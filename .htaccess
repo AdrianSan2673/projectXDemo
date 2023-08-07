@@ -1,0 +1,15 @@
+#Prevent that you can see the list of contents of a directory
+
+Options All -Indexes
+
+<IfModule mod_rewrite.c>
+#Activate rewrite
+
+RewriteEngine on
+ErrorDocument 404 http://localhost/reclutamiento/error/
+
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteCOnd %{SCRIPT_FILENAME} !-f
+
+RewriteRule ^(.*)/(.*) index.php?controller=$1&action=$2
+</IfModule>

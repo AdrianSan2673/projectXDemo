@@ -1,0 +1,140 @@
+@use postcss-nested;
+
+html {
+  height: 100vh;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to top, #134e89, #05131d);
+}
+
+body,
+.container {
+  height: 100%;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0 50px;
+}
+
+.container > * {
+  animation: float 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(30px);
+  }
+}
+
+bubbles-power-puff-girl{
+    z-index: 1000;
+}
+
+.office-banner {
+    background-color: #ffcdd4;
+    font-family: "Arial";
+    padding: 0.125em;
+    font-size: 4em;
+    text-align: center;
+    white-space: nowrap;
+    transform: rotate(-10deg);
+    position: fixed;
+    top: 10%;
+    left: -5%;
+    right: -5%;
+    z-index: 100;
+    margin-top: 0;
+  }
+
+.content{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+}
+
+  .heart {
+    position: absolute;
+    top: 5px;
+    width: 50px;
+    animation: grow 1.75s linear infinite;
+  }
+  
+  @keyframes grow {
+    0% { transform: scale(1); z-index: 100; }
+    25% { transform: scale(10); z-index: 90;}
+    50% { transform: scale(25); z-index: 70;}
+    60% { transform: scale(30); z-index: 50;}
+    75% { transform: scale(40); z-index: 1;}
+    80% { transform: scale(50); z-index: 0;}
+    100% { transform: scale(60); z-index: -1;}
+    120% { transform: scale(70); z-index: -2;}
+  }
+
+  svg:nth-child(1).heart {
+      fill: red;
+  }
+
+  svg:nth-child(2).heart {
+    fill: rgb(224, 73, 98);
+    animation-delay: .25s;
+}
+
+svg:nth-child(3).heart {
+    fill: pink;
+    animation-delay: .50s;
+}
+
+svg:nth-child(4).heart {
+    fill: red;
+    animation-delay: .75s;
+}
+
+svg:nth-child(5).heart {
+    fill: rgb(224, 73, 98);;
+    animation-delay: 1s;
+}
+
+svg:nth-child(6).heart {
+    fill: pink;
+    animation-delay: 1.25s;
+}
+
+.btn-flotante {
+  font-size: 16px; /* Cambiar el tamaño de la tipografia */
+  text-transform: uppercase; /* Texto en mayusculas */
+  font-weight: bold; /* Fuente en negrita o bold */
+  color: #ffffff; /* Color del texto */
+  border-radius: 5px; /* Borde del boton */
+  letter-spacing: 2px; /* Espacio entre letras */
+  background-color: #E91E63; /* Color de fondo */
+  padding: 18px 30px; /* Relleno del boton */
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  transition: all 300ms ease 0ms;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+}
+.btn-flotante:hover {
+  background-color: #2c2fa5; /* Color de fondo al pasar el cursor */
+  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.3);
+  transform: translateY(-7px);
+}
+@media only screen and (max-width: 600px) {
+  .btn-flotante {
+    font-size: 14px;
+    padding: 12px 20px;
+    bottom: 20px;
+    right: 20px;
+  }
+}

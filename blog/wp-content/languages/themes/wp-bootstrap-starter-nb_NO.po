@@ -1,0 +1,376 @@
+# Translation of Themes - WP Bootstrap Starter in Norwegian (Bokmål)
+# This file is distributed under the same license as the Themes - WP Bootstrap Starter package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2021-03-23 04:14:22+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"Language: nb_NO\n"
+"Project-Id-Version: Themes - WP Bootstrap Starter\n"
+
+#. Description of the theme
+msgid "The best WordPress starter theme based on the most powerful frameworks in the world: \"_s\" (by Automattic, the main people behind WordPress development), Twitter Bootstrap (the most popular HTML, CSS, and JS framework for developing responsive, mobile first projects on the web) and Font Awesome (or Fontawesome, a full suite of 675+ pictographic icons for easy scalable vector graphics on websites). This theme, like WordPress, is licensed under the GPL. You can use this theme as base for your next WordPress theme project and you are allowed to remove the link at the footer or do whatever you want. Your feedback on how we can continuously improve this WordPress Starter Theme Bootstrap will be highly appreciated. Page templates includes Right-sidebar (default page template), Left-Sidebar, Full-Width, Blank with container, Blank without container Page. Other features - Currently using Bootstrap v4.5.3 , Widgetized footer area, WooCommerce ready, Compatible with Contact Form 7, Compatible with Visual Composer, Compatible with Elementor Page Builder. This theme will be an active project which we will update from time to time. Check this page regularly for the updates."
+msgstr "Det beste WordPress start-tema basert på de mest kraftige rammeverkene i verden: \"_s\" (av Automattic, de sentrale folkene bak utviklingen av WordPress), Twitter Bootstrap (det mest populære HTML-, CSS- og JS-rammeverket for utvikling av responsive, mobil-først-prosjekter på nettet, og Font Awesome (eller Fontawesome, en komplett samling av 675+ piktogramikoner til bruk som enkelt skalerbar vektorgrafikk  på nettsteder). Dette temaet, som  WordPress, er lisensiert under GPL. Du kan bruke dette temaet som utgangspunkt for det neste temaprosjektet ditt for WordPress, og du har lov til å fjerne lenken i foten eller gjøre hva du vil . Dine tilbakemelding om hvordan vi fortsatt kan forbedre dette WordPress Bootstrap starter-temaet vil bli satt stor pris på. Sidemaler inneholder sider for høyre sidestolpe (standard-malen), venstre sidestope, full bredde, blank med beholder, blank uten beholder. Andre egenskaper: Bruk av Bootstrap v4.5.3, Widgetisert bunnområde, klart for WooCommerce, kompatibelt med Contact Form 7, kompatibelt med Visual Composer, kompatibelt med Elementor Sidebygger. Dette temaet vil bli et aktivt prosjekt som vi vil oppdatere fra tid til annen. Sjekk denne siden regelmessig for oppdateringer."
+
+#. Theme Name of the theme
+msgid "WP Bootstrap Starter"
+msgstr "WP Bootstrap Starter"
+
+#: inc/customizer.php:309
+msgid "No"
+msgstr "Nei"
+
+#: inc/customizer.php:308
+msgid "Yes"
+msgstr "Ja"
+
+#: inc/customizer.php:296
+msgid "no"
+msgstr "nei"
+
+#. translators: 1: title.
+#: comments.php:35
+msgid "One thought on &ldquo;%1$s&rdquo;"
+msgstr "En tanke om &ldquo;%1$s&rdquo;"
+
+#: inc/wp_bootstrap_navwalker.php:365
+msgid "Add a menu"
+msgstr "Legg til en meny"
+
+#: woocommerce/loop/orderby.php:22
+msgid "Shop order"
+msgstr "Ordre"
+
+#: functions.php:104
+msgid "Welcome to WP Bootstrap Starter Theme! Before diving in to your new theme, please visit the <a href=\"%1$s\" target=\"_blank\">theme's</a> page for access to dozens of tips and in-depth tutorials."
+msgstr "Velkommen til WP Bootstrap Starter Theme! Før du dykker ned i det nye temaet, besøk gjerne <a href=\"%1$s\" target=\"_blank\">temaet</a> sin hjemmeside for tilgang til dusinvis av tips og detalljerte veiledninger."
+
+#: inc/customizer.php:134
+msgid "Theme Option"
+msgstr "Tema-innstillinger"
+
+#: header.php:98
+msgid "To customize the contents of this header banner and other elements of your site, go to Dashboard > Appearance > Customize"
+msgstr "For å tilpasse innholdet i denne header-banneren og andre elementer på nettstedet ditt, gå til Kontrollpanel > Utseende > Tilpass"
+
+#: footer.php:42
+msgid "Bootstrap WordPress Theme"
+msgstr "Bootstrap WordPress tema"
+
+#: inc/customizer.php:287
+msgid "Background Image"
+msgstr "Bakgrunnsbilde"
+
+#: inc/customizer.php:278
+msgid "Background Color"
+msgstr "Bakgrunnsfarge"
+
+#: inc/customizer.php:270
+msgid "Other Customizations"
+msgstr "Andre tilpassinger"
+
+#: inc/customizer.php:259
+msgid "Remove Header Banner"
+msgstr "Fjern header-banner"
+
+#: inc/customizer.php:223
+msgid "Header Banner Background Color"
+msgstr "Bakgrunnsfarge for header-banner"
+
+#: inc/customizer.php:195
+msgid "Header Banner"
+msgstr "Header-banner"
+
+#: inc/customizer.php:121
+msgid "Preset Styles"
+msgstr "Forinnstilte stiler"
+
+#: inc/customizer.php:172
+msgid "Typography"
+msgstr "Typografi"
+
+#: inc/customizer.php:243
+msgid "To customize the contents of this header banner and other elements of your site go to Dashboard - Appearance - Customize"
+msgstr "For å tilpasse innholdet i denne header-banneren og andre elementer på nettstedet ditt, gå til Kontrollpanel - Utseende - Tilpass"
+
+#: inc/customizer.php:204
+msgid "Header Image"
+msgstr "Header-bilde"
+
+#: inc/customizer.php:247
+msgid "Banner Tagline"
+msgstr "Banner-nøkkelordlinje"
+
+#: inc/customizer.php:235
+msgid "Banner Title"
+msgstr "Banner-tittel"
+
+#: inc/customizer.php:231
+msgid "WP Bootstrap Framework"
+msgstr "WP Bootstrap Framework"
+
+#. Template Name of the theme
+msgid "Full Width"
+msgstr "Full bredde"
+
+#. Template Name of the theme
+msgid "Blank without Container"
+msgstr "Blank uten beholder"
+
+#. Template Name of the theme
+msgid "Blank with Container"
+msgstr "Blank med beholder"
+
+#: woocommerce/cart/cart.php:148
+msgid "Update cart"
+msgstr "Oppdater handlekurv"
+
+#: woocommerce/cart/cart.php:143
+msgid "Apply coupon"
+msgstr "Bruk kupong"
+
+#: woocommerce/cart/cart.php:143
+msgid "Coupon code"
+msgstr "Kupong-kode"
+
+#: woocommerce/cart/cart.php:143
+msgid "Coupon:"
+msgstr "Kupong"
+
+#: woocommerce/cart/cart.php:56
+msgid "Remove this item"
+msgstr "Fjern denne varen"
+
+#: woocommerce/cart/cart.php:125
+msgid "Total"
+msgstr "Totalt"
+
+#: woocommerce/cart/cart.php:32 woocommerce/cart/cart.php:103
+msgid "Quantity"
+msgstr "Antall"
+
+#: woocommerce/cart/cart.php:31 woocommerce/cart/cart.php:97
+msgid "Price"
+msgstr "Pirs"
+
+#: woocommerce/cart/cart.php:30 woocommerce/cart/cart.php:77
+msgid "Product"
+msgstr "Produkt"
+
+#: inc/template-tags.php:164
+msgid "Your comment is awaiting moderation."
+msgstr "Kommentaren din venter på godkjenning"
+
+#: inc/template-tags.php:159
+msgid "<span style=\"margin-left: 5px;\" class=\"glyphicon glyphicon-edit\"></span> Edit"
+msgstr "<span style=\"margin-left: 5px;\" class=\"glyphicon glyphicon-edit\"></span> Rediger"
+
+#: inc/template-tags.php:152
+msgid "%s <span class=\"says\">says:</span>"
+msgstr "%s <span class=\"says\">sier:</span>"
+
+#: inc/template-tags.php:137
+msgid "Edit"
+msgstr "Rediger"
+
+#: inc/template-tags.php:137
+msgid "Pingback:"
+msgstr "Tilbakeping:"
+
+#: functions.php:278
+msgid "Submit"
+msgstr "Send inn:"
+
+#: functions.php:278
+msgid "Password:"
+msgstr "Passord:"
+
+#: functions.php:277
+msgid "To view this protected post, enter the password below:"
+msgstr "For å se denne beskytteted posten, skriv inn passordet nedenfor:"
+
+#: comments.php:103
+msgid "You may use these <abbr title=\"HyperText Markup Language\">HTML</abbr> tags and attributes:"
+msgstr "Du kan bruke disse <abbr title=\"HyperText Markup Language\">HTML</abbr> koder og -attributter:"
+
+#: comments.php:98
+msgid "Post Comment"
+msgstr "Publiser kommentaren"
+
+#: comments.php:97
+msgid "Cancel Reply"
+msgstr "Angre svar"
+
+#. translators: 1: Reply Specific User
+#: comments.php:96
+msgid "Leave a Reply to %s"
+msgstr "Legg inn et svar til %s"
+
+#: comments.php:94
+msgid "Leave a Reply"
+msgstr "Legg igjen et svar"
+
+#: inc/template-tags.php:156
+msgctxt "1: date, 2: time"
+msgid "%1$s at %2$s"
+msgstr "%1$s kl %2$s"
+
+#: woocommerce/cart/cart.php:92
+msgid "Available on backorder"
+msgstr "Tilgjengelig som restordre"
+
+#. Template Name of the theme
+msgid "Left Sidebar"
+msgstr "Venstre sidestolpe"
+
+#: functions.php:166
+msgid "Footer 3"
+msgstr "Bunnfelt 3"
+
+#: functions.php:157
+msgid "Footer 2"
+msgstr "Bunnfelt 2"
+
+#: functions.php:148
+msgid "Footer 1"
+msgstr "Bunnfelt 1"
+
+#: template-parts/content.php:36
+msgid "Continue reading <span class=\"meta-nav\">&rarr;</span>"
+msgstr "Fortsett å lese <span class=\"meta-nav\">&rarr;</span>"
+
+#: template-parts/content.php:40 template-parts/content-notitle.php:18
+#: template-parts/content-page.php:27
+msgid "Pages:"
+msgstr "Sider:"
+
+#: template-parts/content-none.php:31
+msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+msgstr "Ser ikke ut som vi finner det du ser etter. Kanskje et søk kan hjelpe?"
+
+#: template-parts/content-none.php:25
+msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+msgstr "Beklager, men ingenting passet med det du søker etter. Prøv med noen andre søkeord."
+
+#: template-parts/content-none.php:21
+msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr "Klar til å publisere ditt første innlegg? <a href=\"%1$s\">Start her</a>."
+
+#: template-parts/content-none.php:14
+msgid "Nothing Found"
+msgstr "Fant ingen ting"
+
+#: searchform.php:5
+msgctxt "submit button"
+msgid "Search"
+msgstr "Søk"
+
+#: searchform.php:3
+msgctxt "label"
+msgid "Search for:"
+msgstr "Søk etter:"
+
+#: searchform.php:3
+msgctxt "placeholder"
+msgid "Search &hellip;"
+msgstr "Søk &hellip;"
+
+#: search.php:19
+msgid "Search Results for: %s"
+msgstr "Søkeresultat for: %s"
+
+#. translators: %s: Name of current post
+#: template-parts/content-page.php:39 inc/template-tags.php:71
+msgid "Edit %s"
+msgstr "Rediger %s"
+
+#: inc/template-tags.php:63
+msgid "Tagged %1$s"
+msgstr "Merket %1$s"
+
+#: inc/template-tags.php:57
+msgid "Posted in %1$s"
+msgstr "Publisert i %1$s"
+
+#. translators: used between list items, there is a space after the comma
+#: inc/template-tags.php:55 inc/template-tags.php:61
+msgid ", "
+msgstr ", "
+
+#. translators: %s: post title
+#: inc/template-tags.php:40
+msgid "Leave a Comment<span class=\"screen-reader-text\"> on %s</span>"
+msgstr "Legg igjen en kommentar <span class=\"screen-reader-text\"> på %s</span>"
+
+#: inc/template-tags.php:31
+msgctxt "post author"
+msgid "by %s"
+msgstr "av %s"
+
+#: inc/template-tags.php:26
+msgctxt "post date"
+msgid "Posted on %s"
+msgstr "Publisert den %s"
+
+#: header.php:36
+msgid "Skip to content"
+msgstr "Hopp videre til innholdet"
+
+#: functions.php:141 functions.php:150 functions.php:159 functions.php:168
+msgid "Add widgets here."
+msgstr "Alle småprogrammer her."
+
+#: functions.php:139
+msgid "Sidebar"
+msgstr "Sidestolpe"
+
+#: functions.php:47
+msgid "Primary"
+msgstr "Hoved-"
+
+#: comments.php:87
+msgid "Comments are closed."
+msgstr "Stengt for kommentarer."
+
+#: comments.php:56 comments.php:74
+msgid "Newer Comments"
+msgstr "Nyere kommentarer"
+
+#: comments.php:55 comments.php:73
+msgid "Older Comments"
+msgstr "Eldre kommentarer"
+
+#: comments.php:52 comments.php:70
+msgid "Comment navigation"
+msgstr "Naviger i kommentarer"
+
+#. translators: 1: comment count number, 2: title.
+#: comments.php:41
+msgctxt "comments title"
+msgid "%1$s thought on &ldquo;%2$s&rdquo;"
+msgid_plural "%1$s thoughts on &ldquo;%2$s&rdquo;"
+msgstr[0] "%1$s tanke om &ldquo;%2$s&rdquo;"
+msgstr[1] "%1$s tanker om &ldquo;%2$s&rdquo;"
+
+#: 404.php:21
+msgid "It looks like nothing was found at this location. Maybe try one of the links below or a search?"
+msgstr "Ser ikke ut til at noe ble funnet her. Kanskje du kan forsøke en av lenkene nedenfor, eller et søk?"
+
+#: 404.php:17
+msgid "Oops! That page can&rsquo;t be found."
+msgstr "Oisann! Den siden er ikke å finne."
+
+#. Theme URI of the theme
+msgid "https://afterimagedesigns.com/wp-bootstrap-starter/"
+msgstr "https://afterimagedesigns.com/wp-bootstrap-starter/"
+
+#. Author URI of the theme
+msgid "https://afterimagedesigns.com/"
+msgstr "https://afterimagedesigns.com/"
+
+#. Author of the theme
+msgid "Afterimage Designs"
+msgstr "Afterimage Designs"
