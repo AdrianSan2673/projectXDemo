@@ -27,7 +27,7 @@ class VacacionesController
 
 
                 $employee->setID_Contacto('132');
-                $employee->setStatus('1');
+                $employee->setStatus('1'); 
 
                 $employees = $employee->getEmployeesHolidaysByCliente();
                 $holidays = $employee->getEmployeesHolidaysRequestedByCliente();
@@ -35,20 +35,10 @@ class VacacionesController
                 //$employee = new Employees();
                 //$employees = $employee->getAll();
             }
-
-
             $empleado = new Employees();
             $empleado->setCliente($_SESSION['id_cliente']);
             //verfiicar si es adminisrador
-
             $solicitudes_pendientes = $empleado->getEmployeesAllHolidaysRequested();
-
-            for ($i = 0; $i < count($solicitudes_pendientes); $i++) {
-                $solicitudes_pendientes[$i]['start_date'] =  Utils::getDate($solicitudes_pendientes[$i]['start_date']);
-                $solicitudes_pendientes[$i]['end_date'] =   Utils::getDate($solicitudes_pendientes[$i]['end_date']);
-                $solicitudes_pendientes[$i]['created_at'] =  Utils::getDate($solicitudes_pendientes[$i]['created_at']);
-            }
-
 
             $page_title = 'Empleados | RRHH Ingenia';
             require_once 'views/layout/header.php';
@@ -255,10 +245,8 @@ class VacacionesController
     public function delete()
     {
         if (isset($_SESSION['identity']) && $_SESSION['identity'] != FALSE) {
-
             $id = Utils::sanitizeNumber(Encryption::decode($_POST['id']));
             if ($id) {
-
                 $contactoEmpresa = new ContactosEmpresa();
                 $contactoEmpresa->setUsuario($_SESSION['identity']->username);
                 $id_contacto = $contactoEmpresa->getContactoPorUsuario()->ID;
@@ -267,6 +255,7 @@ class VacacionesController
                 $holidaysObj = new EmployeeHolidays();
                 $holidaysObj->setId($id);
                 $holidaysObj->delete();
+               
                 $holidaysObj->setID_Contacto($_SESSION['id_cliente']);
                 $employees = $holidaysObj->getEmployeesHolidaysByCliente();
                 foreach ($employees as &$emplo) {
@@ -279,6 +268,7 @@ class VacacionesController
                 $empleado->setCliente($_SESSION['id_cliente']);
                 $holidays = $empleado->getEmployeesAllHolidaysRequested();
                 foreach ($holidays as &$holiday) {
+                    $holiday['created_at'] = Utils::getDate($holiday['created_at']);
                     $holiday['start_date'] = Utils::getDate($holiday['start_date']);
                     $holiday['end_date'] = Utils::getDate($holiday['end_date']);
                     $holiday['rest_vacation'] = $holiday['holidays_by_year'] - $holiday['taken_holidays'];
@@ -287,7 +277,7 @@ class VacacionesController
 
                 echo json_encode(array(
                     'employees' => $employees,
-                    'holidays' => $holidays,
+                    'solicitudes' => $holidays,
                     'status' => 1
                 ));
             } else
@@ -404,7 +394,6 @@ class VacacionesController
     {
 
         if (isset($_SESSION['identity']) && $_SESSION['identity'] != FALSE) {
-
             $id_solicitud = (isset($_POST['id_solicitud'])) ? Encryption::decode($_POST['id_solicitud'])  : FALSE;
             $accion = (isset($_POST['accion'])) ? Utils::sanitizeNumber($_POST['accion'])  : FALSE;
             $comments = (isset($_POST['comments'])) ? Utils::sanitizeStringBlank($_POST['comments'])  :  '';

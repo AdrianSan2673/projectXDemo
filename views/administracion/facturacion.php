@@ -170,8 +170,8 @@
                         <th></th>
                         <th class="filterhead"></th>
                         <th></th>
-                        <th hidden></th>
-                        <th hidden></th>
+                        <th ></th>
+                        <th class="filterhead"></th>
                       </tr>
                       <tr>
                         <th class="align-middle">Solicitud</th>
@@ -188,8 +188,8 @@
                         <th class="align-middle">% avance ESE</th>
                         <th class="align-middle">Factura</th>
                         <th>Accion</th>
-                        <th hidden></th>
-                        <th hidden></th>
+                        <th ></th>
+                        <th ></th>
                       </tr>
                   </thead>
                   <tbody>
@@ -266,8 +266,8 @@
                       </div>
                     </div>
                   </td>
-                          <td hidden><?=$servicio['Folio']?></td>
-                          <td hidden><?=$servicio['ID_Cliente']?></td>
+                          <td ><?=$servicio['Folio']?></td>
+                          <td ><?=$servicio['ID_Cliente']==null?'' :$servicio['ID_Cliente']?></td>
                       </tr>
                   <?php endforeach; ?>
                   </tbody>
@@ -287,8 +287,8 @@
                         <th class="align-middle">% avance ESE</th>
                         <th class="align-middle text-center">Factura</th>
                         <th>Accion</th>
-                        <th hidden></th>
-                        <th hidden></th>
+                        <th ></th>
+                        <th ></th>
                       </tr>
                   </tfoot>
                 </table>

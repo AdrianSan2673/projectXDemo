@@ -2168,7 +2168,7 @@ class ServicioApoyoController {
             $Estado = Utils::sanitizeNumber($_POST['Estado']);
             $Comentario_Finalizacion = Utils::sanitizeString(($_POST['Comentario_Finalizacion']));
 
-            if ($Folio && $Comentario_Finalizacion && ($Fase == 230 || $Fase == 231 || $Fase == 298 || ($Servicio_Solicitado == 231 && $Fase == 231) || ($Servicio_Solicitado == 291 && $Fase == 291) || ($Servicio_Solicitado == 230 && $Fase == 230) || ($Servicio_Solicitado == 230 && $Fase == 300) || ($Servicio_Solicitado == 231 && $Fase == 299) || ($Servicio_Solicitado == 323 && $Fase == 324) || ($Servicio_Solicitado == 230 && $Fase == 299) || ($Servicio_Solicitado == 230 && $Fase == 231) || ($Servicio_Solicitado == 328 && $Fase == 328) || ($Servicio_Solicitado == 340 && $Fase == 300)||($Servicio_Solicitado == 340 && $Fase == 299)) && ($Estado == 250 || $Estado == 251 || $Estado == 249)) {
+            if ($Folio && $Comentario_Finalizacion && ($Fase == 230 || $Fase == 231 || $Fase == 298 || ($Servicio_Solicitado == 231 && $Fase == 231) || ($Servicio_Solicitado == 291 && $Fase == 291) || ($Servicio_Solicitado == 230 && $Fase == 230) || ($Servicio_Solicitado == 230 && $Fase == 300) || ($Servicio_Solicitado == 231 && $Fase == 299) || ($Servicio_Solicitado == 323 && $Fase == 324) || ($Servicio_Solicitado == 230 && $Fase == 299) || ($Servicio_Solicitado == 230 && $Fase == 231) || ($Servicio_Solicitado == 328 && $Fase == 328) || ($Servicio_Solicitado == 340 && $Fase == 300)||($Servicio_Solicitado == 340 && $Fase == 299)|| ($Servicio_Solicitado == 341 && $Fase == 300)||($Servicio_Solicitado == 341 && $Fase == 299)) && ($Estado == 250 || $Estado == 251 || $Estado == 249)) {
 
                 $Estado = 252;
 

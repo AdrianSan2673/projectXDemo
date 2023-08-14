@@ -655,7 +655,7 @@ FROM candidates c LEFT JOIN candidate_experience cexp ON c.id=cexp.id_candidate 
 	public function getOneFull()
 	{
 		$id = $this->getId();
-		$stmt = $this->db->prepare("SELECT *, c.first_name,  c.surname,  c.last_name, cv.status, g.gender, c.id, c.id_state AS id_state, c.id_city AS id_city, s.state, ct.city, el.level, ce.id_level AS id_education_level, ce.title, ce.institution AS institution, ce.start_date AS start_date, ce.end_date AS end_date, CASE WHEN c.date_birth IS NULL AND c.age IS NOT NULL THEN c.age ELSE (dbo.GetMonthsDifference(c.date_birth, GETDATE())/12) END AS age_cal FROM candidates c INNER JOIN states s ON c.id_state=s.id LEFT JOIN cities ct ON c.id_city=ct.id LEFT JOIN candidate_education ce ON c.id=ce.id_candidate LEFT JOIN education_levels el ON ce.id_level=el.id LEFT JOIN genders g ON c.id_gender=g.id LEFT JOIN civil_status cv ON c.id_civil_status=cv.id  WHERE c.id=:id");
+		$stmt = $this->db->prepare("SELECT *,c.description, c.first_name,  c.surname,  c.last_name, cv.status, g.gender, c.id, c.id_state AS id_state, c.id_city AS id_city, s.state, ct.city, el.level, ce.id_level AS id_education_level, ce.title, ce.institution AS institution, ce.start_date AS start_date, ce.end_date AS end_date, CASE WHEN c.date_birth IS NULL AND c.age IS NOT NULL THEN c.age ELSE (dbo.GetMonthsDifference(c.date_birth, GETDATE())/12) END AS age_cal FROM candidates c INNER JOIN states s ON c.id_state=s.id LEFT JOIN cities ct ON c.id_city=ct.id LEFT JOIN candidate_education ce ON c.id=ce.id_candidate LEFT JOIN education_levels el ON ce.id_level=el.id LEFT JOIN genders g ON c.id_gender=g.id LEFT JOIN civil_status cv ON c.id_civil_status=cv.id  WHERE c.id=:id");
 		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
 		$stmt->execute();
 

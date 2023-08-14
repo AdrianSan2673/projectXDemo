@@ -1093,7 +1093,7 @@ class Candidatos{
         INNER JOIN [rh_Candidatos_Datos] CD on CD.Candidato=RC.Candidato
         LEFT JOIN rh_Candidatos_Obs_Generales ob ON RC.Candidato=ob.Candidato
 		LEFT JOIN rh_Candidatos_RAL cral ON RC.Candidato=cral.Candidato
-         WHERE RC.Cliente IN (SELECT ID_Cliente FROM rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:Contacto) AND YEAR(RC.Fecha)>=2022 
+         WHERE RC.Cliente IN (SELECT ID_Cliente FROM rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:Contacto) AND RC.Fecha>='2022' 
         ORDER BY RC.Fecha DESC");
         $stmt->bindParam(":Contacto", $Contacto, PDO::PARAM_STR);
         $stmt->execute();
@@ -2202,7 +2202,13 @@ class Candidatos{
 	}
 
     public function getServiciosSolicitadosPorClientesHoy(){
-        $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE CONVERT(date, Fecha)=CONVERT(date, GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 GROUP BY RVA.Nombre_Cliente ORDER BY No_Servicios DESC");
+        $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, 
+        SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291  Or RC.Servicio_Solicitado = 328  then 1 else 0 end) AS No_RAL, 
+        SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, 
+        SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 Or RC.Servicio_Solicitado = 340 Or RC.Servicio_Solicitado = 341 then 1 else 0 end) AS No_ESE, 
+        COUNT(DISTINCT(Candidato)) AS No_Servicios 
+        FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente 
+        WHERE CONVERT(date, Fecha)=CONVERT(date, GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 GROUP BY RVA.Nombre_Cliente ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
@@ -2273,7 +2279,11 @@ class Candidatos{
 
 
     public function getServiciosSolicitadosPorCCHoy(){
-        $stmt = $this->db->prepare("SELECT RVA.Centro_Costos, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE CONVERT(date, Fecha)=CONVERT(date, GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258  and (replicado<>2 OR replicado is null) GROUP BY RVA.Centro_Costos ORDER BY No_Servicios DESC");
+        $stmt = $this->db->prepare("SELECT RVA.Centro_Costos, 
+        SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 Or RC.Servicio_Solicitado = 328 then 1 else 0 end) AS No_RAL, 
+        SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, 
+        SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 Or RC.Servicio_Solicitado = 340 Or RC.Servicio_Solicitado = 341 then 1 else 0 end) AS No_ESE, 
+        COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE CONVERT(date, Fecha)=CONVERT(date, GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258  and (replicado<>2 OR replicado is null) GROUP BY RVA.Centro_Costos ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
@@ -2350,7 +2360,13 @@ class Candidatos{
     public function getServiciosSolicitadosPorEjecutivoUnicoHoy(){
         $Ejecutivo = $this->getEjecutivo();
 
-        $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, SUM(case when RC.Servicio = 298 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio = 299 Or RC.Servicio = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio = 300 Or RC.Servicio = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios, AVG(CAST(dbo.count_days(RC.Fecha, RC.Fecha_Entregado) AS Decimal)) AS Tiempo FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Ejecutivo=U.username WHERE CONVERT(date, Fecha)=CONVERT(date, GETDATE()) AND Ejecutivo=:Ejecutivo AND Estado<>257 AND Estado<>258 GROUP BY U.first_name, U.last_name ORDER BY No_Servicios DESC");
+        $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, 
+        SUM(case when RC.Servicio = 298  then 1 else 0 end) AS No_RAL, 
+        SUM(case when RC.Servicio = 299 Or RC.Servicio = 231 then 1 else 0 end) AS No_INV, 
+        SUM(case when RC.Servicio = 300 Or RC.Servicio = 230 then 1 else 0 end) AS No_ESE, 
+        COUNT(DISTINCT(Candidato)) AS No_Servicios, 
+        AVG(CAST(dbo.count_days(RC.Fecha, RC.Fecha_Entregado) AS Decimal)) AS Tiempo 
+        FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Ejecutivo=U.username WHERE CONVERT(date, Fecha)=CONVERT(date, GETDATE()) AND Ejecutivo=:Ejecutivo AND Estado<>257 AND Estado<>258 GROUP BY U.first_name, U.last_name ORDER BY No_Servicios DESC");
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
         $stmt->execute();
         $servicios = $stmt->fetchAll();
@@ -2424,7 +2440,8 @@ class Candidatos{
         $date1 = $this->getFecha_solicitud();
         $date2 = $this->getFecha_entregado();
 
-        $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254) then 1 else 0 end) AS No_ESE_FIN FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Gestor=U.username WHERE CONVERT(DATE,Fecha) BETWEEN :date1 AND :date2 AND Ejecutivo<>'miguelcasanova' AND Fecha_Aplicacion IS NOT NULL AND Estado<>257 AND Estado<>258 GROUP BY U.first_name, U.last_name ORDER BY No_ESE_FIN DESC");
+        $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, 
+        SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254) then 1 else 0 end) AS No_ESE_FIN FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Gestor=U.username WHERE CONVERT(DATE,Fecha) BETWEEN :date1 AND :date2 AND Ejecutivo<>'miguelcasanova' AND Fecha_Aplicacion IS NOT NULL AND Estado<>257 AND Estado<>258 GROUP BY U.first_name, U.last_name ORDER BY No_ESE_FIN DESC");
         $stmt->bindParam(":date1", $date1, PDO::PARAM_STR);
         $stmt->bindParam(":date2", $date2, PDO::PARAM_STR);
         $stmt->execute();
@@ -2436,7 +2453,14 @@ class Candidatos{
         $date1 = $this->getFecha_solicitud();
         $date2 = $this->getFecha_entregado();
 
-        $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) and (RC.Estado = 252 OR Estado = 254) then 1 else 0 end) AS No_INV_FIN, SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254) then 1 else 0 end) AS No_ESE_FIN, SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) and (RC.Estado < 252) then 1 else 0 end) AS No_INV_Proc, SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado < 252) then 1 else 0 end) AS No_ESE_Proc, SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) and (RC.Estado = 252 OR Estado = 254 OR EStado < 252) then 1 else 0 end) AS No_INV_Total, SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254 OR Estado < 252) then 1 else 0 end) AS No_ESE_Total, SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231 or RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254 OR Estado < 252) then 1 else 0 end) AS No_Total FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Ejecutivo=U.username WHERE CONVERT(DATE,Fecha) BETWEEN :date1 AND :date2 AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 GROUP BY U.first_name, U.last_name ORDER BY No_Total DESC");
+        $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, 
+        SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) and (RC.Estado = 252 OR Estado = 254) then 1 else 0 end) AS No_INV_FIN, 
+        SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254) then 1 else 0 end) AS No_ESE_FIN, 
+        SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) and (RC.Estado < 252) then 1 else 0 end) AS No_INV_Proc, 
+        SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado < 252) then 1 else 0 end) AS No_ESE_Proc, 
+        SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) and (RC.Estado = 252 OR Estado = 254 OR EStado < 252) then 1 else 0 end) AS No_INV_Total, 
+        SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254 OR Estado < 252) then 1 else 0 end) AS No_ESE_Total, 
+        SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231 or RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254 OR Estado < 252) then 1 else 0 end) AS No_Total FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Ejecutivo=U.username WHERE CONVERT(DATE,Fecha) BETWEEN :date1 AND :date2 AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 GROUP BY U.first_name, U.last_name ORDER BY No_Total DESC");
         $stmt->bindParam(":date1", $date1, PDO::PARAM_STR);
         $stmt->bindParam(":date2", $date2, PDO::PARAM_STR);
         $stmt->execute();

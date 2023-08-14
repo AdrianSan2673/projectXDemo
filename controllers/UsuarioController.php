@@ -91,16 +91,17 @@ class UsuarioController
                 $ultimaSemana = strtotime("last Sunday", strtotime("$ultimoDiaMes-$mes-$anio"));
                 $ultimaSemanaSabado = strtotime("next Saturday", $ultimaSemana);
                 $fechaActual = time();
-                if ($fechaActual >= $ultimaSemana && $fechaActual <= $ultimaSemanaSabado) {
+                
+                if (($fechaActual >= $ultimaSemana && $fechaActual <= $ultimaSemanaSabado) || $_SESSION['id_cliente']==132) {
                     $contactoEmpresa = new ContactosEmpresa();
+                  
                     $contactoEmpresa->setUsuario($_SESSION['identity']->username);
                     $id = $contactoEmpresa->getContactoPorUsuario()->ID;
-
+                    
                     $clienteContacto = new ContactosCliente();
                     $clienteContacto->setID($id);
                     $clienteconta = $clienteContacto->getPrimerCliente();
-
-
+                    
                     if ($_SESSION['id_cliente'] != 0) {
                         $contactoEmpresa = new ContactosEmpresa();
                         $contactoEmpresa->setUsuario($_SESSION['identity']->username);
@@ -113,9 +114,11 @@ class UsuarioController
                         $employeeObj->setID_Contacto($id_contacto);
                         $employeeObj->setCliente($_SESSION['id_cliente']);
 
+                        
                         $employeeBirthday = $employeeObj->getEmployeesBirthdayCurrentMonth();
                         $employeeBirthdayNextMonth = $employeeObj->getEmployeesBirthdayNextMonth();
                         $employeeContract = $employeeObj->getFinishContracEmployee();
+                        $evaluations = Statistics::getEvaluationByID_ContactoAndStatus();
                     }
 
                     if ($clienteconta) {
@@ -168,6 +171,7 @@ class UsuarioController
 
             //if ($_SESSION['identity']->username == 'miroslavagarcia')
             //$_SESSION['customerSA'] = TRUE;
+
 
             $page_title = 'Bienvenido(a) | RRHH Ingenia';
             require_once 'views/layout/header.php';

@@ -1,4 +1,4 @@
-class Subareas {
+class Subarea {
 
     constructor() {
         this.id_area = null;

@@ -51,7 +51,7 @@ class CapacitacionesController
             $description = isset($_POST['description']) ? Utils::sanitizeString($_POST['description']) : '';
             $hours = isset($_POST['hours']) ? Utils::sanitizeNumber($_POST['hours']) : null;
             $start_date = Utils::sanitizeString($_POST['start_date']);
-            $end_date = Utils::sanitizeString($_POST['end_date']);
+            $end_date = isset($_POST['end_date'])? Utils::sanitizeString($_POST['end_date']):null;
             $clave_area_tematica = isset($_POST['clave_area_tematica']) ? Utils::sanitizeStringBlank($_POST['clave_area_tematica']) : null;
             $training_agent = Utils::sanitizeStringBlank($_POST['training_agent']);
             $instructor = Utils::sanitizeStringBlank($_POST['instructor']);

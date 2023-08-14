@@ -68,7 +68,7 @@
            utils.dtTable(table);
 
 
-           var subareas = new Subareas();
+           var subareas = new Subarea();
            document.querySelector('#table_areas').addEventListener('click', e => {
                e.preventDefault();
 

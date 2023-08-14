@@ -189,75 +189,80 @@ class Candidate {
 
 	create() {
 
-		this.first_name = document.querySelector('#candidate-form #first_name').value;
-		this.surname = document.querySelector('#candidate-form #surname').value;
-		this.last_name = document.querySelector('#candidate-form #last_name').value;
-		this.date_birth = document.querySelector('#candidate-form #date_birth').value;
-		this.id_gender = document.querySelector('#candidate-form #id_gender').value;
-		this.id_civil_status = document.querySelector('#candidate-form #id_civil_status').value;
-		this.id_level = document.querySelector('#candidate-form #id_level').value;
-		this.job_title = document.querySelector('#candidate-form #job_title').value;
-		this.description = document.querySelector('#candidate-form #description').value;
-		this.email = document.querySelector('#candidate-form #email').value;
-		this.id_state = document.querySelector('#candidate-form #id_state').value;
-		this.id_city = document.querySelector('#candidate-form #id_city').value;
-		this.id_area = document.querySelector('#candidate-form #id_area').value;
-		this.id_subarea = document.querySelector('#candidate-form #id_subarea').value;
-		this.photo = document.querySelector("#avatar").value;
+		var form = document.querySelector("#candidate-form");
+		var formData = new FormData(form);
+		if (document.querySelector("#avatar").value.length > 0) {
+			this.avatar = document.querySelector("#candidate-form #preview").toDataURL("image/png");
+			formData.append('avatar', this.avatar);
+		}
 
-		if (this.first_name.length > 0 && this.surname.length > 0 && this.last_name.length > 0 && this.id_level.length > 0 && this.job_title.length > 0 && this.email.length > 0 && this.id_state.length > 0 && this.id_city.length > 0 && this.id_area.length > 0 && this.id_subarea.length > 0) {
-			var form = document.querySelector("#candidate-form");
-			var formData = new FormData(form);
-			if (document.querySelector("#avatar").value.length > 0) {
-				this.avatar = document.querySelector("#candidate-form #preview").toDataURL("image/png");
-				formData.append('avatar', this.avatar);
-			}
-			let xhr = new XMLHttpRequest();
-			xhr.open('POST', './new');
-			//xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-			xhr.send(formData);
-
-			xhr.onreadystatechange = function () {
-				if (xhr.readyState == 4 && xhr.status == 200) {
-					let r = xhr.responseText;
-					console.log(r);
-					if (r == 0) {
+		fetch('./new', {
+			method: 'POST',
+			body: formData
+		})
+			.then(response => {
+				//	console.log(response.json());
+				if (response.ok) {
+					return response.text();
+				} else {
+					throw new Error('Network response was not ok.');
+				}
+			})
+			.then(r => {
+				console.log(r);
+				try {
+					const json_app = JSON.parse(r);
+					console.log(json_app);
+					if (json_app.status == 0) {
 						utils.showToast('Omitiste algún dato', 'error');
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
-					} else if (r == 1) {
-						utils.showToast('Candidato creado exitosamente', 'success');
-						//document.querySelector("#candidate-form #candidate_submit").disabled = true;
-						setTimeout(() => {
-							//window.location.href = `./index`;
-							window.history.back();
-						}, 3000);
+					} else if (json_app.status == 1) {
 
-					} else if (r == 2) {
-						utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+						console.log(json_app);
+						if (json_app.isCandidate == true) {
+							utils.showToast('Candidato creado exitosamente', 'success');
+							document.querySelector("#candidate-form #candidate_submit").disabled = false;
+							setTimeout(() => {
+								window.history.back();
+							}, 3000);
+						} else if (json_app.type !=0 &&(json_app.type <=4 || json_app.type==null )) {
+							utils.showToast('Candidato creado exitosamente', 'success');
+							document.querySelector("#candidate-form #candidate_submit").disabled = false;
+							setTimeout(() => {
+								window.location.href = `./profile&id_vacancy=${json_app.id_vacancy}&id_candidate=${json_app.id_candidate}`;
+							}, 3000);
+
+						} else {
+							utils.showToast('Candidato creado exitosamente', 'success');
+							document.querySelector("#candidate-form #candidate_submit").disabled = false;
+							setTimeout(() => {
+								window.location.href = `../postulaciones/enviados_a_cliente&id=${json_app.id_vacancy}`;
+							}, 3000);
+						}
+					} else if (json_app.status == 2) {
+						utils.showToast('Algo salió mal1. Inténtalo de nuevo', 'error');
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
-					} else if (r == 3) {
+					} else if (json_app.status == 3) {
 						utils.showToast('Error al subir la imagen', 'error');
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
-					} else if (r == 4) {
+					} else if (json_app.status == 4) {
 						utils.showToast('El archivo de tu cv excede el peso permitido o tiene un formato no admitido', 'warning');
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
 					} else {
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
 					}
-				} else {
+
+				} catch (error) {
+					utils.showToast('Algo salió mal2. Inténtalo de nuevo ' + error, 'error');
 					document.querySelector("#candidate-form #candidate_submit").disabled = false;
 				}
-			}
-		} else {
-			utils.showToast('Completa todos los campos', 'warning');
-			document.querySelector("#candidate-form #candidate_submit").disabled = false;
-		}
-
-		/*if (this.photo.length == 0) {
-			utils.showToast('Es necesario que agregues una foto tuya', 'warning');
-		}*/
-
+			})
+			.catch(error => {
+				utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+				document.querySelector('#agregar-subarea-form [name="guardar"]').disabled = false;
+			});
 	}
+	//===[gabo 1 agosto operativa]===
 
 	update() {
 		this.id = document.querySelector("#candidate-form #id").value;
@@ -832,4 +837,55 @@ class Candidate {
 
 	// ===[FN]===
 
+	save_profile() {
+
+		var form = document.querySelector("#profile-candidate-form");
+		document.querySelector("#profile-candidate-form [name='submit']").disabled = true
+		var formData = new FormData(form);
+
+		fetch('../Candidato/save_perfil', {
+			method: 'POST',
+			body: formData
+		})
+
+			.then(response => {
+				//	console.log(response.json());
+				if (response.ok) {
+					return response.text();
+				} else {
+					throw new Error('Network response was not ok.');
+				}
+			})
+			.then(r => {
+
+				try {
+					const json_app = JSON.parse(r);
+					if (json_app.status == 0) {
+						utils.showToast('Llena todos los campos requeridos por favor', 'error');
+						document.querySelector("#profile-candidate-form [name='submit']").disabled = false
+
+					} else if (json_app.status == 1) {
+						utils.showToast('La información se ha actualizado correctamente', 'success');
+						setTimeout(() => {
+							window.location.href = `../postulaciones/enviados_a_cliente&id=${json_app.id_vacancy}`;
+							document.querySelector("#profile-candidate-form [name='submit']").disabled = false
+
+						}, 3000);
+
+					} else if (json_app.status == 2) {
+						utils.showToast(' No se pudo guardar la informacion', 'error');
+						document.querySelector("#profile-candidate-form [name='submit']").disabled = false
+
+					}
+				} catch (error) {
+					utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+					document.querySelector("#profile-candidate-form [name='submit']").disabled = false
+
+				}
+			})
+			.catch(error => {
+				utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+				document.querySelector("#profile-candidate-form [name='submit']").disabled = false
+			});
+	}
 }

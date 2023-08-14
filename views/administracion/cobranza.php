@@ -193,6 +193,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#tab_2" data-toggle="tab">Facturas pagadas</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tab_3" data-toggle="tab">Facturas canceladas</a>
+                    </li>
                 </ul>
             </div>
             <!-- /.card-header -->
@@ -306,6 +309,7 @@
                     </tfoot>
                   </table>
                 </div>
+                
                  <div class="tab-pane" id="tab_2">
                    <table id="tb_paid_bills" class="table table-responsive table-striped" style="display: none;">
                     <thead>
@@ -409,6 +413,105 @@
                     </tfoot>
                   </table>
                  </div> 
+
+                 <div class="tab-pane" id="tab_3">
+                   <table id="tb_paid_bills_canhcel" class="table table-responsive table-striped" style="display: none;">
+                    <thead>
+                        <tr>
+                          <th></th>
+                          <th></th>
+                          <th class="filterhead"></th>
+                          <th></th>
+                          <th class="filterhead"></th>
+                          <th class="filterhead"></th>
+                          <th class="filterhead"></th>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+                        <tr>
+                          <th class="align-middle">Factura</th>
+                          <th class="align-middle">Fecha</th>
+                          <th class="align-middle">Días de crédito</th>
+                          <th class="align-middle">Días trans</th>
+                          <th class="align-middle">Empresa</th>
+                          <th class="align-middle text-center">Cliente</th>
+                          <th class="align-middle">Razón social</th>
+                          <th class="align-middle text-right">Monto</th>
+                          <th class="align-middle text-right">Monto + IVA</th>
+                          <th class="align-middle text-center">Fecha de pago</th>
+                          <th class="align-middle text-center">Estado</th>
+                          <th class="align-middle">Fecha última gestión</th>
+                          <th class="align-middle">Próxima gestión</th>
+                          <th class="align-middle text-center">Promesa de pago</th>
+                          <th>Última gestión</th>
+                          <th class="align-middle text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach($facturas_canceladas as $bill): ?>
+                        <tr id="factura<?=$bill['Folio_Factura']?>">
+                            <?php switch ($bill['Estado']) {
+                              case 'Pendiente de pago': $class_color = 'bg-orange';break;
+                              case 'Pagada': $class_color = 'bg-success';break;
+                              default: $class_color = '';break;
+                            }
+                            ?>
+                            <td class="text-center align-middle"><b><?=$bill['Folio_Factura']?></b></td>
+                            <td class="text-center align-middle"><?=Utils::getShortDate($bill['Fecha_Emision']);?></td>
+                            <td class="text-center align-middle"><?=$bill['Plazo_Credito']?></td>
+                            <td class="text-center align-middle<?=$class_color_days?>"><?=$bill['Dias_Transcurridos']?></td>
+                            <td class="text-center align-middle"><?=$bill['Nombre_Empresa']?></td>
+                            <td class="text-center align-middle"><?=$bill['Cliente']?></td>
+                            <td id="razon<?=$bill['Folio_Factura']?>" class="align-middle"><?=$bill['Razon_Social']?></td>
+                            <td class="text-right align-middle">$ <?=number_format($bill['Monto'], 2)?></td>
+                            <td class="text-right align-middle">$ <?=number_format($bill['Monto_IVA'], 2)?></td>
+                            <td class="text-center align-middle"><?=!is_null($bill['Fecha_de_Pago']) ? Utils::getShortDate($bill['Fecha_de_Pago']) : ''?></td>
+                            <td id="estado<?=$bill['Folio_Factura']?>" class="text-center align-middle <?=$class_color?>"><?=$bill['Estado']?></td>
+                            <td class="text-center align-middle"><?=!is_null($bill['Fecha_Ultima_Gestion']) ? Utils::getShortDate($bill['Fecha_Ultima_Gestion']) : ''?></td>
+                            <td class="text-center align-middle"><?=!is_null($bill['Proxima_Gestion']) ? Utils::getShortDate($bill['Proxima_Gestion']) : ''?></td>
+                            <td class="text-center align-middle"><?=!is_null($bill['Promesa_Pago']) ? Utils::getShortDate($bill['Promesa_Pago']) : ''?></td>
+                            <td id="gestion<?=$bill['Folio_Factura']?>"><?=$bill['Ultima_Gestion']?></td>
+                            <td class="text-center py-0 align-middle">
+                                <div class="btn-group btn-group-sm">
+                                  <a href="<?=base_url?>administracion_SA/editar_factura&folio=<?=Encryption::encode($bill['Folio_Factura'])?>" class="btn btn-success btn-sm mr-1">
+                                      <i class="fas fa-eye"></i>
+                                  </a>
+                            
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                        
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                          <th class="align-middle">Factura</th>
+                          <th class="align-middle">Fecha</th>
+                          <th class="align-middle">Días de crédito</th>
+                          <th class="align-middle">Días trans</th>
+                          <th class="align-middle">Empresa</th>
+                          <th class="align-middle text-center">Cliente</th>
+                          <th class="align-middle">Razón social</th>
+                          <th class="align-middle text-right">Monto</th>
+                          <th class="align-middle text-right">Monto + IVA</th>
+                          <th class="align-middle text-center">Fecha de pago</th>
+                          <th class="align-middle text-center">Estado</th>
+                          <th class="align-middle">Fecha última gestión</th>
+                          <th class="align-middle">Próxima gestión</th>
+                          <th class="align-middle text-center">Promesa de pago</th>
+                          <th>Última gestión</th>
+                          <th class="align-middle text-center">Acciones</th>
+                        </tr>
+                    </tfoot>
+                  </table>
+                 </div> 
               </div>
                 
             </div>
@@ -426,6 +529,10 @@
     let table2 = document.querySelector('#tb_paid_bills');
     table2.style.display = "table";
     utils.dtTable(table2, false);
+
+    let table3 = document.querySelector('#tb_paid_bills_canhcel');
+    table3.style.display = "table";
+    utils.dtTable(table3, false);
 
 
     table.addEventListener('click', e => {
@@ -455,6 +562,32 @@
     })
 
     table2.addEventListener('click', e => {
+        if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains('btn-info')) {
+            $('#modal_factura').modal('show');
+            let folio;
+            if (e.target.classList.contains('btn-info'))
+                folio = e.target.dataset.id;
+            else
+                folio = e.target.offsetParent.dataset.id;
+
+           let administracion = new Administracion();
+            administracion.getFactura(folio);
+        }
+
+        if (e.target.classList.contains('btn-secondary') || e.target.offsetParent.classList.contains('btn-secondary')) {
+            $('#modal_factura_gestion').modal('show');
+            let folio;
+            if (e.target.classList.contains('btn-secondary'))
+                folio = e.target.dataset.id;
+            else
+                folio = e.target.offsetParent.dataset.id;
+
+            let administracion = new Administracion();
+            administracion.getFacturaGestion(folio);
+        }
+    })
+  
+    table3.addEventListener('click', e => {
         if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains('btn-info')) {
             $('#modal_factura').modal('show');
             let folio;

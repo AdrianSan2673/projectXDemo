@@ -15,6 +15,7 @@ require_once 'models/ApplicantProfile.php';   //gabo perfil
 require_once 'models/CandidateDirectory.php';
 require_once 'models/Area.php';
 require_once 'models/Subarea.php';
+require_once 'models/CivilStatus.php';
 
 class CandidatoController
 {
@@ -191,6 +192,7 @@ class CandidatoController
                 $vacante->setId($id);
                 $vacante = $vacante->getOne();
 
+
                 if (isset($_GET['contact'])) {
                     $id_contacto = Encryption::decode($_GET['contact']);
                     $candidateDirectoryObj = new CandidateDirectory();
@@ -201,23 +203,28 @@ class CandidatoController
                     if ($candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0) {
                         $VacancyObj = new Vacancy();
                         $VacancyObj->setId($candidateDirectory->id_vacancy);
-                        $Vacancy = $VacancyObj->getOne();
-
-                        $candidato->id_area = $Vacancy->id_area;
-                        $candidato->id_subarea = $Vacancy->id_subarea;
-                        $candidato->id_gender=0;
-                        $candidato->id_education_level=0;
-                        $candidato->description='';
-                        $candidato->id=null;
-
+                        $vacante = $VacancyObj->getOne();
                     }
+                    $candidato->id_area = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_area:0;
+                    $candidato->id_subarea = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_subarea:0;
+
+                    $candidato->id_gender = 0;
+                    $candidato->id_civil_status = 0;
+                    $candidato->id_education_level = 0;
+                    $candidato->description = '';
+                    $candidato->id = null;
+                    $candidato->job_title = $candidato->experience;
+                    $candidato->cellphone = '';
+                    $candidato->linkedinn = '';
+                    $candidato->facebook = '';
+                    $candidato->instagram = '';
                 }
             }
 
             $page_title = 'Nuevo candidato | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
-            require_once 'views/candidate/edit_operator.php';
+            require_once 'views/candidate/edit.php';
             require_once 'views/layout/footer.php';
         } else {
             header('location:' . base_url);
@@ -449,37 +456,17 @@ class CandidatoController
             $resume = isset($_FILES['resume']) && $_FILES['resume']['name'] != '' ? $_FILES['resume'] : FALSE;
             $email = Utils::isCandidate() ? $_SESSION['identity']->email : $email;
             $id_vacancy = isset($_POST['id_vacancy']) && !empty($_POST['id_vacancy']) ? Encryption::decode($_POST['id_vacancy']) : FALSE;
-            //gabo new
-            $gender = isset($_POST['gender_c']) ?  Utils::sanitizeString($_POST['gender_c']) : null;
-            $status_gender = isset($_POST['status_gender']) ?  Utils::sanitizeString($_POST['status_gender']) : null;
-            $age_c = isset($_POST['age_c']) ?  Utils::sanitizeString($_POST['age_c']) : null;
-            $status_age = isset($_POST['status_age']) ?  Utils::sanitizeString($_POST['status_age']) : null;
-            $civil_status =  isset($_POST['civil_status_c']) ?  Utils::sanitizeString($_POST['civil_status_c']) : null;
-            $status_civil_status =  isset($_POST['status_civil_status']) ?  Utils::sanitizeString($_POST['status_civil_status']) : null;
-            $level =  isset($_POST['level_c']) ?  Utils::sanitizeString($_POST['level_c']) : null;
-            $status_level =  isset($_POST['status_level']) ?  Utils::sanitizeString($_POST['status_level']) : null;
-            $language =  isset($_POST['language_c']) ?  Utils::sanitizeString($_POST['language_c']) : null;
-            $status_language =  isset($_POST['status_language']) ?  Utils::sanitizeString($_POST['status_language']) : null;
-            $language_level =  isset($_POST['language_level_c']) ? Utils::sanitizeString($_POST['language_level_c']) : null;
-            $status_language_level = isset($_POST['status_language_level']) ? Utils::sanitizeString($_POST['status_language_level']) : null;
-            $functions = isset($_POST['functions_c']) ? Utils::sanitizeString($_POST['functions_c']) : null;
-            $experience_years = isset($_POST['experience_years_c']) ? Utils::sanitizeString($_POST['experience_years_c']) : null;
-            $status_experience_years = isset($_POST['status_experience_years']) ?  Utils::sanitizeString($_POST['status_experience_years']) : null;
-            $experiencia_comments = isset($_POST['experiencia_comments']) ?  Utils::sanitizeString($_POST['experiencia_comments']) : null;
-            $general_comments = isset($_POST['general_comments']) ?  Utils::sanitizeString($_POST['general_comments']) : null;
-            $functions_comments = isset($_POST['functions_comments']) ?  Utils::sanitizeString($_POST['functions_comments']) : null;
-            $status_functions = isset($_POST['status_functions']) ?  Utils::sanitizeString($_POST['status_functions']) : null;
-            //fin gabo
-
-            // ===[gabo 27 junio perfil]==
-            $tiempo = isset($_POST['status_functions']) ?  Utils::sanitizeString($_POST['tiempo']) : null;
-            // ===[gabo 27 junio perfil fin]==
+            $id_contacto = isset($_POST['contact']) ? Encryption::decode($_POST['contact']) : NULL; //id del contacto del directorio
 
 
+            //===[gabo 1 agosto  operativa]==      
+            $isCandidate = false;
+            $vacancy = new Vacancy();
+            $vacancy->setId($id_vacancy);
+            $vacante = $vacancy->getOne();
 
-
-
-            if ($first_name && $surname && $last_name && $id_level && $job_title && $email && $id_state && $id_city && $id_area && $id_subarea) {
+            if (($vacante && $vacante->type == 1 && $first_name && $surname && $last_name && $id_level && $job_title  && $id_state && $id_city && $id_area && $id_subarea) || ($first_name && $surname && $last_name && $id_level && $job_title && $email && $id_state && $id_city && $id_area && $id_subarea)) {
+                //===[gabo 1 agosto  operativa fin]==   
                 if ($resume) {
                     $allowed_formats = array("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/pdf");
                     $limit_kb = 6000;
@@ -511,7 +498,12 @@ class CandidatoController
                 $candidate->setInstagram($instagram);
                 $candidate->setId_user(NULL);
                 $candidate->setCreated_by($_SESSION['identity']->id);
+
                 if (Utils::isCandidate()) {
+                    //===[gabo 2 julio operativa]===
+                    $isCandidate = true;
+                    //===[gabo 2 julio operativa fin]===
+
                     $candidate->setEmail($_SESSION['identity']->email);
                     $candidate->setId_user($_SESSION['identity']->id);
                     $usuario = new User();
@@ -525,7 +517,16 @@ class CandidatoController
                 }
 
                 $save = $candidate->save();
+
                 if ($save) {
+                    if (isset($id_contacto) && $id_contacto != null) {
+                        $candidateDirectoryObj = new CandidateDirectory();
+                        $candidateDirectoryObj->setId($id_contacto);
+                        $candidateDirectoryObj->setStatus(6);
+                        $candidateDirectoryObj->setId_candidate($candidate->getId());
+                        $candidateDirectoryObj->updateSatusCandidate();
+                    }
+
                     $id = $candidate->getId();
                     $studies = new CandidateEducation();
                     $studies->setId_candidate($id);
@@ -553,58 +554,14 @@ class CandidatoController
 
                             //gabi nuevo
                             if ($aplicante && !Utils::isCandidate()) {
-                                //insertar perfil
-                                $perfil = new ApplicantProfile();
-                                $perfil->setGender($gender);
-                                $perfil->setStatus_gender($status_gender);
-                                $perfil->setAge($age_c);
-                                $perfil->setStatus_age($status_age);
-                                $perfil->setCivil_status($civil_status);
-                                $perfil->setStatus_civil_status($status_civil_status);
-                                $perfil->setLevel($level);
-                                $perfil->setStatus_level($status_level);
-                                $perfil->setLanguage($language);
-                                $perfil->setStatus_language($status_language);
-                                $perfil->setLanguage_level($language_level);
-                                $perfil->setStatus_language_level($status_language_level);
-                                // $perfil->setRequirements($requirements);
-                                $perfil->setFunctions($functions);
-                                $perfil->setExperience_years($experience_years);
-                                $perfil->setStatus_experience_years($status_experience_years);
-                                //gabo mod
-                                $perfil->setExperiencia_comments($experiencia_comments);
-                                $perfil->setGeneral_comments($general_comments);
-                                $perfil->setFunctions_comments($functions_comments);
-                                $perfil->setStatus_functions($status_functions);
 
-                                // ===[gabo 27 junio perfil]==
-                                $perfil->setTiempo($tiempo);
-                                // ===[gabo 27 junio perfil fin]==
-
-                                $save = $perfil->save();
-
-
-                                if ($save) {
-                                    //actualizar el id 
-                                    $candidato = new VacancyApplicant();
-                                    $candidato->setId_candidate($id);
-                                    $candidato->setId_vacancy($id_vacancy);
-                                    $candidato->setId_profile($perfil->getId());
-                                    $save = $candidato->update_id_profile();
-                                }
-                                //fin gabo
-
-
-                                //===[gabo 15 junio experiencia candidato ]===
+                                //===[gabo 15 junio experiencia candidato ]=== */
 
                                 $enterpise_experience = isset($_POST['enterprise_experience']) ?  $_POST['enterprise_experience'] : null;
                                 $review_experience = isset($_POST['review_experience']) ?  $_POST['review_experience'] : null;
-
                                 if ($id) {
-
                                     $experience = new CandidateExperience;
                                     $experience->setId_candidate($id);
-
                                     if (isset($_POST['enterprise_experience'])) {
                                         $experience->setId_area(1);
                                         $experience->setId_subarea(1);
@@ -615,27 +572,31 @@ class CandidatoController
 
                                         $tamanio = count($enterpise_experience);
                                         for ($i = 0; $i < $tamanio; $i++) {
-
                                             $enterpise_experience[$i] =  trim($enterpise_experience[$i]);
                                             $review_experience[$i] =  trim($review_experience[$i]);
-
                                             if ($enterpise_experience[$i] != '' and  $review_experience[$i] != '') {
                                                 $experience->setEnterprise($enterpise_experience[$i]);
                                                 $experience->setPosition($enterpise_experience[$i]);
                                                 $experience->setReview($review_experience[$i]);
-
                                                 $result = $experience->save();
                                             }
                                         }
                                     }
                                 }
                                 //===[gabo 15 junio experiencia candidato fin ]===
-
                             }
                         }
                     }
                 }
                 $id = $candidate->getId();
+                //===[gabo 2 julio operativa]===
+                $id_candidate = Encryption::encode($id);
+                $id_vacancy = Encryption::encode($id_vacancy);
+                if (!$vacante) { //cuando no tenga vacante
+                    $vacante = new  stdClass();
+                    $vacante->type = 0;
+                }
+                //===[gabo 2 julio operativa fin]===
 
                 if ($avatar) {
                     $img = $_POST['avatar'];
@@ -700,26 +661,36 @@ class CandidatoController
                     }
 
                     if ($save) {
-                        echo 1;
+                        //===[gabo 2 julio operativa]===
+                        echo json_encode(array('status' => 1, 'id_vacancy' => $id_vacancy, 'id_candidate' => $id_candidate, 'type' => $vacante->type, 'isCandidate' => $isCandidate));
+                        //===[gabo 2 julio operativa]===
                     } else {
-                        echo 2;
+                        echo json_encode(array('status' => 2));
                     }
                     /* 
                     }else{
                         echo 4;
                     } */
+                }
+
+                if ($save) {
+                    //===[gabo 2 julio operativa]===
+                    echo json_encode(array(
+                        'status' => 1,
+                        'id_vacancy' => $id_vacancy,
+                        'id_candidate' => $id_candidate,
+                        'type' => $vacante->type,
+                        'isCandidate' => $isCandidate
+                    ));
+                    //===[gabo 2 julio operativa]===
                 } else {
-                    if ($save) {
-                        echo 1;
-                    } else {
-                        echo 2;
-                    }
+                    echo json_encode(array('status' => 2));
                 }
             } else {
-                echo 0;
+                echo json_encode(array('status' => 0));
             }
         } else {
-            //   header("location:" . base_url);
+            echo json_encode(array('status' => 0));
         }
     }
 
@@ -988,6 +959,7 @@ class CandidatoController
                 $language->setId_candidate($id);
                 $languages = $language->getLanguagesByCandidate();
 
+
                 $page_title = $candidato->first_name . ' ' . $candidato->surname . ' | RRHH Ingenia';
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
@@ -1111,10 +1083,6 @@ class CandidatoController
             header('location:' . base_url);
         }
     }
-
-
-
-
 
     //======================[Gabo Marzo 28 Perfil Postulado]===============
     public function consulta_perfil()
@@ -1253,13 +1221,8 @@ class CandidatoController
             $status_language_level = isset($_POST['status_language_level']) ? Utils::sanitizeString($_POST['status_language_level']) : null;
             // $requirements = isset($_POST['requirements_c']) ? Utils::sanitizeString($_POST['requirements_c']) : null;
             $functions = isset($_POST['functions_c']) ? Utils::sanitizeString($_POST['functions_c']) : null;
-
-            //===[gabo 27 junio perfil]==
             $experience_years_c = isset($_POST['experience_years_c']) || $_POST['experience_years_c'] != null  ?  Utils::sanitizeString($_POST['experience_years_c']) : '0';
-            //===[gabo 27 junio perfil]==
-
             $status_experience_years = isset($_POST['status_experience_years']) ?  Utils::sanitizeString($_POST['status_experience_years']) : null;
-            //gabo mod
             $experiencia_comments = isset($_POST['experiencia_comments']) ?  Utils::sanitizeString($_POST['experiencia_comments']) : null;
             $general_comments = isset($_POST['general_comments']) ?  Utils::sanitizeString($_POST['general_comments']) : null;
             $functions_comments = isset($_POST['functions_comments']) ?  Utils::sanitizeString($_POST['functions_comments']) : null;
@@ -1273,7 +1236,7 @@ class CandidatoController
             $tiempo =  isset($_POST['tiempo']) ? Utils::sanitizeString($_POST['tiempo']) : null;
             //===[gabo 27 junio perfil]==
 
-            if ($id_vacancy  && $id_candidate   && $gender  && $age   &&  $civil_status   &&  $general_comments  &&   $functions  &&   $experiencia_comments  &&   $general_comments &&   $functions_comments) {
+            if ($id_vacancy  && $id_candidate   && $gender  && $age     &&  $general_comments  &&   $functions  &&   $experiencia_comments  &&   $general_comments &&   $functions_comments) {
                 $candidato = new VacancyApplicant();
                 $candidato->setId_candidate($id_candidate);
                 $candidato->setId_vacancy($id_vacancy);
@@ -1331,21 +1294,13 @@ class CandidatoController
                     $perfil->setExperience_years($experience_years_c);
                     //===[gabo 27 junio perfil]==
                     $perfil->setStatus_experience_years($status_experience_years);
-                    $perfil->setLanguage($language);
-                    $perfil->setStatus_language($status_language);
-                    $perfil->setLanguage_level($language_level);
-                    $perfil->setStatus_language_level($status_language_level);
-                    //gabo mod
                     $perfil->setExperiencia_comments($experiencia_comments);
                     $perfil->setGeneral_comments($general_comments);
                     $perfil->setFunctions_comments($functions_comments);
                     $perfil->setStatus_functions($status_functions);
-
                     //===[gabo 27 junio perfil]==
                     $perfil->setTiempo($tiempo);
                     //===[gabo 27 junio perfil]==
-
-
                     //actualizar
                     $actualizado =  $perfil->update_profile();
 
@@ -1374,17 +1329,11 @@ class CandidatoController
                     $perfil->setExperience_years($experience_years_c);
                     //===[gabo 27 junio perfil fin]==
                     $perfil->setStatus_experience_years($status_experience_years);
-
-                    //gabo mod
                     $perfil->setExperiencia_comments($experiencia_comments);
                     $perfil->setGeneral_comments($general_comments);
                     $perfil->setFunctions_comments($functions_comments);
                     $perfil->setStatus_functions($status_functions);
-
-                    //===[gabo 27 junio perfil]==
                     $perfil->setTiempo($tiempo);
-                    //===[gabo 27 junio perfil]==
-
                     $insertado = $perfil->save();
 
                     if ($insertado) {
@@ -1601,4 +1550,35 @@ class CandidatoController
         }
     }
     //========================================================
+    public function profile()
+    {
+
+        if (isset($_SESSION['identity']) && $_SESSION['identity'] != FALSE && Utils::isAdmin() || Utils::isRecruitmentManager() || Utils::isSenior()) {
+            $id_vacancy = isset($_GET['id_vacancy']) ? trim(Encryption::decode($_GET['id_vacancy'])) : FALSE;
+            $id_candidate = isset($_GET['id_candidate']) ? trim(Encryption::decode($_GET['id_candidate'])) : FALSE;
+
+            $vacante = new Vacancy();
+            $vacante->setId($id_vacancy);
+            $vacante = $vacante->getOne();
+
+            $candidato = new Candidate();
+            $candidato->setId($id_candidate);
+            $language = $candidato->getLanguageFromCandidate();
+            $candidato = $candidato->getOneFull();
+
+            $civil_status = new CivilStatus();
+            $civil_status->setId($vacante->id_civil_status);
+            $status =  $civil_status->getOne();
+            $vacante->id_civil_status = $status->status;
+
+
+            $page_title = 'Perfil | RRHH Ingenia';
+            require_once 'views/layout/header.php';
+            require_once 'views/layout/sidebar.php';
+            require_once 'views/candidate/profile.php';
+            require_once 'views/layout/footer.php';
+        } else {
+            header('location:' . base_url);
+        }
+    }
 }

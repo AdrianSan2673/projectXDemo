@@ -27,7 +27,7 @@
 
 
 <script>
-    var subarea = new Subareas();
+    var subarea = new Subarea();
     document.querySelector('#agregar-subarea-form').addEventListener('submit', e => {
         e.preventDefault();
         subarea.save_subarea();

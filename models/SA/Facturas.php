@@ -261,6 +261,16 @@ class Facturas{
         $facturas = $stmt->fetchAll();
         return $facturas;
 	}
+	public function getFacturasCanceladas(){
+        $stmt = $this->db->prepare("SELECT CF.*, DATEDIFF(DAY, Fecha_Emision, GETDATE()) AS Dias_Transcurridos, E.Nombre_Empresa,
+        (SELECT top 1 Comentarios FROM rh_Candidatos_Facturas_Gestiones WHERE Folio_Factura=CF.Folio_Factura order by Fecha desc) as Ultima_Gestion,
+        (SELECT top 1 Fecha FROM rh_Candidatos_Facturas_Gestiones WHERE Folio_Factura=CF.Folio_Factura order by Fecha desc) as Fecha_Ultima_Gestion,
+         (SELECT Dias_Credito FROM rh_Ventas_Alta WHERE Cliente=CF.ID_Cliente) as Plazo_Credito
+	   FROM rh_Candidatos_Facturas CF INNER JOIN rh_Ventas_Alta V ON CF.ID_Cliente=V.Cliente INNER JOIN rh_Ventas_Empresas E ON V.Empresa=E.Empresa WHERE Estado='Cancelada' ORDER BY Fecha_Emision DESC");
+        $stmt->execute();
+        $facturas = $stmt->fetchAll();
+        return $facturas;
+	}
 
     public function getServiciosPorFactura(){
 		$folio = $this->getFolio_Factura();

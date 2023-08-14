@@ -221,6 +221,7 @@ class Administracion_SAController{
                 $facturas_pendientes = $factura->getFacturasPendientes();
                 //$facturas_pagadas = [];
 				$facturas_pagadas = $factura->getFacturasPagadas(); 
+				$facturas_canceladas = $factura->getFacturasCanceladas(); 
             }
 
 			$page_title = 'Cobranza SA | RRHH Ingenia';

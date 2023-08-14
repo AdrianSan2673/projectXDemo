@@ -169,7 +169,7 @@
               </div>
             <?php endif ?>
 
-            <?php if (($employeeContract)) : ?>
+            <?php if (isset($employeeContract)) : ?>
               <section class="content">
                 <div class="card bg-transparent">
                   <div class="card-header bg-danger">
@@ -220,7 +220,7 @@
                 </div>
               </section>
             <?php endif; ?>
-            <?php if ($employeeBirthday || $employeeBirthdayNextMonth) : ?>
+            <?php if (isset($employeeBirthday) ||isset( $employeeBirthdayNextMonth)) : ?>
               <section class="content">
                 <div class="card">
                   <div class="card-header">
@@ -334,8 +334,8 @@
                 </div>
               </section>
             <?php endif ?>
-            <?php $evaluations = Statistics::getEvaluationByID_ContactoAndStatus() ?>
-            <?php if ($evaluations) : ?>
+            
+            <?php if (isset($evaluations)) : ?>
               <div class="card">
                 <div class="card-header">
                   <h4 class="card-title">Evaluaciones pendientes</h4>
@@ -1276,7 +1276,7 @@
                       </div>
                     </div>
                     <div class="card">
-                      <?php $serviciosentxejhoy = !Utils::isAccount() ? Statistics::getServiciosPorEjecutivoHoy() : Statistics::getServiciosPorEjecutivoUnicoHoy() ?>
+                      <?php $serviciosentxejhoy = !Utils::isAccount() ? Statistics::getSServiciosPorEjecutivoHoy() : Statistics::getServiciosPorEjecutivoUnicoHoy() ?>
                       <div class="card-header">
                         <h4 class="card-title">Servicios solicitados hoy de cada ejecutivo</h4>
                       </div>

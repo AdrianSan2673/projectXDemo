@@ -164,6 +164,7 @@ class Cliente_SAController
     public function save()
     {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior() || Utils::isSalesManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor())) {
+            
             $Empresa = Utils::sanitizeNumber($_POST['Empresa']);
             $Nombre_Cliente = Utils::sanitizeString($_POST['Nombre_Cliente']);
             $ESE = Utils::sanitizeNumber($_POST['ESE']);
