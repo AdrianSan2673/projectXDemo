@@ -349,7 +349,7 @@
         </div>
         <!-- /.row -->
         <?php if (!Utils::isCustomer() && !Utils::isCandidate()) : ?>
-          <?php if (true) : ?>
+          <?php if (count($vacancies) > 0) : ?>
             <br>
             <div class="card card-info">
               <div class="card-header">
@@ -357,13 +357,11 @@
               </div>
               <div class="card-body">
 
-              <button class="btn btn-success float-right" id="">Postular a vacante</button>
-
                 <table id="tb_vacancies" class="table table-responsive table-striped" style="font-size: 0.6rem;">
                   <thead>
                     <tr>
                       <?php if (!Utils::isCustomer()) : ?>
-                        <th class="align-middle text-center bg-">Fecha de postulación</th>
+                        <th class="align-middle text-center">Fecha de postulación</th>
                       <?php endif ?>
                       <th>Estado</th>
                       <th>Acerca de</th>
@@ -480,8 +478,8 @@
                 </script>
               </div>
             </div>
-
-            <div class="card card-navy">
+          <?php endif ?>
+          <div class="card card-navy">
             <div class="card-header">
               <h4 class="card-title">Psicometrías</h4>
             </div>
@@ -541,10 +539,6 @@
               </script>
             </div>
           </div>
-          <?php endif ?>
-
-
-         
         <?php endif ?>
       </div><!-- /.container-fluid -->
     </section>

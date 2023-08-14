@@ -171,7 +171,7 @@
                     </a>
                   </div>
                 </td>
-                <td class="text-center align-middle <?= $Color_Estatus ?>"><?= $estudio['RAL'] ?></td>
+                <td class="text-center align-middle <?= $Color_Estatus ?>"><?= $estudio['Estatus'] ?></td>
                 <td class="text-center align-middle <?= $Color_Viabilidad ?>"><?= $estudio['Viable'] == '0' && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254) ? 'Viable' : ($estudio['Viable'] == 1 && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254) ? 'No viable' : ($estudio['Viable'] == 2 && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254) ? 'Viable con Reservas' : ($estudio['Viable'] == 5 && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254) ? 'Viable con observaciones' : '-'))) ?></td>
 
                 <?php if ($estudio['Cliente_Activo'] == 0) : ?>

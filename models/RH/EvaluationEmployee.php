@@ -662,7 +662,7 @@ class EvaluationEmployee
 
 	// ===[gabo 11 junio excel evaluaciones]===
 	//===[gabo 19 julio cliente session]===
-	public function getGroupsByID_Cliente()
+public function getGroupsByID_Cliente()
 	{
 		$id_evaluation = $this->getId_evaluation();
 		$ID_Cliente = $this->getID_Cliente();

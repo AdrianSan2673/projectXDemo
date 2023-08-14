@@ -100,7 +100,7 @@
                           <label for="customer_contact" class="col-form-label">Contacto</label>
                           <select name="customer_contact" id="customer_contact" class="form-control">
                             <?php if (isset($vacante) && is_object($vacante) && !empty($vacante->id_customer)) : ?>
-                              <?= $contacts = Utils::showContactsByCustomer($vacante->id_customer); ?>
+                              <?php $contacts = Utils::showContactsByCustomer($vacante->id_customer); ?>
                               <?php foreach ($contacts as $contact) : ?>
                                 <option value="<?= $contact['id'] ?>" <?= isset($vacante) && is_object($vacante) && $contact['id'] == $vacante->id_customer_contact ? 'selected' : ''; ?>><?= $contact['first_name'] . ' ' . $contact['last_name'] ?></option>
                               <?php endforeach ?>
@@ -117,7 +117,7 @@
                           <label for="business_name" class="col-form-label">Razón social</label>
                           <select name="business_name" id="business_name" class="form-control">
                             <?php if (isset($vacante) && is_object($vacante) && !empty($vacante->id_customer)) : ?>
-                              <?= $BNs = Utils::showBNByCustomer($vacante->id_customer); ?>
+                              <?php $BNs = Utils::showBNByCustomer($vacante->id_customer); ?>
                               <?php foreach ($BNs as $bn) : ?>
                                 <option value="<?= $bn['id'] ?>" <?= isset($vacante) && is_object($vacante) && $bn['id'] == $vacante->id_business_name ? 'selected' : ''; ?>><?= $bn['business_name'] ?></option>
                               <?php endforeach ?>
@@ -213,7 +213,7 @@
                         <label for="subarea" class="col-form-label">Subarea</label>
                         <select name="subarea" id="subarea" class="form-control select2" required>
                           <?php if (isset($vacante) && is_object($vacante) && !empty($vacante->id_area)) : ?>
-                            <?= $subareas = Utils::showSubareasByArea($vacante->id_area); ?>
+                            <?php $subareas = Utils::showSubareasByArea($vacante->id_area); ?>
                             <?php foreach ($subareas as $subarea) : ?>
                               <option value="<?= $subarea['id'] ?>" <?= isset($vacante) && is_object($vacante) && $subarea['id'] == $vacante->id_subarea ? 'selected' : ''; ?>><?= $subarea['subarea'] ?></option>
                             <?php endforeach ?>
@@ -277,7 +277,7 @@
                         <label for="city" class="col-form-label">Ciudad</label>
                         <select name="city" id="city" class="form-control select2" required>
                           <?php if (isset($vacante) && is_object($vacante) && !empty($vacante->id_state)) : ?>
-                            <?= $cities = Utils::showCitiesByState($vacante->id_state); ?>
+                            <?php $cities = Utils::showCitiesByState($vacante->id_state); ?>
                             <?php foreach ($cities as $city) : ?>
                               <option value="<?= $city['id'] ?>" <?= isset($vacante) && is_object($vacante) && $city['id'] == $vacante->id_city ? 'selected' : ''; ?>><?= $city['city'] ?></option>
                             <?php endforeach ?>

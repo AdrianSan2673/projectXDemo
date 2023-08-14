@@ -145,7 +145,7 @@ class Administracion_SAController{
     {
         if (Utils::isAdmin() || Utils::isManager()) {
             $candidato = new Candidatos();
-  
+
             if (isset($_POST['start_date']) && isset($_POST['end_date']) && isset($_POST['Empresa']) && $_POST['Empresa'] != 0) {
                 $candidato->setFecha_solicitud($_POST['start_date']);
                 $candidato->setFecha_Entregado($_POST['end_date']);
@@ -153,7 +153,7 @@ class Administracion_SAController{
             } elseif (isset($_POST['start_date']) && isset($_POST['end_date'])) {
                 $candidato->setFecha_solicitud($_POST['start_date']);
                 $candidato->setFecha_Entregado($_POST['end_date']);
-                $servicios = $candidato->getServiciosPorRangoDeFecha();
+                $servicios = $candidato->getServiciosPorRangoDeFechaConCancelados();
             } elseif (isset($_POST['submit'])) {
                 foreach ($_POST['folio'] as $f) {
                     echo $f;
@@ -161,7 +161,6 @@ class Administracion_SAController{
             } else {
                 $servicios = $candidato->getServiciosDeHoy();
             }
-
 
             $page_title = 'Facturación SA | RRHH Ingenia';
             require_once 'views/layout/header.php';
@@ -222,6 +221,7 @@ class Administracion_SAController{
                 //$facturas_pagadas = [];
 				$facturas_pagadas = $factura->getFacturasPagadas(); 
 				$facturas_canceladas = $factura->getFacturasCanceladas(); 
+
             }
 
 			$page_title = 'Cobranza SA | RRHH Ingenia';

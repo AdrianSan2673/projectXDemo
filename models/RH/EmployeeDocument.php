@@ -103,12 +103,30 @@ class EmployeeDocument{
 		$image = $this->getImage();
 		$file_name = $this->getFile_name();
         $document = $this->getDocument();
-		$stmt = $this->db->prepare("UPDATE root.employee_documents SET image=:image, file_name=:file_name, document=:document, modified_at=GETDATE() WHERE id=:id");
+		$stmt = $this->db->prepare("UPDATE root.employee_documents SET image=:image, file_name=:file_name, modified_at=GETDATE() WHERE id=:id");
 
 		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
 		$stmt->bindParam(":image", $image, PDO::PARAM_LOB, 0, PDO::SQLSRV_ENCODING_BINARY);
 		$stmt->bindParam(":file_name", $file_name, PDO::PARAM_STR);
-        $stmt->bindParam(":document", $document, PDO::PARAM_INT);
+        //$stmt->bindParam(":document", $document, PDO::PARAM_INT);
+
+		$flag = $stmt->execute();
+
+		if ($flag) {
+			$result = true;
+		}
+
+		return $result;
+	}
+
+	public function delete()
+	{
+		$result = false;
+
+		$id = $this->getId();
+		$stmt = $this->db->prepare("DELETE FROM root.employee_documents WHERE id=:id");
+
+		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
 
 		$flag = $stmt->execute();
 
@@ -140,7 +158,17 @@ class EmployeeDocument{
     public function getDocumentsByIdEmployee()
     {
         $id_employee = $this->getId_employee();
-        $stmt = $this->db->prepare("SELECT id, id_employee, file_name, document, created_at, modified_at FROM root.employee_documents WHERE id_employee=:id_employee");
+        $stmt = $this->db->prepare("SELECT d.id, id_employee, file_name, document, c.Descripcion, created_at, modified_at FROM root.employee_documents d INNER JOIN sys_Campos c ON d.document=c.Campo WHERE id_employee=:id_employee");
+        $stmt->bindParam(":id_employee", $id_employee, PDO::PARAM_INT);
+        $stmt->execute();
+        $fetch =  $stmt->fetchAll();
+        return $fetch;
+    }
+
+	public function getMissingDocuments()
+    {
+        $id_employee = $this->getId_employee();
+        $stmt = $this->db->prepare("SELECT c.Campo, c.Descripcion FROM (SELECT * FROM sys_Campos WHERE Tabla=104) c LEFT OUTER JOIN (SELECT id, document FROM root.employee_documents WHERE id_employee=:id_employee) e ON e.document=c.Campo WHERE e.document IS NULL ORDER BY c.Descripcion");
         $stmt->bindParam(":id_employee", $id_employee, PDO::PARAM_INT);
         $stmt->execute();
         $fetch =  $stmt->fetchAll();

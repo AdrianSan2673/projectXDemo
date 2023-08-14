@@ -695,13 +695,13 @@
               </div>
             </div>
 			<div class="content botones_continuar mt-4">
-              <button class="btn btn-app bg-danger" style="display: none;">
+              <button class="btn btn-app bg-danger mb-5" style="display: none;">
                 <i class="fas fa-play"></i>
                 Continuar con investigación
               </button>
               <button class="btn btn-app bg-navy" style="display: none;">
                 <i class="fas fa-play"></i>
-                Continuar con estudio
+                Continuar con estudio ESE(EG48)
               </button>
 			  <button class="btn btn-app bg-maroon" style="display: none;" hidden>
                 <i class="fas fa-play"></i>
@@ -710,6 +710,10 @@
               <button class="btn btn-app bg-black" style="display: none;">
                 <i class="fas fa-play"></i>
                 Continuar con SAFE OPERATOR
+              </button>
+              <button class="btn btn-app bg-success" style="display: none;">
+                <i class="fas fa-play"></i>
+                Continuar con ESE SMART
               </button>
             </div>
             <div class="content botones_pausar_finalizar mt-3 text-center">
@@ -748,7 +752,7 @@
                   <button class="btn btn-danger">Denegar SOI</button>
                 </div>
                 <a href="#">
-                  <img src="" alt="SOI" class="img-fluid">
+                  <img src="" alt="SOI" class="img-fluid" style="display: none;">
                 </a>
               </div>
             </div>
@@ -937,7 +941,7 @@
 <template id="template-reactivar_eliminar">
   <div class="btn-group btn-group-sm text-center">
     <button class="btn btn-info btn-sm btn-reactivar">Reactivar</button>
-    <button class="btn btn-danger btn-sm btn-eliminar" hidden>Eliminar servicio</button>
+    <button class="btn btn-danger btn-sm btn-eliminar" >Eliminar servicio</button>
   </div>
   <hr>
   <div class="col-12 mt-4 text-center">
@@ -1286,7 +1290,9 @@
         <p></p>
       </div>
     </div>
-    <b>Nombre y puesto de quién proporciona la información</b>
+    <b>Nombre de quién proporciona la información</b>
+    <p></p>
+    <b>Puesto de quién proporciona la información</b>
     <p></p>
     <b>Comentarios</b>
     <p></p>
@@ -1509,6 +1515,37 @@
   <hr>
   <b>Comentarios generales de la investigación laboral</b>
   <p></p>
+  <table class="table table-sm text-nowrap">
+      <thead>
+        <tr>
+          <th></th>
+          <th class="text-center">Sí</th>
+          <th class="text-center">No</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>¿El candidato proporcionó los datos de contacto?</th>
+          <td class="text-center"></td>
+          <td class="text-center"></td>
+        </tr>
+        <tr>
+          <th>¿Es congruente la información con lo obtenido en información de IMSS?</th>
+          <td class="text-center"></td>
+          <td class="text-center"></td>
+        </tr>
+        <tr>
+          <th>¿Se detectó algún factor de riesgo?</th>
+          <td class="text-center"></td>
+          <td class="text-center"></td>
+        </tr>
+        <tr>
+          <th>¿Se observa estabilidad laboral</th>
+          <td class="text-center"></td>
+          <td class="text-center"></td>
+        </tr>
+      </tbody>
+  </table>
   <br>
   <b>Viabilidad</b>
   <p></p>
@@ -2152,6 +2189,37 @@
 <template id="template-comentarios_generales">
   <b>Comentarios generales de la verificación</b>
   <p></p>
+  <table class="table table-sm text-nowrap">
+      <thead>
+        <tr>
+          <th></th>
+          <th class="text-center">Sí</th>
+          <th class="text-center">No</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>¿Atendió puntual y en fecha y hora acordada?</th>
+          <td class="text-center"></td>
+          <td class="text-center"></td>
+        </tr>
+        <tr>
+          <th>¿Presentó la documentación solicitada?</th>
+          <td class="text-center"></td>
+          <td class="text-center"></td>
+        </tr>
+        <tr>
+          <th>¿Se condujo con naturalidad y dominio?</th>
+          <td class="text-center"></td>
+          <td class="text-center"></td>
+        </tr>
+        <tr>
+          <th>¿Sus respuestas fueron claras y seguras</th>
+          <td class="text-center"></td>
+          <td class="text-center"></td>
+        </tr>
+      </tbody>
+  </table>
   <br>
   <b>Análisis de la Verificación</b>
   <p></p>

@@ -252,10 +252,9 @@ class ContactosCliente
         $fetch = $stmt->fetchAll();
         return $fetch;
     }
-
-    public function getContactoByUsername()
+	
+ public function getContactoByUsername()
     {
-
         $id = $this->getID();
 
         $stmt = $this->db->prepare("SELECT * FROM rh_Ventas_Alta_Contactos
@@ -265,6 +264,4 @@ class ContactosCliente
         $fetch = $stmt->fetchObject();
         return $fetch;
     }
-
-
 }

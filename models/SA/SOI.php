@@ -74,8 +74,8 @@
         $Activo = $this->getActivo();
 		
         $stmt = $this->db->prepare("INSERT INTO SOI(
-			Candidato, Autorizado_Por, Activo)
-		VALUES (:Candidato, :Autorizado_Por, :Activo)");
+			Candidato, Autorizado_Por, Activo, Fecha_Emision)
+		VALUES (:Candidato, :Autorizado_Por, :Activo, GETDATE())");
         $stmt->bindParam(":Autorizado_Por", $Autorizado_Por, PDO::PARAM_STR);
 		$stmt->bindParam(":Activo", $Activo, PDO::PARAM_STR);
 		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);

@@ -36,7 +36,7 @@
                 <div class="card-body">
                     <div class="form-group">
                       <label for="Empresa" class="col-form-label">Nombre de la empresa</label>
-                      <select class="form-control" name="Empresa">
+                      <select class="form-control select2" name="Empresa">
                         <?php $empresas = Utils::showEmpresas(); $enterprise = Encryption::decode($_GET['empresa'])?>
                         <?php foreach ($empresas as $empresa): ?>
                           <option value="<?= $empresa['Empresa'] ?>" <?=isset($_GET['empresa']) && $enterprise == $empresa['Empresa'] ? 'selected' : ''; ?>><?= $empresa['Nombre_Empresa'] ?></option>

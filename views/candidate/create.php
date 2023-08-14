@@ -64,7 +64,7 @@
                         </div>
                         <div class="col-md-4">
                           <div class="form-group">
-                            <label for="gender" class="col-form-label ">Sexo</label>
+                            <label for="gender" class="col-form-label">Sexo</label>
                             <?php $genders = Utils::showGenders(); ?>
                             <select name="id_gender" id="id_gender" class="form-control select2" required>
                               <option disabled selected></option>

@@ -1,10 +1,10 @@
-class ContenidoEstudio {
-    constructor() {
+class ContenidoEstudio{
+    constructor(){
         this.info_servicio = document.getElementById('info-servicio');
         this.content_licencia = document.getElementById('content-licencia');
         this.content_examen_medico = document.getElementById('content-examen_medico');
         this.content_resultado_licencia = document.getElementById('content-resultado_licencia');
-        this.content_busqueda_ral = document.getElementById('content-busqueda_ral');
+		this.content_busqueda_ral = document.getElementById('content-busqueda_ral');
         this.content_expediente_ral = document.getElementById('content-expedientes_ral');
         this.content_ral = document.getElementById('content-ral');
         this.content_capturas_ral = document.getElementById('content-capturas_ral');
@@ -55,12 +55,12 @@ class ContenidoEstudio {
         this.template_examen_medico = document.getElementById('template-examen_medico').content;
         this.template_resultado_licencia = document.getElementById('template-resultado_licencia').content;
 
-        this.template_busqueda_ral = document.getElementById('template-busqueda_ral').content;
+		this.template_busqueda_ral = document.getElementById('template-busqueda_ral').content;
         this.template_expediente_ral = document.getElementById('template-expediente_ral').content;
         this.template_ral = document.getElementById('template-ral').content;
         this.template_captura_ral = document.getElementById('template-captura_ral').content;
         this.template_propio_ral = document.getElementById('template-propio_ral').content;
-        this.template_propio_ral_estados = document.getElementById('template-propio_ral_estados').content
+		        this.template_propio_ral_estados = document.getElementById('template-propio_ral_estados').content
 
         this.template_comentarios_ral = document.getElementById('template-comentarios_ral').content;
 
@@ -98,7 +98,7 @@ class ContenidoEstudio {
         this.fragment_examen_medico = document.createDocumentFragment();
         this.fragment_resultado_licencia = document.createDocumentFragment();
 
-        this.fragment_busqueda_ral = document.createDocumentFragment();
+		this.fragment_busqueda_ral = document.createDocumentFragment();
         this.fragment_expediente_ral = document.createDocumentFragment();
         this.fragment_ral = document.createDocumentFragment();
         this.fragment_captura_ral = document.createDocumentFragment();
@@ -164,9 +164,9 @@ class ContenidoEstudio {
         this.fragment_comentarios_generales = document.createDocumentFragment();
         this.fragment_notas = document.createDocumentFragment();
     }
+    
 
-
-    cargarInfoServicio(data, perfil, display, cv_ruta = 0, soi = 0, historial_candidato = false) {
+    cargarInfoServicio(data, perfil, display, cv_ruta=0, soi=0, historial_candidato=false) {
         this.template_botones_estatus.querySelectorAll('.btn-group')[0].style.display = 'none';
         this.template_botones_estatus.querySelectorAll('.btn-group')[1].style.display = 'none';
         this.template_botones_estatus.querySelectorAll('.btn-group')[2].style.display = 'none';
@@ -187,43 +187,43 @@ class ContenidoEstudio {
                 this.template_perfil.querySelector('.btn-watch-photo').style.display = 'none';
                 this.template_perfil.querySelector('.btn-edit-photo').style.display = 'none';
                 this.template_perfil.querySelector('.btn-delete-photo').style.display = 'none';
-            } else {
+            }else{
                 this.template_perfil.querySelector('.btn-watch-photo').style.display = 'block';
                 this.template_perfil.querySelector('.btn-edit-photo').style.display = 'block';
                 this.template_perfil.querySelector('.btn-delete-photo').style.display = 'block';
             }
-        } else {
+        }else {
             this.template_perfil.querySelector('.btn-edit-photo').style.display = 'none';
             this.template_perfil.querySelector('.btn-delete-photo').style.display = 'none';
             this.template_perfil.querySelector('.btn-upload-photo').parentElement.style.display = 'none';
         }
-
+            
         this.template_perfil.querySelector('.btn-watch-photo').dataset.id = data.Foto;
         this.template_perfil.querySelector('.btn-edit-photo').dataset.id = data.Foto;
         this.template_perfil.querySelector('.btn-delete-photo').dataset.id = data.Foto;
         this.template_perfil.querySelector('h3 b').textContent = data.Nombres;
-        this.template_perfil.querySelector('h3 p').textContent = data.Apellido_Paterno + ' ' + data.Apellido_Materno;
+        this.template_perfil.querySelector('h3 p').textContent = data.Apellido_Paterno+' '+data.Apellido_Materno;
         this.template_perfil.querySelector('h6').textContent = data.Puesto;
-
-        this.template_candidato_contactado.querySelectorAll('span')[0].textContent = data.Contactado == 1 ? 'Contactado' : (data.Contactado == 2 ? 'No contactado' : '');
+		
+		this.template_candidato_contactado.querySelectorAll('span')[0].textContent = data.Contactado == 1 ? 'Contactado' : (data.Contactado == 2 ? 'No contactado' : '');
         this.template_candidato_contactado.querySelectorAll('p')[0].textContent = data.Contactado == 1 ? data.Fecha_Contactado : (data.Contactado == 2 ? '--' : '');
         this.template_candidato_contactado.querySelectorAll('button')[0].style.display = display.SA;
-        if (data.Contactado == 1) {
+        if (data.Contactado == 1){
             this.template_candidato_contactado.querySelectorAll('button')[0].style.display = 'none';
             this.template_candidato_contactado.querySelectorAll('span')[0].classList.add('badge-success');
-        } else if (data.Contactado == 2) {
+        }else if (data.Contactado == 2){
             this.template_candidato_contactado.querySelectorAll('button')[0].style.display = 'block';
             this.template_candidato_contactado.querySelectorAll('span')[0].classList.add('badge-warning');
-            this.template_candidato_contactado.querySelectorAll('button')[0].style.display = display.SA;
+			this.template_candidato_contactado.querySelectorAll('button')[0].style.display = display.SA;
         }
 
         this.template_datos_empresa.querySelectorAll('p')[0].textContent = data.Nombre_Cliente;
         this.template_datos_empresa.querySelectorAll('p')[1].textContent = data.Razon;
         this.template_datos_empresa.querySelectorAll('p')[2].textContent = data.CC_Cliente;
-
+        
         this.template_datos_empresa.querySelectorAll('p')[3].textContent = data.Quien_Solicita;
         this.template_datos_empresa.querySelectorAll('p')[4].textContent = data.Correo_Cliente;
-        this.template_datos_empresa.querySelectorAll('p')[5].textContent = data.Telefono_Cliente + (data.Extension_Cliente ? ' /' + data.Extension_Cliente : '');
+        this.template_datos_empresa.querySelectorAll('p')[5].textContent = data.Telefono_Cliente + (data.Extension_Cliente ? ' /'+data.Extension_Cliente : '');
         this.template_datos_empresa.querySelectorAll('p')[6].textContent = data.Celular_Cliente;
         this.template_datos_empresa.querySelector('button').style.display = display.Account;
 
@@ -235,120 +235,125 @@ class ContenidoEstudio {
         this.template_estatus_servicio.querySelectorAll('p')[1].textContent = data.Fase;
         this.template_estatus_servicio.querySelectorAll('p')[2].textContent = data.Estatus;
         this.template_estatus_servicio.querySelector('button').style.display = display.Operations;
-
+		console.log(display.Account)
         if (display.Account == 'block') {
             //if (data.Nuevo_Procedimiento == 1 && (data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'INV. LABORAL') && data.Servicio == 298 && (data.Estado == 250 || data.Estado == 251)) {
-            if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'INV. LABORAL' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI') && data.Servicio == 298 && (data.Estado == 250 || data.Estado == 251)) {
+            if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'INV. LABORAL' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') && data.Servicio == 298 && (data.Estado == 250 || data.Estado == 251)) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[0].style.display = 'block';
-                //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'ESE' && data.Servicio == 299 && (data.Estado == 250 || data.Estado == 251)) {
-            } else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI') && data.Servicio == 299 && (data.Estado == 250 || data.Estado == 251)) {
+            //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'ESE' && data.Servicio == 299 && (data.Estado == 250 || data.Estado == 251)) {
+            }else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') && data.Servicio == 299 && (data.Estado == 250 || data.Estado == 251)) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[1].style.display = 'block';
-                //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'ESE' && data.Servicio == 300 && (data.Estado == 250 || data.Estado == 251)) {
-            } else if (data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 299 && (data.Estado == 250 || data.Estado == 251)) {
+            //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'ESE' && data.Servicio == 300 && (data.Estado == 250 || data.Estado == 251)) {
+            }else if (data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 299 && (data.Estado == 250 || data.Estado == 251)) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[3].style.display = 'block';
-            } else if (data.Servicio_Solicitado == 'RAL' && data.Servicio == 298 && (data.Estado == 250 || data.Estado == 251)) {
+            }else if (data.Servicio_Solicitado == 'RAL' && data.Servicio == 298 && (data.Estado == 250 || data.Estado == 251)) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[4].style.display = 'block';
-            } else if (data.Servicio_Solicitado == 'ANÁLISIS DE RAL' && data.Servicio == 328 && (data.Estado == 250 || data.Estado == 251)) {
+            }else if (data.Servicio_Solicitado == 'ANÁLISIS DE RAL' && data.Servicio == 328 && (data.Estado == 250 || data.Estado == 251)) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[9].style.display = 'block';
-            } else if (data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 231 && (data.Estado == 250 || data.Estado == 251)) {
+            }
+           
+            else if (data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 231 && (data.Estado == 250 || data.Estado == 251)) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[5].style.display = 'block';
-            } else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'SOI') && data.Servicio == 230 && (data.Estado == 250 || data.Estado == 251) && data.Fecha_Entregado_INV == null) {
+            }else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') && data.Servicio == 230 && (data.Estado == 250 || data.Estado == 251) && data.Fecha_Entregado_INV == null) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[6].style.display = 'block';
                 this.template_botones_estatus.querySelectorAll('.btn-group')[6].querySelectorAll('.btn')[2].style.display = 'none';
-            } else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'SOI') && data.Servicio == 231 && (data.Estado == 252 || data.Estado == 254) || data.Fecha_Entregado_INV != null) {
+            }
+			
+			else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') && data.Servicio == 231 && (data.Estado == 252 || data.Estado == 254) || data.Fecha_Entregado_INV != null) {
                 document.querySelectorAll('#content_botones a')[2].style.display = "block";
-            } else if (data.Servicio_Solicitado == 'ESE + VISITA' && data.Servicio == 300 && (data.Estado == 250 || data.Estado == 251)) {
+            }
+			
+			else if (data.Servicio_Solicitado == 'ESE + VISITA' && data.Servicio == 300 && (data.Estado == 250 || data.Estado == 251)){
                 this.template_botones_estatus.querySelectorAll('.btn-group')[7].style.display = 'block';
-            } else if (data.Servicio_Solicitado == 'ESE + VISITA' && data.Servicio == 324 && (data.Estado == 250 || data.Estado == 251)) {
+            }else if (data.Servicio_Solicitado == 'ESE + VISITA' && data.Servicio == 324 && (data.Estado == 250 || data.Estado == 251)){
                 this.template_botones_estatus.querySelectorAll('.btn-group')[8].style.display = 'block';
             }
 
             //if (data.Nuevo_Procedimiento == 1 && (data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'INV. LABORAL') && (data.Servicio == 298 || data.Servicio == 311)) {
-            if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'INV. LABORAL' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI') && (data.Servicio == 298 || data.Servicio == 311 || data.Servicio == 328)) {
+            if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'INV. LABORAL' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') && (data.Servicio == 298 || data.Servicio == 311 || data.Servicio == 328)) {
                 document.querySelectorAll('#content_botones a')[1].style.display = "block";
-                //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'ESE' && data.Servicio == 299) {
-            } else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI') && data.Servicio == 299) {
+            //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'ESE' && data.Servicio == 299) {
+            }else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') && data.Servicio == 299) {
                 document.querySelectorAll('#content_botones a')[2].style.display = "block";
-                //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'ESE' && data.Servicio == 300) {
-            } else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI') && data.Servicio == 300) {
+            //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'ESE' && data.Servicio == 300) {
+            }else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') && data.Servicio == 300) {
                 //this.template_botones_estatus.querySelectorAll('.btn-group')[2].style.display = 'block';
                 document.querySelectorAll('#content_botones a')[2].style.display = "block";
                 document.querySelectorAll('#content_botones a')[3].style.display = "block";
-                if (data.ID_Empresa == 413) { //Btn estudio ESE en ingles para Charger logistics
+				    if (data.ID_Empresa==413) {//Btn estudio ESE en ingles para Charger logistics
                     document.querySelectorAll('#content_botones a')[4].style.display = "block";
                 }
-                //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 299) {
-            } else if (data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 299) {
+            //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 299) {
+            }else if (data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 299) {
                 document.querySelectorAll('#content_botones a')[2].style.display = "block";
-            } else if (data.Servicio_Solicitado == 'RAL' && (data.Servicio == 298 || data.Servicio == 311 || data.Servicio == 328)) {
+            }else if (data.Servicio_Solicitado == 'RAL' && (data.Servicio == 298 || data.Servicio == 311 || data.Servicio == 328)) {
                 document.querySelectorAll('#content_botones a')[1].style.display = "block";
-            } else if (data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 231) {
+            }else if (data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 231) {
                 document.querySelectorAll('#content_botones a')[2].style.display = "block";
-            } else if (data.Servicio_Solicitado == 'ESE' && data.Servicio == 230) {
+            }else if (data.Servicio_Solicitado == 'ESE' && data.Servicio == 230) {
                 document.querySelectorAll('#content_botones a')[2].style.display = "block";
                 document.querySelectorAll('#content_botones a')[3].style.display = "block";
-                if (data.ID_Empresa == 413) { //Btn estudio ESE en ingles para Charger logistics
+				    if (data.ID_Empresa==413) {//Btn estudio ESE en ingles para Charger logistics
                     document.querySelectorAll('#content_botones a')[4].style.display = "block";
                 }
             }
 
-            if (data.Estado == 250 || data.Estado == 251) {
+			if (data.Estado == 250 || data.Estado == 251) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[10].style.display = 'block';
             }
-
-            if (data.Estado == 249)
+			
+			if (data.Estado == 249)
                 this.template_botones_estatus.querySelectorAll('.btn-group')[11].style.display = 'block';
         }
-
-        if (display.AccountCustomerSA == 'block') {
-
-            if (((data.Servicio == 298 || data.Servicio == 291 || data.Servicio == 328) && (data.Estado == 252 || data.Estado == 254 || data.Fecha_Entregado_RAL != null)) || ((data.Servicio == 299 || data.Servicio == 300 || data.Servicio == 324)) || ((data.Servicio == 300 || data.Servicio == 324 || data.Servicio == 231))) {
+		
+			if (display.AccountCustomerSA == 'block') {
+        
+            if (((data.Servicio == 298 || data.Servicio == 291 || data.Servicio == 328) && (data.Estado == 252 || data.Estado == 254 || data.Fecha_Entregado_RAL != null)) || ((data.Servicio == 299 || data.Servicio == 300 || data.Servicio == 324))  || ((data.Servicio == 300 || data.Servicio == 324 || data.Servicio == 231))){
                 document.querySelectorAll('#content_botones a')[1].style.display = "block";
-            }
-            if ((((data.Servicio == 231 || data.Servicio == 299) || (data.Servicio == 230)) && (data.Estado == 252 || data.Estado == 254)) || (data.Servicio == 300 || data.Servicio == 324)) {
-                if (data.ID_Empresa == 353 && (data.Fecha_Entregado_ESE == null || data.Fecha_Entregado_INV == null) && data.Servicio_Solicitado == 'ESE') { //Auto partes calderon no debe aparecer la IV si no esta el ESE
+			}
+            if ((((data.Servicio == 231 || data.Servicio == 299) || (data.Servicio == 230)) && (data.Estado == 252 || data.Estado == 254)) || (data.Servicio == 300 || data.Servicio == 324)){
+                if(data.ID_Empresa==353 && (data.Fecha_Entregado_ESE==null || data.Fecha_Entregado_INV==null) && data.Servicio_Solicitado=='ESE'){//Auto partes calderon no debe aparecer la IV si no esta el ESE
                     document.querySelectorAll('#content_botones a')[2].style.display = "none";
-                } else {
+                }else{
                     document.querySelectorAll('#content_botones a')[2].style.display = "block";
-
+                    
                 }
             }
-            if ((data.Servicio == 230 || data.Servicio == 300 || data.Servicio == 324) && (data.Estado == 252 || data.Estado == 254)) {
+            if ((data.Servicio == 230 || data.Servicio == 300 || data.Servicio == 324) && (data.Estado == 252 || data.Estado == 254)){
                 document.querySelectorAll('#content_botones a')[3].style.display = "block";
-            }
-            if ((data.Estado == 249 || data.Estado == 250 || data.Estado == 251) && data.Servicio_Solicitado == 'RAL' && display.SA == 'none') {
-                document.querySelectorAll('.botones_pausar_finalizar button')[0].style.display = 'inline-block';
-            }
-            if ((data.Estado == 250 || data.Estado == 251) && data.Servicio_Solicitado == 'RAL' && display.SA == 'none') {
-                document.querySelectorAll('.botones_pausar_finalizar button')[1].style.display = 'inline-block';
-            }
+			}
+			if ((data.Estado == 249 || data.Estado == 250 || data.Estado == 251) && data.Servicio_Solicitado == 'RAL' && display.SA == 'none'){
+				document.querySelectorAll('.botones_pausar_finalizar button')[0].style.display = 'inline-block';
+			}
+			if ((data.Estado == 250 || data.Estado == 251) && data.Servicio_Solicitado == 'RAL' && display.SA == 'none'){
+				document.querySelectorAll('.botones_pausar_finalizar button')[1].style.display = 'inline-block';
+			}
         }
-
+		
 
         if (display.Logistics == 'block') {
-            if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'SOI') && (data.Servicio == 299 || data.Servicio == 300) && data.Fecha_Entregado_ESE == null && (data.Estado == 250 || data.Estado == 251)) {
+            if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') && (data.Servicio == 299 || data.Servicio == 300) && data.Fecha_Entregado_ESE == null && (data.Estado == 250 || data.Estado == 251)) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[2].style.display = 'block';
                 document.querySelectorAll('#content_botones a')[1].style.display = "block";
-                //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 299 && (data.Estado == 250 || data.Estado == 251)) {
-            } else if (data.Servicio_Solicitado == 'ESE' && data.Servicio == 230 && (data.Estado == 250 || data.Estado == 251) && data.Fecha_Entregado_ESE == null) {
+            //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 299 && (data.Estado == 250 || data.Estado == 251)) {
+            }else if (data.Servicio_Solicitado == 'ESE' && data.Servicio == 230 && (data.Estado == 250 || data.Estado == 251) && data.Fecha_Entregado_ESE == null) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[6].style.display = 'block';
                 this.template_botones_estatus.querySelectorAll('.btn-group')[6].querySelectorAll('.btn')[0].style.display = 'none';
                 this.template_botones_estatus.querySelectorAll('.btn-group')[6].querySelectorAll('.btn')[1].style.display = 'none';
                 this.template_botones_estatus.querySelectorAll('.btn-group')[6].querySelectorAll('.btn')[2].style.display = 'block';
             }
 
-
-            if (data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI') {
+            
+            if (data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART'){
                 document.querySelectorAll('#content_botones a')[3].style.display = "block";
-
-                if (data.ID_Empresa == 413) { //Btn estudio ESE en ingles para Charger logistics
+			
+				 if (data.ID_Empresa == 413) { //Btn estudio ESE en ingles para Charger logistics
                     document.querySelectorAll('#content_botones a')[4].style.display = "block";
-                    document.querySelectorAll('#content_botones a')[5].style.display = "block";
+					document.querySelectorAll('#content_botones a')[5].style.display = "block";
 
                 }
-            }
-
-        }
+			}
+        }    
 
         this.template_config.querySelectorAll('p')[0].textContent = data.Fecha;
         this.template_config.querySelectorAll('p')[1].textContent = data.Analista;
@@ -359,7 +364,7 @@ class ContenidoEstudio {
         this.template_schedule.querySelectorAll('p')[0].textContent = data.Verificador;
         this.template_schedule.querySelectorAll('p')[1].textContent = data.Fecha_Aplicacion;
         this.template_schedule.querySelector('button').style.display = display.Logistics;
-
+        
         this.template_videollamada.querySelector('button').style.display = display.Logistics;
 
         if (data.Enlace_Drive) {
@@ -367,16 +372,16 @@ class ContenidoEstudio {
                 this.template_videollamada.querySelector('div').style.display = 'block';
                 if (data.Enlace_Drive.endsWith('view?usp=sharing'))
                     this.template_videollamada.querySelector('iframe').src = data.Enlace_Drive.replace('view?usp=sharing', 'preview');
-
+                
                 if (data.Enlace_Drive.endsWith('view?usp=share_link'))
                     this.template_videollamada.querySelector('iframe').src = data.Enlace_Drive.replace('view?usp=share_link', 'preview');
-            } else
-                this.template_videollamada.querySelector('div').style.display = 'none';
-        } else
+            }else
+            this.template_videollamada.querySelector('div').style.display = 'none';
+        }else
             this.template_videollamada.querySelector('div').style.display = 'none';
 
-        this.template_reactivar_eliminar.querySelectorAll('button')[0].style.display = display.Operations;
-        this.template_reactivar_eliminar.querySelectorAll('button')[1].style.display = display.Operations;
+            this.template_reactivar_eliminar.querySelectorAll('button')[0].style.display = display.Operations;
+            this.template_reactivar_eliminar.querySelectorAll('button')[1].style.display = display.Operations;
 
         if (display.Operations == 'block') {
             if (data.Estado != 254 && (data.Estado == 258 || data.Estado == 252) && data.Factura == '')
@@ -390,14 +395,14 @@ class ContenidoEstudio {
                 this.template_reactivar_eliminar.querySelectorAll('button')[1].style.display = 'none';
         }
 
-        if (display.SA == 'block' && historial_candidato) {
+		if (display.SA == 'block' && historial_candidato) {
             historial_candidato.forEach(historial => {
                 this.template_historial_candidato.querySelector('h6').textContent = `${historial.Nombres} ${historial.Apellido_Paterno} ${historial.Apellido_Materno}`;
                 this.template_historial_candidato.querySelector('a').href = `./ver&candidato=${historial.Candidato}`;
                 this.template_historial_candidato.querySelectorAll('p')[0].textContent = historial.Fecha;
                 this.template_historial_candidato.querySelectorAll('b')[0].textContent = historial.Nombre_Cliente;
                 this.template_historial_candidato.querySelectorAll('p')[1].textContent = historial.Fase;
-
+                
                 if (historial.Servicio == 291 || historial.Servicio == 298)
                     this.template_historial_candidato.querySelector('div').classList.add('callout-warning');
                 else if (historial.Servicio == 231 || historial.Servicio == 299)
@@ -414,18 +419,19 @@ class ContenidoEstudio {
             this.template_reactivar_eliminar.querySelector('a').href = cv_ruta;
             this.template_reactivar_eliminar.querySelector('a').style.display = 'block';
         }
-
-        if (soi != 0) {
-            document.querySelector('#soi-card').style.display = 'block';
-            document.querySelector('#soi-card img').src = soi;
-            document.querySelector('#soi-card a').href = soi;
-            document.querySelector('#soi-card a').download = 'SOI ' + data.Nombres + ' ' + data.Apellido_Paterno + ' ' + data.Apellido_Materno;
+		
+		if (soi != 0){
+           document.querySelector('#soi-card').style.display = 'block';
+           document.querySelector('#soi-card img').src = soi; 
+           document.querySelector('#soi-card a').href = soi; 
+           document.querySelector('#soi-card a').download = 'SOI '+data.Nombres+' '+data.Apellido_Paterno+' '+data.Apellido_Materno; 
         }
+		
+		
+        //document.querySelectorAll('#update-form .form-group')[2].hidden = data.Ejecutivo_modificacion == 1 ? true : false;
+        //document.querySelectorAll('#modal_schedule .form-group')[2].hidden = data.Gestor_modificacion == 1 ? true : false;
 
-        
-        document.querySelector('#update-form [name="Ejecutivo"]').disabled = data.Ejecutivo_modificacion == 1 ? true : false;
-        document.querySelector('#modal_schedule [name="Logistica"]').disabled = data.Gestor_modificacion == 1 ? true : false;
-
+		
         const clone_perfil = this.template_perfil.cloneNode(true);
         const clone_candidato_contactado = this.template_candidato_contactado.cloneNode(true);
         const clone_datos_empresa = this.template_datos_empresa.cloneNode(true);
@@ -438,24 +444,24 @@ class ContenidoEstudio {
         const clone_reactivar_eliminar = this.template_reactivar_eliminar.cloneNode(true);
 
         this.fragment_info_servicio.appendChild(clone_perfil);
-        if (data.Contactado != null)
+		if (data.Contactado != null)
             this.fragment_info_servicio.appendChild(clone_candidato_contactado);
         this.fragment_info_servicio.appendChild(clone_datos_empresa);
         this.fragment_info_servicio.appendChild(clone_localizacion);
         this.fragment_info_servicio.appendChild(clone_estatus_servicio);
         this.fragment_info_servicio.appendChild(clone_botones_estatus);
         this.fragment_info_servicio.appendChild(clone_config);
-
-        if (data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI') {
+        
+        if (data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') {
             this.fragment_info_servicio.appendChild(clone_schedule);
             this.fragment_info_servicio.appendChild(clone_videollamada);
         }
-
-        if (data.Especificaciones != '' && data.Especificaciones != null) {
-            document.querySelector('#especificaciones_Empresa h6').textContent = data.Especificaciones;
-            document.querySelector('#especificaciones_Empresa').style.display = display.SA;
-        }
-
+        
+  	     if (data.Especificaciones != '' && data.Especificaciones != null) {
+             document.querySelector('#especificaciones_Empresa h6').textContent = data.Especificaciones;
+             document.querySelector('#especificaciones_Empresa').style.display = display.SA;
+         }
+		
         if (data.Comentario_Cancelado != '' || data.Comentario_Cliente != '') {
             if (data.Comentario_Cliente != '') {
                 this.template_comentarios_servicio.querySelectorAll('p')[0].innerText = data.Comentario_Cliente;
@@ -470,18 +476,12 @@ class ContenidoEstudio {
         }
 
         this.fragment_info_servicio.appendChild(clone_reactivar_eliminar);
-        if (display.SA == 'block')
+		if (display.SA == 'block')
             this.fragment_info_servicio.appendChild(this.fragment_historial_candidato);
         this.info_servicio.innerHTML = '';
         this.info_servicio.appendChild(this.fragment_info_servicio);
 
         document.querySelectorAll('#modal_ral input')[2].value = `${data.Nombres} ${data.Apellido_Paterno} ${data.Apellido_Materno}`;
-
-
-        
-        document.querySelector('#update-form [name="Ejecutivo"]').disabled = data.Ejecutivo_modificacion == 1 ? true : false;
-        document.querySelector('#modal_schedule [name="Logistica"]').disabled = data.Gestor_modificacion == 1 ? true : false;
-
     }
 
     cargarInfoRAL(data, display) {
@@ -494,12 +494,12 @@ class ContenidoEstudio {
 
         if (data.Demandas == 2) {
             this.template_ral.querySelector('div').style.display = 'block';
-        } else {
-            this.template_ral.querySelector('div').style.display = 'none';
+        }else{
+            this.template_ral.querySelector('div').style.display = 'none'; 
         }
 
         const clone_ral = this.template_ral.cloneNode(true);
-
+        
         this.fragment_ral.appendChild(clone_ral);
 
         this.content_ral.innerHTML = '';
@@ -508,22 +508,22 @@ class ContenidoEstudio {
 
         //document.querySelectorAll('#content_botones a')[1].style.display = data && (display.Account == 'block')? 'block' : 'none';
     }
-
-    cargarBusquedaRAL(candidato_datos, busqueda_RAL, display) {
+	
+	cargarBusquedaRAL(candidato_datos, busqueda_RAL, display){
         this.template_busqueda_ral.querySelectorAll('input')[0].value = candidato_datos.Nombres.trim();
-        this.template_busqueda_ral.querySelectorAll('input')[1].value = candidato_datos.Apellido_Paterno.trim() + ' ' + candidato_datos.Apellido_Materno.trim();
-        this.template_busqueda_ral.querySelector('a').style.display = 'none';
-        if (busqueda_RAL.status == 1) {
+        this.template_busqueda_ral.querySelectorAll('input')[1].value = candidato_datos.Apellido_Paterno.trim()+' '+candidato_datos.Apellido_Materno.trim();
+		this.template_busqueda_ral.querySelector('a').style.display = 'none';
+        if (busqueda_RAL.status == 1){
             this.template_busqueda_ral.querySelector('button').style.display = 'none';
             this.template_busqueda_ral.querySelector('h6').innerHTML = `Resultados de búsqueda: <b>${candidato_datos.Nombres} ${candidato_datos.Apellido_Paterno} ${candidato_datos.Apellido_Materno}</b>`;
             if (busqueda_RAL.expedientes.length > 0) {
-                this.template_busqueda_ral.querySelector('a').style.display = 'inline-block';
-                this.template_busqueda_ral.querySelector('a').setAttribute('href', busqueda_RAL.PDF_RAL);
+				this.template_busqueda_ral.querySelector('a').style.display = 'inline-block';
+				this.template_busqueda_ral.querySelector('a').setAttribute('href', busqueda_RAL.PDF_RAL);
                 busqueda_RAL.expedientes.forEach(expediente => {
-                    this.template_expediente_ral.querySelectorAll('a')[0].setAttribute('href', '#collapse' + expediente.ID);
+                    this.template_expediente_ral.querySelectorAll('a')[0].setAttribute('href', '#collapse'+expediente.ID);
                     this.template_expediente_ral.querySelectorAll('h4')[0].innerHTML = `<b>${expediente.Actor}</b> | ${expediente.Demandado} | Exp ${expediente.Toca}`;
                     this.template_expediente_ral.querySelectorAll('b')[1].textContent = `${expediente.Estado} > ${expediente.Ciudad} > ${expediente.Juzgado}`;
-                    this.template_expediente_ral.querySelectorAll('div')[2].setAttribute('id', 'collapse' + expediente.ID);
+                    this.template_expediente_ral.querySelectorAll('div')[2].setAttribute('id', 'collapse'+expediente.ID);
                     this.template_expediente_ral.querySelectorAll('p')[0].textContent = `${expediente.Ciudad} > ${expediente.Juzgado}`;
 
                     this.template_expediente_ral.querySelectorAll('dd')[0].textContent = expediente.Actor;
@@ -546,34 +546,34 @@ class ContenidoEstudio {
                     });
 
                     this.template_expediente_ral.querySelector('.card-navy .card-body').innerHTML = acuerdos;
-
+                
                     const clone_expedientes_RAL = this.template_expediente_ral.cloneNode(true);
                     this.fragment_expediente_ral.appendChild(clone_expedientes_RAL);
                 });
-                this.template_busqueda_ral.querySelector('p').textContent = 'No. de Resultados: ' + busqueda_RAL.expedientes.length;
+                this.template_busqueda_ral.querySelector('p').textContent = 'No. de Resultados: '+busqueda_RAL.expedientes.length;
                 this.template_expediente_ral.innerHTML = '';
                 this.content_expediente_ral.appendChild(this.fragment_expediente_ral);
-            } else {
+            }else {
                 this.template_busqueda_ral.querySelector('p').textContent = 'No hay resultados. Por favor verifique los criterios de búsqueda.';
                 this.template_busqueda_ral.querySelector('a').style.display = 'inline-block';
-                this.template_busqueda_ral.querySelector('a').setAttribute('href', 'https://rrhh-ingenia.com.mx/formato/ral&candidato=' + candidato_datos.folio);
+                this.template_busqueda_ral.querySelector('a').setAttribute('href', 'https://rrhh-ingenia.com.mx/formato/ral&candidato='+ candidato_datos.folio);
             }
-        } else if (busqueda_RAL.status == 0) {
+        }else if (busqueda_RAL.status == 0) {
             this.template_busqueda_ral.querySelector('h6').innerHTML = '';
             this.template_busqueda_ral.querySelector('p').textContent = '';
-        } else if (busqueda_RAL.status == 2) {
+        }else if (busqueda_RAL.status == 2){
             this.template_busqueda_ral.querySelector('h6').innerHTML = `Resultados de búsqueda: <b>${candidato_datos.Nombres} ${candidato_datos.Apellido_Paterno} ${candidato_datos.Apellido_Materno}</b>`;
             this.template_busqueda_ral.querySelector('p').textContent = 'Algo salió mal. No se pudo obtener información de esa consulta. ¡Inténtalo de nuevo!';
-        } else if (busqueda_RAL.status == 3) {
+        }else if (busqueda_RAL.status == 3){
             this.template_busqueda_ral.querySelector('h6').innerHTML = `Búsqueda de <b>${busqueda_RAL.Nombres} ${busqueda_RAL.Apellidos}</b> realizada anteriormente para <b>${busqueda_RAL.Nombre_Cliente}</b> por <b>${busqueda_RAL.Creado}</b> el ${busqueda_RAL.Fecha}`;
             if (busqueda_RAL.expedientes.length > 0) {
-                this.template_busqueda_ral.querySelector('a').style.display = 'inline-block';
+				this.template_busqueda_ral.querySelector('a').style.display = 'inline-block';
                 this.template_busqueda_ral.querySelector('a').setAttribute('href', busqueda_RAL.PDF_RAL);
                 busqueda_RAL.expedientes.forEach(expediente => {
-                    this.template_expediente_ral.querySelectorAll('a')[0].setAttribute('href', '#collapse' + expediente.ID);
+                    this.template_expediente_ral.querySelectorAll('a')[0].setAttribute('href', '#collapse'+expediente.ID);
                     this.template_expediente_ral.querySelectorAll('h4')[0].innerHTML = `<b>${expediente.Actor}</b> | ${expediente.Demandado} | Exp ${expediente.Toca}`;
                     this.template_expediente_ral.querySelectorAll('b')[1].textContent = `${expediente.Estado} > ${expediente.Ciudad} > ${expediente.Juzgado}`;
-                    this.template_expediente_ral.querySelectorAll('div')[2].setAttribute('id', 'collapse' + expediente.ID);
+                    this.template_expediente_ral.querySelectorAll('div')[2].setAttribute('id', 'collapse'+expediente.ID);
                     this.template_expediente_ral.querySelectorAll('p')[0].textContent = `${expediente.Ciudad} > ${expediente.Juzgado}`;
 
                     this.template_expediente_ral.querySelectorAll('dd')[0].textContent = expediente.Actor;
@@ -596,25 +596,25 @@ class ContenidoEstudio {
                     });
 
                     this.template_expediente_ral.querySelector('.card-navy .card-body').innerHTML = acuerdos;
-
+                
                     const clone_expedientes_RAL = this.template_expediente_ral.cloneNode(true);
                     this.fragment_expediente_ral.appendChild(clone_expedientes_RAL);
                 });
-                this.template_busqueda_ral.querySelector('p').textContent = 'No. de Resultados: ' + busqueda_RAL.expedientes.length;
+                this.template_busqueda_ral.querySelector('p').textContent = 'No. de Resultados: '+busqueda_RAL.expedientes.length;
                 this.template_expediente_ral.innerHTML = '';
                 this.content_expediente_ral.appendChild(this.fragment_expediente_ral);
             }
-        } else if (busqueda_RAL.status == 4) {
+        }else if (busqueda_RAL.status == 4){
             this.template_busqueda_ral.querySelector('h6').innerHTML = `Búsqueda de <b>${busqueda_RAL.Nombres} ${busqueda_RAL.Apellidos}</b> realizada anteriormente para <b>${busqueda_RAL.Nombre_Cliente}</b> por <b>${busqueda_RAL.Creado}</b> el ${busqueda_RAL.Fecha}`;
             this.template_busqueda_ral.querySelectorAll('button')[0].style.display = 'none';
             if (busqueda_RAL.expedientes.length > 0) {
                 this.template_busqueda_ral.querySelector('a').style.display = 'inline-block';
                 this.template_busqueda_ral.querySelector('a').setAttribute('href', busqueda_RAL.PDF_RAL);
                 busqueda_RAL.expedientes.forEach(expediente => {
-                    this.template_expediente_ral.querySelectorAll('a')[0].setAttribute('href', '#collapse' + expediente.ID);
+                    this.template_expediente_ral.querySelectorAll('a')[0].setAttribute('href', '#collapse'+expediente.ID);
                     this.template_expediente_ral.querySelectorAll('h4')[0].innerHTML = `<b>${expediente.Actor}</b> | ${expediente.Demandado} | Exp ${expediente.Toca}`;
                     this.template_expediente_ral.querySelectorAll('b')[1].textContent = `${expediente.Estado} > ${expediente.Ciudad} > ${expediente.Juzgado}`;
-                    this.template_expediente_ral.querySelectorAll('div')[2].setAttribute('id', 'collapse' + expediente.ID);
+                    this.template_expediente_ral.querySelectorAll('div')[2].setAttribute('id', 'collapse'+expediente.ID);
                     this.template_expediente_ral.querySelectorAll('p')[0].textContent = `${expediente.Ciudad} > ${expediente.Juzgado}`;
 
                     this.template_expediente_ral.querySelectorAll('dd')[0].textContent = expediente.Actor;
@@ -637,17 +637,17 @@ class ContenidoEstudio {
                     });
 
                     this.template_expediente_ral.querySelector('.card-navy .card-body').innerHTML = acuerdos;
-
+                
                     const clone_expedientes_RAL = this.template_expediente_ral.cloneNode(true);
                     this.fragment_expediente_ral.appendChild(clone_expedientes_RAL);
                 });
-                this.template_busqueda_ral.querySelector('p').textContent = 'No. de Resultados: ' + busqueda_RAL.expedientes.length;
+                this.template_busqueda_ral.querySelector('p').textContent = 'No. de Resultados: '+busqueda_RAL.expedientes.length;
                 this.template_expediente_ral.innerHTML = '';
                 this.content_expediente_ral.appendChild(this.fragment_expediente_ral);
-            } else {
+            }else {
                 this.template_busqueda_ral.querySelector('p').textContent = 'No hay resultados. Por favor verifique los criterios de búsqueda.';
                 this.template_busqueda_ral.querySelector('a').style.display = 'inline-block';
-                this.template_busqueda_ral.querySelector('a').setAttribute('href', 'http://reclutamiento.rrhh-ingenia.com/formato/ral&candidato=' + busqueda_RAL.Candidato);
+                this.template_busqueda_ral.querySelector('a').setAttribute('href', 'http://reclutamiento.rrhh-ingenia.com/formato/ral&candidato='+ busqueda_RAL.Candidato);
             }
         }
 
@@ -656,25 +656,25 @@ class ContenidoEstudio {
         this.content_busqueda_ral.innerHTML = '';
         this.content_busqueda_ral.appendChild(this.fragment_busqueda_ral);
     }
-
-
-    cargarPropioRAL(candidato_datos, busqueda_RAL, display) {
+	
+	
+	 cargarPropioRAL(candidato_datos, busqueda_RAL, display) {
         if (busqueda_RAL.length > 0) {
 
-            /* 
-                        let nombre_estados = [];
-                        busqueda_RAL.forEach(expediente => {
-                            if (!nombre_estados.includes(expediente.Estado)) {
-                                nombre_estados.push(expediente.Estado)
-                                this.template_propio_ral_estados.querySelectorAll('a')[0].setAttribute('href', '#collapsestados' + expediente.id_estado);
-                                this.template_propio_ral_estados.querySelectorAll('h4')[0].textContent = expediente.Estado
-                                this.template_propio_ral_estados.querySelector('div .collapsestados').setAttribute('id', 'collapsestados' + expediente.id_estado);
+/* 
+            let nombre_estados = [];
+            busqueda_RAL.forEach(expediente => {
+                if (!nombre_estados.includes(expediente.Estado)) {
+                    nombre_estados.push(expediente.Estado)
+                    this.template_propio_ral_estados.querySelectorAll('a')[0].setAttribute('href', '#collapsestados' + expediente.id_estado);
+                    this.template_propio_ral_estados.querySelectorAll('h4')[0].textContent = expediente.Estado
+                    this.template_propio_ral_estados.querySelector('div .collapsestados').setAttribute('id', 'collapsestados' + expediente.id_estado);
 
-                                const clone_expedientes_RAL = this.template_propio_ral_estados.cloneNode(true);
-                                this.fragment_propio_ral.appendChild(clone_expedientes_RAL);
-                            }
-                        }); 
-            */
+                    const clone_expedientes_RAL = this.template_propio_ral_estados.cloneNode(true);
+                    this.fragment_propio_ral.appendChild(clone_expedientes_RAL);
+                }
+            }); 
+*/
 
             busqueda_RAL.forEach(expediente => {
                 this.template_propio_ral.querySelectorAll('a')[0].setAttribute('href', '#collapseral' + expediente.id);
@@ -711,7 +711,7 @@ class ContenidoEstudio {
                 });
 
                 this.template_propio_ral.querySelector('.card-navy .card-body').innerHTML = acuerdos;
-                const clone_expedientes_RAL = this.template_propio_ral.cloneNode(true);
+                const clone_expedientes_RAL = this.template_propio_ral.cloneNode(true);                
                 this.fragment_propio_ral.appendChild(clone_expedientes_RAL);
             });
 
@@ -724,13 +724,13 @@ class ContenidoEstudio {
         }
     }
 
-
-
-    cargarComentariosRAL(data, display) {
+	
+    
+	cargarComentariosRAL(data, display) {
         this.template_comentarios_ral.querySelectorAll('p')[0].innerText = data.Comentarios;
 
         const clone_comentarios_ral = this.template_comentarios_ral.cloneNode(true);
-
+        
         this.fragment_comentarios_ral.appendChild(clone_comentarios_ral);
 
         this.content_comentarios_ral.innerHTML = '';
@@ -738,10 +738,10 @@ class ContenidoEstudio {
 
     }
 
-    cargarValidacionLicencia(data, display) {
+    cargarValidacionLicencia(data, display){
         this.template_licencia.querySelectorAll('p')[0].textContent = data.Tipo_Licencia == 1 ? 'Federal' : (data.Tipo_Licencia == 2 ? 'Estatal' : '');
         this.template_licencia.querySelectorAll('p')[1].textContent = data.Numero_Licencia;
-        this.template_licencia.querySelectorAll('p')[2].textContent = ((data.CategoriaA == 1 ? 'A, ' : '') + (data.CategoriaB == 1 ? 'B, ' : '') + (data.CategoriaC == 1 ? 'C, ' : '') + (data.CategoriaD == 1 ? 'D, ' : '') + (data.CategoriaE == 1 ? 'E, ' : '') + (data.CategoriaF == 1 ? 'F, ' : ''));
+        this.template_licencia.querySelectorAll('p')[2].textContent = ((data.CategoriaA == 1 ? 'A, ' : '')+(data.CategoriaB == 1 ? 'B, ' : '')+(data.CategoriaC == 1 ? 'C, ' : '')+(data.CategoriaD == 1 ? 'D, ' : '')+(data.CategoriaE == 1 ? 'E, ' : '')+(data.CategoriaF == 1 ? 'F, ' : ''));
         this.template_licencia.querySelectorAll('p')[3].textContent = data.Licencia_Vigente_Del;
         this.template_licencia.querySelectorAll('p')[4].textContent = data.Licencia_Vigente_Hasta;
         this.template_licencia.querySelector('button').style.display = display.Account;
@@ -756,11 +756,11 @@ class ContenidoEstudio {
         this.template_resultado_licencia.querySelectorAll('p')[0].textContent = data.Caracteristicas;
         this.template_resultado_licencia.querySelectorAll('p')[1].textContent = data.Resultado;
         this.template_resultado_licencia.querySelector('button').style.display = display.Account;
-
-        if (data.Tipo_Licencia == 1) {
+		
+		if (data.Tipo_Licencia == 1) {
             this.template_licencia.querySelectorAll('.row')[0].style.display = 'block';
             this.template_licencia.querySelectorAll('.row')[1].style.display = 'none';
-        } else if (data.Tipo_Licencia == 2) {
+        }else if (data.Tipo_Licencia == 2) {
             this.template_licencia.querySelectorAll('.row')[0].style.display = 'none';
             this.template_licencia.querySelectorAll('.row')[1].style.display = 'block';
         }
@@ -783,7 +783,7 @@ class ContenidoEstudio {
         document.querySelectorAll('#content_botones a')[0].style.display = data && display.Account == 'block' ? 'block' : 'none';
     }
 
-    cargarCapturasRAL(data, display) {
+    cargarCapturasRAL(data, display){
         console.log(data);
         data.forEach(element => {
             this.template_captura_ral.querySelectorAll('td')[0].textContent = element.Folio;
@@ -800,7 +800,7 @@ class ContenidoEstudio {
         this.content_capturas_ral.appendChild(this.fragment_captura_ral);
     }
 
-    cargarDatosGenerales(data, display) {
+    cargarDatosGenerales(data, display){
         var clones_datos_generales = new Array();
         this.template_datos_generales.querySelectorAll('p')[0].textContent = data.Nacimiento;
         this.template_datos_generales.querySelectorAll('p')[1].textContent = data.Edad;
@@ -814,9 +814,9 @@ class ContenidoEstudio {
         this.template_datos_generales.querySelectorAll('p')[9].textContent = data.CURP;
         this.template_datos_generales.querySelectorAll('p')[10].textContent = data.IMSS;
         this.template_datos_generales.querySelectorAll('p')[11].textContent = data.RFC;
-
-        if (data.ID_Empresa == 413) {
-            this.template_datos_generales.querySelectorAll('b')[12].style.display = 'block'
+		
+ 	  if (data.ID_Empresa==413) {
+            this.template_datos_generales.querySelectorAll('b')[12].style.display='block'
             this.template_datos_generales.querySelectorAll('p')[12].textContent = data.Numero_Licencia;
         }
         for (let i = 0; i < this.content_datos_generales.length; i++) {
@@ -827,10 +827,10 @@ class ContenidoEstudio {
             this.content_datos_generales[i].appendChild(this.fragment_datos_generales[i]);
         }
 
-
+        
     }
 
-    cargarContacto(data) {
+    cargarContacto(data){
         var clones_contacto = new Array();
         this.template_contacto.querySelectorAll('p')[0].textContent = data.Telefono_fijo;
         this.template_contacto.querySelectorAll('p')[1].textContent = data.Celular;
@@ -847,7 +847,7 @@ class ContenidoEstudio {
 
         this.template_contacto.querySelectorAll('b')[5].style.display = data.Facebook ? 'block' : 'none';
         this.template_contacto.querySelectorAll('p')[5].style.display = data.Facebook ? 'block' : 'none';
-
+        
         this.template_contacto.querySelectorAll('p')[6].textContent = data.Domicilio;
 
         for (let i = 0; i < this.content_contacto.length; i++) {
@@ -856,12 +856,12 @@ class ContenidoEstudio {
             this.content_contacto[i].innerHTML = '';
             this.content_contacto[i].appendChild(this.fragment_contacto[i]);
         }
-
+        
     }
 
-    cargarReferenciasLaborales(data, display, Empresa, Cliente) {
+    cargarReferenciasLaborales(data, display, Empresa, candidato=false){
         data.forEach(element => {
-            this.template_referencia_laboral.querySelectorAll('div')[0].setAttribute('renglon', element.Renglon);
+			this.template_referencia_laboral.querySelectorAll('div')[0].setAttribute('renglon',element.Renglon);
             this.template_referencia_laboral.querySelectorAll('p')[0].textContent = element.Empresa;
             this.template_referencia_laboral.querySelectorAll('p')[1].textContent = element.Giro;
             this.template_referencia_laboral.querySelectorAll('p')[2].textContent = element.Domicilio;
@@ -877,7 +877,8 @@ class ContenidoEstudio {
             this.template_referencia_laboral.querySelectorAll('p')[12].textContent = element.Recontratable == 1 ? 'Sí' : 'No';
             this.template_referencia_laboral.querySelectorAll('p')[13].textContent = element.Recontratable_PorQue;
             this.template_referencia_laboral.querySelectorAll('p')[14].textContent = element.Informante;
-            this.template_referencia_laboral.querySelectorAll('p')[15].innerText = element.Comentarios;
+			this.template_referencia_laboral.querySelectorAll('p')[15].textContent = element.Puesto_Informante;
+            this.template_referencia_laboral.querySelectorAll('p')[16].innerText = element.Comentarios;
             this.template_referencia_laboral.querySelector('.btn-info').dataset.id = element.Renglon;
             this.template_referencia_laboral.querySelector('.btn-danger').dataset.id = element.Renglon;
             this.template_referencia_laboral.querySelector('.btn-info').style.display = display.Account;
@@ -885,134 +886,134 @@ class ContenidoEstudio {
 
             if (element.Calif == 1) {
                 this.template_referencia_laboral.querySelector('.table-responsive').style.display = "none";
-            } else {
+            }else{
                 this.template_referencia_laboral.querySelector('.table-responsive').style.display = "block";
-                if (element.Desempeno == 260) {
+                if (element.Desempeno == 260){
                     this.template_referencia_laboral.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[1].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[1].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Desempeno == 261) {
+                }else if (element.Desempeno == 261){
                     this.template_referencia_laboral.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-info'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[1].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[1].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Desempeno == 262) {
+                }else if (element.Desempeno == 262){
                     this.template_referencia_laboral.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = "";
                     this.template_referencia_laboral.querySelectorAll('tr')[1].querySelectorAll('td')[2].innerHTML = "<i class='fas fa-circle text-warning'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[1].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Desempeno == 263) {
+                }else if(element.Desempeno == 263){
                     this.template_referencia_laboral.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = "";
                     this.template_referencia_laboral.querySelectorAll('tr')[1].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[1].querySelectorAll('td')[3].innerHTML = "<i class='fas fa-circle text-danger'></i>";
-                }
+                }  
 
-                if (element.Honradez == 260) {
+                if (element.Honradez == 260){
                     this.template_referencia_laboral.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[2].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[2].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Honradez == 261) {
+                }else if (element.Honradez == 261){
                     this.template_referencia_laboral.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-info'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[2].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[2].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Honradez == 262) {
+                }else if (element.Honradez == 262){
                     this.template_referencia_laboral.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = "";
                     this.template_referencia_laboral.querySelectorAll('tr')[2].querySelectorAll('td')[2].innerHTML = "<i class='fas fa-circle text-warning'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[2].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Honradez == 263) {
+                }else if(element.Honradez == 263){
                     this.template_referencia_laboral.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = "";
                     this.template_referencia_laboral.querySelectorAll('tr')[2].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[2].querySelectorAll('td')[3].innerHTML = "<i class='fas fa-circle text-danger'></i>";
                 }
 
-                if (element.Puntualidad == 260) {
+                if (element.Puntualidad == 260){
                     this.template_referencia_laboral.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[3].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[3].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Puntualidad == 261) {
+                }else if (element.Puntualidad == 261){
                     this.template_referencia_laboral.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-info'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[3].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[3].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Puntualidad == 262) {
+                }else if (element.Puntualidad == 262){
                     this.template_referencia_laboral.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = "";
                     this.template_referencia_laboral.querySelectorAll('tr')[3].querySelectorAll('td')[2].innerHTML = "<i class='fas fa-circle text-warning'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[3].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Puntualidad == 263) {
+                }else if(element.Puntualidad == 263){
                     this.template_referencia_laboral.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = "";
                     this.template_referencia_laboral.querySelectorAll('tr')[3].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[3].querySelectorAll('td')[3].innerHTML = "<i class='fas fa-circle text-danger'></i>";
                 }
 
-                if (element.Relacion == 260) {
+                if (element.Relacion == 260){
                     this.template_referencia_laboral.querySelectorAll('tr')[4].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[4].querySelectorAll('td')[1].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[4].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[4].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Relacion == 261) {
+                }else if (element.Relacion == 261){
                     this.template_referencia_laboral.querySelectorAll('tr')[4].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[4].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-info'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[4].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[4].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Relacion == 262) {
+                }else if (element.Relacion == 262){
                     this.template_referencia_laboral.querySelectorAll('tr')[4].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[4].querySelectorAll('td')[1].innerHTML = "";
                     this.template_referencia_laboral.querySelectorAll('tr')[4].querySelectorAll('td')[2].innerHTML = "<i class='fas fa-circle text-warning'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[4].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Relacion == 263) {
+                }else if(element.Relacion == 263){
                     this.template_referencia_laboral.querySelectorAll('tr')[4].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[4].querySelectorAll('td')[1].innerHTML = "";
                     this.template_referencia_laboral.querySelectorAll('tr')[4].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[4].querySelectorAll('td')[3].innerHTML = "<i class='fas fa-circle text-danger'></i>";
                 }
 
-                if (element.Responsabilidad == 260) {
+                if (element.Responsabilidad == 260){
                     this.template_referencia_laboral.querySelectorAll('tr')[5].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[5].querySelectorAll('td')[1].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[5].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[5].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Responsabilidad == 261) {
+                }else if (element.Responsabilidad == 261){
                     this.template_referencia_laboral.querySelectorAll('tr')[5].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[5].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-info'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[5].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[5].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Responsabilidad == 262) {
+                }else if (element.Responsabilidad == 262){
                     this.template_referencia_laboral.querySelectorAll('tr')[5].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[5].querySelectorAll('td')[1].innerHTML = "";
                     this.template_referencia_laboral.querySelectorAll('tr')[5].querySelectorAll('td')[2].innerHTML = "<i class='fas fa-circle text-warning'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[5].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Responsabilidad == 263) {
+                }else if(element.Responsabilidad == 263){
                     this.template_referencia_laboral.querySelectorAll('tr')[5].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[5].querySelectorAll('td')[1].innerHTML = "";
                     this.template_referencia_laboral.querySelectorAll('tr')[5].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[5].querySelectorAll('td')[3].innerHTML = "<i class='fas fa-circle text-danger'></i>";
                 }
 
-                if (element.Adaptacion == 260) {
+                if (element.Adaptacion == 260){
                     this.template_referencia_laboral.querySelectorAll('tr')[6].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[6].querySelectorAll('td')[1].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[6].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[6].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Adaptacion == 261) {
+                }else if (element.Adaptacion == 261){
                     this.template_referencia_laboral.querySelectorAll('tr')[6].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[6].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-info'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[6].querySelectorAll('td')[2].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[6].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Adaptacion == 262) {
+                }else if (element.Adaptacion == 262){
                     this.template_referencia_laboral.querySelectorAll('tr')[6].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[6].querySelectorAll('td')[1].innerHTML = "";
                     this.template_referencia_laboral.querySelectorAll('tr')[6].querySelectorAll('td')[2].innerHTML = "<i class='fas fa-circle text-warning'></i>";
                     this.template_referencia_laboral.querySelectorAll('tr')[6].querySelectorAll('td')[3].innerHTML = '';
-                } else if (element.Adaptacion == 263) {
+                }else if(element.Adaptacion == 263){
                     this.template_referencia_laboral.querySelectorAll('tr')[6].querySelectorAll('td')[0].innerHTML = '';
                     this.template_referencia_laboral.querySelectorAll('tr')[6].querySelectorAll('td')[1].innerHTML = "";
                     this.template_referencia_laboral.querySelectorAll('tr')[6].querySelectorAll('td')[2].innerHTML = '';
@@ -1021,25 +1022,35 @@ class ContenidoEstudio {
 
             }
 
-            if (Cliente == 314) {
-                this.template_referencia_laboral.querySelectorAll('.col-sm-6')[11].style.display = 'block';
+            if (candidato) {
+                if (candidato.Cliente == 314) {
+                    this.template_referencia_laboral.querySelectorAll('.col-sm-6')[11].style.display = 'block';
+                }
+
+                if (candidato.Servicio_Solicitado == 'ESE SMART') {
+                    this.template_referencia_laboral.querySelectorAll('b')[1].textContent = 'Sitio Web';
+                    this.template_referencia_laboral.querySelectorAll('p')[1].textContent = element.Sitio_Web;
+                    this.template_referencia_laboral.querySelectorAll('p')[6].textContent = 'Puesto';
+                    this.template_referencia_laboral.querySelectorAll('p')[7].textContent = 'Correo del Contacto';
+                    this.template_referencia_laboral.querySelectorAll('b')[16].style.display = 'none';
+                }    
             }
 
             //if (element.Sindicalizado && Empresa == 190)
             this.template_referencia_laboral.querySelector('.sindicato-cementin').style.display = 'none';
-            if (Empresa == 190) {
+            if (Empresa == 190){
                 //document.querySelectorAll('.sindicato-cementin')[0].style.display = 'block';
                 //document.querySelectorAll('.sindicato-cementin')[1].style.display = 'block';
                 this.template_referencia_laboral.querySelector('.sindicato-cementin').style.display = 'block';
                 document.querySelector('#modal_referencia_laboral .sindicato-cementin').style.display = 'block';
             }
 
-            this.template_referencia_laboral.querySelectorAll('p')[16].textContent = element.Sindicalizado == 1 ? 'Sí' : (element.Sindicalizado == 0 ? 'No' : '');
-            this.template_referencia_laboral.querySelectorAll('p')[17].textContent = element.Sindicato;
-            this.template_referencia_laboral.querySelectorAll('p')[18].textContent = element.Comite_Sindical == 1 ? 'Sí' : (element.Comite_Sindical == 0 ? 'No' : '');
-            this.template_referencia_laboral.querySelectorAll('p')[19].textContent = element.Puesto_Sindical;
-            this.template_referencia_laboral.querySelectorAll('p')[20].textContent = element.Funciones_Sindicato;
-            this.template_referencia_laboral.querySelectorAll('p')[21].textContent = element.Tiempo_Sindicato;
+            this.template_referencia_laboral.querySelectorAll('p')[17].textContent = element.Sindicalizado == 1 ? 'Sí' : ( element.Sindicalizado == 0 ? 'No' : '');
+            this.template_referencia_laboral.querySelectorAll('p')[18].textContent = element.Sindicato;
+            this.template_referencia_laboral.querySelectorAll('p')[19].textContent = element.Comite_Sindical == 1 ? 'Sí' : ( element.Comite_Sindical == 0 ? 'No' : '');
+            this.template_referencia_laboral.querySelectorAll('p')[20].textContent = element.Puesto_Sindical;
+            this.template_referencia_laboral.querySelectorAll('p')[21].textContent = element.Funciones_Sindicato;
+            this.template_referencia_laboral.querySelectorAll('p')[22].textContent = element.Tiempo_Sindicato;
 
             const clone = this.template_referencia_laboral.cloneNode(true);
             this.fragment_referencia_laboral.appendChild(clone);
@@ -1048,7 +1059,7 @@ class ContenidoEstudio {
         this.content_referencias_laborales.appendChild(this.fragment_referencia_laboral);
     }
 
-    cargarDocumentos(data, display, comentario = false, Redes_Sociales = false) {
+    cargarDocumentos(data, display, comentario = false, Redes_Sociales = false){
         var clones_documento = new Array();
         data.forEach(element => {
             this.template_documento.querySelectorAll('td')[0].textContent = element.Descripcion;
@@ -1079,7 +1090,7 @@ class ContenidoEstudio {
         }
     }
 
-    cargarInvestigacion(data, display, Empresa) {
+    cargarInvestigacion(data, display, Empresa){
         this.template_investigacion.querySelectorAll('p')[0].textContent = data.Circunstancias_Laborales;
         this.template_investigacion.querySelectorAll('p')[1].textContent = data.Proporciono_Datos_Empleos;
         this.template_investigacion.querySelectorAll('p')[2].textContent = data.Motivo_No_Proporciono_Datos;
@@ -1089,7 +1100,7 @@ class ContenidoEstudio {
         this.template_investigacion.querySelector('button').style.display = display.Account;
 
 
-        if (Empresa == 190) {
+        if (Empresa == 190){
             //document.querySelectorAll('.sindicato-cementin')[0].style.display = 'block';
             //document.querySelectorAll('.sindicato-cementin')[1].style.display = 'block';
             this.template_investigacion.querySelector('.sindicato-cementin').style.display = 'block';
@@ -1106,9 +1117,9 @@ class ContenidoEstudio {
             document.querySelector('#modal_investigacion .preguntas-operador').style.display = 'block';
         }
 
-        this.template_investigacion.querySelectorAll('p')[6].textContent = data.Sindicalizado == 1 ? 'Sí' : (data.Sindicalizado == 0 ? 'No' : '');
+        this.template_investigacion.querySelectorAll('p')[6].textContent = data.Sindicalizado == 1 ? 'Sí' : ( data.Sindicalizado == 0 ? 'No' : '');
         this.template_investigacion.querySelectorAll('p')[7].textContent = data.Sindicato;
-        this.template_investigacion.querySelectorAll('p')[8].textContent = data.Comite_Sindical == 1 ? 'Sí' : (data.Comite_Sindical == 0 ? 'No' : '');
+        this.template_investigacion.querySelectorAll('p')[8].textContent = data.Comite_Sindical == 1 ? 'Sí' : ( data.Comite_Sindical == 0 ? 'No' : '');
         this.template_investigacion.querySelectorAll('p')[9].textContent = data.Puesto_Sindical;
         this.template_investigacion.querySelectorAll('p')[10].textContent = data.Funciones_Sindicato;
         this.template_investigacion.querySelectorAll('p')[11].textContent = data.Tiempo_Sindicato;
@@ -1127,44 +1138,44 @@ class ContenidoEstudio {
         this.content_investigacion.appendChild(this.fragment_investigacion);
     }
 
-    cargarComentariosGeneralesInv(observaciones) {
-        if (observaciones.Info_Proporcionada_Candidato == 242) {
+    cargarComentariosGeneralesInv(observaciones, display, candidato){
+        if (observaciones.Info_Proporcionada_Candidato == 242){
             this.template_comentarios_generales_inv.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
             this.template_comentarios_generales_inv.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = '';
             this.template_comentarios_generales_inv.querySelectorAll('tr')[1].querySelectorAll('td')[2].innerHTML = '';
-        } else if (observaciones.Info_Proporcionada_Candidato == 241) {
+        }else if (observaciones.Info_Proporcionada_Candidato == 241){
             this.template_comentarios_generales_inv.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = '';
             this.template_comentarios_generales_inv.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-warning'></i>";
             this.template_comentarios_generales_inv.querySelectorAll('tr')[1].querySelectorAll('td')[2].innerHTML = '';
-        } else if (observaciones.Info_Proporcionada_Candidato == 240) {
+        }else if(observaciones.Info_Proporcionada_Candidato == 240){
             this.template_comentarios_generales_inv.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = '';
             this.template_comentarios_generales_inv.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = "";
             this.template_comentarios_generales_inv.querySelectorAll('tr')[1].querySelectorAll('td')[2].innerHTML = "<i class='fas fa-circle text-danger'></i>";
         }
 
-        if (observaciones.Referencias_Laborales == 242) {
+        if (observaciones.Referencias_Laborales == 242){
             this.template_comentarios_generales_inv.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
             this.template_comentarios_generales_inv.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = '';
             this.template_comentarios_generales_inv.querySelectorAll('tr')[2].querySelectorAll('td')[2].innerHTML = '';
-        } else if (observaciones.Referencias_Laborales == 241) {
+        }else if (observaciones.Referencias_Laborales == 241){
             this.template_comentarios_generales_inv.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = '';
             this.template_comentarios_generales_inv.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-warning'></i>";
             this.template_comentarios_generales_inv.querySelectorAll('tr')[2].querySelectorAll('td')[2].innerHTML = '';
-        } else if (observaciones.Referencias_Laborales == 240) {
+        }else if(observaciones.Referencias_Laborales == 240){
             this.template_comentarios_generales_inv.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = '';
             this.template_comentarios_generales_inv.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = "";
             this.template_comentarios_generales_inv.querySelectorAll('tr')[2].querySelectorAll('td')[2].innerHTML = "<i class='fas fa-circle text-danger'></i>";
         }
 
-        if (observaciones.Info_Confiable == 242) {
+        if (observaciones.Info_Confiable == 242){
             this.template_comentarios_generales_inv.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
             this.template_comentarios_generales_inv.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = '';
             this.template_comentarios_generales_inv.querySelectorAll('tr')[3].querySelectorAll('td')[2].innerHTML = '';
-        } else if (observaciones.Info_Confiable == 241) {
+        }else if (observaciones.Info_Confiable == 241){
             this.template_comentarios_generales_inv.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = '';
             this.template_comentarios_generales_inv.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-warning'></i>";
             this.template_comentarios_generales_inv.querySelectorAll('tr')[3].querySelectorAll('td')[2].innerHTML = '';
-        } else if (observaciones.Info_Confiable == 240) {
+        }else if(observaciones.Info_Confiable == 240){
             this.template_comentarios_generales_inv.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = '';
             this.template_comentarios_generales_inv.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = "";
             this.template_comentarios_generales_inv.querySelectorAll('tr')[3].querySelectorAll('td')[2].innerHTML = "<i class='fas fa-circle text-danger'></i>";
@@ -1172,6 +1183,44 @@ class ContenidoEstudio {
 
         this.template_comentarios_generales_inv.querySelectorAll('p')[0].innerText = observaciones.Comentario_General_il;
         this.template_comentarios_generales_inv.querySelectorAll('p')[1].innerText = observaciones.Viable == 0 ? 'Viable' : (observaciones.Viable == 1 ? 'No viable' : (observaciones.Viable == 2 ? 'Viable con reservas' : (observaciones.Viable == 4 ? 'Sin viabilidad' : (observaciones.Viable == 5 ? 'Viable con observaciones' : ''))));
+		
+		if (candidato.Servicio_Solicitado == 'ESE SMART') {
+            this.template_comentarios_generales_inv.querySelectorAll('p')[0].style.display = 'none';
+            this.template_comentarios_generales_inv.querySelectorAll('b')[0].style.display = 'none';
+			let tabla = this.template_comentarios_generales_inv.querySelectorAll('table')[1];
+            tabla.style.display = '';
+			if (observaciones.Proporciona_Contacto == 1){
+				tabla.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
+				tabla.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = '';
+			}else if (observaciones.Proporciona_Contacto == 2){
+				tabla.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = '';
+				tabla.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-danger'></i>";
+			}
+			if (observaciones.Informacion_Congruente == 1){
+				tabla.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
+				tabla.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = '';
+			}else if (observaciones.Informacion_Congruente == 2){
+				tabla.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = '';
+				tabla.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-danger'></i>";
+			}
+			if (observaciones.Factor_Riesgo == 1){
+				tabla.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
+				tabla.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = '';
+			}else if (observaciones.Factor_Riesgo == 2){
+				tabla.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = '';
+				tabla.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-danger'></i>";
+			}
+			if (observaciones.Estabilidad_Laboral == 1){
+				tabla.querySelectorAll('tr')[4].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
+				tabla.querySelectorAll('tr')[4].querySelectorAll('td')[1].innerHTML = '';
+			}else if (observaciones.Estabilidad_Laboral == 2){
+				tabla.querySelectorAll('tr')[4].querySelectorAll('td')[0].innerHTML = '';
+				tabla.querySelectorAll('tr')[4].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-danger'></i>";
+			}
+			
+        }else {
+            this.template_comentarios_generales_inv.querySelectorAll('table')[1].style.display = 'none';
+        }
 
         const clone_comentarios_generales_inv = this.template_comentarios_generales_inv.cloneNode(true);
         this.fragment_comentarios_generales_inv.appendChild(clone_comentarios_generales_inv);
@@ -1179,7 +1228,7 @@ class ContenidoEstudio {
         this.content_comentarios_generales_inv.appendChild(this.fragment_comentarios_generales_inv);
     }
 
-    cargarConociendoCandidato(data, display) {
+    cargarConociendoCandidato(data, display){
         this.template_conociendo_candidato.querySelectorAll('p')[0].textContent = data.Interes_Puesto;
         this.template_conociendo_candidato.querySelectorAll('p')[1].textContent = data.Que_Esperas_Lograr;
         this.template_conociendo_candidato.querySelectorAll('p')[2].textContent = data.Caracteristicas_Empleo;
@@ -1204,7 +1253,8 @@ class ContenidoEstudio {
         this.content_conociendo_candidato.appendChild(this.fragment_conociendo_candidato);
     };
 
-    cargarEscolaridad(data, comentario) {
+	
+    cargarEscolaridad(data, candidato) {
         var clones_escolaridad = new Array();
         data.forEach(escolaridad => {
             this.template_escolaridad.querySelectorAll('p')[0].textContent = escolaridad.Grado;
@@ -1225,22 +1275,58 @@ class ContenidoEstudio {
             this.content_escolaridad[i].innerHTML = "";
             this.content_escolaridad[i].appendChild(this.fragment_escolaridad[i]);
 
-            const b = document.createElement('b');
-            b.textContent = 'Comentarios';
-            const p = document.createElement('p');
-            p.innerText = comentario;
-            this.content_escolaridad[i].appendChild(b);
-            this.content_escolaridad[i].appendChild(p);
+			if (candidato.Servicio_Solicitado != 'ESE SMART') {
+				const b = document.createElement('b');
+				b.textContent = 'Comentarios';
+				const p = document.createElement('p');
+				p.innerText = candidato.Comentario_Escolaridad;
+				this.content_escolaridad[i].appendChild(b);
+				this.content_escolaridad[i].appendChild(p);
+			}
         }
 
     }
+	
+  
+      cargarEscolaridad1(data, candidato) {
+        var clones_escolaridad = new Array();
+        data.forEach(escolaridad => {
+            this.template_escolaridad.querySelectorAll('p')[0].textContent = escolaridad.Grado;
+            this.template_escolaridad.querySelectorAll('p')[1].textContent = escolaridad.Institucion;
+            this.template_escolaridad.querySelectorAll('p')[2].textContent = escolaridad.Localidad;
+            this.template_escolaridad.querySelectorAll('p')[3].textContent = escolaridad.Periodo;
+            this.template_escolaridad.querySelectorAll('p')[4].textContent = escolaridad.Documento;
+            this.template_escolaridad.querySelectorAll('p')[5].textContent = escolaridad.Folio;
+            
+            for (let i = 0; i < this.content_escolaridad.length; i++) {
+                this.content_escolaridad[i].parentElement.children[0].dataset.id = escolaridad.Renglon;
+                clones_escolaridad[i] = this.template_escolaridad.cloneNode(true);
+                this.fragment_escolaridad[i].appendChild(clones_escolaridad[i]);
+            }
 
-    cargarCohabitantes(data, display, comentario = false) {
+        });
+        for (let i = 0; i < this.content_escolaridad.length; i++) {
+            this.content_escolaridad[i].innerHTML = "";
+            this.content_escolaridad[i].appendChild(this.fragment_escolaridad[i]);
+            
+            if (candidato.Servicio_Solicitado != 'ESE SMART') {
+                const b = document.createElement('b');
+                b.textContent = 'Comentarios';
+                const p = document.createElement('p');
+                p.innerText = data.Comentario_Escolaridad;
+                this.content_escolaridad[i].appendChild(b);
+                this.content_escolaridad[i].appendChild(p);
+            }
+        }
+        
+    }
+
+    cargarCohabitantes(data, display, comentario = false, candidato){
         var clones_cohabitantes = new Array();
         data.forEach(element => {
             this.template_cohabitante.querySelectorAll('td')[0].textContent = element.Nombre;
             this.template_cohabitante.querySelectorAll('td')[1].textContent = element.Parentesco;
-            this.template_cohabitante.querySelectorAll('td')[2].textContent = `${element.Edad} ${element.Edad_2}`;
+            this.template_cohabitante.querySelectorAll('td')[2].textContent = candidato.Servicio_Solicitado == 'ESE SMART' ? (element.Es_Mayor_Edad == 1 ? 'Sí' : 'No') : `${element.Edad} ${element.Edad_2}`;
             this.template_cohabitante.querySelectorAll('td')[3].textContent = element.Estado_Civil;
             this.template_cohabitante.querySelectorAll('td')[4].textContent = element.Ocupacion;
             this.template_cohabitante.querySelectorAll('td')[5].textContent = element.Empresa;
@@ -1262,10 +1348,23 @@ class ContenidoEstudio {
         for (let i = 0; i < this.content_cohabitantes.length; i++) {
             this.content_cohabitantes[i].innerHTML = "";
             this.content_cohabitantes[i].appendChild(this.fragment_cohabitante[i]);
-
+            
+            if (candidato.Servicio_Solicitado == 'ESE SMART') {
+                this.content_cohabitantes[i].parentElement.children[0].children[0].children[2].innerText = '¿Es mayor de edad?';
+                this.content_cohabitantes[i].parentElement.children[0].children[0].children[6].style.display = 'none';
+                this.content_cohabitantes[i].parentElement.children[0].children[0].children[7].style.display = '';
+				
+				this.content_cohabitantes[i].parentElement.parentElement.parentElement.children[3].style.display = 'none';
+				this.content_cohabitantes[i].parentElement.parentElement.parentElement.children[4].style.display = 'none';
+				this.content_cohabitantes[i].parentElement.parentElement.parentElement.children[5].style.display = 'none';
+            }
+            
 
             if (comentario) {
                 this.content_cohabitantes[i].parentElement.parentElement.parentElement.children[5].textContent = comentario
+            }
+            if (candidato.Servicio_Solicitado == 'ESE SMART') {
+                this.content_cohabitantes[i].parentElement.parentElement.parentElement.children[5].style.display = 'none';
             }
         }
     }
@@ -1279,10 +1378,10 @@ class ContenidoEstudio {
             this.template_circulo_familiar.querySelector('.btn-danger').dataset.id = element.Id;
             this.template_circulo_familiar.querySelector('.btn-info').style.display = display.Logistics;
             this.template_circulo_familiar.querySelector('.btn-danger').style.display = display.Logistics;
-            if (element.Estatus == 'Finado') {
+            if (element.Estatus == 'Finado'){
                 this.template_circulo_familiar.querySelectorAll('td')[3].textContent = '';
                 this.template_circulo_familiar.querySelectorAll('td')[4].textContent = 'X';
-            } else {
+            }else{
                 this.template_circulo_familiar.querySelectorAll('td')[3].textContent = 'X';
                 this.template_circulo_familiar.querySelectorAll('td')[4].textContent = '';
             }
@@ -1320,11 +1419,11 @@ class ContenidoEstudio {
         this.template_historial_salud.querySelectorAll('table')[0].querySelectorAll('tbody tr')[7].querySelectorAll('td')[1].textContent = historial_salud.Migranas == 'Si' ? historial_salud.Migranas_Familiar : 'No aplica';
         this.template_historial_salud.querySelectorAll('table')[0].querySelectorAll('tbody tr')[8].querySelectorAll('td')[1].textContent = historial_salud.Esclerosis_Multiple == 'Si' ? historial_salud.Esclerosis_Multiple_Familiar : 'No aplica';
 
-        this.template_historial_salud.querySelectorAll('table')[1].querySelectorAll('tbody tr')[0].querySelectorAll('td')[0].textContent = historial_salud.Fuma == 1 ? 'Sí' : 'No';
-        this.template_historial_salud.querySelectorAll('table')[1].querySelectorAll('tbody tr')[1].querySelectorAll('td')[0].textContent = historial_salud.Bebe == 1 ? 'Sí' : 'No';
+        this.template_historial_salud.querySelectorAll('table')[1].querySelectorAll('tbody tr')[0].querySelectorAll('td')[0].textContent = historial_salud.Fuma  == 1 ? 'Sí' : 'No';
+        this.template_historial_salud.querySelectorAll('table')[1].querySelectorAll('tbody tr')[1].querySelectorAll('td')[0].textContent = historial_salud.Bebe  == 1 ? 'Sí' : 'No';
         this.template_historial_salud.querySelectorAll('table')[1].querySelectorAll('tbody tr')[2].querySelectorAll('td')[0].textContent = historial_salud.Consume_Droga;
         this.template_historial_salud.querySelectorAll('table')[1].querySelectorAll('tbody tr')[3].querySelectorAll('td')[0].textContent = salud_seguros ? 'Sí' : 'No';
-        this.template_historial_salud.querySelectorAll('table')[1].querySelectorAll('tbody tr')[4].querySelectorAll('td')[0].textContent = historial_salud.Deportes == 1 ? 'Sí' : 'No';
+        this.template_historial_salud.querySelectorAll('table')[1].querySelectorAll('tbody tr')[4].querySelectorAll('td')[0].textContent = historial_salud.Deportes  == 1 ? 'Sí' : 'No';
 
         this.template_historial_salud.querySelectorAll('table')[1].querySelectorAll('tbody tr')[0].querySelectorAll('td')[1].textContent = historial_salud.Fuma_Cuanto;
         this.template_historial_salud.querySelectorAll('table')[1].querySelectorAll('tbody tr')[1].querySelectorAll('td')[1].textContent = historial_salud.Bebe_Frecuencia;
@@ -1337,14 +1436,14 @@ class ContenidoEstudio {
 
         this.content_historial_salud.innerHTML = "";
         this.content_historial_salud.appendChild(this.fragment_historial_salud);
-
-        if (!historial_salud) {
+		
+		if (!historial_salud) {
             document.querySelector('#vert-tabs-historial_salud-tab').hidden = true;
             document.querySelector('#vert-tabs-historial_salud').hidden = true;
         }
     }
 
-    cargarUbicacion(ubicacion, vivienda, comentario) {
+    cargarUbicacion(ubicacion, vivienda, candidato) {
         this.template_ubicacion.querySelectorAll('p')[0].textContent = vivienda.Tiempo_Viviendo;
         this.template_ubicacion.querySelectorAll('p')[1].textContent = ubicacion.Calle;
         this.template_ubicacion.querySelectorAll('p')[2].textContent = ubicacion.Exterior;
@@ -1367,17 +1466,29 @@ class ContenidoEstudio {
         this.template_ubicacion.querySelectorAll('p')[19].textContent = vivienda.Contrato_Arrendamiento;
         this.template_ubicacion.querySelectorAll('p')[20].textContent = vivienda.Tiempo_Contrato;
 
-        this.template_ubicacion.querySelectorAll('p')[21].textContent = comentario.Comentario_Vivienda;
+        this.template_ubicacion.querySelectorAll('p')[21].textContent = candidato.Comentario_Vivienda;
         this.template_ubicacion.querySelectorAll('p')[22].textContent = ubicacion.Maps;
+		
+		console.log(candidato.Servicio_Solicitado);
+		if (candidato.Servicio_Solicitado == 'ESE SMART') {
+            this.template_ubicacion.querySelectorAll('b')[12].style.display = 'none';
+            this.template_ubicacion.querySelectorAll('p')[12].style.display = 'none';
+            this.template_ubicacion.querySelectorAll('b')[13].style.display = 'none';
+            this.template_ubicacion.querySelectorAll('p')[13].style.display = 'none';
+            this.template_ubicacion.querySelectorAll('b')[14].style.display = 'none';
+            this.template_ubicacion.querySelectorAll('p')[14].style.display = 'none';
+            this.template_ubicacion.querySelectorAll('b')[21].style.display = 'none';
+            this.template_ubicacion.querySelectorAll('p')[21].style.display = 'none';
+        }
 
         const clone_ubicacion = this.template_ubicacion.cloneNode(true);
         this.fragment_ubicacion.appendChild(clone_ubicacion);
-
+        
         this.content_ubicacion.innerHTML = '';
         this.content_ubicacion.appendChild(this.fragment_ubicacion);
     }
 
-    cargarUbicacionFotos(ubicacion_exterior, ubicacion_no_exterior, ubicacion_interior, ubicacion, vivienda) {
+    cargarUbicacionFotos(ubicacion_exterior, ubicacion_no_exterior, ubicacion_interior, ubicacion, vivienda){
         this.template_ubicacion_fotos.querySelectorAll('img')[0].src = ubicacion_exterior ? ubicacion_exterior[0] : '../dist/img/image_unavailable.jpg';
         this.template_ubicacion_fotos.querySelectorAll('img')[1].src = ubicacion_no_exterior ? ubicacion_no_exterior[0] : '../dist/img/image_unavailable.jpg';
         this.template_ubicacion_fotos.querySelectorAll('img')[2].src = ubicacion_interior ? ubicacion_interior[0] : '../dist/img/image_unavailable.jpg';
@@ -1409,7 +1520,7 @@ class ContenidoEstudio {
         this.template_ubicacion_fotos.querySelectorAll('.btn-orange')[0].dataset.tabla = 'Candidatos_Ubicacion';
         this.template_ubicacion_fotos.querySelectorAll('.btn-orange')[1].dataset.tabla = 'Candidatos_Ubicacion';
         this.template_ubicacion_fotos.querySelectorAll('.btn-orange')[2].dataset.tabla = 'Candidatos_Vivienda';
-
+        
         this.template_ubicacion_fotos.querySelectorAll('.btn-group')[0].style.display = ubicacion_exterior ? 'block' : 'none';
         this.template_ubicacion_fotos.querySelectorAll('.btn-group')[1].style.display = ubicacion_no_exterior ? 'block' : 'none';
         this.template_ubicacion_fotos.querySelectorAll('.btn-group')[2].style.display = ubicacion_interior ? 'block' : 'none';
@@ -1465,7 +1576,7 @@ class ContenidoEstudio {
             this.template_referencia.querySelector('.btn-danger').dataset.id = element.Renglon;
             this.template_referencia.querySelector('.btn-info').style.display = display.SA;
             this.template_referencia.querySelector('.btn-danger').style.display = display.SA;
-
+            
             for (let i = 0; i < this.content_referencias.length; i++) {
                 clones_referencias[i] = this.template_referencia.cloneNode(true);
                 this.fragment_referencia[i].appendChild(clones_referencias[i]);
@@ -1511,7 +1622,7 @@ class ContenidoEstudio {
 
         if ((total_ingresos - total_egresos) < 0) {
             this.template_totales_economia.querySelectorAll('p')[2].classList.add('text-danger');
-        } else {
+        }else{
             this.template_totales_economia.querySelectorAll('p')[2].classList.remove('text-danger');
         }
 
@@ -1531,7 +1642,7 @@ class ContenidoEstudio {
         }
     }
 
-    cargarInformacionFinanciera(creditos, cuentas_bancarias, seguros, INFONAVIT, display) {
+    cargarInformacionFinanciera(creditos, cuentas_bancarias, seguros, INFONAVIT, display){
         creditos.forEach(credito => {
             this.template_credito.querySelectorAll('th')[0].textContent = credito.Institucion;
             this.template_credito.querySelectorAll('td')[0].textContent = credito.Limite_Credito;
@@ -1592,7 +1703,8 @@ class ContenidoEstudio {
             this.template_inmueble.querySelectorAll('th')[0].textContent = inmueble.Tipo_Inmueble;
             this.template_inmueble.querySelectorAll('td')[0].textContent = inmueble.Ubicacion;
             this.template_inmueble.querySelectorAll('td')[1].textContent = inmueble.Valor;
-            this.template_inmueble.querySelectorAll('td')[2].textContent = inmueble.Pagado == 1 ? 'Sí' : 'No';
+            this.template_inmueble.querySelectorAll('td'
+            )[2].textContent = inmueble.Pagado == 1 ? 'Sí' : 'No';
             this.template_inmueble.querySelectorAll('td')[3].textContent = inmueble.Abono_Mensual;
             this.template_inmueble.querySelector('.btn-info').dataset.id = inmueble.Renglon;
             this.template_inmueble.querySelector('.btn-danger').dataset.id = inmueble.Renglon;
@@ -1612,7 +1724,7 @@ class ContenidoEstudio {
             this.template_vehiculo.querySelector('.btn-danger').dataset.id = vehiculo.Renglon;
             this.template_vehiculo.querySelector('.btn-info').style.display = display.Logistics;
             this.template_vehiculo.querySelector('.btn-danger').style.display = display.Logistics;
-
+            
             const clone_vehiculo = this.template_vehiculo.cloneNode(true);
             this.fragment_vehiculo.appendChild(clone_vehiculo);
         });
@@ -1623,19 +1735,25 @@ class ContenidoEstudio {
         this.content_vehiculos.appendChild(this.fragment_vehiculo);
     }
 
-    cargarConclusiones(observaciones) {
-        this.template_conclusiones.querySelectorAll('p')[0].textContent = observaciones.Sobre_Candidato;
-        this.template_conclusiones.querySelectorAll('p')[1].textContent = observaciones.Sobre_Casa;
-        this.template_conclusiones.querySelectorAll('p')[2].textContent = observaciones.Conclusiones_Entrevistador;
+    cargarConclusiones(observaciones, display, candidato) {
+		if (candidato.Servicio_Solicitado != 'ESE SMART') {
+			this.template_conclusiones.querySelectorAll('p')[0].textContent = observaciones.Sobre_Candidato;
+			this.template_conclusiones.querySelectorAll('p')[1].textContent = observaciones.Sobre_Casa;
+			this.template_conclusiones.querySelectorAll('p')[2].textContent = observaciones.Conclusiones_Entrevistador;
+		} else {
+            this.template_conclusiones.querySelectorAll('b')[0].style.display = 'none';
+            this.template_conclusiones.querySelectorAll('b')[1].style.display = 'none';
+            this.template_conclusiones.querySelectorAll('b')[2].style.display = 'none';
+        }
         if (observaciones.Participacion_Candidato == 243 || observaciones.Participacion_Candidato == 242) {
             this.template_conclusiones.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
             this.template_conclusiones.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = "";
             this.template_conclusiones.querySelectorAll('tr')[1].querySelectorAll('td')[2].innerHTML = "";
-        } else if (observaciones.Participacion_Candidato == 241) {
+        }else if (observaciones.Participacion_Candidato == 241){
             this.template_conclusiones.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = "";
             this.template_conclusiones.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-warning'></i>";
             this.template_conclusiones.querySelectorAll('tr')[1].querySelectorAll('td')[2].innerHTML = "";
-        } else if (observaciones.Participacion_Candidato == 240) {
+        }else if(observaciones.Participacion_Candidato == 240){
             this.template_conclusiones.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = "";
             this.template_conclusiones.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = "";
             this.template_conclusiones.querySelectorAll('tr')[1].querySelectorAll('td')[2].innerHTML = "<i class='fas fa-circle text-danger'></i>";
@@ -1645,11 +1763,11 @@ class ContenidoEstudio {
             this.template_conclusiones.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
             this.template_conclusiones.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = "";
             this.template_conclusiones.querySelectorAll('tr')[2].querySelectorAll('td')[2].innerHTML = "";
-        } else if (observaciones.Entorno_Familiar == 241) {
+        }else if (observaciones.Entorno_Familiar == 241){
             this.template_conclusiones.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = "";
             this.template_conclusiones.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-warning'></i>";
             this.template_conclusiones.querySelectorAll('tr')[2].querySelectorAll('td')[2].innerHTML = "";
-        } else if (observaciones.Entorno_Familiar == 240) {
+        }else if(observaciones.Entorno_Familiar == 240){
             this.template_conclusiones.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = "";
             this.template_conclusiones.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = "";
             this.template_conclusiones.querySelectorAll('tr')[2].querySelectorAll('td')[2].innerHTML = "<i class='fas fa-circle text-danger'></i>";
@@ -1659,11 +1777,11 @@ class ContenidoEstudio {
             this.template_conclusiones.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
             this.template_conclusiones.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = "";
             this.template_conclusiones.querySelectorAll('tr')[3].querySelectorAll('td')[2].innerHTML = "";
-        } else if (observaciones.Referencias_Vecinales == 241) {
+        }else if (observaciones.Referencias_Vecinales == 241){
             this.template_conclusiones.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = "";
             this.template_conclusiones.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-warning'></i>";
             this.template_conclusiones.querySelectorAll('tr')[3].querySelectorAll('td')[2].innerHTML = "";
-        } else if (observaciones.Referencias_Vecinales == 240) {
+        }else if(observaciones.Referencias_Vecinales == 240){
             this.template_conclusiones.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = "";
             this.template_conclusiones.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = "";
             this.template_conclusiones.querySelectorAll('tr')[3].querySelectorAll('td')[2].innerHTML = "<i class='fas fa-circle text-danger'></i>";
@@ -1676,11 +1794,47 @@ class ContenidoEstudio {
         this.content_conclusiones.appendChild(this.fragment_conclusiones);
     }
 
-    cargarComentariosGenerales(observaciones) {
-        this.template_comentarios_generales.querySelectorAll('p')[0].innerText = observaciones.Comentarios_Generales;
+    cargarComentariosGenerales(observaciones, display, candidato){
+		if (candidato.Servicio_Solicitado != 'ESE SMART') {
+        	this.template_comentarios_generales.querySelectorAll('p')[0].innerText = observaciones.Comentarios_Generales;
+			this.template_comentarios_generales.querySelector('table').style.display = 'none';
+		}else {
+            this.template_comentarios_generales.querySelectorAll('b')[0].style.display = 'none';
+            if (observaciones.Puntualidad == 1) {
+                this.template_comentarios_generales.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
+                this.template_comentarios_generales.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = "";
+            }else if (observaciones.Puntualidad == 2){
+                this.template_comentarios_generales.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = "";
+                this.template_comentarios_generales.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-danger'></i>";
+            }
+    
+            if (observaciones.Documentacion == 1) {
+                this.template_comentarios_generales.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
+                this.template_comentarios_generales.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = "";
+            }else if (observaciones.Documentacion == 2){
+                this.template_comentarios_generales.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = "";
+                this.template_comentarios_generales.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-danger'></i>";
+            }
+
+            if (observaciones.Naturalidad == 1) {
+                this.template_comentarios_generales.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
+                this.template_comentarios_generales.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = "";
+            }else if (observaciones.Naturalidad == 2){
+                this.template_comentarios_generales.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = "";
+                this.template_comentarios_generales.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-danger'></i>";
+            }
+
+            if (observaciones.Respuestas_Claras == 1) {
+                this.template_comentarios_generales.querySelectorAll('tr')[4].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
+                this.template_comentarios_generales.querySelectorAll('tr')[4].querySelectorAll('td')[1].innerHTML = "";
+            }else if (observaciones.Respuestas_Claras == 2){
+                this.template_comentarios_generales.querySelectorAll('tr')[4].querySelectorAll('td')[0].innerHTML = "";
+                this.template_comentarios_generales.querySelectorAll('tr')[4].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-danger'></i>";
+            }
+        }
         //this.template_comentarios_generales.querySelectorAll('p')[1].innerText = observaciones.Califica_como;
-        // this.template_comentarios_generales.querySelectorAll('p')[1].innerText = observaciones.Viabilidad == '0' ? 'Viable para su contratación' : (observaciones.Viabilidad == 1 ? 'No viable para su contratación' : (observaciones.Viabilidad == 2 ? 'Viable con reservas' :
-        //  (observaciones.Viabilidad == 4 ? 'Sin viabilidad' : (observaciones.Viabilidad == 5 ? 'Viable con observaciones' : ''))));
+       // this.template_comentarios_generales.querySelectorAll('p')[1].innerText = observaciones.Viabilidad == '0' ? 'Viable para su contratación' : (observaciones.Viabilidad == 1 ? 'No viable para su contratación' : (observaciones.Viabilidad == 2 ? 'Viable con reservas' :
+       //  (observaciones.Viabilidad == 4 ? 'Sin viabilidad' : (observaciones.Viabilidad == 5 ? 'Viable con observaciones' : ''))));
         this.template_comentarios_generales.querySelectorAll('p')[1].innerText = observaciones.Viabilidad;
 
         const clone_comentarios_generales = this.template_comentarios_generales.cloneNode(true);
@@ -1688,8 +1842,8 @@ class ContenidoEstudio {
         this.content_comentarios_generales.innerHTML = "";
         this.content_comentarios_generales.appendChild(this.fragment_comentarios_generales);
     }
-
-    cargarNotas(data, display) {
+	
+	cargarNotas(data, display) {
         data.forEach(element => {
             this.template_notas.querySelectorAll('.username')[0].textContent = element.first_name + ' ' + element.last_name;
             this.template_notas.querySelectorAll('.description')[0].textContent = element.Fecha;

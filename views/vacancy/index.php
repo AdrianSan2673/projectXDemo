@@ -281,7 +281,7 @@
                           $recruiter_color = 'bg-danger';
                         }
                         ?>
-                        <td class="align-middle"><?=$vacancy['id']?></td>
+                        <td class="align-middle h6"><?=$vacancy['id']?></td>
                         <td class="align-middle <?=$recruiter_color?>">
 							<?=$vacancy['recruiter']!=' '?$vacancy['recruiter'] :'Sin asignar'?>
 						</td>

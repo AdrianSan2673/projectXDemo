@@ -216,14 +216,11 @@ class ServicioApoyo{
 		xhr.onreadystatechange = function(){
 			if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = this.responseText;
-                console.log(r);
                 try {
                     let json_app = JSON.parse(r);
                     if(json_app.status == 0)
                         utils.showToast('Omitiste algún dato','error');
                     else if (json_app.status == 1){
-
-                        console.log(json_app.folio);
                         document.querySelector("#solicitud"+json_app.folio).textContent = json_app.solicitud;
                         document.querySelector("#ejecutivo"+json_app.folio).textContent = json_app.ejecutivo;
                         document.querySelector("#entregado"+json_app.folio).textContent = json_app.entregado;
@@ -235,8 +232,6 @@ class ServicioApoyo{
                             document.querySelector("#tiempo"+json_app.folio).className = timeclass+'bg-danger';
                         else
                             document.querySelector("#tiempo"+json_app.folio).className = timeclass+'bg-orange';
-
-
 
                         utils.showToast('Servicio actualizado exitosamente', 'success');
                         $('#modal_config').modal('hide');

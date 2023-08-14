@@ -24,13 +24,8 @@
                     <!-- form start -->
                     <form id="candidate-form" name="candidate-form" method="POST">
                         <input type="hidden" id="id" value="<?= isset($candidato) && is_object($candidato) ? Encryption::encode($candidato->id) : '' ?>">
-
                         <?php if (isset($_GET['vacante'])) : ?>
                             <input type="hidden" name="id_vacancy" id="id_vacancy" value="<?= isset($_GET['vacante']) && !empty($_GET['vacante']) ? $_GET['vacante'] : '' ?>">
-                        <?php endif ?>
-
-                        <?php if (isset($_GET['contact'])) : ?>
-                            <input type="hidden" name="contact" value="<?= $_GET['contact'] ?>">
                         <?php endif ?>
                         <!-- general form elements -->
                         <div class="card card-orange">
@@ -41,23 +36,23 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="first_name" class="col-form-label">Nombre(s)</label>
-                                                    <input type="text" name="first_name" id="first_name" class="form-control" required value="<?= (isset($candidato) && is_object($candidato)) ? $candidato->first_name : ((isset($candidateDirectory)) ? $candidateDirectory->first_name : ''); ?>">
+                                                    <input type="text" name="first_name" id="first_name" class="form-control" required value="<?= isset($candidato) && is_object($candidato) ? $candidato->first_name : ''; ?>">
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="surname" class="col-form-label">Apellido Paterno</label>
-                                                    <input type="text" name="surname" id="surname" class="form-control" required value="<?= (isset($candidato) && is_object($candidato)) ? $candidato->surname : ((isset($candidateDirectory)) ? $candidateDirectory->surname : '');; ?>">
+                                                    <input type="text" name="surname" id="surname" class="form-control" required value="<?= isset($candidato) && is_object($candidato) ? $candidato->surname : ''; ?>">
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="last_name" class="col-form-label">Apellido
                                                         Materno</label>
-                                                    <input type="text" name="last_name" id="last_name" class="form-control" required value="<?= (isset($candidato) && is_object($candidato)) ? $candidato->last_name : ((isset($candidateDirectory)) ? $candidateDirectory->last_name : '');; ?>">
+                                                    <input type="text" name="last_name" id="last_name" class="form-control" required value="<?= isset($candidato) && is_object($candidato) ? $candidato->last_name : ''; ?>">
                                                 </div>
                                             </div>
                                         </div>
@@ -152,8 +147,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="job_title" class="col-form-label">Experiencia en</label>
-                                                                                     <input type="text" name="job_title" id="job_title" class="form-control" required value="<?= (isset($candidato) && is_object($candidato)) ? $candidato->experience : ((isset($candidateDirectory)) ? $candidateDirectory->experience : '');; ?>">
-
+                                            <input type="text" name="job_title" id="job_title" class="form-control" required value="<?= isset($candidato) && is_object($candidato) ? $candidato->job_title : ''; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -169,7 +163,7 @@
                                             <select name="id_area" id="id_area" class="form-control" required>
                                                 <option value="" hidden selected>Selecciona un Área</option>
                                                 <?php foreach ($areas as $area) : ?>
-                                                    <option value="<?= $area['id'] ?>" <?= isset($candidato) && is_object($candidato) && ($area['id'] == $candidato->id_area) ?  'selected' : ''; ?>>
+                                                    <option value="<?= $area['id'] ?>" <?= isset($candidato) && is_object($candidato) && $area['id'] == $candidato->id_area ? 'selected' : ''; ?>>
                                                         <?= $area['area'] ?></option>
                                                 <?php endforeach; ?>
                                             </select>
@@ -180,7 +174,7 @@
                                             <label for="id_subarea" class="col-form-label">Subarea</label>
                                             <select name="id_subarea" id="id_subarea" class="form-control" required>
                                                 <?php if (isset($candidato) && is_object($candidato) && !empty($candidato->id_area)) : ?>
-                                                    <?php $subareas = Utils::showSubareasByArea($candidato->id_area); ?>
+                                                    <?= $subareas = Utils::showSubareasByArea($candidato->id_area); ?>
                                                     <?php foreach ($subareas as $subarea) : ?>
                                                         <option value="<?= $subarea['id'] ?>" <?= isset($candidato) && is_object($candidato) && $subarea['id'] == $candidato->id_subarea ? 'selected' : ''; ?>>
                                                             <?= $subarea['subarea'] ?></option>
@@ -377,7 +371,7 @@
     $(function() {
         $.validator.setDefaults({
             submitHandler: function() {
-                //document.querySelector("#candidate-form #candidate_submit").disabled = true;
+                /*   document.querySelector("#candidate-form #candidate_submit").disabled = true; */
                 let candidate = new Candidate();
 
 
@@ -415,7 +409,7 @@
                         candidate.create();
                     } else {
                         utils.showToast('Llena los datos de experiencia correctamente', 'error');
-                        //document.querySelector("#candidate-form #candidate_submit").disabled = false;
+                        /*  document.querySelector("#candidate-form #candidate_submit").disabled = false; */
                     }
                 }
 
@@ -578,13 +572,11 @@
         var empresa = document.getElementById("enterprise_experience").value.trim();
         var descripcion = document.getElementById("review_experience").value.trim();
 
-
         var inputs = document.getElementsByClassName("multiple");
         var bandera = false;
         Array.from(inputs).forEach((input) => {
             bandera = true;
         })
-
 
         if (bandera == false) {
             if (empresa != "" || descripcion != "") {
@@ -594,7 +586,6 @@
             } else {
                 $('#enterprise_experience').removeAttr("required");
                 $('#review_experience').removeAttr("required");
-
 
             }
 

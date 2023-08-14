@@ -32,8 +32,8 @@ class CivilStatus{
         $status = $stmt->fetchAll();
         return $status;
 	}
-
-	public function getOne()
+	
+		public function getOne()
 	{
 		$id = $this->getId();
 		$stmt = $this->db->prepare("SELECT * FROM civil_status where id=:id;");

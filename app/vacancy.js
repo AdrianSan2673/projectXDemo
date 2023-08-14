@@ -950,7 +950,7 @@ class Vacancy {
                 }
             })
             .then(r => {
-               //console.log(r);
+                console.log(r);
                 try {
                     const json_app = JSON.parse(r);
                     if (json_app.status === 0) {

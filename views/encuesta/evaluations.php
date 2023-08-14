@@ -28,7 +28,6 @@
               <th class="align-middle text-center">Fecha</th>
               <th class="align-middle text-center">Mes</th>
 			  <th class="align-middle text-center">¿Qué tan agradable es tu experiencia con nosotros?</th>
-              <th class="align-middle text-center">Promedio</th>
               <th class="align-middle text-center">Comentarios</th>
             </tr>
           </thead>
@@ -40,7 +39,6 @@
                 <td class="text-center"><?= Utils::getFullDate($evaluation['Fecha']) ?></td>
                 <td class="text-center"><?= date("n", strtotime($evaluation['Fecha'])) ?></td>
                 <td class="text-center"><?=$evaluation['Experiencia']?></td>
-                <td class="text-center"><?= $evaluation['Promedio'] ?></td>
                 <td><?= $evaluation['Comentarios'] ?></td>
               </tr>
             <?php endforeach; ?>
@@ -53,7 +51,6 @@
               <th class="align-middle text-center">Fecha</th>
               <th class="align-middle text-center">Mes</th>
 			  <th class="align-middle text-center">¿Qué tan agradable es tu experiencia con nosotros?</th>
-              <th class="align-middle text-center">Promedio</th>
               <th class="align-middle text-center">Comentarios</th>
             </tr>
           </tfoot>

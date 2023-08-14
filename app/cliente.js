@@ -143,6 +143,39 @@ class Cliente {
         }
     }
 
+    getServicios(Cliente){
+        let xhr = new XMLHttpRequest();
+        let data = `Cliente=${Cliente}`;
+        let form = document.querySelector('#modal_servicios');
+        document.querySelectorAll('#modal_servicios form .btn')[1].disabled = false;
+        xhr.open('POST', '../Cliente_SA/getOne');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.send(data);
+        xhr.onreadystatechange = function(){
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                let r = xhr.responseText;
+                console.log(r);
+                try {
+                    if (r != 0){
+                        let json_app = JSON.parse(r);
+                        form.querySelectorAll('input')[0].value = json_app.Cliente;
+                        form.querySelectorAll('input')[1].value = 1;
+                        form.querySelectorAll('input[type=checkbox]')[0].checked = json_app.Tiene_IL == 1 ? true : false;
+                        form.querySelectorAll('input[type=checkbox]')[1].checked = json_app.Tiene_ESE == 1 ? true : false;
+                        form.querySelectorAll('input[type=checkbox]')[2].checked = json_app.Tiene_SOI == 1 ? true : false;
+                        form.querySelectorAll('input[type=checkbox]')[3].checked = json_app.Tiene_SMART == 1 ? true : false;
+                    }else {
+                        form.querySelectorAll('input')[0].value = 0;
+                        form.querySelectorAll('input')[1].value = 0;
+                    }
+                } catch (error) {
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                }
+                    
+			}
+        }
+    }
+
     getCondiciones(Cliente){
         let xhr = new XMLHttpRequest();
         let data = `Cliente=${Cliente}`;
@@ -157,7 +190,7 @@ class Cliente {
                 console.log(r);
                 try {
                     if (r != 0){
-                        let json_app = JSON.parse(r);
+                		let json_app = JSON.parse(r);
                         form.querySelectorAll('input')[0].value = json_app.Cliente;
                         form.querySelectorAll('input')[1].value = 1;
                         form.querySelectorAll('input')[2].value = Math.round(json_app.Validacion_Licencia);
@@ -715,7 +748,70 @@ class Cliente {
         }
     }
 
-    save_condiciones(){
+    save_servicios(){
+        var form = document.querySelector("#modal_servicios form");
+		var formData = new FormData(form);
+        form.querySelectorAll('.btn')[1].disabled = true;
+		
+		let xhr = new XMLHttpRequest();
+		xhr.open('POST', '../Cliente_SA/updateServicios');
+		xhr.send(formData);
+
+        xhr.onreadystatechange = function(){
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                let r = xhr.responseText;
+                console.log(r);
+                try {
+                    let json_app = JSON.parse(r);
+                    if(json_app.status == 0){
+                        form.querySelectorAll('.btn')[1].disabled = false;
+                        utils.showToast('Omitiste algún dato','error');
+                    }else if(json_app.status == 1){
+                        let content = '';
+                        content = `
+                        <div class="row">
+                            <div class="col text-center">
+                                <b>Investigación Laboral</b>
+                                <p>${json_app.cliente.Tiene_IL == 1 ? 'Sí' : 'No'}</p>
+                            </div>
+                            <div class="col text-center">
+                                <b>Verificación Domiciliaria</b>
+                                <p>${json_app.cliente.Tiene_ESE == 1 ? 'Sí' : 'No'}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col text-center">
+                                <b>Safe Operator By Ingenia</b>
+                                <p>${json_app.cliente.Tiene_SOI == 1 ? 'Sí' : 'No'}</p>
+                            </div>
+                            <div class="col text-center">
+                                <b>Estudio Socioeconómico SMART</b>
+                                <p>${json_app.cliente.Tiene_SMART == 1 ? 'Sí' : 'No'}</p>
+                            </div>
+                        </div>
+                        `;
+                        document.querySelector('#content-servicios').innerHTML = content;
+                        utils.showToast('Los servicios fueron actualizados exitosamente', 'success');
+                        $('#modal_servicios').modal('hide');
+                        form.querySelectorAll('.btn')[1].disabled = false;
+                    }else if (json_app.status == 2){
+                        form.querySelectorAll('.btn')[1].disabled = false;
+                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                    }else{
+                        form.querySelectorAll('.btn')[1].disabled = false;
+                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                    }
+                } catch (error) {
+                    form.querySelectorAll('.btn')[1].disabled = false;
+                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                }
+
+            }        
+        }
+    }
+
+
+   save_condiciones(){
         var form = document.querySelector("#modal_condiciones form");
 		var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;

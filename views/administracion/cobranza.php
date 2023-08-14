@@ -311,7 +311,7 @@
                 </div>
                 
                  <div class="tab-pane" id="tab_2">
-                   <table id="tb_paid_bills" class="table table-responsive table-striped" style="display: none;">
+                   <table id="tb_paid_bills" class="table table-responsive table-striped table-sm" style="display: none;">
                     <thead>
                         <tr>
                           <th></th>
@@ -415,7 +415,7 @@
                  </div> 
 
                  <div class="tab-pane" id="tab_3">
-                   <table id="tb_paid_bills_canhcel" class="table table-responsive table-striped" style="display: none;">
+                   <table id="tb_paid_bills_canhcel" class="table table-responsive table-striped  table-sm" style="display: none;">
                     <thead>
                         <tr>
                           <th></th>

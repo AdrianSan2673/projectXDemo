@@ -77,7 +77,7 @@
                                     <label for="subarea" class="col-form-label">Subarea</label>
                                     <select name="subarea" id="subarea_select" class="form-control select2" required>
                                         <?php if (isset($vacante) && is_object($vacante) && !empty($vacante->id_area)) : ?>
-                                            <?= $subareas = Utils::showSubareasByArea($vacante->id_area); ?>
+                                            <?php $subareas = Utils::showSubareasByArea($vacante->id_area); ?>
                                             <?php foreach ($subareas as $subarea) : ?>
                                                 <option value="<?= $subarea['id'] ?>" <?= isset($vacante) && is_object($vacante) && $subarea['id'] == $vacante->id_subarea ? 'selected' : ''; ?>><?= $subarea['subarea'] ?></option>
                                             <?php endforeach ?>
@@ -141,7 +141,7 @@
                                     <label for="city" class="col-form-label">Ciudad</label>
                                     <select name="city" id="city" class="form-control select2" required>
                                         <?php if (isset($vacante) && is_object($vacante) && !empty($vacante->id_state)) : ?>
-                                            <?= $cities = Utils::showCitiesByState($vacante->id_state); ?>
+                                            <?php $cities = Utils::showCitiesByState($vacante->id_state); ?>
                                             <?php foreach ($cities as $city) : ?>
                                                 <option value="<?= $city['id'] ?>" <?= isset($vacante) && is_object($vacante) && $city['id'] == $vacante->id_city ? 'selected' : ''; ?>><?= $city['city'] ?></option>
                                             <?php endforeach ?>

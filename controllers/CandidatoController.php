@@ -214,6 +214,7 @@ class CandidatoController
                     $candidato->description = '';
                     $candidato->id = null;
                     $candidato->job_title = $candidato->experience;
+					$candidato->experience =$candidato->experience;
                     $candidato->cellphone = '';
                     $candidato->linkedinn = '';
                     $candidato->facebook = '';
@@ -671,9 +672,7 @@ class CandidatoController
                     }else{
                         echo 4;
                     } */
-                }
-
-                if ($save) {
+                }else {if ($save) {
                     //===[gabo 2 julio operativa]===
                     echo json_encode(array(
                         'status' => 1,
@@ -686,6 +685,8 @@ class CandidatoController
                 } else {
                     echo json_encode(array('status' => 2));
                 }
+					  }
+				
             } else {
                 echo json_encode(array('status' => 0));
             }

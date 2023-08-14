@@ -114,6 +114,7 @@
                                                 <a class="nav-link" id="vert-tabs-incidencias-tab" data-toggle="pill" href="#vert-tabs-incidencias" role="tab" aria-controls="vert-tabs-incidencias" aria-selected="false">Incidencias</a>
                                                 <a class="nav-link" id="vert-tabs-capacitacion-tab" data-toggle="pill" href="#vert-tabs-capacitacion" role="tab" aria-controls="vert-tabs-capacitacion" aria-selected="false">Capacitacion</a>
                                                 <a class="nav-link" id="vert-tabs-documentos-tab" data-toggle="pill" href="#vert-tabs-documentos" role="tab" aria-controls="vert-tabs-documentos" aria-selected="false">Documentos</a>
+                                                <a class="nav-link" id="vert-tabs-documentacion-tab" data-toggle="pill" href="#vert-tabs-documentacion" role="tab" aria-controls="vert-tabs-documentacion" aria-selected="false">Documentación</a>
                                             </div>
                                         </div>
                                         <div class="col-7 col-sm-9">
@@ -737,6 +738,43 @@
                                                         </div>
                                                     </form>
 
+
+                                                </div>
+                                                <div class="tab-pane fade" id="vert-tabs-documentacion" role="tabpanel" aria-labelledby="vert-tabs-documentacion-tab">
+                                                    <div class="form-group mb-3">
+                                                        <label class="col-form-label">Agregar documento</label>
+                                                        <input type="file" class="btn btn-success" accept="image/x-png,image/gif,image/jpeg" style="display: block;">
+                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-sm text-nowrap">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Documento</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody class="content-documentos">
+                                                                <?php foreach ($documents as $document): ?>
+                                                                <tr>
+                                                                    <td><?=$document['Descripcion']?></td>
+                                                                    <td class="text-right py-0 align-middle">
+                                                                        <div class="btn-group btn-group-sm">
+                                                                            <button class="btn btn-success" data-id="<?=$document['id']?>">
+                                                                                <i class="fas fa-eye"></i>
+                                                                            </button>
+                                                                            <button class="btn btn-info" data-id="<?=$document['id']?>">
+                                                                                <i class="fas fa-pencil-alt"></i>
+                                                                            </button>
+                                                                            <button class="btn btn-danger" data-id="<?=$document['id']?>">
+                                                                                <i class="fas fa-times"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr> 
+                                                                <?php endforeach ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
 
                                                 </div>
 
@@ -1554,5 +1592,286 @@
                 }
             });
         <?php endif; ?>
+		
+		let cropperr;
+        let optionsDocs = {
+            autoCropArea: 1,
+            //preview:'.previeww',
+            checkOrientation: true,
+            responsive: true
+        };
+
+        $('#modal_documento').on('shown.bs.modal', function() {
+            cropperr = new Cropper(document.querySelector('#modal_documento img'), optionsDocs);
+        }).on('hidden.bs.modal', function(){
+            cropperr.destroy();
+            cropperr = null;
+        });
+
+        document.querySelector('#modal_documento .docs-buttons').onclick = function (event) {
+            var e = event || window.event;
+            var target = e.target || e.srcElement;
+            var cropped;
+            var result;
+            var input;
+            var data;
+        
+            if (!cropperr) {
+            return;
+            }
+        
+            while (target !== this) {
+            if (target.getAttribute('data-method')) {
+                break;
+            }
+        
+            target = target.parentNode;
+            }
+        
+            if (target === this || target.disabled || target.className.indexOf('disabled') > -1) {
+            return;
+            }
+        
+            data = {
+            method: target.getAttribute('data-method'),
+            target: target.getAttribute('data-target'),
+            option: target.getAttribute('data-option') || undefined,
+            secondOption: target.getAttribute('data-second-option') || undefined
+            };
+        
+            cropped = cropperr.cropped;
+        
+            if (data.method) {
+            if (typeof data.target !== 'undefined') {
+                input = document.querySelector(data.target);
+        
+                if (!target.hasAttribute('data-option') && data.target && input) {
+                try {
+                    data.option = JSON.parse(input.value);
+                } catch (e) {
+                    console.log(e.message);
+                }
+                }
+            }
+        
+            switch (data.method) {
+                case 'rotate':
+                if (cropped && optionsDocs.viewMode > 0) {
+                    cropperr.clear();
+                }
+        
+                break;
+            }
+        
+            result = cropperr[data.method](data.option, data.secondOption);
+        
+            switch (data.method) {
+                case 'rotate':
+                if (cropped && optionsDocs.viewMode > 0) {
+                    cropperr.crop();
+                }
+        
+                break;
+        
+                case 'scaleX':
+                case 'scaleY':
+                target.setAttribute('data-option', -data.option);
+                break;
+            }
+        
+            if (typeof result === 'object' && result !== cropperr && input) {
+                try {
+                input.value = JSON.stringify(result);
+                } catch (e) {
+                console.log(e.message);
+                }
+            }
+            }
+        };
+
+        document.querySelectorAll('.content-documentos')[0].parentElement.parentElement.parentElement.children[0].children[1].addEventListener('change', e => {
+            var files = e.target.files;
+            let data = `id_employee=${document.querySelectorAll('#modal_documento form input')[1].value}`;
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '../EmpleadoDocumento/getDocumentosPorCompletar');
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.send(data);
+            xhr.clase = this;
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    let r = this.responseText;
+                    console.log(r);
+                    try {
+                        let json_app = JSON.parse(r);
+                        let data = '';
+                        json_app.forEach(element => {
+                            data += `<option value="${element.Campo}">${element.Descripcion}</option>`;
+                        });
+                        document.querySelector('#modal_documento select').innerHTML = data;
+                    } catch (error) {
+                        utils.showToast('Algo salió mal. Inténtalo de nuevo'+error, 'error');
+                        //form.querySelectorAll('.btn')[1].disabled = false;
+                    }
+                }
+            }
+            
+            var done = function(url){
+                
+                document.querySelector('#modal_documento img').src = url;
+
+                var form = document.querySelector("#modal_documento form");
+                //var formData = new FormData(form);
+                form.querySelectorAll('input')[0].value = 0;
+                form.querySelectorAll('input')[2].value = files[0].name;
+                form.querySelectorAll('input')[4].value = 0;
+
+                form.querySelectorAll('.btn')[3].disabled = false;
+                $('#modal_documento').modal({backdrop: 'static', keyboard: false});
+            };
+
+            if(files && files.length > 0)
+            {
+                reader = new FileReader();
+                reader.onload = function(e)
+                {
+                    done(reader.result);
+                };
+                reader.readAsDataURL(files[0]);
+            }
+        })
+
+        document.querySelectorAll('.content-documentos')[0].addEventListener('click', e => {
+
+            if (e.target.classList.contains('btn-success') || e.target.offsetParent.classList.contains('btn-success')) {
+                let id;
+                if (e.target.classList.contains('btn-success'))
+                    id = e.target.dataset.id;
+                else
+                    id = e.target.offsetParent.dataset.id;
+        
+                let xhr = new XMLHttpRequest();
+                let data = `id=${id}`;
+                let image = document.querySelector('#modal_ver_imagen img');
+                image.style.display = "none";
+                image.src = "";
+                let link = document.querySelector('#modal_ver_imagen a');
+                link.href = "";
+                xhr.open('POST', "../EmpleadoDocumento/getOne");
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        let r = xhr.responseText;
+                        let json_app = JSON.parse(r);
+                        try {
+                            if (json_app.status == 1) {
+                                console.log(json_app);
+                                image.src = json_app.data.image[0];
+                                image.style.display = "block";
+                                link.href = json_app.data.image[0];
+                                link.download = json_app.data.file_name;
+                                $('#modal_ver_imagen').modal('show');
+                            }
+
+                        } catch (error) {
+                            utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                        }
+                    }
+                }
+            }
+
+            if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains('btn-info')) {
+                let id;
+                if (e.target.classList.contains('btn-info'))
+                    id = e.target.dataset.id;
+                else
+                    id = e.target.offsetParent.dataset.id;
+        
+                let xhr = new XMLHttpRequest();
+                let data = `id=${id}`;
+                let form = document.querySelector('#modal_imagen form');
+                form.querySelectorAll('.btn')[3].disabled = false;
+                //let content_imagen = form.querySelector('.imagen');
+                let image = form.querySelector('img');
+                image.style.display = "none";
+                image.src = "";
+                xhr.open('POST', "../EmpleadoDocumento/getOne");
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        let r = xhr.responseText;
+                        try {
+                            let json_app = JSON.parse(r);
+                            if (json_app.status == 1) {
+                                form.querySelectorAll('input')[0].value = json_app.data.id;
+                                form.querySelectorAll('input')[1].value = json_app.data.id_employee;
+                                form.querySelectorAll('input')[2].value = json_app.data.file_name;
+                                form.querySelectorAll('input')[3].value = 1;
+                                /*let image = document.createElement('img');
+                                image.setAttribute('src', json_app);
+                                content_imagen.appendChild(image);*/
+                                image.src = json_app.image[0];
+                                image.style.display = "block";
+                                $('#modal_imagen').modal({
+                                    backdrop: 'static',
+                                    keyboard: false
+                                });
+                                if (image.src == json_app.image[0]) {
+                                    let cropper;
+                                    $('#modal_imagen').on('shown.bs.modal', function() {
+                                        cropper = null;
+                                        cropper = new Cropper(image, {
+                                            movable: true,
+                                            zoomable: true,
+                                            scalable: true,
+                                            viewMode: 0,
+                                            rotatable: true,
+                                            preview: '.preview',
+                                            ready: function(e) {
+                                                document.querySelectorAll('#modal_imagen .btn-primary')[0].addEventListener('click', e => {
+                                                    cropper.rotate(-45);
+                                                })
+
+                                                document.querySelectorAll('#modal_imagen .btn-primary')[1].addEventListener('click', e => {
+                                                    cropper.rotate(45);
+                                                })
+                                            }
+                                        });
+
+                                    }).on('hidden.bs.modal', function() {
+                                        cropper.destroy();
+                                        cropper = null;
+                                    });
+                                }
+
+                            } else {
+                                form.querySelectorAll('input')[0].value = 0;
+                                form.querySelectorAll('input')[1].value = 0;
+                            }
+
+                        } catch (error) {
+                            utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                            console.log(error);
+                        }
+                    }
+                }
+            }
+
+            if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains('btn-danger')) {
+                $('#modal_delete_imagen').modal({backdrop: 'static', keyboard: false});
+                let imagen;
+                if (e.target.classList.contains('btn-danger')){
+                    imagen = e.target.dataset.id;
+                    nombre = e.target.parentElement.parentElement.parentElement.children[0].innerText;
+                }else{
+                    imagen = e.target.offsetParent.dataset.id;
+                    nombre = e.target.parentElement.parentElement.parentElement.parentElement.children[0].innerText;
+                }
+                document.querySelectorAll('#modal_delete_imagen form input[type=hidden]')[0].value = imagen;
+                document.querySelector('#modal_delete_imagen form p').textContent = `¿Estás seguro(a) de que deseas eliminar la imagen ${nombre}?  `;
+            }
+            e.stopPropagation();
+        })
     })
 </script>

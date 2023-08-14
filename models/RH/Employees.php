@@ -937,8 +937,8 @@ public function getId_Usuario_Rh()
         $fetch =  $stmt->fetchAll();
         return $fetch;
     }
-
-    public function getEmployeesAllHolidaysRequested()
+	
+	 public function getEmployeesAllHolidaysRequested()
     {
         $Cliente = $this->getCliente();
         $stmt = $this->db->prepare(

@@ -782,6 +782,10 @@ document.addEventListener('DOMContentLoaded', e => {
         $('#modal_continuar_servicio').modal({backdrop: 'static', keyboard: false});
         estudio.getContinuarServicio(340);
     })
+	document.querySelectorAll('.botones_continuar button')[4].addEventListener('click', e => {
+        $('#modal_continuar_servicio').modal({backdrop: 'static', keyboard: false});
+        estudio.getContinuarServicio(341);
+    })
     document.querySelector('#modal_continuar_servicio form').addEventListener('submit', e => {
         e.preventDefault();
         let servicio = new ServicioApoyo();
@@ -911,6 +915,11 @@ document.addEventListener('DOMContentLoaded', e => {
                 
             }
           })
+    })
+	
+	document.querySelector('#modal_soi form').addEventListener('submit', e => {
+        e.preventDefault();
+        estudio.soi();
     })
 });
 
@@ -1302,6 +1311,7 @@ estudio.content_referencias_laborales.parentElement.children[0].addEventListener
     form.querySelectorAll('input')[0].value = 0;
     form.querySelectorAll('input')[1].value = folio;
     form.querySelectorAll('input')[2].value = 0;
+    estudio.getReferenciaLaboral(0);
 })
 
 estudio.content_referencias_laborales.addEventListener('click', (e) => {
@@ -1471,6 +1481,7 @@ for (let i = 0; i < estudio.content_cohabitantes.length; i++) {
         form.querySelectorAll('input')[0].value = 0;
         form.querySelectorAll('input')[1].value = folio;
         form.querySelectorAll('input')[2].value = 0;
+		estudio.getCohabitante(0);
     })
 
     estudio.content_cohabitantes[i].addEventListener('click', (e) => {
@@ -1701,6 +1712,7 @@ for (let i = 0; i < estudio.content_referencias.length; i++) {
         form.querySelectorAll('input')[0].value = 0;
         form.querySelectorAll('input')[1].value = folio;
         form.querySelectorAll('input')[2].value = 0;
+		estudio.getReferencia(0);
     })
 
     estudio.content_referencias[i].addEventListener('click', e => {
@@ -2135,7 +2147,7 @@ const fetchData = async (folio) => {
     estudio.setNivelPuesto(data.candidato_datos.Nivel, data.conociendo_candidato);
     estudio.setFaseVLF(data.candidato_datos.Nivel, data.candidato_datos.ID_Empresa, data.candidato_datos.Servicio_Solicitado);
     estudio.setFase(data.candidato_datos, data.display);
-    estudio.setServicioSolicitado(data.candidato_datos.Servicio_Solicitado);
+    estudio.setServicioSolicitado(data.candidato_datos.Servicio_Solicitado, data.display);
     estudio.setDopajeLogimex(data.candidato_datos.Cliente);
     estudio.cargarInfoServicio(data.candidato_datos, data.perfil, data.display, data.cv_ruta, data.soi, data.historial_candidato);
     estudio.cargarValidacionLicencia(data.vlf, data.display);
@@ -2146,24 +2158,25 @@ const fetchData = async (folio) => {
     estudio.cargarComentariosRAL(data.ral, data.display);
     estudio.cargarDatosGenerales(data.candidato_datos, data.display);
     estudio.cargarContacto(data.candidato_datos, data.display);
-    estudio.cargarReferenciasLaborales(data.referencias_laborales, data.display, data.candidato_datos.ID_Empresa, data.candidato_datos.Cliente);
+    estudio.cargarReferenciasLaborales(data.referencias_laborales, data.display, data.candidato_datos.ID_Empresa, data.candidato_datos);
     estudio.cargarDocumentos(data.documentos, data.display, data.comentarios.Comentario_Documentos, data.docs.Redes_Sociales);
     estudio.cargarInvestigacion(data.investigacion, data.display, data.candidato_datos.ID_Empresa);
-    estudio.cargarComentariosGeneralesInv(data.observaciones, data.display);
+    estudio.cargarComentariosGeneralesInv(data.observaciones, data.display, data.candidato_datos);
 
     estudio.cargarConociendoCandidato(data.conociendo_candidato, data.display);
-    estudio.cargarEscolaridad(data.escolaridad, data.comentarios.Comentario_Escolaridad);
-    estudio.cargarCohabitantes(data.cohabitantes, data.display, data.comentarios.Comentario_Cohabitan);
+    estudio.cargarEscolaridad(data.escolaridad, data.candidato_datos);
+    estudio.cargarCohabitantes(data.cohabitantes, data.display, data.comentarios.Comentario_Cohabitan, data.candidato_datos);
     estudio.cargarCirculoFamiliar(data.circulo_familiar, data.display);
     estudio.cargarHistorialSalud(data.historial_salud, data.salud_seguros);
     estudio.cargarUbicacion(data.ubicacion, data.vivienda, data.candidato_datos);
     estudio.cargarUbicacionFotos(data.ubicacion_exterior, data.ubicacion_no_exterior, data.ubicacion_interior, data.ubicacion, data.vivienda);
     estudio.cargarEnseres(data.enseres);
-    estudio.cargarReferencias(data.referencias, data.display);
+    estudio.cargarReferencias(data.referencias, data.display, data.candidato_datos);
     estudio.cargarEconomiaFamiliar(data.ingresos, data.egresos, data.display, data.comentarios.Comentario_Economia);
     estudio.cargarInformacionFinanciera(data.creditos, data.cuentas, data.seguros, data.comentarios.INFONAVIT, data.display);
     estudio.cargarInformacionPatrimonial(data.inmuebles, data.vehiculos, data.display);
-    estudio.cargarConclusiones(data.observaciones, data.display);
-    estudio.cargarComentariosGenerales(data.observaciones, data.display);
+    estudio.cargarConclusiones(data.observaciones, data.display, data.candidato_datos);
+    estudio.cargarComentariosGenerales(data.observaciones, data.display, data.candidato_datos);
     estudio.cargarNotas(data.notas, data.display);
+	estudio.set_SOI(data.candidato_datos, data.soiCer, data.display, data.soi)
 }

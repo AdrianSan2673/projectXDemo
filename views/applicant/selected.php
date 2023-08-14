@@ -7,12 +7,10 @@
           <ol class="breadcrumb float-sm-left mb-2">
             <li class="breadcrumb-item"><a href="<?= base_url ?>">Inicio</a></li>
             <li class="breadcrumb-item"><a href="<?= base_url . "vacante/index" ?>">Vacantes</a></li>
-            <li class="breadcrumb-item"><a href="<?= base_url . "vacante/ver&id=" . $_GET['id'] ?>"><?= $vacante->vacancy ?></a></li>
+            <li class="breadcrumb-item"><a href="<?= base_url . "vacante/ver&id=" . $_GET['id'] ?>"><?= $vacante && is_object($vacante)? $vacante->vacancy:'' ?></a></li>
             <?php if (!Utils::isCustomer()) : ?>
               <li class="breadcrumb-item"><a href="<?= base_url . "postulaciones/ver&id=" . $_GET['id'] ?>">Postulaciones</a></li>
-              <!-- <li class="breadcrumb-item"><a href="<?= base_url . "postulaciones/enviados_a_reclutador&id=" . $_GET['id'] ?>">Candidatos enviados por ej. de bÃºsqueda</a></li> -->
             <?php endif ?>
-
             <li class="breadcrumb-item active">Candidatos selectos</li>
           </ol>
         </div>
@@ -179,14 +177,14 @@
                       </a>
 
                       <a href="<?= base_url ?>candidato/editar&id=<?= Encryption::encode($candidate['id']) ?>" class="btn btn-lg btn-success mr-1" target="_blank">
-                        <i class="fas fa-user "></i> Ver perfil
+                        <i class="fas fa-user "></i> Editar perfil
                       </a>
                     <?php endif ?>
 
                     <!-- // ===[20 mayo gabo operativa ]=== -->
                     <?php if ($vacante->type == 1) : ?>
                       <a href="<?= base_url ?>resume/CVoperador&id=<?= Encryption::encode($candidate['id']) ?>" target="_blank" class="btn btn-lg bg-maroon">
-                        <i class="fas fa-download mr-1"></i>Generar CV
+                        <i class="fas fa-download mr-1"></i>Generar solicitud
                       </a>
                     <?php endif ?>
                     <!-- // ===[20 mayo gabo estudios  operativa fin]=== -->
@@ -238,7 +236,7 @@
 
                     <!-- ===[gabo 2 junio modal-experiencia]=== -->
                     <?php if ($vacante->type == 1) : ?>
-                      <btn class="btn btn-lg btn-success mt-1 " onclick="abrir_experiencia('<?= Encryption::encode($candidate['id']) ?>','<?= $candidate['first_name'] . ' ' . $candidate['surname'] . ' ' . $candidate['last_name'] ?>')">
+                      <btn class="btn btn-lg btn-success mt-1 " hidden onclick="abrir_experiencia('<?= Encryption::encode($candidate['id']) ?>','<?= $candidate['first_name'] . ' ' . $candidate['surname'] . ' ' . $candidate['last_name'] ?>')">
                         <i class="fas fa-file-invoice"></i> Experiencia
                       </btn>
                     <?php endif ?>
@@ -369,7 +367,6 @@
     $("#id_vacancy_reactivar").val(id_vacancy);
     $("#id_status_reactivar").val(id_status);
     document.querySelector('#nombre_reactivar').innerHTML = nombre;
-    // href="<?= base_url ?>postulaciones/send_to_customer&id_candidate=<?= Encryption::encode($candidate['id']) ?>&id_vacancy=<?= $_GET['id'] ?>&id_status=<?= $candidate['id_status'] ?>"
     $('#modal_reactivar_postulante').modal({
       backdrop: 'static',
       keyboard: false

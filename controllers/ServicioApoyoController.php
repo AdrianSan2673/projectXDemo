@@ -217,7 +217,7 @@ class ServicioApoyoController {
                     //$Nombre_Cliente = 0;
                     $Nombre_Cliente = Utils::sanitizeNumber($_POST['Nombre_Cliente']);
                 }
-                $Ejecutivo = $Ejecutivo && !empty($Ejecutivo) ? $Ejecutivo : 'dulcemoreno';
+                $Ejecutivo = $Ejecutivo && !empty($Ejecutivo) ? $Ejecutivo : 'angelesdelacruz';
                 $estudio = new Candidatos();
                 if (Utils::isAdmin() && ($Cliente == 584 || $Cliente == 670 || $Cliente == 598 || $Cliente == 593 || $Cliente == 599 || $Cliente == 669)) {
                     // ===[19 de mayo 2023 estudios]===
@@ -1419,9 +1419,10 @@ class ServicioApoyoController {
                     </html>
                     ";
 
-
-                Utils::sendEmail('calidad@rrhhingenia.com', 'Calidad','Modificacion de '.$Nombre_Candidato, $body); 
-              
+				if(!Utils::isAdmin()){
+				Utils::sendEmail('calidad@rrhhingenia.com', 'Calidad','Modificacion de '.$Nombre_Candidato, $body); 
+				}
+                
                 $estudio = new Candidatos();
                 $estudio->setCandidato($Folio);
                 $estudio->setFecha_solicitud($Solicitud);
@@ -1544,7 +1545,7 @@ class ServicioApoyoController {
                     </html>
                     ";
 
-                    if ($candidato_datos->Fecha_Aplicacion && $candidato_datos->Cliente != 408) {
+                    if ($candidato_datos->Fecha_Aplicacion && $candidato_datos->Cliente != 408 ) {
                         Utils::sendEmail($Correo_Analista, $Analista, 'Agenda de ' . $Nombre_Candidato, $body);
 					    Utils::sendEmail('calidad@rrhhingenia.com', $Analista, 'Agenda de ' . $Nombre_Candidato, $body);
 
@@ -2197,7 +2198,7 @@ class ServicioApoyoController {
 				$estudio->setComentario_Finalizacion($Comentario_Finalizacion);
 				$Candidato = $estudio->getOne();
                     
-				if (($Servicio_Solicitado == 230 || $Servicio_Solicitado == 340) && ($Fase == 230 || $Fase == 300)) {
+				if (($Servicio_Solicitado == 230 || $Servicio_Solicitado == 340|| $Servicio_Solicitado == 341) && ($Fase == 230 || $Fase == 300)) {
                     $Fase2 = $Fase == 230 ? 230 : ($Fase == 300 ? 299 : $Fase);
                     $estudio->setFase($Fase2);
                     if ($Candidato->Fecha_Entregado_INV == NULL) {
@@ -2213,7 +2214,7 @@ class ServicioApoyoController {
                     }
                     
                 }
-                elseif ($Servicio_Solicitado == 230 && ($Fase == 231 || $Fase == 299)){
+                elseif (($Servicio_Solicitado == 230 || $Servicio_Solicitado == 340|| $Servicio_Solicitado == 341) && ($Fase == 231 || $Fase == 299)){
                     $Fase2 = $Fase == 231 ? 232 : ($Fase == 299 ? 300 : $Fase);
                     $estudio->setFase($Fase2);
                     if ($Candidato->Fecha_Entregado_ESE == NULL){
@@ -2280,7 +2281,7 @@ class ServicioApoyoController {
             $Fase = Utils::sanitizeNumber($_POST['Fase']);
             $Estado = Utils::sanitizeNumber($_POST['Estado']);
 
-            if ($Folio && ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 231 || $Servicio_Solicitado == 323 || $Servicio_Solicitado == 340) && ($Estado == 250 || $Estado == 251)) {
+            if ($Folio && ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 231 || $Servicio_Solicitado == 323 || $Servicio_Solicitado == 340||$Servicio_Solicitado == 341) && ($Estado == 250 || $Estado == 251)) {
 
                 /* if ($Fase == 298)
                     $Fase = 299;
@@ -2533,7 +2534,7 @@ class ServicioApoyoController {
             $resume = isset($_FILES['resume']) && $_FILES['resume']['name'] != '' ? $_FILES['resume'] : FALSE;
 			//$duplicar = isset($_POST['duplicar']) && $_POST['duplicar'] != 0 ? $_POST['duplicar'] : false;
 
-            if ($Folio && ($Servicio_Solicitado == 231 || $Servicio_Solicitado == 230 || $Servicio_Solicitado == 328 || $Servicio_Solicitado == 340)) {
+            if ($Folio && ($Servicio_Solicitado == 231 || $Servicio_Solicitado == 230 || $Servicio_Solicitado == 328 || $Servicio_Solicitado == 340 || $Servicio_Solicitado == 341)) {
                 $candidato_datos = new CandidatosDatos();
                 $candidato_datos->setCandidato($Folio);
                 $candidato_datos->setNacimiento($Fecha_Nacimiento);
@@ -2554,7 +2555,7 @@ class ServicioApoyoController {
 
                 if ($save_datos) {
 					
-					$Ejecutivo = $Ejecutivo && !empty($Ejecutivo) ? $Ejecutivo : 'dulcemoreno';
+					$Ejecutivo = $Ejecutivo && !empty($Ejecutivo) ? $Ejecutivo : 'angelesdelacruz';
                     $estudio = new Candidatos();
                     $estudio->setCandidato($Folio);
                     $estudio->setFecha_solicitud(Utils::getFechaIngresoSA($Cliente));
@@ -3181,7 +3182,7 @@ class ServicioApoyoController {
                                     $Nombre_Cliente = 0;
                             }
                         }
-                        $Ejecutivo = $Ejecutivo && !empty($Ejecutivo) ? $Ejecutivo : 'dulcemoreno';
+                        $Ejecutivo = $Ejecutivo && !empty($Ejecutivo) ? $Ejecutivo : 'angelesdelacruz';
                         $estudio = new Candidatos();
                         $estudio->setFecha_solicitud(Utils::getFechaIngresoSA($Cliente));
                         $estudio->setPuesto($Puesto);

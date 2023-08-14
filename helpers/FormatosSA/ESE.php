@@ -59,9 +59,12 @@ class ESE extends FPDF
 		
 	if ($this->id_cliente == 662 || $this->id_cliente == 668 ) { //Formato RADEC
 			$this->MultiCell(180, 20, utf8_encode($candidato->Nombre_Cliente), 1, 'L');
-		} else if ($candidato->Cliente == 366 || $this->id_cliente == 673 || $this->id_cliente == 598 || $this->id_cliente == 593 || $this->id_cliente == 599|| $this->id_cliente == 668|| $this->id_cliente == 660|| $this->id_cliente == 708) {
+		} else if ($candidato->Cliente == 366 || $this->id_cliente == 673  || $this->id_cliente == 593 || $this->id_cliente == 668|| $this->id_cliente == 660|| $this->id_cliente == 708) {
 			$this->MultiCell(200, 20, utf8_encode($candidato->Nombre_Cliente), 1, 'L');
-		} else {
+		} if($candidato->ID_Empresa == 480|| $this->id_cliente == 598|| $this->id_cliente == 599){
+			$this->MultiCell(200, 20, utf8_encode('TS Trucking'), 1, 'L');
+		}	
+		else {
 			$this->MultiCell(200, 20, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' || $candidato->Empresa == 'DUCTOS DEL ALTIPLANO SA DE CV' ? $candidato->Nombre_Cliente : ($candidato->ID_Empresa == 315 ? $candidato->Nombre_Cliente : $candidato->Empresa)))), 1, 'L');
 		}
 
@@ -213,7 +216,7 @@ class ESE extends FPDF
 		$this->setTextColor(0, 0, 0);
 		$this->setXY(75, $y);
 		
-		if($candidato->Cliente ==366||$candidato->Cliente ==626  || $candidato->Cliente ==668  || $this->id_cliente == 673  || $this->id_cliente == 598 || $this->id_cliente == 593 || $this->id_cliente == 599|| $this->id_cliente == 668|| $this->id_cliente == 660|| $this->id_cliente == 708){
+		if($candidato->Cliente ==366||$candidato->Cliente ==626  || $candidato->Cliente ==668  || $this->id_cliente == 673  || $this->id_cliente == 593 || $this->id_cliente == 599|| $this->id_cliente == 668|| $this->id_cliente == 660|| $this->id_cliente == 708|| $this->id_cliente == 598){
 
 			$this->MultiCell(410, 18, utf8_encode( $candidato->Nombre_Cliente), 0, 'C', true);
 		}else{
@@ -1883,7 +1886,7 @@ public function setEstudios($escolaridad, $comentarios)
 		}	
 	}
 
-	public function setCohabitantes($cohabitantes, $comentarios){
+	public function setCohabitantes($cohabitantes, $comentarios, $candidato){
 		if ($this->GetY() > 570) {
 			$this->seccionHeader = 2;
 			$this->AddPage();
@@ -1921,7 +1924,7 @@ public function setEstudios($escolaridad, $comentarios)
 		$this->setXY(77, $y);
 		$this->MultiCell(160, 20, utf8_encode('Nombre'), 0, 'C', false);
 		$this->setXY(239, $y);
-		$this->MultiCell(50, 20, utf8_encode('Edad'), 0, 'C', false);
+		$this->MultiCell(50, 20, utf8_encode($candidato->Servicio_Solicitado == 'ESE SMART' ? '¿Es mayor de edad?' : 'Edad'), 0, 'C', false);
 		$this->setXY(291, $y);
 		/* $this->MultiCell(50, 20, utf8_encode('Edo Civil'), 0, 'C', false);
 		$this->setXY(293, $y); */
@@ -1929,7 +1932,7 @@ public function setEstudios($escolaridad, $comentarios)
 		$this->setXY(403, $y+5);
 		$this->MultiCell(110, 10, utf8_encode('Empresa / Escuela'), 0, 'C', false);
 		$this->setXY(515, $y);
-		$this->MultiCell(87, 10, utf8_encode('¿Es dependiente económico?'), 0, 'C', false);
+		$this->MultiCell(87, 10, utf8_encode($candidato->Servicio_Solicitado == 'ESE SMART' ? 'Teléfono' : '¿Es dependiente económico?'), 0, 'C', false);
 		/* $this->setXY(522, $y);
 		$this->MultiCell(78, 20, utf8_encode('Teléfono'), 0, 'C', false); */
 
@@ -1965,7 +1968,8 @@ public function setEstudios($escolaridad, $comentarios)
 			$this->setXY(77, $y);
 			$this->MultiCell(160, 8, utf8_encode($cohabitante['Nombre']), 0, 'C', false);
 			$this->setXY(239, $y);
-			$this->MultiCell(50, 8, utf8_encode($cohabitante['Edad'].' '.$cohabitante['Edad_2']), 0, 'C', false);
+			$Es_Mayor_Edad = $cohabitante['Es_Mayor_Edad'] == 1 ? 'Sí' : 'No';
+			$this->MultiCell(50, 8, utf8_encode($candidato->Servicio_Solicitado == 'ESE SMART' ? $Es_Mayor_Edad : $cohabitante['Edad'].' '.$cohabitante['Edad_2']), 0, 'C', false);
 			$this->setXY(291, $y);
 			/* $id_estado_civil = $cohabitante['Estado_Civil'];
 			$Estado_Civil = Utils::getEstadoCivil($id_estado_civil);
@@ -1976,7 +1980,7 @@ public function setEstudios($escolaridad, $comentarios)
 			$this->MultiCell(110, 8, utf8_encode($cohabitante['Edad_2'] == 'Años' && $cohabitante['Edad'] > 2 ? $cohabitante['Empresa'] : 'No aplica'), 0, 'C', false);
 			$this->setXY(515, $y);
 			$dependiente_economico = $cohabitante['Dependiente'] == 1 ? 'Sí' : 'No';
-			$this->MultiCell(83, 8, utf8_encode($dependiente_economico), 0, 'C', false);
+			$this->MultiCell(83, 8, utf8_encode($candidato->Servicio_Solicitado == 'ESE SMART' ? $cohabitante['Telefono'] : $dependiente_economico), 0, 'C', false);
 			/* $this->setXY(522, $y);
 			$this->MultiCell(78, 8, utf8_encode($cohabitante['Edad_2'] == 'Años' && $cohabitante['Edad'] >= 18 ? $cohabitante['Telefono'] : 'No aplica'), 0, 'C', false); */
 			
@@ -1988,15 +1992,17 @@ public function setEstudios($escolaridad, $comentarios)
 			}
 		}
 		
-		$this->setFont('SinkinSans', 'B', 6.5);
-		$this->setTextColor(140, 140, 140);
-		$this->SetXY($x, $y);
-		$this->MultiCell(97, 15, utf8_encode('Comentarios'), 0, 'L');
+		if ($candidato->Servicio_Solicitado != 'ESE SMART') {
+			$this->setFont('SinkinSans', 'B', 6.5);
+			$this->setTextColor(140, 140, 140);
+			$this->SetXY($x, $y);
+			$this->MultiCell(97, 15, utf8_encode('Comentarios'), 0, 'L');
 
-		$this->setFont('SinkinSans', '', 6.5);
-		$this->setTextColor(0, 0, 0);
-		$this->SetXY($x + 99, $y);
-		$this->MultiCell(482, 15, utf8_encode($comentarios), 0, 'L', true);
+			$this->setFont('SinkinSans', '', 6.5);
+			$this->setTextColor(0, 0, 0);
+			$this->SetXY($x + 99, $y);
+			$this->MultiCell(483, 15, utf8_encode($comentarios), 0, 'L', true);	
+		}
 	}
 
 	public function setSociales($candidato){
@@ -2188,7 +2194,7 @@ public function setEstudios($escolaridad, $comentarios)
 		}
 	}
 
-	public function setVivienda($vivienda, $ubicacion, $comentarios){
+	public function setVivienda($vivienda, $ubicacion, $comentarios, $candidato){
 		if ($vivienda && $ubicacion) {
 			if ($this->GetY() >= 620) {
 				$this->AddPage();
@@ -2379,43 +2385,46 @@ public function setEstudios($escolaridad, $comentarios)
 			$this->setXY(158, $y);
 			$this->MultiCell(148, 15, utf8_encode($vivienda->Plantas), 0, 'C', true);
 			
-			$this->setFont('SinkinSans', 'B', 6.5);
-			$this->setTextColor(140, 140, 140);
-			$this->setXY(310, $y);
-			$this->MultiCell(140, 15, utf8_encode('Número de baños:'), 0, 'L', false);
-			
-			$this->setFont('SinkinSans', '', 6.5);
-			$this->setTextColor(0, 0, 0);
-			$this->setXY(452, $y);
-			$this->MultiCell(148, 15, utf8_encode($vivienda->Sanitarios), 0, 'C', true);
+			if ($candidato->Servicio_Solicitado != 'ESE SMART') {
+				$this->setFont('SinkinSans', 'B', 6.5);
+				$this->setTextColor(140, 140, 140);
+				$this->setXY(310, $y);
+				$this->MultiCell(140, 15, utf8_encode('Número de baños:'), 0, 'L', false);
+				
+				$this->setFont('SinkinSans', '', 6.5);
+				$this->setTextColor(0, 0, 0);
+				$this->setXY(452, $y);
+				$this->MultiCell(148, 15, utf8_encode($vivienda->Sanitarios), 0, 'C', true);
 
-			if ($this->GetY() >= 680) {
-				$this->AddPage();
-				$y = 100;
-			}else{
-				$y = $this->GetY() + 2;
+				if ($this->GetY() >= 680) {
+					$this->AddPage();
+					$y = 100;
+				}else{
+					$y = $this->GetY() + 2;
+				}
+
+				$this->setFont('SinkinSans', 'B', 6.5);
+				$this->setTextColor(140, 140, 140);
+				$this->setXY($x, $y);
+				$this->MultiCell(138, 15, utf8_encode('Número de recámaras'), 0, 'L', false);
+				
+				$this->setFont('SinkinSans', '', 6.5);
+				$this->setTextColor(0, 0, 0);
+				$this->setXY(158, $y);
+				$this->MultiCell(148, 15, utf8_encode($vivienda->Recamaras), 0, 'C', true);
+				
+				$this->setFont('SinkinSans', 'B', 6.5);
+				$this->setTextColor(140, 140, 140);
+				$this->setXY(310, $y);
+				$this->MultiCell(140, 15, utf8_encode('Capacidad de autos en cochera'), 0, 'L', false);
+				
+				$this->setFont('SinkinSans', '', 6.5);
+				$this->setTextColor(0, 0, 0);
+				$this->setXY(452, $y);
+				$this->MultiCell(148, 15, utf8_encode($vivienda->Capacidad_Cochera), 0, 'C', true);
+	
 			}
-
-			$this->setFont('SinkinSans', 'B', 6.5);
-			$this->setTextColor(140, 140, 140);
-			$this->setXY($x, $y);
-			$this->MultiCell(138, 15, utf8_encode('Número de recámaras'), 0, 'L', false);
 			
-			$this->setFont('SinkinSans', '', 6.5);
-			$this->setTextColor(0, 0, 0);
-			$this->setXY(158, $y);
-			$this->MultiCell(148, 15, utf8_encode($vivienda->Recamaras), 0, 'C', true);
-			
-			$this->setFont('SinkinSans', 'B', 6.5);
-			$this->setTextColor(140, 140, 140);
-			$this->setXY(310, $y);
-			$this->MultiCell(140, 15, utf8_encode('Capacidad de autos en cochera'), 0, 'L', false);
-			
-			$this->setFont('SinkinSans', '', 6.5);
-			$this->setTextColor(0, 0, 0);
-			$this->setXY(452, $y);
-			$this->MultiCell(148, 15, utf8_encode($vivienda->Capacidad_Cochera), 0, 'C', true);
-
 			if ($this->GetY() >= 680) {
 				$this->AddPage();
 				$y = 100;
@@ -2509,21 +2518,23 @@ public function setEstudios($escolaridad, $comentarios)
 				$this->MultiCell(148, 15, utf8_encode($vivienda->Tiempo_Contrato), 0, 'L', true);
 			}
 			
-			if ($this->GetY() >= 680) {
-				$this->AddPage();
-				$y = 100;
-			}else
-				$y = $this->GetY() + 2;
+			if ($candidato->Servicio_Solicitado != 'ESE SMART') {
+				if ($this->GetY() >= 680) {
+					$this->AddPage();
+					$y = 100;
+				}else
+					$y = $this->GetY() + 2;
 
-			$this->setFont('SinkinSans', 'B', 6.5);
-			$this->setTextColor(140, 140, 140);
-			$this->setXY($x, $y);
-			$this->MultiCell(138, 15, utf8_encode('Comentarios'), 0, 'L', false);
+				$this->setFont('SinkinSans', 'B', 6.5);
+				$this->setTextColor(140, 140, 140);
+				$this->setXY($x, $y);
+				$this->MultiCell(138, 15, utf8_encode('Comentarios'), 0, 'L', false);
 
-			$this->setFont('SinkinSans', '', 6.5);
-			$this->setTextColor(0, 0, 0);
-			$this->setXY(158, $y);
-			$this->MultiCell(442, 15, utf8_encode($comentarios), 0, 'L', true);
+				$this->setFont('SinkinSans', '', 6.5);
+				$this->setTextColor(0, 0, 0);
+				$this->setXY(158, $y);
+				$this->MultiCell(442, 15, utf8_encode($comentarios), 0, 'L', true);	
+			}
 
 			if ($ubicacion->Maps) {
 				if ($this->GetY() >= 680) {
@@ -3061,7 +3072,7 @@ public function setEstudios($escolaridad, $comentarios)
 		
 	}
 
-	public function setReferencias($referencias){
+	public function setReferencias($referencias, $candidato){
 		if ($referencias) {
 			if ($this->headerEconomia) {
 				$this->seccionHeader = 3;
@@ -3182,16 +3193,17 @@ public function setEstudios($escolaridad, $comentarios)
 				$this->setXY(250, $y);
 				$this->MultiCell(350, 18, utf8_encode($referencia['Tiempo_Conocerlo']), 0, 'L', true);
 
-				$y = $this->GetY() + 2;
-				$this->setFont('SinkinSans', 'B', 6.5);
-				$this->setTextColor(140, 140, 140);
-				$this->SetXY($x, $y);
-				$this->MultiCell(223, 10, utf8_encode('¿Sabe si tiene hijos?'), 0, 'L', false);
-
-				$this->setFont('SinkinSans', '', 6.5);
-				$this->setTextColor(0, 0, 0);
-				$this->setXY(250, $y);
-				$this->MultiCell(350, 18, utf8_encode($referencia['Tiene_Hijos']), 0, 'L', true);
+				if ($candidato->Servicio_Solicitado != 'ESE SMART') {
+					$y = $this->GetY() + 2;
+					$this->setFont('SinkinSans', 'B', 6.5);
+					$this->setTextColor(140, 140, 140);
+					$this->SetXY($x, $y);
+					$this->MultiCell(223, 10, utf8_encode('¿Sabe si tiene hijos?'), 0, 'L', false);
+					$this->setFont('SinkinSans', '', 6.5);
+					$this->setTextColor(0, 0, 0);
+					$this->setXY(250, $y);
+					$this->MultiCell(350, 18, utf8_encode($referencia['Tiene_Hijos']), 0, 'L', true);	
+				}
 
 				$y = $this->GetY() + 2;
 				$this->setFont('SinkinSans', 'B', 6.5);
@@ -3204,16 +3216,18 @@ public function setEstudios($escolaridad, $comentarios)
 				$this->setXY(250, $y);
 				$this->MultiCell(350, 18, utf8_encode($referencia['Dedicacion']), 0, 'L', true);
 
-				$y = $this->GetY() + 2;
-				$this->setFont('SinkinSans', 'B', 6.5);
-				$this->setTextColor(140, 140, 140);
-				$this->SetXY($x, $y);
-				$this->MultiCell(223, 10, utf8_encode('¿Sabe sobre su estado civil?'), 0, 'L', false);
+				if ($candidato->Servicio_Solicitado != 'ESE SMART') {
+					$y = $this->GetY() + 2;
+					$this->setFont('SinkinSans', 'B', 6.5);
+					$this->setTextColor(140, 140, 140);
+					$this->SetXY($x, $y);
+					$this->MultiCell(223, 10, utf8_encode('¿Sabe sobre su estado civil?'), 0, 'L', false);
 
-				$this->setFont('SinkinSans', '', 6.5);
-				$this->setTextColor(0, 0, 0);
-				$this->setXY(250, $y);
-				$this->MultiCell(350, 18, utf8_encode($referencia['Estado_Civil']), 0, 'L', true);
+					$this->setFont('SinkinSans', '', 6.5);
+					$this->setTextColor(0, 0, 0);
+					$this->setXY(250, $y);
+					$this->MultiCell(350, 18, utf8_encode($referencia['Estado_Civil']), 0, 'L', true);	
+				}
 
 				$y = $this->GetY() + 2;
 				$this->setFont('SinkinSans', 'B', 6.5);
@@ -3635,7 +3649,7 @@ public function setEstudios($escolaridad, $comentarios)
 		
 	}
 
-	public function setConclusiones($observaciones){
+	public function setConclusiones($observaciones, $candidato){
 		if ($this->GetY() >= 500) {
 			$this->AddPage();
 			$y = 72;
@@ -3655,43 +3669,46 @@ public function setEstudios($escolaridad, $comentarios)
 		$this->setXY(250, $y);
 		$this->Write(10, 'CONCLUSIONES');
 
-		$this->setFont('SinkinSans', 'B', 6.5);
-		$this->setTextColor(140, 140, 140);
 		$x = 25;
 		$y = $this->GetY() + 35;
-		$this->SetFillColor(255, 255, 255);
-		$this->SetXY($x, $y);
-		$this->MultiCell(100, 18, utf8_encode('Acerca del candidato'), 0, 'L', false);
 
-		$this->setFont('SinkinSans', '', 6.5);
-		$this->setTextColor(0, 0, 0);
-		$this->setXY(127, $y);
-		$this->MultiCell(473, 18, utf8_encode($observaciones->Sobre_Candidato), 0, 'L', true);
+		if ($candidato->Servicio_Solicitado != 'ESE SMART') {
+			$this->setFont('SinkinSans', 'B', 6.5);
+			$this->setTextColor(140, 140, 140);
+			$this->SetFillColor(255, 255, 255);
+			$this->SetXY($x, $y);
+			$this->MultiCell(100, 18, utf8_encode('Acerca del candidato'), 0, 'L', false);
 
-		$y = $this->GetY() + 2;
-		$this->setFont('SinkinSans', 'B', 6.5);
-		$this->setTextColor(140, 140, 140);
-		$this->SetXY($x, $y);
-		$this->MultiCell(100, 8, utf8_encode('Acerca de su familia y entorno'), 0, 'L', false);
+			$this->setFont('SinkinSans', '', 6.5);
+			$this->setTextColor(0, 0, 0);
+			$this->setXY(127, $y);
+			$this->MultiCell(473, 18, utf8_encode($observaciones->Sobre_Candidato), 0, 'L', true);
 
-		$this->setFont('SinkinSans', '', 6.5);
-		$this->setTextColor(0, 0, 0);
-		$this->setXY(127, $y);
-		$this->MultiCell(473, 18, utf8_encode($observaciones->Sobre_Casa), 0, 'L', true);
+			$y = $this->GetY() + 2;
+			$this->setFont('SinkinSans', 'B', 6.5);
+			$this->setTextColor(140, 140, 140);
+			$this->SetXY($x, $y);
+			$this->MultiCell(100, 8, utf8_encode('Acerca de su familia y entorno'), 0, 'L', false);
 
-		$y = $this->GetY() + 2;
-		
-		$this->setFont('SinkinSans', 'B', 6.5);
-		$this->setTextColor(140, 140, 140);
-		$this->SetXY($x, $y);
-		$this->MultiCell(100, 8, utf8_encode('Conclusiones del entrevistador'), 0, 'L', false);
+			$this->setFont('SinkinSans', '', 6.5);
+			$this->setTextColor(0, 0, 0);
+			$this->setXY(127, $y);
+			$this->MultiCell(473, 18, utf8_encode($observaciones->Sobre_Casa), 0, 'L', true);
 
-		$this->setFont('SinkinSans', '', 6.5);
-		$this->setTextColor(0, 0, 0);
-		$this->setXY(127, $y);
-		$this->MultiCell(473, 18, utf8_encode($observaciones->Conclusiones_Entrevistador), 0, 'L', true);
+			$y = $this->GetY() + 2;
+			
+			$this->setFont('SinkinSans', 'B', 6.5);
+			$this->setTextColor(140, 140, 140);
+			$this->SetXY($x, $y);
+			$this->MultiCell(100, 8, utf8_encode('Conclusiones del entrevistador'), 0, 'L', false);
 
-		$y = $this->gety() + 25;
+			$this->setFont('SinkinSans', '', 6.5);
+			$this->setTextColor(0, 0, 0);
+			$this->setXY(127, $y);
+			$this->MultiCell(473, 18, utf8_encode($observaciones->Conclusiones_Entrevistador), 0, 'L', true);
+
+			$y = $this->gety() + 25;	
+		}
 
 		$this->SetFillColor(234, 234, 234);
 		$this->Rect(11, $y, 590, 72, 'F');
@@ -3792,45 +3809,135 @@ public function setEstudios($escolaridad, $comentarios)
 		$this->setTextColor(140, 140, 140);
 		$x = 25;
 		$y = $this->GetY() + 25;
-		$this->SetFillColor(255, 255, 255);
 		
-		$this->setFont('SinkinSans', '', 6.5);
-		$this->setTextColor(0, 0, 0);
-		$this->SetXY($x, $y);
-		$this->MultiCell(562, 14, (utf8_encode($observaciones->Comentarios_Generales)), 0, 'L', true);
-		
-		
-		if($observaciones->Viabilidad!='' || $observaciones->Viabilidad!=null){
-		if ($y >= 550) {
-			$this->AddPage();
-			$y = 72;
-		}else{
-			$y = $this->GetY() + 18;
-		}
+		if ($candidato->Servicio_Solicitado != 'ESE SMART') {
+			$this->SetFillColor(255, 255, 255);
 
-		$this->SetFillColor(248, 152, 80);
-		$this->Rect(10, $y, 592, 20, 'F');
-		$this->SetFont('Sinkinsans','B', 11);
-		$this->SetTextColor(255, 255, 255);
-		$y += 6;
-		$this->setXY(195, $y);
-		$this->Write(10, utf8_encode('ANÁLISIS DE LA VERIFICACIÓN'));
+			$this->setFont('SinkinSans', '', 6.5);
+			$this->setTextColor(0, 0, 0);
+			$this->SetXY($x, $y);
+			$this->MultiCell(562, 14, (utf8_encode($observaciones->Comentarios_Generales)), 0, 'L', true);
 
-		$this->setFont('SinkinSans', 'B', 6.5);
-		$this->setTextColor(140, 140, 140);
-		$x = 25;
-		$y = $this->GetY() + 25;
-		$this->SetFillColor(255, 255, 255);
-		
-		$this->setFont('SinkinSans', '', 6.5);
-		$this->setTextColor(0, 0, 0);
-		$this->SetXY($x, $y);
-		$this->MultiCell(562, 14, (utf8_encode($observaciones->Viabilidad)), 0, 'L', true);
+
+			if($observaciones->Viabilidad!='' || $observaciones->Viabilidad!=null){
+				if ($y >= 550) {
+					$this->AddPage();
+					$y = 72;
+				}else{
+					$y = $this->GetY() + 18;
+				}
+
+				$this->SetFillColor(248, 152, 80);
+				$this->Rect(10, $y, 592, 20, 'F');
+				$this->SetFont('Sinkinsans','B', 11);
+				$this->SetTextColor(255, 255, 255);
+				$y += 6;
+				$this->setXY(195, $y);
+				$this->Write(10, utf8_encode('ANÁLISIS DE LA VERIFICACIÓN'));
+
+				$this->setFont('SinkinSans', 'B', 6.5);
+				$this->setTextColor(140, 140, 140);
+				$x = 25;
+				$y = $this->GetY() + 25;
+				$this->SetFillColor(255, 255, 255);
+
+				$this->setFont('SinkinSans', '', 6.5);
+				$this->setTextColor(0, 0, 0);
+				$this->SetXY($x, $y);
+				$this->MultiCell(562, 14, (utf8_encode($observaciones->Viabilidad)), 0, 'L', true);
+			}
+		}else {
+			$this->SetFillColor(234, 234, 234);
+			$this->Rect(11, $y, 590, 72, 'F');
+
+			$this->SetFillColor(239, 246, 248);
+			$this->setFont('SinkinSans', 'B', 6.5);
+			$this->setTextColor(140, 140, 140);
+			$this->SetXY(10, $y);
+			$this->MultiCell(148, 18, '', 0, 'L', true);
+			$this->SetXY(158, $y);
+			$this->MultiCell(148, 18, utf8_encode(''), 0, 'C', true);
+			$this->SetXY(306, $y);
+			$this->MultiCell(148, 18, utf8_encode('SÍ'), 0, 'C', true);
+			$this->SetXY(454, $y);
+			$this->MultiCell(148, 18, utf8_encode('No'), 0, 'C', true);
+
+			$y = $this->GetY();
+			$this->SetXY(10, $y);
+			$this->MultiCell(591, 16, utf8_encode('¿Atendió puntual y en fecha y hora acordada?'), 0, 'L', true);
+			$this->SetFillColor(255, 255, 255);
+			$this->Circle(380, $y + 7, 6, 'F');
+			$this->Circle(528, $y + 7, 6, 'F');
+
+			$Puntualidad = $observaciones->Puntualidad;
+			if ($Puntualidad == 1){
+				$this->SetFillColor(43, 179, 73);
+				$this->Circle(380, $y + 7, 4, 'F');
+			}elseif ($Puntualidad == 2) {
+				$this->SetFillColor(255, 16, 16);
+				$this->Circle(528, $y + 7, 4, 'F');
+			}
+			$this->SetFillColor(239, 246, 248);
+
+			$y = $this->GetY() + 2;
+
+			$this->SetXY(10, $y);
+			$this->MultiCell(591, 16, utf8_encode('¿Presentó la documentación solicitada?'), 0, 'L', true);
+			$this->SetFillColor(255, 255, 255);
+			$this->Circle(380, $y + 7, 6, 'F');
+			$this->Circle(528, $y + 7, 6, 'F');
+
+			$Documentacion = $observaciones->Documentacion;
+			if ($Documentacion == 1){
+				$this->SetFillColor(43, 179, 73);
+				$this->Circle(380, $y + 7, 4, 'F');
+			}elseif ($Documentacion == 2) {
+				$this->SetFillColor(255, 16, 16);
+				$this->Circle(528, $y + 7, 4, 'F');
+			}
+			$this->SetFillColor(239, 246, 248);
+
+			$y = $this->GetY() + 2;
+
+			$this->SetXY(10, $y);
+			$this->MultiCell(591, 16, utf8_encode('¿Se condujo con naturalidad y dominio?'), 0, 'L', true);
+			$this->SetFillColor(255, 255, 255);
+			$this->Circle(380, $y + 7, 6, 'F');
+			$this->Circle(528, $y + 7, 6, 'F');
+
+			$Naturalidad = $observaciones->Naturalidad;
+			if ($Naturalidad == 1){
+				$this->SetFillColor(43, 179, 73);
+				$this->Circle(380, $y + 7, 4, 'F');
+			}elseif ($Naturalidad == 2) {
+				$this->SetFillColor(255, 16, 16);
+				$this->Circle(528, $y + 7, 4, 'F');
+			}
+			$this->SetFillColor(239, 246, 248);
+
+			$y = $this->GetY() + 2;
+
+			$this->SetXY(10, $y);
+			$this->MultiCell(591, 16, utf8_encode('¿Sus respuestas fueron claras y seguras?'), 0, 'L', true);
+			$this->SetFillColor(255, 255, 255);
+			$this->Circle(380, $y + 7, 6, 'F');
+			$this->Circle(528, $y + 7, 6, 'F');
+
+			$Respuestas_Claras = $observaciones->Respuestas_Claras;
+			if ($Respuestas_Claras == 1){
+				$this->SetFillColor(43, 179, 73);
+				$this->Circle(380, $y + 7, 4, 'F');
+			}elseif ($Respuestas_Claras == 2) {
+				$this->SetFillColor(255, 16, 16);
+				$this->Circle(528, $y + 7, 4, 'F');
+			}
+			$this->SetFillColor(239, 246, 248);
+
+			$y = $this->GetY() + 2;
 		}
-		
 	}
 
-	public function setInvestigacionLaboral($investigacion, $Empresa){
+	public function setInvestigacionLaboral($investigacion, $Empresa, $candidato){
 		if ($investigacion) {
 			if ($this->GetY() >= 500) {
 				$this->AddPage();
@@ -3873,17 +3980,19 @@ public function setEstudios($escolaridad, $comentarios)
 			$this->setXY(308, $y);
 			$this->MultiCell(292, 18, utf8_encode($investigacion->Proporciono_Datos_Empleos), 0, 'L', true);
 
-			$y = $this->GetY() + 4;
+			if ($candidato->Servicio_Solicitado != 'ESE SMART') {
+				$y = $this->GetY() + 4;
 
-			$this->setFont('SinkinSans', 'B', 6.5);
-			$this->setTextColor(140, 140, 140);
-			$this->SetXY($x, $y);
-			$this->MultiCell(281, 8, utf8_encode('En caso de que no, ¿cuál fue el motivo por que no los proporcionó?'), 0, 'L', false);
+				$this->setFont('SinkinSans', 'B', 6.5);
+				$this->setTextColor(140, 140, 140);
+				$this->SetXY($x, $y);
+				$this->MultiCell(281, 8, utf8_encode('En caso de que no, ¿cuál fue el motivo por que no los proporcionó?'), 0, 'L', false);
 
-			$this->setFont('SinkinSans', '', 6.5);
-			$this->setTextColor(0, 0, 0);
-			$this->setXY(308, $y-2);
-			$this->MultiCell(292, 18, utf8_encode($investigacion->Motivo_No_Proporciono_Datos), 0, 'L', true);
+				$this->setFont('SinkinSans', '', 6.5);
+				$this->setTextColor(0, 0, 0);
+				$this->setXY(308, $y);
+				$this->MultiCell(292, 18, utf8_encode($investigacion->Motivo_No_Proporciono_Datos), 0, 'L', true);	
+			}
 
 			$y = $this->GetY() + 4;
 
@@ -4131,7 +4240,7 @@ public function setEstudios($escolaridad, $comentarios)
 		
 	}
 
-	public function setReferenciasLaborales($referencias_laborales, $Cliente, $Empresa){
+	public function setReferenciasLaborales($referencias_laborales, $Cliente, $Empresa, $candidato){
 		foreach ($referencias_laborales as $key => $referencia) { 
 			$this->AddPage();
 			$y = 72;
@@ -4166,12 +4275,12 @@ public function setEstudios($escolaridad, $comentarios)
 			$this->setFont('SinkinSans', 'B', 6.5);
 			$this->setTextColor(140, 140, 140);
 			$this->SetXY(321, $y+3);
-			$this->MultiCell(103, 18, utf8_encode('Giro'), 0, 'L', false);
+			$this->MultiCell(103, 18, utf8_encode($candidato->Servicio_Solicitado != 'ESE SMART' ? 'Giro' : 'Sitio Web'), 0, 'L', false);
 
 			$this->setFont('SinkinSans', '', 6.5);
 			$this->setTextColor(0, 0, 0);
 			$this->setXY(426, $y+2);
-			$this->MultiCell(173, 18, utf8_encode($referencia['Giro']), 0, 'L', true);
+			$this->MultiCell(176, 18, utf8_encode($candidato->Servicio_Solicitado != 'ESE SMART' ? $referencia['Giro'] : $referencia['Sitio_Web']), 0, 'L', true);
 
 			$y = $this->GetY() + 3;
 			
@@ -4234,12 +4343,12 @@ public function setEstudios($escolaridad, $comentarios)
 			$this->setFont('SinkinSans', 'B', 6.5);
 			$this->setTextColor(140, 140, 140);
 			$this->SetXY(321, $y);
-			$this->MultiCell(103, 18, utf8_encode('Puesto final'), 0, 'L', false);
+			$this->MultiCell(103, 18, utf8_encode($candidato->Servicio_Solicitado != 'ESE SMART' ? 'Puesto final' : 'Correo del Contacto'), 0, 'L', false);
 
 			$this->setFont('SinkinSans', '', 6.5);
 			$this->setTextColor(0, 0, 0);
 			$this->setXY(426, $y);
-			$this->MultiCell(173, 18, utf8_encode($referencia['Puesto_Final']), 0, 'L', true);
+			$this->MultiCell(176, 18, utf8_encode($candidato->Servicio_Solicitado != 'ESE SMART' ? $referencia['Puesto_Final'] : $referencia['Correo']), 0, 'L', true);	
 
 			$y = $this->GetY() + 2;
 
@@ -4550,7 +4659,7 @@ public function setEstudios($escolaridad, $comentarios)
 			$this->setFont('SinkinSans', '', 6.5);
 			$this->setTextColor(0, 0, 0);
 			$this->setXY(130, $y);
-			$this->MultiCell(469, 27, utf8_encode($referencia['Informante']), 0, 'L', true);
+			$this->MultiCell(469, 27, utf8_encode($referencia['Puesto_Informante']!='' ||$referencia['Puesto_Informante']!=NULL?$referencia['Informante'].' - '.$referencia['Puesto_Informante']:$referencia['Informante'] ), 0, 'L', true);
 
 			$y = $this->GetY() + 2;
 
@@ -4770,7 +4879,7 @@ public function setEstudios($escolaridad, $comentarios)
 		}
 	}
 
-	public function setResultadoInvestigacionLaboral($observaciones, $Empresa){
+	public function setResultadoInvestigacionLaboral($observaciones, $Empresa, $candidato){
 		$this->AddPage();
 		$y = 72;
 		$this->SetFillColor(73, 142, 180);
@@ -4878,12 +4987,100 @@ public function setEstudios($escolaridad, $comentarios)
 		$this->setTextColor(140, 140, 140);
 		$x = 25;
 		$y = $this->GetY() + 25;
-		$this->SetFillColor(255, 255, 255);
-		
-		$this->setFont('SinkinSans', '', 6);
-		$this->setTextColor(0, 0, 0);
-		$this->SetXY($x, $y);
-		$this->MultiCell(562, 10, (utf8_encode($observaciones->Comentario_General_il)), 0, 'L', true);
+		if ($candidato->Servicio_Solicitado != 'ESE SMART') {
+			$this->SetFillColor(255, 255, 255);
+			
+			$this->setFont('SinkinSans', '', 6);
+			$this->setTextColor(0, 0, 0);
+			$this->SetXY($x, $y);
+			$this->MultiCell(562, 10, (utf8_encode($observaciones->Comentario_General_il)), 0, 'L', true);
+		}else {
+			$this->SetFillColor(234, 234, 234);
+			$this->Rect(11, $y, 590, 72, 'F');
+
+			$this->SetFillColor(239, 246, 248);
+			$this->SetXY(10, $y);
+			$this->MultiCell(148, 18, '', 0, 'L', true);
+			$this->SetXY(158, $y);
+			$this->MultiCell(148, 18, utf8_encode(''), 0, 'C', true);
+			$this->SetXY(306, $y);
+			$this->MultiCell(148, 18, utf8_encode('Sí'), 0, 'C', true);
+			$this->SetXY(454, $y);
+			$this->MultiCell(148, 18, utf8_encode('No'), 0, 'C', true);
+
+		$y = $this->GetY();
+			$this->SetXY(10, $y);
+			$this->MultiCell(591, 16, utf8_encode('¿El candidato proporcionó los datos de contacto?'), 0, 'L', true);
+			$this->SetFillColor(255, 255, 255);
+			$this->Circle(380, $y + 7, 6, 'F');
+			$this->Circle(528, $y + 7, 6, 'F');
+
+			$Proporciona_Contacto = $observaciones->Proporciona_Contacto;
+			if ($Proporciona_Contacto == 1){
+				$this->SetFillColor(43, 179, 73);
+				$this->Circle(380, $y + 7, 4, 'F');
+			}elseif ($Proporciona_Contacto == 2) {
+				$this->SetFillColor(255, 16, 16);
+				$this->Circle(528, $y + 7, 4, 'F');
+			}
+			$this->SetFillColor(239, 246, 248);
+
+			$y = $this->GetY() + 2;
+
+			$this->SetXY(10, $y);
+			$this->MultiCell(591, 16, utf8_encode('¿Es congruente la información con lo obtenido en información de IMSS?'), 0, 'L', true);
+			$this->SetFillColor(255, 255, 255);
+			$this->Circle(380, $y + 7, 6, 'F');
+			$this->Circle(528, $y + 7, 6, 'F');
+
+			$Informacion_Congruente = $observaciones->Informacion_Congruente;
+			if ($Informacion_Congruente == 1){
+				$this->SetFillColor(43, 179, 73);
+				$this->Circle(380, $y + 7, 4, 'F');
+			}elseif ($Informacion_Congruente == 2) {
+				$this->SetFillColor(255, 16, 16);
+				$this->Circle(528, $y + 7, 4, 'F');
+			}
+			$this->SetFillColor(239, 246, 248);
+
+			$y = $this->GetY() + 2;
+
+			$this->SetXY(10, $y);
+			$this->MultiCell(591, 16, utf8_encode('¿Se detectó algún factor de riesgo?'), 0, 'L', true);
+			$this->SetFillColor(255, 255, 255);
+			$this->Circle(380, $y + 7, 6, 'F');
+			$this->Circle(528, $y + 7, 6, 'F');
+
+			$Factor_Riesgo = $observaciones->Factor_Riesgo;
+			if ($Factor_Riesgo == 1){
+				$this->SetFillColor(43, 179, 73);
+				$this->Circle(380, $y + 7, 4, 'F');
+			}elseif ($Factor_Riesgo == 2) {
+				$this->SetFillColor(255, 16, 16);
+				$this->Circle(528, $y + 7, 4, 'F');
+			}
+			$this->SetFillColor(239, 246, 248);
+
+			$y = $this->GetY() + 2;
+
+			$this->SetXY(10, $y);
+			$this->MultiCell(591, 16, utf8_encode('¿Se observa estabilidad laboral?'), 0, 'L', true);
+			$this->SetFillColor(255, 255, 255);
+			$this->Circle(380, $y + 7, 6, 'F');
+			$this->Circle(528, $y + 7, 6, 'F');
+
+			$Estabilidad_Laboral = $observaciones->Estabilidad_Laboral;
+			if ($Estabilidad_Laboral == 1){
+				$this->SetFillColor(43, 179, 73);
+				$this->Circle(380, $y + 7, 4, 'F');
+			}elseif ($Estabilidad_Laboral == 2) {
+				$this->SetFillColor(255, 16, 16);
+				$this->Circle(528, $y + 7, 4, 'F');
+			}
+			$this->SetFillColor(239, 246, 248);
+
+			$y = $this->GetY() + 2;
+		}
 
 		if (strlen($observaciones->Califica_como) > 0 && $observaciones->Viable == NULL) {
 			$y = $this->GetY();

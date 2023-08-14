@@ -15,7 +15,9 @@ class CandidatosCohabitan {
     private $Empresa;
     private $Dependiente;
     private $Telefono;
+	private $Es_Mayor_Edad;
 
+	private $db;
 	
     public function __construct() {
         $this->db = Connection::connectSA();
@@ -109,6 +111,14 @@ class CandidatosCohabitan {
 		$this->Telefono = $Telefono;
 	}
 
+	public function getEs_Mayor_Edad(){
+		return $this->Es_Mayor_Edad;
+	}
+
+	public function setEs_Mayor_Edad($Es_Mayor_Edad){
+		$this->Es_Mayor_Edad = $Es_Mayor_Edad;
+	}
+
     public function getCohabitantesPorCandidato(){
         $Candidato=$this->getCandidato();
         $stmt = $this->db->prepare(
@@ -157,9 +167,10 @@ class CandidatosCohabitan {
 		$Empresa = $this->getEmpresa();
 		$Dependiente = $this->getDependiente();
         $Telefono = $this->getTelefono();
+		$Es_Mayor_Edad = $this->getEs_Mayor_Edad();
 		
-        $stmt = $this->db->prepare("INSERT INTO rh_Candidatos_Cohabitan (Candidato,Renglon,Nombre,Parentesco,Edad,Estado_Civil, Ocupacion, Empresa,Dependiente, Telefono, Edad_2)
-		VALUES (:Candidato, :Renglon, :Nombre, :Parentesco, :Edad, :Estado_Civil, :Ocupacion, :Empresa, :Dependiente, :Telefono, :Edad_2)");
+        $stmt = $this->db->prepare("INSERT INTO rh_Candidatos_Cohabitan (Candidato,Renglon,Nombre,Parentesco,Edad,Estado_Civil, Ocupacion, Empresa,Dependiente, Telefono, Edad_2, Es_Mayor_Edad)
+		VALUES (:Candidato, :Renglon, :Nombre, :Parentesco, :Edad, :Estado_Civil, :Ocupacion, :Empresa, :Dependiente, :Telefono, :Edad_2, :Es_Mayor_Edad)");
         $stmt->bindParam(":Nombre", $Nombre, PDO::PARAM_STR);
         $stmt->bindParam(":Parentesco", $Parentesco, PDO::PARAM_INT);
 		$stmt->bindParam(":Edad", $Edad, PDO::PARAM_INT);
@@ -171,6 +182,7 @@ class CandidatosCohabitan {
 		$stmt->bindParam(":Telefono", $Telefono, PDO::PARAM_STR);
 		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
 		$stmt->bindParam(":Renglon", $Renglon, PDO::PARAM_INT);
+		$stmt->bindParam(":Es_Mayor_Edad", $Es_Mayor_Edad, PDO::PARAM_INT);
 
         $flag = $stmt->execute();
 		
@@ -194,8 +206,9 @@ class CandidatosCohabitan {
 		$Empresa = $this->getEmpresa();
 		$Dependiente = $this->getDependiente();
         $Telefono = $this->getTelefono();
+		$Es_Mayor_Edad = $this->getEs_Mayor_Edad();
 
-        $stmt = $this->db->prepare("UPDATE rh_Candidatos_Cohabitan SET Nombre=:Nombre, Parentesco=:Parentesco, Edad=:Edad, Estado_Civil=:Estado_Civil, Ocupacion=:Ocupacion, Empresa=:Empresa, Dependiente=:Dependiente, Telefono=:Telefono, Edad_2=:Edad_2 WHERE Candidato=:Candidato and Renglon=:Renglon");
+        $stmt = $this->db->prepare("UPDATE rh_Candidatos_Cohabitan SET Nombre=:Nombre, Parentesco=:Parentesco, Edad=:Edad, Estado_Civil=:Estado_Civil, Ocupacion=:Ocupacion, Empresa=:Empresa, Dependiente=:Dependiente, Telefono=:Telefono, Edad_2=:Edad_2, Es_Mayor_Edad=:Es_Mayor_Edad WHERE Candidato=:Candidato and Renglon=:Renglon");
         $stmt->bindParam(":Nombre", $Nombre, PDO::PARAM_STR);
         $stmt->bindParam(":Parentesco", $Parentesco, PDO::PARAM_INT);
 		$stmt->bindParam(":Edad", $Edad, PDO::PARAM_INT);
@@ -207,6 +220,7 @@ class CandidatosCohabitan {
 		$stmt->bindParam(":Telefono", $Telefono, PDO::PARAM_STR);
 		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
 		$stmt->bindParam(":Renglon", $Renglon, PDO::PARAM_INT);
+		$stmt->bindParam(":Es_Mayor_Edad", $Es_Mayor_Edad, PDO::PARAM_INT);
 
         $flag = $stmt->execute();
 
@@ -240,8 +254,8 @@ class CandidatosCohabitan {
 		$Candidato = $this->getCandidato();
 		$Folio = $duplicado;
 		
-        $stmt = $this->db->prepare("INSERT INTO rh_Candidatos_Cohabitan (Candidato,Renglon,Nombre,Parentesco,Edad,Estado_Civil, Ocupacion, Empresa,Dependiente, Telefono, Edad_2)
-		SELECT :Candidato, Renglon, Nombre, Parentesco, Edad, Estado_Civil, Ocupacion, Empresa, Dependiente, Telefono, Edad_2 FROM rh_Candidatos_Cohabitan WHERE Candidato=:Folio");
+        $stmt = $this->db->prepare("INSERT INTO rh_Candidatos_Cohabitan (Candidato,Renglon,Nombre,Parentesco,Edad,Estado_Civil, Ocupacion, Empresa,Dependiente, Telefono, Edad_2, Es_Mayor_Edad)
+		SELECT :Candidato, Renglon, Nombre, Parentesco, Edad, Estado_Civil, Ocupacion, Empresa, Dependiente, Telefono, Edad_2, Es_Mayor_Edad FROM rh_Candidatos_Cohabitan WHERE Candidato=:Folio");
 		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
 		$stmt->bindParam(":Folio", $Folio, PDO::PARAM_INT);
 

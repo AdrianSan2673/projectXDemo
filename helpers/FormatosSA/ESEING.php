@@ -52,8 +52,10 @@ class ESEINGE extends FPDF
 		$this->SetX($x1);
 		if ($this->id_cliente == 662 || $this->id_cliente == 668 || $this->id_cliente == 599) { //Formato RADEC
 			$this->MultiCell(180, 20, utf8_encode($candidato->Nombre_Cliente), 1, 'L');
-		} else if ($candidato->Cliente == 366 || $this->id_cliente == 673  || $this->id_cliente == 598 || $this->id_cliente == 593 || $this->id_cliente == 599) {
+		} else if ($candidato->Cliente == 366 || $this->id_cliente == 673  || $this->id_cliente == 593 || $this->id_cliente == 599) {
 			$this->MultiCell(200, 20, utf8_encode($candidato->Nombre_Cliente), 1, 'L');
+		}else  if($candidato->ID_Empresa == 480|| $this->id_cliente == 598){
+			$this->MultiCell(200, 20, utf8_encode('TS Trucking'), 1, 'L');
 		} else {
 			$this->MultiCell(200, 20, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' || $candidato->Empresa == 'DUCTOS DEL ALTIPLANO SA DE CV' ? $candidato->Nombre_Cliente : ($candidato->ID_Empresa == 315 ? $candidato->Nombre_Cliente : $candidato->Empresa)))), 1, 'L');
 		}
@@ -190,10 +192,11 @@ class ESEINGE extends FPDF
 		$this->setFont('SinkinSans', '', 6.5);
 		$this->setTextColor(0, 0, 0);
 		$this->setXY(75, $y);
-	if($candidato->Cliente ==366||$candidato->Cliente ==626  || $candidato->Cliente ==668  || $this->id_cliente == 673 || $this->id_cliente == 598 || $this->id_cliente == 593 || $this->id_cliente == 599){
-
+	if($candidato->Cliente ==366||$candidato->Cliente ==626  || $candidato->Cliente ==668  || $this->id_cliente == 673 ||$this->id_cliente == 593 || $this->id_cliente == 599){
 			$this->MultiCell(410, 18, utf8_encode( $candidato->Nombre_Cliente), 0, 'C', true);
-		}else{
+		}else  if($candidato->ID_Empresa == 480|| $this->id_cliente == 598){
+			$this->MultiCell(410, 18, utf8_encode('TS Trucking'), 1, 'L');
+		} else{
 			$this->MultiCell(410, 18, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' || $candidato->Empresa == 'DUCTOS DEL ALTIPLANO SA DE CV' ? $candidato->Nombre_Cliente : ($candidato->ID_Empresa == 315 ? $candidato->Nombre_Cliente : $candidato->Empresa)))), 0, 'C', true);
 		}
 

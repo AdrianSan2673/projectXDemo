@@ -27,7 +27,7 @@
                           <label for="customer_contact" class="col-form-label">Contacto</label>
                           <select name="customer_contact" id="customer_contact" class="form-control">
                             <?php if (isset($vacante) && is_object($vacante) && !empty($vacante->id_customer)) : ?>
-                              <?= $contacts = Utils::showContactsByCustomer($vacante->id_customer); ?>
+                              <?php $contacts = Utils::showContactsByCustomer($vacante->id_customer); ?>
                               <?php foreach ($contacts as $contact) : ?>
                                 <option value="<?= $contact['id'] ?>" <?= isset($vacante) && is_object($vacante) && $contact['id'] == $vacante->id_customer_contact ? 'selected' : ''; ?>><?= $contact['first_name'] . ' ' . $contact['last_name'] ?></option>
                               <?php endforeach ?>
@@ -44,7 +44,7 @@
                           <label for="business_name" class="col-form-label">Razón social</label>
                           <select name="business_name" id="business_name" class="form-control">
                             <?php if (isset($vacante) && is_object($vacante) && !empty($vacante->id_customer)) : ?>
-                              <?= $BNs = Utils::showBNByCustomer($vacante->id_customer); ?>
+                              <?php $BNs = Utils::showBNByCustomer($vacante->id_customer); ?>
                               <?php foreach ($BNs as $bn) : ?>
                                 <option value="<?= $bn['id'] ?>" <?= isset($vacante) && is_object($vacante) && $bn['id'] == $vacante->id_business_name ? 'selected' : ''; ?>><?= $bn['business_name'] ?></option>
                               <?php endforeach ?>

@@ -37,7 +37,7 @@ class AreasController
                         $area['id'] = Encryption::encode($area['id']);
                     }
 
-                     $save = $subareaObj->save();
+                     //$save = $subareaObj->save();
 
                     if ($save) {
                         echo json_encode(array('areas' => $areas, 'status' => 1));

@@ -325,9 +325,9 @@ class FormatoController
             $pdf->setSalud($historial_salud, $salud_seguros);
             //}   
             $pdf->setSociales($candidato_datos);
-            $pdf->setCohabitantes($cohabitantes, $candidato_datos->Comentario_Cohabitan);
+            $pdf->setCohabitantes($cohabitantes, $candidato_datos->Comentario_Cohabitan, $candidato_datos);
             $pdf->setCirculoFamiliar($circulo_familiar);
-            $pdf->setVivienda($vivienda, $ubicacion, $candidato_datos->Comentario_Vivienda);
+            $pdf->setVivienda($vivienda, $ubicacion, $candidato_datos->Comentario_Vivienda, $candidato_datos);
             //if ($candidato_datos->Empresa != 'QUÁLITAS') {
             $pdf->setEnseres($enseres);
             //}
@@ -344,19 +344,19 @@ class FormatoController
 
             $pdf->setFotoUbicacionGeografica($ubicacion_geografica);
             $pdf->setFotoUbicacionCalle($ubicacion_calle);
-            $pdf->setReferencias($referencias);
-            //if ($candidato_datos->Empresa != 'QUÁLITAS') {
-            $pdf->setEconomiaFamiliar($ingresos, $egresos, $candidato_datos->Comentario_Economia);
-            $pdf->setInformacionFinanciera($creditos, $cuentas, $seguros, $candidato_datos->INFONAVIT);
-            $pdf->setInformacionPatrimonial($inmuebles, $vehiculos);
-            //}
-            $pdf->setConclusiones($observaciones);
+            $pdf->setReferencias($referencias, $candidato_datos);
+            if ($candidato_datos->Servicio_Solicitado != 'ESE SMART') {
+				$pdf->setEconomiaFamiliar($ingresos, $egresos, $candidato_datos->Comentario_Economia);
+				$pdf->setInformacionFinanciera($creditos, $cuentas, $seguros, $candidato_datos->INFONAVIT);
+				$pdf->setInformacionPatrimonial($inmuebles, $vehiculos);
+            }
+            $pdf->setConclusiones($observaciones, $candidato_datos);
             //if ($candidato_datos->ID_Empresa == 137) {
-            $pdf->setInvestigacionLaboral($investigacion, $candidato_datos->ID_Empresa);
-            $pdf->setReferenciasLaborales($referencias_laborales, $candidato_datos->Cliente, $candidato_datos->ID_Empresa);
+            $pdf->setInvestigacionLaboral($investigacion, $candidato_datos->ID_Empresa, $candidato_datos);
+            $pdf->setReferenciasLaborales($referencias_laborales, $candidato_datos->Cliente, $candidato_datos->ID_Empresa, $candidato_datos);
 
             if ($candidato_datos->Cliente != 662) {
-                $pdf->setResultadoInvestigacionLaboral($observaciones, $candidato_datos->ID_Empresa);
+                $pdf->setResultadoInvestigacionLaboral($observaciones, $candidato_datos->ID_Empresa, $candidato_datos);
             }
 
             $pdf->setNotasLegales($ral);
@@ -573,22 +573,22 @@ class FormatoController
             if ($candidato_datos->ID_Empresa == 137) {
                 if ($candidato_datos->Tipo_Investigacion != 1) {
                     $pdf->setEstudios($escolaridad, $candidato_datos->Comentario_Escolaridad);
-                    $pdf->setCohabitantes($cohabitantes, $candidato_datos->Comentario_Cohabitan);
+                    $pdf->setCohabitantes($cohabitantes, $candidato_datos->Comentario_Cohabitan, $candidato_datos);
                     $pdf->setFotoUbicacionGeografica($ubicacion_geografica);
                     $pdf->setFotoUbicacionCalle($ubicacion_calle);
                     //aqui iba referencia
                 }
             }
-            $pdf->setReferencias($referencias);
+            $pdf->setReferencias($referencias, $candidato_datos);
 
             if ($candidato_datos->ID_Empresa == 35) {
                 $pdf->setFotoUbicacionGeografica($ubicacion_geografica);
                 $pdf->setFotoUbicacionCalle($ubicacion_calle);
             }
-            $pdf->setInvestigacionLaboral($investigacion, $candidato_datos->ID_Empresa);
-            $pdf->setReferenciasLaborales($referencias_laborales, $candidato_datos->Cliente, $candidato_datos->ID_Empresa);
+            $pdf->setInvestigacionLaboral($investigacion, $candidato_datos->ID_Empresa, $candidato_datos);
+            $pdf->setReferenciasLaborales($referencias_laborales, $candidato_datos->Cliente, $candidato_datos->ID_Empresa, $candidato_datos);
             if ($observaciones)
-                $pdf->setResultadoInvestigacionLaboral($observaciones, $candidato_datos->ID_Empresa);
+                $pdf->setResultadoInvestigacionLaboral($observaciones, $candidato_datos->ID_Empresa, $candidato_datos);
             $pdf->setNotasLegales($ral);
             //if ($candidato_datos->Tipo_Investigacion != 1) {
             $pdf->setFotoCredencial($credencial_frente, $credencial_atras);

@@ -145,10 +145,10 @@ class SOIQR {
 
         
 
-        $bbox = imageftbbox(26.09, 0, $this->fontJosefinaBold, $nombre);
+        $bbox = imageftbbox(strlen($nombre) >= 24 ? 20 : 26.09, 0, $this->fontJosefinaBold, $nombre);
         $x = (505 - abs($bbox[2] - $bbox[0])) / 2 + 495;
         $y = 340;
-        imagettftext($this->image, 26.09, 0, $x, $y, $this->black, $this->fontJosefinaBold, $nombre);
+        imagettftext($this->image, strlen($nombre) >= 24 ? 20 : 26.09, 0, $x, $y, $this->black, $this->fontJosefinaBold, $nombre);
 
         imagettftext($this->image, 18.6, 0, 750, 375, $this->black, $this->fontJosefina, 'Operador');
 

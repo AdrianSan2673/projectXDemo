@@ -49,8 +49,6 @@
 							<option value="5">Viable con observaciones (RADEC)</option>
                         </select>
                     </div>
-
-                    <div hidden>
                     <div class="form-group">
                         <label class="col-for-label">¿El candidato proporcionó los datos de contacto?</label>
                         <div class="form-row">
@@ -62,7 +60,7 @@
                             </div>
                             <div class="col-3">
                                 <div class="icheck-success form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Proporciona_Contacto" id="Proporciona_Contacto2" value="0">
+                                    <input class="form-check-input" type="radio" name="Proporciona_Contacto" id="Proporciona_Contacto2" value="2">
                                     <label class="form-check-label" for="Proporciona_Contacto2">No</label>
                                 </div>
                             </div>
@@ -79,7 +77,7 @@
                             </div>
                             <div class="col-3">
                                 <div class="icheck-success form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Informacion_Congruente" id="Informacion_Congruente2" value="0">
+                                    <input class="form-check-input" type="radio" name="Informacion_Congruente" id="Informacion_Congruente2" value="2">
                                     <label class="form-check-label" for="Informacion_Congruente2">No</label>
                                 </div>
                             </div>
@@ -96,7 +94,7 @@
                             </div>
                             <div class="col-3">
                                 <div class="icheck-success form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Factor_Riesgo" id="Factor_Riesgo2" value="0">
+                                    <input class="form-check-input" type="radio" name="Factor_Riesgo" id="Factor_Riesgo2" value="2">
                                     <label class="form-check-label" for="Factor_Riesgo2">No</label>
                                 </div>
                             </div>
@@ -117,19 +115,12 @@
                             </div>
                             <div class="col-3">
                                 <div class="icheck-success form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Estabilidad_Laboral" id="Estabilidad_Laboral2" value="0">
+                                    <input class="form-check-input" type="radio" name="Estabilidad_Laboral" id="Estabilidad_Laboral2" value="2">
                                     <label class="form-check-label" for="Estabilidad_Laboral2">No</label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-form-label" for="Comentario_General_il">Comentarios generales</label>
-                        <textarea name="Comentario_General_il" class="form-control" rows="25"></textarea>
-                    </div>
-                    </div>
-
-
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>

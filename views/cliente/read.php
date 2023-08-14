@@ -127,6 +127,42 @@
                     <?php endif ?>
                         </div>
                     </div>
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h4 class="card-title">Servicios</h4>
+                    </div>
+                    <!-- /.card-header -->
+                    
+                    <div class="card-body">
+                        <div id="content-servicios">
+                            <div class="row">
+                                <div class="col text-center">
+                                    <b>Investigación Laboral</b>
+                                    <p><?=$cliente->Tiene_IL == 1 ? 'Sí' : 'No'?></p>
+                                </div>
+                                <div class="col text-center">
+                                    <b>Verificación Domiciliaria</b>
+                                    <p><?=$cliente->Tiene_ESE == 1 ? 'Sí' : 'No'?></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col text-center">
+                                    <b>Safe Operator By Ingenia</b>
+                                    <p><?=$cliente->Tiene_SOI == 1 ? 'Sí' : 'No'?></p>
+                                </div>
+                                <div class="col text-center">
+                                    <b>Estudio Socioeconómico SMART</b>
+                                    <p><?=$cliente->Tiene_SMART == 1 ? 'Sí' : 'No'?></p>
+                                </div>
+                            </div>
+                        </div>
+                        <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior()): ?>
+                            <div class="text-center">
+                                <button class="btn btn-info" id="btn-editar-servicios">Editar</button>
+                            </div>
+                        <?php endif ?>
+                    </div>
+                </div>
                     <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior() || Utils::isSAManager()) : ?>
                         <div class="card card-info">
                             <div class="card-header">
@@ -157,12 +193,10 @@
                                             <b>Estudio Socioeconómico + Visita</b>
                                             <p><?= number_format($cliente->ESE_Visita, 2) ?></p>
                                         </div>
-                                        
-                                        <div class="col text-center">
+										<div class="col text-center">
                                             <b>Estudio Socioeconómico(SMART)</b>
                                             <p><?= number_format($cliente->SMART, 2) ?></p>
                                         </div>
-
                                     </div>
                                     <div class="row">
                                         <div class="col text-center">
@@ -576,6 +610,12 @@
                 cliente.save_nombre_cliente();
             })
 
+			document.querySelector('#modal_servicios').addEventListener('submit', e => {
+				e.preventDefault();
+				let cliente = new Cliente();
+				cliente.save_servicios();
+			})
+
             document.querySelector('#modal_condiciones').addEventListener('submit', e => {
                 e.preventDefault();
                 let cliente = new Cliente();
@@ -631,6 +671,13 @@
                 keyboard: false
             });
         })
+
+		document.querySelector('#btn-editar-servicios').addEventListener('click', e => {
+			e.preventDefault();
+			let cliente = new Cliente();
+			cliente.getServicios(<?=$cliente->Cliente?>);
+			$('#modal_servicios').modal({backdrop: 'static', keyboard: false});
+		})
 
         document.querySelector('#btn-editar-condiciones').addEventListener('click', e => {
             e.preventDefault();

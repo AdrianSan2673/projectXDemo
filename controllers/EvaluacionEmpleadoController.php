@@ -928,16 +928,21 @@ class EvaluacionEmpleadoController
 
                 $evaluation = new EvaluationEmployee();
                 $evaluation->setId_evaluation($id_evaluation);
+                //===[gabo 9 junio excel evaluaciones]===
 
                 $contactoEmpresa = new ContactosEmpresa();
                 $contactoEmpresa->setUsuario($_SESSION['identity']->username);
                 $ID_Contacto = $contactoEmpresa->getContactoPorUsuario()->ID;
 
+                //===[gabo 19 julio cliente session]===
                 $evaluation->setID_Cliente($_SESSION['id_cliente']);
                 $groups = $evaluation->getGroupsByID_Cliente();
+                //===[gabo 19 julio cliente session fin]===
+
+                //===[gabo 15 junio excel evaluaciones pt3]===
 
                 for ($i = 0; $i < count($groups); $i++) {
-                    $groups[$i]['start_date_noformat'] = date('Y-m-d', strtotime($groups[$i]['start_date']));
+					$groups[$i]['start_date_noformat'] = date('Y-m-d', strtotime($groups[$i]['start_date']));
                     $groups[$i]['end_date_noformat']  = date('Y-m-d', strtotime($groups[$i]['end_date']));
                     $groups[$i]['start_date'] = Utils::getDate($groups[$i]['start_date']);
                     $groups[$i]['end_date']  = Utils::getDate($groups[$i]['end_date']);

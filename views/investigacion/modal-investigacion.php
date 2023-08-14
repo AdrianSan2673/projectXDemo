@@ -29,7 +29,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="Motivo_No_Proporciono_Datos">En caso de que no, ¿cuál fue el motivo por que no los proporcionó?</label>
-                        <input type="text" class="form-control" name="Motivo_No_Proporciono_Datos" maxlength="150" required>
+                        <input type="text" class="form-control" name="Motivo_No_Proporciono_Datos" maxlength="150" >
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="Demanda_Laboral">¿Ha demandado alguna empresa?</label>

@@ -107,14 +107,10 @@ $(function () {
 
     let labels = new Array();
     let data = new Array();
-
-
     <?php foreach ($candidates_count as $count): ?>
       labels.push('<?=$count['dia_semana'].' '.$count['dia']?>');
       data.push(<?=$count['total']?>);
     <?php endforeach ?>
-
-    
     var salesGraphChartData = {
       labels  : labels,
       datasets: [

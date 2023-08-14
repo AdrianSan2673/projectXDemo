@@ -111,6 +111,7 @@ class Cliente_SAController
                 require_once 'views/layout/sidebar.php';
                 require_once 'views/cliente/read.php';
                 require_once 'views/cliente/modal-cliente.php';
+                require_once 'views/cliente/modal-servicios.php';
                 require_once 'views/cliente/modal-condiciones.php';
                 require_once 'views/cliente/modal-facturacion.php';
                 require_once 'views/cliente/modal-cuentas.php';
@@ -164,7 +165,6 @@ class Cliente_SAController
     public function save()
     {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior() || Utils::isSalesManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor())) {
-            
             $Empresa = Utils::sanitizeNumber($_POST['Empresa']);
             $Nombre_Cliente = Utils::sanitizeString($_POST['Nombre_Cliente']);
             $ESE = Utils::sanitizeNumber($_POST['ESE']);
@@ -268,6 +268,38 @@ class Cliente_SAController
         }
     }
 
+    public function updateServicios(){
+        if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager())) {
+            $Cliente = Utils::sanitizeNumber($_POST['Cliente']);
+            $Tiene_IL = isset($_POST['Tiene_IL']) ? 1 : 0;
+            $Tiene_ESE = isset($_POST['Tiene_ESE']) ? 1 : 0;
+            $Tiene_SOI = isset($_POST['Tiene_SOI']) ? 1 : 0;
+            $Tiene_SMART = isset($_POST['Tiene_SMART']) ? 1 : 0;
+
+            if ($Cliente) {
+                $cliente = new Clientes();
+                $cliente->setCliente($Cliente);
+                $cliente->setTiene_IL($Tiene_IL);
+                $cliente->setTiene_ESE($Tiene_ESE);
+                $cliente->setTiene_SOI($Tiene_SOI);
+                $cliente->setTiene_SMART($Tiene_SMART);
+                
+                $save = $cliente->updateServicios();
+                if ($save) {
+                    echo json_encode(
+                        array(
+                            'status' => 1,
+                            'cliente' => $cliente->getOne()
+                        )
+                    );
+                }else echo json_encode(array('status' => 2));
+
+            }else echo json_encode(array('status' => 0));
+        }else{
+            header('location:'.base_url);
+        }
+    }
+
     public function updateCondiciones()
     {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager())) {
@@ -281,8 +313,6 @@ class Cliente_SAController
             $Plazo_Credito = Utils::sanitizeStringBlank($_POST['Plazo_Credito']);
             $Dias_Credito = Utils::sanitizeNumber($_POST['Dias_Credito']);
             $SMART = Utils::sanitizeNumber($_POST['SMART']);
-
-
 
             if ($Cliente && $Dias_Credito) {
                 $ESE = $ESE ? $ESE : 0;
@@ -328,10 +358,10 @@ class Cliente_SAController
                         $flag_VL = ($precioVL != $Validacion_Licencia ? '<li><b>RAL</b> Precio Anterior: $' . number_format($precioVL, 2) . '. | Precio Actual: $' . number_format($Validacion_Licencia, 2) . '</li>' : '');
                         $body = "{$greetings}, Lic. {$name}<br><br>Se le informa que hubo un cambio de precios del cliente <u>{$Nombre_Cliente}</u> realizado por {$changed_by}.<br><br><ul>{$flag_RAL}{$flag_IL}{$flag_ESE}{$flag_ESE_Visita}{$flag_VL}</ul>";
                         $body1 = "{$greetings}, Lic. {$name1}<br><br>Se le informa que hubo un cambio de precios del cliente <u>{$Nombre_Cliente}</u> realizado por {$changed_by}.<br><br><ul>{$flag_RAL}{$flag_IL}{$flag_ESE}{$flag_ESE_Visita}{$flag_VL}</ul>";
-                        //Utils::sendEmail($email, $name, $subject, $body);
-                       // Utils::sendEmail($email1, $name1, $subject, $body1);
+                        Utils::sendEmail($email, $name, $subject, $body);
+                        Utils::sendEmail($email1, $name1, $subject, $body1);
                     }
-                    $cliente=$cliente->getOne();
+                	$cliente=$cliente->getOne();
                     $cliente->Validacion_Licencia=number_format($cliente->Validacion_Licencia, 2);
                     $cliente->RAL=number_format($cliente->RAL, 2);
                     $cliente->Investigacion_L=number_format($cliente->Investigacion_L, 2);

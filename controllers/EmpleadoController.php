@@ -18,6 +18,7 @@ require_once 'models/RH/HistoryPositions.php';
 require_once 'models/RH/EmployeeContract.php';
 require_once 'models/RH/EmployeeAvatar.php';
 require_once 'models/RH/EmployeeFamily.php';
+require_once 'models/RH/EmployeeDocument.php';
 
 class EmpleadoController
 {
@@ -151,6 +152,10 @@ class EmpleadoController
             $avatar = new EmployeeAvatar();
             $avatar->setId_employee($id);
             $avatar = $avatar->getOneByIdEmployee();
+
+            $document = new EmployeeDocument();
+            $document->setId_employee($id);
+            $documents = $document->getDocumentsByIdEmployee();
 
             if (!$avatar) {
                 $avatar = new stdClass();

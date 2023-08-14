@@ -57,20 +57,24 @@
                                     <div class="col-md-3">
                                         <div class="form-group" style="text-align: center">
                                             <label class="col-form-label">Requerido</label>
-                                            <input type="" name="gender" id="gender" style="text-align:center""  class=" form-control" value="" readonly>
+                                            <input type="" name="gender" id="gender" style="text-align:center""  class="
+                                                form-control" value="" readonly>
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group" style="text-align: center">
                                             <label class="col-form-label">Candidato</label>
-                                            <input type="" name="gender_c" id="gender_c" style="text-align:center""  class=" form-control" value="" required <?= Utils::isCustomer() ? 'disabled' : '' ?> maxlength="20">
+                                            <input type="" name="gender_c" id="gender_c"
+                                                style="text-align:center""  class=" form-control" value="" required
+                                                <?= Utils::isCustomer() ? 'disabled' : '' ?> maxlength="20">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group" style="text-align: center">
                                             <label class="col-form-label">Estado</label>
-                                            <select name="status_gender" id="status_gender" class="form-control" required <?= Utils::isCustomer() ? 'disabled' : '' ?>>
+                                            <select name="status_gender" id="status_gender" class="form-control"
+                                                required <?= Utils::isCustomer() ? 'disabled' : '' ?>>
                                                 <option value="" selected disabled>Seleciona Estado</option>
                                                 <option value="si"> Cumple</option>
                                                 <option value="no">No cumple</option>
@@ -87,18 +91,22 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group" style="text-align: center">
-                                            <input type="" name="age" id="age" style="text-align:center""  class=" form-control" value="" readonly>
+                                            <input type="" name="age" id="age" style="text-align:center""  class="
+                                                form-control" value="" readonly>
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group" style="text-align: center">
-                                            <input type="number" name="age_c" id="age_c" style="text-align:center""  class=" form-control" value="" min="18" required <?= Utils::isCustomer() ? 'disabled' : '' ?> maxlength="3">
+                                            <input type="number" name="age_c" id="age_c"
+                                                style="text-align:center""  class=" form-control" value="" min="18"
+                                                required <?= Utils::isCustomer() ? 'disabled' : '' ?> maxlength="3">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group" style="text-align: center">
-                                            <select name="status_age" id="status_age" class="form-control" required <?= Utils::isCustomer() ? 'disabled' : '' ?>>
+                                            <select name="status_age" id="status_age" class="form-control" required
+                                                <?= Utils::isCustomer() ? 'disabled' : '' ?>>
                                                 <option value="" selected disabled>Seleciona Estado</option>
                                                 <option value="si"> Cumple</option>
                                                 <option value="no">No cumple</option>
@@ -116,18 +124,23 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group" style="text-align: center">
-                                            <input type="" name="civil_status" id="civil_status" style="text-align:center""  class=" form-control" value="" readonly>
+                                            <input type="" name="civil_status" id="civil_status"
+                                                style="text-align:center""  class=" form-control" value="" readonly>
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group" style="text-align: center">
-                                            <input type="" name="civil_status_c" id="civil_status_c" style="text-align:center""  class=" form-control" value="" required <?= Utils::isCustomer() ? 'disabled' : '' ?> maxlength="20">
+                                            <input type="" name="civil_status_c" id="civil_status_c"
+                                                style="text-align:center""  class=" form-control" value="" required
+                                                <?= Utils::isCustomer() ? 'disabled' : '' ?> maxlength="20">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group" style="text-align: center">
-                                            <select name="status_civil_status" id="status_civil_status" class="form-control" required <?= Utils::isCustomer() ? 'disabled' : '' ?>>
+                                            <select name="status_civil_status" id="status_civil_status"
+                                                class="form-control" required
+                                                <?= Utils::isCustomer() ? 'disabled' : '' ?>>
                                                 <option value="" selected disabled>Seleciona Estado</option>
                                                 <option value="si"> Cumple</option>
                                                 <option value="no">No cumple</option>
@@ -149,26 +162,31 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group" style="text-align: center">
-                                            <label for="" class="col-form-label" style="margin-top:30px">Estudios:</label>
+                                            <label for="" class="col-form-label"
+                                                style="margin-top:30px">Estudios:</label>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group" style="text-align: center">
                                             <label class="col-form-label">Requerido</label>
-                                            <input type="" name="level" id="level" class="form-control" style="text-align:center""  value="" readonly>
+                                            <input type="" name="level" id="level" class="form-control"
+                                                style="text-align:center""  value="" readonly>
                     </div>
                   </div>
 
                   <div class=" col-md-3">
                                             <div class="form-group" style="text-align: center">
                                                 <label class="col-form-label">Candidato</label>
-                                                <input type="" name="level_c" id="level_c" class="form-control" style="text-align:center""  value="" required <?= Utils::isCustomer() ? 'disabled' : '' ?> maxlength=" 50">
+                                                <input type="" name="level_c" id="level_c" class="form-control"
+                                                    style="text-align:center""  value="" required <?= Utils::isCustomer() ? 'disabled' : '' ?> maxlength="
+                                                    50">
                                             </div>
                                         </div>
                                         <div class=" col-md-3">
                                             <div class="form-group" style="text-align: center">
                                                 <label class="col-form-label">Estado</label>
-                                                <select name="status_level" id="status_level" class="form-control" required <?= Utils::isCustomer() ? 'disabled' : '' ?>>
+                                                <select name="status_level" id="status_level" class="form-control"
+                                                    required <?= Utils::isCustomer() ? 'disabled' : '' ?>>
                                                     <option value="" selected disabled>Seleciona Estado</option>
                                                     <option value="si"> Cumple</option>
                                                     <option value="no">No cumple</option>
@@ -190,26 +208,32 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group" style="text-align: center">
-                                                <label for="" class="col-form-label" style="margin-top:30px">Idioma:</label>
+                                                <label for="" class="col-form-label"
+                                                    style="margin-top:30px">Idioma:</label>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group" style="text-align: center">
                                                 <label class="col-form-label">Requerido</label>
-                                                <input type="" name="language" id="language" class="form-control" style="text-align:center""  value="" readonly>
+                                                <input type="" name="language" id="language" class="form-control"
+                                                    style="text-align:center""  value="" readonly>
                     </div>
                   </div>
 
                   <div class=" col-md-3">
                                                 <div class="form-group" style="text-align: center">
                                                     <label class="col-form-label">Candidato</label>
-                                                    <input type="" name="language_c" id="language_c" style="text-align:center""  class=" form-control" value="" <?= Utils::isCustomer() ? 'disabled' : '' ?> maxlength="50">
+                                                    <input type="" name="language_c" id="language_c"
+                                                        style="text-align:center""  class=" form-control" value=""
+                                                        <?= Utils::isCustomer() ? 'disabled' : '' ?> maxlength="50">
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group" style="text-align: center">
                                                     <label class="col-form-label">Estado</label>
-                                                    <select name="status_language" id="status_language" class="form-control" <?= Utils::isCustomer() ? 'disabled' : '' ?>>
+                                                    <select name="status_language" id="status_language"
+                                                        class="form-control"
+                                                        <?= Utils::isCustomer() ? 'disabled' : '' ?>>
                                                         <option value="" selected disabled>Seleciona Estado</option>
                                                         <option value="si"> Cumple</option>
                                                         <option value="no">No cumple</option>
@@ -221,23 +245,30 @@
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <div class="form-group" style="text-align: center">
-                                                    <label for="" class="col-form-label" style="margin-top:10px">Dominio:</label>
+                                                    <label for="" class="col-form-label"
+                                                        style="margin-top:10px">Dominio:</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group" style="text-align: center">
-                                                    <input type="" name="language_level" id="language_level" class="form-control" value="" style="text-align:center""  readonly maxlength=" 50">
+                                                    <input type="" name="language_level" id="language_level"
+                                                        class="form-control" value=""
+                                                        style="text-align:center""  readonly maxlength=" 50">
                                                 </div>
                                             </div>
 
                                             <div class=" col-md-3">
                                                 <div class="form-group" style="text-align: center">
-                                                    <input type="" name="language_level_c" id="language_level_c" style="text-align:center""  class=" form-control" value="" <?= Utils::isCustomer() ? 'disabled' : '' ?>>
+                                                    <input type="" name="language_level_c" id="language_level_c"
+                                                        style="text-align:center""  class=" form-control" value=""
+                                                        <?= Utils::isCustomer() ? 'disabled' : '' ?>>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group" style="text-align: center">
-                                                    <select name="status_language_level" id="status_language_level" class="form-control" <?= Utils::isCustomer() ? 'disabled' : '' ?>>
+                                                    <select name="status_language_level" id="status_language_level"
+                                                        class="form-control"
+                                                        <?= Utils::isCustomer() ? 'disabled' : '' ?>>
                                                         <option value="" selected disabled>Seleciona Estado</option>
                                                         <option value="si"> Cumple</option>
                                                         <option value="no">No cumple</option>
@@ -259,28 +290,34 @@
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <div class="form-group" style="text-align: center">
-                                                    <label for="" class="col-form-label" style="margin-top:30px">Años o
-                                                        meses de Experiencia:</label>
+                                                    <label for="" class="col-form-label" style="margin-top:30px">Años o meses de
+                                                        Experiencia:</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group" style="text-align: center">
                                                     <label class="col-form-label">Requerido</label>
-                                                    <input type="text" name="experience_years" id="experience_years" style="text-align:center"" class=" form-control" value="" readonly>
-                                                </div>
-                                            </div>
-                                            <!-- gabo 3 agosto operativa -->
-                                            <div class="col-md-2">
-                                                <div class="form-group" style="text-align: center">
-                                                    <label class="col-form-label">Candidato</label>
-                                                    <input type="number" name="experience_years_c" id="experience_years_c" style="text-align:center""  class=" form-control" value="" required <?= Utils::isCustomer() ? 'disabled' : '' ?>>
+                                                    <input type="text" name="experience_years" id="experience_years"
+                                                        style="text-align:center"" class=" form-control" value=""
+                                                        readonly>
                                                 </div>
                                             </div>
 
+                                            <!-- ===[gabo 27 junio perfil]=== -->
+                                            <div class="col-md-2">
+                                                <div class="form-group" style="text-align: center">
+                                                    <label class="col-form-label">Candidato</label>
+                                                    <input type="number" name="experience_years_c"
+                                                        id="experience_years_c" style="text-align:center""  class="
+                                                        form-control" value="" required
+                                                        <?= Utils::isCustomer() ? 'disabled' : '' ?>>
+                                                </div>
+                                            </div>
                                             <div class="col-md-2">
                                                 <div class="form-group" style="text-align: center">
                                                     <label class="col-form-label">Tiempo</label>
-                                                    <select name="tiempo" id="tiempo" required class="form-control" <?= Utils::isCustomer() ? 'disabled' : '' ?>>
+                                                    <select name="tiempo" id="tiempo" class="form-control" required
+                                                        <?= Utils::isCustomer() ? 'disabled' : '' ?>>
                                                         <option value="" selected disabled>Seleciona</option>
                                                         <option value="meses">Meses</option>
                                                         <option value="años">Años</option>
@@ -290,7 +327,9 @@
                                             <div class="col-md-2">
                                                 <div class="form-group" style="text-align: center">
                                                     <label class="col-form-label">Estado</label>
-                                                    <select name="status_experience_years" id="status_experience_years" class="form-control" required <?= Utils::isCustomer() ? 'disabled' : '' ?>>
+                                                    <select name="status_experience_years" id="status_experience_years"
+                                                        class="form-control" required
+                                                        <?= Utils::isCustomer() ? 'disabled' : '' ?>>
                                                         <option value="" selected disabled>Seleciona Estado</option>
                                                         <option value="si"> Cumple</option>
                                                         <option value="no">No cumple</option>
@@ -299,18 +338,22 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- gabo 3 agosto operativa -->
+                                        <!-- ===[gabo 27 junio perfil]=== -->
+
                                         <!-- Act gabo  -->
                                         <div class="row">
                                             <div class="col-md-3" style="text-align: center;margin:auto  ">
                                                 <div class="form-group " style="text-align: center; ">
-                                                    <label class="col-form-label" style="text-align: center;margin:auto">Comentarios sobre la
+                                                    <label class="col-form-label"
+                                                        style="text-align: center;margin:auto">Comentarios sobre la
                                                         experiencia:</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-9">
                                                 <div class="form-group" style="text-align: center">
-                                                    <textarea class="form-control" name="experiencia_comments" id="experiencia_comments" cols="25" rows="3" required <?= Utils::isCustomer() ? 'disabled' : '' ?>></textarea>
+                                                    <textarea class="form-control" name="experiencia_comments"
+                                                        id="experiencia_comments" cols="25" rows="3" required
+                                                        <?= Utils::isCustomer() ? 'disabled' : '' ?>></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -326,20 +369,25 @@
                                             <div class="col-md-3">
                                                 <div class="form-group" style="text-align: center">
                                                     <label class="col-form-label">Requerido</label>
-                                                    <textarea class="form-control" name="functions" id="functions" rows="4" readonly>  </textarea>
+                                                    <textarea class="form-control" name="functions" id="functions"
+                                                        rows="4" readonly>  </textarea>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-3">
                                                 <div class="form-group" style="text-align: center">
                                                     <label class="col-form-label">Candidato</label>
-                                                    <textarea class="form-control" name="functions_c" id="functions_c" rows="4" <?= Utils::isCustomer() ? 'disabled' : '' ?>></textarea>
+                                                    <textarea class="form-control" name="functions_c" id="functions_c"
+                                                        rows="4"
+                                                        <?= Utils::isCustomer() ? 'disabled' : '' ?>></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="form-group" style="text-align: center">
                                                     <label class="col-form-label">Estado</label>
-                                                    <select name="status_functions" id="status_functions" class="form-control" required <?= Utils::isCustomer() ? 'disabled' : '' ?>>
+                                                    <select name="status_functions" id="status_functions"
+                                                        class="form-control" required
+                                                        <?= Utils::isCustomer() ? 'disabled' : '' ?>>
                                                         <option value="" selected disabled>Seleciona Estado</option>
                                                         <option value="si"> Cumple</option>
                                                         <option value="no">No cumple</option>
@@ -352,13 +400,16 @@
                                         <div class="row">
                                             <div class="col-md-3" style="text-align: center;margin:auto  ">
                                                 <div class="form-group " style="text-align: center; ">
-                                                    <label class="col-form-label" style="text-align: center;margin:auto">Comentarios sobre los
+                                                    <label class="col-form-label"
+                                                        style="text-align: center;margin:auto">Comentarios sobre los
                                                         puestos:</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-9">
                                                 <div class="form-group" style="text-align: center">
-                                                    <textarea class="form-control" name="functions_comments" id="functions_comments" cols="25" rows="3" required <?= Utils::isCustomer() ? 'disabled' : '' ?>></textarea>
+                                                    <textarea class="form-control" name="functions_comments"
+                                                        id="functions_comments" cols="25" rows="3" required
+                                                        <?= Utils::isCustomer() ? 'disabled' : '' ?>></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -366,13 +417,16 @@
                                         <div class="row">
                                             <div class="col-md-3" style="text-align: center;margin:auto  ">
                                                 <div class="form-group " style="text-align: center; ">
-                                                    <label class="col-form-label" style="text-align: center;margin:auto">Comentarios
+                                                    <label class="col-form-label"
+                                                        style="text-align: center;margin:auto">Comentarios
                                                         generales:</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-9">
                                                 <div class="form-group" style="text-align: center">
-                                                    <textarea class="form-control" name="general_comments" id="general_comments" cols="25" rows="5" required <?= Utils::isCustomer() ? 'disabled' : '' ?>></textarea>
+                                                    <textarea class="form-control" name="general_comments"
+                                                        id="general_comments" cols="25" rows="5" required
+                                                        <?= Utils::isCustomer() ? 'disabled' : '' ?>></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -381,11 +435,9 @@
                                 </div>
                             </div>
 
-                            <div class="modal-footer justify-content-between">
+                            <div class="modal-footer justify-content-between" >
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                                <?php if (Utils::isAdmin() || Utils::isSenior() || Utils::isRecruitmentManager()) : ?>
-                                    <input type="submit" name="submit" id="submit" class="btn btn-orange" value="Guardar">
-                                <?php endif; ?>
+                                <input type="submit" name="submit" id="submit"  class="btn btn-orange" value="Guardar">
                             </div>
                         </div>
             </form>
@@ -395,16 +447,16 @@
 </div>
 
 <script>
-    document.querySelector("#modal_perfil_postulante").onsubmit = function(e) {
+document.querySelector("#modal_perfil_postulante").onsubmit = function(e) {
 
-        e.preventDefault();
-        document.querySelector("#modal_perfil_postulante #submit").disabled = true;
-        let candidato = new Candidate();
-        candidato.save_perfil();
+    e.preventDefault();
+    document.querySelector("#modal_perfil_postulante #submit").disabled = true;
+    let candidato = new Candidate();
+    candidato.save_perfil();
 
-    };
+};
 
-    function delete_row(objeto) {
-        objeto.parentElement.parentElement.parentElement.remove();
-    }
+function delete_row(objeto) {
+    objeto.parentElement.parentElement.parentElement.remove();
+}
 </script>

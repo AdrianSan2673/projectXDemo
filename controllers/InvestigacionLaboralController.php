@@ -1,6 +1,7 @@
 <?php
 
 require_once 'models/SA/Investigacion_Laboral.php';
+require_once 'models/SA/CandidatosDatos.php';
 
 class InvestigacionLaboralController{
 
@@ -9,14 +10,25 @@ class InvestigacionLaboralController{
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
 
             if ($Folio) {
+                $candidato = new CandidatosDatos();
+                $candidato->setCandidato($Folio);
+                $candidato_datos = $candidato->getOne();
+
                 $inv = new Investigacion_Laboral();
                 $inv->setCandidato($Folio);
                 $data = $inv->getOne();
 
                 if ($data) {
                     header('Content-Type: text/html; charset=utf-8');
-                    echo json_encode($data, \JSON_UNESCAPED_UNICODE);
-                } else echo 0;
+                    echo json_encode(array(
+                        'data' => $data,
+                        'candidato_datos' => $candidato_datos,
+                        'status' => 1
+                    ), \JSON_UNESCAPED_UNICODE);
+                } else echo json_encode(array(
+                    'candidato_datos' => $candidato_datos,
+                    'status' => 2
+                ), \JSON_UNESCAPED_UNICODE);
                 
             }else 
                 echo 0;

@@ -170,8 +170,8 @@
                         <th></th>
                         <th class="filterhead"></th>
                         <th></th>
-                        <th ></th>
-                        <th class="filterhead"></th>
+                        <th hidden></th>
+                        <th hidden></th>
                       </tr>
                       <tr>
                         <th class="align-middle">Solicitud</th>
@@ -188,8 +188,8 @@
                         <th class="align-middle">% avance ESE</th>
                         <th class="align-middle">Factura</th>
                         <th>Accion</th>
-                        <th ></th>
-                        <th ></th>
+                        <th hidden></th>
+                        <th hidden></th>
                       </tr>
                   </thead>
                   <tbody>
@@ -239,9 +239,11 @@
                         ?>
                           <td><?=Utils::getShortDate($servicio['Solicitud']);?></td>
                           <td class="font-weight-bold"><?=$servicio['Empresa']?></td>
-
-                          <td c lass="font-weight-bold"><?= Utils::isManager()|| Utils::isAdmin()? '<a href="'.base_url.'cliente_SA/ver&id='.Encryption::encode($servicio['ID_Cliente']).'" target="_blank">'.$servicio['Cliente'].'</a>':$servicio['Cliente']?></td>
-                          
+                          <td c lass="font-weight-bold">
+							  
+							  <?=$servicio['Cliente'] //Utils::isManager()|| Utils::isAdmin()? '<a href="'.base_url.'cliente_SA/ver&id='.Encryption::encode($servicio['ID_Cliente']).'" target="_blank">'.$servicio['Cliente'].'</a>':$servicio['Cliente']?>
+						  
+						  </td>
                           <td id="razon<?=$servicio['Folio']?>"><?=$servicio['Razon']?></td>
                           <td><?=$servicio['CC_Cliente']?></td>
                           <td class="<?=$Color_Solicitud_De?>"><?=$servicio['Nombre_Candidato']?></td>
@@ -266,7 +268,7 @@
                       </div>
                     </div>
                   </td>
-                          <td ><?=$servicio['Folio']?></td>
+                          <td hidden><?=$servicio['Folio']?></td>
                           <td ><?=$servicio['ID_Cliente']==null?'' :$servicio['ID_Cliente']?></td>
                       </tr>
                   <?php endforeach; ?>
@@ -287,8 +289,8 @@
                         <th class="align-middle">% avance ESE</th>
                         <th class="align-middle text-center">Factura</th>
                         <th>Accion</th>
-                        <th ></th>
-                        <th ></th>
+                        <th hidden></th>
+                        <th hidden></th>
                       </tr>
                   </tfoot>
                 </table>
