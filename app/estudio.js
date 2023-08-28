@@ -868,7 +868,7 @@ class Estudio extends ContenidoEstudio{
                         let comentario = json_app[json_app.length -2].Comentario_Escolaridad;
                         json_app.splice(json_app.length -1, 1);
                         json_app.splice(json_app.length -1, 1);
-                        xhr.clase.cargarEscolaridad(json_app, comentario);
+                        xhr.clase.cargarEscolaridad(json_app, json_app.data);
                         
                         utils.showToast('Escolaridad actualizada exitosamente', 'success');
                         $('#modal_escolaridad').modal('hide');

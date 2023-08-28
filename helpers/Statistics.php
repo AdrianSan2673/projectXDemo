@@ -242,6 +242,23 @@ class Statistics{
         $candidate->setFecha_solicitud(date('Y-m-d'));
         return $candidate->getTotalESESPorDia();
     }
+    public static function getTotalESESOIHoy(){
+        require_once 'models/SA/Candidatos.php';
+        $candidate = new Candidatos();
+        $candidate->setFecha_solicitud(date('Y-m-d'));
+        return $candidate->getTotalESESPorDia();
+    }
+    public static function getTotalESESMARTHoy(){
+        require_once 'models/SA/Candidatos.php';
+        $candidate = new Candidatos();
+        $candidate->setFecha_solicitud(date('Y-m-d'));
+        return $candidate->getTotalESESPorDia();
+    }
+
+
+
+
+
 
     //POR EJECUTIVO
     public static function getTotalServiciosApoyoHoyPorEjecutivo(){

@@ -1143,11 +1143,12 @@
                           </a>
                         </div>
                       </div>
-                      <div class="col-lg-3 col-6">
+                      
+                      <div class="col-lg-1 col-2">
                         <div class="small-box bg-info">
                           <div class="inner">
                             <h4><?= !Utils::isAccount() ? Statistics::getTotalESESHoy() : Statistics::getTotalESESHoyPorEjecutivo() ?></h4>
-                            <p>ESE solicitados hoy</p>
+                            <p>ESE </p>
                           </div>
                           <div class="icon">
                             <i class="fas fa-file-invoice-dollar"></i>
@@ -1158,6 +1159,43 @@
                           </a>
                         </div>
                       </div>
+                      <div class="col-lg-1 col-2">
+                        <div class="small-box bg-info">
+                          <div class="inner">
+                            <h4><?= !Utils::isAccount() ? Statistics::getTotalESESHoy() : Statistics::getTotalESESHoyPorEjecutivo() ?></h4>
+                            <p>SOI </p>
+                          </div>
+                          <div class="icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                          </div>
+                          <a href="#" class="small-box-footer">
+                            Ver
+                            <i class="fas fa-arrow-circle-right"></i>
+                          </a>
+                        </div>
+                      </div>
+                      <div class="col-lg-1 col-2">
+                        <div class="small-box bg-info">
+                          <div class="inner">
+                            <h4><?= !Utils::isAccount() ? Statistics::getTotalESESHoy() : Statistics::getTotalESESHoyPorEjecutivo() ?></h4>
+                            <p>SMART </p>
+                          </div>
+                          <div class="icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                          </div>
+                          <a href="#" class="small-box-footer">
+                            Ver
+                            <i class="fas fa-arrow-circle-right"></i>
+                          </a>
+                        </div>
+                      </div>
+
+
+
+
+
+
+
                       <div class="col-lg-3 col-6">
                         <div class="small-box bg-maroon">
                           <div class="inner">
