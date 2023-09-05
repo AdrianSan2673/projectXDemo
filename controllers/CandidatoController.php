@@ -23,139 +23,15 @@ class CandidatoController
     public function index()
     {
         if (Utils::isValid($_SESSION['identity']) && !Utils::isCandidate() && !Utils::isCustomer()) {
+
             $candidate = new Candidate();
-            // GABOOOOOOOOO 13/03/2023
-            $consulta = "";
-            $campos = "";
-            $inners = "";
-            if (isset($_POST)) {
+            // $consulta = "";
+            // $campos = "";
+            // $inners = "";
 
-                if (isset($_POST['clave']) and $_POST['clave'] != "") {
-                    $clave = $_POST['clave'];
-                    if (!is_numeric($clave)) {
-                        $consulta = " AND  edl.level like '%" . $clave . "%' or s.state like '%" . $clave . "%' or  ct.city like '%" . $clave . "%'  or c.first_name like '%" . $clave . "%' or job_title like '%" . $clave . "%'  ";
-                        //$consulta =" AND edl.level like '%" . $clave . "%'  or  s.state  like '%" . $clave . "%' or ct.city like '%" . $clave . "%' or l.language like '%" . $clave . "%' or a.area like '%" . $clave . "%' or sa.subarea like '%" . $clave . "%' or c.first_name like '%" . $clave . "%'  ";
-                    } else {
-                        $consulta = " AND dbo.GetMonthsDifference(c.date_birth, GETDATE())/12 =" . $clave;
-                    }
-                } else {
-                    if (isset($_POST['id_level']) and $_POST['id_level'] != "") {
-                        $consulta = " and ced.id_level=" . $_POST['id_level'];
-                    }
-                    if (isset($_POST['id_area']) and $_POST['id_area'] != "") {
-                        $consulta .= " and a.id=" . $_POST['id_area'];
-                    }
-                    if (isset($_POST['id_subarea']) and $_POST['id_subarea'] != "") {
-                        $consulta .= " and ce.id_subarea=" . $_POST['id_subarea'];
-                    }
-                    if (isset($_POST['id_state']) and $_POST['id_state'] != "") {
-                        $consulta .= " and c.id_state=" . $_POST['id_state'];
-                    }
-                    if (isset($_POST['id_city']) and $_POST['id_city'] != "") {
-                        $consulta .= " and c.id_city=" . $_POST['id_city'];
-                    }
-                    if (isset($_POST['language']) and $_POST['language'] != "") {
-                        $consulta .= " and l.id=" . $_POST['language'] . " ";
-                    }
-                    if (isset($_POST['edad1']) and $_POST['edad1'] != "" or isset($_POST['edad2']) and $_POST['edad2'] != "") {
-                        if ($_POST['edad1'] != "" and $_POST['edad2'] == "") {
-                            $_POST['edad2'] = $_POST['edad1'];
-                        }
-                        if ($_POST['edad2'] != "" and $_POST['edad1'] == "") {
-                            $_POST['edad1'] = $_POST['edad2'];
-                        }
-                        $consulta .= " and dbo.GetMonthsDifference(c.date_birth, GETDATE())/12  BETWEEN " . $_POST['edad1'] . " AND " . $_POST['edad2'];
-                    }
-                    if (isset($_POST['id_gender']) and $_POST['id_gender'] != "") {
-                        $consulta = " and c.id_gender=" . $_POST['id_gender'];
-                    }
-                    if (isset($_POST['language']) and $_POST['language']) {
-                        $campos .= ",l.language";
-                        $inners .= " LEFT JOIN candidate_language cl ON cl.id_candidate=c.id  LEFT JOIN languages l ON l.id=cl.id_language ";
-                    }
-                    if ((isset($_POST['id_subarea']) and $_POST['id_subarea'] != "")  or (isset($_POST['id_area']) and $_POST['id_area'] != "")) {
-                        $campos = ",sa.subarea,a.area ";
-                        $inners .= " inner join candidate_experience ce on ce.id_candidate=c.id inner join subareas sa on ce.id_subarea = sa.id inner join areas a on sa.id_area=a.id ";
-                    }
-                }
-            }
-
-
-            $candidates = $candidate->getCandidatesByKey($consulta, $campos, $inners);
-            // FIN  GABOOOOOOOO
-
-
+            // $candidates = $candidate->getCandidatesByKey("", $campos, $inners);
             $total = $candidate->getTotal();
-
-            $c = new Candidate();
-            for ($i = 0; $i < count($candidates); $i++) {
-                //INICIO GABO
-                $candidates[$i]['area'] = "";
-                $candidates[$i]['subarea'] = "";
-                $candidates[$i]['language'] = "";
-
-                $c->setId($candidates[$i]['id']);
-                $language = $c->getLanguageFromCandidate();
-                if ($language) {
-                    $candidates[$i]['language'] = $language->language;
-                    if ($candidates[$i]['language'] == "") {
-                        $candidates[$i]['language'] = "-";
-                    }
-                } else {
-                    $candidates[$i]['language'] = "-";
-                }
-
-
-                $area = $c->getAreasYSubareasFromCandidate();
-
-                if ($area) {
-                    $candidates[$i]['area'] = $area->area;
-                    $candidates[$i]['subarea'] = $area->subarea;
-                } else {
-                    $candidates[$i]['area'] = "-";
-                    $candidates[$i]['subarea'] = "-";
-                }
-
-
-                /* $path = 'uploads/candidate/'.$candidates[$i]['id'];
-                if (file_exists($path)) {
-                    $directory = opendir($path);
-        
-                    while ($file = readdir($directory))
-                    {
-                        if (!is_dir($file)){
-                            $type = pathinfo($path, PATHINFO_EXTENSION);
-                            $img_content = file_get_contents($path."/".$file);
-                            $route = $path.'/'.$file;
-                        }
-                    }
-                }else{ */
-                if ($candidates[$i]['id_gender'] != 2) {
-                    $route = "dist/img/user-icon.png";
-                } else {
-                    $route = "dist/img/user-icon-rose.png";
-                }
-
-                $type = pathinfo($route, PATHINFO_EXTENSION);
-                $img_content = file_get_contents($route);
-                //}
-                //$img_base64 = chunk_split(base64_encode($img_content));
-
-                /*$img_base64 = 'data:image/' . $type . ';base64,' . base64_encode($img_content);*/
-                $candidates[$i]['avatar'] = base_url . $route;
-
-                $resumepath = 'uploads/resume/' . $candidates[$i]['id'];
-                if (file_exists($resumepath)) {
-                    $resumedirectory = opendir($resumepath);
-                    while ($cv = readdir($resumedirectory)) {
-                        if (!is_dir($cv)) {
-                            $cvtype = pathinfo($resumepath, PATHINFO_EXTENSION);
-                            $cvroute = $resumepath . '/' . $cv;
-                        }
-                    }
-                    $candidates[$i]['resume'] = base_url . $cvroute;
-                }
-            }
+            // $c = new Candidate();
 
             $page_title = 'Candidatos | RRHH Ingenia';
             require_once 'views/layout/header.php';
@@ -205,8 +81,8 @@ class CandidatoController
                         $VacancyObj->setId($candidateDirectory->id_vacancy);
                         $vacante = $VacancyObj->getOne();
                     }
-                    $candidato->id_area = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_area:0;
-                    $candidato->id_subarea = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_subarea:0;
+                    $candidato->id_area = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_area : 0;
+                    $candidato->id_subarea = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_subarea : 0;
 
                     $candidato->id_gender = 0;
                     $candidato->id_civil_status = 0;
@@ -214,7 +90,7 @@ class CandidatoController
                     $candidato->description = '';
                     $candidato->id = null;
                     $candidato->job_title = $candidato->experience;
-					$candidato->experience =$candidato->experience;
+                    $candidato->experience = $candidato->experience;
                     $candidato->cellphone = '';
                     $candidato->linkedinn = '';
                     $candidato->facebook = '';
@@ -672,21 +548,21 @@ class CandidatoController
                     }else{
                         echo 4;
                     } */
-                }else {if ($save) {
-                    //===[gabo 2 julio operativa]===
-                    echo json_encode(array(
-                        'status' => 1,
-                        'id_vacancy' => $id_vacancy,
-                        'id_candidate' => $id_candidate,
-                        'type' => $vacante->type,
-                        'isCandidate' => $isCandidate
-                    ));
-                    //===[gabo 2 julio operativa]===
                 } else {
-                    echo json_encode(array('status' => 2));
+                    if ($save) {
+                        //===[gabo 2 julio operativa]===
+                        echo json_encode(array(
+                            'status' => 1,
+                            'id_vacancy' => $id_vacancy,
+                            'id_candidate' => $id_candidate,
+                            'type' => $vacante->type,
+                            'isCandidate' => $isCandidate
+                        ));
+                        //===[gabo 2 julio operativa]===
+                    } else {
+                        echo json_encode(array('status' => 2));
+                    }
                 }
-					  }
-				
             } else {
                 echo json_encode(array('status' => 0));
             }
@@ -1573,6 +1449,7 @@ class CandidatoController
             $vacante->id_civil_status = $status->status;
 
 
+
             $page_title = 'Perfil | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
@@ -1581,5 +1458,88 @@ class CandidatoController
         } else {
             header('location:' . base_url);
         }
+    }
+
+
+    public function pruebaserver()
+    {
+
+        $_GET['filtros'] .= ($_GET['id_language'] != '') ? "and id_language like " . "'%" . $_GET['id_language'] . "%'" : '';
+        $extrawhere = substr($_GET['filtros'], 3);
+        $tabla = "filtros_candidatos4 fc";
+
+
+        if ($_GET['clave'] != '') {
+            $extrawhere = " ( first_name LIKE " . "'%" . $_GET['clave'] . "%' OR age LIKE " . "'%" . $_GET['clave'] . "%' OR city LIKE " . "'%" . $_GET['clave'] . "%' OR state LIKE " . "'%" . $_GET['clave'] . "%' OR level LIKE " . "'%" . $_GET['clave'] . "%' OR job_title LIKE " . "'%" . $_GET['clave'] . "%' OR language LIKE " . "'%" . $_GET['clave'] . "%' OR area LIKE " . "'%" . $_GET['clave'] . "%' OR subarea LIKE " . "'%" . $_GET['clave'] . "%' OR description LIKE " . "'%" . $_GET['clave'] . "%' OR experiences LIKE " . "'%" . $_GET['clave'] . "%' OR aptitudes LIKE " . "'%" . $_GET['clave'] . "%' OR created_at LIKE " . "'%" . $_GET['clave'] . "%' OR created_by LIKE " . "'%" . $_GET['clave'] . "%')";
+        }
+
+
+
+
+        $primaryKey = 'id';
+        $columns = array(
+
+            array('db' => 'first_name',  'dt' => 1),
+            array('db' => 'age',  'dt' => 2),
+            array('db' => 'city',  'dt' => 3),
+            array('db' => 'state',  'dt' => 4),
+            array('db' => 'level',  'dt' => 5),
+            array('db' => 'job_title',  'dt' => 6),
+            array('db' => 'language',  'dt' => 7),
+            array('db' => 'area',  'dt' => 8),
+            array('db' => 'subarea',  'dt' => 9),
+            array('db' => 'description',  'dt' => 10),
+            array('db' => 'experiences',  'dt' => 11),
+            array('db' => 'aptitudes',  'dt' => 12),
+            array('db' => 'created_at',  'dt' => 13),
+            array('db' => 'created_by',  'dt' => 14),
+            array('db' => 'id',  'dt' => 15),
+            array('db' => 'id_gender',  'dt' => 16),
+            array('db' => 'surname',  'dt' => 18),
+            array('db' => 'last_name',  'dt' => 19),
+            array('db' => 'id_language',  'dt' => 20),
+            // array('db' => 'first_name',  'dt' => 11),
+            // array('db' => 'first_name',  'dt' => 12),
+            // array('db' => 'first_name',  'dt' => 13)
+
+        );
+
+
+        $sql_details = array(
+            'user' => '',
+            'pass' => '',
+            'db'   => 'reclutamiento3',
+            'host' => 'localhost'
+        );
+
+        // $sql_details = array(
+        //     'user' => 'reclutador',
+        //     'pass' => 'Sr65s$0z',
+        //     'db'   => 'reclutamiento',
+        //     'host' => '148.72.144.152'
+        // );
+
+        $botones = 1;
+
+        require("views/candidate/ssp.php");
+        // require("helpers/Encryption.php");
+        // require("../../config/Connection.php");
+        // require("../../config/Parameters.php");
+        // require("../../models/Candidate.php");
+        // require("../../helpers/utils.php");
+
+        $extraFields = '';
+        //si la busqueda viene del datatable input
+        $_POST['search']['value'] != "" ? $extrawhere = '' : '';
+
+        //si la tabla es postulate ocupamos 2 atributos extra
+        if (isset($_GET['id_vacancy'])) {
+            $_GET['id_vacancy'] = Encryption::decode($_GET['id_vacancy']);
+            $extraFields = " ,(SELECT top (1) id_status FROM vacancy_applicants va WHERE va.id_candidate=fc.id AND va.id_vacancy=" . $_GET['id_vacancy'] . ") AS id_status, (SELECT top (1) vas.status FROM vacancy_applicants va LEFT JOIN vacancy_applicant_status vas ON va.id_status=vas.id WHERE va.id_candidate=fc.id AND va.id_vacancy=" . $_GET['id_vacancy'] . ") AS status";
+        }
+
+        echo json_encode(
+            SSP::simple($_POST, $sql_details,  $tabla, $primaryKey, $columns, $botones, $extrawhere, $extraFields)
+        );
     }
 }

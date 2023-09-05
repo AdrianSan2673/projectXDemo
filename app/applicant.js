@@ -139,10 +139,23 @@ class Applicant {
                     utils.showToast('No has seleccionado ningún candidato', 'error');
                     document.querySelector("#postulate").disabled = false;
                 } else if (r == 1) {
-                    utils.showToast('Los candidatos seleccionados se enviaron al reclutador', 'success');
-                    setTimeout(() => {
-                        window.location.href = `../vacante/index`;
-                    }, 2000);
+                    // utils.showToast('Los candidatos seleccionados se enviaron al reclutador', 'success');
+                    //side server
+                    Swal.fire(
+                        'Postulados!',
+                        'Los candidatos seleccionados se enviaron al reclutador',
+                        'success'
+                    )
+                    document.querySelector("#postulate").disabled = false;
+
+                    let candidate = new Candidate();
+                    candidate.LoadTablePostulate();
+
+                    // setTimeout(() => {
+                    //     window.location.reload();
+                    // }, 2000);
+                    //side server
+
                 } else if (r == 2) {
                     utils.showToast('Algo salió mal, inténtalo de nuevo', 'error');
                     document.querySelector("#postulate").disabled = false;
@@ -197,6 +210,66 @@ class Applicant {
     }
 
     // ===[gabo 2 mayo  modal vacantes fin]===
+
+
+    //side server
+    postulate_one(id_candidate, id_vacancy) {
+        var formData = new FormData();
+        formData.append('id_candidate', id_candidate);
+        formData.append('id_vacancy', id_vacancy);
+
+        fetch('../postulaciones/postulate_one', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                //   console.log(response.json());
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('Network response was not ok.');
+                }
+            })
+            .then(r => {
+                console.log(r);
+                try {
+                    const json_app = JSON.parse(r);
+                    if (json_app.status == 1) {
+
+
+                        Swal.fire(
+                            'Postulado!',
+                            'Candidato postulado correctamente.',
+                            'success'
+                        )
+
+                        let candidate = new Candidate();
+                        candidate.LoadTablePostulate();
+
+
+                    } else if (json_app.status == 0) {
+                        utils.showToast('No se pudo consultar la informacion dentro', 'error');
+                        document.querySelector('#agregar-area-form [name="guardar"]').disabled = false;
+                    } else if (json_app.status == 2) {
+                        utils.showToast('No se pudo consultar la informacion fuera', 'error');
+                        document.querySelector('#agregar-area-form [name="guardar"]').disabled = false;
+                    } else {
+                        utils.showToast('Esa area ya esta registrada ', 'error');
+                        document.querySelector('#agregar-area-form [name="guardar"]').disabled = false;
+                    }
+                } catch (error) {
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                    document.querySelector('#agregar-area-form [name="guardar"]').disabled = false;
+                }
+            })
+            .catch(error => {
+                utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                document.querySelector('#agregar-area-form [name="guardar"]').disabled = false;
+            });
+    }
+
+
+
 
 
 }

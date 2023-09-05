@@ -75,7 +75,6 @@ class PostulacionesController
                 $vacante = $vacancy->getOne();
                 $vacancy->setId_area($vacante->id_area);
 
-
                 $candidate = new Candidate();
                 if (isset($_GET['area'])) {
                     $candidates = $candidate->getCandidatesByArea($vacancy);
@@ -83,159 +82,32 @@ class PostulacionesController
                     $candidates = $candidate->getCandidatesByVacancy($vacancy);
                 }
 
+                // var_dump($vacante);
+                // die();
 
-                // ===[gabo 3 mayo abril modal vacantes]===
-                $consulta = "";
-                $campos = "";
-                $inners = "";
-
-                if (isset($_POST['search'])) {
-
-                    if (isset($_POST['clave']) and $_POST['clave'] != "") {
-                        $clave = $_POST['clave'];
-                        if (!is_numeric($clave)) {
-                            $consulta = " AND ( edl.level like '%" . $clave . "%' or s.state like '%" . $clave . "%' or  ct.city like '%" . $clave . "%'  or c.first_name like '%" . $clave . "%' or job_title like '%" . $clave . "%'  )";
-                        } else {
-
-                            $consulta = " AND ( dbo.GetMonthsDifference(c.date_birth, GETDATE())/12 =" . $clave . ")";
-                        }
-                    } else {
-                        if (isset($_POST['id_level']) and $_POST['id_level'] != "") {
-                            $consulta = " and ced.id_level=" . $_POST['id_level'];
-                        }
-                        if (isset($_POST['id_area']) and $_POST['id_area'] != "") {
-                            $consulta .= " and a.id=" . $_POST['id_area'];
-                        }
-                        if (isset($_POST['id_subarea']) and $_POST['id_subarea'] != "") {
-                            $consulta .= " and ce.id_subarea=" . $_POST['id_subarea'];
-                        }
-                        if (isset($_POST['id_state']) and $_POST['id_state'] != "") {
-                            $consulta .= " and c.id_state=" . $_POST['id_state'];
-                        }
-                        if (isset($_POST['id_city']) and $_POST['id_city'] != "") {
-                            $consulta .= " and c.id_city=" . $_POST['id_city'];
-                        }
-                        if (isset($_POST['language']) and $_POST['language'] != "") {
-                            $consulta .= " and l.id=" . $_POST['language'] . " ";
-                        }
-                        if (isset($_POST['edad1']) and $_POST['edad1'] != "" or isset($_POST['edad2']) and $_POST['edad2'] != "") {
-                            if ($_POST['edad1'] != "" and $_POST['edad2'] == "") {
-                                $_POST['edad2'] = $_POST['edad1'];
-                            }
-                            if ($_POST['edad2'] != "" and $_POST['edad1'] == "") {
-                                $_POST['edad1'] = $_POST['edad2'];
-                            }
-                            $consulta .= " and dbo.GetMonthsDifference(c.date_birth, GETDATE())/12  BETWEEN " . $_POST['edad1'] . " AND " . $_POST['edad2'];
-                        }
-                        if (isset($_POST['id_gender']) and $_POST['id_gender'] != "") {
-                            $consulta = " and c.id_gender=" . $_POST['id_gender'];
-                        }
-
-
-                        if (isset($_POST['language']) and $_POST['language']) {
-                            $campos .= ",l.language";
-                            $inners .= " LEFT JOIN candidate_language cl ON cl.id_candidate=c.id  LEFT JOIN languages l ON l.id=cl.id_language ";
-                        }
-
-                        if ((isset($_POST['id_subarea']) and $_POST['id_subarea'] != "")  or (isset($_POST['id_area']) and $_POST['id_area'] != "")) {
-
-                            $campos = ",sa.subarea,a.area ";
-
-                            $inners .= " inner join candidate_experience ce on ce.id_candidate=c.id inner join subareas sa on ce.id_subarea = sa.id inner join areas a on sa.id_area=a.id ";
-                        }
-                    }
-
-                    $campos .= ",va.id_status, vas.status";
-                    $inners .= " LEFT join vacancy_applicants va on va.id_candidate=c.id  and  va.id_vacancy =" . $id;
-                    $inners .= " LEFT join vacancy_applicant_status vas on va.id_status=vas.id";
-
-                    $consulta .= " and va.id_candidate IS NULL  ";
-                    $candidates = $candidate->getCandidatesByKey($consulta, $campos, $inners);
-                }
-                // ===[gabo 28 abril modal vacantes fin]===
-
-
-
-
-                for ($i = 0; $i < count($candidates); $i++) {
-
-                    // ===[gabo 28 abril modal vacantes]===
-
-                    $candidates[$i]['area'] = "";
-                    $candidates[$i]['subarea'] = "";
-                    $candidates[$i]['language'] = "";
-
-                    $candidate->setId($candidates[$i]['id']);
-                    $language = $candidate->getLanguageFromCandidate();
-                    if ($language) {
-                        $candidates[$i]['language'] = $language->language;
-                        if ($candidates[$i]['language'] == "") {
-                            $candidates[$i]['language'] = "-";
-                        }
-                    } else {
-                        $candidates[$i]['language'] = "-";
-                    }
-                    $area = $candidate->getAreasYSubareasFromCandidate();
-
-                    if ($area) {
-                        $candidates[$i]['area'] = $area->area;
-                        $candidates[$i]['subarea'] = $area->subarea;
-                    } else {
-                        $candidates[$i]['area'] = "-";
-                        $candidates[$i]['subarea'] = "-";
-                    }
-
-                    // ===[gabo 28 abril modal vacantes fin]===
-
-
-
-                    $path = 'uploads/candidate/' . $candidates[$i]['id'];
-                    if (file_exists($path)) {
-                        $directory = opendir($path);
-
-                        while ($file = readdir($directory)) {
-                            if (!is_dir($file)) {
-                                $type = pathinfo($path, PATHINFO_EXTENSION);
-                                $img_content = file_get_contents($path . "/" . $file);
-                                $route = $path . '/' . $file;
-                            }
-                        }
-                    } else {
-                        if ($candidates[$i]['id_gender'] != 2) {
-                            $route = "dist/img/user-icon.png";
-                        } else {
-                            $route = "dist/img/user-icon-rose.png";
-                        }
-                        $type = pathinfo($route, PATHINFO_EXTENSION);
-                        $img_content = file_get_contents($route);
-                    }
-                    //$img_base64 = chunk_split(base64_encode($img_content));
-
-                    /*$img_base64 = 'data:image/' . $type . ';base64,' . base64_encode($img_content);*/
-                    $candidates[$i]['avatar'] = base_url . $route;
-
-                    $resumepath = 'uploads/resume/' . $candidates[$i]['id'];
-                    if (file_exists($resumepath)) {
-                        $resumedirectory = opendir($resumepath);
-                        while ($cv = readdir($resumedirectory)) {
-                            if (!is_dir($cv)) {
-                                $cvtype = pathinfo($resumepath, PATHINFO_EXTENSION);
-                                $cvroute = $resumepath . '/' . $cv;
-                            }
-                        }
-                        $candidates[$i]['resume'] = base_url . $cvroute;
-                    }
-                }
+                // var_dump($vacante->id_género);
+                // die();
+                // // ===[gabo 3 mayo abril modal vacantes]===
+                // $consulta = "";
+                // $campos = "";
+                // $inners = "";
+                // // ===[gabo 28 abril modal vacantes fin]===
+                // $candidates = $candidate->getCandidatesByKey($consulta, $campos, $inners);
 
                 $total = $candidate->getTotal();
 
                 $lbl_candidates = 'Búsqueda de candidatos';
                 $lbl_n_candidates = 'Total de candidatos de acuerdos a filtros';
 
+
                 $page_title = $vacante->vacancy . ' | RRHH Ingenia';
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
-                require_once 'views/candidate/index.php';
+                require_once 'views/candidate/index_postular.php';
+                //side server
+
+
+
                 require_once 'views/layout/footer.php';
             } else {
                 header('location:' . base_url . 'vacante/index');
@@ -262,13 +134,17 @@ class PostulacionesController
                 foreach ($postulate as $p) {
                     $applicant = new VacancyApplicant();
                     $applicant->setId_vacancy($id_vacancy);
-                    $applicant->setId_candidate($p);
+                    //===[gabo side server]===
+                    $applicant->setId_candidate(Encryption::decode($p));
+                    //===[gabo server side]===
                     if ($applicant->create()) {
                         $applicant->setId_status(3);
                         $applicant->setCustomer_date(true);
                         $applicant->updateStatus();
                         $cdto = new Candidate();
-                        $cdto->setId($p);
+                        //===[gabo side server]===
+                        $cdto->setId(Encryption::decode($p));
+                        //===[gabo server side]===
                         $candidate = $cdto->getOne();
                         $postulado .= "  * " . $candidate->first_name . " " . $candidate->surname . " " . $candidate->last_name . "<br>";
                     }
@@ -286,14 +162,14 @@ class PostulacionesController
                     $user->setId($recruiter);
                     $executive = $user->getOne();
 
-                    Utils::sendEmail($executive->email, $executive->first_name . ' ' . $executive->last_name, $subject, $body);
+                    //   Utils::sendEmail($executive->email, $executive->first_name . ' ' . $executive->last_name, $subject, $body);
 
                     $exe = new ExecutiveJRRecruiter();
                     $exe->setId_recruiter($executive->id);
                     $executiveJR = $exe->getExecutiveJRByRecruiter();
 
                     if ($executiveJR) {
-                        Utils::sendEmail($executiveJR->email, $executiveJR->first_name . ' ' . $executiveJR->last_name, $subject, $body);
+                        // Utils::sendEmail($executiveJR->email, $executiveJR->first_name . ' ' . $executiveJR->last_name, $subject, $body);
                     }
                 }
                 //Utils::sendEmail('ernesto.rivas@rrhhingenia.com', 'Ernesto Rivas', $subject, $body);
@@ -345,14 +221,14 @@ class PostulacionesController
                     $user->setId($recruiter);
                     $executive = $user->getOne();
 
-                    Utils::sendEmail($executive->email, $executive->first_name . ' ' . $executive->last_name, $subject, $body);
+                    //   Utils::sendEmail($executive->email, $executive->first_name . ' ' . $executive->last_name, $subject, $body);
 
                     $exe = new ExecutiveJRRecruiter();
                     $exe->setId_recruiter($executive->id);
                     $executiveJR = $exe->getExecutiveJRByRecruiter();
 
                     if ($executiveJR) {
-                        Utils::sendEmail($executiveJR->email, $executiveJR->first_name . ' ' . $executiveJR->last_name, $subject, $body);
+                        //   Utils::sendEmail($executiveJR->email, $executiveJR->first_name . ' ' . $executiveJR->last_name, $subject, $body);
                     }
                 }
             } else {
@@ -366,14 +242,14 @@ class PostulacionesController
                     $user->setId($recruiter);
                     $executive = $user->getOne();
 
-                    Utils::sendEmail($executive->email, $executive->first_name . ' ' . $executive->last_name, $subject, $body);
+                    //   Utils::sendEmail($executive->email, $executive->first_name . ' ' . $executive->last_name, $subject, $body);
 
                     $exe = new ExecutiveJRRecruiter();
                     $exe->setId_recruiter($executive->id);
                     $executiveJR = $exe->getExecutiveJRByRecruiter();
 
                     if ($executiveJR) {
-                        Utils::sendEmail($executiveJR->email, $executiveJR->first_name . ' ' . $executiveJR->last_name, $subject, $body);
+                        //   Utils::sendEmail($executiveJR->email, $executiveJR->first_name . ' ' . $executiveJR->last_name, $subject, $body);
                     }
                 }
             }
@@ -487,7 +363,44 @@ class PostulacionesController
                 $candidates = $candidate->getCandidatesByApplicationStatus($vacancy, 2);
                 $total = $candidate->getTotal();
 
+
+
+                //side server
+                $c = new Candidate();
                 for ($i = 0; $i < count($candidates); $i++) {
+
+                    //side server
+                    $candidates[$i]['area'] = "";
+                    $candidates[$i]['subarea'] = "";
+                    $candidates[$i]['language'] = "";
+
+                    $c->setId($candidates[$i]['id']);
+                    $language = $c->getLanguageFromCandidate();
+                    if ($language) {
+                        $candidates[$i]['language'] = $language->language;
+                        if ($candidates[$i]['language'] == "") {
+                            $candidates[$i]['language'] = "-";
+                        }
+                    } else {
+                        $candidates[$i]['language'] = "-";
+                    }
+
+
+                    $area = $c->getAreasYSubareasFromCandidate();
+
+                    if ($area) {
+                        $candidates[$i]['area'] = $area->area;
+                        $candidates[$i]['subarea'] = $area->subarea;
+                    } else {
+                        $candidates[$i]['area'] = "-";
+                        $candidates[$i]['subarea'] = "-";
+                    }
+
+
+
+
+
+
                     $path = 'uploads/candidate/' . $candidates[$i]['id'];
                     if (file_exists($path)) {
                         $directory = opendir($path);
@@ -526,13 +439,14 @@ class PostulacionesController
                     }
                 }
 
+
                 $lbl_candidates = 'Candidatos enviados por ej. de búsqueda';
                 $lbl_n_candidates = 'Total de candidatos enviados a ej. reclutador';
                 $page_title = $vacante->vacancy . ' | RRHH Ingenia';
 
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
-                require_once 'views/candidate/index.php';
+                require_once 'views/candidate/enviados_a_reclutador.php';
                 require_once 'views/layout/footer.php';
             } else {
                 header('location:' . base_url . 'vacante/index');
@@ -718,16 +632,16 @@ class PostulacionesController
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
                 require_once 'views/applicant/selected.php';
-                  // ===[gabo 2 junio modal-experiencia]=== 
-                  require_once 'views/applicant/modal-experiencia.php';
-                  // ===[gabo 2 junio modal-experiencia fin]===
+                // ===[gabo 2 junio modal-experiencia]=== 
+                require_once 'views/applicant/modal-experiencia.php';
+                // ===[gabo 2 junio modal-experiencia fin]===
                 require_once 'views/applicant/modal-eliminar-postulante.php';
                 require_once 'views/applicant/modal-reactivar-postulante.php';
                 require_once 'views/applicant/modal-descartar-postulante.php';
                 require_once 'views/applicant/modal-mover-postulante.php';
                 require_once 'views/applicant/modal-perfil-postulante.php';
-              
-               
+
+
                 require_once 'views/layout/footer.php';
             } else {
                 header('location:' . base_url . 'vacante/index');
@@ -1093,5 +1007,137 @@ class PostulacionesController
 
 
 
+    ///gabo side server
 
+    public function server()
+    {
+        // $candidate = new Candidate();
+        // $candidates = $candidate->getCandidatesByKey('', '', '');
+
+        $_GET['filtros'] .= ($_GET['id_language'] != '') ? "and id_language like " . "'%" . $_GET['id_language'] . "%'" : '';
+        $extrawhere = substr($_GET['filtros'], 3);
+        $tabla = "filtros_candidatos4";
+
+
+        if ($_GET['clave'] != '') {
+            $extrawhere = " ( first_name LIKE " . "'%" . $_GET['clave'] . "%' OR job_title LIKE " . "'%" . $_GET['clave'] . "%' OR description LIKE " . "'%" . $_GET['clave'] . "%' OR experiences LIKE " . "'%" . $_GET['clave'] . "%' OR aptitudes LIKE " . "'%" . $_GET['clave'] . "%')";
+        }
+
+
+        // if ($_GET['clave'] != '') {
+        //     $extrawhere = " ( first_name LIKE " . "'%" . $_GET['clave'] . "%' OR age LIKE " . "'%" . $_GET['clave'] . "%' OR city LIKE " . "'%" . $_GET['clave'] . "%' OR state LIKE " . "'%" . $_GET['clave'] . "%' OR level LIKE " . "'%" . $_GET['clave'] . "%' OR job_title LIKE " . "'%" . $_GET['clave'] . "%' OR language LIKE " . "'%" . $_GET['clave'] . "%' OR area LIKE " . "'%" . $_GET['clave'] . "%' OR subarea LIKE " . "'%" . $_GET['clave'] . "%' OR description LIKE " . "'%" . $_GET['clave'] . "%' OR experiences LIKE " . "'%" . $_GET['clave'] . "%' OR aptitudes LIKE " . "'%" . $_GET['clave'] . "%' OR created_at LIKE " . "'%" . $_GET['clave'] . "%' OR created_by LIKE " . "'%" . $_GET['clave'] . "%')";
+        // }
+
+        $primaryKey = 'id';
+        $columns = array(
+
+            array('db' => 'first_name',  'dt' => 1),
+            array('db' => 'age',  'dt' => 2),
+            array('db' => 'city',  'dt' => 3),
+            array('db' => 'state',  'dt' => 4),
+            array('db' => 'level',  'dt' => 5),
+            array('db' => 'job_title',  'dt' => 6),
+            array('db' => 'language',  'dt' => 7),
+            array('db' => 'area',  'dt' => 8),
+            array('db' => 'subarea',  'dt' => 9),
+            array('db' => 'description',  'dt' => 10),
+            array('db' => 'experiences',  'dt' => 11),
+            array('db' => 'aptitudes',  'dt' => 12),
+            array('db' => 'created_at',  'dt' => 13),
+            array('db' => 'created_by',  'dt' => 14),
+            array('db' => 'id',  'dt' => 15),
+            array('db' => 'id_gender',  'dt' => 16),
+            array('db' => 'surname',  'dt' => 18),
+            array('db' => 'last_name',  'dt' => 19),
+            array('db' => 'id_language',  'dt' => 20),
+            array('db' => 'id_language',  'dt' => 21)
+            // array('db' => 'first_name',  'dt' => 11),
+            // array('db' => 'first_name',  'dt' => 12),
+            // array('db' => 'first_name',  'dt' => 13)
+
+        );
+
+
+        $sql_details = array(
+            'user' => '',
+            'pass' => '',
+            'db'   => 'reclutamiento3',
+            'host' => 'localhost'
+        );
+
+        $botones = 1;
+
+        require("views/candidate/ssp.php");
+        // require("../../helpers/Encryption.php");
+        // require("../../config/Connection.php");
+        // require("../../config/Parameters.php");
+        // require("../../models/Candidate.php");
+        // require("../../helpers/utils.php");
+
+        var_dump($_GET);
+        die();
+        //si la busqueda viene del datatable input
+        $_GET['search']['value'] != "" ? $extrawhere = '' : '';
+        $extraAtributes = ",(SELECT id_status FROM vacancy_applicants va WHERE va.id_candidate=c.id AND va.id_vacancy=:id_vacancy) AS id_status, (SELECT vas.status FROM vacancy_applicants va LEFT JOIN vacancy_applicant_status vas ON va.id_status=vas.id WHERE va.id_candidate=c.id AND va.id_vacancy=:id_vacancy2) AS status";
+
+        echo json_encode(
+            SSP::simple($_GET, $sql_details,  $tabla, $primaryKey, $columns, $botones, $extrawhere, $extraAtributes)
+        );
+    }
+
+
+
+
+
+
+    function postulate_one()
+    {
+
+        if (Utils::isValid($_SESSION['identity']) && isset($_POST['id_candidate']) && isset($_POST['id_vacancy'])) {
+            $id_vacancy = Encryption::decode($_POST['id_vacancy']);
+            $id_candidate = Encryption::decode($_POST['id_candidate']);
+
+
+            $applicant = new VacancyApplicant();
+            $applicant->setId_vacancy($id_vacancy);
+            $applicant->setId_candidate($id_candidate);
+
+            $vacancy = new Vacancy();
+            $vacancy->setId($id_vacancy);
+            $vacante = $vacancy->getOne();
+
+            $recruiter = $vacante->id_recruiter;
+
+            $cdto = new Candidate();
+            $cdto->setId($id_candidate);
+            $postulado = $cdto->getOne();
+
+            $save =  $applicant->move_postulant();
+
+            $subject = 'Nueva postulación para ' . $vacante->vacancy;
+
+            $body = "Se ha postulado el candidato <b>{$postulado->first_name} {$postulado->surname}  {$postulado->last_name}</b> a la vacante de <b>{$vacante->vacancy}</b> perteneciente al cliente <b>{$vacante->customer}</b>";
+            if ($recruiter) {
+                $user = new User();
+                $user->setId($recruiter);
+                $executive = $user->getOne();
+
+                //   Utils::sendEmail($executive->email, $executive->first_name . ' ' . $executive->last_name, $subject, $body);
+
+                $exe = new ExecutiveJRRecruiter();
+                $exe->setId_recruiter($executive->id);
+                $executiveJR = $exe->getExecutiveJRByRecruiter();
+
+                if ($executiveJR) {
+                    //   Utils::sendEmail($executiveJR->email, $executiveJR->first_name . ' ' . $executiveJR->last_name, $subject, $body);
+                }
+            }
+
+            if ($save) {
+                echo json_encode(array('status' => 1));
+            }
+        } else {
+            echo json_encode(array('status' => 0));
+        }
+    }
 }
