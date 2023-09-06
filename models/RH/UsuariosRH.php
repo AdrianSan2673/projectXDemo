@@ -157,4 +157,27 @@ class UsuariosRH
         $flag = $stmt->execute();
         return $flag;
     }
+
+
+
+    public function getOneBYusername()
+    {
+        $username = $this->getUsername();
+        $stmt = $this->db->prepare("SELECT * from usuarios_rh where username=:username");
+        $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+        $stmt->execute();
+        $fetch =  $stmt->fetchObject();
+        return $fetch;
+    }
+
+
+    public function getUsersInfo()
+    {
+
+        $stmt = $this->db->prepare("SELECT * from usuarios_rh u INNER JOIN root.employees e ON u.id=e.usuario_rh where id_cliente=132");
+
+        $stmt->execute();
+        $fetch =  $stmt->fetchAll();
+        return $fetch;
+    }
 }

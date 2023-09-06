@@ -198,7 +198,7 @@ class ContactosCliente
         $ID_Contacto = $this->getID_Contacto();
 
         $stmt = $this->db->prepare("SELECT * FROM rh_Ventas_Alta
-         WHERE Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto)");
+         WHERE Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos3.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto)");
         $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
         $stmt->execute();
         $fetch = $stmt->fetchAll();
@@ -240,20 +240,20 @@ class ContactosCliente
     }
 
     // ===[gabo 5 junio  departamento fin]===
-	  public function getClientesByContactoAcriveRH()
+    public function getClientesByContactoAcriveRH()
     {
 
         $ID_Contacto = $this->getID_Contacto();
 
         $stmt = $this->db->prepare("SELECT * FROM rh_Ventas_Alta
-         WHERE Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) and Modulo_RH=1");
+         WHERE Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos3.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) and Modulo_RH=1");
         $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
         $stmt->execute();
         $fetch = $stmt->fetchAll();
         return $fetch;
     }
-	
- public function getContactoByUsername()
+
+    public function getContactoByUsername()
     {
         $id = $this->getID();
 

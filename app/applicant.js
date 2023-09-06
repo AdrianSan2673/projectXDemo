@@ -167,11 +167,11 @@ class Applicant {
     }
 
 
-    // ===[gabo 2 mayo  modal vacantes]===
-    getVacanciesByCandidato(id_candidato, id_recruiter) {
-
+    //modal-vacantes
+    getVacanciesByCandidato(id_candidato) {
+        console.log("entre");
         let xhr = new XMLHttpRequest();
-        let data = `id_candidato=${id_candidato}&id_recruiter=${id_recruiter}`;
+        let data = `id_candidato=${id_candidato}`;
         xhr.open('POST', '../postulaciones/getVacanciesByCandidato');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
@@ -187,6 +187,8 @@ class Applicant {
                     if (json_app.status == 0) {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     } else if (json_app.status == 1) {
+
+
                         let cities = '';
                         cities += `<option value=""></option>`
                         for (let i in json_app.vacantes) {
@@ -209,7 +211,7 @@ class Applicant {
         }
     }
 
-    // ===[gabo 2 mayo  modal vacantes fin]===
+    //modal-vacantes
 
 
     //side server

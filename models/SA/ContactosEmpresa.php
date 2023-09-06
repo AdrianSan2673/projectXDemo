@@ -21,7 +21,6 @@ class ContactosEmpresa
     public function __construct()
     {
         $this->db = Connection::connectSA();
-        $this->db1 = Connection::connectSA2();
     }
 
     public function getID()
@@ -367,8 +366,8 @@ class ContactosEmpresa
 
         return $fetch;
     }
-	
-	
+
+
 
     public function getOneClientesPorUsuarioContacto()
     {

@@ -965,14 +965,21 @@ class PostulacionesController
 
     public function getVacanciesByCandidato()
     {
+
+
         if (Utils::isValid($_SESSION['identity'])) {
-            $id_recruiter = isset($_POST['id_recruiter']) ? $_POST['id_recruiter'] : FALSE;
+
             $id_candidato = isset($_POST['id_candidato']) ? trim(Encryption::decode($_POST['id_candidato'])) : FALSE;
 
-            if ($id_candidato  && $id_recruiter) {
+            if ($id_candidato) {
 
                 $vacantes = new Vacancy();
-                $vacantes = Utils::isAdmin() ? $vacantes->getVacanciesInProcess() : $vacantes->getVacanciesInProcessByIdRecruiter($id_recruiter);
+                $vacantes = (Utils::isAdmin()) ? $vacantes->getVacanciesInProcess() : $vacantes->getVacanciesInProcessByIdRecruiter($_SESSION['identity']->id);
+
+
+                // var_dump($vacantes);
+                // die();
+                // // $vacantes =   $vacantes->getVacanciesInProcessByIdRecruiter(24);
 
                 $applicant = new VacancyApplicant();
                 $applicant->setId_candidate($id_candidato);
@@ -989,13 +996,10 @@ class PostulacionesController
                     }
                 }
 
-                if ($vacantes) {
-                    echo json_encode(array(
-                        'vacantes' => $vacantesFiltradas,
-                        'status' => 1
-                    ));
-                } else
-                    echo json_encode(array('status' => 0));
+                echo json_encode(array(
+                    'vacantes' => $vacantesFiltradas,
+                    'status' => 1
+                ));
             } else
                 echo json_encode(array('status' => 0));
         } else

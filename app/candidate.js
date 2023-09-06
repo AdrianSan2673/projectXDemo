@@ -938,6 +938,11 @@ class Candidate {
 				render: function (data, type, row) { // con row obtienes la información por fila
 
 					let botones = `  <div class="btn-group btn-group-sm align-middle">
+
+						
+					<button id="btn_postular" class="btn btn-warning" data-id="${data[1]} ${data[18]} ${data[19]}" value="${data[15]}">
+					<i class="fas fa-check"></i> Postular
+					</button>
 	                               <a href="ver&id=${data[15]}"
 	                                    class="btn btn-success">
 	                                    <i class="fas fa-eye"></i> Ver
@@ -1057,7 +1062,7 @@ class Candidate {
 					console.log(data[22]);
 					if (data[22] == 1 || data[22] == '' || data[22] === null) {
 						botones += `	
-						<button id="btn_postular" class="btn btn-warning" data-id="${data[1]} ${data[8]} ${data[19]}" value="${data[15]}">
+						<button id="btn_postular" class="btn btn-warning" data-id="${data[1]} ${data[18]} ${data[19]}" value="${data[15]}">
 						<i class="fas fa-check"></i>Postular
 						</button>`;
 					}
@@ -1067,11 +1072,11 @@ class Candidate {
 	                                    <i class="fas fa-eye"></i> Ver
 	                                </a>
 	                                <a href="../Candidato/editar&id=${data[15]}"
-	                                    class="btn btn-info">
+	                                    class="btn btn-info" hidden>
 	                                    <i class="fas fa-pencil-alt"></i> Editar
 	                                </a>
 	                                <a href="../resume/generate&id=${data[15]}"
-	                                    target="_blank" class="btn btn-danger">
+	                                    target="_blank" class="btn btn-danger" hidden>
 	                                    <i class="fas fa-download"></i> Plantilla
 	                                </a>
 	                               `;
@@ -1101,33 +1106,12 @@ class Candidate {
 					let disabled = '';
 
 
-					// data[22] == 3 ? checked = 'selected' : checked = '';
-					// if (data[22] != 3) {
-					// 	return ` <input type="checkbox" name="postulate[]" value="${data[15]}" class="form-control" ${checked} >`;
-					// } else {
-					// 	return '';
-
-					// }
-
-					// data[22] == 3 ? checked = 'checked' : checked = '';
-					// data[22] == 3 ? disabled = 'disabled' : disabled = '';
-
-					// return ` <input type="checkbox" name="postulate[]" value="${data[15]}" ${disabled} class="form-control" ${checked} >`;
-
-					// data[22] == 3 ? checked = 'checked' : checked = '';
-					// data[22] == 3 ? disabled = 'disabled' : disabled = '';
 					if (data[22] == 1 || data[22] == '' || data[22] === null) {
 						return `<input type="checkbox" name="postulate[]" value="${data[15]}" class="form-control" >`;
 					} else {
 						return `<input type="checkbox" name="postulate[]" value="${data[15]}" disabled class="form-control" checked >`;
 
 					}
-
-
-
-
-
-
 
 				}
 			}, {

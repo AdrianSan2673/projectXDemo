@@ -37,9 +37,9 @@ class CandidatoController
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
             require_once 'views/candidate/index.php';
-            // ===[gabo 28 abril modal vacantes]===
             require_once 'views/candidate/modal-vacantes.php';
-            // ===[gabo 28 abril modal vacantes fin]===
+            //5 septiembre
+            // require_once 'views/candidate/modal-postular.php';
             require_once 'views/layout/footer.php';
         } else {
             header('location:' . base_url);

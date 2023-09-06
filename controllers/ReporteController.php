@@ -2256,7 +2256,7 @@ class ReporteController
         }
     }
 
-      //RH
+    //RH
     public function employeesinformation()
     {
         $status = Encryption::decode($_GET['status']) ? Encryption::decode($_GET['status']) : 0;
@@ -2353,7 +2353,7 @@ class ReporteController
 
         $columnIndex = 1;
         foreach ($arrayColumns as $data) {
-            if (( $data['pColumn'] == 'Z' || $data['pColumn'] == 'AA' || $data['pColumn'] == 'AB' || $data['pColumn'] == 'AC') && $data['row'] == 2) {
+            if (($data['pColumn'] == 'Z' || $data['pColumn'] == 'AA' || $data['pColumn'] == 'AB' || $data['pColumn'] == 'AC') && $data['row'] == 2) {
                 $hoja->getColumnDimension($data['pColumn'])->setAutoSize(true);
                 $hoja->setCellValueByColumnAndRow($columnIndex, $data['row'], $data['value']);
             } else {
@@ -2372,7 +2372,7 @@ class ReporteController
         $employeeContactObj = new EmployeeContact();
 
         foreach ($employees as $emp) {
-            $col=1;
+            $col = 1;
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['employee_number']);
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['fullName']);
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['title']);
@@ -3086,7 +3086,7 @@ class ReporteController
         exit();
     }
     //===[gabo 7 junio incidencias fin]=== 
- public function ExcelGroupEvaluation()
+    public function ExcelGroupEvaluation()
     {
         $id_evaluation = ($_POST['id_evaluation'] ? Utils::sanitizeNumber($_POST['id_evaluation']) : 'false');
         $fechas = ($_POST['fechas'] ? Utils::sanitizeString($_POST['fechas']) : 'false');
@@ -3426,4 +3426,177 @@ class ReporteController
     }
 
 
+    //===[gabo 7 junio incidencias fin]=== 
+    public function ExcelPAsswords()
+    {
+        require_once 'models/RH/UsuariosRH.php';
+
+        $users_rh = new UsuariosRH();
+        $users_rh = $users_rh->getUsersInfo();
+
+
+        $title = "Usuarios RH";
+        //===[gabo 27 julio excel fin]===
+        $documento = new Spreadsheet();
+        $documento
+            ->getProperties()
+            ->setCreator('RRHH Ingenia')
+            ->setLastModifiedBy($_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name)
+            ->setDescription('RRHH Ingenia | Reporte ');
+        $hoja = $documento->getActiveSheet();
+
+
+        $row = 2;
+        $hoja->setCellValueByColumnAndRow(1, $row, 'Nombre del colaborador');
+        $hoja->setCellValueByColumnAndRow(2, $row, 'usuario');
+        $hoja->setCellValueByColumnAndRow(3, $row, 'contraseña');
+
+
+
+
+        $estiloFilas = array(
+
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('rgb' => 'C5E5FA')
+            ),
+
+        );
+
+        $estiloFilasBorder = array(
+            'borders' => array(
+                'inside' => array(
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => array(
+                        'rgb' => '000000'
+                    )
+                ),
+                'outline' => array(
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => array(
+                        'rgb' => '000000'
+                    )
+                )
+            ),
+        );
+
+        //stilos
+        $estiloTituloColumnas = array(
+            'font' => array(
+                'bold'  => true,
+                'size' => 14,
+                'color' => array(
+                    'rgb' => 'FFFFFF'
+                )
+            ),
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('rgb' => 'A6C44A')
+            ),
+            'borders' => array(
+                'inside' => array(
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => array(
+                        'rgb' => '000000'
+                    )
+                ), 'outline' => array(
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => array(
+                        'rgb' => '000000'
+                    )
+                )
+
+            ),
+            'alignment' =>  array(
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical'  => Alignment::VERTICAL_CENTER
+            )
+        );
+
+
+        foreach (range('A', $hoja->getHighestColumn()) as $col) {
+            $hoja->getStyle($col . "2")->applyFromArray($estiloTituloColumnas);
+            $hoja->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        //llenar tabla
+        $row++;
+        foreach ($users_rh as $user) :
+
+
+            $columna = 0;
+            $row++;
+            $hoja->setCellValueByColumnAndRow(++$columna, $row, $user['first_name'] . " " . $user['surname'] . $user['last_name']);
+            $hoja->setCellValueByColumnAndRow(++$columna, $row, $user['username']);
+            $hoja->setCellValueByColumnAndRow(++$columna, $row, Encryption::decode($user['password']));
+
+
+
+        endforeach;
+
+        //estilos
+        $estiloInformacion = array(
+            'font' => array(
+                'size' => 8
+            ),
+            'fill' => array(
+                'fillType'  => Fill::FILL_SOLID
+            ),
+            'borders' => array(
+                'inside' => array(
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => array(
+                        'rgb' => '000000'
+                    )
+                ),
+                'outline' => array(
+                    'borderStyle' => Border::BORDER_MEDIUM,
+                    'color' => array(
+                        'rgb' => '000000'
+                    )
+                )
+            )
+        );
+
+        $centrado = array(
+            'alignment' =>  array(
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical'  => Alignment::VERTICAL_CENTER
+            )
+        );
+
+
+        $hoja->getStyle('A2:' . $col . "2")->applyFromArray($estiloInformacion);
+        $hoja->getStyle('A1:' . $col . "3")->applyFromArray($centrado);
+        $hoja->getStyle('A2:' . $col . "2")->applyFromArray($estiloTituloColumnas);
+        $hoja->mergeCells('A1:' . $col . "1");
+        $hoja->setCellValueByColumnAndRow(1, 1, $title);
+
+        $hoja->getStyle('A3:' . $col . "3")->applyFromArray(
+            array(
+                'font' => array(
+                    'bold'  => true,
+                    'size' => 13,
+
+                )
+            )
+        );;
+
+        $hoja->getStyle('A1')->applyFromArray(
+            array(
+                'font' => array(
+                    'bold'  => true,
+                    'size' => 18,
+
+                )
+            )
+        );
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $title . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new WriterXlsx($documento);
+        $writer->save('php://output');
+        exit();
+    }
 }

@@ -30,7 +30,7 @@ class Employees
     private $civil_status;
     private $id_razon;
     private $id_boss;
-	private $id_usuario_rh;
+    private $id_usuario_rh;
     private $db;
 
     public function __construct()
@@ -308,8 +308,8 @@ class Employees
     {
         $this->id_boss = $id_boss;
     }
-	
-public function getId_Usuario_Rh()
+
+    public function getId_Usuario_Rh()
     {
         return $this->id_usuario_rh;
     }
@@ -318,7 +318,7 @@ public function getId_Usuario_Rh()
     {
         $this->id_usuario_rh = $id_usuario_rh;
     }
-	
+
     public function getOne()
     {
         $id = $this->getId();
@@ -346,7 +346,7 @@ public function getId_Usuario_Rh()
         $status = $this->getStatus();
         $stmt = $this->db->prepare("SELECT e.id AS id_employee, CONCAT(e.first_name,' ',e.surname,' ',e.last_name,' - ', p.title) employePosition, e.first_name, e.surname, e.last_name, e.Cliente, Nombre_Cliente, p.title, d.department, dbo.GetMonthsDifference(e.date_birth, GETDATE())/12 date_birth,e.start_date, e.modified_at, ID_Candidato, e.employee_number,e.civil_status
         FROM root.employees e INNER JOIN rh_Ventas_Alta v ON e.Cliente=v.Cliente LEFT JOIN root.positions p ON e.id_position=p.id LEFT JOIN root.department d ON p.id_department=d.id 
-        WHERE e.status=:status AND e.Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) ORDER BY e.first_name");
+        WHERE e.status=:status AND e.Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos3.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) ORDER BY e.first_name");
         $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
         $stmt->bindParam(":status", $status, PDO::PARAM_INT);
         $stmt->execute();
@@ -361,7 +361,7 @@ public function getId_Usuario_Rh()
         $ID_Contacto = $this->getID_Contacto();
         $stmt = $this->db->prepare("SELECT ei.id id_incident,e.id id_employe, p.title, CONCAT(e.first_name,' ',e.last_name,' ',e.surname) as employeFullName, ei.type,ei.comments,ei.created_at,ei.end_date,ei.modified_at,ei.amount,ei.type_of_foul,ei.hours,ei.type_of_incapacity,ei.permission,d.department
         FROM root.employees e, root.positions p, root.employee_incidence ei, root.department d
-        WHERE p.id=e.id_position AND e.status=:status AND e.id=ei.id_employee AND p.id_department=d.id  AND Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) ORDER BY ei.created_at DESC");
+        WHERE p.id=e.id_position AND e.status=:status AND e.id=ei.id_employee AND p.id_department=d.id  AND Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos3.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) ORDER BY ei.created_at DESC");
         $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
         $stmt->bindParam(":status", $status, PDO::PARAM_INT);
         $stmt->execute();
@@ -376,7 +376,7 @@ public function getId_Usuario_Rh()
         $ID_Contacto = $this->getID_Contacto();
         $stmt = $this->db->prepare("SELECT ei.id id_incident,e.id id_employe, p.title, CONCAT(e.first_name,' ',e.last_name,' ',e.surname) as employeFullName, ei.type,ei.comments,ei.created_at,ei.end_date,ei.modified_at,ei.amount,ei.type_of_foul,ei.hours,ei.type_of_incapacity
         FROM root.employees e, root.positions p, root.employee_incidence ei
-        WHERE e.id=:id AND p.id=e.id_position AND e.status=:status AND e.id=ei.id_employee  AND Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) ORDER BY ei.created_at DESC");
+        WHERE e.id=:id AND p.id=e.id_position AND e.status=:status AND e.id=ei.id_employee  AND Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos3.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) ORDER BY ei.created_at DESC");
         $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
         $stmt->bindParam(":status", $status, PDO::PARAM_INT);
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
@@ -397,7 +397,7 @@ public function getId_Usuario_Rh()
     {
         $ID_Contacto = $this->getID_Contacto();
         $stmt = $this->db->prepare("SELECT e.*, v.Nombre_Cliente FROM root.employees e LEFT JOIN rh_Ventas_Alta v ON e.Cliente=v.Cliente
-         WHERE e.Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto)
+         WHERE e.Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos3.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto)
         ORDER BY created_at DESC");
         $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
         $stmt->execute();
@@ -411,7 +411,7 @@ public function getId_Usuario_Rh()
         $Cliente = $this->getCliente();
         $status = $this->getStatus();
         $stmt = $this->db->prepare("SELECT e.id id_employee,CONCAT(e.first_name,' ', e.surname,' ', e.last_name) fullName, e.id_gender, e.date_birth ,p.title, d.department, Nombre_Cliente AS nombre_comercial, dbo.GetMonthsDifference(e.date_birth, GETDATE())/12 age, image
-        FROM root.employees e INNER JOIN root.positions p ON e.id_position=p.id INNER JOIN root.department d ON p.id_department=d.id INNER JOIN rrhhinge_Candidatos.dbo.rh_Ventas_Alta v ON v.Cliente=e.Cliente LEFT JOIN root.employee_avatar a ON a.id_employee=e.id
+        FROM root.employees e INNER JOIN root.positions p ON e.id_position=p.id INNER JOIN root.department d ON p.id_department=d.id INNER JOIN rrhhinge_Candidatos3.dbo.rh_Ventas_Alta v ON v.Cliente=e.Cliente LEFT JOIN root.employee_avatar a ON a.id_employee=e.id
         WHERE MONTH(e.date_birth)=MONTH(GETDATE()) AND e.status=:status AND e.Cliente=:Cliente  ORDER BY MONTH(e.date_birth), DAY( e.date_birth)");
         $stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
         $stmt->bindParam(":status", $status, PDO::PARAM_INT);
@@ -425,7 +425,7 @@ public function getId_Usuario_Rh()
         $Cliente = $this->getCliente();
         $status = $this->getStatus();
         $stmt = $this->db->prepare("SELECT CONCAT(e.first_name,' ', e.surname,' ', e.last_name) fullName, e.id_gender, e.date_birth ,p.title, d.department, Nombre_Cliente AS nombre_comercial, dbo.GetMonthsDifference(e.date_birth, GETDATE())/12 age
-        FROM root.employees e INNER JOIN root.positions p ON e.id_position=p.id INNER JOIN root.department d ON p.id_department=d.id INNER JOIN rrhhinge_Candidatos.dbo.rh_Ventas_Alta v ON v.Cliente=e.Cliente LEFT JOIN root.employee_avatar a ON a.id_employee=e.id
+        FROM root.employees e INNER JOIN root.positions p ON e.id_position=p.id INNER JOIN root.department d ON p.id_department=d.id INNER JOIN rrhhinge_Candidatos3.dbo.rh_Ventas_Alta v ON v.Cliente=e.Cliente LEFT JOIN root.employee_avatar a ON a.id_employee=e.id
         WHERE MONTH(e.date_birth)=MONTH(GETDATE()) AND DAY(e.date_birth)=DAY(GETDATE()) AND e.status=:status AND e.Cliente=:Cliente ");
         $stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
         $stmt->bindParam(":status", $status, PDO::PARAM_INT);
@@ -439,7 +439,7 @@ public function getId_Usuario_Rh()
         $Cliente = $this->getCliente();
         $status = $this->getStatus();
         $stmt = $this->db->prepare("SELECT e.id id_employee,CONCAT(e.first_name,' ', e.surname,' ', e.last_name) fullName, e.id_gender, e.date_birth ,p.title, d.department, Nombre_Cliente AS nombre_comercial, dbo.GetMonthsDifference(e.date_birth, GETDATE())/12 age, image
-        FROM root.employees e INNER JOIN root.positions p ON e.id_position=p.id INNER JOIN root.department d ON p.id_department=d.id INNER JOIN rrhhinge_Candidatos.dbo.rh_Ventas_Alta v ON v.Cliente=e.Cliente LEFT JOIN root.employee_avatar a ON a.id_employee=e.id
+        FROM root.employees e INNER JOIN root.positions p ON e.id_position=p.id INNER JOIN root.department d ON p.id_department=d.id INNER JOIN rrhhinge_Candidatos3.dbo.rh_Ventas_Alta v ON v.Cliente=e.Cliente LEFT JOIN root.employee_avatar a ON a.id_employee=e.id
         WHERE MONTH(e.date_birth)=MONTH(DATEADD(MM, 1, GETDATE())) AND e.status=:status AND e.Cliente =:Cliente  ORDER BY MONTH(e.date_birth), DAY( e.date_birth)");
         $stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
         $stmt->bindParam(":status", $status, PDO::PARAM_INT);
@@ -452,10 +452,10 @@ public function getId_Usuario_Rh()
     {
         $ID_Contacto = $this->getID_Contacto();
         $status = $this->getStatus();
-        $stmt = $this->db->prepare("SELECT e.id id_employee,CONCAT(e.first_name,' ',e.surname,' ',e.last_name) fullName,p.title,d.department,ec.contract_start,ec.contract_end,ec.type, (SELECT Nombre_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Alta  WHERE Cliente=e.Cliente ) nombre_comercial
+        $stmt = $this->db->prepare("SELECT e.id id_employee,CONCAT(e.first_name,' ',e.surname,' ',e.last_name) fullName,p.title,d.department,ec.contract_start,ec.contract_end,ec.type, (SELECT Nombre_Cliente FROM rrhhinge_Candidatos3.dbo.rh_Ventas_Alta  WHERE Cliente=e.Cliente ) nombre_comercial
         FROM root.employees e, root.employee_contract ec, root.positions p, root.department d 
         WHERE e.id_position=p.id AND p.id_department=d.id AND e.status=:status AND e.id=ec.id_employee AND ec.type<>'Tiempo indeterminado'  AND ec.contract_end>GETDATE() AND DATEADD(DAY,-10,ec.contract_end)<getdate()   
-        AND e.Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) ORDER BY  ec.contract_end DESC");
+        AND e.Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos3.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) ORDER BY  ec.contract_end DESC");
         $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
         $stmt->bindParam(":status", $status, PDO::PARAM_INT);
         $stmt->execute();
@@ -509,7 +509,7 @@ public function getId_Usuario_Rh()
                 (SELECT TOP 1 ect.contract_end   FROM root.employee_contract ect WHERE ect.id_employee=e.id AND ect.type='Tiempo determinado' ORDER BY ect.contract_start DESC) contract_end4,
                 (SELECT TOP 1 ect.contract_start FROM root.employee_contract ect WHERE ect.id_employee=e.id AND ect.type='Tiempo indeterminado' ORDER BY ect.contract_start DESC) contract_start5
                 FROM root.employees e INNER JOIN rh_Ventas_Alta v ON e.Cliente=v.Cliente LEFT JOIN root.positions p ON e.id_position=p.id LEFT JOIN root.department d ON p.id_department=d.id 
-                WHERE e.status=:status AND e.Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) ORDER BY e.first_name");
+                WHERE e.status=:status AND e.Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos3.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) ORDER BY e.first_name");
 
         $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
         $stmt->bindParam(":status", $status, PDO::PARAM_INT);
@@ -750,7 +750,7 @@ public function getId_Usuario_Rh()
 
         $stmt = $this->db->prepare("SELECT ei.id id_incident,e.id id_employe, p.title, CONCAT(e.first_name,' ',e.last_name,' ',e.surname) as employeFullName, ei.type,ei.comments,ei.created_at,ei.end_date,ei.modified_at,ei.amount,ei.type_of_foul,ei.hours,ei.type_of_incapacity,ei.permission,d.department
         FROM root.employees e, root.positions p, root.employee_incidence ei, root.department d
-        WHERE p.id=e.id_position AND e.status=:status AND e.id=ei.id_employee AND p.id_department=d.id  AND Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) AND ei.created_at>=:start_date AND ei.created_at<=:end_date ORDER BY ei.created_at DESC  ");
+        WHERE p.id=e.id_position AND e.status=:status AND e.id=ei.id_employee AND p.id_department=d.id  AND Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos3.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) AND ei.created_at>=:start_date AND ei.created_at<=:end_date ORDER BY ei.created_at DESC  ");
         $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
         $stmt->bindParam(":status", $status, PDO::PARAM_INT);
         $stmt->bindParam(":start_date", $start_date, PDO::PARAM_STR);
@@ -766,7 +766,7 @@ public function getId_Usuario_Rh()
     {
         $Cliente = $this->getCliente();
         $status = $this->getStatus();
-        $stmt = $this->db->prepare("SELECT e.id AS id_employee, CONCAT(e.first_name,' ',e.surname,' ',e.last_name,' - ', p.title) employePosition, e.first_name, e.surname, e.last_name, e.Cliente, Nombre_Cliente, p.title, d.department, dbo.GetMonthsDifference(e.date_birth, GETDATE())/12 date_birth,e.start_date, e.modified_at, ID_Candidato, e.employee_number,e.civil_status
+        $stmt = $this->db->prepare("SELECT e.curp, e.id AS id_employee, CONCAT(e.first_name,' ',e.surname,' ',e.last_name,' - ', p.title) employePosition, e.first_name, e.surname, e.last_name, e.Cliente, Nombre_Cliente, p.title, d.department, dbo.GetMonthsDifference(e.date_birth, GETDATE())/12 date_birth,e.start_date, e.modified_at, ID_Candidato, e.employee_number,e.civil_status
         FROM root.employees e INNER JOIN rh_Ventas_Alta v ON e.Cliente=v.Cliente LEFT JOIN root.positions p ON e.id_position=p.id LEFT JOIN root.department d ON p.id_department=d.id 
         WHERE e.status=:status AND e.Cliente =:Cliente ORDER BY e.first_name");
         $stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
@@ -795,7 +795,7 @@ public function getId_Usuario_Rh()
 
     public function getEmployeesAllInformationByCliente()
     {
-        
+
         $Cliente = $this->getCliente();
         $status = $this->getStatus();
         $stmt = $this->db->prepare("SELECT e.id AS id_employee, CONCAT(e.first_name,' ',e.surname,' ',e.last_name) fullName,  p.title, d.department,e.date_birth, dbo.GetMonthsDifference(e.date_birth, GETDATE())/12 age,e.start_date,dbo.GetMonthsDifference(e.start_date, GETDATE())/12 antiquity ,e.modified_at, e.employee_number,e.civil_status, e.id_gender,
@@ -869,7 +869,7 @@ public function getId_Usuario_Rh()
         return $fetch;
     }
 
-      public function getOneByIdUserRh()
+    public function getOneByIdUserRh()
     {
         $id_usuario_rh = $this->getId_Usuario_Rh();
 
@@ -896,8 +896,8 @@ public function getId_Usuario_Rh()
         }
         return $result;
     }
-	
-	public function Update_Id_userRH()
+
+    public function Update_Id_userRH()
     {
 
         $id = $this->getId();
@@ -908,8 +908,8 @@ public function getId_Usuario_Rh()
         $flag = $stmt->execute();
         return $flag;
     }
-	
-	  public function Validate_Curp()
+
+    public function Validate_Curp()
     {
         $cliente = $this->getCliente();
         $curp = $this->getCurp();
@@ -923,8 +923,8 @@ public function getId_Usuario_Rh()
         $result =  $stmt->fetchObject();
         return $result;
     }
-	
-	public function getAllEmployeesByIDCliente()
+
+    public function getAllEmployeesByIDCliente()
     {
         $Cliente = $this->getCliente();
         $status = $this->getStatus();
@@ -937,8 +937,8 @@ public function getId_Usuario_Rh()
         $fetch =  $stmt->fetchAll();
         return $fetch;
     }
-	
-	 public function getEmployeesAllHolidaysRequested()
+
+    public function getEmployeesAllHolidaysRequested()
     {
         $Cliente = $this->getCliente();
         $stmt = $this->db->prepare(
