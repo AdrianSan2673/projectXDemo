@@ -1188,8 +1188,14 @@ class UsuarioController
                 $solicitudes_pendientes[$i]['end_date'] =   date("d-m-Y", strtotime($solicitudes_pendientes[$i]['end_date']));
                 $solicitudes_pendientes[$i]['created_at'] =  date("d-m-Y", strtotime($solicitudes_pendientes[$i]['created_at']));
             }
+            //gabo 6 sep
+            $holidays = new EmployeeHolidays();
+            $holidays->setId_employee($_SESSION['identity']->id_empleado);
+            $holidays = $holidays->getEmployeeHoliday();
 
-
+            // var_dump($_SESSION);
+            // die();
+            //gabo 6 sep
 
             $empleado = new Employees();
             $empleado->setId_boss($_SESSION['identity']->id_empleado);

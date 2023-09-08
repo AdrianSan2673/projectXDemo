@@ -19,6 +19,9 @@ require_once 'models/RH/EmployeeContract.php';
 require_once 'models/RH/EmployeeAvatar.php';
 require_once 'models/RH/EmployeeFamily.php';
 require_once 'models/RH/EmployeeDocument.php';
+//gabo 6 sep
+require_once 'models/RH/UsuariosRH.php';
+//gabo 6 sep
 
 class EmpleadoController
 {
@@ -248,7 +251,7 @@ class EmpleadoController
             header("location:" . base_url);
     }
 
-   
+
     public function save()
     {
         if (Utils::isAdmin() || Utils::isCustomerSA()) {
@@ -278,6 +281,9 @@ class EmpleadoController
             $civil_status =  isset($_POST['civil_status']) ?  Utils::sanitizeString($_POST['civil_status']) : null;
             $id_razon = Utils::sanitizeNumber($_POST['id_razon']);
             $id_boss =  Encryption::decode($_POST['id_boss']) ?  Encryption::decode($_POST['id_boss']) : null;
+            //gabo 6 sep
+            $email =  isset($_POST['email']) ?  Utils::sanitizeString($_POST['email']) : null;
+            //gabo 6 sep
 
             if (isset($_POST['contract'])) {
                 $contract = Encryption::decode($_POST['contract']);
@@ -370,6 +376,9 @@ class EmpleadoController
                 $employee->setCivil_status($civil_status);
                 $employee->setId_razon($id_razon);
                 $employee->setId_boss($id_boss);
+                //gabo 6 sep
+                $employee->setEmail($email);
+                //gabo 6 sep
 
                 if ($flag == 1) {
 
@@ -408,7 +417,7 @@ class EmpleadoController
                     }
 
 
-                    
+
                     $save = $employee->update();
                 } else {
 
@@ -429,7 +438,7 @@ class EmpleadoController
                     $user_rh->setUsername($curp);
                     $user_rh->setId_cliente($Cliente);
                     $password = random_int(111111, 999999);
-                    $user_rh->setPassword( Encryption::encode($password));
+                    $user_rh->setPassword(Encryption::encode($password));
                     $usuario_saved = $user_rh->save();
                     //actualizar su  id_user_rh
                     if ($usuario_saved) {
@@ -937,5 +946,31 @@ class EmpleadoController
                 echo json_encode(array('status' => 0));
         } else
             echo json_encode(array('status' => 0));
+    }
+
+
+    //7 sep
+    public function Traspasarcorreos()
+    {
+
+
+        $employee = new Employees();
+        $employee->setCliente(132);
+        $employee->setStatus(1);
+        $empleados = $employee->getAllEmployeesByCliente();
+
+        $contactos = new EmployeeContact();
+
+        foreach ($empleados as $empleado) {
+
+
+            $contactos->setId_employee($empleado['id_employee']);
+            $contacto = $contactos->getOne();
+            if ($contacto) {
+                $employee->setEmail($contacto->institutional_email);
+                $employee->setId($contacto->id_employee);
+                $employee->updateEmail();
+            }
+        }
     }
 }

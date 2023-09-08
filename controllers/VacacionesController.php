@@ -27,7 +27,7 @@ class VacacionesController
 
 
                 $employee->setID_Contacto('132');
-                $employee->setStatus('1'); 
+                $employee->setStatus('1');
 
                 $employees = $employee->getEmployeesHolidaysByCliente();
                 $holidays = $employee->getEmployeesHolidaysRequestedByCliente();
@@ -96,9 +96,8 @@ class VacacionesController
                         $emplo['start_date'] = Utils::getDate($emplo['start_date']);
                         $emplo['due_date'] = Utils::getDate($emplo['due_date']);
                         $emplo['rest_vacation'] = $emplo['holidays_by_year'] - $emplo['taken_holidays'];
-                        
                     }
-                    
+
                     $empleado = new Employees();
                     $empleado->setCliente($_SESSION['id_cliente']);
                     // AQUI verfiicar si es adminisrador
@@ -255,7 +254,7 @@ class VacacionesController
                 $holidaysObj = new EmployeeHolidays();
                 $holidaysObj->setId($id);
                 $holidaysObj->delete();
-               
+
                 $holidaysObj->setID_Contacto($_SESSION['id_cliente']);
                 $employees = $holidaysObj->getEmployeesHolidaysByCliente();
                 foreach ($employees as &$emplo) {
@@ -312,6 +311,34 @@ class VacacionesController
                 $holiday->setComments('');
                 //===[gabo 20 julio movil-responsive fin]===
                 $save = $holiday->create();
+
+
+                //gabo 6 sep
+                $start_date = Utils::getShortDate($start_date);
+                $end_date = Utils::getShortDate($end_date);
+
+                $holidays = new EmployeeHolidays();
+                $holidays->setId_employee($id_employee);
+                $holidays = $holidays->getEmployeeHoliday();
+
+                $url = base_url . 'vacaciones/index?solicitudes';
+
+                $subject = 'Solicitud de vacaciones';
+                $body = "El empleado {$holidays->first_name} {$holidays->surname} {$holidays->last_name} solicitó  vacaciones del periodo {$start_date} al {$end_date} <br/> <br /> Para aceptar o denegar la solicitud favor de hacer lick en el enlace| <a href={$url}>enlace</a>";
+
+                Utils::sendEmail('gabriel.izaguirre@rrhhingenia.com', $holidays->first_name . ' ' . $holidays->surname, $subject, $body);
+                //  Utils::sendEmail('gabriel.izaguirre@rrhhingenia.com', $holidays->first_name . ' ' . $holidays->surname, $subject, $body);
+
+                $employee = new Employees();
+                $employee->setId($holidays->id_boss);
+                $empleado = $employee->getOne();
+
+                if ($empleado->email != '' && $empleado->email != NULL) {
+                    //   Utils::sendEmail($empleado->email, $holidays->first_name . ' ' . $holidays->surname, $subject, $body);
+                }
+
+                //gabo 6 sep
+
 
                 if ($save) {
                     $solicitudes = $holiday->getEmployeesHolidaysRequestedByID_User($_SESSION['identity']->id);

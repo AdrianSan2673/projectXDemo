@@ -7,9 +7,9 @@ class Employee_RH {
         var data = new FormData(form);
 
         fetch('../Vacaciones/responder_solicitud_rh', {
-                method: 'POST',
-                body: data
-            })
+            method: 'POST',
+            body: data
+        })
             .then(function (response) {
                 //   console.log(response.json());
                 if (response.ok) {
@@ -27,7 +27,7 @@ class Employee_RH {
                     var cont = json_app.solicitudes.length;
                     json_app.solicitudes.forEach(solicitud => {
 
-                        (solicitud.comments == '') ? solicitud.comments = '-': false;
+                        (solicitud.comments == '') ? solicitud.comments = '-' : false;
                         solicitudes += ` <tr>
                                         <td class="text-center text-bold">${cont}</td>
                                         <td class="text-center">${solicitud.first_name}  ${solicitud.surname}  ${solicitud.last_name}</td>
@@ -78,7 +78,7 @@ class Employee_RH {
                     var cont = json_app.solicitudes.length;
                     json_app.solicitudes.forEach(solicitud => {
 
-                        (solicitud.comments == '') ? solicitud.comments = '-': false;
+                        (solicitud.comments == '') ? solicitud.comments = '-' : false;
                         solicitudes += `     <tr>
                                                     <td class="text-left">
                                                         <div class="card-body">
@@ -176,11 +176,11 @@ class Employee_RH {
         var data = new FormData(form);
 
         fetch('../Vacaciones/save_solicitud_rh', {
-                method: 'POST',
-                body: data
-            })
+            method: 'POST',
+            body: data
+        })
             .then(function (response) {
-                // console.log(response.json());
+                //   console.log(response.json());
                 if (response.ok) {
                     return response.json();
                 } else {
@@ -194,7 +194,7 @@ class Employee_RH {
                     var cont = json_app.solicitudes.length;
                     json_app.solicitudes.forEach(solicitud => {
 
-                        (solicitud.comments == '') ? solicitud.comments = '-': false;
+                        (solicitud.comments == '') ? solicitud.comments = '-' : false;
 
                         solicitudes += `
                             <tr>
@@ -228,7 +228,7 @@ class Employee_RH {
                     var cont = json_app.solicitudes.length;
                     json_app.solicitudes.forEach(solicitud => {
 
-                        (solicitud.comments == '') ? solicitud.comments = '-': false;
+                        (solicitud.comments == '') ? solicitud.comments = '-' : false;
                         solicitudes_movil += `
                             <tr>
                             <td class="text-left">
@@ -328,9 +328,9 @@ class Employee_RH {
         var data = new FormData(form);
 
         fetch('../Usuario/update_password_rh', {
-                method: 'POST',
-                body: data
-            })
+            method: 'POST',
+            body: data
+        })
             .then(function (response) {
                 //  console.log(response.json());
                 if (response.ok) {
@@ -380,9 +380,9 @@ class Employee_RH {
         data.append('direccion', direccion);
 
         fetch('../Usuario/registrar_asistencia', {
-                method: 'POST',
-                body: data
-            })
+            method: 'POST',
+            body: data
+        })
             .then(function (response) {
                 //   console.log(response.json());
                 if (response.ok) {
@@ -443,22 +443,22 @@ class Employee_RH {
         var form = document.querySelector("#modal_responder form");
         var data = new FormData(form);
         fetch('../Vacaciones/responder_solicitud_admin', {
-                method: 'POST',
-                body: data
-            }).then(response => {
-                if (response.ok) {
-                    return response.text();
-                } else {
-                    throw new Error('Network response was not ok.');
-                }
-            }).then(r => {
-                console.log(r);
-                try {
-                    const json_app = JSON.parse(r);
-                    if (json_app.status == 1) {
-                        let employees = '';
-                        json_app.employees.forEach(employee => {
-                            employees += `
+            method: 'POST',
+            body: data
+        }).then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                throw new Error('Network response was not ok.');
+            }
+        }).then(r => {
+            console.log(r);
+            try {
+                const json_app = JSON.parse(r);
+                if (json_app.status == 1) {
+                    let employees = '';
+                    json_app.employees.forEach(employee => {
+                        employees += `
                                             <tr>
                                                 <td class="align-middle text-bold"> ${employee.first_name} ${employee.surname} ${employee.last_name}</td>
                                                 <td class="text-center align-middle">${employee.start_date}</td>
@@ -468,15 +468,15 @@ class Employee_RH {
                                                 <td class="text-center align-middle">${employee.due_date}</td>
                                             </tr>
                                         `;
-                        });
-                        utils.destruir_datatable('#tb_employees', '#tb_employees tbody', employees);
-                        $('#table3').DataTable().destroy();
+                    });
+                    utils.destruir_datatable('#tb_employees', '#tb_employees tbody', employees);
+                    $('#table3').DataTable().destroy();
 
-                        var solicitudes = '';
-                        var cont = json_app.solicitudes.length;
-                        json_app.solicitudes.forEach(solicitud => {
-                            (solicitud.comments == '') ? solicitud.comments = '-': false;
-                            solicitudes += ` <tr>
+                    var solicitudes = '';
+                    var cont = json_app.solicitudes.length;
+                    json_app.solicitudes.forEach(solicitud => {
+                        (solicitud.comments == '') ? solicitud.comments = '-' : false;
+                        solicitudes += ` <tr>
                                                 <td class="text-center text-bold">${cont}</td>
                                                 <td class="text-center">${solicitud.first_name}  ${solicitud.surname}  ${solicitud.last_name}</td>
                                                 <td class="text-center">${solicitud.created_at}</td>
@@ -485,9 +485,9 @@ class Employee_RH {
                                                 <td class="text-center">${solicitud.holidays_by_year - solicitud.taken_holidays} </td>
                                                 <td class="text-center">${solicitud.comments} </td>
                                                 <td class="text-center"> `;
-                            //===[gabo 4 agosto fail]===
-                            if (solicitud.status == 'En revisión') {
-                                solicitudes += `  <button data-id="" value="${solicitud.id}" class="btn btn-success mt-1" id="btn-aceptar">
+                        //===[gabo 4 agosto fail]===
+                        if (solicitud.status == 'En revisión') {
+                            solicitudes += `  <button data-id="" value="${solicitud.id}" class="btn btn-success mt-1" id="btn-aceptar">
                                                             <i class="fas fa-check"> Aceptar</i>
                                                         </button>
                                                         <a data-id="${solicitud.id}" class="btn btn-danger mt-1" id="btn-denegar">
@@ -497,46 +497,46 @@ class Employee_RH {
                                                         class="btn btn-warning mt-1" id="btn-borrar">
                                                         <i class="fas fa-ban"> Borrar</i>
                                                     </button>`;
-                            }
-                            if (solicitud.status == 'Aceptada') {
-                                solicitudes += ` <small class="badge badge-success"> Aceptada</small>`;
-                            }
-                            if (solicitud.status == 'Declinada') {
-                                solicitudes += ` <small class="badge badge-danger"> Declinada</small>`;
-                            }
-                            //===[gabo 4 agosto fail]===
-                            solicitudes += ` </td >
+                        }
+                        if (solicitud.status == 'Aceptada') {
+                            solicitudes += ` <small class="badge badge-success"> Aceptada</small>`;
+                        }
+                        if (solicitud.status == 'Declinada') {
+                            solicitudes += ` <small class="badge badge-danger"> Declinada</small>`;
+                        }
+                        //===[gabo 4 agosto fail]===
+                        solicitudes += ` </td >
                                             </tr > `;
-                            cont--;
-                        });
+                        cont--;
+                    });
 
-                        document.querySelector('#table3 tbody').innerHTML = solicitudes;
-                        $("#table3").DataTable({
-                            "searching": true,
-                            "pageLength": 50,
-                            "aaSorting": [], //Agregar o Quitar segun se necesite desactivar orden
-                            "oAria": {
-                                "sSortAscending": false,
-                                "sSortDescending": true
-                            }
-                        });
+                    document.querySelector('#table3 tbody').innerHTML = solicitudes;
+                    $("#table3").DataTable({
+                        "searching": true,
+                        "pageLength": 50,
+                        "aaSorting": [], //Agregar o Quitar segun se necesite desactivar orden
+                        "oAria": {
+                            "sSortAscending": false,
+                            "sSortDescending": true
+                        }
+                    });
 
-                        document.querySelector("#modal_responder form").reset();
-                        utils.showToast('Acción realizada correctamente exitosamente', 'success');
-                        document.querySelector("#modal_responder [name='submit']").disabled = false
-                        $('#modal_responder').modal('hide');
-                    } else if (json_app.status == 0) {
-                        utils.showToast('No se pudo guardar la información', 'error');
-                        document.querySelector("#modal_responder [name='submit']").disabled = false
-                    } else {
-                        utils.showToast('No se pudo consultar la informacion', 'error');
-                        document.querySelector("#modal_responder [name='submit']").disabled = false
-                    }
-                } catch (error) {
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                    document.querySelector("#modal_responder form").reset();
+                    utils.showToast('Acción realizada correctamente exitosamente', 'success');
+                    document.querySelector("#modal_responder [name='submit']").disabled = false
+                    $('#modal_responder').modal('hide');
+                } else if (json_app.status == 0) {
+                    utils.showToast('No se pudo guardar la información', 'error');
+                    document.querySelector("#modal_responder [name='submit']").disabled = false
+                } else {
+                    utils.showToast('No se pudo consultar la informacion', 'error');
                     document.querySelector("#modal_responder [name='submit']").disabled = false
                 }
-            })
+            } catch (error) {
+                utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                document.querySelector("#modal_responder [name='submit']").disabled = false
+            }
+        })
             .catch(function (error) {
                 utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
                 document.querySelector("#modal_responder [name='submit']").disabled = false

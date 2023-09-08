@@ -84,7 +84,9 @@ maptilerClient.config.apiKey = "D5wN1aRujYvuBJ9nihTZ";
                     <div class="row mb-2">
                         <div class="col-sm-12">
                             <div>
-                                <h1>¡Hola, <?= $_SESSION['first_name'] . " " . $_SESSION['last_name'] ?>!</h1>
+                                <h1>¡Hola,
+                                    <?= $_SESSION['first_name'] . " " . $_SESSION['last_name'] . "-" . $_SESSION['user_rh'] ?>!
+                                </h1>
                             </div>
                         </div>
                     </div>
@@ -121,8 +123,9 @@ maptilerClient.config.apiKey = "D5wN1aRujYvuBJ9nihTZ";
                             </ul>
                         </div>
 
-                           <div class="col-sm-12 col-md-4" id="cerrar">
-                            <a href="<?= base_url ?>usuario/logout_rh" class="btn btn-maroon float-right">Cerrar sesión </a>
+                        <div class="col-sm-12 col-md-4" id="cerrar">
+                            <a href="<?= base_url ?>usuario/logout_rh" class="btn btn-maroon float-right">Cerrar sesión
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -158,7 +161,7 @@ maptilerClient.config.apiKey = "D5wN1aRujYvuBJ9nihTZ";
                                         ?>
                                         <tr>
                                             <td class="text-center text-bold"> <?= $cont  ?></td>
-                                                <td class="text-center"> <?= $asistencia['created_at'];  ?></td>
+                                            <td class="text-center"> <?= $asistencia['created_at'];  ?></td>
                                             <td class="text-center"> <?= $asistencia['coordenada'];  ?></td>
                                         </tr>
 
@@ -172,12 +175,66 @@ maptilerClient.config.apiKey = "D5wN1aRujYvuBJ9nihTZ";
 
 
                         <div class="tab-pane fade" id="solicitudes" role="tabpanel">
+
+                            <!-- //gabo 6 sep -->
+
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="small-box bg-success">
+                                        <div class="inner">
+                                            <h4><?= $holidays->years ?>
+                                            </h4>
+                                            <p>Años de antiguedad</p>
+                                        </div>
+                                        <div class="icon">
+                                            <!-- <i class="fas fa-briefcase"></i> -->
+                                        </div>
+                                        <!-- <a href="<?= base_url ?>vacante/index" class="small-box-footer">
+                                            Ver
+                                            <i class="fas fa-arrow-circle-right"></i>
+                                        </a> -->
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div
+                                        class="small-box <?= $holidays->holidays_by_year - $holidays->taken_holidays != 0 ? 'bg-primary' : 'bg-danger'  ?>     ">
+                                        <div class="inner">
+                                            <?php if ($holidays->holidays_by_year - $holidays->taken_holidays != 0) :   ?>
+                                            <h4><?= $holidays->holidays_by_year - $holidays->taken_holidays ?>
+                                            </h4>
+                                            <p>Dias disponibles</p>
+                                            <?php else : ?>
+                                            <h6>Sin dias disponibles
+                                            </h6>
+                                            <h6>No puedes crear solicitudes en este momento</h6>
+
+
+                                            <?php endif; ?>
+
+                                        </div>
+                                        <div class="icon">
+                                            <!-- <i class="fas fa-briefcase"></i> -->
+                                        </div>
+                                        <!-- <a href="<?= base_url ?>vacante/index" class="small-box-footer">
+                                            Ver
+                                            <i class="fas fa-arrow-circle-right"></i>
+                                        </a> -->
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- //gabo 6 sep -->
+
+
                             <div style="padding-bottom:3rem">
                                 <h5 class="card-title mb-3">Solicitudes</h5>
+                                <!-- //gabo 6 sep -->
                                 <div class="col-sm-2 ml-auto">
                                     <button class="btn btn-orange float-right" data-toggle="modal" id="btn_new_holidays"
+                                        <?= ($holidays->holidays_by_year - $holidays->taken_holidays == 0) ? 'disabled' : ''; ?>
                                         data-target="#">Crear</button>
                                 </div>
+                                <!-- //gabo 6 sep -->
                             </div>
                             <div class="content" id="tabla-solicitudes">
                                 <div class="table-responsive">

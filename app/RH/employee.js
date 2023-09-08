@@ -29,7 +29,7 @@ class Employee {
                             timer: 1750
                         })
 
-                        form.reset();a
+                        form.reset();
 
                         document.querySelector('#select_razon_social').innerHTML = ''
                         //===[gabo 9 junio excel evaluaciones]===
@@ -44,7 +44,7 @@ class Employee {
                     } else if (json_app.status == 3) {
                         form.querySelectorAll('.btn')[0].disabled = false;
                         utils.showToast('Ya existe un empleado con ese curp', 'error');
-                    }  else {
+                    } else {
                         form.querySelectorAll('.btn')[0].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
@@ -122,12 +122,12 @@ class Employee {
                         <div class="row">
                               <div class="col-sm-4 text-center">
                                   <b>Nombre del empleado</b>
-                                  <p class="title-empelado">${json_app.employee.first_name+ ' '+json_app.employee.surname+ ' '+json_app.employee.last_name}</p>
+                                  <p class="title-empelado">${json_app.employee.first_name + ' ' + json_app.employee.surname + ' ' + json_app.employee.last_name}</p>
                               </div>
 
                               <div class="col-sm-4 text-center">
                                   <b>Titulo profesional</b>
-                                  <p>${json_app.employee.scholarship==''||json_app.employee.scholarship==null?'Sin definir':json_app.employee.scholarship }</p>
+                                  <p>${json_app.employee.scholarship == '' || json_app.employee.scholarship == null ? 'Sin definir' : json_app.employee.scholarship}</p>
                               </div>
 
                               <div class="col-sm-4 text-center">
@@ -139,17 +139,17 @@ class Employee {
                         <div class="row">
                            <div class="col-sm-4 text-center">
                                <b>CURP</b>
-                               <p>${json_app.employee.curp==''||json_app.employee.curp==null?'Sin definir':json_app.employee.curp}</p>
+                               <p>${json_app.employee.curp == '' || json_app.employee.curp == null ? 'Sin definir' : json_app.employee.curp}</p>
                            </div>
 
                            <div class="col-sm-4 text-center">
                                <b>NSS</b>
-                               <p>${json_app.employee.nss==''||json_app.employee.nss==null?'Sin definir':json_app.employee.nss}</p>
+                               <p>${json_app.employee.nss == '' || json_app.employee.nss == null ? 'Sin definir' : json_app.employee.nss}</p>
                            </div>
 
                            <div class="col-sm-4 text-center">
                                <b>RFC</b>
-                               <p>${json_app.employee.rfc==''||json_app.employee.rfc==null?'Sin definir':json_app.employee.rfc}</p>
+                               <p>${json_app.employee.rfc == '' || json_app.employee.rfc == null ? 'Sin definir' : json_app.employee.rfc}</p>
                            </div>
                         </div>
 
@@ -183,7 +183,7 @@ class Employee {
                         
                             <div class="col-sm-4 text-center">
                                 <b>A quien reporta</b>
-                                <p>${json_app.employee.nameBoss==''||json_app.employee.nameBoss==null?'Sin definir':json_app.employee.nameBoss}</p>
+                                <p>${json_app.employee.nameBoss == '' || json_app.employee.nameBoss == null ? 'Sin definir' : json_app.employee.nameBoss}</p>
                             </div>
                         </div>
 
@@ -200,7 +200,7 @@ class Employee {
                         </div>                        
 
                         
-                        <div class="row divReasion" ${json_app.employee.reason_for_leaving!=null?'':'hidden'}>
+                        <div class="row divReasion" ${json_app.employee.reason_for_leaving != null ? '' : 'hidden'}>
                            <div class="col-sm-4 text-center">
                                <b>Fecha de terminacion</b>
                                <p class="end_date">${json_app.employee.end_date}</p>
@@ -218,7 +218,7 @@ class Employee {
 
                         </div>
                         
-                        <div class="row divRe_entrry_date" ${json_app.employee.re_entry_date==null?'hidden':''} >
+                        <div class="row divRe_entrry_date" ${json_app.employee.re_entry_date == null ? 'hidden' : ''} >
                         <div class="col-sm-4 text-center">
                             <b>Fecha de reingreso</b>
                             <p class="re_entry_dateP">${json_app.employee.re_entry_date}</p>
@@ -311,7 +311,7 @@ class Employee {
                         document.querySelector('#btn-debaja-empleado').textContent = 'Dar de alta'
 
                         $('#modal-baja').modal('hide');
-                        setTimeout('document.location.reload()',2000);
+                        setTimeout('document.location.reload()', 2000);
 
                     } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
@@ -365,8 +365,8 @@ class Employee {
                         document.querySelector('#btn-debaja-empleado').classList.add("btn-danger");
                         document.querySelector('#btn-debaja-empleado').textContent = 'Dar de baja'
 
-           			    location.reload();
-                        setTimeout('document.location.reload()',1700);
+                        location.reload();
+                        setTimeout('document.location.reload()', 1700);
                     } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
@@ -411,22 +411,22 @@ class Employee {
                         <div class="row">
                             <div class="col-sm-6 text-center">
                                 <b>Telefono 1</b>
-                                <p>${json_app.employee_contacts.phone_number1==null||json_app.employee_contacts.phone_number1==''?'Sin definir':json_app.employee_contacts.phone_number1+' '+json_app.employee_contacts.label1 }</p>
+                                <p>${json_app.employee_contacts.phone_number1 == null || json_app.employee_contacts.phone_number1 == '' ? 'Sin definir' : json_app.employee_contacts.phone_number1 + ' ' + json_app.employee_contacts.label1}</p>
                                 </div>
                                 
                                 <div class="col-sm-6 text-center">
                                 <b>Telefono 2</b>
-                                <p>${json_app.employee_contacts.phone_number2==''||json_app.employee_contacts.phone_number2==null?'Sin definir': json_app.employee_contacts.phone_number2 +' '+json_app.employee_contacts.label2  } </p>
+                                <p>${json_app.employee_contacts.phone_number2 == '' || json_app.employee_contacts.phone_number2 == null ? 'Sin definir' : json_app.employee_contacts.phone_number2 + ' ' + json_app.employee_contacts.label2} </p>
                             </div>
                         </div>
                                                    
                             <div class="row">
                                 <div class="col-sm-6 text-center">
                                     <b>Correo</b>
-                                    <p>${json_app.employee_contacts.email==null||json_app.employee_contacts.email==''?'Sin definir':json_app.employee_contacts.email}</p></div>
+                                    <p>${json_app.employee_contacts.email == null || json_app.employee_contacts.email == '' ? 'Sin definir' : json_app.employee_contacts.email}</p></div>
                                 <div class="col-sm-6 text-center">
                                     <b>Correo empresarial</b>
-                                    <p>${json_app.employee_contacts.institutional_email==null||json_app.employee_contacts.institutional_email==''?'Sin definir':json_app.employee_contacts.institutional_email}</p> </div>
+                                    <p>${json_app.employee_contacts.institutional_email == null || json_app.employee_contacts.institutional_email == '' ? 'Sin definir' : json_app.employee_contacts.institutional_email}</p> </div>
                             </div>
                         </div>
                     
@@ -484,17 +484,17 @@ class Employee {
                         <div class="row">
                             <div class="col-sm-4 text-center">
                                 <b>Nombre</b>
-                                <p>${json_app.employee_contacts.emergency_contact1==null||json_app.employee_contacts.emergency_contact1==''?'Sin definir':json_app.employee_contacts.emergency_contact1}</p>
+                                <p>${json_app.employee_contacts.emergency_contact1 == null || json_app.employee_contacts.emergency_contact1 == '' ? 'Sin definir' : json_app.employee_contacts.emergency_contact1}</p>
                             </div>
 
                             <div class="col-sm-4 text-center">
                                 <b>Parentesco</b>
-                                <p>${json_app.employee_contacts.emergency_relationship1==null||json_app.employee_contacts.emergency_relationship1==''?'Sin definir':json_app.employee_contacts.emergency_relationship1}</p>
+                                <p>${json_app.employee_contacts.emergency_relationship1 == null || json_app.employee_contacts.emergency_relationship1 == '' ? 'Sin definir' : json_app.employee_contacts.emergency_relationship1}</p>
                             </div>
 
                             <div class="col-sm-4 text-center">
                                 <b>Telefono</b>
-                                <p>${json_app.employee_contacts.emergency_number1==null||json_app.employee_contacts.emergency_number1==''?'Sin definir':json_app.employee_contacts.emergency_number1}</p>
+                                <p>${json_app.employee_contacts.emergency_number1 == null || json_app.employee_contacts.emergency_number1 == '' ? 'Sin definir' : json_app.employee_contacts.emergency_number1}</p>
                             </div>
                         </div>
 
@@ -507,17 +507,17 @@ class Employee {
                         <div class="row">
                             <div class="col-sm-4 text-center">
                                 <b>Nombre</b>
-                                <p>${json_app.employee_contacts.emergency_contact2==null||json_app.employee_contacts.emergency_contact2==''?'Sin definir':json_app.employee_contacts.emergency_contact2}</p>
+                                <p>${json_app.employee_contacts.emergency_contact2 == null || json_app.employee_contacts.emergency_contact2 == '' ? 'Sin definir' : json_app.employee_contacts.emergency_contact2}</p>
                             </div>
 
                             <div class="col-sm-4 text-center">
                                 <b>Parentesco</b>
-                                <p>${json_app.employee_contacts.emergency_relationship2==null||json_app.employee_contacts.emergency_relationship2==''?'Sin definir':json_app.employee_contacts.emergency_relationship2}</p>
+                                <p>${json_app.employee_contacts.emergency_relationship2 == null || json_app.employee_contacts.emergency_relationship2 == '' ? 'Sin definir' : json_app.employee_contacts.emergency_relationship2}</p>
                             </div>
 
                             <div class="col-sm-4 text-center">
                                 <b id="colores">Telefono</b>
-                                <p>${json_app.employee_contacts.emergency_number2==null||json_app.employee_contacts.emergency_number2==''?'Sin definir':json_app.employee_contacts.emergency_number2}</p>
+                                <p>${json_app.employee_contacts.emergency_number2 == null || json_app.employee_contacts.emergency_number2 == '' ? 'Sin definir' : json_app.employee_contacts.emergency_number2}</p>
                             </div>
                         </div>
                       
@@ -638,7 +638,7 @@ class Employee {
     }
 
 
-   
+
     deletePayroll(id) {
         let xhr = new XMLHttpRequest();
         xhr.open('POST', '../EmpleadoNomina/deletePayroll');
@@ -658,32 +658,32 @@ class Employee {
                      <div class="row">
                             <div class="col-sm-4 text-center">
                                 <b>Fecha del último ajuste</b>
-                                <p>${json_app.employeePayroll!=''?json_app.employeePayroll.created_at:'Sin definir'}</p>
+                                <p>${json_app.employeePayroll != '' ? json_app.employeePayroll.created_at : 'Sin definir'}</p>
                             </div>
 
                             <div class="col-sm-4 text-center">
                                 <b>Salario actual o final</b>
-                                <p>$${json_app.employeePayroll!=''?json_app.employeePayroll.gross_pay:'Sin definir'}</p>
+                                <p>$${json_app.employeePayroll != '' ? json_app.employeePayroll.gross_pay : 'Sin definir'}</p>
                             </div>
 
                             <div class="col-sm-4 text-center">
                                 <b>Salario inicial</b>
-                                <p>$${json_app.employeePayroll!=''?json_app.employeePayroll.start_pay:'Sin definir'}</p>
+                                <p>$${json_app.employeePayroll != '' ? json_app.employeePayroll.start_pay : 'Sin definir'}</p>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-sm-4 text-center">
                                 <b>Banco</b>
-                                <p>${json_app.employeePayroll!=''?json_app.employeePayroll.bank:'Sin definir'}</p>
+                                <p>${json_app.employeePayroll != '' ? json_app.employeePayroll.bank : 'Sin definir'}</p>
                             </div>
                             <div class="col-sm-4 text-center">
                                 <b>Cuenta</b>
-                                <p>${json_app.employeePayroll!=''?json_app.employeePayroll.account_number:'Sin definir'}</p>
+                                <p>${json_app.employeePayroll != '' ? json_app.employeePayroll.account_number : 'Sin definir'}</p>
                             </div>
                             <div class="col-sm-4 text-center">
                                 <b>CLABE</b>
-                                <p>${json_app.employeePayroll!=''?json_app.employeePayroll.CLABE:'Sin definir'}</p>
+                                <p>${json_app.employeePayroll != '' ? json_app.employeePayroll.CLABE : 'Sin definir'}</p>
                             </div>
                         </div>
 
@@ -711,8 +711,8 @@ class Employee {
 
                         document.querySelector('#divNomina').innerHTML = employee
                         document.querySelector('#tableRollPay').innerHTML = tableEmployee
- 
-                        if (json_app.employeePayroll=='') {
+
+                        if (json_app.employeePayroll == '') {
                             document.querySelector("#modal-payroll form").reset()
                         }
                     } else if (json_app.status == 2) {
@@ -837,8 +837,8 @@ class Employee {
                             employeeFamily += `
                             <tr>
                               <td class="text-center align-middle text-bold">${element.type}</td>
-                              <td class="text-center align-middle">${element.name==null||element.name==''?'Sin definir':element.name}</td>
-                              <td class="text-center align-middle">${element.age==null||element.age==''?'Sin definir':element.age+' Años'}</td>
+                              <td class="text-center align-middle">${element.name == null || element.name == '' ? 'Sin definir' : element.name}</td>
+                              <td class="text-center align-middle">${element.age == null || element.age == '' ? 'Sin definir' : element.age + ' Años'}</td>
                               <td class="text-center align-middle">${element.created_at}</td>
                               <td class="text-center align-middle">
                                   <button class="btn btn-danger text-bold" value="${element.id}">X</button>
@@ -892,8 +892,8 @@ class Employee {
                             employeeFamily2 += `
                             <tr>
                               <td class="text-center align-middle text-bold">${element.type}</td>
-                              <td class="text-center align-middle">${element.name==null||element.name==''?'Sin definir':element.name}</td>
-                              <td class="text-center align-middle">${element.age==null||element.age==''?'Sin definir':element.age+' Años'}</td>
+                              <td class="text-center align-middle">${element.name == null || element.name == '' ? 'Sin definir' : element.name}</td>
+                              <td class="text-center align-middle">${element.age == null || element.age == '' ? 'Sin definir' : element.age + ' Años'}</td>
                               <td class="text-center align-middle">${element.created_at}</td>
                               <td class="text-center align-middle">
                                   <button class="btn btn-danger text-bold" value="${element.id}">X</button>
@@ -940,8 +940,8 @@ class Employee {
                         json_app.employee.forEach(element => {
                             employee += `
                         <tr>
-                            <td class="align-middle">${element.first_name+' '+element.surname+' '+element.last_name}</td>
-                            <td class="text-center align-middle">${element.title==null?'':element.title}</td>
+                            <td class="align-middle">${element.first_name + ' ' + element.surname + ' ' + element.last_name}</td>
+                            <td class="text-center align-middle">${element.title == null ? '' : element.title}</td>
                             <td class="text-center align-middle">${element.date_birth} Años</td>
                             <td class="text-center align-middle">${element.Nombre_Cliente}</td>
                             <td class="text-center align-middle">${element.start_date}</td>
@@ -950,7 +950,7 @@ class Employee {
                               <a href="<?= base_url ?>empleado/ver&id=${element.id_employee}" target="_blank" class="btn btn-success">
                                 <i class="fas fa-eye"></i> Ver
                               </a>
-                                <button class="btn btn-danger" value="${element.id_employee}" name="${element.first_name+' '+element.surname+' '+element.last_name}">Borrar</button>
+                                <button class="btn btn-danger" value="${element.id_employee}" name="${element.first_name + ' ' + element.surname + ' ' + element.last_name}">Borrar</button>
                             </td>
                         </tr>
                             `

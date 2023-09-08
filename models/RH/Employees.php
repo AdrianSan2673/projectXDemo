@@ -32,6 +32,9 @@ class Employees
     private $id_boss;
     private $id_usuario_rh;
     private $db;
+    //gabo 6 sep
+    private $email;
+    //gabo 6 sep
 
     public function __construct()
     {
@@ -319,6 +322,18 @@ class Employees
         $this->id_usuario_rh = $id_usuario_rh;
     }
 
+    //gabo 6 sep
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+    //gabo 6 sep
+
     public function getOne()
     {
         $id = $this->getId();
@@ -554,8 +569,13 @@ class Employees
         $civil_status = $this->getCivil_status();
         $id_razon = $this->getId_razon();
         $id_boss = $this->getId_boss();
+        //gabo 6 sep
+        $email = $this->getEmail();
+        //gabo 6 sep
 
-        $stmt = $this->db->prepare("INSERT INTO root.employees (first_name, surname, last_name, Cliente, ID_Contacto, date_birth, id_gender, start_date,id_position,created_at,modified_at,scholarship,curp,rfc,nss,employee_number,civil_status,id_razon,id_boss) VALUES (:first_name, :surname, :last_name, :Cliente, :ID_Contacto, :date_birth, :id_gender, :start_date,:id_position,GETDATE(),GETDATE(),:scholarship,:curp,:rfc,:nss,:employee_number,:civil_status,:id_razon,:id_boss)");
+        //gabo 6 sep
+        $stmt = $this->db->prepare("INSERT INTO root.employees (first_name, surname, last_name, Cliente, ID_Contacto, date_birth, id_gender, start_date,id_position,created_at,modified_at,scholarship,curp,rfc,nss,employee_number,civil_status,id_razon,id_boss,email) VALUES (:first_name, :surname, :last_name, :Cliente, :ID_Contacto, :date_birth, :id_gender, :start_date,:id_position,GETDATE(),GETDATE(),:scholarship,:curp,:rfc,:nss,:employee_number,:civil_status,:id_razon,:id_boss,:email)");
+        //gabo 6 sep
         //$stmt = $this->db->prepare("INSERT INTO root.employees (first_name, surname, last_name, Cliente, ID_Contacto, date_birth, id_gender, start_date, ID_Candidato) VALUES (:first_name, :surname, :last_name, :Cliente, :ID_Contacto, :date_birth, :id_gender, :start_date, :id_position, :ID_Candidato)");
         //el de arriba es con id de candidato
         $stmt->bindParam(":first_name", $first_name, PDO::PARAM_STR);
@@ -576,6 +596,9 @@ class Employees
         $stmt->bindParam(":civil_status", $civil_status, PDO::PARAM_INT);
         $stmt->bindParam(":id_razon", $id_razon, PDO::PARAM_INT);
         $stmt->bindParam(":id_boss", $id_boss, PDO::PARAM_INT);
+        //gabo 6 sep
+        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        //gabo 6 sep
 
         $flag = $stmt->execute();
 
@@ -614,12 +637,15 @@ class Employees
         $civil_status = $this->getCivil_status();
         $id_razon = $this->getId_razon();
         $id_boss = $this->getId_boss();
+        //gabo 6 sep
+        $email = $this->getEmail();
+        //gabo 6 sep
 
-
+        //gabo 6 sep
         $stmt = $this->db->prepare("UPDATE root.employees 
-        SET first_name=:first_name, surname=:surname, last_name=:last_name, Cliente=:Cliente, date_birth=:date_birth, id_gender=:id_gender, start_date=:start_date, end_date=:end_date, id_position=:id_position, ID_Candidato=:ID_Candidato,modified_at=GETDATE(),reason_for_leaving=:reason_for_leaving,comment_for_leaving=:comment_for_leaving ,re_entry_date=:re_entry_date,scholarship=:scholarship,curp=:curp,rfc=:rfc,nss=:nss,employee_number=:employee_number,civil_status=:civil_status,id_razon=:id_razon,id_boss=:id_boss
+        SET first_name=:first_name, surname=:surname, last_name=:last_name, Cliente=:Cliente, date_birth=:date_birth, id_gender=:id_gender, start_date=:start_date, end_date=:end_date, id_position=:id_position, ID_Candidato=:ID_Candidato,modified_at=GETDATE(),reason_for_leaving=:reason_for_leaving,comment_for_leaving=:comment_for_leaving ,re_entry_date=:re_entry_date,scholarship=:scholarship,curp=:curp,rfc=:rfc,nss=:nss,employee_number=:employee_number,civil_status=:civil_status,id_razon=:id_razon,id_boss=:id_boss,email=:email
         WHERE id=:id");
-
+        //gabo 6 sep
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->bindParam(":first_name", $first_name, PDO::PARAM_STR);
         $stmt->bindParam(":surname", $surname, PDO::PARAM_STR);
@@ -643,6 +669,9 @@ class Employees
         $stmt->bindParam(":civil_status", $civil_status, PDO::PARAM_INT);
         $stmt->bindParam(":id_razon", $id_razon, PDO::PARAM_INT);
         $stmt->bindParam(":id_boss", $id_boss, PDO::PARAM_INT);
+        //gabo 6 sep
+        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        //gabo 6 sep
 
         $flag = $stmt->execute();
 
@@ -965,5 +994,31 @@ class Employees
         $stmt->execute();
         $fetch = $stmt->fetchAll();
         return $fetch;
+    }
+
+    public function updateEmail()
+    {
+        $id = $this->getId();
+        $email = $this->getEmail();
+        $stmt = $this->db->prepare("UPDATE top (1) root.employees set email=:email where id=:id");
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->bindParam(":email", $email, PDO::PARAM_INT);
+        $result =  $stmt->execute();
+
+        return $result;
+    }
+
+    //gabo 7 sep
+    public function getEmployeeByEmail()
+    {
+
+        $email = $this->getEmail();
+
+        $stmt = $this->db->prepare("SELECT * FROM root.employees where email=:email and status=1");
+
+        $stmt->bindParam(":email", $email, PDO::PARAM_INT);
+        $stmt->execute();
+        $result =  $stmt->fetchObject();
+        return $result;
     }
 }
