@@ -56,4 +56,14 @@ class State{
         $areas = $stmt->fetchAll();
         return $areas;
     }
+
+    public function getOne() {
+        $id = $this->getId();
+        $stmt = $this->db->prepare("SELECT * FROM states WHERE id=:id");
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        if ($stmt->execute())
+            return $stmt->fetchObject();
+        else
+            return false;
+    }
 }

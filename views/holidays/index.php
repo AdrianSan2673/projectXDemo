@@ -12,13 +12,15 @@
         </div><!-- /.container-fluid -->
     </section>
     <br>
-    <section class="content-header">
-        <div class="row">
-            <div class="col-sm-2 ml-auto">
-                <button class="btn btn-orange float-right" id="btn_new_holidays">Crear Solicitud</button>
+    <?php if (Utils::permission($_GET['controller'], 'create')) : ?>
+        <section class="content-header">
+            <div class="row">
+                <div class="col-sm-2 ml-auto">
+                    <button class="btn btn-orange float-right" id="btn_new_holidays">Crear Solicitud</button>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    <?php endif ?>
     <section class="content">
         <div class="card bg-transparent">
             <div class="card-header">

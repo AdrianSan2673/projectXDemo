@@ -34,6 +34,7 @@
 <script src="<?=base_url?>dist/js/adminlte.min.js?v=<?=rand()?>"></script>
 <script src="<?=base_url?>plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
 <script src="<?=base_url?>plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<script src="<?=base_url?>plugins/bs-stepper/js/steppermin.js"></script>
 <script src="<?=base_url?>app/city.js?v=<?=rand()?>"></script>
 <script src="<?=base_url?>app/subarea.js?v=<?=rand()?>"></script>
 <script src="<?=base_url?>app/utils.js?v=<?=rand()?>"></script>

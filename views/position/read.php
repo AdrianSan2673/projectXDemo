@@ -76,9 +76,11 @@
                                         </div>
                                     </div>
                                     <?php if (Utils::isAdmin() || Utils::isCustomerSA()) : ?>
-                                        <div class="text-center pt-4">
-                                            <button class="btn btn-info" id="btn-editar-puesto">Editar</button>
-                                        </div>
+                                        <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                            <div class="text-center pt-4">
+                                                <button class="btn btn-info" id="btn-editar-puesto">Editar</button>
+                                            </div>
+                                        <?php endif ?>
                                     <?php endif ?>
                                 </div>
                                 <hr>
@@ -96,9 +98,11 @@
 
 
                                         <?php if (Utils::isAdmin() || Utils::isCustomerSA()) : ?>
-                                            <div class="text-center">
-                                                <input type="submit" name="submit" class="btn btn-info" value="Guardar">
-                                            </div>
+                                            <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                <div class="text-center">
+                                                    <input type="submit" name="submit" class="btn btn-info" value="Guardar">
+                                                </div>
+                                            <?php endif ?>
                                         <?php endif ?>
                                     </form>
                                 </div>
@@ -114,9 +118,11 @@
                                     <p><?= isset($position->objective) ? $position->objective : ' Sin asignar' ?> </p>
                                 </div>
                                 <?php if (Utils::isAdmin() || Utils::isCustomerSA()) : ?>
-                                    <div class="text-center">
-                                        <button class="btn btn-info" id="btn-editar-objetivo">Editar</button>
-                                    </div>
+                                    <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                        <div class="text-center">
+                                            <button class="btn btn-info" id="btn-editar-objetivo">Editar</button>
+                                        </div>
+                                    <?php endif ?>
                                 <?php endif ?>
                             </div>
                         </div>
@@ -131,9 +137,11 @@
                                     <p><?= isset($position->authority) ? $position->authority : ' Sin asignar' ?> </p>
                                 </div>
                                 <?php if (Utils::isAdmin() || Utils::isCustomerSA()) : ?>
-                                    <div class="text-center">
-                                        <button class="btn btn-info" id="btn-editar-autoridad">Editar</button>
-                                    </div>
+                                    <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                        <div class="text-center">
+                                            <button class="btn btn-info" id="btn-editar-autoridad">Editar</button>
+                                        </div>
+                                    <?php endif ?>
                                 <?php endif ?>
                             </div>
                         </div>
@@ -143,9 +151,11 @@
                             </div>
                             <div class="card-body">
                                 <?php if (Utils::isAdmin() || Utils::isCustomerSA()) : ?>
-                                    <div class="text-right">
-                                        <button class="btn btn-success" id="btn-nueva-responsabilidad">Registrar responsabilidad</button>
-                                    </div>
+                                    <?php if (Utils::permission($_GET['controller'], 'create')) : ?>
+                                        <div class="text-right">
+                                            <button class="btn btn-success" id="btn-nueva-responsabilidad">Registrar responsabilidad</button>
+                                        </div>
+                                    <?php endif ?>
                                     <div class="row text-bold">
                                         <div class="col-6">
                                             <p>Responsabilidades</p>
@@ -166,13 +176,16 @@
                                                 </div>
                                                 <div class="col-1">
                                                     <div class="row">
-                                                        <div class="col-6">
-                                                            <button class="btn btn-info" value="<?= Encryption::encode($resp['id']) ?>"><i class="fas fa-edit"></i></button>
-                                                        </div>
-
-                                                        <div class="col-6">
-                                                            <button class="btn btn-danger text-bold h4" name="<?= $_GET['id'] ?>" value="<?= Encryption::encode($resp['id']) ?>">X</button>
-                                                        </div>
+                                                        <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                            <div class="col-6">
+                                                                <button class="btn btn-info" value="<?= Encryption::encode($resp['id']) ?>"><i class="fas fa-edit"></i></button>
+                                                            </div>
+                                                        <?php endif ?>
+                                                        <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
+                                                            <div class="col-6">
+                                                                <button class="btn btn-danger text-bold h4" name="<?= $_GET['id'] ?>" value="<?= Encryption::encode($resp['id']) ?>">X</button>
+                                                            </div>
+                                                        <?php endif ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -188,9 +201,11 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <div class="text-right">
-                                    <button class="btn btn-success" id="btn-nueva-indicadores">Registrar indicador</button>
-                                </div>
+                                <?php if (Utils::permission($_GET['controller'], 'create')) : ?>
+                                    <div class="text-right">
+                                        <button class="btn btn-success" id="btn-nueva-indicadores">Registrar indicador</button>
+                                    </div>
+                                <?php endif ?>
                                 <div id="indicadorEfectivo">
                                     <?php foreach ($effectivenessIndicatiors as $ef) : ?>
                                         <div class="row mt-2">
@@ -199,12 +214,16 @@
                                             </div>
                                             <div class="col-1">
                                                 <div class="row">
-                                                    <div class="col-6">
-                                                        <button class="btn btn-info" value="<?= Encryption::encode($ef['id']); ?>"><i class="fas fa-edit"></i></button>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <button class="btn btn-danger text-bold h4" name="<?= $_GET['id'] ?>" value="<?= Encryption::encode($ef['id']); ?>">X</button>
-                                                    </div>
+                                                    <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                        <div class="col-6">
+                                                            <button class="btn btn-info" value="<?= Encryption::encode($ef['id']); ?>"><i class="fas fa-edit"></i></button>
+                                                        </div>
+                                                    <?php endif ?>
+                                                    <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
+                                                        <div class="col-6">
+                                                            <button class="btn btn-danger text-bold h4" name="<?= $_GET['id'] ?>" value="<?= Encryption::encode($ef['id']); ?>">X</button>
+                                                        </div>
+                                                    <?php endif ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -262,9 +281,11 @@
 
 
                                 <?php if (Utils::isAdmin() || Utils::isCustomerSA()) : ?>
-                                    <div class="text-center">
-                                        <button class="btn btn-info" id="btn-editar-perfil">Editar</button>
-                                    </div>
+                                    <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                        <div class="text-center">
+                                            <button class="btn btn-info" id="btn-editar-perfil">Editar</button>
+                                        </div>
+                                    <?php endif ?>
                                 <?php endif ?>
                             </div>
                         </div>
@@ -277,9 +298,11 @@
                                 <div class="row">
 
                                     <div class="col-6">
-                                        <div class="text-right">
-                                            <button class="btn btn-success" id="btn-nueva-conocimiento">Agregar conocimiento +</button>
-                                        </div>
+                                        <?php if (Utils::permission($_GET['controller'], 'create')) : ?>
+                                            <div class="text-right">
+                                                <button class="btn btn-success" id="btn-nueva-conocimiento">Agregar conocimiento +</button>
+                                            </div>
+                                        <?php endif ?>
                                         <b>Conocimientos requeridos por el puesto</b>
                                         <div id="content_conocimiento">
                                             <?php foreach ($requiredKnowledge as $req) : ?>
@@ -290,12 +313,16 @@
 
                                                     <div class="col-2">
                                                         <div class="row">
-                                                            <div class="col-6">
-                                                                <button class="btn btn-info" value="<?= Encryption::encode($req['id']) ?>"><i class="fas fa-edit"></i></button>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <button class="btn btn-danger text-bold h4" value="<?= Encryption::encode($req['id']) ?>" name="<?= $_GET['id']  ?>">X</button>
-                                                            </div>
+                                                            <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                                <div class="col-6">
+                                                                    <button class="btn btn-info" value="<?= Encryption::encode($req['id']) ?>"><i class="fas fa-edit"></i></button>
+                                                                </div>
+                                                            <?php endif ?>
+                                                            <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
+                                                                <div class="col-6">
+                                                                    <button class="btn btn-danger text-bold h4" value="<?= Encryption::encode($req['id']) ?>" name="<?= $_GET['id']  ?>">X</button>
+                                                                </div>
+                                                            <?php endif ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -304,9 +331,11 @@
                                     </div>
 
                                     <div class="col-6">
-                                        <div class="text-right">
-                                            <button class="btn btn-success" id="btn-nueva-habilidades">Agregar habilidad +</button>
-                                        </div>
+                                        <?php if (Utils::permission($_GET['controller'], 'create')) : ?>
+                                            <div class="text-right">
+                                                <button class="btn btn-success" id="btn-nueva-habilidades">Agregar habilidad +</button>
+                                            </div>
+                                        <?php endif ?>
                                         <b>Habilidades interpersonales</b>
                                         <div id="content_habilidades">
                                             <?php foreach ($interpersonalSkills as $inter) : ?>
@@ -316,12 +345,16 @@
                                                     </div>
                                                     <div class="col-2">
                                                         <div class="row">
-                                                            <div class="col-6">
-                                                                <button class="btn btn-info" value="<?= Encryption::encode($inter['id'])  ?>"><i class="fas fa-edit"></i></button>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <button class="btn btn-danger text-bold h4" value="<?= Encryption::encode($inter['id']) ?>" name="<?= $_GET['id'] ?>">X</button>
-                                                            </div>
+                                                            <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                                <div class="col-6">
+                                                                    <button class="btn btn-info" value="<?= Encryption::encode($inter['id'])  ?>"><i class="fas fa-edit"></i></button>
+                                                                </div>
+                                                            <?php endif ?>
+                                                            <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
+                                                                <div class="col-6">
+                                                                    <button class="btn btn-danger text-bold h4" value="<?= Encryption::encode($inter['id']) ?>" name="<?= $_GET['id'] ?>">X</button>
+                                                                </div>
+                                                            <?php endif ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -386,24 +419,27 @@
                                     <input type="hidden" name="id_position" value="<?= $_GET['id'] ?>">
 
                                     <?php if (Utils::isAdmin() || Utils::isCustomerSA()) : ?>
-                                        <div class="text-center">
-                                            <input type="submit" name="submit" class="btn btn-info" value="Guardar">
-                                        </div>
+                                        <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                            <div class="text-center">
+                                                <input type="submit" name="submit" class="btn btn-info" value="Guardar">
+                                            </div>
+                                        <?php endif ?>
                                     <?php endif ?>
                                 </form>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-10 float-left">
-                                <a class="btn btn-orange" href="<?= base_url ?>puesto/puestoFormato&id=<?= $_GET['id']  ?>" target="_blank">Descargar Descripcion de Puesto</a>
-                            </div>
-
-
-                            <div class="col-sm-2 float-right" id="divEliminarPuesto">
-                                <button class="btn <?= $position->status == 1 ? 'btn-danger ' : 'btn-success' ?>  " value="<?= $_GET['id']  ?>" data-estatus="<?= $position->status ?>"> <?= $position->status == 1 ? 'Eliminar puesto' : 'Reactivar puesto' ?></button>
-                            </div>
-
+                            <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
+                                <div class="col-sm-10 float-left">
+                                    <a class="btn btn-orange" href="<?= base_url ?>puesto/puestoFormato&id=<?= $_GET['id']  ?>" target="_blank">Descargar Descripcion de Puesto</a>
+                                </div>
+                            <?php endif ?>
+                            <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
+                                <div class="col-sm-2 float-right" id="divEliminarPuesto">
+                                    <button class="btn <?= $position->status == 1 ? 'btn-danger ' : 'btn-success' ?>  " value="<?= $_GET['id']  ?>" data-estatus="<?= $position->status ?>"> <?= $position->status == 1 ? 'Eliminar puesto' : 'Reactivar puesto' ?></button>
+                                </div>
+                            <?php endif ?>
                         </div>
                     </div>
 

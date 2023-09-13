@@ -63,7 +63,7 @@
                                         </div>
                                         <div class="row">
                                             <!-- ===[gabo 1 agosto operativa]== -->
-                                            <div class="col-md-4" <?= (isset($vacante->type) && $vacante->type == 1) ? 'hidden' : ''; ?>>
+                                            <div class="col-md-4" <?= (isset($vacante->type) && ($vacante->type == 1 || $vacante->type == 4)) ? 'hidden' : ''; ?>>
                                                 <!-- gabo 18 abril vacante -->
                                                 <div class="form-group">
                                                     <label for="date_birth" class="col-form-label">Fecha de
@@ -75,7 +75,7 @@
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label for="age" class="col-form-label">Edad</label>
-                                                    <input type="number" name="age" id="age" class="form-control" value="<?= isset($candidato) && is_object($candidato) ? $candidato->age : ''; ?>" min="16" max="99">
+                                                    <input type="number" name="age" id="age" class="form-control" value="<?= isset($candidato) && is_object($candidato) ? $candidato->age : ''; ?>" min="16" max="99" required>
                                                 </div>
                                             </div>
                                             <!-- gabo 18 abril vacante -->
@@ -93,7 +93,7 @@
                                                 </div>
                                             </div>
                                             <!-- ===[gabo 1 agosto operativa]== -->
-                                            <div class="col-md-3" <?= (isset($vacante->type) && $vacante->type == 1) ? 'hidden' : ''; ?>>
+                                            <div class="col-md-3" <?= (isset($vacante->type) && ($vacante->type == 1 || $vacante->type == 4)) ? 'hidden' : ''; ?>>
                                                 <!-- ===[gabo 1 agosto operativa]== -->
                                                 <div class="form-group">
                                                     <label for="id_civil_status" class="col-form-label">Estado
@@ -110,7 +110,7 @@
                                             </div>
                                         </div>
                                         <!-- ===[gabo 1 agosto operativa]== -->
-                                        <div class="row" <?= (isset($vacante->type) && $vacante->type == 1) ? 'hidden' : ''; ?>>
+                                        <div class="row" <?= (isset($vacante->type) && ($vacante->type == 1 || $vacante->type == 4)) ? 'hidden' : ''; ?>>
                                             <!-- ===[gabo 1 agosto operativa]== -->
                                             <div class="col-md-6 mx-auto">
                                                 <div class="form-group">
@@ -152,8 +152,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="job_title" class="col-form-label">Experiencia en</label>
-                                                                                     <input type="text" name="job_title" id="job_title" class="form-control" required value="<?= (isset($candidato) && is_object($candidato)) ? $candidato->experience : ((isset($candidateDirectory)) ? $candidateDirectory->experience : '');; ?>">
-
+                                            <input type="text" name="job_title" id="job_title" class="form-control" required value="<?= (isset($candidato) && is_object($candidato)) ? $candidato->job_title : ((isset($candidateDirectory)) ? $candidateDirectory->experience : '');; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -192,7 +191,7 @@
                                         </div>
                                     </div>
                                     <!-- ===[gabo 1 agosto operativa]== -->
-                                    <div class="col-md-12" <?= (isset($vacante->type) && $vacante->type == 1) ? 'hidden' : ''; ?>>
+                                    <div class="col-md-12" <?= (isset($vacante->type) && ($vacante->type == 1 || $vacante->type == 4)) ? 'hidden' : ''; ?>>
                                         <!-- ===[gabo 1 agosto operativa]== -->
                                         <div class="form-group">
                                             <label for="resume" class="col-form-label">Adjuntar curri­culum
@@ -217,7 +216,7 @@
                                         </div>
                                     </div>
                                     <!-- ===[gabo 1 agosto operativa]== -->
-                                    <div class="col-md-4" <?= (isset($vacante->type) && $vacante->type == 1) ? 'hidden' : ''; ?>>
+                                    <div class="col-md-4" <?= (isset($vacante->type) && ($vacante->type == 1 || $vacante->type == 4)) ? 'hidden' : ''; ?>>
                                         <!-- ===[gabo 1 agosto operativa]== -->
                                         <div class="form-group">
                                             <label for="cellphone" class="col-form-label">Celular:</label>
@@ -233,7 +232,7 @@
                                         </div>
                                     <?php else : ?>
                                         <!-- ===[gabo 1 agosto operativa]== -->
-                                        <div class="col-md-4" <?= (isset($vacante->type) && $vacante->type == 1) ? 'hidden' : ''; ?>>
+                                        <div class="col-md-4" <?= (isset($vacante->type) && ($vacante->type == 1 || $vacante->type == 4)) ? 'hidden' : ''; ?>>
                                             <!-- ===[gabo 1 agosto operativa]== -->
                                             <div class="form-group">
                                                 <label for="email" class="col-form-label">Correo electrinico</label>
@@ -299,7 +298,7 @@
                         </div>
 
                         <!-- gabo 15 junio experiencia candidato -->
-                        <?php if (!Utils::isCandidate()  && isset($_GET['vacante']) && $_GET['vacante'] != '' && $vacante->type == 1) :  ?>
+                        <?php if (!Utils::isCandidate()  && isset($_GET['vacante']) && $_GET['vacante'] != '' && ($vacante->type == 1 || $vacante->type == 4)) :  ?>
                             <div class="card card-success">
                                 <div class="card-header" style="text-align: center;">
                                     <h4 class="card-title">

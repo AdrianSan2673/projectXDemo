@@ -318,14 +318,18 @@ class FormatoController
                 $pdf->setDatosAdicionales($candidato_datos);
             }
             $pdf->setConociendoCandidato($conociendo_candidato);
-            $pdf->setDocumentacionPresentada($doc_adjuntos, $candidato_datos->Comentario_Documentos);
-            $pdf->setEstudios($escolaridad, $candidato_datos->Comentario_Escolaridad);
+            $pdf->setDocumentacionPresentada($doc_adjuntos, $candidato_datos);
+			
+			if (count($escolaridad)!=0)
+            $pdf->setEstudios($escolaridad, $candidato_datos);
+			
             //if ($candidato_datos->Empresa != 'QUÁLITAS') {
             $pdf->setHistorialSalud($historial_salud, $salud_seguros);
             $pdf->setSalud($historial_salud, $salud_seguros);
             //}   
             $pdf->setSociales($candidato_datos);
-            $pdf->setCohabitantes($cohabitantes, $candidato_datos->Comentario_Cohabitan, $candidato_datos);
+            if ($cohabitantes || $candidato_datos->Comentario_Cohabitan)
+                $pdf->setCohabitantes($cohabitantes, $candidato_datos);
             $pdf->setCirculoFamiliar($circulo_familiar);
             $pdf->setVivienda($vivienda, $ubicacion, $candidato_datos->Comentario_Vivienda, $candidato_datos);
             //if ($candidato_datos->Empresa != 'QUÁLITAS') {
@@ -572,8 +576,8 @@ class FormatoController
             }
             if ($candidato_datos->ID_Empresa == 137) {
                 if ($candidato_datos->Tipo_Investigacion != 1) {
-                    $pdf->setEstudios($escolaridad, $candidato_datos->Comentario_Escolaridad);
-                    $pdf->setCohabitantes($cohabitantes, $candidato_datos->Comentario_Cohabitan, $candidato_datos);
+                    $pdf->setEstudios($escolaridad, $candidato_datos);
+                    $pdf->setCohabitantes($cohabitantes, $candidato_datos);
                     $pdf->setFotoUbicacionGeografica($ubicacion_geografica);
                     $pdf->setFotoUbicacionCalle($ubicacion_calle);
                     //aqui iba referencia
@@ -616,6 +620,7 @@ class FormatoController
             $pdf->setFotoAnexo($anexo_3, 3);
             $pdf->setFotoAnexo($anexo_4, 4);
             $pdf->setFotoAnexo($anexo_5, 5);
+			$pdf->AddPagesFromPDF("./uploads/google_search/".$folio.".pdf");
             $pdf->Output('I', 'IL ' . utf8_decode($nombre) . '.pdf', true);
         } else {
             header("location:" . base_url);
@@ -1155,18 +1160,22 @@ class FormatoController
                 $pdf->setDatosAdicionales($candidato_datos);
             }
             $pdf->setConociendoCandidato($conociendo_candidato);
-            //$pdf->setDocumentacionPresentada($doc_adjuntos, $candidato_datos->Comentario_Documentos);
-            //$pdf->setEstudios($escolaridad, $candidato_datos->Comentario_Escolaridad);
+            $pdf->setDocumentacionPresentada($doc_adjuntos, $candidato_datos);
+			
+			if (count($escolaridad)!=0)
+            $pdf->setEstudios($escolaridad, $candidato_datos);
+			
             //if ($candidato_datos->Empresa != 'QUÁLITAS') {
-            //$pdf->setHistorialSalud($historial_salud, $salud_seguros);
-            //$pdf->setSalud($historial_salud, $salud_seguros);
+            $pdf->setHistorialSalud($historial_salud, $salud_seguros);
+            $pdf->setSalud($historial_salud, $salud_seguros);
             //}   
             $pdf->setSociales($candidato_datos);
-            $pdf->setCohabitantes($cohabitantes, $candidato_datos->Comentario_Cohabitan);
-            //$pdf->setCirculoFamiliar($circulo_familiar);
-            $pdf->setVivienda($vivienda, $ubicacion, $candidato_datos->Comentario_Vivienda);
+            if ($cohabitantes || $candidato_datos->Comentario_Cohabitan)
+                $pdf->setCohabitantes($cohabitantes, $candidato_datos);
+            $pdf->setCirculoFamiliar($circulo_familiar);
+            $pdf->setVivienda($vivienda, $ubicacion, $candidato_datos->Comentario_Vivienda, $candidato_datos);
             //if ($candidato_datos->Empresa != 'QUÁLITAS') {
-            //$pdf->setEnseres($enseres);
+            $pdf->setEnseres($enseres);
             //}
             if ($ubicacion_exterior) {
                 $pdf->setFotoExteriorDomicilio($ubicacion_exterior);
@@ -1181,19 +1190,19 @@ class FormatoController
 
             $pdf->setFotoUbicacionGeografica($ubicacion_geografica);
             $pdf->setFotoUbicacionCalle($ubicacion_calle);
-            $pdf->setReferencias($referencias);
-            //if ($candidato_datos->Empresa != 'QUÁLITAS') {
-            //$pdf->setEconomiaFamiliar($ingresos, $egresos, $candidato_datos->Comentario_Economia);
-            //$pdf->setInformacionFinanciera($creditos, $cuentas, $seguros, $candidato_datos->INFONAVIT);
-            //$pdf->setInformacionPatrimonial($inmuebles, $vehiculos);
-            //}
-            $pdf->setConclusiones($observaciones);
+            $pdf->setReferencias($referencias, $candidato_datos);
+            if ($candidato_datos->Servicio_Solicitado != 'ESE SMART') {
+				$pdf->setEconomiaFamiliar($ingresos, $egresos, $candidato_datos->Comentario_Economia);
+				$pdf->setInformacionFinanciera($creditos, $cuentas, $seguros, $candidato_datos->INFONAVIT);
+				$pdf->setInformacionPatrimonial($inmuebles, $vehiculos);
+            }
+            $pdf->setConclusiones($observaciones, $candidato_datos);
             //if ($candidato_datos->ID_Empresa == 137) {
-            $pdf->setInvestigacionLaboral($investigacion, $candidato_datos->ID_Empresa);
-            $pdf->setReferenciasLaborales($referencias_laborales, $candidato_datos->Cliente, $candidato_datos->ID_Empresa);
+            $pdf->setInvestigacionLaboral($investigacion, $candidato_datos->ID_Empresa, $candidato_datos);
+            $pdf->setReferenciasLaborales($referencias_laborales, $candidato_datos->Cliente, $candidato_datos->ID_Empresa, $candidato_datos);
 
             if ($candidato_datos->Cliente != 662) {
-                $pdf->setResultadoInvestigacionLaboral($observaciones, $candidato_datos->ID_Empresa);
+                $pdf->setResultadoInvestigacionLaboral($observaciones, $candidato_datos->ID_Empresa, $candidato_datos);
             }
 
             $pdf->setNotasLegales($ral);
@@ -1244,9 +1253,228 @@ class FormatoController
                 $pdf->setFotoAnexo($anexo_4, 4);
                 $pdf->setFotoAnexo($anexo_5, 5);
             }
+			
+			$pdf->AddPagesFromPDF("./uploads/google_search/".$folio."pdf");
+			
             $pdf->Output('I', 'VD ' . utf8_decode($nombre) . '.pdf', true);
         } else {
             header("location:" . base_url);
         }
     }
+	
+	
+	   public function investigacion_laboralp()
+    {
+        if (isset($_GET['candidato']) && !empty($_GET['candidato'])) {
+            $folio = Encryption::decode($_GET['candidato']);
+            $candidato = new CandidatosDatos();
+            $candidato->setCandidato($folio);
+            $candidato_datos = $candidato->getOne();
+
+            //Cliente Vetado
+            //Utils::isClienteVetado($candidato_datos->Cliente);
+
+            if ($candidato_datos->Cliente == 139) { //Grupo FH
+                $nombre = strtoupper(Utils::eliminarAcentos($candidato_datos->Apellido_Paterno . ' ' . $candidato_datos->Apellido_Materno . ' ' . $candidato_datos->Nombres));
+            } else {
+                $nombre = utf8_encode($candidato_datos->Nombres . ' ' . $candidato_datos->Apellido_Paterno . ' ' . $candidato_datos->Apellido_Materno);
+            }
+
+            $folio_docs = new CandidatosFolioDocumentos();
+            $folio_docs->setCandidato($folio);
+            $docs = $folio_docs->getOne();
+
+            $ubicacion_geografica = new CfgImagenes();
+            $ubicacion_geografica->setCandidato($folio);
+            $ubicacion_geografica->setFolio_Origen(289);
+            $ubicacion_geografica = $ubicacion_geografica->getDocumento();
+
+            $ubicacion_calle = new CfgImagenes();
+            $ubicacion_calle->setCandidato($folio);
+            $ubicacion_calle->setFolio_Origen(321);
+            $ubicacion_calle = $ubicacion_calle->getDocumento();
+
+            $perfil = new CfgImagenes();
+            $perfil->setFolio_Origen($folio);
+            $perfil->setTabla('Candidatos');
+            $perfil = $perfil->getProfile();
+
+            if ($candidato_datos->Tipo_Investigacion != 1) {
+                $estudios = new CandidatosEscolaridad();
+                $estudios->setCandidato($folio);
+                $escolaridad = $estudios->getEscolaridadPorCandidato();
+
+
+                $cohabitan = new CandidatosCohabitan();
+                $cohabitan->setCandidato($folio);
+                $cohabitantes = $cohabitan->getCohabitantesPorCandidato($folio);
+
+                //aqui iba la referencia 
+
+            }
+            $referencia = new CandidatosReferencias();
+            $referencia->setCandidato($folio);
+            $referencias = $referencia->getReferenciasPorCandidato();
+
+            $domicilio = $candidato_datos->Domicilio;
+
+            $investigacion = new Investigacion_Laboral;
+            $investigacion->setCandidato($folio);
+            $investigacion = $investigacion->getOne();
+
+            $laboral = new CandidatosLaborales();
+            $laboral->setCandidato($folio);
+            $referencias_laborales = $laboral->getLaboralesPorCandidato();
+
+            $obs = new CandidatosObsGenerales();
+            $obs->setCandidato($folio);
+            $observaciones = $obs->getObservacionesPorCandidato();
+
+            $ral = new CandidatosRAL();
+            $ral->setCandidato($folio);
+            $ral = $ral->getOne();
+
+            $documento = new CfgImagenes();
+            $documento->setCandidato($folio);
+            //if ($candidato_datos->Tipo_Investigacion != 1) {
+            $documento->setFolio_Origen(269);
+            $credencial_frente = $documento->getDocumento();
+            $documento->setFolio_Origen(270);
+            $credencial_atras = $documento->getDocumento();
+            $documento->setFolio_Origen(271);
+            $acta_nacimiento = $documento->getDocumento();
+            $documento->setFolio_Origen(275);
+            $rfc = $documento->getDocumento();
+            $documento->setFolio_Origen(278);
+            $comprobante_domicilio = $documento->getDocumento();
+            $documento->setFolio_Origen(279);
+            $comprobante_estudios = $documento->getDocumento();
+            //}
+
+
+            $documento->setFolio_Origen(280);
+            $registro_patronal_1 = $documento->getDocumento();
+            $documento->setFolio_Origen(281);
+            $registro_patronal_2 = $documento->getDocumento();
+            $documento->setFolio_Origen(296);
+            $registro_patronal_3 = $documento->getDocumento();
+            $documento->setFolio_Origen(301);
+            $registro_patronal_4 = $documento->getDocumento();
+            $documento->setFolio_Origen(302);
+            $registro_patronal_5 = $documento->getDocumento();
+            $documento->setFolio_Origen(307);
+            $registro_patronal_6 = $documento->getDocumento();
+            $documento->setFolio_Origen(308);
+            $registro_patronal_7 = $documento->getDocumento();
+            $documento->setFolio_Origen(282);
+            $redes_sociales = $documento->getDocumento();
+            $documento->setFolio_Origen(283);
+            $carta_laboral_1 = $documento->getDocumento();
+            $documento->setFolio_Origen(284);
+            $carta_laboral_2 = $documento->getDocumento();
+            $documento->setFolio_Origen(303);
+            $carta_laboral_3 = $documento->getDocumento();
+            $documento->setFolio_Origen(305);
+            $carta_laboral_4 = $documento->getDocumento();
+            $documento->setFolio_Origen(306);
+            $carta_laboral_5 = $documento->getDocumento();
+            $documento->setFolio_Origen(304);
+            $buro_credito = $documento->getDocumento();
+
+            $documento->setFolio_Origen(329);
+            $anexo_1 = $documento->getDocumento();
+            $documento->setFolio_Origen(330);
+            $anexo_2 = $documento->getDocumento();
+            $documento->setFolio_Origen(331);
+            $anexo_3 = $documento->getDocumento();
+            $documento->setFolio_Origen(332);
+            $anexo_4 = $documento->getDocumento();
+            $documento->setFolio_Origen(333);
+            $anexo_5 = $documento->getDocumento();
+
+			//Uli
+            $pdf = new InvestigacionLaboral("P", "pt", "Letter");
+           // require('../libraries/fpdf/makefont/makefont.php');
+			//use .\librarie\setasign\Fpdi\Fpdi;
+			
+
+            $pdf->AliasNbPages();
+            $pdf->AddFont('SinkinSansLight', '', 'SinkinSans-300Light.php');
+            $pdf->AddFont('SinkinSans', '', 'SinkinSans-400Regular.php');
+            $pdf->AddFont('SinkinSans', 'I', 'SinkinSans-400Italic.php');
+            $pdf->AddFont('SinkinSans', 'B', 'SinkinSans-700Bold.php');
+            $pdf->AddFont('SinkinSans', 'BI', 'SinkinSans-700BoldItalic.php');
+            $pdf->AddFont('SinkinSansBold', 'B', 'SinkinSans-800Black.php');
+            $pdf->SetTitle("Investigación laboral " . utf8_decode($nombre), true);
+            $pdf->SetMargins(0, 55, 0, 0);
+            $pdf->tieneHeader = false;
+            $pdf->AddPage();
+            $pdf->nombre = $nombre;
+            $pdf->id_empresa = $candidato_datos->ID_Empresa;
+            $pdf->id_cliente = $candidato_datos->Cliente;
+            $pdf->setPortadaInvestigacion($candidato_datos, $observaciones->Viable);
+            $pdf->SetMargins(10, 100, 10);
+            $pdf->tieneHeader = true;
+            $pdf->setDatosGeneralesInvComp($candidato_datos, $perfil);
+            if ($candidato_datos->Tipo_Investigacion != 1) {
+                $pdf->setDatosPersonalesInvComp($candidato_datos);
+                $pdf->setDatosContacto($candidato_datos, $domicilio);
+            } else {
+                $pdf->setDatosPersonalesInvOrd($candidato_datos);
+                $pdf->setDatosContactoInv($candidato_datos, $domicilio);
+            }
+            if ($candidato_datos->ID_Empresa == 137) {
+                if ($candidato_datos->Tipo_Investigacion != 1) {
+                    $pdf->setEstudios($escolaridad, $candidato_datos);
+                    $pdf->setCohabitantes($cohabitantes, $candidato_datos);
+                    $pdf->setFotoUbicacionGeografica($ubicacion_geografica);
+                    $pdf->setFotoUbicacionCalle($ubicacion_calle);
+                    //aqui iba referencia
+                }
+            }
+            $pdf->setReferencias($referencias, $candidato_datos);
+
+            if ($candidato_datos->ID_Empresa == 35) {
+                $pdf->setFotoUbicacionGeografica($ubicacion_geografica);
+                $pdf->setFotoUbicacionCalle($ubicacion_calle);
+            }
+            $pdf->setInvestigacionLaboral($investigacion, $candidato_datos->ID_Empresa, $candidato_datos);
+            $pdf->setReferenciasLaborales($referencias_laborales, $candidato_datos->Cliente, $candidato_datos->ID_Empresa, $candidato_datos);
+            if ($observaciones)
+                $pdf->setResultadoInvestigacionLaboral($observaciones, $candidato_datos->ID_Empresa, $candidato_datos);
+            $pdf->setNotasLegales($ral);
+            //if ($candidato_datos->Tipo_Investigacion != 1) {
+            $pdf->setFotoCredencial($credencial_frente, $credencial_atras);
+            $pdf->setFotoActaNacimiento($acta_nacimiento);
+            $pdf->setFotoRFC($rfc);
+            $pdf->setFotoComprobanteDomicilio($comprobante_domicilio);
+            $pdf->setFotoComprobanteEstudios($comprobante_estudios);
+            //}
+            $pdf->setFotoRegistroPatronal($registro_patronal_1, 1);
+            $pdf->setFotoRegistroPatronal($registro_patronal_2, 2);
+            $pdf->setFotoRegistroPatronal($registro_patronal_3, 3);
+            $pdf->setFotoRegistroPatronal($registro_patronal_4, 4);
+            $pdf->setFotoRegistroPatronal($registro_patronal_5, 5);
+            $pdf->setFotoRegistroPatronal($registro_patronal_6, 6);
+            $pdf->setFotoRegistroPatronal($registro_patronal_7, 7);
+            $pdf->setFotoRedesSociales($redes_sociales, $docs->Redes_Sociales);
+            $pdf->setFotoCartaLaboral($carta_laboral_1, 1);
+            $pdf->setFotoCartaLaboral($carta_laboral_2, 2);
+            $pdf->setFotoCartaLaboral($carta_laboral_3, 3);
+            $pdf->setFotoCartaLaboral($carta_laboral_4, 4);
+            $pdf->setFotoCartaLaboral($carta_laboral_5, 5);
+            $pdf->setFotoBuroCredito($buro_credito);
+            $pdf->setFotoAnexo($anexo_1, 1);
+            $pdf->setFotoAnexo($anexo_2, 2);
+            $pdf->setFotoAnexo($anexo_3, 3);
+            $pdf->setFotoAnexo($anexo_4, 4);
+            $pdf->setFotoAnexo($anexo_5, 5);
+			$pdf->AddPagesFromPDF("./uploads/google_search/".$folio.".pdf");
+
+            $pdf->Output('I', 'IL ' . utf8_decode($nombre) . '.pdf', true);
+        } else {
+            header("location:" . base_url);
+        }
+    }
+
 }

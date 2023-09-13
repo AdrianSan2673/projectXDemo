@@ -558,34 +558,36 @@ Notification.requestPermission().then(function(permission) {
 });
 document.addEventListener('DOMContentLoaded', e =>{
     getNotifications();
-    document.querySelector('.notifications-list').addEventListener('click', e => {
-        e.preventDefault();
-        console.log(e.target)
-        if (e.target.classList.contains('dropdown-item') || e.target.parentElement.classList.contains('dropdown-item') || e.target.parentElement.parentElement.classList.contains('dropdown-item') || e.target.parentElement.parentElement.parentElement.classList.contains('dropdown-item') || e.target.parentElement.parentElement.parentElement.parentElement.classList.contains('dropdown-item')) {
-            let id;
-            let url;
-            if (e.target.classList.contains('dropdown-item')){
-                id = e.target.dataset.id;
-                url = e.target.href;
-            }else if (e.target.parentElement.classList.contains('dropdown-item')){
-                id = e.target.parentElement.dataset.id;
-                url = e.target.parentElement.href;
-            }
-            else if (e.target.parentElement.parentElement.classList.contains('dropdown-item')){
-                id = e.target.parentElement.parentElement.dataset.id;
-                url = e.target.parentElement.parentElement.href;
-            }
-            else if (e.target.parentElement.parentElement.parentElement.classList.contains('dropdown-item')){
-                id = e.target.parentElement.parentElement.parentElement.dataset.id;
-                url = e.target.parentElement.parentElement.parentElement.href;
-            }
-            else {
-                id = e.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
-                url = e.target.parentElement.parentElement.parentElement.parentElement.href;
-            }
-            clickedNotification(id);
-            window.location.href = url;
-        }
-    })
+	if (!!document.querySelector('.notifications-list')) {
+		document.querySelector('.notifications-list').addEventListener('click', e => {
+			e.preventDefault();
+			console.log(e.target)
+			if (e.target.classList.contains('dropdown-item') || e.target.parentElement.classList.contains('dropdown-item') || e.target.parentElement.parentElement.classList.contains('dropdown-item') || e.target.parentElement.parentElement.parentElement.classList.contains('dropdown-item') || e.target.parentElement.parentElement.parentElement.parentElement.classList.contains('dropdown-item')) {
+				let id;
+				let url;
+				if (e.target.classList.contains('dropdown-item')){
+					id = e.target.dataset.id;
+					url = e.target.href;
+				}else if (e.target.parentElement.classList.contains('dropdown-item')){
+					id = e.target.parentElement.dataset.id;
+					url = e.target.parentElement.href;
+				}
+				else if (e.target.parentElement.parentElement.classList.contains('dropdown-item')){
+					id = e.target.parentElement.parentElement.dataset.id;
+					url = e.target.parentElement.parentElement.href;
+				}
+				else if (e.target.parentElement.parentElement.parentElement.classList.contains('dropdown-item')){
+					id = e.target.parentElement.parentElement.parentElement.dataset.id;
+					url = e.target.parentElement.parentElement.parentElement.href;
+				}
+				else {
+					id = e.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
+					url = e.target.parentElement.parentElement.parentElement.parentElement.href;
+				}
+				clickedNotification(id);
+				window.location.href = url;
+			}
+		})
+	}
 })
 setInterval(getNotifications, 10000);

@@ -118,6 +118,9 @@ class CustomerContact{
                     }else if (r == 2){
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                         
+                    } else if (r == 3) {
+                        utils.showToast('El correo o el usuario ya existe', 'error');
+
                     }
                 }
             }

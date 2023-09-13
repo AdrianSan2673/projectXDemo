@@ -47,10 +47,17 @@
                       <div class="form-group">
                         <label for="id_state" class="col-form-label">Estado del candidato</label>
                         <select class="form-control" name="Estado" required>
-                          <?php $estados = Utils::showEstadosMX() ?>
-                          <?php foreach ($estados as $e) : ?>
-                            <option value="<?= $e['Estado'] ?>"><?= $e['Descripcion'] ?></option>
-                          <?php endforeach ?>
+                          <?= $pais = ['', 'México', 'Guatemala'] ?>
+                          <?php for ($i = 1; $i < count($pais); $i++) : ?>
+
+                            <optgroup label="<?= $pais[$i] ?>">
+                              <?php $estados = Utils::showEstadosPorPais($i) ?>
+                              <?php foreach ($estados as $e) : ?>
+                                <option value="<?= $e['Estado'] ?>"><?= $e['Descripcion'] ?></option>
+                              <?php endforeach ?>
+                            </optgroup>
+
+                          <?php endfor; ?>
                         </select>
                       </div>
                     </div>
@@ -117,7 +124,16 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="Puesto" class="col-form-label">Puesto</label>
-                          <input type="text" name="Puesto" id="Puesto" class="form-control" maxlength="40" required>
+                          <?php $Id_Empresa = Utils::showContactoPorUsuario()->Empresa ?>
+
+                          <?php if ($Id_Empresa != 525) : ?>
+                            <input type="text" name="Puesto" id="Puesto" class="form-control" maxlength="40" required>
+                          <?php else : ?>
+                            <select name="Puesto"  class="form-control">
+                              <option value="Agente de seguros">Agente de seguros</option>
+                              <option value="Promotor de seguros">Promotor de seguros</option>
+                            </select>
+                          <?php endif; ?>
                         </div>
                       </div>
                     </div>
@@ -127,10 +143,11 @@
                       <div class="form-group">
                         <label class="col-form-label" for="Cliente">Nombre comercial</label>
                         <select class="form-control " name="Cliente" id="Cliente" required>
+                          <?php $Id_Empresa = Utils::showContactoPorUsuario()->Empresa ?>
                           <?php $clientes = !Utils::isCustomerSA() ? Utils::showClientes() : Utils::showClientesPorUsuario() ?>
                           <option value="" hidden selected>Selecciona el nombre comercial</option>
                           <?php foreach ($clientes as $cliente) : ?>
-                            <option value="<?= $cliente['Cliente'] ?>"><?= $cliente['Nombre_Cliente'] ?></option>
+                            <option value="<?= $cliente['Cliente'] ?>" <?= $Id_Empresa == 525 ? 'selected' : '' ?> ><?= $cliente['Nombre_Cliente'] ?></option>
                           <?php endforeach ?>
                         </select>
                       </div>
@@ -146,15 +163,18 @@
                             <!--  <option value="298">Registro de Antecedentes Legales (RAL)</option> -->
                             <?php //endif 
                             ?>
-                            <?php if ($Id_Empresa !=533 && $Id_Empresa !=496 && $Id_Empresa !=349 && $Id_Empresa !=528 && $Id_Empresa != 409 && $Id_Empresa != 527 && $Id_Empresa != 519 && $Id_Empresa != 517 && $Id_Empresa != 513 && $Id_Empresa != 497 && $Id_Empresa != 512 && $Id_Empresa != 511 && $Id_Empresa != 510 && $Id_Empresa != 508 && $Id_Empresa != 460 && $Id_Empresa != 487 && $Id_Empresa != 483 && $Id_Empresa != 501 && $Id_Empresa != 498 && $Id_Empresa != 500 && $Id_Empresa != 201 && $Id_Empresa != 490 && $Id_Empresa != 465 && $Id_Empresa != 461 && $Id_Empresa != 490 && $Id_Empresa != 453 && $Id_Empresa != 485 && $Id_Empresa != 468 && $Id_Empresa != 472 && $Id_Empresa != 480 && $Id_Empresa != 470 && $Id_Empresa != 422 && $Id_Empresa != 231 && $Id_Empresa != 417 && $Id_Empresa != 86 && $Id_Empresa != 175 && $Id_Empresa != 361 && $Id_Empresa != 397 && $Id_Empresa != 435 && $Id_Empresa != 404 && $Id_Empresa != 435 && $Id_Empresa != 566 && $Id_Empresa != 411 && $Id_Empresa != 454 && $Id_Empresa != 457 && $Id_Empresa != 462 && $Id_Empresa != 452 && $Id_Empresa != 305 && $Id_Empresa != 434 && $Id_Empresa != 298 && $Id_Empresa != 278 && $Id_Empresa != 245 && $Id_Empresa != 199 && $Id_Empresa != 120 && $Id_Empresa != 445 && $Id_Empresa != 444 && $Id_Empresa != 439 && $Id_Empresa != 438 && $Id_Empresa != 253 && $Id_Empresa != 181 && $Id_Empresa != 141 && $Id_Empresa != 94 && $Id_Empresa != 426 && $Id_Empresa != 151 && $Id_Empresa != 214 && $Id_Empresa != 232 && $Id_Empresa != 220 && $Id_Empresa != 248 && $Id_Empresa != 143 && $Id_Empresa != 302 && $Id_Empresa != 284 && $Id_Empresa != 162 && $Id_Empresa != 139 && $Id_Empresa != 112 && $Id_Empresa != 58 && $Id_Empresa != 410 && $Id_Empresa != 127 && $Id_Empresa != 126 && $Id_Empresa != 107 && $Id_Empresa != 93 && $Id_Empresa != 77 && $Id_Empresa != 335 && $Id_Empresa != 213 && $Id_Empresa != 142 && $Id_Empresa != 110 && $Id_Empresa != 7 && $Id_Empresa != 432 && $Id_Empresa != 430 && $Id_Empresa != 418 && $Id_Empresa != 322 && $Id_Empresa != 227 && $Id_Empresa != 161 && $Id_Empresa != 6 && $Id_Empresa != 296 && $Id_Empresa != 235 && $Id_Empresa != 154 && $Id_Empresa != 85 && $Id_Empresa != 24 && $Id_Empresa != 328 && $Id_Empresa != 247 && $Id_Empresa != 242 && $Id_Empresa != 163 && $Id_Empresa != 114 && $Id_Empresa != 100 && $Id_Empresa != 359 && $Id_Empresa != 320 && $Id_Empresa != 212 && $Id_Empresa != 108 && $Id_Empresa != 32 && $Id_Empresa != 325 && $Id_Empresa != 263 && $Id_Empresa != 223 && $Id_Empresa != 200 && $Id_Empresa != 157 && $Id_Empresa != 140 && $Id_Empresa != 25 && $Id_Empresa != 79 && $Id_Empresa != 183 && $Id_Empresa != 81 && $Id_Empresa != 341 && $Id_Empresa != 415 && $Id_Empresa != 416 && $Id_Empresa != 353 && $Id_Empresa != 252 && $Id_Empresa != 407 && $Id_Empresa != 399 && $Id_Empresa != 372 && $Id_Empresa != 405 && $Id_Empresa != 336 && $Id_Empresa != 184 && $Id_Empresa != 27 && $Id_Empresa != 25 && $Id_Empresa != 197 && $Id_Empresa != 109 && $Id_Empresa != 413 && $Id_Empresa != 76 && $Id_Empresa != 56 && $Id_Empresa != 222 && $Id_Empresa != 17 && $Id_Empresa != 31 && $Id_Empresa != 30 && $Id_Empresa != 130 && $Id_Empresa != 153 && $Id_Empresa != 8 && $Id_Empresa != 391 && $Id_Empresa != 412 && $Id_Empresa != 279 && $Id_Empresa != 224 && $Id_Empresa != 307 && $Id_Empresa != 389  && $Id_Empresa != 103 && $Id_Empresa != 158 && $Id_Empresa != 167 && $Id_Empresa != 87 && $Id_Empresa != 388 && $Id_Empresa != 385 && $Id_Empresa != 292 && $Id_Empresa != 260 && $Id_Empresa != 365 && $Id_Empresa != 274 && $Id_Empresa != 195 && $Id_Empresa != 369 && $Id_Empresa != 339 && $Id_Empresa != 382 && $Id_Empresa != 356 && $Id_Empresa != 381 && $Id_Empresa != 61 && $Id_Empresa != 45 && $Id_Empresa != 180 && $Id_Empresa != 35 && $Id_Empresa != 33 && $Id_Empresa != 304 && $Id_Empresa != 15 && $Id_Empresa != 179 && $Id_Empresa != 82 && $Id_Empresa != 111 && $Id_Empresa != 102 && $Id_Empresa != 22 && $Id_Empresa != 319 && $Id_Empresa != 46 && $Id_Empresa != 193 && $Id_Empresa != 168 && $Id_Empresa != 36 && $Id_Empresa != 225 && $Id_Empresa != 196 && $Id_Empresa != 329 && $Id_Empresa != 215 && $Id_Empresa != 190 && $Id_Empresa != 144 && $Id_Empresa != 257 && $Id_Empresa != 14 && $Id_Empresa != 268 && $Id_Empresa != 39 && $Id_Empresa != 301 && $Id_Empresa != 9 && $Id_Empresa != 295 && $Id_Empresa != 314 && $Id_Empresa != 40 && $Id_Empresa != 273 && $Id_Empresa != 315 && $Id_Empresa != 52 && $Id_Empresa != 350 && $Id_Empresa != 147 && $Id_Empresa != 277 && $Id_Empresa != 267 && $Id_Empresa != 115 && $Id_Empresa != 131 && $Id_Empresa != 92 && $Id_Empresa != 351 && $Id_Empresa != 159 && $Id_Empresa != 368 && $Id_Empresa != 375 && $Id_Empresa != 165 && $Id_Empresa != 18) : ?>
+                            <?php if ($Id_Empresa !=568 && $Id_Empresa !=565 && $Id_Empresa !=567 && $Id_Empresa !=566 && $Id_Empresa !=466 && $Id_Empresa !=562 && $Id_Empresa !=505 &&$Id_Empresa !=523 && $Id_Empresa !=545 && $Id_Empresa !=543 && $Id_Empresa !=507 && $Id_Empresa !=548 && $Id_Empresa != 550 && $Id_Empresa != 549 && $Id_Empresa != 544 && $Id_Empresa != 534 && $Id_Empresa != 105 && $Id_Empresa != 536 && $Id_Empresa != 533 && $Id_Empresa != 496 && $Id_Empresa != 349 && $Id_Empresa != 528 && $Id_Empresa != 409 && $Id_Empresa != 527 && $Id_Empresa != 519 && $Id_Empresa != 517 && $Id_Empresa != 513 && $Id_Empresa != 497 && $Id_Empresa != 512 && $Id_Empresa != 511 && $Id_Empresa != 510 && $Id_Empresa != 508 && $Id_Empresa != 460 && $Id_Empresa != 487 && $Id_Empresa != 483 && $Id_Empresa != 501 && $Id_Empresa != 498 && $Id_Empresa != 500 && $Id_Empresa != 201 && $Id_Empresa != 490 && $Id_Empresa != 465 && $Id_Empresa != 461 && $Id_Empresa != 490 && $Id_Empresa != 453 && $Id_Empresa != 485 && $Id_Empresa != 468 && $Id_Empresa != 472 && $Id_Empresa != 480 && $Id_Empresa != 470 && $Id_Empresa != 422 && $Id_Empresa != 231 && $Id_Empresa != 417 && $Id_Empresa != 86 && $Id_Empresa != 175 && $Id_Empresa != 361 && $Id_Empresa != 397 && $Id_Empresa != 435 && $Id_Empresa != 404 && $Id_Empresa != 435 && $Id_Empresa != 566 && $Id_Empresa != 411 && $Id_Empresa != 454 && $Id_Empresa != 457 && $Id_Empresa != 462 && $Id_Empresa != 452 && $Id_Empresa != 305 && $Id_Empresa != 434 && $Id_Empresa != 298 && $Id_Empresa != 278 && $Id_Empresa != 245 && $Id_Empresa != 199 && $Id_Empresa != 120 && $Id_Empresa != 445 && $Id_Empresa != 444 && $Id_Empresa != 439 && $Id_Empresa != 438 && $Id_Empresa != 253 && $Id_Empresa != 181 && $Id_Empresa != 141 && $Id_Empresa != 94 && $Id_Empresa != 426 && $Id_Empresa != 151 && $Id_Empresa != 214 && $Id_Empresa != 232 && $Id_Empresa != 220 && $Id_Empresa != 248 && $Id_Empresa != 143 && $Id_Empresa != 302 && $Id_Empresa != 284 && $Id_Empresa != 162 && $Id_Empresa != 139 && $Id_Empresa != 112 && $Id_Empresa != 58 && $Id_Empresa != 410 && $Id_Empresa != 127 && $Id_Empresa != 126 && $Id_Empresa != 107 && $Id_Empresa != 93 && $Id_Empresa != 77 && $Id_Empresa != 335 && $Id_Empresa != 213 && $Id_Empresa != 142 && $Id_Empresa != 110 && $Id_Empresa != 7 && $Id_Empresa != 432 && $Id_Empresa != 430 && $Id_Empresa != 418 && $Id_Empresa != 322 && $Id_Empresa != 227 && $Id_Empresa != 161 && $Id_Empresa != 6 && $Id_Empresa != 296 && $Id_Empresa != 235 && $Id_Empresa != 154 && $Id_Empresa != 85 && $Id_Empresa != 24 && $Id_Empresa != 328 && $Id_Empresa != 247 && $Id_Empresa != 242 && $Id_Empresa != 163 && $Id_Empresa != 114 && $Id_Empresa != 100 && $Id_Empresa != 359 && $Id_Empresa != 320 && $Id_Empresa != 212 && $Id_Empresa != 108 && $Id_Empresa != 32 && $Id_Empresa != 325 && $Id_Empresa != 263 && $Id_Empresa != 223 && $Id_Empresa != 200 && $Id_Empresa != 157 && $Id_Empresa != 140 && $Id_Empresa != 25 && $Id_Empresa != 79 && $Id_Empresa != 183 && $Id_Empresa != 81 && $Id_Empresa != 341 && $Id_Empresa != 415 && $Id_Empresa != 416 && $Id_Empresa != 353 && $Id_Empresa != 252 && $Id_Empresa != 407 && $Id_Empresa != 399 && $Id_Empresa != 372 && $Id_Empresa != 405 && $Id_Empresa != 336 && $Id_Empresa != 184 && $Id_Empresa != 27 && $Id_Empresa != 25 && $Id_Empresa != 197 && $Id_Empresa != 109 && $Id_Empresa != 413 && $Id_Empresa != 76 && $Id_Empresa != 56 && $Id_Empresa != 222 && $Id_Empresa != 17 && $Id_Empresa != 31 && $Id_Empresa != 30 && $Id_Empresa != 130 && $Id_Empresa != 153 && $Id_Empresa != 8 && $Id_Empresa != 391 && $Id_Empresa != 412 && $Id_Empresa != 279 && $Id_Empresa != 224 && $Id_Empresa != 307 && $Id_Empresa != 389  && $Id_Empresa != 103 && $Id_Empresa != 158 && $Id_Empresa != 167 && $Id_Empresa != 87 && $Id_Empresa != 388 && $Id_Empresa != 385 && $Id_Empresa != 292 && $Id_Empresa != 260 && $Id_Empresa != 365 && $Id_Empresa != 274 && $Id_Empresa != 195 && $Id_Empresa != 369 && $Id_Empresa != 339 && $Id_Empresa != 382 && $Id_Empresa != 356 && $Id_Empresa != 381 && $Id_Empresa != 61 && $Id_Empresa != 45 && $Id_Empresa != 180 && $Id_Empresa != 35 && $Id_Empresa != 33 && $Id_Empresa != 304 && $Id_Empresa != 15 && $Id_Empresa != 179 && $Id_Empresa != 82 && $Id_Empresa != 111 && $Id_Empresa != 102 && $Id_Empresa != 22 && $Id_Empresa != 319 && $Id_Empresa != 46 && $Id_Empresa != 193 && $Id_Empresa != 168 && $Id_Empresa != 36 && $Id_Empresa != 225 && $Id_Empresa != 196 && $Id_Empresa != 329 && $Id_Empresa != 215 && $Id_Empresa != 190 && $Id_Empresa != 144 && $Id_Empresa != 257 && $Id_Empresa != 14 && $Id_Empresa != 268 && $Id_Empresa != 39 && $Id_Empresa != 301 && $Id_Empresa != 9 && $Id_Empresa != 295 && $Id_Empresa != 314 && $Id_Empresa != 40 && $Id_Empresa != 273 && $Id_Empresa != 315 && $Id_Empresa != 52 && $Id_Empresa != 350 && $Id_Empresa != 147 && $Id_Empresa != 277 && $Id_Empresa != 267 && $Id_Empresa != 115 && $Id_Empresa != 131 && $Id_Empresa != 92 && $Id_Empresa != 351 && $Id_Empresa != 159 && $Id_Empresa != 368 && $Id_Empresa != 375 && $Id_Empresa != 165 && $Id_Empresa != 18) : ?>
                               <option value="231">LABORAL (RAL + IL)</option>
-                              <option value="230">Estudio Socioeconómico (RAL + IL + VD)</option>
+                              <option value="230" <?= $Id_Empresa == 525 ? 'hidden' : '' ?>>Estudio Socioeconómico (RAL + IL + VD)</option>
                             <?php else : ?>
                               <option value="291">Registro de Antecedentes Legales (RAL)</option>
                             <?php endif ?>
                           <?php else : ?>
                             <option value="231">LABORAL (RAL + IL)</option>
                             <option value="230">Estudio Socioeconómico (RAL + IL + VD)</option>
+                            <option value="340" <?= !Utils::isCustomerSA() && !Utils::isCustomer() ? '' : 'hidden' ?>>Estudio Socioeconómico SOI(RAL + IL + VD)</option>
+                            <option value="341" <?= !Utils::isCustomerSA() && !Utils::isCustomer() ? '' : 'hidden' ?>>Estudio Socioeconómico SMART(RAL + IL + VD)</option>
+
                           <?php endif ?>
                           <?php if ($Id_Empresa == 16 || Utils::isAdmin() || Utils::isSAManager() || Utils::isSalesManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount()) : ?>
                             <option value="323">Estudio Socioeconómico + Visita Presencial (RAL + IL + VD + Visita)</option>
@@ -170,6 +190,7 @@
                         <?php if (!Utils::isAccount()) : ?>
                           <?php $usuarios = Utils::showUsuariosPorPerfil(13); ?>
                           <select name="Ejecutivo" id="Ejecutivo" class="form-control">
+							<?= $Id_Empresa == 525 ? '<option value="ANALIPAREDES" selected>Dulce Anali Paredes Rodríguez</option>' : '' ?>
                             <?php foreach ($usuarios as $usuario) : ?>
                               <option value="<?= $usuario['Usuario'] ?>"><?= $usuario['Nombre'] ?></option>
                             <?php endforeach ?>
@@ -190,10 +211,9 @@
                     </div>
                   </div>
                   <div class="form-row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6"  >
                       <div class="form-group">
 
-                        <?php if (Utils::isCustomerSA()) : ?>
                           <?php $Id_Empresa = Utils::showContactoPorUsuario()->Empresa ?>
                           <input type="hidden" name="Empresa" value="<?= $Id_Empresa ?>">
                           <?php if ($Id_Empresa == 167 || $Id_Empresa == 198) : ?>
@@ -205,14 +225,10 @@
                               <?php endforeach ?>
                             </select>
                           <?php else : ?>
-                            <label class="col-form-label" for="CC_Cliente">Centro de Costo</label>
+                            <label class="col-form-label" for="CC_Cliente"><?= $Id_Empresa == 525 ? 'Folio prudential' : 'Centro de Costo' ?></label>
                             <input type="text" name="CC_Cliente" class="form-control" maxlength="30" <?= $Id_Empresa == 45 ? 'required' : '' ?>>
                           <?php endif ?>
-                        <?php else : ?>
-                          <label class="col-form-label" for="CC_Cliente">Centro de Costo</label>
-                          <input type="text" name="CC_Cliente" class="form-control" maxlength="30">
-                        <?php endif ?>
-
+                    
                       </div>
                     </div>
                     <div class="col-sm-6" style="display: <?= !Utils::isCustomerSA() ? 'block' : 'none' ?>;">
@@ -232,12 +248,12 @@
                   </div>
                   <div class="data">
                     <div class="form-row">
-                      <div class="col-sm-6">
+                      <div class="col-sm-6" <?= Utils::userClientePrudential($Id_Empresa) == true ? 'hidden' : ''; ?>>
                         <div class="form-group">
                           <label class="col-form-label" for="Nivel">Nivel organizacional del candidato</label>
                           <select name="Nivel" id="Nivel" class="form-control" required>
                             <option value="" hidden selected>Selecciona el nivel organizacional</option>
-                            <option value="1">Operativo</option>
+                            <option value="1" <?= Utils::userClientePrudential($Id_Empresa) == true ? 'selected' : ''; ?>>Operativo</option>
                             <option value="2">Administrativo</option>
                             <option value="3">Gerencial</option>
                             <?php if (Utils::showContactoPorUsuario()->Empresa == 167) : ?>
@@ -299,6 +315,7 @@
   </div>
 </div>
 <script type="text/javascript" src="<?= base_url ?>app/cliente.js?v=<?= rand() ?>"></script>
+<script type="text/javascript" src="<?= base_url ?>app/cc_cliente.js?v=<?= rand() ?>"></script>
 <script type="text/javascript" src="<?= base_url ?>app/servicioapoyo.js?v=<?= rand() ?>"></script>
 <script type="text/javascript">
   var radios = document.getElementsByName('Cuenta_con');
@@ -329,7 +346,24 @@
     servicio.checkCURP(e.target.value);
   })
 </script>
+
+
+
 <?php if (Utils::isCustomerSA()) : ?>
+
+  <?php if ($Id_Empresa == 525) : ?>
+    <script type="text/javascript">
+      const selectElement = document.querySelector('[ name="Razon"]')
+      const newOption = document.createElement('option');
+      newOption.value = 'opcion3';
+      newOption.textContent = 'Opción 3';
+      selectElement.appendChild(newOption);
+      newOption.selected = true;
+    </script>
+
+  <?php endif; ?>
+
+
   <script type="text/javascript">
     var id_cliente = document.querySelector('#Cliente');
     id_cliente.addEventListener('change', e => {
@@ -341,47 +375,23 @@
       let Servicio_Solicitado_Valor = Servicio_Solicitado.value;
       if (id_cliente.value == 74 || id_cliente.value == 475 || id_cliente.value == 506 || id_cliente.value == 453 || id_cliente.value == 181 || id_cliente.value == 314 || id_cliente.value == 517 || id_cliente.value == 544 || id_cliente.value == 543 || id_cliente.value == 42 || id_cliente.value == 513 || id_cliente.value == 193 || id_cliente.value == 475 || id_cliente.value == 245 || id_cliente.value == 531 || id_cliente.value == 502 || id_cliente.value == 179)
         Servicio_Solicitado.innerHTML = `<option value="291">Registro de Antecedentes Legales (RAL)</option>`;
-        else if (id_cliente.value == 662){
-          Servicio_Solicitado.innerHTML = `
+      else if (id_cliente.value == 662) {
+        Servicio_Solicitado.innerHTML = `
           <option value="230">Estudio Socioeconómico (RAL + IL + VD)</option>
           `;
-          document.querySelector('#Nivel').removeAttribute('required');
-          document.querySelectorAll('#candidate-form .form-row')[2].style.display = 'none';
-          document.querySelectorAll('#candidate-form .form-row .col-sm-6')[0].style.display = 'none';
-          document.querySelectorAll('#candidate-form .form-row ')[3].style.display = 'none';
-          document.querySelector('#Telefono').setAttribute('required', '');
-		  document.querySelector('#Nivel').value='1'
-        } else if (id_cliente.value == 705) {
-   		const contenedor = document.querySelectorAll('.form-group')[16];
-        const inputElement = document.querySelector('[name="CC_Cliente"]');
-        const nuevoSelect = document.createElement('select');
-        nuevoSelect.className = 'form-control';
-        nuevoSelect.setAttribute('name', 'CC_Cliente');
-        nuevoSelect.required = true;
-        const opciones = [
-          { value: '', text: 'Selecciona centro de costo', disabled: true, selected: true },
-          { value: 'veracruz', text: 'Veracruz' },
-          { value: 'colima', text: 'Colima' },
-		  { value: 'Penjamo Guanajuato', text: 'Penjamo Guanajuato' },
-          { value: 'guaymas', text: 'Guaymas' }
-        ];
-			
-        opciones.forEach(opcion => {
-          const optionElement = document.createElement('option');
-          optionElement.value = opcion.value;
-          optionElement.textContent = opcion.text;
-          if (opcion.disabled) optionElement.disabled = true;
-          if (opcion.selected) optionElement.selected = true;
-          nuevoSelect.appendChild(optionElement);
-        });
-
-        // Reemplazar el elemento input por el nuevo select
-        contenedor.replaceChild(nuevoSelect, inputElement);
-      }else if (id_cliente.value == 426) {
+        document.querySelector('#Nivel').removeAttribute('required');
+        document.querySelectorAll('#candidate-form .form-row')[2].style.display = 'none';
+        document.querySelectorAll('#candidate-form .form-row .col-sm-6')[0].style.display = 'none';
+        document.querySelectorAll('#candidate-form .form-row ')[3].style.display = 'none';
+        document.querySelector('#Telefono').setAttribute('required', '');
+        document.querySelector('#Nivel').value = '1'
+      }else if (id_cliente.value == 705||id_cliente.value == 760||id_cliente.value == 757||id_cliente.value == 756||id_cliente.value == 762||id_cliente.value == 761||id_cliente.value == 759||id_cliente.value == 754||id_cliente.value == 753||id_cliente.value == 714||id_cliente.value == 755||id_cliente.value == 758||id_cliente.value == 752) {
+        cc_clientes(id_cliente.value);
+      } else if (id_cliente.value == 426) {
         setTimeout(function() {
           document.querySelectorAll('[name="Razon"] option')[0].remove()
         }, 200);
-      }  else {
+      } else {
         const contenedor = document.querySelectorAll('.form-group')[16];
         const selectElement = document.querySelector('[name="CC_Cliente"]');
         const nuevoInput = document.createElement('input');
@@ -401,38 +411,7 @@
       ocultarCamposRAL();
     })
   </script>
-  <?php //if (Utils::showContactoPorUsuario()->Empresa == 167): 
-  ?>
-  <!-- <script type="text/javascript">
-      var nivel = document.querySelector('#Nivel');
-      nivel.addEventListener('change', e => {
-        let servicio_solicitado = document.querySelectorAll('#candidate-form select')[2];
-        if (nivel.value == 4 || nivel.value == 1) {
-          let servicio_sol = servicio_solicitado.value == 298 ? 298 : (servicio_solicitado.value == 231 ? 231 : (servicio_solicitado.value == 230 ? 230 : 310));
-          servicio_solicitado.innerHTML = `
-          <option value="310">Validación de Licencia Federal (VLF)</option>
-          <option value="298">Reporte de Antecedentes Legales (VLF + RAL)</option>
-          <option value="231">Investigación Laboral (VLF + RAL + Inv. Lab.)</option>
-          <option value="230">Estudio Socioeconómico (VLF + RAL + Inv. Lab. + Verificación)</option>
-          `;
-          servicio_solicitado.value = servicio_sol;
 
-          document.querySelectorAll('#candidate-form .form-row')[4].style.display = 'flex';
-        }else {
-          let servicio_sol = servicio_solicitado.value == 298 ? 298 : (servicio_solicitado.value == 231 ? 231 : (servicio_solicitado.value == 230 ? 230 : 298));
-          servicio_solicitado.innerHTML = `
-          <option value="298">Reporte de Antecedentes Legales (RAL)</option>
-          <option value="231">Investigación Laboral (RAL + Inv. Lab.)</option>
-          <option value="230">Estudio Socioeconómico (RAL + Inv. Lab. + Verificación)</option>
-          `;
-          servicio_solicitado.value = servicio_sol;
-
-          document.querySelectorAll('#candidate-form .form-row')[4].style.display = 'none';
-        }
-      })
-    </script> -->
-  <?php //endif 
-  ?>
 <?php else : ?>
   <script type="text/javascript">
     var id_cliente = document.querySelector('#Cliente');
@@ -453,6 +432,10 @@
     })
   </script>
 <?php endif ?>
+
+
+
+
 <script type="text/javascript">
   var Servicio_Solicitado = document.querySelector('#Servicio_Solicitado');
 

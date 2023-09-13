@@ -79,7 +79,7 @@
 
                                         <div class="col-md-3">
                                             <div class="form-group" style="text-align: center">
-                                                <input type="number" name="age_c" id="age_c" style="text-align:center" class=" form-control" value="<?= $candidato->age_cal ?>" min="18" maxlength="3" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)" <?= Utils::isCustomer() ? 'disabled' : '' ?>>
+                                                <input type="number" name="age_c" id="age_c" style="text-align:center" class=" form-control" value="<?= ($candidato->age_cal!=0)? $candidato->age_cal : ''?>" min="18" maxlength="3" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)" <?= Utils::isCustomer() ? 'disabled' : '' ?>>
                                             </div>
                                         </div>
                                         <div class="col-md-3">

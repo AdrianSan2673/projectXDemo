@@ -11,6 +11,7 @@
       </div>
     </div><!-- /.container-fluid -->
   </section>
+  <?php if (Utils::permission($_GET['controller'], 'create')) : ?>
   <section class="content-header">
     <div class="row">
       <div class="col-sm-2 ml-auto">
@@ -18,6 +19,7 @@
       </div>
     </div>
   </section>
+  <?php endif ?>
   <section class="content">
 
     <div class="row mt-3 " id="all_departments">
@@ -36,10 +38,12 @@
                 </div>
               </div>
             </div>
+            <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
             <a class="small-box-footer" href="<?= base_url ?>departamento/ver&id=<?= Encryption::encode($department['id']) ?>">
               Ver
               <i class="fas fa-arrow-circle-right"></i>
             </a>
+            <?php endif ?>
           </div>
         </div>
       <?php endforeach ?>

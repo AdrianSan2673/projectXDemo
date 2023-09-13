@@ -54,17 +54,23 @@
                 <td class=" align-middle text-center"><?= Utils::getDate($tra['end_date'])  ?></td>
                 <td class=" align-middle text-center">
                   <div class="row">
-                    <div class="col-4">
-                      <a href="<?= base_url ?>capacitaciones/ver&id=<?= Encryption::encode($tra['id']) ?>" target="_blank" class="btn btn-success">
-                        <i class="fas fa-eye"></i>
-                      </a>
-                    </div>
-                    <div class="col-4">
-                      <button class="btn btn-info" value="<?= Encryption::encode($tra['id'])  ?>"><i class="fas fa-edit"></i></button>
-                    </div>
-                    <div class="col-4">
-                      <button class="btn btn-danger text-bold" value="<?= Encryption::encode($tra['id'])  ?>">X</button>
-                    </div>
+                    <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
+                      <div class="col-4">
+                        <a href="<?= base_url ?>capacitaciones/ver&id=<?= Encryption::encode($tra['id']) ?>" target="_blank" class="btn btn-success">
+                          <i class="fas fa-eye"></i>
+                        </a>
+                      </div>
+                    <?php endif ?>
+                    <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                      <div class="col-4">
+                        <button class="btn btn-info" value="<?= Encryption::encode($tra['id'])  ?>"><i class="fas fa-edit"></i></button>
+                      </div>
+                    <?php endif ?>
+                    <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
+                      <div class="col-4">
+                        <button class="btn btn-danger text-bold" value="<?= Encryption::encode($tra['id'])  ?>">X</button>
+                      </div>
+                    <?php endif ?>
                   </div>
                 </td>
               </tr>

@@ -34,6 +34,7 @@ class CandidatosLaborales{
 	private $Sitio_Web;
 	private $Correo;
 	private $Puesto_Informante;
+	private $Razon_Social;
   
 	private $db;
 	
@@ -281,6 +282,14 @@ class CandidatosLaborales{
 		$this->Puesto_Informante = $Puesto_Informante;
 	}
 
+	public function getRazon_Social(){
+		return $this->Razon_Social;
+	}
+
+	public function setRazon_Social($Razon_Social){
+		$this->Razon_Social = $Razon_Social;
+	}
+
     public function getLaboralesPorCandidato(){
         $Candidato=$this->getCandidato();
         $stmt = $this->db->prepare(
@@ -357,9 +366,10 @@ class CandidatosLaborales{
 		$Sitio_Web = $this->getSitio_Web();
 		$Correo = $this->getCorreo();
 		$Puesto_Informante = $this->getPuesto_Informante();
+		$Razon_Social = $this->getRazon_Social();
 		
-        $stmt = $this->db->prepare("INSERT INTO rh_Candidatos_Laborales (Candidato, Renglon, Empresa, Giro, Domicilio, Telefono, Fecha_Ingreso, Fecha_Baja, Puesto_Inicial, Puesto_Final, Jefe, Puesto_Jefe, Motivo_Separacion, Comentarios, Recontratable, Recontratable_PorQue, Informante, Calif, Dopaje, Sindicalizado, Sindicato, Comite_Sindical, Puesto_Sindical, Funciones_Sindicato, Tiempo_Sindicato, Sitio_Web, Correo, Puesto_Informante)
-		VALUES (:Candidato, :Renglon, :Empresa, :Giro, :Domicilio, :Telefono, :Fecha_Ingreso, :Fecha_Baja, :Puesto_Inicial, :Puesto_Final, :Jefe, :Puesto_Jefe, :Motivo_Separacion, :Comentarios, :Recontratable, :Recontratable_PorQue, :Informante,:Calif, :Dopaje, :Sindicalizado, :Sindicato, :Comite_Sindical, :Puesto_Sindical, :Funciones_Sindicato, :Tiempo_Sindicato, :Sitio_Web, :Correo, :Puesto_Informante)");
+        $stmt = $this->db->prepare("INSERT INTO rh_Candidatos_Laborales (Candidato, Renglon, Empresa, Giro, Domicilio, Telefono, Fecha_Ingreso, Fecha_Baja, Puesto_Inicial, Puesto_Final, Jefe, Puesto_Jefe, Motivo_Separacion, Comentarios, Recontratable, Recontratable_PorQue, Informante, Calif, Dopaje, Sindicalizado, Sindicato, Comite_Sindical, Puesto_Sindical, Funciones_Sindicato, Tiempo_Sindicato, Sitio_Web, Correo, Puesto_Informante, Razon_Social)
+		VALUES (:Candidato, :Renglon, :Empresa, :Giro, :Domicilio, :Telefono, :Fecha_Ingreso, :Fecha_Baja, :Puesto_Inicial, :Puesto_Final, :Jefe, :Puesto_Jefe, :Motivo_Separacion, :Comentarios, :Recontratable, :Recontratable_PorQue, :Informante,:Calif, :Dopaje, :Sindicalizado, :Sindicato, :Comite_Sindical, :Puesto_Sindical, :Funciones_Sindicato, :Tiempo_Sindicato, :Sitio_Web, :Correo, :Puesto_Informante, :Razon_Social)");
         $stmt->bindParam(":Empresa", $Empresa, PDO::PARAM_STR);
         $stmt->bindParam(":Giro", $Giro, PDO::PARAM_STR);
 		$stmt->bindParam(":Domicilio", $Domicilio, PDO::PARAM_STR);
@@ -386,6 +396,7 @@ class CandidatosLaborales{
 		$stmt->bindParam(":Sitio_Web", $Sitio_Web, PDO::PARAM_STR);
 		$stmt->bindParam(":Correo", $Correo, PDO::PARAM_STR);
 		$stmt->bindParam(":Puesto_Informante", $Puesto_Informante, PDO::PARAM_STR);
+		$stmt->bindParam(":Razon_Social", $Razon_Social, PDO::PARAM_STR);
 		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
 		$stmt->bindParam(":Renglon", $Renglon, PDO::PARAM_INT);
 
@@ -429,6 +440,7 @@ class CandidatosLaborales{
 		$Sitio_Web = $this->getSitio_Web();
 		$Correo = $this->getCorreo();
 		$Puesto_Informante = $this->getPuesto_Informante();
+		$Razon_Social = $this->getRazon_Social();
 
         $stmt = $this->db->prepare("UPDATE rh_Candidatos_Laborales
 		SET Empresa = :Empresa, 
@@ -456,7 +468,8 @@ class CandidatosLaborales{
 			Tiempo_Sindicato = :Tiempo_Sindicato,
 			Sitio_Web = :Sitio_Web,
 			Correo = :Correo,
-			Puesto_Informante = :Puesto_Informante
+			Puesto_Informante = :Puesto_Informante,
+			Razon_Social = :Razon_Social
 		WHERE Candidato = :Candidato
 		AND Renglon = :Renglon");
         $stmt->bindParam(":Empresa", $Empresa, PDO::PARAM_STR);
@@ -485,6 +498,7 @@ class CandidatosLaborales{
 		$stmt->bindParam(":Sitio_Web", $Sitio_Web, PDO::PARAM_STR);
 		$stmt->bindParam(":Correo", $Correo, PDO::PARAM_STR);
 		$stmt->bindParam(":Puesto_Informante", $Puesto_Informante, PDO::PARAM_STR);
+		$stmt->bindParam(":Razon_Social", $Razon_Social, PDO::PARAM_STR);
 		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
 		$stmt->bindParam(":Renglon", $Renglon, PDO::PARAM_INT);
 
@@ -540,8 +554,8 @@ class CandidatosLaborales{
 		$Candidato = $this->getCandidato();
 		$Folio = $duplicado;
 		
-        $stmt = $this->db->prepare("INSERT INTO rh_Candidatos_Laborales (Candidato, Renglon, Empresa, Giro, Domicilio, Telefono, Fecha_Ingreso, Fecha_Baja, Puesto_Inicial, Puesto_Final, Jefe, Puesto_Jefe, Motivo_Separacion, Comentarios, Recontratable, Recontratable_PorQue, Informante, Calif, Dopaje, Sindicalizado, Sindicato, Comite_Sindical, Puesto_Sindical, Funciones_Sindicato, Tiempo_Sindicato, Sitio_Web, Correo, Puesto_Informante)
-		SELECT :Candidato, Renglon, Empresa, Giro, Domicilio, Telefono, Fecha_Ingreso, Fecha_Baja, Puesto_Inicial, Puesto_Final, Jefe, Puesto_Jefe, Motivo_Separacion, Comentarios, Recontratable, Recontratable_PorQue, Informante,Calif, Dopaje, Sindicalizado, Sindicato, Comite_Sindical, Puesto_Sindical, Funciones_Sindicato, Tiempo_Sindicato, Sitio_Web, Correo, Puesto_Informante FROM rh_Candidatos_Laborales WHERE Candidato=:Folio");
+        $stmt = $this->db->prepare("INSERT INTO rh_Candidatos_Laborales (Candidato, Renglon, Empresa, Giro, Domicilio, Telefono, Fecha_Ingreso, Fecha_Baja, Puesto_Inicial, Puesto_Final, Jefe, Puesto_Jefe, Motivo_Separacion, Comentarios, Recontratable, Recontratable_PorQue, Informante, Calif, Dopaje, Sindicalizado, Sindicato, Comite_Sindical, Puesto_Sindical, Funciones_Sindicato, Tiempo_Sindicato, Sitio_Web, Correo, Puesto_Informante, Razon_Social)
+		SELECT :Candidato, Renglon, Empresa, Giro, Domicilio, Telefono, Fecha_Ingreso, Fecha_Baja, Puesto_Inicial, Puesto_Final, Jefe, Puesto_Jefe, Motivo_Separacion, Comentarios, Recontratable, Recontratable_PorQue, Informante,Calif, Dopaje, Sindicalizado, Sindicato, Comite_Sindical, Puesto_Sindical, Funciones_Sindicato, Tiempo_Sindicato, Sitio_Web, Correo, Puesto_Informante, Razon_Social FROM rh_Candidatos_Laborales WHERE Candidato=:Folio");
 		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
 		$stmt->bindParam(":Folio", $Folio, PDO::PARAM_INT);
 

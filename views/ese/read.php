@@ -75,7 +75,7 @@
                       <div class="row">
                         <div class="col-5 col-sm-3 col-md-2 mt-3">
                           <div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" role="tablist" aria-orientation="vertical">
-                            <a class="nav-link <?=Utils::getDisplayBotones()['Account'] == 'block' ? 'active' : ''?>" id="vert-tabs-busqueda_ral-tab" data-toggle="pill" href="#vert-tabs-busqueda_ral" role="tab" aria-controls="vert-tabs-busqueda_ral" aria-selected="true" style="display: <?=Utils::getDisplayBotones()['Account']?>;">Búsqueda de RAL</a>
+                            <a class="nav-link <?=Utils::getDisplayBotones()['Account'] == 'block' ? 'active' : ''?>" id="vert-tabs-busqueda_ral-tab" data-toggle="pill" href="#vert-tabs-busqueda_ral" role="tab" aria-controls="vert-tabs-busqueda_ral" aria-selected="true" style="display: block">Búsqueda de RAL</a>
                             <a class="nav-link" id="vert-tabs-propio_ral-tab" data-toggle="pill" href="#vert-tabs-propio_ral" role="tab" aria-controls="vert-tabs-busqueda_ral" aria-selected="true" style="display: <?=Utils::getDisplayBotones()['Account']?>;">RAL Propio</a>
                             <a class="nav-link <?=Utils::getDisplayBotones()['Account'] != 'block' ? 'active' : ''?>" id="vert-tabs-acerca_ral-tab" data-toggle="pill" href="#vert-tabs-acerca_ral" role="tab" aria-controls="vert-tabs-acerca_ral" aria-selected="true">Acerca del RAL</a>
                             <a class="nav-link" id="vert-tabs-capturas_ral-tab" data-toggle="pill" href="#vert-tabs-capturas_ral" role="tab" aria-controls="vert-tabs-capturas_ral" aria-selected="false">Capturas del RAL</a>
@@ -158,6 +158,7 @@
                             <a class="nav-link" id="vert-tabs-profile-tab" data-toggle="pill" href="#vert-tabs-profile" role="tab" aria-controls="vert-tabs-profile" aria-selected="false">Referencias laborales</a>
                             <a class="nav-link" id="vert-tabs-messages-tab" data-toggle="pill" href="#vert-tabs-messages" role="tab" aria-controls="vert-tabs-messages" aria-selected="false">Documentos</a>
                             <a class="nav-link" id="vert-tabs-settings-tab" data-toggle="pill" href="#vert-tabs-settings" role="tab" aria-controls="vert-tabs-settings" aria-selected="false">Preguntas</a>
+                            <a class="nav-link" id="vert-tabs-google-search-tab" data-toggle="pill" href="#vert-tabs-google-search" role="tab" aria-controls="vert-tabs-google-search" aria-selected="false" style="display: none;">Búsqueda Google</a>
                             <a class="nav-link" id="vert-tabs-comentarios_generales_inv-tab" data-toggle="pill" href="#vert-tabs-comentarios_generales_inv" role="tab" aria-controls="vert-tabs-comentarios_generales_inv" aria-selected="false">Comentarios generales</a>
                           </div>
                         </div>
@@ -272,6 +273,19 @@
                             </div>
                             <div class="tab-pane fade" id="vert-tabs-settings" role="tabpanel" aria-labelledby="vert-tabs-settings-tab">
                               <div id="content-investigacion">
+                                <div class="d-flex justify-content-center mt-5 mb-5">
+                                  <div class="spinner-border" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="tab-pane fade" id="vert-tabs-google-search" role="tabpanel" aria-labelledby="vert-tabs-google-search-tab">
+                              <div class="form-group mb-3">
+                                <label class="col-form-label">Agregar búsqueda de google</label>
+                                <input type="file" class="btn btn-success" id="btn-upload-google-search" style="display: <?=Utils::getDisplayBotones()['SA']?>" accept="application/pdf">
+                              </div>
+                              <div id="content-google-search">
                                 <div class="d-flex justify-content-center mt-5 mb-5">
                                   <div class="spinner-border" role="status">
                                     <span class="sr-only">Loading...</span>
@@ -703,7 +717,7 @@
                 <i class="fas fa-play"></i>
                 Continuar con estudio ESE(EG48)
               </button>
-			  <button class="btn btn-app bg-maroon" style="display: none;" hidden>
+			  <button class="btn btn-app bg-maroon" style="display: none;" >
                 <i class="fas fa-play"></i>
                 Continuar con análisis de RAL
               </button>
@@ -1478,6 +1492,14 @@
 	<b>¿Tuvo abandono de unidad?</b>
 	<p></p>
   </div>
+	
+  <div class="trabajo-dalton" style="display: none;">
+    <b>¿Cuentan con algún familiar dentro de la empresa?</b>
+    <p></p>
+  </div>
+</template>
+<template id="template-google_search">
+  <embed src="" type="application/pdf" width="100%" height="500">
 </template>
 <template id="template-comentarios_generales_inv">
   <div class="table-responsive">

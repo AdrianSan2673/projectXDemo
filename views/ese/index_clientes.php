@@ -58,7 +58,7 @@
               <th class="align-middle">Solicitud</th>
               <th class="align-middle">Nombre Comercial</th>
               <th class="align-middle text-center">Solicita</th>
-              <th class="align-middle">Centro de Costos</th>
+              <th class="align-middle"><?= $id_empresa == 525?'Folio prudential':' Centro de Costos' ?> </th>
               <th class="align-middle">Candidato</th>
               <th class="align-middle text-center">Servicio solicitado</th>
               <th class="align-middle">Fase</th>
@@ -251,7 +251,7 @@
               <th class="align-middle">Solicitud</th>
               <th class="align-middle">Nombre Comercial</th>
               <th class="align-middle">Solicita</th>
-              <th class="align-middle">Centro de costos</th>
+              <th class="align-middle"><?= $id_empresa == 525?'Folio prudential':' Centro de Costos' ?> </th>
               <th class="align-middle">Candidato</th>
               <th class="align-middle text-center">Servicio solicitado</th>
               <th class="align-middle">Fase</th>

@@ -245,13 +245,12 @@ class ExperienciaController
             $activity4 = isset($_POST['activity4']) ? trim($_POST['activity4']) : FALSE;
 
             if ($id && $position && $enterprise && $id_area && $id_subarea && $id_state && $id_city && $start_date && $review && $activity1 && $activity2 && $activity3 && $activity4) {
-
-
-
-                if ($still_works == 1) {
+				
+				//gabo 1 sep 2023
+				if ($still_works == 1) {
                     $end_date = '';
                 }
-                if (isset($start_date)) {
+				if (isset($start_date)) {
                     if ($start_date < '1950-01-01') {
                         echo json_encode(array('status' => 3));
                         die();
@@ -263,7 +262,7 @@ class ExperienciaController
                         }
                     }
                 }
-
+				
                 $exp = new CandidateExperience();
                 $exp->setId($id);
                 $exp->setPosition($position);
@@ -333,11 +332,14 @@ class ExperienciaController
             $activity4 = isset($_POST['activity4']) ? trim($_POST['activity4']) : FALSE;
 
             if ($id_candidate && $position && $enterprise && $id_area && $id_subarea && $id_state && $id_city && $start_date && $review && $activity1 && $activity2) {
-
-                if ($still_works == 1) {
+				
+				
+				
+				//gabo 1 sep 2023
+				if ($still_works == 1) {
                     $end_date = '';
                 }
-                if (isset($start_date)) {
+				if (isset($start_date)) {
                     if ($start_date < '1950-01-01') {
                         echo json_encode(array('status' => 3));
                         die();
@@ -349,7 +351,8 @@ class ExperienciaController
                         }
                     }
                 }
-
+				
+				
                 $exp = new CandidateExperience();
                 $exp->setId_candidate($id_candidate);
                 $exp->setPosition($position);

@@ -1,8 +1,10 @@
 <?php
-
+// $candidate = new Candidate();
+// $candidates = $candidate->getCandidatesByKey('', '', '');
 
 
 $_GET['filtros'] .= ($_GET['id_language'] != '') ? "and id_language like " . "'%" . $_GET['id_language'] . "%'" : '';
+
 $extrawhere = substr($_GET['filtros'], 3);
 $tabla = "rrhhinge_Candidatos.filtros_candidatos fc";
 
@@ -10,6 +12,8 @@ $tabla = "rrhhinge_Candidatos.filtros_candidatos fc";
 if ($_GET['clave'] != '') {
     $extrawhere = " ( first_name LIKE " . "'%" . $_GET['clave'] . "%' OR age LIKE " . "'%" . $_GET['clave'] . "%' OR city LIKE " . "'%" . $_GET['clave'] . "%' OR state LIKE " . "'%" . $_GET['clave'] . "%' OR level LIKE " . "'%" . $_GET['clave'] . "%' OR job_title LIKE " . "'%" . $_GET['clave'] . "%' OR language LIKE " . "'%" . $_GET['clave'] . "%' OR area LIKE " . "'%" . $_GET['clave'] . "%' OR subarea LIKE " . "'%" . $_GET['clave'] . "%' OR description LIKE " . "'%" . $_GET['clave'] . "%' OR experiences LIKE " . "'%" . $_GET['clave'] . "%' OR aptitudes LIKE " . "'%" . $_GET['clave'] . "%' OR created_at LIKE " . "'%" . $_GET['clave'] . "%' OR created_by LIKE " . "'%" . $_GET['clave'] . "%')";
 }
+
+
 
 
 $primaryKey = 'id';
@@ -49,12 +53,7 @@ $sql_details = array(
 
 $botones = 1;
 
-require("helpers/SideServer/Candidatos/ssp.php");
-// require("helpers/Encryption.php");
-// require("../../config/Connection.php");
-// require("../../config/Parameters.php");
-// require("../../models/Candidate.php");
-// require("../../helpers/utils.php");
+require("ssp.php");
 
 $extraFields = '';
 //si la busqueda viene del datatable input

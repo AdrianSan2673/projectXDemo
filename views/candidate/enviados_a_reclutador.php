@@ -207,6 +207,7 @@
           </button>
         </div>
       </div>
+		 <?php if (($_GET['controller'] == 'candidatos' && $_GET['action'] == 'index')||($_GET['controller'] == 'postulaciones' && $_GET['action'] == 'buscar')) : ?>
       <!-- GABOOOOOOO 10/03/2023 -->
       <section class="content-header">
         <div class="container-fluid">
@@ -348,6 +349,7 @@
 
         </div>
       </section>
+		   <?php endif ?>
       <!-- /.card-header -->
       <div class="card-body">
         <p class="h4">Candidatos encontrados: <?= count($candidates) ?></p>

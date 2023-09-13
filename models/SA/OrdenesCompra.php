@@ -314,10 +314,6 @@ class OrdenesCompra{
                 rh_Candidatos_Facturas RF
             ON 
                 RC.Factura=RF.Folio_Factura
-            INNER JOIN
-                rh_Candidatos_Facturas_OC OC
-            ON
-                RC.Factura=OC.Folio_Factura
         WHERE
             Factura=:folio
         ORDER BY
@@ -379,10 +375,6 @@ class OrdenesCompra{
                 rh_Candidatos_Facturas RF
             ON 
                 RC.Factura=RF.Folio_Factura
-            INNER JOIN
-                rh_Candidatos_Facturas_OC OC
-            ON
-                RC.Factura=OC.Folio_Factura
         WHERE Factura=:folio
         ORDER BY
             Fecha DESC");
@@ -418,17 +410,19 @@ class OrdenesCompra{
         return $result;
 	}
 
-    public function updateFolioYRazonDeServiciosPorFolio() {
+      public function updateFolioYRazonDeServiciosPorFolio() {
 		$result = false;
 
 		$Folio_Factura = $this->getFolio_Factura();
 		$Razon_Social = $this->getRazon_Social();
 		$Folio = $this->getFolio();
+		$Estado = $this->getEstado_OC();
 
-		$stmt = $this->db->prepare("UPDATE rh_Candidatos SET Factura=:Folio_Factura, Razon=:Razon_Social, Estado=254 WHERE Factura=:Folio");
+		$stmt = $this->db->prepare("UPDATE rh_Candidatos SET Factura=:Folio_Factura, Razon=:Razon_Social, Estado=:Estado WHERE Factura=:Folio");
 		$stmt->bindParam(":Folio_Factura", $Folio_Factura, PDO::PARAM_STR);
 		$stmt->bindParam(":Razon_Social", $Razon_Social, PDO::PARAM_STR);
 		$stmt->bindParam(":Folio", $Folio, PDO::PARAM_STR);
+		$stmt->bindParam(":Estado", $Estado, PDO::PARAM_STR);
 		
         $flag = $stmt->execute();
         if ($flag) {

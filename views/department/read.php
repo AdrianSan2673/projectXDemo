@@ -43,9 +43,11 @@
                                         <p class="title-departament"><?= $departamento->department ?></p>
                                     </div>
                                 </div>
-                                <div class="text-center">
-                                    <button class="btn btn-info" id="btn-editar-departamento">Editar</button>
-                                </div>
+                                <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                    <div class="text-center">
+                                        <button class="btn btn-info" id="btn-editar-departamento">Editar</button>
+                                    </div>
+                                <?php endif ?>
                             </div>
                         </div>
 
@@ -56,9 +58,11 @@
                             </div>
                             <div class="card-body">
                                 <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior()) : ?>
-                                    <div class="text-right">
-                                        <button class="btn btn-success" id="btn-nuevo-contacto">Nuevo Empleado</button>
-                                    </div>
+                                    <?php if (Utils::permission($_GET['controller'], 'create')) : ?>
+                                        <div class="text-right">
+                                            <button class="btn btn-success" id="btn-nuevo-contacto">Nuevo Empleado</button>
+                                        </div>
+                                    <?php endif ?>
                                 <?php endif ?>
 
                                 <div class="table-responsive">
@@ -81,9 +85,11 @@
                                                     <td class="text-center align-middle"><?= $employee['date_birth']  ?> Años</td>
                                                     <td class="text-center align-middle"><?= Utils::getDate($employee['start_date']) ?></td>
                                                     <td class="text-center align-middle">
-                                                        <a href="<?= base_url ?>empleado/ver&id=<?= Encryption::encode($employee['id_employe']) ?>" class="btn btn-success">
-                                                            <i class="fas fa-eye"></i> Ver
-                                                        </a>
+                                                        <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
+                                                            <a href="<?= base_url ?>empleado/ver&id=<?= Encryption::encode($employee['id_employe']) ?>" class="btn btn-success">
+                                                                <i class="fas fa-eye"></i> Ver
+                                                            </a>
+                                                        <?php endif ?>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -131,9 +137,11 @@
                                                     <td class="text-center align-middle"><?= isset($position['objective']) ? $position['objective'] : 'Sin objetivos' ?></td>
                                                     <td class="text-center align-middle"><?= Utils::getDate($position['created_at']) ?></td>
                                                     <td class="text-center align-middle">
-                                                        <a href="<?= base_url ?>puesto/ver&id=<?= Encryption::encode($position['id']) ?>" class="btn btn-success">
-                                                            <i class="fas fa-eye"></i> Ver
-                                                        </a>
+                                                        <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
+                                                            <a href="<?= base_url ?>puesto/ver&id=<?= Encryption::encode($position['id']) ?>" class="btn btn-success">
+                                                                <i class="fas fa-eye"></i> Ver
+                                                            </a>
+                                                        <?php endif ?>
                                                     </td>
                                                 </tr>
                                             <?php endforeach;

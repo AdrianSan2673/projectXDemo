@@ -16,7 +16,7 @@ class EncuestaCliente {
     
     public function __construct() {
         $this->db = Connection::connectSA();
-        // $this->db2 = Connection::connectSA2();
+        $this->db2 = Connection::connectSA2();
     }
 
     public function getId(){
@@ -130,7 +130,7 @@ class EncuestaCliente {
         $ID_Cliente = $this->getID_Cliente();
         $ID_Empresa = $this->getID_Empresa();
         $Fecha = $this->getFecha();
-        $Fecha1 = $this->getFecha();
+        $Fecha1 = $this->getId();
 
         $stmt = $this->db->prepare("SELECT * FROM Encuesta_Cliente WHERE Usuario=:Usuario AND ID_Cliente=:ID_Cliente AND ID_Empresa=:ID_Empresa AND CONVERT(DATE, Fecha) BETWEEN :Fecha AND :Fecha1");
         $stmt->bindParam(":Usuario", $Usuario, PDO::PARAM_STR);

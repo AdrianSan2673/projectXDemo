@@ -115,6 +115,7 @@ class CandidateEducation{
 
         if ($flag) {
             $result = true;
+            $this->setId($this->db->lastInsertId());
         }
         return $result;
 	}
@@ -169,7 +170,7 @@ class CandidateEducation{
 
     public function getOne(){
         $id = $this->getId_candidate();
-        $stmt = $this->db->prepare("SELECT ce.*,el.level, c.first_name, c.surname, c.last_name FROM candidate_education ce INNER JOIN candidates c ON ce.id_candidate=c.id INNER JOIN education_levels el ON ce.id_level=el.id WHERE c.id=:id");
+        $stmt = $this->db->prepare("SELECT ce.*, c.first_name, c.surname, c.last_name, ce.id_level AS id_education_level, el.level FROM candidate_education ce INNER JOIN candidates c ON ce.id_candidate=c.id LEFT JOIN education_levels el ON ce.id_level=el.id WHERE c.id=:id");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
         

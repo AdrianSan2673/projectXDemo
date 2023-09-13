@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', e => {
             },
             Edad: {
                 number: true,
-                min: 18
+                min: 17
             },
             Sexo: {
                 required: true
@@ -921,6 +921,35 @@ document.addEventListener('DOMContentLoaded', e => {
         e.preventDefault();
         estudio.soi();
     })
+
+    document.querySelector('#btn-upload-google-search').addEventListener('change', function(e) {
+        const selectedFile = e.target.files[0];
+        
+        if (selectedFile) {
+            const formData = new FormData();
+            formData.append('search', selectedFile);
+			formData.append('Folio', folio);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '../ServicioApoyo/upload_google_search');
+            xhr.send(formData);
+            xhr.clase = estudio;
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    let r = xhr.responseText;
+					let json_app = JSON.parse(r);
+					console.log(r);
+                    if (json_app.status == 1) {
+                        xhr.clase.cargarBusquedaGoogle(json_app.google_search);
+                        utils.showToast('Búsqueda en Internet cargada con éxito', 'success');
+                    }
+                } else {
+                    utils.showToast('Error al subir archivo', 'error');
+                }
+            };
+
+        }
+    });
 });
 
 
@@ -2161,6 +2190,7 @@ const fetchData = async (folio) => {
     estudio.cargarReferenciasLaborales(data.referencias_laborales, data.display, data.candidato_datos.ID_Empresa, data.candidato_datos);
     estudio.cargarDocumentos(data.documentos, data.display, data.comentarios.Comentario_Documentos, data.docs.Redes_Sociales);
     estudio.cargarInvestigacion(data.investigacion, data.display, data.candidato_datos.ID_Empresa);
+    estudio.cargarBusquedaGoogle(data.google_search);
     estudio.cargarComentariosGeneralesInv(data.observaciones, data.display, data.candidato_datos);
 
     estudio.cargarConociendoCandidato(data.conociendo_candidato, data.display);

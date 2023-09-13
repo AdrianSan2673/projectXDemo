@@ -21,6 +21,7 @@ class ContactosEmpresa
     public function __construct()
     {
         $this->db = Connection::connectSA();
+        $this->db1 = Connection::connectSA2();
     }
 
     public function getID()
@@ -366,8 +367,8 @@ class ContactosEmpresa
 
         return $fetch;
     }
-
-
+	
+	
 
     public function getOneClientesPorUsuarioContacto()
     {
@@ -394,6 +395,20 @@ class ContactosEmpresa
         $stmt->execute();
         $fetch = $stmt->fetchAll();
 
+        return $fetch;
+    }
+	 public function getEmpresayClienteByUsername()
+    {
+
+        $username = $this->getUsuario();
+        $email = $this->getCorreo();
+        $stmt = $this->db->prepare("SELECT rve.Nombre_Empresa, rvac.ID as ID_Contacto,(select top (1) Nombre_Cliente from rh_Ventas_Cliente_Contactos rvcc LEFT JOIN rh_Ventas_Alta rva ON
+        rvcc.ID_Cliente=rva.Cliente where rvcc.ID_Contacto=rvac.ID) as Nombre_Cliente from rh_Ventas_Alta_Contactos rvac LEFT JOIN rh_Ventas_Empresas rve
+        ON rvac.Empresa=rve.Empresa where rvac.Usuario=:username or Correo=:email");
+        $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        $stmt->execute();
+        $fetch = $stmt->fetchObject();
         return $fetch;
     }
 }

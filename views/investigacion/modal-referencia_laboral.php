@@ -83,7 +83,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label" for="Recontratable_PorQue">Justifique la respuesta anterior</label>
-                                <textarea name="Recontratable_PorQue" rows="3" class="form-control" maxlength="100"></textarea>
+                                <textarea name="Recontratable_PorQue" rows="3" class="form-control" maxlength="180"></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label" for="Informante">Nombre de quién proporciona la información</label>

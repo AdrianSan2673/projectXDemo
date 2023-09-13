@@ -20,6 +20,7 @@
                                     <option value="1">Personal</option>
                                     <option value="2">Vecinal</option>
                                     <option value="3">Familiar</option>
+									<option value="4">Último arrendador</option>
                                 </select>
                             </div>
                             <div class="form-group">

@@ -254,7 +254,7 @@ class SSP
         // $limit");
         // die();
         // Main query to actually get the data
-        // var_dump("SELECT " . implode(", ", self::pluck($columns, 'db')) . "
+        // var_dump("SELECT " . implode(", ", self::pluck($columns, 'db')) . " $extraFields
         // FROM $table
         // $where
         // $extraWhere
@@ -303,15 +303,15 @@ class SSP
         //  $limit");
         // die();
 
-        $c = new Candidate();
+      //  $c = new Candidate();
         for ($i = 0; $i < count($data); $i++) {
 
 
 
             if ($data[$i]['id_gender'] != 2) {
-                $route = "dist/img/user-icon.png";
+                $route = "../../../dist/img/user-icon.png";
             } else {
-                $route = "dist/img/user-icon-rose.png";
+                $route = "../../../dist/img/user-icon-rose.png";
             }
 
             $type = pathinfo($route, PATHINFO_EXTENSION);
@@ -336,9 +336,9 @@ class SSP
                 $resume = $cvroute;
             }
 
-            //SI SE QUITA LOS ../ DE LAS IMAGENES SE QUITA EL SUBSTR
-            $data[$i]['route'] = base_url . $avatar;
-            // $data[$i]['route'] = base_url . substr($avatar, 6);
+
+            $data[$i]['route'] = base_url . substr($avatar, 9);
+
             $data[$i]['resume'] = $resume;
             $data[$i]['id'] = Encryption::encode($data[$i]['id']);
             $data[$i]['aptitudes'] = str_replace('\n', " ", $data[$i]['aptitudes']);

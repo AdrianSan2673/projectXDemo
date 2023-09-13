@@ -10,8 +10,7 @@ require_once 'models/User.php';
 require_once 'models/Vacancy.php';
 require_once 'models/VacancyApplicant.php';
 require_once 'models/Psychometry.php';
-require_once 'models/ApplicantProfile.php';   //gabo perfil
-//=========================
+require_once 'models/ApplicantProfile.php';   
 require_once 'models/CandidateDirectory.php';
 require_once 'models/Area.php';
 require_once 'models/Subarea.php';
@@ -22,28 +21,17 @@ class CandidatoController
 
     public function index()
     {
-
-        if (isset($_SESSION['user_rh'])) {
-            Utils::ChangeSession(1);
-        }
         if (Utils::isValid($_SESSION['identity']) && !Utils::isCandidate() && !Utils::isCustomer()) {
-
             $candidate = new Candidate();
-            // $consulta = "";
-            // $campos = "";
-            // $inners = "";
-
-            // $candidates = $candidate->getCandidatesByKey("", $campos, $inners);
             $total = $candidate->getTotal();
-            // $c = new Candidate();
 
             $page_title = 'Candidatos | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
             require_once 'views/candidate/index.php';
+            // ===[gabo 28 abril modal vacantes]===
             require_once 'views/candidate/modal-vacantes.php';
-            //5 septiembre
-            // require_once 'views/candidate/modal-postular.php';
+            // ===[gabo 28 abril modal vacantes fin]===
             require_once 'views/layout/footer.php';
         } else {
             header('location:' . base_url);
@@ -85,8 +73,8 @@ class CandidatoController
                         $VacancyObj->setId($candidateDirectory->id_vacancy);
                         $vacante = $VacancyObj->getOne();
                     }
-                    $candidato->id_area = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_area : 0;
-                    $candidato->id_subarea = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_subarea : 0;
+                    $candidato->id_area = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_area:0;
+                    $candidato->id_subarea = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_subarea:0;
 
                     $candidato->id_gender = 0;
                     $candidato->id_civil_status = 0;
@@ -94,7 +82,7 @@ class CandidatoController
                     $candidato->description = '';
                     $candidato->id = null;
                     $candidato->job_title = $candidato->experience;
-                    $candidato->experience = $candidato->experience;
+					$candidato->experience =$candidato->experience;
                     $candidato->cellphone = '';
                     $candidato->linkedinn = '';
                     $candidato->facebook = '';
@@ -345,8 +333,16 @@ class CandidatoController
             $vacancy = new Vacancy();
             $vacancy->setId($id_vacancy);
             $vacante = $vacancy->getOne();
+			
+			 if (isset($vacante) && ($vacante->type != "1" && $vacante->type != "4")) {
+                if ($date_birth < '1950-01-01') {
+                    echo json_encode(array('status' => 5));
+                    die();
+                }
+            }
 
-            if (($vacante && $vacante->type == 1 && $first_name && $surname && $last_name && $id_level && $job_title  && $id_state && $id_city && $id_area && $id_subarea) || ($first_name && $surname && $last_name && $id_level && $job_title && $email && $id_state && $id_city && $id_area && $id_subarea)) {
+
+            if (($vacante && ($vacante->type == 1 || $vacante->type == 4)  && $first_name && $surname && $last_name && $id_level && $job_title  && $id_state && $id_city && $id_area && $id_subarea) || ($first_name && $surname && $last_name && $id_level && $job_title && $email && $id_state && $id_city && $id_area && $id_subarea)) {
                 //===[gabo 1 agosto  operativa fin]==   
                 if ($resume) {
                     $allowed_formats = array("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/pdf");
@@ -552,21 +548,21 @@ class CandidatoController
                     }else{
                         echo 4;
                     } */
+                }else {if ($save) {
+                    //===[gabo 2 julio operativa]===
+                    echo json_encode(array(
+                        'status' => 1,
+                        'id_vacancy' => $id_vacancy,
+                        'id_candidate' => $id_candidate,
+                        'type' => $vacante->type,
+                        'isCandidate' => $isCandidate
+                    ));
+                    //===[gabo 2 julio operativa]===
                 } else {
-                    if ($save) {
-                        //===[gabo 2 julio operativa]===
-                        echo json_encode(array(
-                            'status' => 1,
-                            'id_vacancy' => $id_vacancy,
-                            'id_candidate' => $id_candidate,
-                            'type' => $vacante->type,
-                            'isCandidate' => $isCandidate
-                        ));
-                        //===[gabo 2 julio operativa]===
-                    } else {
-                        echo json_encode(array('status' => 2));
-                    }
+                    echo json_encode(array('status' => 2));
                 }
+					  }
+				
             } else {
                 echo json_encode(array('status' => 0));
             }
@@ -853,6 +849,7 @@ class CandidatoController
                 require_once 'views/candidate/modal-educacion-candidato.php';
                 require_once 'views/candidate/modal-experiencia-candidato.php';
                 require_once 'views/candidate/modal-candidato.php'; // <!--===[gabo 27 abril  ver candidato2]===--> 
+                require_once 'views/candidate/modal-postular.php';
 
                 //  ===[FIN]===
                 require_once 'views/layout/footer.php';
@@ -1186,7 +1183,7 @@ class CandidatoController
                     $actualizado =  $perfil->update_profile();
 
                     if ($actualizado)
-                        echo json_encode(array('status' => 1));
+                        echo json_encode(array('status' => 1, 'id_vacancy' => Encryption::encode($id_vacancy)));
                     else
                         echo json_encode(array('status' => 0));
                 } else {
@@ -1453,7 +1450,6 @@ class CandidatoController
             $vacante->id_civil_status = $status->status;
 
 
-
             $page_title = 'Perfil | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
@@ -1463,21 +1459,304 @@ class CandidatoController
             header('location:' . base_url);
         }
     }
-
-
-    public function pruebaserver()
+	
+	  public function postulate()
     {
+        if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isRecruitmentManager())) {
+            $id_vacancy = isset($_POST['id_vacancy']) ? trim(Encryption::decode($_POST['id_vacancy'])) : FALSE;
+            $id_candidate = isset($_POST['id_candidate']) ? trim(Encryption::decode($_POST['id_candidate'])) : FALSE;
 
+
+            if ($id_vacancy && $id_candidate) {
+                $vacante = new VacancyApplicant();
+                $vacante->setId_vacancy($id_vacancy);
+                $vacante->setId_candidate($id_candidate);
+                $existe = $vacante->getOne();
+
+                if (!$existe) {
+                    $save = $vacante->move_postulant();
+
+                    $va = new VacancyApplicant();
+                    $va->setId_candidate($id_candidate);
+                    $vacancies = $va->getApplicantsByCandidate();
+
+
+                    foreach ($vacancies as &$vacancy) {
+
+                        switch ($vacancy['id_status']) {
+                            case 1:
+                                $class_color = 'bg-info';
+                                break;
+                            case 2:
+                                $class_color = 'bg-success';
+                                break;
+                            case 3:
+                                $class_color = 'bg-orange';
+                                break;
+                            case 4:
+                                $class_color = 'bg-navy';
+                                break;
+                            case 5:
+                                $class_color = 'bg-maroon';
+                                break;
+                            default:
+                                $class_color = '';
+                                break;
+                        }
+
+                        $vacancy['applicant_date'] = ($vacancy['applicant_date'] != '') ? Utils::getFullDate($vacancy['applicant_date']) : '';
+                        $vacancy['request_date'] = ($vacancy['request_date'] != '') ? Utils::getFullDate($vacancy['request_date']) : '';
+                        ($vacancy['about'] == NULL) ? $vacancy['about'] = '' : '';
+                        ($vacancy['interview_date'] == NULL) ? $vacancy['interview_date'] = '' : '';
+                        ($vacancy['interview_comments'] == NULL) ? $vacancy['interview_comments'] = '' : '';
+                        $vacancy['salary_min'] = number_format($vacancy['salary_min']);
+                        $vacancy['salary_max'] = number_format($vacancy['salary_max']);
+                        $vacancy['end_date'] =  ($vacancy['end_date']) != NULL ? Utils::getFullDate($vacancy['end_date']) : '';
+                        $vacancy['id'] = Encryption::encode($vacancy['id']);
+                        (Utils::isJunior()) ? $vacancy['id_area'] = Encryption::encode($vacancy['id_area']) : '';
+                        $vacancy['class_color'] = $class_color;
+                        $vacancy['base_url'] = base_url;
+                    }
+
+                    if ($save) {
+                        echo json_encode(array('status' => 1, 'vacancies' => $vacancies, "isCustomer" => Utils::isCustomer(), "isAdmin" => Utils::isAdmin(), "isJunior" => Utils::isJunior()));
+                    } else {
+                        echo json_encode(array('status' => 2));
+                    }
+                } else
+                    echo json_encode(array('status' => 3));
+            } else
+                echo json_encode(array('status' => 0));
+        } else
+            echo json_encode(array('status' => 0));
+    }
+
+    public function registrar() {
+        if (isset($_POST)) {
+            $_SESSION['data'] = isset($_SESSION['data']) && !empty($_SESSION['data']) ? $_SESSION['data'] : [];
+            $data = (object) array(
+                'first_name' => isset($_POST['first_name']) && !empty($_POST['first_name']) ? $_POST['first_name'] : @Utils::sanitizeStringBlank($_SESSION['data']->first_name),
+                'surname' => isset($_POST['surname']) && !empty($_POST['surname']) ? $_POST['surname'] : (@Utils::sanitizeStringBlank($_SESSION['data']->surname)),
+                'last_name' => isset($_POST['last_name']) && !empty($_POST['last_name']) ? $_POST['last_name'] : (@Utils::sanitizeStringBlank($_SESSION['data']->last_name)),
+                'email' => isset($_POST['email']) && !empty($_POST['email']) ? $_POST['email'] : (@Utils::sanitizeEmail($_SESSION['data']->email)),
+                'password' => isset($_POST['password']) && !empty($_POST['password']) ? $_POST['password'] : @(($_SESSION['data']->password))
+            );
+            $_SESSION['data'] = $data;
+        }
+        $status = 0;
+        $color = '';
+        $message = '';
+        $icon = '';
+        if (isset($_GET['paso']) && $_GET['paso'] == 3 && isset($_SESSION['data']) && isset($data->email)) {
+            $user = new User();
+            $user->setUsername(NULL);
+            $user->setPassword($data->password);
+            $user->setFirst_name($data->first_name);
+            $user->setLast_name($data->surname.' '.$data->last_name);
+            $user->setEmail($data->email);
+            $user->setActivation(2);
+            $user->setId_user_type(7);
+
+            $emailExists = $user->emailExists();
+
+            if (!$emailExists) {
+                $save = $user->save();
+                if ($save) {
+                    $date = new DateTime();
+                    //$date->setDate($year, $month, $day);
+                    //$date_birth = $date->format('Y-m-d');
+
+                    $candidate = new Candidate();
+                    $candidate->setFirst_name($data->first_name);
+                    $candidate->setSurname($data->surname);
+                    $candidate->setLast_name($data->last_name);
+                    $candidate->setDate_birth(NULL);
+                    $candidate->setAge(NULL);
+                    $candidate->setId_gender(NULL);
+                    $candidate->setId_state(NULL);
+                    $candidate->setEmail($email);
+
+                    $candidate->setId_civil_status(NULL);
+                    $candidate->setJob_title('');
+                    $candidate->setDescription('');
+                    $candidate->setTelephone($data->telephone);
+                    $candidate->setCellphone('');
+                    $candidate->setId_city(NULL);
+                    $candidate->setId_area(NULL);
+                    $candidate->setId_subarea(NULL);
+                    $candidate->setLinkedinn('');
+                    $candidate->setFacebook('');
+                    $candidate->setInstagram('');
+                    $candidate->setId_user($user->getId());
+                    $candidate->setCreated_by(NULL);
+
+                    $created = $candidate->save();
+
+                    if ($created) {
+                        $_SESSION['data']->id = $candidate->getId();
+                        $id_user = Encryption::encode($user->getId());
+                        $token = $user->getToken();
+                        
+                        $url = base_url.'usuario/activar_cuenta&id='.$id_user.'&val='.$token;
+                        
+                        $subject = 'Verificación de correo electrónico';
+                        $body = "Gracias por registrarte en RRHH Ingenia, {$data->first_name}, ingresa a nuestra página e inicia sesión con tu correo electrónico.<br/><br/> Contraseña : {$data->password} <br /> <br /> Para continuar, es necesario que verifiques tu correo dando clic en el siguiente <a href={$url}>enlace</a>";
+                        
+                        Utils::sendEmail($data->email, $data->first_name.' '.$data->surname, $subject, $body);
+                        header('location:'.base_url.'candidato/datos_cv');
+                    } else {
+                        $color = 'alert-danger';
+                        $message = 'Error al guardar sus datos';
+                        $icon = 'fas fa-ban';
+                        $status = 2;
+                    }
+                } else {
+                    $color = 'alert-danger';
+                    $message = 'Error al guardar sus datos';
+                    $icon = 'fas fa-ban';
+                    $status = 2;
+                }
+            }else {
+                $color = 'alert-warning';
+                $message = 'La dirección de correo '.$data->email.' ya se encuentra registrada.';
+                $icon = 'fas fa-exclamation-triangle';
+                $status = 3;
+            }
+
+        }
+        require_once './views/user/header.php';
+        require_once './views/candidate/register.php';
+        require_once './views/user/footer.php';
+    }
+
+    public function datos_cv() {
+        if (isset($_SESSION['data'])) {
+            $id_candidate = $_SESSION['data']->id_candidate;
+            $candidate = new Candidate();
+            $candidate->setId($id_candidate);
+            $data = $candidate->getOne();
+            if ($data) {
+                $_SESSION['data'] = $data;
+            }
+
+            $experiences = [];
+            if (!isset($_SESSION['data']->experiences)) {
+                $experience = new CandidateExperience();
+                $experience->setId_candidate($id_candidate);
+                $experiences = $experience->getExperiencesByCandidate();
+                if ($experiences)
+                    $_SESSION['data']->experiences = $experiences;
+            }  else
+                $experiences = $_SESSION['data']->experiences;
+
+            foreach ($_SESSION['data']->experiences as $key => $value)
+                $_SESSION['data']->experiences[$key]['experience_id'] = $key + 1;
+            
+            $education = [];
+            if (!isset($_SESSION['data']->education)) {
+                $education = new CandidateEducation();
+                $education->setId_candidate($id_candidate);
+                $education = $education->getOne();
+                if ($education)
+                    $_SESSION['data']->education = $education;
+            } else
+                $education = $_SESSION['data']->education;
+
+            $preparations = [];
+            if (!isset($_SESSION['data']->preparations)) {
+                $additional_preparation = new CandidateAdditionalPreparation();
+                $additional_preparation->setId_candidate($id_candidate);
+                $preparations = $additional_preparation->getAdditionalPreparationsByCandidate();
+                if ($preparations)
+                    $_SESSION['data']->preparations = $preparations;
+            } else
+                $preparations = $_SESSION['data']->preparations;
+
+            foreach ($_SESSION['data']->preparations as $key => $value)
+                $_SESSION['data']->preparations[$key]['preparation_id'] = $key + 1;
+
+            $languages = [];
+            if (!isset($_SESSION['data']->languages)) {
+                $language = new CandidateLanguage();
+                $language->setId_candidate($id_candidate);
+                $languages = $language->getLanguagesByCandidate();
+                if ($languages)
+                    $_SESSION['data']->languages = $languages;
+            } else
+                $languages = $_SESSION['data']->languages;
+
+            foreach ($_SESSION['data']->languages as $key => $value)
+                $_SESSION['data']->languages[$key]['language_id'] = $key + 1;
+
+            $aptitudes = [];
+            if (!isset($_SESSION['data']->aptitudes)) {
+                $aptitude = new CandidateAptitude();
+                $aptitude->setId_candidate($id_candidate);
+                $aptitudes = $aptitude->getAptitudesByCandidate();
+                if ($aptitudes)
+                    $_SESSION['data']->aptitudes = $aptitudes;
+            }else
+                $aptitudes = $_SESSION['data']->aptitudes;
+
+            foreach ($_SESSION['data']->aptitudes as $key => $value)
+                $_SESSION['data']->aptitudes[$key]['aptitude_id'] = $key + 1;
+
+            require_once './views/layout/header.php';
+            require_once './views/layout/navbar.php';
+            require_once './views/candidate/cv.php';
+            require_once './views/layout/footer.php';
+
+        }else
+            header('location:'.base_url.'candidato/registrar');
+    }
+    
+    public function image() {
+        if (isset($_POST['Objeto'])) {
+            $Objeto = $_POST['Objeto'];
+
+            $Objeto = explode(';', $Objeto);
+            $Objeto = explode(',', $Objeto[1]);
+            $Objeto = str_replace(' ', '+', $Objeto);
+            $Objeto = (base64_decode($Objeto[1]));
+
+            $filename = uniqid() . '.png';
+
+            $tempFilePath = sys_get_temp_dir() . '\\' . $filename;
+
+            file_put_contents($tempFilePath, $Objeto); 
+
+            $type = pathinfo($tempFilePath, PATHINFO_EXTENSION);
+            $img_content = file_get_contents($tempFilePath);
+                    
+            $img_base64 = 'data:image/' . $type . ';base64,' . base64_encode($img_content);
+            $_SESSION['route'] = $img_base64;
+            echo json_encode(array('status' => 1, 'imagen' => $_SESSION['route']));
+        }else
+            header('location:'.base_url);
+    }
+
+    public function delete_image(){
+        if (isset($_SESSION['route']) && !empty($_SESSION['route'])) {
+            unset($_SESSION['route']);
+            echo json_encode(array('status' => 1, 'imagen' => base_url.'dist/img/user-icon.png'));
+        }else
+            header('location:'.base_url);
+    }
+	
+	
+	
+	
+	
+    public function sideserver()
+    {
+		
         $_GET['filtros'] .= ($_GET['id_language'] != '') ? "and id_language like " . "'%" . $_GET['id_language'] . "%'" : '';
         $extrawhere = substr($_GET['filtros'], 3);
-        $tabla = "filtros_candidatos4 fc";
-
-
-        if ($_GET['clave'] != '') {
-            $extrawhere = " ( first_name LIKE " . "'%" . $_GET['clave'] . "%' OR age LIKE " . "'%" . $_GET['clave'] . "%' OR city LIKE " . "'%" . $_GET['clave'] . "%' OR state LIKE " . "'%" . $_GET['clave'] . "%' OR level LIKE " . "'%" . $_GET['clave'] . "%' OR job_title LIKE " . "'%" . $_GET['clave'] . "%' OR language LIKE " . "'%" . $_GET['clave'] . "%' OR area LIKE " . "'%" . $_GET['clave'] . "%' OR subarea LIKE " . "'%" . $_GET['clave'] . "%' OR description LIKE " . "'%" . $_GET['clave'] . "%' OR experiences LIKE " . "'%" . $_GET['clave'] . "%' OR aptitudes LIKE " . "'%" . $_GET['clave'] . "%' OR created_at LIKE " . "'%" . $_GET['clave'] . "%' OR created_by LIKE " . "'%" . $_GET['clave'] . "%')";
+        $tabla = "rrhhinge_Candidatos.filtros_candidatos fc";
+		
+		  if ($_GET['clave'] != '') {
+            $extrawhere = " ( first_name LIKE " . "'%" . $_GET['clave'] . "%' OR job_title LIKE " . "'%" . $_GET['clave'] . "%' OR description LIKE " . "'%" . $_GET['clave'] . "%' OR experiences LIKE " . "'%" . $_GET['clave'] . "%' OR aptitudes LIKE " . "'%" . $_GET['clave'] . "%')";
         }
-
-
 
 
         $primaryKey = 'id';
@@ -1508,42 +1787,25 @@ class CandidatoController
 
         );
 
-
-        $sql_details = array(
-            'user' => '',
-            'pass' => '',
-            'db'   => 'reclutamiento3',
-            'host' => 'localhost'
-        );
-
-        // $sql_details = array(
-        //     'user' => 'reclutador',
-        //     'pass' => 'Sr65s$0z',
-        //     'db'   => 'reclutamiento',
-        //     'host' => '148.72.144.152'
-        // );
+         $sql_details = array(
+             'user' => 'reclutador',
+             'pass' => 'Sr65s$0z',
+             'db'   => 'reclutamiento',
+             'host' => '148.72.144.152'
+         );
 
         $botones = 1;
 
-        require("views/candidate/ssp.php");
-        // require("helpers/Encryption.php");
-        // require("../../config/Connection.php");
-        // require("../../config/Parameters.php");
-        // require("../../models/Candidate.php");
-        // require("../../helpers/utils.php");
-
-        $extraFields = '';
+        require("helpers/SideServer/Candidatos/ssp.php");
+     
         //si la busqueda viene del datatable input
         $_POST['search']['value'] != "" ? $extrawhere = '' : '';
 
-        //si la tabla es postulate ocupamos 2 atributos extra
-        if (isset($_GET['id_vacancy'])) {
-            $_GET['id_vacancy'] = Encryption::decode($_GET['id_vacancy']);
-            $extraFields = " ,(SELECT top (1) id_status FROM vacancy_applicants va WHERE va.id_candidate=fc.id AND va.id_vacancy=" . $_GET['id_vacancy'] . ") AS id_status, (SELECT top (1) vas.status FROM vacancy_applicants va LEFT JOIN vacancy_applicant_status vas ON va.id_status=vas.id WHERE va.id_candidate=fc.id AND va.id_vacancy=" . $_GET['id_vacancy'] . ") AS status";
-        }
-
         echo json_encode(
-            SSP::simple($_POST, $sql_details,  $tabla, $primaryKey, $columns, $botones, $extrawhere, $extraFields)
+            SSP::simple($_POST, $sql_details,  $tabla, $primaryKey, $columns, $botones, $extrawhere)
         );
     }
+
+
+
 }

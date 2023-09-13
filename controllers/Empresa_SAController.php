@@ -6,12 +6,20 @@ require_once 'models/SA/RazonesSocialesEmpresa.php';
 require_once 'models/SA/Clientes.php';
 require_once 'models/SA/Prospecto.php';
 
-class Empresa_SAController{
+class Empresa_SAController
+{
 
-    public function index(){
-        if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior() || Utils::isJunior()|| Utils::isSAManager())) {
+    public function index()
+    {
+        if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior() || Utils::isJunior() || Utils::isSAManager())) {
             $empresa = new Empresas();
-            $empresas = $empresa->getAll();
+ 
+            if ($_SESSION['identity']->id==9396) {
+                $empresa->setCreado_por($_SESSION['identity']->username);
+                $empresas = $empresa->getAllByCreate();
+            }else{
+                $empresas = $empresa->getAll();
+            }
 
             $page_title = 'Empresas SA | RRHH Ingenia';
             require_once 'views/layout/header.php';
@@ -19,10 +27,11 @@ class Empresa_SAController{
             require_once 'views/empresa/index.php';
             require_once 'views/layout/footer.php';
         } else
-            header('location:'.base_url);
+            header('location:' . base_url);
     }
 
-    public function crear(){
+    public function crear()
+    {
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior())) {
 
             $page_title = 'Nueva empresa | RRHH Ingenia';
@@ -31,12 +40,13 @@ class Empresa_SAController{
             require_once 'views/empresa/create.php';
             require_once 'views/layout/footer.php';
         } else {
-            header('location:'.base_url);
+            header('location:' . base_url);
         }
     }
 
-    public function ver(){
-        if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior() || Utils::isJunior()|| Utils::isSAManager())) {
+    public function ver()
+    {
+        if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior() || Utils::isJunior() || Utils::isSAManager())) {
             if (isset($_GET['id'])) {
                 $edit = true;
                 $id = Encryption::decode($_GET['id']);
@@ -52,16 +62,16 @@ class Empresa_SAController{
                 $razon->setEmpresa($id);
                 $razones = $razon->getRazonesSocialesPorEmpresa();
 
-                for ($i=0; $i < count($razones); $i++) { 
-                    $path = 'uploads/situacionesfiscales/'.$id.'/'.$razones[$i]['RFC'];
+                for ($i = 0; $i < count($razones); $i++) {
+                    $path = 'uploads/situacionesfiscales/' . $id . '/' . $razones[$i]['RFC'];
                     if (file_exists($path)) {
                         $directory = opendir($path);
                         while ($file = readdir($directory)) {
                             if (!is_dir($file)) {
-                                $route = $path.'/'.$file;
+                                $route = $path . '/' . $file;
                             }
                         }
-                        $razones[$i]['archivo'] = base_url.$route;
+                        $razones[$i]['archivo'] = base_url . $route;
                     }
                 }
 
@@ -69,7 +79,8 @@ class Empresa_SAController{
                 $cliente->setEmpresa($id);
                 $clientes = $cliente->getClientesPorEmpresa();
 
-                $page_title = $empresa->Nombre_Empresa.' | RRHH Ingenia';
+
+                $page_title = $empresa->Nombre_Empresa . ' | RRHH Ingenia';
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
                 require_once 'views/empresa/read.php';
@@ -77,16 +88,17 @@ class Empresa_SAController{
                 require_once 'views/empresa/modal-contacto.php';
                 require_once 'views/empresa/modal-razon.php';
                 require_once 'views/layout/footer.php';
-            }else
-                header('location:'.base_url.'empresa/index');
-        }else 
-            header('location:'.base_url);
+            } else
+                header('location:' . base_url . 'empresa/index');
+        } else
+            header('location:' . base_url);
     }
 
-    public function getOne(){
+    public function getOne()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isSales() || Utils::isSalesManager()) {
             $Empresa = Utils::sanitizeNumber($_POST['Empresa']);
-            
+
             if ($Empresa) {
                 $enterprise = new Empresas();
                 $enterprise->setEmpresa($Empresa);
@@ -96,18 +108,21 @@ class Empresa_SAController{
                     header('Content-Type: text/html; charset=utf-8');
                     echo json_encode($data, \JSON_UNESCAPED_UNICODE);
                 } else echo 0;
-                
-            }else echo 0;
+            } else echo 0;
         } else
-            header('location:'.base_url);
+            header('location:' . base_url);
     }
 
-    public function save(){
+    public function save()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isSales() || Utils::isSalesManager()) {
             $Empresa = Utils::sanitizeNumber($_POST['Empresa']);
             $Nombre_Empresa = Utils::sanitizeStringBlank($_POST['Nombre_Empresa']);
             $Alias = Utils::sanitizeStringBlank($_POST['Alias']);
-			$Especificaciones = isset($_POST['Especificaciones']) ? Utils::sanitizeStringBlank($_POST['Especificaciones']) : null;
+            $Especificaciones = isset($_POST['Especificaciones']) ? Utils::sanitizeStringBlank($_POST['Especificaciones']) : null;
+            //===[gabo 7 agosto creado por ]===
+            $creado_por = isset($_POST['creado_por']) ? Utils::sanitizeStringBlank($_POST['creado_por']) : false;
+            //===[gabo 7 agosto creado por fin===
             $flag = $_POST['flag'];
 
             if ($Nombre_Empresa && $Alias) {
@@ -116,15 +131,22 @@ class Empresa_SAController{
                 $empresa->setNombre_Empresa($Nombre_Empresa);
                 $empresa->setAlias($Alias);
                 $empresa->setNuevo_Procedimiento(1);
-                
-             
+
+
                 if ($flag == 1) {
+                    //===[gabo 7 agosto creado por ]===
+                    $empresa->setCreado_por($creado_por);
+                    //===[gabo 7 agosto creado por fin===
                     $empresa->setEspecificaciones($Especificaciones);
                     $save = $empresa->update();
-                }  else
+                } else {
+                    //===[gabo 7 agosto creado por ]===
+                    $empresa->setCreado_por($_SESSION['identity']->username);
+                    //===[gabo 7 agosto creado por fin===
                     $save = $empresa->create();
-                    
-                if ($save){
+                }
+
+                if ($save) {
                     $id = Encryption::encode($empresa->getEmpresa());
                     echo json_encode(
                         array(
@@ -132,15 +154,16 @@ class Empresa_SAController{
                             'id' => $id
                         )
                     );
-                }else 
+                } else
                     echo json_encode(array('status' => 2));
-            }else
+            } else
                 echo json_encode(array('status' => 0));
         } else
-            header('location:'.base_url);
+            header('location:' . base_url);
     }
-	
-	public function save_prospecto(){
+
+    public function save_prospecto()
+    {
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isSales() || Utils::isSalesManager()) && isset($_GET['prospecto'])) {
 
             $id = Encryption::decode($_GET['prospecto']);
@@ -148,7 +171,7 @@ class Empresa_SAController{
             $pros = new Prospecto();
             $pros->setID($id);
             $prospecto = $pros->getOne();
-        
+
             $Nombre_Empresa = Utils::sanitizeStringBlank($prospecto->Prospecto);
             $Alias = Utils::sanitizeStringBlank($prospecto->Prospecto);
 
@@ -157,21 +180,22 @@ class Empresa_SAController{
                 $empresa->setNombre_Empresa($Nombre_Empresa);
                 $empresa->setAlias($Alias);
                 $empresa->setNuevo_Procedimiento(1);
-                
+
                 $save = $empresa->create();
-                    
-                if ($save){
+
+                if ($save) {
                     $id = Encryption::encode($empresa->getEmpresa());
-                    header('location:'.base_url.'cliente_SA/crear&prospecto='.Encryption::encode($prospecto->ID).'&empresa='.$id);
-                }else 
-                    header('location:'.base_url.'prospecto/index');
-            }else
-                header('location:'.base_url.'empresa_SA/index');
+                    header('location:' . base_url . 'cliente_SA/crear&prospecto=' . Encryption::encode($prospecto->ID) . '&empresa=' . $id);
+                } else
+                    header('location:' . base_url . 'prospecto/index');
+            } else
+                header('location:' . base_url . 'empresa_SA/index');
         } else
-            header('location:'.base_url);
+            header('location:' . base_url);
     }
-	
-	public function inicio(){
+
+    public function inicio()
+    {
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isCustomerSA())) {
             $contactoEmpresa = new ContactosEmpresa();
             $contactoEmpresa->setUsuario($_SESSION['identity']->username);
@@ -186,37 +210,35 @@ class Empresa_SAController{
             $cliente->setEmpresa($ID_Empresa);
             $clientes = $cliente->getClientesPorEmpresa();
 
-            $path = 'uploads/empresa/'.$ID_Empresa;
+            $path = 'uploads/empresa/' . $ID_Empresa;
             if (file_exists($path)) {
                 $directory = opendir($path);
-    
-                while ($file = readdir($directory))
-                {
-                    if (!is_dir($file)){
+
+                while ($file = readdir($directory)) {
+                    if (!is_dir($file)) {
                         $type = pathinfo($path, PATHINFO_EXTENSION);
-                        $img_content = file_get_contents($path."/".$file);
-                        $route = base_url.$path.'/'.$file;
+                        $img_content = file_get_contents($path . "/" . $file);
+                        $route = base_url . $path . '/' . $file;
                     }
                 }
-            }else
+            } else
                 $route = false;
 
             $empresa->logo = $route;
 
-            for ($i=0; $i < count($clientes); $i++) { 
-                $path = 'uploads/cliente/'.$clientes[$i]['Cliente'];
+            for ($i = 0; $i < count($clientes); $i++) {
+                $path = 'uploads/cliente/' . $clientes[$i]['Cliente'];
                 if (file_exists($path)) {
                     $directory = opendir($path);
-        
-                    while ($file = readdir($directory))
-                    {
-                        if (!is_dir($file)){
+
+                    while ($file = readdir($directory)) {
+                        if (!is_dir($file)) {
                             $type = pathinfo($path, PATHINFO_EXTENSION);
-                            $img_content = file_get_contents($path."/".$file);
-                            $route = base_url.$path.'/'.$file;
+                            $img_content = file_get_contents($path . "/" . $file);
+                            $route = base_url . $path . '/' . $file;
                         }
                     }
-                }else {
+                } else {
                     $route = false;
                 }
                 $clientes[$i]['logo'] = $route;
@@ -229,33 +251,34 @@ class Empresa_SAController{
             require_once 'views/empresa/modal-imagen.php';
             require_once 'views/layout/footer.php';
         } else
-            header('location:'.base_url);
+            header('location:' . base_url);
     }
 
-    public function upload_image64(){
+    public function upload_image64()
+    {
         if (isset($_SESSION['identity']) && isset($_POST['logo'])) {
             $img = $_POST['logo'];
-            $img = str_replace('data:image/png;base64,', '', $img);  
+            $img = str_replace('data:image/png;base64,', '', $img);
             $img = str_replace(' ', '+', $img);
             $data = base64_decode($img);
-			$ID_Empresa = Utils::sanitizeNumber($_POST['ID_Empresa']);
+            $ID_Empresa = Utils::sanitizeNumber($_POST['ID_Empresa']);
             $ID_Cliente = Utils::sanitizeNumber($_POST['ID_Cliente']);
-			
-			if ($ID_Cliente && $ID_Cliente > 0){
-				$route = 'uploads/cliente/'.$ID_Cliente.'/';
 
-				if (file_exists($route)) {
-					Utils::deleteDir('uploads/cliente/'. $ID_Cliente);
-				}
-			}elseif ($ID_Empresa && $ID_Empresa > 0) {
-				$route = 'uploads/empresa/'.$ID_Empresa.'/';
+            if ($ID_Cliente && $ID_Cliente > 0) {
+                $route = 'uploads/cliente/' . $ID_Cliente . '/';
 
-				if (file_exists($route)) {
-					Utils::deleteDir('uploads/empresa/'. $ID_Empresa);
-				}
-			}
-				
-            if(!file_exists($route)){
+                if (file_exists($route)) {
+                    Utils::deleteDir('uploads/cliente/' . $ID_Cliente);
+                }
+            } elseif ($ID_Empresa && $ID_Empresa > 0) {
+                $route = 'uploads/empresa/' . $ID_Empresa . '/';
+
+                if (file_exists($route)) {
+                    Utils::deleteDir('uploads/empresa/' . $ID_Empresa);
+                }
+            }
+
+            if (!file_exists($route)) {
                 mkdir($route);
             }
 
@@ -264,52 +287,51 @@ class Empresa_SAController{
 
             if ($success) {
                 echo json_encode(
-					array(
-						'status' => 1,
-						'logo' => base_url.$file
-					)
-				);
+                    array(
+                        'status' => 1,
+                        'logo' => base_url . $file
+                    )
+                );
             } else {
                 echo json_encode(
-					array(
-						'status' => 0
-					)
-				);
+                    array(
+                        'status' => 0
+                    )
+                );
             }
-            
-        }else{
-            header("location:".base_url);
+        } else {
+            header("location:" . base_url);
         }
     }
-	
-	public function delete_image64(){
+
+    public function delete_image64()
+    {
         if (isset($_SESSION['identity'])) {
-			$ID_Empresa = Utils::sanitizeNumber($_POST['ID_Empresa']);
+            $ID_Empresa = Utils::sanitizeNumber($_POST['ID_Empresa']);
             $ID_Cliente = Utils::sanitizeNumber($_POST['ID_Cliente']);
-			
-			if ($ID_Cliente && $ID_Cliente > 0){
-				$route = 'uploads/cliente/'.$ID_Cliente.'/';
 
-				if (file_exists($route)) {
-					Utils::deleteDir('uploads/cliente/'. $ID_Cliente);
-				}
-			}elseif ($ID_Empresa && $ID_Empresa > 0) {
-				$route = 'uploads/empresa/'.$ID_Empresa.'/';
+            if ($ID_Cliente && $ID_Cliente > 0) {
+                $route = 'uploads/cliente/' . $ID_Cliente . '/';
 
-				if (file_exists($route)) {
-					Utils::deleteDir('uploads/empresa/'. $ID_Empresa);
-				}
-			}
-			
+                if (file_exists($route)) {
+                    Utils::deleteDir('uploads/cliente/' . $ID_Cliente);
+                }
+            } elseif ($ID_Empresa && $ID_Empresa > 0) {
+                $route = 'uploads/empresa/' . $ID_Empresa . '/';
+
+                if (file_exists($route)) {
+                    Utils::deleteDir('uploads/empresa/' . $ID_Empresa);
+                }
+            }
+
             echo json_encode(
                 array(
                     'status' => 1,
-                    'logo' => base_url.'dist/img/image_unavailable.jpg'
+                    'logo' => base_url . 'dist/img/image_unavailable.jpg'
                 )
             );
-            
-        }else{
-            header("location:".base_url);
+        } else {
+            header("location:" . base_url);
         }
     }
 }

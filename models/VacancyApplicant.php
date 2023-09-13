@@ -487,7 +487,7 @@ class VacancyApplicant
 		$id_vacancy = $this->getId_vacancy();
 		$id_candidate = $this->getId_candidate();
 
-		$stmt = $this->db->prepare("INSERT INTO vacancy_applicants(applicant_date, id_vacancy, id_candidate, id_status) VALUES (GETDATE(), :id_vacancy, :id_candidate, 3)");
+		$stmt = $this->db->prepare("INSERT INTO vacancy_applicants(applicant_date,customer_date, id_vacancy, id_candidate, id_status) VALUES (GETDATE(),GETDATE(), :id_vacancy, :id_candidate, 3)");
 		$stmt->bindParam(":id_vacancy", $id_vacancy, PDO::PARAM_INT);
 		$stmt->bindParam(":id_candidate", $id_candidate, PDO::PARAM_INT);
 

@@ -14,6 +14,7 @@ class DepartamentoController
     public function index()
     {
         if (Utils::isAdmin() || Utils::isCustomerSA()) {
+						
             $contactoEmpresa = new ContactosEmpresa();
             $contactoEmpresa->setUsuario($_SESSION['identity']->username);
             $contactos = $contactoEmpresa->getClientesPorUsuarioContacto();

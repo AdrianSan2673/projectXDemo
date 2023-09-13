@@ -7,9 +7,9 @@ class Employee_RH {
         var data = new FormData(form);
 
         fetch('../Vacaciones/responder_solicitud_rh', {
-            method: 'POST',
-            body: data
-        })
+                method: 'POST',
+                body: data
+            })
             .then(function (response) {
                 //   console.log(response.json());
                 if (response.ok) {
@@ -27,7 +27,7 @@ class Employee_RH {
                     var cont = json_app.solicitudes.length;
                     json_app.solicitudes.forEach(solicitud => {
 
-                        (solicitud.comments == '') ? solicitud.comments = '-' : false;
+                        (solicitud.comments == '') ? solicitud.comments = '-': false;
                         solicitudes += ` <tr>
                                         <td class="text-center text-bold">${cont}</td>
                                         <td class="text-center">${solicitud.first_name}  ${solicitud.surname}  ${solicitud.last_name}</td>
@@ -78,7 +78,7 @@ class Employee_RH {
                     var cont = json_app.solicitudes.length;
                     json_app.solicitudes.forEach(solicitud => {
 
-                        (solicitud.comments == '') ? solicitud.comments = '-' : false;
+                        (solicitud.comments == '') ? solicitud.comments = '-': false;
                         solicitudes += `     <tr>
                                                     <td class="text-left">
                                                         <div class="card-body">
@@ -117,7 +117,7 @@ class Employee_RH {
                                                         <div class="row">
                                                             <div class="col-12" style="text-align:center;margin-top:-0.5rem;margin-bottom:1rem">`;
                         if (solicitud['status'] == 'En revisión') {
-                            solicitudes += `  <button value="<?= Encryption::encode($solicitud['i" class="btn btn-success mt-1" id="btn-aceptar">
+                            solicitudes += `  <button value="${solicitud.id}" class="btn btn-success mt-1" id="btn-aceptar">
                                                                         <i class="fas fa-check"> Aceptar</i>
                                                                     </button>
                                                                     <button data-id="${solicitud.id}" class="btn btn-danger mt-1" id="btn-denegar">
@@ -176,11 +176,11 @@ class Employee_RH {
         var data = new FormData(form);
 
         fetch('../Vacaciones/save_solicitud_rh', {
-            method: 'POST',
-            body: data
-        })
+                method: 'POST',
+                body: data
+            })
             .then(function (response) {
-                //   console.log(response.json());
+                // console.log(response.json());
                 if (response.ok) {
                     return response.json();
                 } else {
@@ -194,7 +194,7 @@ class Employee_RH {
                     var cont = json_app.solicitudes.length;
                     json_app.solicitudes.forEach(solicitud => {
 
-                        (solicitud.comments == '') ? solicitud.comments = '-' : false;
+                        (solicitud.comments == '') ? solicitud.comments = '-': false;
 
                         solicitudes += `
                             <tr>
@@ -228,7 +228,7 @@ class Employee_RH {
                     var cont = json_app.solicitudes.length;
                     json_app.solicitudes.forEach(solicitud => {
 
-                        (solicitud.comments == '') ? solicitud.comments = '-' : false;
+                        (solicitud.comments == '') ? solicitud.comments = '-': false;
                         solicitudes_movil += `
                             <tr>
                             <td class="text-left">
@@ -328,9 +328,9 @@ class Employee_RH {
         var data = new FormData(form);
 
         fetch('../Usuario/update_password_rh', {
-            method: 'POST',
-            body: data
-        })
+                method: 'POST',
+                body: data
+            })
             .then(function (response) {
                 //  console.log(response.json());
                 if (response.ok) {
@@ -371,20 +371,20 @@ class Employee_RH {
             });
     }
 
-    //gabo 11 sep
+    //rafa
     registrar_asientencia(direccion) {
 
         document.querySelector("#btn_asistencia").disabled = true;
 
         const data = new FormData();
         data.append('direccion', direccion);
-        var id_type = document.getElementById('type').value;
+		var id_type = document.getElementById('type').value;
         data.append('id_type', id_type);
 
         fetch('../Usuario/registrar_asistencia', {
-            method: 'POST',
-            body: data
-        })
+                method: 'POST',
+                body: data
+            })
             .then(function (response) {
                 //   console.log(response.json());
                 if (response.ok) {
@@ -404,7 +404,7 @@ class Employee_RH {
                             <tr>       
                              <td class="text-center text-bold" style="width:10px">${cont}</td>
                              <td class="text-center">${asistencia.created_at}</td>
-                             <td class="text-center">${asistencia.name}</td>
+							 <td class="text-center">${asistencia.name}</td>
                              <td class="text-center">${asistencia.coordenada}</td>
                             </tr >
                             `;
@@ -422,9 +422,8 @@ class Employee_RH {
                             "sSortDescending": true
                         }
                     });
-                    //gabo 11 sept
 
-                    var total_asistencias = parseInt(document.getElementById('total_asistencias').value);
+                  var total_asistencias = parseInt(document.getElementById('total_asistencias').value);
                     if (total_asistencias < 2) {
                         total_asistencias++;
                         document.getElementById('total_asistencias').value = total_asistencias;
@@ -449,14 +448,8 @@ class Employee_RH {
 
 
 
-
-
                 } else if (json_app.status == 2) {
                     utils.showToast('Ha ocurrido un error intentelo de nuevo', 'error');
-                    document.querySelector("#btn_asistencia").disabled = false;
-
-                } else if (json_app.status == 3) {
-                    utils.showToast('Seleccione un tipo de asistencia por favor', 'error');
                     document.querySelector("#btn_asistencia").disabled = false;
 
                 }
@@ -474,22 +467,22 @@ class Employee_RH {
         var form = document.querySelector("#modal_responder form");
         var data = new FormData(form);
         fetch('../Vacaciones/responder_solicitud_admin', {
-            method: 'POST',
-            body: data
-        }).then(response => {
-            if (response.ok) {
-                return response.text();
-            } else {
-                throw new Error('Network response was not ok.');
-            }
-        }).then(r => {
-            console.log(r);
-            try {
-                const json_app = JSON.parse(r);
-                if (json_app.status == 1) {
-                    let employees = '';
-                    json_app.employees.forEach(employee => {
-                        employees += `
+                method: 'POST',
+                body: data
+            }).then(response => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('Network response was not ok.');
+                }
+            }).then(r => {
+                console.log(r);
+                try {
+                    const json_app = JSON.parse(r);
+                    if (json_app.status == 1) {
+                        let employees = '';
+                        json_app.employees.forEach(employee => {
+                            employees += `
                                             <tr>
                                                 <td class="align-middle text-bold"> ${employee.first_name} ${employee.surname} ${employee.last_name}</td>
                                                 <td class="text-center align-middle">${employee.start_date}</td>
@@ -499,15 +492,15 @@ class Employee_RH {
                                                 <td class="text-center align-middle">${employee.due_date}</td>
                                             </tr>
                                         `;
-                    });
-                    utils.destruir_datatable('#tb_employees', '#tb_employees tbody', employees);
-                    $('#table3').DataTable().destroy();
+                        });
+                        utils.destruir_datatable('#tb_employees', '#tb_employees tbody', employees);
+                        $('#table3').DataTable().destroy();
 
-                    var solicitudes = '';
-                    var cont = json_app.solicitudes.length;
-                    json_app.solicitudes.forEach(solicitud => {
-                        (solicitud.comments == '') ? solicitud.comments = '-' : false;
-                        solicitudes += ` <tr>
+                        var solicitudes = '';
+                        var cont = json_app.solicitudes.length;
+                        json_app.solicitudes.forEach(solicitud => {
+                            (solicitud.comments == '') ? solicitud.comments = '-': false;
+                            solicitudes += ` <tr>
                                                 <td class="text-center text-bold">${cont}</td>
                                                 <td class="text-center">${solicitud.first_name}  ${solicitud.surname}  ${solicitud.last_name}</td>
                                                 <td class="text-center">${solicitud.created_at}</td>
@@ -516,9 +509,9 @@ class Employee_RH {
                                                 <td class="text-center">${solicitud.holidays_by_year - solicitud.taken_holidays} </td>
                                                 <td class="text-center">${solicitud.comments} </td>
                                                 <td class="text-center"> `;
-                        //===[gabo 4 agosto fail]===
-                        if (solicitud.status == 'En revisión') {
-                            solicitudes += `  <button data-id="" value="${solicitud.id}" class="btn btn-success mt-1" id="btn-aceptar">
+                            //===[gabo 4 agosto fail]===
+                            if (solicitud.status == 'En revisión') {
+                                solicitudes += `  <button data-id="" value="${solicitud.id}" class="btn btn-success mt-1" id="btn-aceptar">
                                                             <i class="fas fa-check"> Aceptar</i>
                                                         </button>
                                                         <a data-id="${solicitud.id}" class="btn btn-danger mt-1" id="btn-denegar">
@@ -528,46 +521,46 @@ class Employee_RH {
                                                         class="btn btn-warning mt-1" id="btn-borrar">
                                                         <i class="fas fa-ban"> Borrar</i>
                                                     </button>`;
-                        }
-                        if (solicitud.status == 'Aceptada') {
-                            solicitudes += ` <small class="badge badge-success"> Aceptada</small>`;
-                        }
-                        if (solicitud.status == 'Declinada') {
-                            solicitudes += ` <small class="badge badge-danger"> Declinada</small>`;
-                        }
-                        //===[gabo 4 agosto fail]===
-                        solicitudes += ` </td >
+                            }
+                            if (solicitud.status == 'Aceptada') {
+                                solicitudes += ` <small class="badge badge-success"> Aceptada</small>`;
+                            }
+                            if (solicitud.status == 'Declinada') {
+                                solicitudes += ` <small class="badge badge-danger"> Declinada</small>`;
+                            }
+                            //===[gabo 4 agosto fail]===
+                            solicitudes += ` </td >
                                             </tr > `;
-                        cont--;
-                    });
+                            cont--;
+                        });
 
-                    document.querySelector('#table3 tbody').innerHTML = solicitudes;
-                    $("#table3").DataTable({
-                        "searching": true,
-                        "pageLength": 50,
-                        "aaSorting": [], //Agregar o Quitar segun se necesite desactivar orden
-                        "oAria": {
-                            "sSortAscending": false,
-                            "sSortDescending": true
-                        }
-                    });
+                        document.querySelector('#table3 tbody').innerHTML = solicitudes;
+                        $("#table3").DataTable({
+                            "searching": true,
+                            "pageLength": 50,
+                            "aaSorting": [], //Agregar o Quitar segun se necesite desactivar orden
+                            "oAria": {
+                                "sSortAscending": false,
+                                "sSortDescending": true
+                            }
+                        });
 
-                    document.querySelector("#modal_responder form").reset();
-                    utils.showToast('Acción realizada correctamente exitosamente', 'success');
-                    document.querySelector("#modal_responder [name='submit']").disabled = false
-                    $('#modal_responder').modal('hide');
-                } else if (json_app.status == 0) {
-                    utils.showToast('No se pudo guardar la información', 'error');
-                    document.querySelector("#modal_responder [name='submit']").disabled = false
-                } else {
-                    utils.showToast('No se pudo consultar la informacion', 'error');
+                        document.querySelector("#modal_responder form").reset();
+                        utils.showToast('Acción realizada correctamente exitosamente', 'success');
+                        document.querySelector("#modal_responder [name='submit']").disabled = false
+                        $('#modal_responder').modal('hide');
+                    } else if (json_app.status == 0) {
+                        utils.showToast('No se pudo guardar la información', 'error');
+                        document.querySelector("#modal_responder [name='submit']").disabled = false
+                    } else {
+                        utils.showToast('No se pudo consultar la informacion', 'error');
+                        document.querySelector("#modal_responder [name='submit']").disabled = false
+                    }
+                } catch (error) {
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
                     document.querySelector("#modal_responder [name='submit']").disabled = false
                 }
-            } catch (error) {
-                utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
-                document.querySelector("#modal_responder [name='submit']").disabled = false
-            }
-        })
+            })
             .catch(function (error) {
                 utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
                 document.querySelector("#modal_responder [name='submit']").disabled = false
@@ -576,7 +569,58 @@ class Employee_RH {
     }
 
 
+  Update_UserRH() {
 
+        document.querySelector("#modal-acceso [name='submit']").disabled = false;
+        var form = document.querySelector("#modal-acceso form");
+        var data = new FormData(form);
+
+        fetch('../Usuario/update_UserRH', {
+            method: 'POST',
+            body: data
+        })
+            .then(function (response) {
+                //   console.log(response.json());
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw "Error en la Petición";
+                }
+            })
+            .then(function (json_app) {
+
+
+                if (json_app.status == 1) {
+
+
+
+                    document.querySelector("#usernamep").innerHTML = json_app.usuario.username;
+                    document.querySelector("#passwordp").innerHTML = json_app.usuario.password;
+                    document.querySelector("#statusp").innerHTML = json_app.usuario.status;
+
+                    document.querySelector("#modal-acceso [name='submit']").disabled = false;
+                    utils.showToast('La  informacion ha sido guardada correctamente', 'success');
+                    $('#modal-acceso').modal('hide');
+
+                } else if (json_app.status == 0) {
+                    utils.showToast('Revise sus credenciales por favor', 'error');
+                    document.querySelector("#modal-acceso [name='submit']").disabled = false;
+
+                } else if (json_app.status == 2) {
+                    utils.showToast('EL usuario ya se encuentra ocupado', 'error');
+                    document.querySelector("#modal-acceso [name='submit']").disabled = false;
+                } else {
+                    utils.showToast('No se pudo consultar la informacion', 'error');
+                    document.querySelector("#modal-acceso [name='submit']").disabled = false;
+                }
+
+
+            })
+            .catch(function (error) {
+                utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                console.log(error);
+            });
+    }
 
 
 

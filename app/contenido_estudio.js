@@ -16,6 +16,7 @@ class ContenidoEstudio{
         this.content_referencias_laborales = document.getElementById('content-referencias_laborales');
         this.content_documentos = document.getElementsByClassName('content-documentos');
         this.content_investigacion = document.getElementById('content-investigacion');
+        this.content_google_search = document.getElementById('content-google-search');
         this.content_comentarios_generales_inv = document.getElementById('content-comentarios_generales_inv');
         this.content_conociendo_candidato = document.getElementById('content-conociendo_candidato');
         this.content_escolaridad = document.getElementsByClassName('content-escolaridad');
@@ -69,6 +70,7 @@ class ContenidoEstudio{
         this.template_referencia_laboral = document.getElementById('template-referencia_laboral').content;
         this.template_documento = document.getElementById('template-documento').content;
         this.template_investigacion = document.getElementById('template-investigacion').content;
+        this.template_google_search = document.getElementById('template-google_search').content;
         this.template_comentarios_generales_inv = document.getElementById('template-comentarios_generales_inv').content;
         this.template_conociendo_candidato = document.getElementById('template-conociendo_candidato').content;
         this.template_escolaridad = document.getElementById('template-escolaridad').content;
@@ -126,6 +128,7 @@ class ContenidoEstudio{
         this.fragment_documento = this.fragments_documento;
 
         this.fragment_investigacion = document.createDocumentFragment();
+        this.fragment_google_search = document.createDocumentFragment();
         this.fragment_comentarios_generales_inv = document.createDocumentFragment();
 
         this.fragment_conociendo_candidato = document.createDocumentFragment();
@@ -286,7 +289,7 @@ class ContenidoEstudio{
             //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 299) {
             }else if (data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 299) {
                 document.querySelectorAll('#content_botones a')[2].style.display = "block";
-            }else if (data.Servicio_Solicitado == 'RAL' && (data.Servicio == 298 || data.Servicio == 311 || data.Servicio == 328)) {
+            }else if ((data.Servicio_Solicitado == 'RAL'||data.Servicio_Solicitado == 'ANÁLISIS DE RAL') && (data.Servicio == 298 || data.Servicio == 311 || data.Servicio == 328)) {
                 document.querySelectorAll('#content_botones a')[1].style.display = "block";
             }else if (data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 231) {
                 document.querySelectorAll('#content_botones a')[2].style.display = "block";
@@ -328,6 +331,10 @@ class ContenidoEstudio{
 			if ((data.Estado == 250 || data.Estado == 251) && data.Servicio_Solicitado == 'RAL' && display.SA == 'none'){
 				document.querySelectorAll('.botones_pausar_finalizar button')[1].style.display = 'inline-block';
 			}
+				
+				   if (data.Servicio_Solicitado == 'RAL' && data.Servicio == 291 && (data.Estado == 250 || data.Estado == 251|| data.Estado == 252) && data.ID_Empresa == 45) {
+                document.querySelectorAll('.botones_continuar button')[2].style.display = "block";
+            }
         }
 		
 
@@ -367,6 +374,11 @@ class ContenidoEstudio{
         
         this.template_videollamada.querySelector('button').style.display = display.Logistics;
 
+		 if (data.Servicio_Solicitado == 'ESE SMART') {
+            this.template_videollamada.querySelector('button').style.display = display.SA;
+			this.template_schedule.querySelector('button').style.display = display.SA;
+        }
+		
         if (data.Enlace_Drive) {
             if (data.Enlace_Drive.length > 10) {
                 this.template_videollamada.querySelector('div').style.display = 'block';
@@ -1030,6 +1042,8 @@ class ContenidoEstudio{
                 if (candidato.Servicio_Solicitado == 'ESE SMART') {
                     this.template_referencia_laboral.querySelectorAll('b')[1].textContent = 'Sitio Web';
                     this.template_referencia_laboral.querySelectorAll('p')[1].textContent = element.Sitio_Web;
+                    this.template_referencia_laboral.querySelectorAll('b')[2].textContent = 'Razon Social';
+                    this.template_referencia_laboral.querySelectorAll('p')[2].textContent = element.Razon_Social;
                     this.template_referencia_laboral.querySelectorAll('p')[6].textContent = 'Puesto';
                     this.template_referencia_laboral.querySelectorAll('p')[7].textContent = 'Correo del Contacto';
                     this.template_referencia_laboral.querySelectorAll('b')[16].style.display = 'none';
@@ -1117,6 +1131,12 @@ class ContenidoEstudio{
             document.querySelector('#modal_investigacion .preguntas-operador').style.display = 'block';
         }
 
+		  if (Empresa == 523) {//Dalton
+            this.template_investigacion.querySelector('.trabajo-dalton').style.display = 'block';
+            document.querySelector('#modal_investigacion .trabajo-dalton').style.display = 'block';
+            document.querySelector('#modal_investigacion [name="Familiar_Empresa"]').required=true
+        }
+		
         this.template_investigacion.querySelectorAll('p')[6].textContent = data.Sindicalizado == 1 ? 'Sí' : ( data.Sindicalizado == 0 ? 'No' : '');
         this.template_investigacion.querySelectorAll('p')[7].textContent = data.Sindicato;
         this.template_investigacion.querySelectorAll('p')[8].textContent = data.Comite_Sindical == 1 ? 'Sí' : ( data.Comite_Sindical == 0 ? 'No' : '');
@@ -1131,11 +1151,24 @@ class ContenidoEstudio{
         this.template_investigacion.querySelectorAll('p')[16].textContent = data.Sustancia_Antidoping;
         this.template_investigacion.querySelectorAll('p')[17].textContent = data.Accidentes_Empresa;
         this.template_investigacion.querySelectorAll('p')[18].textContent = data.Abandono_Unidad;
+		this.template_investigacion.querySelectorAll('p')[19].textContent = data.Familiar_Empresa;
         const clone_investigacion = this.template_investigacion.cloneNode(true);
         this.fragment_investigacion.appendChild(clone_investigacion);
 
         this.content_investigacion.innerHTML = '';
         this.content_investigacion.appendChild(this.fragment_investigacion);
+    }
+	
+	cargarBusquedaGoogle(pdf = 0) {
+		this.content_google_search.innerHTML = '';
+        if (pdf != 0) {
+            //const fileURL = URL.createObjectURL(pdf);
+            console.log(this.template_google_search.querySelector('embed').setAttribute('src', pdf));
+			
+            const clone_google_search = this.template_google_search.cloneNode(true);
+            this.fragment_google_search.appendChild(clone_google_search);
+            this.content_google_search.appendChild(this.fragment_google_search);
+        }
     }
 
     cargarComentariosGeneralesInv(observaciones, display, candidato){

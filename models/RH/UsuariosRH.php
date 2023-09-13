@@ -7,6 +7,7 @@ class UsuariosRH
     private $id_cliente;
     private $created_at;
     private $db;
+	private $status;
 
 
 
@@ -76,6 +77,15 @@ class UsuariosRH
     {
         $this->db = $db;
     }
+	 public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
 
 
     //===[gabo 7 julio rh_empleado]===
@@ -122,9 +132,9 @@ class UsuariosRH
     }
 
     //===[gabo 7 julio  user_rh]===
-    public function login_rh()
+     public function login_rh()
     {
-        $result = FALSE;
+        $result = false;
         $username = $this->getUsername();
         $password = $this->getPassword();
 
@@ -142,7 +152,7 @@ class UsuariosRH
                 $result = $fetch;
             }
         }
-        return $fetch;
+        return $result;
     }
     //===[gabo  7 julio user_rh fin]===
 
@@ -157,10 +167,7 @@ class UsuariosRH
         $flag = $stmt->execute();
         return $flag;
     }
-
-
-
-    public function getOneBYusername()
+	 public function exist_username()
     {
         $username = $this->getUsername();
         $stmt = $this->db->prepare("SELECT * from usuarios_rh where username=:username");
@@ -171,6 +178,28 @@ class UsuariosRH
     }
 
 
+    public function updateStatus()
+    {
+        $status = $this->getStatus();
+        $id = $this->getId();
+
+        $username = $this->getUsername();
+        $stmt = $this->db->prepare("UPDATE usuarios_rh SET status=:status where id=:id");
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+        $flag = $stmt->execute();
+        return $flag;
+    }
+	    public function getOneBYusername()
+    {
+        $username = $this->getUsername();
+        $stmt = $this->db->prepare("SELECT * from usuarios_rh where username=:username");
+        $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+        $stmt->execute();
+        $fetch =  $stmt->fetchObject();
+        return $fetch;
+    }
+	
     public function getUsersInfo()
     {
 

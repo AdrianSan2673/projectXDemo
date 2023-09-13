@@ -191,6 +191,16 @@ class EjecutivosPlazas
     }
 
 
+  public function getEjecutivoPorCliente()
+    {
+        $ID_Cliente = $this->getID_Cliente();
+
+        $stmt = $this->db->prepare("SELECT * FROM rh_Candidatos_Ejecutivos_Plazas WHERE ID_Cliente=:Cliente");
+        $stmt->bindParam(":Cliente", $ID_Cliente, PDO::PARAM_INT);
+        $stmt->execute();
+        $ejecutivos = $stmt->fetchAll();
+        return $ejecutivos;
+    }
 
 
 }

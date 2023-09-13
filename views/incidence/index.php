@@ -20,14 +20,15 @@
         <h3 class="card-title">Listado de incidentes</h3>
       </div>
       <div class="card-body">
-        <div class="row">
-          <div class="col-sm-2 ml-auto">
-            <div class="btn-group mr-3 text-center">
-              <button class="btn btn-orange" id="btn-nuevo-incidencia">Nuevo incidente</button>
+        <?php if (Utils::permission($_GET['controller'], 'create')) : ?>
+          <div class="row">
+            <div class="col-sm-2 ml-auto">
+              <div class="btn-group mr-3 text-center">
+                <button class="btn btn-orange" id="btn-nuevo-incidencia">Nuevo incidente</button>
+              </div>
             </div>
           </div>
-        </div>
-
+        <?php endif ?>
         <!-- //===[gabo 7 junio incidencias]=== -->
 
         <section class="content-header">
@@ -110,8 +111,12 @@
                 <td class="text-center align-middle"><?= Utils::getDate($inc['created_at'])  ?></td>
                 <td class="text-center align-middle"><?= Utils::getDate($inc['end_date'])  ?></td>
                 <td class="text-center align-middle">
-                  <a href="<?= base_url ?>empleado/ver&id=<?= Encryption::encode($inc['id_employe']) ?>" class="btn btn-success"><i class="fas fa-eye"></i> Ver</a>
-                  <button class="btn btn-danger text-bold" value="<?= Encryption::encode($inc['id_incident'])  ?>">X</button>
+                  <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
+                    <a href="<?= base_url ?>empleado/ver&id=<?= Encryption::encode($inc['id_employe']) ?>" class="btn btn-success"><i class="fas fa-eye"></i> Ver</a>
+                  <?php endif ?>
+                  <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
+                    <button class="btn btn-danger text-bold" value="<?= Encryption::encode($inc['id_incident'])  ?>">X</button>
+                  <?php endif ?>
                 </td>
               </tr>
             <?php endforeach;

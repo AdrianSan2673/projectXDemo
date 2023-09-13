@@ -2,7 +2,9 @@
 // $candidate = new Candidate();
 // $candidates = $candidate->getCandidatesByKey('', '', '');
 
+
 $_GET['filtros'] .= ($_GET['id_language'] != '') ? "and id_language like " . "'%" . $_GET['id_language'] . "%'" : '';
+
 $extrawhere = substr($_GET['filtros'], 3);
 $tabla = "rrhhinge_Candidatos.filtros_candidatos fc";
 
@@ -42,14 +44,6 @@ $columns = array(
 
 );
 
-
-// $sql_details = array(
-//     'user' => '',
-//     'pass' => '',
-//     'db'   => 'reclutamiento3',
-//     'host' => 'localhost'
-// );
-
 $sql_details = array(
     'user' => 'reclutador',
     'pass' => 'Sr65s$0z',
@@ -65,6 +59,7 @@ require("../../../config/Connection.php");
 require("../../../config/Parameters.php");
 require("../../../models/Candidate.php");
 require("../../../helpers/utils.php");
+
 
 
 $extraFields = '';

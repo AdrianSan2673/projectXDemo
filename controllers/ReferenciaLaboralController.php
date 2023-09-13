@@ -89,6 +89,7 @@ class ReferenciaLaboralController{
             $Sitio_Web = @Utils::sanitizeStringBlank($_POST['Sitio_Web']);
             $Correo = @Utils::sanitizeStringBlank($_POST['Correo']);
             $Puesto_Informante = @Utils::sanitizeStringBlank($_POST['Puesto_Informante']);
+            $Razon_Social = @Utils::sanitizeStringBlank($_POST['Razon_Social']);
 
             $flag = $_POST['flag'];
 
@@ -124,6 +125,7 @@ class ReferenciaLaboralController{
                 $laboral->setSitio_Web($Sitio_Web);
                 $laboral->setCorreo($Correo);
                 $laboral->setPuesto_Informante($Puesto_Informante);
+                $laboral->setRazon_Social($Razon_Social);
 
                 $concepto = new CandidatosLaboralesConceptos();
                 $concepto->setCandidato($Candidato);

@@ -55,7 +55,7 @@ class Administracion_SAController{
 		}	
     }
 
-    public function purchase_order_follow_up(){
+       public function purchase_order_follow_up(){
 		if (Utils::isAdmin() || Utils::isManager() && Utils::isValid($_POST)) {
             $Folio = isset($_POST['Folio']) ? trim($_POST['Folio']) : FALSE;
             $Folio_Factura = isset($_POST['Folio_Factura']) ? trim($_POST['Folio_Factura']) : FALSE;
@@ -80,6 +80,7 @@ class Administracion_SAController{
                 $orden->setFecha_Prox_Gestion($Fecha_Prox_Gestion);
                 $update = $orden->update();
                 if ($update) {
+                    $orden->getEstado_OC(substr($Folio, 0, 2) == 'F-'?254:252);    
                     $orden->updateFolioYRazonDeServiciosPorFolio();
                     echo 1;
                 } else {
@@ -90,7 +91,7 @@ class Administracion_SAController{
                 echo 0;
             }
 		} else {
-			header("location:".base_url);
+            echo 0;
 		}	
     }
 
@@ -217,10 +218,17 @@ class Administracion_SAController{
                 
             }
             else {
-                $facturas_pendientes = $factura->getFacturasPendientes();
-                //$facturas_pagadas = [];
-				$facturas_pagadas = $factura->getFacturasPagadas(); 
-				$facturas_canceladas = $factura->getFacturasCanceladas(); 
+            $facturas_pendientes = $factura->getFacturasPendientes();
+                if (isset($_POST['search'])) {
+                    $factura->setFecha_inicio($_POST['fecha_inicio']);
+                    $factura->setFecha_fin($_POST['fecha_fin']);
+                    $facturas_pagadas = $factura->getFacturasPagadasPorFecha();
+                } else {
+                    $facturas_pagadas = $factura->getFacturasPagadas();
+                }
+
+                $facturas_canceladas = $factura->getFacturasCanceladas();
+				$facturas_incobrables = $factura->getFacturasIncobrables();
 
             }
 
@@ -230,6 +238,7 @@ class Administracion_SAController{
             require_once 'views/administracion/modal_afectar_facturas_cobranza.php';
             require_once 'views/administracion/modal_gestion_facturas_cobranza.php';
 			require_once 'views/administracion/modal_vetar_cliente.php';
+			require_once 'views/administracion/modal_info_cancelados.php';
             require_once 'views/administracion/cobranza.php';
             require_once 'views/layout/footer.php';
             require_once 'views/administracion/modal-factura.php';
@@ -274,6 +283,7 @@ class Administracion_SAController{
             $Monto = isset($_POST['Monto']) && !empty($_POST['Monto']) ? trim($_POST['Monto']) : 0;
             $Monto_IVA = isset($_POST['iva']) && !empty($_POST['iva']) ? ($Monto * $_POST['iva']) : 0;
             $Fecha_de_Pago = isset($_POST['Fecha_de_Pago']) && !empty($_POST['Fecha_de_Pago']) ? trim($_POST['Fecha_de_Pago']) : NULL;
+            $Tipo = isset($_POST['Tipo']) && !empty($_POST['Tipo']) ? ($_POST['Tipo']==1?'1':'0') : '0';
 
             if ($Folio && $Folio_Factura && $Fecha_Emision && $Hora_Emision && $Razon_Social && $Estado) {
                 $Fecha_Emision = DateTime::createFromFormat('Y-m-d H:i:s', "{$Fecha_Emision} {$Hora_Emision}");
@@ -289,15 +299,26 @@ class Administracion_SAController{
                 $factura->setMonto($Monto);
                 $factura->setMonto_IVA($Monto_IVA);
                 $factura->setFecha_de_Pago($Fecha_de_Pago);
+                $factura->setTipo($Tipo);
+				($Estado == 'Cancelada') ? $factura->setFecha_cancelacion(date('Y-m-d')) : $factura->setFecha_cancelacion(NULL);
                 $update = $factura->update();
                 $Factura = $factura->getOne();
+				
+				$facturas_pendientes = Administracion_SAController::formatear($factura->getFacturasPendientes());
+                $facturas_pagadas = Administracion_SAController::formatear($factura->getFacturasPagadas());
+                $facturas_canceladas = Administracion_SAController::formatear($factura->getFacturasCanceladas());
+                $facturas_incobrables = Administracion_SAController::formatear($factura->getFacturasIncobrables());
 
                 if ($update) {
                     $factura->updateFolioYRazonDeServiciosPorFolio();
                     $factura->updateSeguimientosPorFolio();
-                    echo json_encode(array(
-                            'Factura' => $Factura,
-                            'status' => 1
+                     echo json_encode(array(
+                        'Factura' => $Factura,
+                        'status' => 1,
+                        'facturas_pendientes' => $facturas_pendientes,
+                        'facturas_pagadas' => $facturas_pagadas,
+                        'facturas_canceladas' => $facturas_canceladas,
+                        'facturas_incobrables' => $facturas_incobrables,
                     ));
                 }else{
                     echo json_encode(array('status' => 2));
@@ -310,7 +331,7 @@ class Administracion_SAController{
 			header("location:".base_url);
 		}	
     }
-
+	
     public function gestion_factura(){
 		if (Utils::isAdmin() || Utils::isManager()) {
 
@@ -354,6 +375,7 @@ class Administracion_SAController{
                 $factura->setEstado($Estado);
                 $factura->setPromesa_Pago($Promesa_Pago);
                 $factura->setProxima_Gestion($Proxima_Gestion);
+				($Estado == 'Cancelada') ? $factura->setFecha_cancelacion(date('Y-m-d')) : $factura->setFecha_cancelacion(NULL);
                 $update = $factura->updateFollowUp();
                 $factura = $factura->getOne();
 
@@ -366,7 +388,16 @@ class Administracion_SAController{
                     $gestion->setUsuario($Usuario);
                     $gestion->setProxima_Gestion($Proxima_Gestion);
                     $gestion->create();
-                    echo json_encode(array('status' => 1, 'Factura' => $factura));
+					
+					$facturas_pendientes = Administracion_SAController::formatear($factura->getFacturasPendientes());
+                    $facturas_pagadas = Administracion_SAController::formatear($factura->getFacturasPagadas());
+                    $facturas_canceladas = Administracion_SAController::formatear($factura->getFacturasCanceladas());
+					
+                    echo json_encode(array(
+                        'status' => 1, 'Factura' => $factura2, 'facturas_pendientes' => $facturas_pendientes,
+                        'facturas_pagadas' => $facturas_pagadas,
+                        'facturas_canceladas' => $facturas_canceladas,
+                    ));
                 }else{
                     echo json_encode(array('status' => 2));
                 }
@@ -494,7 +525,7 @@ class Administracion_SAController{
                 );
 
                 header('Content-Type: text/html; charset=utf-8');
-                echo json_encode($all_info);
+                echo json_encode($all_info, JSON_UNESCAPED_UNICODE);
             }else{
                 echo 0;
             }
@@ -933,5 +964,89 @@ class Administracion_SAController{
             echo json_encode(array('status' => 0));
     }
 	//==========================================================================================
+  public static function formatear($facturas)
+    {
+        foreach ($facturas as &$factura) {
+            $factura['Fecha_Emision'] =   Utils::getShortDate($factura['Fecha_Emision']);
+            $factura['Monto'] = number_format($factura['Monto'], 2);
+            $factura['Monto_IVA'] = number_format($factura['Monto_IVA'], 2);
+            $factura['Fecha_de_Pago'] = (!is_null($factura['Fecha_de_Pago'])) ? Utils::getShortDate($factura['Fecha_de_Pago']) : '';
+            $factura['Fecha_Ultima_Gestion'] = (!is_null($factura['Fecha_Ultima_Gestion'])) ? Utils::getShortDate($factura['Fecha_Ultima_Gestion']) : '';
+            $factura['Proxima_Gestion'] = (!is_null($factura['Proxima_Gestion'])) ? Utils::getShortDate($factura['Proxima_Gestion']) : '';
+            $factura['Promesa_Pago'] = (!is_null($factura['Promesa_Pago'])) ? Utils::getShortDate($factura['Promesa_Pago']) : '';
+            $factura['Ultima_Gestion'] = (!is_null($factura['Ultima_Gestion'])) ? $factura['Ultima_Gestion'] : '';
+            $factura['Folio_Factura_Encrypytado'] = Encryption::encode($factura['Folio_Factura']);
+            $factura['fecha_cancelacion'] = (!is_null($factura['fecha_cancelacion'])) ? Utils::getShortDate($factura['fecha_cancelacion']) : '';
+            $factura['comentarios'] = (!is_null($factura['comentarios'])) ? $factura['comentarios'] : '';
+        }
+        return $facturas;
+    }
+	
+	  public function getInfoCancel()
+    {
+        if (Utils::isValid($_SESSION['identity']) && isset($_POST)) {
+            $folio_factura = isset($_POST['factura'])  ? Encryption::decode($_POST['factura']) : Null;
 
+            if ($folio_factura) {
+                $factura = new Facturas;
+                $factura->setFolio_Factura($folio_factura);
+                $factura = $factura->getOne();
+                $factura->Folio_Factura_encryptado = Encryption::encode($factura->Folio_Factura);
+            }
+
+
+
+            echo json_encode(array('status' => 1, 'factura' => $factura));
+        } else {
+            echo json_encode(array('status' => 0));
+        }
+    }
+
+    public function updateInfoCancelados()
+    {
+        if (Utils::isValid($_SESSION['identity']) && isset($_POST)) {
+
+            $folio_factura = isset($_POST['factura'])  ? Encryption::decode($_POST['factura']) : Null;
+            $comentarios = isset($_POST['comentarios'])  ? Utils::sanitizeString($_POST['comentarios']) : Null;
+            $fecha_cancelacion = isset($_POST['fecha_cancelacion'])  ? Utils::sanitizeString($_POST['fecha_cancelacion']) : Null;
+
+            if ($folio_factura) {
+                $factura = new Facturas;
+                $factura->setFolio_Factura($folio_factura);
+                $factura->setComentarios($comentarios);
+                $factura->setFecha_cancelacion($fecha_cancelacion);
+                $update = $factura->updateInfoCancelados();
+
+                $facturas_canceladas = Administracion_SAController::formatear($factura->getFacturasCanceladas());
+
+                echo json_encode(array('status' => 1, 'factura' => $factura, 'facturas_canceladas' => $facturas_canceladas,));
+            } else {
+                echo json_encode(array('status' => 0));
+            }
+        } else {
+            echo json_encode(array('status' => 0));
+        }
+    }
+
+	  public function chagueCliente()
+    {
+        if (Utils::isValid($_SESSION['identity'])  && isset($_POST)) {
+            $Cliente = isset($_POST['Cliente'])? Utils::sanitizeNumber($_POST['Cliente']):   Null;
+            if ($Cliente ) {
+                
+                $clienteObj = new Clientes();
+                $clienteObj->setCliente($Cliente);
+                $cliente=$clienteObj->getOne();
+                
+                $razon = new RazonesSociales();
+                $razon->setID_Cliente($Cliente);
+                $razones = $razon->getRazonesSocialesPorCliente();
+                echo json_encode(array('status' => 1, 'razones' => $razones,'cliente'=> $cliente));
+            } else {
+                echo json_encode(array('status' => 0));
+            }
+        } else {
+            echo json_encode(array('status' => 0));
+        }
+    }
 }

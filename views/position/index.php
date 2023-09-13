@@ -12,15 +12,17 @@
     </div><!-- /.container-fluid -->
   </section>
   <br>
-  <section class="content-header">
-    <div class="row">
-      <div class="col-sm-3 ml-auto">
-        <div class="btn-group mr-3 text-center">
-          <a href="<?= base_url ?>puesto/nuevo" class="btn btn-orange">Crear nuevo puesto</a>
+  <?php if (Utils::permission($_GET['controller'], 'create')) : ?>
+    <section class="content-header">
+      <div class="row">
+        <div class="col-sm-3 ml-auto">
+          <div class="btn-group mr-3 text-center">
+            <a href="<?= base_url ?>puesto/nuevo" class="btn btn-orange">Crear nuevo puesto</a>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  <?php endif ?>
   <!-- Main content -->
   <section class="content">
     <div class="card bg-transparent">
@@ -65,18 +67,20 @@
                           <td class="text-center align-middle"><?= Utils::getDate($position['created_at']) ?></td>
                           <td class="text-center align-middle">
                             <div class="row">
-
-                              <div class="col-6">
-                                <a href="<?= base_url ?>puesto/ver&id=<?= Encryption::encode($position['id']) ?>" class="btn btn-success">
-                                  <i class="fas fa-eye"></i> Ver
-                                </a>
-                              </div>
-
-                              <div class="col-4">
-                              <a href="<?= base_url ?>puesto/puestoFormato&id=<?= Encryption::encode($position['id']) ?>" class="btn btn-orange" Target="_blank">
-                                  <i class="fas fa-file-alt"></i>
-                                </a>
-                              </div>
+                              <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
+                                <div class="col-6">
+                                  <a href="<?= base_url ?>puesto/ver&id=<?= Encryption::encode($position['id']) ?>" class="btn btn-success">
+                                    <i class="fas fa-eye"></i> Ver
+                                  </a>
+                                </div>
+                              <?php endif ?>
+                              <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
+                                <div class="col-4">
+                                  <a href="<?= base_url ?>puesto/puestoFormato&id=<?= Encryption::encode($position['id']) ?>" class="btn btn-orange" Target="_blank">
+                                    <i class="fas fa-file-alt"></i>
+                                  </a>
+                                </div>
+                              <?php endif ?>
                             </div>
                           </td>
                         </tr>
@@ -115,18 +119,20 @@
                           <td class="text-center align-middle"><?= Utils::getDate($position['created_at']) ?></td>
                           <td class="text-center align-middle">
                             <div class="row">
-
-                              <div class="col-6">
-                                <a href="<?= base_url ?>puesto/ver&id=<?= Encryption::encode($position['id']) ?>" class="btn btn-success">
-                                  <i class="fas fa-eye"></i> Ver
-                                </a>
-                              </div>
-
-                              <div class="col-4">
-                                <a href="<?= base_url ?>puesto/puestoFormato&id=<?= Encryption::encode($position['id']) ?>" class="btn btn-orange" Target="_blank">
-                                  <i class="fas fa-file-alt"></i>
-                                </a>
-                              </div>
+                              <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
+                                <div class="col-6">
+                                  <a href="<?= base_url ?>puesto/ver&id=<?= Encryption::encode($position['id']) ?>" class="btn btn-success">
+                                    <i class="fas fa-eye"></i> Ver
+                                  </a>
+                                </div>
+                              <?php endif ?>
+                              <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
+                                <div class="col-4">
+                                  <a href="<?= base_url ?>puesto/puestoFormato&id=<?= Encryption::encode($position['id']) ?>" class="btn btn-orange" Target="_blank">
+                                    <i class="fas fa-file-alt"></i>
+                                  </a>
+                                </div>
+                              <?php endif ?>
                             </div>
                           </td>
                         </tr>

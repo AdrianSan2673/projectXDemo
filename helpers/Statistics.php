@@ -242,17 +242,20 @@ class Statistics{
         $candidate->setFecha_solicitud(date('Y-m-d'));
         return $candidate->getTotalESESPorDia();
     }
-    public static function getTotalESESOIHoy(){
+
+    public static function getTotalESESOIHoy()
+    {
         require_once 'models/SA/Candidatos.php';
         $candidate = new Candidatos();
         $candidate->setFecha_solicitud(date('Y-m-d'));
-        return $candidate->getTotalESESPorDia();
+        return $candidate->getTotalESESOIPorDia();
     }
-    public static function getTotalESESMARTHoy(){
+    public static function getTotalESESMARTHoy()
+    {
         require_once 'models/SA/Candidatos.php';
         $candidate = new Candidatos();
         $candidate->setFecha_solicitud(date('Y-m-d'));
-        return $candidate->getTotalESESPorDia();
+        return $candidate->getTotalESESMARTPorDia();
     }
 
 
@@ -291,6 +294,25 @@ class Statistics{
         $candidate->setFecha_solicitud(date('Y-m-d'));
         $candidate->setEjecutivo($_SESSION['identity']->username);
         return $candidate->getTotalESESPorDiaYEjecutivo();
+    }
+
+    public static function getTotalESESOIHoyPorEjecutivo()
+    {
+        require_once 'models/SA/Candidatos.php';
+        $candidate = new Candidatos();
+        $candidate->setFecha_solicitud(date('Y-m-d'));
+        $candidate->setEjecutivo($_SESSION['identity']->username);
+        return $candidate->getTotalESESOIPorDiaYEjecutivo();
+    }
+
+
+    public static function getTotalESESMARTHoyPorEjecutivo()
+    {
+        require_once 'models/SA/Candidatos.php';
+        $candidate = new Candidatos();
+        $candidate->setFecha_solicitud(date('Y-m-d'));
+        $candidate->setEjecutivo($_SESSION['identity']->username);
+        return $candidate->getTotalESESMARTPorDiaYEjecutivo();
     }
 
 

@@ -6,8 +6,7 @@ class AsistenciaRH
     private $coordenada;
     private $created_at;
     private $db;
-    //11 sept
-    private $type;
+	private $type;
 
     public function __construct()
     {
@@ -52,8 +51,7 @@ class AsistenciaRH
     {
         $this->created_at = $created_at;
     }
-    //11 sept
-    public function getType()
+	  public function getType()
     {
         return $this->type;
     }
@@ -62,7 +60,6 @@ class AsistenciaRH
     {
         $this->type = $type;
     }
-
 
 
     public function getOne()
@@ -86,7 +83,7 @@ class AsistenciaRH
         return $fetch;
     }
 
-    //gabo 11 sept
+
     public function Insertar_Asistencia()
     {
 
@@ -99,6 +96,7 @@ class AsistenciaRH
         $stmt->bindParam(":coordenada", $coordenada, PDO::PARAM_STR);
         $stmt->bindParam(":id_user_rh", $id_user_rh, PDO::PARAM_INT);
         $stmt->bindParam(":id_type", $id_type, PDO::PARAM_INT);
+
 
 
         $flag = $stmt->execute();

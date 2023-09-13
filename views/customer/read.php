@@ -30,18 +30,24 @@
 
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-4 text-center">
+                                    <!-- ===[gabo 7 agosto creado por ]=== -->
+                                    <div class="col-md-6 text-center">
                                         <b>Empresa</b>
                                         <p><?= $cliente->customer ?></p>
                                     </div>
-                                    <div class="col-md-4 text-center">
+                                    <div class="col-md-6 text-center">
                                         <b>Alias</b>
                                         <p><?= $cliente->alias ?></p>
                                     </div>
-                                    <div class="col-md-4 text-center">
+                                    <div class="col-md-6 text-center">
                                         <b>Centro de costos</b>
                                         <p><?= $cliente->cost_center ?></p>
                                     </div>
+                                    <div class="col-md-6 text-center">
+                                        <b>Creado por</b>
+                                        <p><?= $cliente->created_by ?></p>
+                                    </div>
+                                    <!-- ===[gabo 7 agosto creado por fin=== -->
                                 </div>
                                 <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior()) : ?>
                                     <div class="text-center">

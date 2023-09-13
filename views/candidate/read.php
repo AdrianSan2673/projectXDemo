@@ -51,10 +51,10 @@
               <div class="card-header" style="border-bottom: none;">
                 <?php if (!Utils::isCustomer()) : ?>
                   <div class="card-tools">
-                   <!-- ===[GABO 27 ABRIL VER CANDIDATO2]=== -->
-                  <button class="btn" style="font-size: 1.2rem;" value="editar" onclick="update_candidate('<?= Encryption::encode($candidato->id) ?>')"><i class="fas fa-pen"></i> </button>
-                  <!-- <a href="<?= base_url ?>candidato/editar&id=<?= Encryption::encode($candidato->id) ?>" class="btn btn-tool" style="font-size: 1.2rem;"><i class="fas fa-pen"></i></a> -->
-                  <!--  ===[FIN]=== -->
+                    <!-- ===[GABO 27 ABRIL VER CANDIDATO2]=== -->
+                    <button class="btn" style="font-size: 1.2rem;" value="editar" onclick="update_candidate('<?= Encryption::encode($candidato->id) ?>')"><i class="fas fa-pen"></i> </button>
+                    <!-- <a href="<?= base_url ?>candidato/editar&id=<?= Encryption::encode($candidato->id) ?>" class="btn btn-tool" style="font-size: 1.2rem;"><i class="fas fa-pen"></i></a> -->
+                    <!--  ===[FIN]=== -->
                   </div>
                 <?php endif ?>
 
@@ -94,21 +94,21 @@
                         <li>
                           <p id="city_state_can"><i class="fas fa-map-marker-alt"></i><?= '   ' . $candidato->city . ', ' . $candidato->state ?></p> <!-- ===[GABO 27 ABRIL VER CANDIDATO2]=== -->
                         </li>
-                         <?php   if($candidato->linkedinn!=""):  ?><!-- ===[GABO 27 ABRIL VER CANDIDATO2]=== -->
-                        <li>
-                          <p id="linkedinn_can"><i class="fab fa-linkedin-in"></i><?= '   ' . $candidato->linkedinn ?></p> <!-- ===[GABO 27 ABRIL VER CANDIDATO2]=== -->
-                        </li>
-                        <?php  endif;   ?>
-                        <?php   if($candidato->facebook!=""):  ?><!-- ===[GABO 27 ABRIL VER CANDIDATO2]=== -->
-                        <li>
-                          <p id="facebook_can"><i class="fab fa-facebook-square"></i><?= '   ' . $candidato->facebook ?></p> <!-- ===[GABO 27 ABRIL VER CANDIDATO2]=== -->
-                        </li>
-                        <?php  endif;   ?>
-                        <?php   if($candidato->instagram!=""):  ?><!-- ===[GABO 27 ABRIL VER CANDIDATO2]=== -->
-                        <li>
-                          <p id="instagram_can"><i class="fab fa-instagram"></i><?= '   ' . $candidato->instagram ?></p> <!-- ===[GABO 27 ABRIL VER CANDIDATO2]=== -->
-                        </li>
-                        <?php  endif;   ?>
+                        <?php if ($candidato->linkedinn != "") :  ?><!-- ===[GABO 27 ABRIL VER CANDIDATO2]=== -->
+                          <li>
+                            <p id="linkedinn_can"><i class="fab fa-linkedin-in"></i><?= '   ' . $candidato->linkedinn ?></p> <!-- ===[GABO 27 ABRIL VER CANDIDATO2]=== -->
+                          </li>
+                        <?php endif;   ?>
+                        <?php if ($candidato->facebook != "") :  ?><!-- ===[GABO 27 ABRIL VER CANDIDATO2]=== -->
+                          <li>
+                            <p id="facebook_can"><i class="fab fa-facebook-square"></i><?= '   ' . $candidato->facebook ?></p> <!-- ===[GABO 27 ABRIL VER CANDIDATO2]=== -->
+                          </li>
+                        <?php endif;   ?>
+                        <?php if ($candidato->instagram != "") :  ?><!-- ===[GABO 27 ABRIL VER CANDIDATO2]=== -->
+                          <li>
+                            <p id="instagram_can"><i class="fab fa-instagram"></i><?= '   ' . $candidato->instagram ?></p> <!-- ===[GABO 27 ABRIL VER CANDIDATO2]=== -->
+                          </li>
+                        <?php endif;   ?>
 
                       </ul>
                     <?php endif ?>
@@ -129,7 +129,7 @@
                   <?php if (!Utils::isCustomer()) : ?>
                     <div class="col-12 text-center">
                       <a href="<?= base_url ?>candidato/editar&id=<?= Encryption::encode($candidato->id) ?>" class="btn btn-lg btn-info"><i class="fas fa-pen"></i> Editar</a>
-                      
+
                     </div>
                   <?php endif ?>
 
@@ -349,13 +349,14 @@
         </div>
         <!-- /.row -->
         <?php if (!Utils::isCustomer() && !Utils::isCandidate()) : ?>
-          <?php if (count($vacancies) > 0) : ?>
+          <?php if (Utils::isRecruitmentManager()||Utils::isAdmin() ) : ?>
             <br>
             <div class="card card-info">
               <div class="card-header">
                 <h4 class="card-title">Vacantes a las que se ha postulado</h4>
               </div>
               <div class="card-body">
+                <button class="btn btn-orange float-right btn-lg" data-toggle="modal" data-target="#modal-postular">Postular</button>
 
                 <table id="tb_vacancies" class="table table-responsive table-striped" style="font-size: 0.6rem;">
                   <thead>
@@ -782,7 +783,7 @@
 
   }
 
-    function delete_aptitude(id_aptitude) {
+  function delete_aptitude(id_aptitude) {
 
     Swal.fire({
       title: '¿Desea eliminar este idioma?',
@@ -804,16 +805,16 @@
   };
 
 
-// ===[GABO 27 ABRIL VER CANDIDATO2]===
-  
+  // ===[GABO 27 ABRIL VER CANDIDATO2]===
+
   function update_candidate(id_candidate) {
 
-$('#modal_candidato').modal({
-  backdrop: 'static',
-  keyboard: false
-});
+    $('#modal_candidato').modal({
+      backdrop: 'static',
+      keyboard: false
+    });
 
-}
+  }
 
   // ===[FIN]===
 </script>

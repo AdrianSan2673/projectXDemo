@@ -2,11 +2,8 @@
 
 require_once 'libraries/fpdf/fpdf.php';
 require_once 'helpers/FormatosSA/ESE.php';
-require_once 'helpers/FormatosSA/ESEP.php';
 require_once 'helpers/FormatosSA/ESEING.php';
-require_once 'helpers/FormatosSA/InvestigacionLaboral.php';
 require_once 'helpers/FormatosSA/InvestigacionLaboraling.php';
-require_once 'helpers/FormatosSA/RAL.php';
 require_once 'helpers/FormatosSA/RALING.php';
 require_once 'helpers/FormatosSA/ValidacionLicenciaFederalPDF.php';
 require_once 'helpers/FormatosSA/ResultadoRAL.php';
@@ -887,7 +884,7 @@ class FormatoIngController
             $pdf->setSociales($candidato_datos);
             $pdf->setCohabitantes($cohabitantes, $candidato_datos->Comentario_Cohabitan);
             $pdf->setCirculoFamiliar($circulo_familiar);
-            $pdf->setVivienda($vivienda, $ubicacion, $candidato_datos->Comentario_Vivienda);
+            //$pdf->setVivienda($vivienda, $ubicacion, $candidato_datos->Comentario_Vivienda);
             //if ($candidato_datos->Empresa != 'QUÁLITAS') {
             $pdf->setEnseres($enseres);
             //}
@@ -904,15 +901,15 @@ class FormatoIngController
 
             $pdf->setFotoUbicacionGeografica($ubicacion_geografica);
             $pdf->setFotoUbicacionCalle($ubicacion_calle);
-            $pdf->setReferencias($referencias);
+           // $pdf->setReferencias($referencias);
             //if ($candidato_datos->Empresa != 'QUÁLITAS') {
             $pdf->setEconomiaFamiliar($ingresos, $egresos, $candidato_datos->Comentario_Economia);
             $pdf->setInformacionFinanciera($creditos, $cuentas, $seguros, $candidato_datos->INFONAVIT);
             $pdf->setInformacionPatrimonial($inmuebles, $vehiculos);
             //}
-            $pdf->setConclusiones($observaciones);
+            //$pdf->setConclusiones($observaciones);
             //if ($candidato_datos->ID_Empresa == 137) {
-            $pdf->setInvestigacionLaboral($investigacion, $candidato_datos->ID_Empresa);
+            //$pdf->setInvestigacionLaboral($investigacion, $candidato_datos->ID_Empresa);
             $pdf->setReferenciasLaborales($referencias_laborales, $candidato_datos->Cliente, $candidato_datos->ID_Empresa);
             $pdf->setResultadoInvestigacionLaboral($observaciones, $candidato_datos->ID_Empresa);
             $pdf->setNotasLegales($ral);

@@ -191,7 +191,7 @@ class Experience {
 						$('#modal_experiencia_candidato').modal('hide');
 						document.querySelector("#save-experience-form #candidate_submit").disabled = false;
 
-					} else if (json_app.status == 3) {
+					}else if (json_app.status == 3) {
 						utils.showToast('Formato de fecha inicial incorrecto', 'error');
 						document.querySelector("#save-experience-form #candidate_submit").disabled = false;
 					}
@@ -304,7 +304,7 @@ class Experience {
 					utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
 					document.querySelector("#save-experience-form #candidate_submit").disabled = false;
 				}
-			}
+			} 
 		}
 	}
 
@@ -362,7 +362,7 @@ class Experience {
 					utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
 					document.querySelector("#save-experience-form #candidate_submit").disabled = false;
 				}
-			}
+			} 
 		}
 	}
 

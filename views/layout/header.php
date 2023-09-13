@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="<?=base_url?>plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="<?=base_url?>plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
+	<link rel="stylesheet" href="<?=base_url?>plugins/bs-stepper/css/bs-steppermin.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?=base_url?>dist/css/adminlte.min.css?v=2021">
     <!-- Google Font: Source Sans Pro -->

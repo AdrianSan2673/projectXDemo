@@ -13,7 +13,7 @@
                     <input type="hidden" name="flag">
                     <div class="form-group">
                         <label class="col-form-label" for="Circunstancias_Laborales">¿El candidato cuenta con constancias laborales?</label>
-                        <select class="form-control" name="Circunstancias_Laborales"  required>
+                        <select class="form-control" name="Circunstancias_Laborales" required>
                             <option value="" hidden selected>Selecciona</option>
                             <option value="Si">Sí</option>
                             <option value="No">No</option>
@@ -29,11 +29,11 @@
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="Motivo_No_Proporciono_Datos">En caso de que no, ¿cuál fue el motivo por que no los proporcionó?</label>
-                        <input type="text" class="form-control" name="Motivo_No_Proporciono_Datos" maxlength="150" >
+                        <input type="text" class="form-control" name="Motivo_No_Proporciono_Datos" maxlength="150">
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="Demanda_Laboral">¿Ha demandado alguna empresa?</label>
-                        <select class="form-control" name="Demanda_Laboral"  required>
+                        <select class="form-control" name="Demanda_Laboral" required>
                             <option value="" hidden selected>Selecciona</option>
                             <option value="Si">Sí</option>
                             <option value="No">No</option>
@@ -89,8 +89,9 @@
                             <label class="col-form-label" for="Tiempo_Sindicato">¿Durante cuánto tiempo</label>
                             <input type="text" name="Tiempo_Sindicato" class="form-control" maxlength="250">
                         </div>
-                    </div> 
-                       <div class="trabajo-ternium" style="display: none;">
+                    </div>
+
+                    <div class="trabajo-ternium" style="display: none;">
                         <div class="form-group ">
                             <label class="col-form-label" for="Trabajo_Ternium">¿Ha trabajado para Ternium?</label>
                             <select class="form-control" name="Trabajo_Ternium">
@@ -99,7 +100,7 @@
                                 <option value="No">No</option>
                             </select>
                         </div>
-                        
+
                         <div class="form-group ">
                             <label class="col-form-label" for="Alta_Ternium">¿Qué empresa lo dio de alta y cuándo fue su último acceso a una planta Ternium?</label>
                             <input type="text" name="Alta_Ternium" class="form-control" maxlength="50">
@@ -110,6 +111,8 @@
                             <input type="text" name="Veto_Ternium" class="form-control" maxlength="50">
                         </div>
                     </div>
+
+
                     <div class="form-row preguntas-operador" style="display: none;">
                         <div class="form-group col">
                             <label for="Positivo_Antidoping" class="col-form-label">¿Alguna vez salió positivo en una prueba antidpoing?</label>
@@ -139,7 +142,19 @@
                                 <option value="No">No</option>
                             </select>
                         </div>
-                    </div>   
+                    </div>
+
+                    <div class="trabajo-dalton" style="display: none;">
+                        <div class="form-group ">
+                            <label class="col-form-label" for="Trabajo_dalton">¿Cuentan con algún familiar dentro de la empresa?</label>
+                            <select class="form-control" name="Familiar_Empresa">
+                                <option value="" disabled selected>Selecciona</option>
+                                <option value="Si">Sí</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -147,7 +162,7 @@
                 </div>
             </form>
         </div>
-    </div>              
+    </div>
 </div>
 
 

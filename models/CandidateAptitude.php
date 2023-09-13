@@ -81,8 +81,9 @@ class CandidateAptitude
 		$flag = $stmt->execute();
 
 		if ($flag) {
-			$result = true;
-		}
+            $result = true;
+            $this->setId($this->db->lastInsertId());
+        }
 		return $result;
 	}
 

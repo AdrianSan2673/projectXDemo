@@ -139,23 +139,10 @@ class Applicant {
                     utils.showToast('No has seleccionado ningún candidato', 'error');
                     document.querySelector("#postulate").disabled = false;
                 } else if (r == 1) {
-                    // utils.showToast('Los candidatos seleccionados se enviaron al reclutador', 'success');
-                    //side server
-                    Swal.fire(
-                        'Postulados!',
-                        'Los candidatos seleccionados se enviaron al reclutador',
-                        'success'
-                    )
-                    document.querySelector("#postulate").disabled = false;
-
-                    let candidate = new Candidate();
-                    candidate.LoadTablePostulate();
-
-                    // setTimeout(() => {
-                    //     window.location.reload();
-                    // }, 2000);
-                    //side server
-
+                    utils.showToast('Los candidatos seleccionados se enviaron al reclutador', 'success');
+                    setTimeout(() => {
+                        window.location.href = `../vacante/index`;
+                    }, 2000);
                 } else if (r == 2) {
                     utils.showToast('Algo salió mal, inténtalo de nuevo', 'error');
                     document.querySelector("#postulate").disabled = false;
@@ -167,9 +154,9 @@ class Applicant {
     }
 
 
-    //modal-vacantes
+    // ===[gabo 2 mayo  modal vacantes]===
     getVacanciesByCandidato(id_candidato) {
-        console.log("entre");
+
         let xhr = new XMLHttpRequest();
         let data = `id_candidato=${id_candidato}`;
         xhr.open('POST', '../postulaciones/getVacanciesByCandidato');
@@ -187,8 +174,6 @@ class Applicant {
                     if (json_app.status == 0) {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     } else if (json_app.status == 1) {
-
-
                         let cities = '';
                         cities += `<option value=""></option>`
                         for (let i in json_app.vacantes) {
@@ -211,8 +196,7 @@ class Applicant {
         }
     }
 
-    //modal-vacantes
-
+    // ===[gabo 2 mayo  modal vacantes fin]===
 
     //side server
     postulate_one(id_candidate, id_vacancy) {
@@ -248,7 +232,6 @@ class Applicant {
                         let candidate = new Candidate();
                         candidate.LoadTablePostulate();
 
-
                     } else if (json_app.status == 0) {
                         utils.showToast('No se pudo consultar la informacion dentro', 'error');
                         document.querySelector('#agregar-area-form [name="guardar"]').disabled = false;
@@ -269,9 +252,6 @@ class Applicant {
                 document.querySelector('#agregar-area-form [name="guardar"]').disabled = false;
             });
     }
-
-
-
 
 
 }

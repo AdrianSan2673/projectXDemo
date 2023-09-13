@@ -93,47 +93,66 @@ class ServicioApoyoController {
                 require_once 'views/ese/modal-schedule.php';
                 require_once 'views/layout/footer.php';
             }else {
-                //esto es para los clientes
-			   
-			   //Para usuarios que tienen mas de una empresa
-			    $contactoEmpresa = new ContactosEmpresa();
+               //esto es para los clientes
+                //Para usuarios que tienen mas de una empresa
+                $contactoEmpresa = new ContactosEmpresa();
                 $contactoEmpresa->setUsuario($_SESSION['identity']->username);
                 $contactos = $contactoEmpresa->getContactoPorUsuario2();
 
+                $id = $_SESSION['identity']->id;
+                $id_empresa=$contactos[0]['Empresa'];
+
                 $estudios = [];
-                foreach ($contactos as $contacto) {
-                    $id_contacto = $contacto['ID'];
-                    $id_empresa = $contacto['Empresa'];
-                    $estudioObj = new Candidatos();
-                    $estudioObj->setContacto($id_contacto);
-                    if ($id_empresa == 45) { //Para transpais del 2022 a actual
-                        $estudio1 = $estudioObj->getServiciosPorContactoTranspais();
-                    } else {
-                        //$estudio1 = $estudioObj->getServiciosPorContacto();
-						
-						//ciosa y estafera [Condcion solicitada de las empresas que los usuarios solo vean lo que solicitaron]
-						 $user = $_SESSION['identity']->username;
-                        if ($user == 'Claudiabarragan' || $user == 'allan.perez' || $user == 'maria.castro' || $user == 'rodrigo.lopez'|| $user == 'valeria.juarez') 
-                        {
-                            $estudioObj->setContacto($_SESSION['identity']->username);
-                            $estudio1 = $estudioObj->getServiciosPorUsuario();
-                        } else
-                            $estudio1 = $estudioObj->getServiciosPorContacto();
+                $estudioObj = new Candidatos();
+
+                //ciosa, estafeta,Prudential [Condcion solicitada de las empresas que los usuarios solo vean lo que solicitaron], Dalton
+                if ($id == 8084 || $id == 8844 || $id == 9034 || $id == 8826 || $id == 9051 || ($id_empresa == 525 && ($id != 9517 && $id != 9518 && $id != 9510 && $id != 9511 && $id != 9512 && $id != 9513)) || $id == 9628 || $id == 9629 || $id == 9630 || $id == 9631 || $id == 9632 || $id == 9633) { //
+                    $ContactosClienteSolicitanObj= new ContactosClienteSolicitan();
+                    $ContactosClienteSolicitanObj->setUsuario($_SESSION['identity']->username);
+                    $ContactosClienteSolicitan=$ContactosClienteSolicitanObj->getAllContactoPorUsuario();
+                    
+                    foreach ($ContactosClienteSolicitan as $cliente) {
+                        $estudioObj->setCliente($cliente['Cliente']);
+                        $estudioObj->setContacto($_SESSION['identity']->username);
+                        $estudio1 = $estudioObj->getServiciosPorUsuario();
+                        $estudios = array_merge($estudios, $estudio1);
                     }
-                    $estudios = array_merge($estudios, $estudio1);
+
+                } else {
+                    foreach ($contactos as $contacto) {
+                        $id_contacto = $contacto['ID'];
+                        $id_empresa = $contacto['Empresa'];
+                        $estudioObj->setContacto($id_contacto);
+
+                        if ($id_empresa == 45) { //Para transpais del 2022 a actual
+                            $estudio1 = $estudioObj->getServiciosPorContactoTranspais();
+                        } else {
+                            if ($id == 9517 || $id == 9518) {
+                                $estudio1 = $estudioObj->getServiciosPorContactoYViabilidad();
+                            } else {
+                                $estudio1 = $estudioObj->getServiciosPorContacto();
+                            }
+                        }
+                        $estudios = array_merge($estudios, $estudio1);
+                    }
+
                 }
-			
-				
+
                 $page_title = 'Estudios SocioEconómicos | RRHH Ingenia';
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
-                if($id_empresa == 413)//charger
-                require_once 'views/ese/index_clientes_charger.php';
-                else
-                require_once 'views/ese/index_clientes.php';
+                if ($id_empresa == 413) //charger
+                {
+                    require_once 'views/ese/index_clientes/index_clientes_charger.php';
+                } else if ($id_empresa == 525 && ($id != 9517 && $id != 9518 && $id != 9510 && $id != 9511 && $id != 9512 && $id != 9513)) //prudentia
+                {
+                    require_once 'views/ese/index_clientes/index_clientes_prudential.php';
+                } else {
+                    require_once 'views/ese/index_clientes.php';
+                }
                 require_once 'views/layout/modal-encuesta.php';
                 require_once 'views/layout/footer.php';
-            }            
+            }   
         } else
             header('location:'.base_url);
     }
@@ -563,8 +582,7 @@ class ServicioApoyoController {
                                         <label>Para mas detalles del ESE hacer clic </label>
                                         <a href='${Enlace2}'>aqui!</a>
                                         <br/>
-                                        <img style='align-content: center;' src='http://rrhh-ingenia.com/Imagenes/rrhh-ingenia.png' height='auto' width='550' ></img>
-                                </body>
+                                        <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                                </body>
                                 </html> ";
                             }
                             /*elseif ($Servicio_Solicitado == 230 && $Nivel == 4) {
@@ -588,8 +606,7 @@ class ServicioApoyoController {
                                         <label>Para mas detalles de la Verificación Domiciliaria hacer clic </label>
                                         <a href='${Enlace2}'>aqui!</a>
                                         <br/>
-                                        <img style='align-content: center;' src='http://rrhh-ingenia.com/Imagenes/rrhh-ingenia.png' height='auto' width='550' ></img>
-                                </body>
+<img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                                </body>
                                 </html> ";
                             }*/
                             else {
@@ -609,8 +626,7 @@ class ServicioApoyoController {
                                         <label>Para mas detalles hacer clic </label>
                                         <a href='${Enlace}'>aqui!</a>
                                         <br/>
-                                        <img style='align-content: center;' src='http://rrhh-ingenia.com/Imagenes/rrhh-ingenia.png' height='auto' width='550' ></img>
-                                </body>
+                                        <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                                </body>
                                 </html>";
                             }
 							Utils::newNotification($Reclutador.' de '. $Nombre_Cliente.' solicita '. $Tipo_Solicitud, $Enlace, 1, $Servicio_Solicitado == 231 || $Servicio_Solicitado == 299 ? 1 : ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 300 ? 2 : ($Servicio_Solicitado == 328 ? 3 : 16)), $id_user, $_SESSION['identity']->id, $id_cliente);
@@ -642,8 +658,7 @@ class ServicioApoyoController {
                                     <label>Estimado(a) <b>${Reclutador}</b>, se ha registrado con éxito su nueva solicitud de <b>${Tipo_Solicitud}</b>.</label><br/><br/>
                                     <label>Candidato: <b>${Nombre_Candidato}</b></label><br/>
                                     <label>Telefono: <b>${Telefono}</b></label><br/>${Comentarios_Cliente}<br/><br><br/>
-                                    <img style='align-content: center;' src='http://rrhh-ingenia.com/Imagenes/rrhh-ingenia.png' height='auto' width='550'></img>
-                                </body>
+                                    <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                                </body>
                             </html>";
                             Utils::sendEmail($Correo, $Reclutador, $Asunto2, $body2);
                         }else{
@@ -730,8 +745,7 @@ class ServicioApoyoController {
                                 <body>
                                     <label>Estimado(a) <b>${Reclutador}</b>, se ha registrado con éxito su nueva solicitud de Consulta de <b>${Tipo_Solicitud}</b>.</label><br/><br/>
                                     <label>Candidato: <b>${Nombre_Candidato}</b></label><br/><br><br/>
-                                    <img style='align-content: center;' src='http://rrhh-ingenia.com/Imagenes/rrhh-ingenia.png' height='auto' width='550'></img>
-                                </body>
+                                    <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                                </body>
                             </html>";
                             Utils::sendEmail($Correo, $Reclutador, $Asunto2, $body2);
                             $auto_ral = 1;
@@ -800,6 +814,22 @@ class ServicioApoyoController {
             require_once 'views/layout/footer.php';
         } else {
             header('location:'.base_url);
+        }
+    }
+
+    public function certificadosSOI()
+    {
+        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager()) {
+            $estudio = new Candidatos();
+            $estudios = $estudio->getServiciosSOI();
+
+            $page_title = 'Certificados SOI | RRHH Ingenia';
+            require_once 'views/layout/header.php';
+            require_once 'views/layout/sidebar.php';
+            require_once 'views/ese/soi-index.php';
+            require_once 'views/layout/footer.php';
+        } else {
+            header('location:' . base_url);
         }
     }
 
@@ -1238,6 +1268,10 @@ class ServicioApoyoController {
                 if (get_headers(base_url.'uploads/soi/'.$folio.'.png')[0] != 'HTTP/1.1 404 Not Found')
                     $soi = base_url.'uploads/soi/'.$folio.'.png';
 				
+				$google_search = 0;
+                if (get_headers(base_url.'uploads/google_search/'.$folio.'.pdf')[0] != 'HTTP/1.1 404 Not Found')
+                    $google_search = base_url.'uploads/google_search/'.$folio.'.pdf';
+				
 				$candidato_datos->folio = Encryption::encode($folio);
                 $all_info = array(
                     'candidato_datos' => $candidato_datos,
@@ -1279,7 +1313,8 @@ class ServicioApoyoController {
                     'expedientes_RAL' => $expedientes_RAL,
 					'soi' => $soi,
 					'soiCer' => $soiCer,
-                    'notas' => $notas
+                    'notas' => $notas,
+                    'google_search' => $google_search
                 );
                 header('Content-Type: text/html; charset=utf-8');
                 echo json_encode($all_info);
@@ -1414,8 +1449,7 @@ class ServicioApoyoController {
                                 <a href='$url' target='_blank' >aqui</a>
                                 </b></p><br/>
 
-                                <br/><img style='align-content: center;' src='http://rrhh-ingenia.com/Imagenes/rrhh-ingenia.png' height='auto' width='800' ></img>
-                        </body>
+                                <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                        </body>
                     </html>
                     ";
 
@@ -1479,7 +1513,7 @@ class ServicioApoyoController {
     }
 
     public function update_schedule(){
-        if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isLogistics() || Utils::isLogisticsSupervisor())) {
+        if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isAccount() ||Utils::isLogistics() || Utils::isLogisticsSupervisor())) {
             $Folio = isset($_POST['Folio_Candidato']) && !empty($_POST['Folio_Candidato']) ? trim($_POST['Folio_Candidato']) : FALSE;
             $Ejecutivo = isset($_POST['Logistica']) && !empty($_POST['Logistica']) ? trim($_POST['Logistica']) : '';
 
@@ -1540,8 +1574,7 @@ class ServicioApoyoController {
                                 <br/><br/>
                                 <p>Ejecutivo de logística: <b>$Logistica</b></p><br/>
                                 <p>Fecha y Hora: <b>$Fecha_Aplicacion</b></p><br/>
-                                <br/><img style='align-content: center;' src='http://rrhh-ingenia.com/Imagenes/rrhh-ingenia.png' height='auto' width='800' ></img>
-                        </body>
+                                <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                        </body>
                     </html>
                     ";
 
@@ -2751,8 +2784,7 @@ class ServicioApoyoController {
                                         <label>Estimado(a) <b>${Reclutador}</b>, se ha registrado con éxito su nueva solicitud de <b>${Tipo_Solicitud}</b>.</label><br/><br/>
                                         <label>Candidato: <b>${Nombre_Candidato}</b></label><br/>
                                         <label>Telefono: <b>${Telefono}</b></label><br/>${Comentarios_Cliente}<br/><br><br/>
-                                        <img style='align-content: center;' src='http://rrhh-ingenia.com/Imagenes/rrhh-ingenia.png' height='auto' width='550'></img>
-                                    </body>
+                                        <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                                    </body>
                                 </html>";
 								
 								if($Cliente != 408)
@@ -2941,8 +2973,7 @@ class ServicioApoyoController {
                             </head>
                             <body>
                                 <p>$Mensaje</p>
-                                <br/><img style='align-content: center;' src='http://rrhh-ingenia.com/Imagenes/rrhh-ingenia.png' height='auto' width='800' ></img>
-                            </body>
+                                <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                            </body>
                         </html>
                         ";
                     $cc = array('email' => $_SESSION['identity']->email, 'name' => $_SESSION['identity']->first_name.' '.$_SESSION['identity']->last_name);
@@ -2994,8 +3025,9 @@ class ServicioApoyoController {
             $Estado = Utils::sanitizeNumber($_POST['Estado']);
             $Comentario_Pausa = Utils::sanitizeString(($_POST['Comentario_Pausa']));
 
-            if ($Folio && $Comentario_Pausa && ($Fase == 230 || $Fase == 231 || $Fase == 298 || $Fase == 291 || ($Servicio_Solicitado == 231 && $Fase == 231) || ($Servicio_Solicitado == 230 && $Fase == 230) || ($Servicio_Solicitado == 230 && $Fase == 300) || ($Servicio_Solicitado == 231 && $Fase == 299) || ($Servicio_Solicitado == 323 && $Fase == 324) || ($Servicio_Solicitado == 230 && $Fase == 299) || ($Servicio_Solicitado == 230 && $Fase == 231)) && ($Estado == 250 || $Estado == 251)) {
+            if ($Folio && $Comentario_Pausa && ($Fase == 230 || $Fase == 231 || $Fase == 298 || $Fase == 291 || ($Servicio_Solicitado == 231 && $Fase == 231) || ($Servicio_Solicitado == 230 && $Fase == 230) || ($Servicio_Solicitado == 230 && $Fase == 300) || ($Servicio_Solicitado == 231 && $Fase == 299) || ($Servicio_Solicitado == 323 && $Fase == 324) || ($Servicio_Solicitado == 230 && $Fase == 299) || ($Servicio_Solicitado == 230 && $Fase == 231)|| ($Servicio_Solicitado == 340 && $Fase == 300)||($Servicio_Solicitado == 340 && $Fase == 299)|| ($Servicio_Solicitado == 341 && $Fase == 300)||($Servicio_Solicitado == 341 && $Fase == 299) ) && ($Estado == 250 || $Estado == 251)) {
 
+					 
                 $Estado = 249;
 
                 $estudio = new Candidatos();
@@ -3060,7 +3092,7 @@ class ServicioApoyoController {
             $Fase = Utils::sanitizeNumber($_POST['Fase']);
             $Estado = Utils::sanitizeNumber($_POST['Estado']);
 
-            if ($Folio && ($Fase == 230 || $Fase == 231 || $Fase == 298 || ($Servicio_Solicitado == 231 && $Fase == 231) || ($Servicio_Solicitado == 230 && $Fase == 230) || ($Servicio_Solicitado == 230 && $Fase == 300) || ($Servicio_Solicitado == 231 && $Fase == 299) || ($Servicio_Solicitado == 323 && $Fase == 324) || ($Servicio_Solicitado == 230 && $Fase == 299) || ($Servicio_Solicitado == 230 && $Fase == 231)) && ($Estado == 249)) {
+            if ($Folio && ($Fase == 230 || $Fase == 231 || $Fase == 298 || ($Servicio_Solicitado == 231 && $Fase == 231) || ($Servicio_Solicitado == 230 && $Fase == 230) || ($Servicio_Solicitado == 230 && $Fase == 300) || ($Servicio_Solicitado == 231 && $Fase == 299) || ($Servicio_Solicitado == 323 && $Fase == 324) || ($Servicio_Solicitado == 230 && $Fase == 299) || ($Servicio_Solicitado == 230 && $Fase == 231)|| ($Servicio_Solicitado == 340 && $Fase == 300)||($Servicio_Solicitado == 340 && $Fase == 299)|| ($Servicio_Solicitado == 341 && $Fase == 300)||($Servicio_Solicitado == 341 && $Fase == 299)) && ($Estado == 249)) {
 
                 $Estado = 250;
 
@@ -3371,5 +3403,34 @@ class ServicioApoyoController {
                 echo 0;
         } else
             header('location:' . base_url);
+    }
+	
+	public function upload_google_search() {
+        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager()) {
+            $Folio = Utils::sanitizeNumber($_POST['Folio']);
+            $search = isset($_FILES['search']) && $_FILES['search']['name'] != '' ? $_FILES['search'] : FALSE;
+            if ($search && $Folio) {
+                if (file_exists('uploads/google_search/'.$Folio.'.pdf')) {
+                    Utils::deleteDir('uploads/google_search/'. $Folio.'.pdf');
+                }
+                
+                $allowed_formats = array("application/pdf"); 
+                $limit_kb = 16000;
+                
+                if(in_array($_FILES["search"]["type"], $allowed_formats) && $_FILES["search"]["size"] <= $limit_kb * 1024){
+                    $route = 'uploads/google_search/';
+                    $search = $route.$Folio.'.pdf';
+                    
+                        mkdir($route);
+                    
+                        $result = @move_uploaded_file($_FILES["search"]["tmp_name"], $search);
+
+                    if ($result) {echo json_encode(['status' => 1, 'google_search' => base_url.'uploads/google_search/'.$Folio.'.pdf']);}
+                    else{echo json_encode(['status' => 2]);}
+                }
+            }else{
+                echo json_encode(['status' => 0]);
+            }
+        }
     }
 }

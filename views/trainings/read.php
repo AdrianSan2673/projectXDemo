@@ -63,9 +63,11 @@
                             
                         </div>
                         <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior()): ?>
-                            <div class="text-center">
-                                <button class="btn btn-info" id="btn-editar-cliente">Editar</button>
-                            </div>
+                            <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                <div class="text-center">
+                                    <button class="btn btn-info" id="btn-editar-cliente">Editar</button>
+                                </div>
+                            <?php endif ?>
                         <?php endif ?>
                     </div>
                 </div>
@@ -92,9 +94,11 @@
                                         <td><?=$employee['title']?></td>
                                         <td><?=$employee['Razon']?></td>
                                         <td>
-                                            <a href="<?=base_url?>formato/DC3&id=<?=Encryption::encode($employee['id'])?>" target="_blank" class="btn btn-orange">
-                                                <i class="fas fa-file-download"></i>
-                                            </a>
+                                            <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
+                                                <a href="<?=base_url?>formato/DC3&id=<?=Encryption::encode($employee['id'])?>" target="_blank" class="btn btn-orange">
+                                                    <i class="fas fa-file-download"></i>
+                                                </a>
+                                            <?php endif ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

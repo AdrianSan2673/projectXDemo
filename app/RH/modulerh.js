@@ -7,12 +7,12 @@ class ModuleRH {
         const formData = new FormData(form);
 
         fetch('../RecursosHumanos/save', {
-            method: 'POST',
-            /* headers: {
-                'Content-type': 'application/x-www-form-urlencoded'
-            }, */
-            body: formData
-        })
+                method: 'POST',
+                /* headers: {
+                    'Content-type': 'application/x-www-form-urlencoded'
+                }, */
+                body: formData
+            })
             .then(response => {
                 if (response.ok) {
                     return response.text();
@@ -42,9 +42,9 @@ class ModuleRH {
                                   <td class="text-left align-middle ">${element.Nombre_Cliente}</td>
                                   <td class="text-center align-middle">${element.Centro_Costos}</td>
                                   <td class="text-center align-middle">${element.Servicios}</td>
-                                  <td class="text-center align-middle">${element.Paquete == '' || element.Paquete == null ? 'Sin paquete' : element.Paquete}</td>
-                                  <td class="text-center align-middle">${element.Modulo_RH == 0 ? '<small class="badge badge-danger"><i class="fas fa-times-circle"></i>Desactivado</small>' : '<small class="badge badge-success"><i class="fas fa-check-circle"></i>Activo</small>'}</td>
-                                  <td class="text-center align-middle">${element.Fecha_cancelacion == '' ? 'Sin cancelacion' : element.Fecha_cancelacion}</td>
+                                  <td class="text-center align-middle">${element.Paquete==''  || element.Paquete==null? 'Sin paquete':element.Paquete}</td>
+                                  <td class="text-center align-middle">${element.Modulo_RH==0?'<small class="badge badge-danger"><i class="fas fa-times-circle"></i>Desactivado</small>':'<small class="badge badge-success"><i class="fas fa-check-circle"></i>Activo</small>'}</td>
+                                  <td class="text-center align-middle">${element.Fecha_cancelacion== '' ? 'Sin cancelacion' : element.Fecha_cancelacion}</td>
           
                                   <td class="text-center py-0 align-middle">
                                     <div class="btn-group btn-group-sm" >
@@ -83,8 +83,8 @@ class ModuleRH {
                 submitBtn.disabled = false;
             });
     }
-
-
+	
+	
     save_type() {
         const form = document.querySelector("#add-type-form");
         const submitBtn = form.querySelector('[name="guardar"]');
@@ -222,4 +222,7 @@ class ModuleRH {
                 submitBtn.disabled = false;
             });
     }
+
+
+
 }

@@ -325,7 +325,7 @@ class Positions
 		//$type_position = $this->getType_position();
 		$ID_Contacto = $this->getID_Contacto();
 
-		$stmt = $this->db->prepare("SELECT  CONCAT(e.first_name,' ',e.surname,' ',e.last_name,' - ', p.title) employePosition,e.id id_employee,* FROM root.positions p, root.employees e  WHERE  e.id_position=p.id AND p.status=:status AND e.status=1 AND e.Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos3.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) ORDER BY p.type_position,p.title,e.first_name");
+		$stmt = $this->db->prepare("SELECT  CONCAT(e.first_name,' ',e.surname,' ',e.last_name,' - ', p.title) employePosition,e.id id_employee,* FROM root.positions p, root.employees e  WHERE  e.id_position=p.id AND p.status=:status AND e.status=1 AND e.Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) ORDER BY p.type_position,p.title,e.first_name");
 
 		$stmt->bindParam(":status", $status, PDO::PARAM_STR);
 		//$stmt->bindParam(":type_position", $type_position, PDO::PARAM_STR);
@@ -674,7 +674,7 @@ class Positions
 	}
 	//===[gabo 7 junio puestos fin]===
 
-	// <!--===[gabo 3 JULIO MODULO RH]=== -->
+    // <!--===[gabo 3 JULIO MODULO RH]=== -->
 	public function getPositionsByCliente()
 	{
 		$ID_Cliente = $this->getID_Cliente();
@@ -689,7 +689,7 @@ class Positions
 		return $fetch;
 	}
 
-
+	
 	public function getAllPositionByTypePositionAndCliente()
 	{
 		$status = $this->getStatus();
@@ -707,7 +707,7 @@ class Positions
 		return $fetch;
 	}
 
-	// <!-- //===[gabo 3 JULIO MODULO RH]=== -->
+    // <!-- //===[gabo 3 JULIO MODULO RH]=== -->
 
 	//===[gabo 19 julio cliente session]===
 	public function getAllPositionByID_Cliente()

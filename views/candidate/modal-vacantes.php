@@ -9,36 +9,30 @@
                 </button>
             </div>
             <!-- form start -->
-
-            <form id="add-candidate-form" name="add-candidate-form" action="post">
-                <!-- //modal-vacantes-->
-                <!-- <input type="hidden" id="id_recruiter" value="<?= $_SESSION['identity']->id; ?>"> -->
-                <!--//modal-vacantes -->
+            <form id="add-candidate-form" name="add-candidate-form"  action="post">
                 <div class="modal-body">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
-
-                                <input type="hidden" value="" name="id_candidate" id="id_candidato_v">
-                                <div class="card card-info ">
-                                    <div class="card-header">
-                                        <h4 class="card-title" id="nombre_candidato"></h4>
-                                    </div>
-                                    <div class="card-body ">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="vacantes" class="col-form-label">Vacantes
-                                                        disponibles:</label>
-                                                    <select multiple name="id_vacancies[]" id="id_vacancy_v"
-                                                        class="form-control select2" required>
-                                                        <option disabled selected>Selecciona una vacante</option>
-                                                    </select>
+                                
+                                    <input type="hidden" value="" name="id_candidate" id="id_candidato_v">
+                                    <div class="card card-info ">
+                                        <div class="card-header">
+                                            <h4 class="card-title" id="nombre_candidato"></h4>
+                                        </div>
+                                        <div class="card-body ">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="vacantes" class="col-form-label">Vacantes disponibles:</label>
+                                                        <select multiple  name="id_vacancies[]"  id="id_vacancy_v" class="form-control select2" required>
+                                                            <option disabled selected>Selecciona una vacante</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -52,12 +46,12 @@
     </div>
 </div>
 
-<script src="<?= base_url ?>app/vacancy.js?v=<?= rand() ?>"></script>
+<script src="<?=base_url?>app/vacancy.js?v=<?=rand()?>"></script>
 
 <script>
-document.querySelector('#add-candidate-form').addEventListener('submit', e => {
-    e.preventDefault();
-    let vacancy = new Vacancy();
-    vacancy.agregar_candidato();
-});
+    document.querySelector('#add-candidate-form').addEventListener('submit', e => {
+        e.preventDefault();
+        let vacancy = new Vacancy();
+        vacancy.agregar_candidato();
+    });
 </script>

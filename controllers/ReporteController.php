@@ -2256,7 +2256,7 @@ class ReporteController
         }
     }
 
-    //RH
+      //RH
     public function employeesinformation()
     {
         $status = Encryption::decode($_GET['status']) ? Encryption::decode($_GET['status']) : 0;
@@ -2353,7 +2353,7 @@ class ReporteController
 
         $columnIndex = 1;
         foreach ($arrayColumns as $data) {
-            if (($data['pColumn'] == 'Z' || $data['pColumn'] == 'AA' || $data['pColumn'] == 'AB' || $data['pColumn'] == 'AC') && $data['row'] == 2) {
+            if (( $data['pColumn'] == 'Z' || $data['pColumn'] == 'AA' || $data['pColumn'] == 'AB' || $data['pColumn'] == 'AC') && $data['row'] == 2) {
                 $hoja->getColumnDimension($data['pColumn'])->setAutoSize(true);
                 $hoja->setCellValueByColumnAndRow($columnIndex, $data['row'], $data['value']);
             } else {
@@ -2372,7 +2372,7 @@ class ReporteController
         $employeeContactObj = new EmployeeContact();
 
         foreach ($employees as $emp) {
-            $col = 1;
+            $col=1;
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['employee_number']);
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['fullName']);
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['title']);
@@ -2422,6 +2422,7 @@ class ReporteController
             $factura = new Facturas();
             $facturas_pendientes = $factura->getFacturasPendientes();
             $facturas_pagadas = $factura->getFacturasPagadas();
+            $facturas_incobrables = $factura->getFacturasIncobrables();
 
             $documento = new Spreadsheet();
             $documento
@@ -2863,6 +2864,99 @@ class ReporteController
             $hoja2->getStyle('A3:O3')->applyFromArray($estiloTituloColumnas);
             $hoja2->getStyle('B4:B' . $fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_DATE_YYYYMMDDSLASH);
 
+			  $hoja3 = $documento->createSheet();
+            $hoja3->setTitle('Facturas Incobrables');
+
+            $hoja3->setCellValue('A1', 'REPORTE DE FACTURAS INCOBRABLES SA');
+            $hoja3->mergeCells('A1:N1');
+
+            $hoja3->getColumnDimension('A')->setAutoSize(true);
+            $hoja3->setCellValueByColumnAndRow(1, 3, 'Factura');
+
+            $hoja3->getColumnDimension('B')->setAutoSize(true);
+            $hoja3->setCellValueByColumnAndRow(2, 3, 'Fecha');
+
+            $hoja3->getColumnDimension('C')->setAutoSize(true);
+            $hoja3->setCellValueByColumnAndRow(3, 3, 'Días de crédito');
+
+            $hoja3->getColumnDimension('D')->setAutoSize(true);
+            $hoja3->setCellValueByColumnAndRow(4, 3, 'Días transcurridos');
+
+            $hoja3->getColumnDimension('E')->setAutoSize(true);
+            $hoja3->setCellValueByColumnAndRow(5, 3, 'Empresa');
+
+            $hoja3->getColumnDimension('F')->setAutoSize(true);
+            $hoja3->setCellValueByColumnAndRow(6, 3, 'Cliente');
+
+            $hoja3->getColumnDimension('G')->setAutoSize(true);
+            $hoja3->setCellValueByColumnAndRow(7, 3, 'Razon social');
+
+            $hoja3->getColumnDimension('H')->setAutoSize(true);
+            $hoja3->setCellValueByColumnAndRow(8, 3, 'Monto');
+
+            $hoja3->getColumnDimension('I')->setAutoSize(true);
+            $hoja3->setCellValueByColumnAndRow(9, 3, 'Monto + IVA');
+
+            $hoja3->getColumnDimension('J')->setAutoSize(true);
+            $hoja3->setCellValueByColumnAndRow(10, 3, 'Fecha de pago');
+
+            $hoja3->getColumnDimension('K')->setAutoSize(true);
+            $hoja3->setCellValueByColumnAndRow(11, 3, 'Estado');
+
+            $hoja3->getColumnDimension('L')->setAutoSize(true);
+            $hoja3->setCellValueByColumnAndRow(12, 3, 'Fecha última gestión');
+
+            $hoja3->getColumnDimension('M')->setAutoSize(true);
+            $hoja3->setCellValueByColumnAndRow(13, 3, 'Próxima gestión');
+
+            $hoja3->getColumnDimension('N')->setAutoSize(true);
+            $hoja3->setCellValueByColumnAndRow(12, 3, 'Promesa de pago');
+
+            $hoja3->getColumnDimension('O')->setAutoSize(true);
+            $hoja3->setCellValueByColumnAndRow(14, 3, 'Última gestión');
+
+            $fila = 4;
+            foreach ($facturas_incobrables as $factura) {
+                $hoja3->setCellValueByColumnAndRow(1, $fila, $factura['Folio_Factura']);
+                $hoja3->setCellValueByColumnAndRow(2, $fila, date_format(date_create($factura['Fecha_Emision']), 'd/m/Y'));
+                $hoja3->setCellValueByColumnAndRow(3, $fila, $factura['Plazo_Credito']);
+                $hoja3->setCellValueByColumnAndRow(4, $fila, $factura['Dias_Transcurridos']);
+                $hoja3->setCellValueByColumnAndRow(5, $fila, $factura['Nombre_Empresa']);
+                $hoja3->setCellValueByColumnAndRow(6, $fila, $factura['Cliente']);
+                $hoja3->setCellValueByColumnAndRow(7, $fila, $factura['Razon_Social']);
+                $hoja3->setCellValueByColumnAndRow(8, $fila, $factura['Monto']);
+                $hoja3->setCellValueByColumnAndRow(9, $fila, $factura['Monto_IVA']);
+                $hoja3->setCellValueByColumnAndRow(10, $fila, !is_null($factura['Fecha_de_Pago']) ? date_format(date_create($factura['Fecha_de_Pago']), 'd/m/Y') : '');
+                $hoja3->setCellValueByColumnAndRow(11, $fila, $factura['Estado']);
+                $hoja3->setCellValueByColumnAndRow(12, $fila, !is_null($factura['Fecha_Ultima_Gestion']) ? date_format(date_create($factura['Fecha_Ultima_Gestion']), 'd/m/Y') : '');
+                $hoja3->setCellValueByColumnAndRow(13, $fila, !is_null($factura['Proxima_Gestion']) ? date_format(date_create($factura['Proxima_Gestion']), 'd/m/Y') : '');
+                $hoja3->setCellValueByColumnAndRow(14, $fila, !is_null($factura['Promesa_Pago']) ? date_format(date_create($factura['Promesa_Pago']), 'd/m/Y') : '');
+                $hoja3->setCellValueByColumnAndRow(15, $fila, $factura['Ultima_Gestion']);
+
+
+                if ($factura['Estado'] == 'Pendiente de pago')
+                    $hoja3->getStyle('K' . $fila)->applyFromArray($naranja);
+                if ($factura['Estado'] == 'Pagada')
+                    $hoja3->getStyle('K' . $fila)->applyFromArray($verde);
+
+                if ($factura['Dias_Transcurridos'] > $factura['Plazo_Credito'])
+                    $hoja3->getStyle('D' . $fila)->applyFromArray($rojo);
+                if ($factura['Dias_Transcurridos'] == $factura['Plazo_Credito'])
+                    $hoja3->getStyle('D' . $fila)->applyFromArray($naranja);
+
+                $fila++;
+            }
+            $fila = $fila - 1;
+
+            $hoja3->getStyle('A4:O' . $fila)->applyFromArray($estiloInformacion);
+            $hoja3->getStyle('A4:F' . $fila)->applyFromArray($centrado);
+            $hoja3->getStyle('G4:G' . $fila)->applyFromArray($izquierda);
+            $hoja3->getStyle('H4:I' . $fila)->applyFromArray($derecha);
+            $hoja3->getStyle('J4:N' . $fila)->applyFromArray($centrado);
+            $hoja3->getStyle('O4:O' . $fila)->applyFromArray($izquierda);
+            $hoja3->getStyle('A1:O1')->applyFromArray($estiloTituloReporte);
+            $hoja3->getStyle('A3:O3')->applyFromArray($estiloTituloColumnas);
+            $hoja3->getStyle('B4:B' . $fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_DATE_YYYYMMDDSLASH);
 
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="Reporte de Cuentas por Cobrar ' . (date('Y-m-d')) . '.xlsx"');
@@ -3086,7 +3180,7 @@ class ReporteController
         exit();
     }
     //===[gabo 7 junio incidencias fin]=== 
-    public function ExcelGroupEvaluation()
+ public function ExcelGroupEvaluation()
     {
         $id_evaluation = ($_POST['id_evaluation'] ? Utils::sanitizeNumber($_POST['id_evaluation']) : 'false');
         $fechas = ($_POST['fechas'] ? Utils::sanitizeString($_POST['fechas']) : 'false');
@@ -3424,10 +3518,7 @@ class ReporteController
             header("location:" . base_url);
         }
     }
-
-
-    //===[gabo 7 junio incidencias fin]=== 
-    public function ExcelPAsswords()
+ public function ExcelPAsswords()
     {
         require_once 'models/RH/UsuariosRH.php';
 
@@ -3599,4 +3690,5 @@ class ReporteController
         $writer->save('php://output');
         exit();
     }
+
 }

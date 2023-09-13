@@ -25,6 +25,7 @@ class Investigacion_Laboral{
 	private $Sustancia_Antidoping;
 	private $Accidentes_Empresa;
 	private $Abandono_Unidad;
+	private $Familiar_Empresa;
 
 	private $db;
     
@@ -200,6 +201,14 @@ class Investigacion_Laboral{
 		$this->Abandono_Unidad = $Abandono_Unidad;
 	}
 
+	public function getFamiliar_Empresa(){
+		return $this->Familiar_Empresa;
+	}
+
+	public function setFamiliar_Empresa($Familiar_Empresa){
+		$this->Familiar_Empresa = $Familiar_Empresa;
+	}
+
     public function getOne(){
         $Candidato=$this->getCandidato();
         $stmt = $this->db->prepare(
@@ -238,18 +247,20 @@ class Investigacion_Laboral{
 		$Accidentes_Empresa = $this->getAccidentes_Empresa();
 		$Abandono_Unidad = $this->getAbandono_Unidad();
 		
+		$Familiar_Empresa = $this->getFamiliar_Empresa();
+		
         $stmt = $this->db->prepare("INSERT INTO Investigacion_Laboral(Candidato, 
 		Proporciono_Datos_Empleos, Motivo_No_Proporciono_Datos, 
 		Demanda_Laboral, Motivo_Demanda, 
 		No_Empleos, 
 		Circunstancias_Laborales, Tiempo_Promedio_Empleos, Sindicalizado, Sindicato,
-		Comite_Sindical, Puesto_Sindical, Funciones_Sindicato, Tiempo_Sindicato, Trabajo_Ternium,Alta_Ternium,Veto_Ternium, Positivo_Antidoping, Sustancia_Antidoping, Accidentes_Empresa, Abandono_Unidad)
+		Comite_Sindical, Puesto_Sindical, Funciones_Sindicato, Tiempo_Sindicato, Trabajo_Ternium,Alta_Ternium,Veto_Ternium, Positivo_Antidoping, Sustancia_Antidoping, Accidentes_Empresa, Abandono_Unidad,Familiar_Empresa)
 		VALUES (:Candidato, 
 		:Proporciono_Datos_Empleos, :Motivo_No_Proporciono_Datos, 
 		:Demanda_Laboral, :Motivo_Demanda, 
 		:No_Empleos,  
 		:Circunstancias_Laborales, :Tiempo_Promedio_Empleos, :Sindicalizado, :Sindicato,
-		:Comite_Sindical, :Puesto_Sindical, :Funciones_Sindicato, :Tiempo_Sindicato, :Trabajo_Ternium,:Alta_Ternium,:Veto_Ternium, :Positivo_Antidoping, :Sustancia_Antidoping, :Accidentes_Empresa, :Abandono_Unidad)");
+		:Comite_Sindical, :Puesto_Sindical, :Funciones_Sindicato, :Tiempo_Sindicato, :Trabajo_Ternium,:Alta_Ternium,:Veto_Ternium, :Positivo_Antidoping, :Sustancia_Antidoping, :Accidentes_Empresa, :Abandono_Unidad,:Familiar_Empresa)");
         $stmt->bindParam(":Proporciono_Datos_Empleos", $Proporciono_Datos_Empleos, PDO::PARAM_STR);
         $stmt->bindParam(":Motivo_No_Proporciono_Datos", $Motivo_No_Proporciono_Datos, PDO::PARAM_STR);
 		$stmt->bindParam(":Demanda_Laboral", $Demanda_Laboral, PDO::PARAM_STR);
@@ -270,6 +281,7 @@ class Investigacion_Laboral{
 		$stmt->bindParam(":Sustancia_Antidoping", $Sustancia_Antidoping, PDO::PARAM_STR);
 		$stmt->bindParam(":Accidentes_Empresa", $Accidentes_Empresa, PDO::PARAM_INT);
 		$stmt->bindParam(":Abandono_Unidad", $Abandono_Unidad, PDO::PARAM_INT);
+		$stmt->bindParam(":Familiar_Empresa", $Familiar_Empresa, PDO::PARAM_INT);
 		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
 
         $flag = $stmt->execute();
@@ -307,6 +319,9 @@ class Investigacion_Laboral{
 		$Accidentes_Empresa = $this->getAccidentes_Empresa();
 		$Abandono_Unidad = $this->getAbandono_Unidad();
 
+		$Familiar_Empresa = $this->getFamiliar_Empresa();
+
+
         $stmt = $this->db->prepare("UPDATE Investigacion_Laboral
 		SET Proporciono_Datos_Empleos=:Proporciono_Datos_Empleos
 			,Motivo_No_Proporciono_Datos=:Motivo_No_Proporciono_Datos
@@ -327,7 +342,8 @@ class Investigacion_Laboral{
 			Positivo_Antidoping = :Positivo_Antidoping,
 			Sustancia_Antidoping = :Sustancia_Antidoping,
 			Accidentes_Empresa = :Accidentes_Empresa,
-			Abandono_Unidad = :Abandono_Unidad
+			Abandono_Unidad = :Abandono_Unidad,
+			Familiar_Empresa = :Familiar_Empresa
 		WHERE Candidato=:Candidato");
         $stmt->bindParam(":Proporciono_Datos_Empleos", $Proporciono_Datos_Empleos, PDO::PARAM_STR);
         $stmt->bindParam(":Motivo_No_Proporciono_Datos", $Motivo_No_Proporciono_Datos, PDO::PARAM_STR);
@@ -349,6 +365,7 @@ class Investigacion_Laboral{
 		$stmt->bindParam(":Sustancia_Antidoping", $Sustancia_Antidoping, PDO::PARAM_STR);
 		$stmt->bindParam(":Accidentes_Empresa", $Accidentes_Empresa, PDO::PARAM_INT);
 		$stmt->bindParam(":Abandono_Unidad", $Abandono_Unidad, PDO::PARAM_INT);
+		$stmt->bindParam(":Familiar_Empresa", $Familiar_Empresa, PDO::PARAM_INT);
 		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
 
         $flag = $stmt->execute();

@@ -188,7 +188,7 @@ class Candidate {
 	}
 
 	create() {
-
+        document.querySelector("#candidate-form #candidate_submit").disabled = true;
 		var form = document.querySelector("#candidate-form");
 		var formData = new FormData(form);
 		if (document.querySelector("#avatar").value.length > 0) {
@@ -220,33 +220,28 @@ class Candidate {
 
 						console.log(json_app);
 						if (json_app.isCandidate == true) {
-							utils.showToast('Candidato creado exitosamente', 'success');
-							document.querySelector("#candidate-form #candidate_submit").disabled = false;
+							utils.showToast('Informacion registrada exitosamente', 'success');
 							setTimeout(() => {
 								window.history.back();
 							}, 3000);
-						} else if (json_app.type != 0 && (json_app.type <= 4 || json_app.type == null)) {
+						} else  {
 							utils.showToast('Candidato creado exitosamente', 'success');
-							document.querySelector("#candidate-form #candidate_submit").disabled = false;
 							setTimeout(() => {
 								window.location.href = `./profile&id_vacancy=${json_app.id_vacancy}&id_candidate=${json_app.id_candidate}`;
 							}, 3000);
 
-						} else {
-							utils.showToast('Candidato creado exitosamente', 'success');
-							document.querySelector("#candidate-form #candidate_submit").disabled = false;
-							setTimeout(() => {
-								window.location.href = `../postulaciones/enviados_a_cliente&id=${json_app.id_vacancy}`;
-							}, 3000);
-						}
+						} 
 					} else if (json_app.status == 2) {
-						utils.showToast('Algo salió mal1. Inténtalo de nuevo', 'error');
+						utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
 					} else if (json_app.status == 3) {
 						utils.showToast('Error al subir la imagen', 'error');
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
 					} else if (json_app.status == 4) {
 						utils.showToast('El archivo de tu cv excede el peso permitido o tiene un formato no admitido', 'warning');
+						document.querySelector("#candidate-form #candidate_submit").disabled = false;
+					}else if (json_app.status == 5) {
+						utils.showToast('Fecha de nacimiento no permitida', 'warning');
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
 					} else {
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
@@ -888,9 +883,105 @@ class Candidate {
 				document.querySelector("#profile-candidate-form [name='submit']").disabled = false
 			});
 	}
+	
+	postulate() {
 
+		var form = document.querySelector("#postular-form");
+		document.querySelector("#postular-form [name='submit']").disabled = true
+		var formData = new FormData(form);
 
-	//===[gabo 30 agosto]===
+		fetch('../Candidato/postulate', {
+				method: 'POST',
+				body: formData
+			})
+			.then(response => {
+				//console.log(response.json());
+				if (response.ok) {
+					return response.text();
+				} else {
+					throw new Error('Network response was not ok.');
+				}
+			})
+			.then(r => {
+
+				try {
+					const json_app = JSON.parse(r);
+					if (json_app.status == 0) {
+						utils.showToast('Llena todos los campos requeridos por favor', 'error');
+						document.querySelector("#postular-form [name='submit']").disabled = false
+
+					} else if (json_app.status == 1) {
+
+						console.log(json_app);
+						let vacancies = '';
+						let cont = json_app.vacancies.length;
+						json_app.vacancies.forEach(vacancy => {
+
+							vacancies += `
+                                <tr> `;
+							(json_app.isCustomer == false) ? vacancies += `<td>${vacancy.applicant_date}</td>`: '';
+
+							vacancies += `
+                                    <td>${vacancy.applicant_status}</td>
+                                    <td>${vacancy.about}</td>
+                                    <td>${vacancy.interview_date}</td>
+                                    <td>${vacancy.interview_comments}</td>
+                                    <td> ${vacancy.request_date}</td>`;
+							(json_app.isCustomer == false) ? vacancies += `<td> ${vacancy.customer}</td >`: '';
+							vacancies += ` 
+                                    <td>${vacancy.vacancy}</td>
+                                    <td>${vacancy.city} , ${vacancy.abbreviation}</td>
+                                    `;
+
+							(vacancy.salary_min != vacancy.salary_max) ? vacancies += `<td class="text-center">$${vacancy.salary_min} - $${vacancy.salary_max}</td>`: vacancies += `<td class="text-center">$${vacancy.salary_max}`;
+
+							(json_app.isCustomer == false) ? vacancies += `<td> ${vacancy.end_date}</td >`: '';
+
+							vacancies += `
+                                    <td class="text-center ${vacancy.class_color}">${vacancy.status}</td>
+                                    <td class="text-center py-0 align-middle">
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="${vacancy.base_url}vacante/ver&id=${vacancy.id}"
+                                                class="btn btn-success">
+                                                <i class="fas fa-eye"></i>
+                                            </a> `;
+							(json_app.isAdmin == true || json_app.isJunior == true) ? vacancies += `<a href="${vacancy.base_url}vacante/editar&id=${vacancy.id}" class="btn btn-info"><i class="fas fa-pencil-alt"></i></a>`: '';
+
+							(json_app.isJunior == true) ? vacancies += `<a href="${vacancy.base_url}postulaciones/buscar&id=${vacancy.id}&area=${vacancy.id}" class="btn btn-info"> <i class="fas fa-search"></i></a>`: '';
+							vacancies += `
+                                        </div>
+                                    </td>
+                                </tr >`;
+
+						})
+
+						utils.destruir_datatable('#tb_vacancies', '#tb_vacancies tbody', vacancies);
+						$('#modal-postular').modal('hide');
+						utils.showToast('Se ha postulado correctamente al candidato', 'success');
+						document.querySelector("#postular-form [name='submit']").disabled = false
+
+					} else if (json_app.status == 2) {
+						utils.showToast(' No se pudo guardar la informacion', 'error');
+						document.querySelector("#postular-form [name='submit']").disabled = false
+					} else if (json_app.status == 3) {
+						utils.showToast('El candidato ya está postulado a esta vacante', 'error');
+						document.querySelector("#postular-form [name='submit']").disabled = false
+					}
+				} catch (error) {
+					utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+					document.querySelector("#postular-form [name='submit']").disabled = false
+
+				}
+			})
+
+			.catch(error => {
+				utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+				document.querySelector("#postular-form [name='submit']").disabled = false
+			});
+	}
+	
+	
+	//side server
 	cargarTabla() {
 
 		var form = document.querySelector("#filtros");
@@ -925,10 +1016,8 @@ class Candidate {
 
 		$('#tb_candidates').DataTable().destroy();
 		var table = $('#tb_candidates').DataTable({
-			ajax: {
-				url: '../candidato/pruebaserver&filtros=' + datos + '&id_language=' + id_language + '&clave=' + clave,
-				type: "POST"
-			},
+			ajax:{ url: '../candidato/sideserver?filtros=' + datos + '&id_language=' + id_language + '&clave=' + clave,
+			type: "POST"},
 			processing: true,
 			serverSide: true,
 			"pageLength": 50,
@@ -938,8 +1027,7 @@ class Candidate {
 				render: function (data, type, row) { // con row obtienes la información por fila
 
 					let botones = `  <div class="btn-group btn-group-sm align-middle">
-
-						
+					
 					<button id="btn_postular" class="btn btn-warning" data-id="${data[1]} ${data[18]} ${data[19]}" value="${data[15]}">
 					<i class="fas fa-check"></i> Postular
 					</button>
@@ -948,11 +1036,11 @@ class Candidate {
 	                                    <i class="fas fa-eye"></i> Ver
 	                                </a>
 	                                <a href="editar&id=${data[15]}"
-	                                    class="btn btn-info">
+	                                    class="btn btn-info" hidden>
 	                                    <i class="fas fa-pencil-alt"></i> Editar
 	                                </a>
 	                                <a href="../resume/generate&id=${data[15]}"
-	                                    target="_blank" class="btn btn-danger">
+	                                    target="_blank" class="btn btn-danger" hidden>
 	                                    <i class="fas fa-download"></i> Plantilla
 	                                </a>
 	                               `;
@@ -1045,11 +1133,10 @@ class Candidate {
 		let id_vacancy = (form.querySelector('#id_vacancy').value != '') ? form.querySelector('#id_vacancy').value : 0;
 
 
-
 		$('#tb_candidates_postulate').DataTable().destroy();
 		var table = $('#tb_candidates_postulate').DataTable({
-			ajax: '../helpers/SideServer/Candidatos/SSCandidatos.php?filtros=' + datos + '&id_language=' + id_language + '&clave=' + clave + '&id_vacancy=' + id_vacancy,
-			// ajax: '../Postulaciones/server?filtros=' + datos + '&id_language=' + id_language + '&clave=' + clave,
+				ajax:{ url: '../postulaciones/sideserver?filtros=' + datos + '&id_language=' + id_language + '&clave=' + clave + '&id_vacancy=' + id_vacancy,
+			type: "POST"},
 			processing: true,
 			serverSide: true,
 			"pageLength": 50,
@@ -1102,10 +1189,6 @@ class Candidate {
 				"targets": 1,
 				"data": null,
 				render: function (data, type, row) { // con row obtienes la información por fila
-					let checked = '';
-					let disabled = '';
-
-
 					if (data[22] == 1 || data[22] == '' || data[22] === null) {
 						return `<input type="checkbox" name="postulate[]" value="${data[15]}" class="form-control" >`;
 					} else {
@@ -1197,5 +1280,6 @@ class Candidate {
 
 	}
 
-
+	
+	
 }

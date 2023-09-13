@@ -16,7 +16,7 @@
         </div>
         <div class="col-sm-12">
           <div class="alert alert-success">
-            <h3>Candidatos selectos para el puesto de <b><?= $vacante->vacancy ?></b></h3>
+            <h3>Candidatos selectos para el puesto de <b><?= $vacante->vacancy ?> <?= (Utils::isAdmin()||Utils::isRecruitmentManager())?'Folio: #'.Encryption::decode($_GET['id']):'' ?></b></h3>
           </div>
 
         </div>
@@ -182,7 +182,7 @@
                     <?php endif ?>
 
                     <!-- // ===[20 mayo gabo operativa ]=== -->
-                    <?php if ($vacante->type == 1) : ?>
+                    <?php if ($vacante->type == 1|| $vacante->type == 4) : ?>
                       <a href="<?= base_url ?>resume/CVoperador&id=<?= Encryption::encode($candidate['id']) ?>" target="_blank" class="btn btn-lg bg-maroon">
                         <i class="fas fa-download mr-1"></i>Generar solicitud
                       </a>
@@ -234,13 +234,11 @@
                       </btn>
                     <?php endif ?>
 
-                    <!-- ===[gabo 2 junio modal-experiencia]=== -->
-                    <?php if ($vacante->type == 1) : ?>
-                      <btn class="btn btn-lg btn-success mt-1 " hidden onclick="abrir_experiencia('<?= Encryption::encode($candidate['id']) ?>','<?= $candidate['first_name'] . ' ' . $candidate['surname'] . ' ' . $candidate['last_name'] ?>')">
-                        <i class="fas fa-file-invoice"></i> Experiencia
+                      <?php if ($vacante->type == 1|| $vacante->type == 4 && (Utils::isAdmin() || Utils::isSenior() || Utils::isRecruitmentManager() )) : ?>
+                      <btn class="btn btn-lg btn-success mt-1 "  onclick="abrir_experiencia('<?= Encryption::encode($candidate['id']) ?>','<?= $candidate['first_name'] . ' ' . $candidate['surname'] . ' ' . $candidate['last_name'] ?>')">
+                        <i class="fas fa-file-invoice"></i> Editar experiencia
                       </btn>
                     <?php endif ?>
-                    <!-- ===[gabo 2 junio modal-experiencia fin]=== -->
 
                   </div>
                 </div>

@@ -1150,13 +1150,64 @@ class Candidatos
         INNER JOIN [rh_Candidatos_Datos] CD on CD.Candidato=RC.Candidato
         LEFT JOIN rh_Candidatos_Obs_Generales ob ON RC.Candidato=ob.Candidato
 		LEFT JOIN rh_Candidatos_RAL cral ON RC.Candidato=cral.Candidato
-         WHERE RC.Cliente IN (SELECT ID_Cliente FROM rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:Contacto)
+         WHERE RC.Cliente IN (SELECT ID_Cliente FROM rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:Contacto) AND  rc.Ejecutivo<>'miguelcasanova'
         ORDER BY RC.Fecha DESC");
         $stmt->bindParam(":Contacto", $Contacto, PDO::PARAM_STR);
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
+	
+	public function getServiciosPorContactoYViabilidad()
+    {
+        $Contacto = $this->getContacto();
+        $stmt = $this->db->prepare("SELECT TOP(7200) Folio=RC.Candidato,RC.Cliente ID_Ciente,va.Empresa id_empresa
+        ,[Solicitud]=RC.Fecha
+        ,RC.Estado
+        ,[Estatus] = CASE WHEN RC.Servicio=298 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Ral en Proceso' WHEN (RC.Servicio=299 OR RC.Servicio=231) AND (RC.Estado=250 OR RC.Estado=251) THEN 'Investigación en Proceso' WHEN (RC.Servicio=300 OR RC.Servicio=230) AND (RC.Estado=250 OR RC.Estado=251) THEN 'Visita en Proceso' WHEN RC.Servicio=310 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Validación de Licencia en Proceso' WHEN RC.Servicio=324 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Visita Presencial en Proceso' WHEN RC.Servicio=328 AND RC.Estado=250 OR RC.Estado=251 THEN 'Análisis de RAL en Proceso' WHEN RC.Estado=252 THEN 'Finalizado' WHEN RC.Estado=254 THEN 'Facturado' WHEN RC.Estado=258 THEN 'Cancelado' WHEN RC.Estado=249 THEN 'Pausado' WHEN RC.Servicio=291 AND RC.Estado=250 OR RC.Estado=251 THEN 'RAL Consultado' ELSE '' END
+        ,VLF = (SELECT TOP 1 CASE WHEN Candidato IS NOT NULL THEN 'VLF + ' ELSE '' END FROM Validacion_Licencia_Federal lic WHERE lic.Candidato=RC.Candidato)
+        ,Cliente= CASE WHEN RC.Cliente=0 THEN (SELECT AE.Alias FROM [adm_Empresas] AE WHERE AE.Empresa=RC.Empresa) ELSE (SELECT AE.Nombre_Cliente FROM [rh_Ventas_Alta] AE WHERE AE.Cliente=RC.Cliente) END
+        ,Fase = CASE WHEN RC.Servicio>0 THEN(SELECT UPPER(TS.Descripcion) FROM sys_Campos TS WHERE TS.Campo=RC.Servicio)ELSE' -sin asignar-'END
+		,A_RAL = CASE WHEN A_RAL>0 THEN 'ARAL' ELSE '' END
+        ,RC.Servicio
+        ,Nombre_Candidato=TRANSLATE(UPPER(CD.Nombres +' '+ cd.Apellido_Paterno +' '+ cd.Apellido_Materno), 'ÁÉÍÓÚÑ', 'AEIOUN')
+        ,[Aplicacion] = RC.Fecha_Aplicacion
+        ,[Fecha_Entregado]=RC.Fecha_Entregado
+        ,[Ejecutivo] = UPPER(RC.Ejecutivo)
+        ,[HO] = RC.Gestor
+        ,[Dias] = CASE WHEN RC.Fecha_Entregado IS NULL AND RC.Estado <> 258 THEN dbo.count_days(RC.Fecha, GETDATE()) WHEN RC.Estado <> 258 THEN dbo.count_days(RC.Fecha, RC.Fecha_Entregado) ELSE '-1' END
+        ,[Tiempo_IL] = CASE WHEN RC.Fecha_Entregado_INV IS NULL AND RC.Fecha <= GETDATE() AND RC.Estado<>258 THEN CONCAT(dbo.count_days(RC.Fecha, GETDATE()),'.', CONVERT(INT, (DATEDIFF(MINUTE, RC.Fecha, GETDATE()))%1440/14.4)) WHEN RC.Fecha_Entregado_INV IS NULL AND RC.Fecha > GETDATE() AND RC.Estado<>258 THEN '0.0' WHEN RC.Estado<>258 THEN CONCAT(dbo.count_days(RC.Fecha, RC.Fecha_Entregado_INV),'.', CONVERT(INT, (DATEDIFF(MINUTE, RC.Fecha, RC.Fecha_Entregado_INV))%1440/14.4)) ELSE '' END
+        ,[Tiempo_ESE] = CASE WHEN RC.Fecha_Entregado_ESE IS NULL AND RC.Fecha <= GETDATE() AND RC.Estado<>258 THEN CONCAT(dbo.count_days(RC.Fecha, GETDATE()),'.', CONVERT(INT, (DATEDIFF(MINUTE, RC.Fecha, GETDATE()))%1440/14.4)) WHEN RC.Fecha_Entregado_ESE IS NULL AND RC.Fecha > GETDATE() AND RC.Estado<>258 THEN '0.0' WHEN RC.Estado<>258 THEN CONCAT(dbo.count_days(RC.Fecha, RC.Fecha_Entregado_ESE),'.', CONVERT(INT, (DATEDIFF(MINUTE, RC.Fecha, RC.Fecha_Entregado_ESE))%1440/14.4)) ELSE '' END
+        ,[Tiempo] = CASE WHEN RC.Fecha_Entregado IS NULL AND RC.Fecha <= GETDATE() AND RC.Estado<>258 THEN CONCAT(dbo.count_days(RC.Fecha, GETDATE()),'.', CONVERT(INT, (DATEDIFF(MINUTE, RC.Fecha, GETDATE()))%1440/14.4)) WHEN RC.Fecha_Entregado IS NULL AND RC.Fecha > GETDATE() AND RC.Estado<>258 THEN '0.0' WHEN RC.Estado<>258 THEN CONCAT(dbo.count_days(RC.Fecha, RC.Fecha_Entregado),'.', CONVERT(INT, (DATEDIFF(MINUTE, RC.Fecha, RC.Fecha_Entregado))%1440/14.4)) ELSE '' END
+        ,[Viatico] = RC.Viatico
+        ,[Solicitud_De] = RC.Solicitud_De
+        ,[Progreso] = (SELECT (Datos_Generales+Datos_Adicionales+Documentos+salud+Sociales+Ubicacion+Estructura+Ref_Vecinal+Obs_Generales) as Total from Progreso_Gestor WHERE Candidato=RC.Candidato)
+        ,[Servicio_Solicitado] =UPPER((SELECT ES.Descripcion FROM sys_Campos ES WHERE ES.Campo= RC.Servicio_Solicitado))
+        ,[Repetidos] = (SELECT COUNT(rh_Candidatos_Datos.Candidato) FROM rh_Candidatos_Datos left join rh_Candidatos on rh_Candidatos_Datos.Candidato = rh_Candidatos.Candidato WHERE ((rh_Candidatos_Datos.Nombres=CD.Nombres and rh_Candidatos_Datos.Apellido_Paterno=CD.Apellido_Paterno and rh_Candidatos_Datos.Apellido_Materno=CD.Apellido_Materno)) and rh_Candidatos.Ejecutivo<>'MIGUELCASANOVA')
+		 ,RC.replicado
+        ,[Solicita]= (SELECT Nombre FROM rh_Candidatos_Personas_Solicitan WHERE ID=RC.Nombre_Cliente)
+        ,RC.Factura
+        ,Enlace_Drive
+        ,RC.CC_Cliente
+        ,ob.Viable
+		,RAL = cral.Candidato
+        ,RC.ID_Busqueda_RAL
+        ,RC.Fecha_Entregado_INV
+        ,RC.Fecha_Entregado_ESE
+		,[Cliente_Activo] = (SELECT Activo FROM rh_Ventas_Alta WHERE Cliente=RC.Cliente)
+    FROM rh_Candidatos RC
+        INNER JOIN [rh_Candidatos_Datos] CD on CD.Candidato=RC.Candidato
+        LEFT JOIN rh_Candidatos_Obs_Generales ob ON RC.Candidato=ob.Candidato
+		LEFT JOIN rh_Candidatos_RAL cral ON RC.Candidato=cral.Candidato
+        INNER JOiN rh_Ventas_Alta va on va.Cliente=RC.Cliente
+        WHERE RC.Cliente IN (SELECT ID_Cliente FROM rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:Contacto) AND  rc.Ejecutivo<>'miguelcasanova' AND (ob.Viable=1 OR ob.Viable=2 OR ob.Viable=5 )
+        ORDER BY RC.Fecha DESC");
+        $stmt->bindParam(":Contacto", $Contacto, PDO::PARAM_STR);
+        $stmt->execute();
+        $servicios = $stmt->fetchAll();
+        return $servicios;
+    }
+	
 
     public function getServiciosPorContactoTranspais()
     {
@@ -1198,7 +1249,7 @@ class Candidatos
         INNER JOIN [rh_Candidatos_Datos] CD on CD.Candidato=RC.Candidato
         LEFT JOIN rh_Candidatos_Obs_Generales ob ON RC.Candidato=ob.Candidato
 		LEFT JOIN rh_Candidatos_RAL cral ON RC.Candidato=cral.Candidato
-         WHERE RC.Cliente IN (SELECT ID_Cliente FROM rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:Contacto) AND RC.Fecha>='2022-08-01' 
+         WHERE RC.Cliente IN (SELECT ID_Cliente FROM rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:Contacto) AND  rc.Ejecutivo<>'miguelcasanova' AND RC.Fecha>='2022-12-01' 
         ORDER BY RC.Fecha DESC");
         $stmt->bindParam(":Contacto", $Contacto, PDO::PARAM_STR);
         $stmt->execute();
@@ -2087,7 +2138,7 @@ class Candidatos
     public function getTotalESESPorDia()
     {
         $Fecha = $this->getFecha_solicitud();
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230  or Servicio_Solicitado=340 or Servicio_Solicitado=341  AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=230) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230  AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
         $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
         $stmt->execute();
         $fetch = $stmt->fetchObject();
@@ -2095,7 +2146,24 @@ class Candidatos
     }
 
 
-
+    public function getTotalESESOIPorDia()
+    {
+        $Fecha = $this->getFecha_solicitud();
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=340) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=340 AND Servicio=340 AND Estado<252) and (replicado<>2 OR replicado is null)");
+        $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
+        $stmt->execute();
+        $fetch = $stmt->fetchObject();
+        return $fetch->total;
+    }
+    public function getTotalESESMARTPorDia()
+    {
+        $Fecha = $this->getFecha_solicitud();
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=341) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=341  AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
+        $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
+        $stmt->execute();
+        $fetch = $stmt->fetchObject();
+        return $fetch->total;
+    }
 
 
     public function getTotalServiciosPorDiaYEjecutivo()
@@ -2133,12 +2201,11 @@ class Candidatos
         $fetch = $stmt->fetchObject();
         return $fetch->total;
     }
-
     public function getTotalESESPorDiaYEjecutivo()
     {
         $Fecha = $this->getFecha_solicitud();
         $Ejecutivo = $this->getEjecutivo();
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND(Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Servicio=230 AND Estado<252)");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND (Servicio_Solicitado=230 ) AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND(Servicio_Solicitado=230) AND Servicio=230 AND Estado<252)");
         $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
         $stmt->execute();
@@ -2147,8 +2214,29 @@ class Candidatos
     }
 
 
+    public function getTotalESESOIPorDiaYEjecutivo()
+    {
+        $Fecha = $this->getFecha_solicitud();
+        $Ejecutivo = $this->getEjecutivo();
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND (Servicio_Solicitado=340 ) AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND(Servicio_Solicitado=340) AND Servicio=340 AND Estado<252)");
+        $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
+        $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
+        $stmt->execute();
+        $fetch = $stmt->fetchObject();
+        return $fetch->total;
+    }
 
-
+    public function getTotalESESMARTPorDiaYEjecutivo()
+    {
+        $Fecha = $this->getFecha_solicitud();
+        $Ejecutivo = $this->getEjecutivo();
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND (Servicio_Solicitado=341) AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND(Servicio_Solicitado=341) AND Servicio=341    AND Estado<252)");
+        $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
+        $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
+        $stmt->execute();
+        $fetch = $stmt->fetchObject();
+        return $fetch->total;
+    }
     public function getTotalServiciosEnProceso()
     {
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Estado < 252 AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
@@ -3307,9 +3395,10 @@ class Candidatos
     }
 
     // ===[19 de mayo 2023 estudios fin]===
-    public function getServiciosPorUsuario()
+     public function getServiciosPorUsuario()
     {
         $Contacto = $this->getContacto();
+        $Cliente = $this->getCliente();
         $stmt = $this->db->prepare("SELECT TOP(7200) Folio=RC.Candidato,RC.Cliente ID_Ciente
         ,[Solicitud]=RC.Fecha
         ,RC.Estado
@@ -3349,13 +3438,15 @@ class Candidatos
         LEFT JOIN rh_Candidatos_Obs_Generales ob ON RC.Candidato=ob.Candidato
 		LEFT JOIN rh_Candidatos_RAL cral ON RC.Candidato=cral.Candidato
         INNER JOIN rh_Candidatos_Personas_Solicitan cp ON rc.Nombre_Cliente=cp.ID
-        WHERE RC.Nombre_Cliente = (SELECT ID FROM rh_Candidatos_Personas_Solicitan WHERE Usuario=:Contacto)
+        WHERE RC.Nombre_Cliente = (SELECT ID FROM rh_Candidatos_Personas_Solicitan WHERE Usuario=:Contacto AND Cliente=:Cliente) AND  rc.Ejecutivo<>'miguelcasanova'
         ORDER BY RC.Fecha DESC");
         $stmt->bindParam(":Contacto", $Contacto, PDO::PARAM_STR);
+        $stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_STR);
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
+	
 
     public function getModificacionEjecutivoGestor()
     {
@@ -3387,7 +3478,61 @@ class Candidatos
         $fetch = $stmt->execute();
         return $fetch;
     }
-    public function countCandidatosPorCliente()
+
+    public function getServiciosSOI(){
+
+        $stmt = $this->db->prepare("SELECT Creado, Folio=RC.Candidato
+        ,[Solicitud]=RC.Fecha
+        ,RC.Estado
+        ,[Estatus] = CASE WHEN RC.Servicio=298 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Ral en Proceso' WHEN (RC.Servicio=299 OR RC.Servicio=231) AND (RC.Estado=250 OR RC.Estado=251) THEN 'Investigación en Proceso' WHEN (RC.Servicio=300 OR RC.Servicio=230) AND (RC.Estado=250 OR RC.Estado=251) THEN 'Visita en Proceso' WHEN RC.Servicio=310 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Validación de Licencia en Proceso' WHEN RC.Servicio=324 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Visita Presencial en Proceso' WHEN RC.Servicio=328 AND RC.Estado=250 OR RC.Estado=251 THEN 'Análisis de RAL en Proceso' WHEN RC.Estado=252 THEN 'Finalizado' WHEN RC.Estado=254 THEN 'Facturado' WHEN RC.Estado=258 THEN 'Cancelado' WHEN RC.Estado=249 THEN 'Pausado' WHEN RC.Servicio=291 AND RC.Estado=250 OR RC.Estado=251 THEN 'RAL Consultado' ELSE '' END
+        ,VLF = (SELECT TOP(1) CASE WHEN Candidato IS NOT NULL THEN 'VLF + ' ELSE '' END FROM Validacion_Licencia_Federal lic WHERE lic.Candidato=RC.Candidato)
+        ,[Empresa] = (SELECT Nombre_Empresa FROM rh_Ventas_Empresas WHERE Empresa=(SELECT Empresa FROM rh_Ventas_Alta WHERE Cliente=RC.Cliente))
+        ,Cliente= CASE WHEN RC.Cliente=0 THEN (SELECT AE.Alias FROM [adm_Empresas] AE WHERE AE.Empresa=RC.Empresa) ELSE (SELECT AE.Nombre_Cliente FROM [rh_Ventas_Alta] AE WHERE AE.Cliente=RC.Cliente) END
+        ,Plaza_Cliente
+        ,Fase = CASE WHEN RC.Servicio>0 THEN(SELECT UPPER(TS.Descripcion) FROM sys_Campos TS WHERE TS.Campo=RC.Servicio)ELSE' -sin asignar-'END
+        ,A_RAL = CASE WHEN A_RAL=0 THEN '' ELSE 'ARAL' END
+        ,RC.Servicio
+        ,Nombre_Candidato=TRANSLATE(UPPER(CD.Nombres +' '+ cd.Apellido_Paterno +' '+ cd.Apellido_Materno), 'ÁÉÍÓÚÑ', 'AEIOUN')
+        ,[Puesto] = RC.Puesto
+        ,[Aplicacion] = RC.Fecha_Aplicacion
+        ,[Fecha_Entregado]=RC.Fecha_Entregado
+        ,[Ejecutivo] = UPPER(RC.Ejecutivo)
+        ,[HO] = RC.Gestor
+        ,[Dias] = CASE WHEN RC.Fecha_Entregado IS NULL AND RC.Estado <> 258 THEN dbo.count_days(RC.Fecha, GETDATE()) WHEN RC.Estado <> 258 THEN dbo.count_days(RC.Fecha, RC.Fecha_Entregado) ELSE '-1' END
+        ,[Tiempo_IL] = CASE WHEN RC.Fecha_Entregado_INV IS NULL AND RC.Fecha <= GETDATE() AND (RC.Estado<>258 AND RC.Estado<>249) THEN dbo.count_days_with_decimal(RC.Fecha, GETDATE()) WHEN RC.Fecha_Entregado_INV IS NULL AND RC.Fecha > GETDATE() AND (RC.Estado<>258 AND RC.Estado<>249) THEN '0.0' WHEN RC.Fecha_Entregado_INV IS NOT NULL AND RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, RC.Fecha_Entregado_INV) ELSE '0' END
+        ,[Tiempo_ESE] = CASE WHEN RC.Fecha_Entregado_ESE IS NULL AND RC.Fecha <= GETDATE() AND (RC.Estado<>258 AND RC.Estado<>249) THEN dbo.count_days_with_decimal(RC.Fecha, GETDATE()) WHEN RC.Fecha_Entregado_ESE IS NULL AND RC.Fecha > GETDATE() AND (RC.Estado<>258 AND RC.Estado<>249) THEN '0.0' WHEN RC.Fecha_Entregado_ESE IS NOT NULL AND RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, RC.Fecha_Entregado_ESE) ELSE '0' END
+        ,[Tiempo] = CASE WHEN RC.Fecha_Entregado IS NULL AND RC.Fecha <= GETDATE() AND RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, GETDATE()) WHEN RC.Fecha_Entregado IS NULL AND RC.Fecha > GETDATE() AND RC.Estado<>258 THEN '0.0' WHEN RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, RC.Fecha_Entregado) ELSE '0' END
+        ,[Viatico] = RC.Viatico
+        ,[Solicitud_De] = RC.Solicitud_De
+        ,[Progreso] = (SELECT (Datos_Generales+Datos_Adicionales+Documentos+salud+Sociales+Ubicacion+Estructura+Ref_Vecinal+Obs_Generales) as Total from Progreso_Gestor WHERE Candidato=RC.Candidato)
+        ,[Servicio_Solicitado] =UPPER((SELECT ES.Descripcion FROM sys_Campos ES WHERE ES.Campo= RC.Servicio_Solicitado))
+        ,[Ciudad]=(SELECT Municipio FROM rh_Candidatos_Ubicacion WHERE Candidato=RC.Candidato)
+        ,[Estado_MX]=(SELECT Descripcion FROM General_Estados WHERE Estado=(SELECT Estado FROM rh_Candidatos_Ubicacion WHERE Candidato=RC.Candidato))
+        ,[Repetidos] = (SELECT COUNT(rh_Candidatos_Datos.Candidato) FROM rh_Candidatos_Datos left join rh_Candidatos on rh_Candidatos_Datos.Candidato = rh_Candidatos.Candidato WHERE ((rh_Candidatos_Datos.Nombres=CD.Nombres and rh_Candidatos_Datos.Apellido_Paterno=CD.Apellido_Paterno and rh_Candidatos_Datos.Apellido_Materno=CD.Apellido_Materno)) and rh_Candidatos.Ejecutivo<>'MIGUELCASANOVA')
+        ,RC.Factura
+        ,Enlace_Drive
+        ,[Centro_C] = (SELECT Centro_Costos FROM rh_Ventas_Alta WHERE Cliente=RC.Cliente)
+        ,RC.Razon
+        ,[Solicita] = (SELECT Nombre FROM rh_Candidatos_Personas_Solicitan WHERE ID=RC.Nombre_Cliente)
+        ,CC_Cliente
+        ,Comentario_Cliente
+        ,Comentario_Cancelado
+        ,ISNULL(Comentario_Finalizado, '') AS Comentario_Finalizado
+        ,ob.Viable
+        ,RC.IL
+        ,RC.ESE
+    FROM rh_Candidatos RC
+        INNER JOIN [rh_Candidatos_Datos] CD on CD.Candidato=RC.Candidato
+        LEFT JOIN rh_Candidatos_Obs_Generales ob ON RC.Candidato=ob.Candidato
+        INNER JOIN SOI ON RC.Candidato=SOI.Candidato 
+         WHERE rc.Ejecutivo<>'miguelcasanova' and RC.Cliente<>0 
+        ORDER BY RC.Fecha DESC");
+        $stmt->execute();
+        $servicios = $stmt->fetchAll();
+        return $servicios;
+    }
+	
+	    public function countCandidatosPorCliente()
     {
         $Cliente = $this->getCliente();
         $stmt = $this->db->prepare("SELECT count(*) as Total FROM rh_Candidatos WHERE Cliente=:Cliente");

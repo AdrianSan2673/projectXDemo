@@ -784,7 +784,7 @@ class CandidatosDatos{
 		$CURP = $this->getCURP();
 		$IMSS = $this->getIMSS();
 		$Candidato = $this->getCandidato();
-        $stmt = $this->db->prepare("SELECT c.Candidato, Nombres, Apellido_Paterno, Apellido_Materno, Fecha, IMSS, v.Nombre_Cliente, Servicio, Fase = CASE WHEN C.Servicio>0 THEN(SELECT UPPER(TS.Descripcion) FROM sys_Campos TS WHERE TS.Campo=C.Servicio)ELSE' -sin asignar-' END FROM rh_Candidatos_Datos d INNER JOIN rh_Candidatos c ON d.Candidato=c.Candidato INNER JOIN rh_Ventas_Alta v ON c.Cliente=v.Cliente WHERE ((CURP=:CURP AND CURP<>'') OR (IMSS=:IMSS AND IMSS<>'' AND IMSS<>'No proporciona')) AND c.Candidato<>:Candidato");
+        $stmt = $this->db->prepare("SELECT c.Candidato, Nombres, Apellido_Paterno, Apellido_Materno, Fecha, IMSS, v.Nombre_Cliente, Servicio, Fase = CASE WHEN C.Servicio>0 THEN(SELECT UPPER(TS.Descripcion) FROM sys_Campos TS WHERE TS.Campo=C.Servicio)ELSE' -sin asignar-' END FROM rh_Candidatos_Datos d INNER JOIN rh_Candidatos c ON d.Candidato=c.Candidato INNER JOIN rh_Ventas_Alta v ON c.Cliente=v.Cliente WHERE ((CURP=:CURP AND CURP<>'') OR (IMSS=:IMSS AND IMSS<>'' AND IMSS<>'No proporciona'))AND c.Ejecutivo<>'miguelcasanova' AND c.Candidato<>:Candidato");
         $stmt->bindParam(":CURP", $CURP, PDO::PARAM_STR);
 		$stmt->bindParam(":IMSS", $IMSS, PDO::PARAM_STR);
 		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
