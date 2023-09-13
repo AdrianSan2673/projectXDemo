@@ -22,6 +22,10 @@ class CandidatoController
 
     public function index()
     {
+
+        if (isset($_SESSION['user_rh'])) {
+            Utils::ChangeSession(1);
+        }
         if (Utils::isValid($_SESSION['identity']) && !Utils::isCandidate() && !Utils::isCustomer()) {
 
             $candidate = new Candidate();

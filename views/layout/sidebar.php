@@ -168,7 +168,8 @@
         <li class="nav-item dropdown user-menu">
           <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
             <img src="<?= $_SESSION['avatar_route'] ?>" class="user-image img-circle" alt="User Image">
-            <span class="d-none d-md-inline"><?= $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name ?> <i class="right fas fa-angle-down"></i></span>
+            <span class="d-none d-md-inline"><?= $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name ?>
+              <i class="right fas fa-angle-down"></i></span>
           </a>
           <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <!-- User image -->
@@ -188,7 +189,8 @@
             <!-- Menu Footer-->
             <li class="user-footer">
               <a href="<?= base_url ?>usuario/editar_perfil" class="btn btn-info btn-flat">Editar</a>
-              <a href="<?= base_url ?>usuario/logout" class="btn btn-maroon btn-flat float-right">Cerrar sesión</a>
+              <a href="<?= base_url ?>usuario/logout" class="btn btn-maroon btn-flat float-right">Cerrar
+                sesión</a>
             </li>
           </ul>
         </li>
@@ -254,8 +256,8 @@
                   </p>
                 </a>
               </li>
-			  
-			     <li class="nav-item" hidden>
+
+              <li class="nav-item" hidden>
                 <a href="<?= base_url ?>CandidatoDirectorio/index" class="nav-link<?= $_GET['controller'] == 'CandidatoDirectorio' ? ' active' : '' ?>">
                   <i class="nav-icon fas fa-users"></i>
                   <p>
@@ -459,7 +461,8 @@
               </li>
             <?php endif ?>
             <?php if (Utils::isAdmin() || Utils::isSenior() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isJunior() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount()) : ?>
-              <li class="nav-header texto-clientes"><?= Utils::isAccount() ? '<b>CONSULTA DE CONTACTOS RH</b>' : 'VENTAS' ?></li>
+              <li class="nav-header texto-clientes">
+                <?= Utils::isAccount() ? '<b>CONSULTA DE CONTACTOS RH</b>' : 'VENTAS' ?></li>
               <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor()) : ?>
                 <li class="nav-item">
                   <a href="<?= base_url ?>empresa_SA/index" class="nav-link<?= $_GET['controller'] == 'empresa_SA' ? ' active' : '' ?>">
@@ -471,7 +474,7 @@
                 </li>
               <?php endif ?>
 
-            
+
               <?php if (Utils::isAdmin()) : //if (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSAManager()) : 
               ?>
                 <li class="nav-item <?= $_GET['controller'] == 'recursoshumanos'  ? ' menu-open' : '' ?>">
@@ -541,7 +544,7 @@
 
             <?php $acceder = Utils::getEmpresaByContacto()[0]['Empresa']; ?>
             <?php $acceder = Utils::isManager() ? '82' : $acceder  ?>
-            
+
             <?php if ((Utils::isCustomerSA() || Utils::isAdmin()) && ($acceder == '82' || $acceder == '13')) : ?>
               <li class="nav-header">RECURSOS HUMANOS</li>
               <li class="nav-item">
@@ -648,6 +651,16 @@
                 </ul>
               </li>
 
+              <li class="nav-header">CONFIGURACIONES</li>
+              <li class="nav-item">
+                <a href="<?= base_url ?>configuracionesRH/index" class="nav-link<?= $_GET['controller'] == 'configuracionesRH' ? ' active' : '' ?>">
+                  <i class="nav-icon fas fa-users-cog"></i>
+                  <p>
+                    Configuraciones
+                  </p>
+                </a>
+              </li>
+
             <?php endif ?>
             <?php if (Utils::isManager() || Utils::isAdmin()) : ?>
               <li class="nav-header">ADMINISTRACIÓN</li>
@@ -720,7 +733,7 @@
                   </li>
 
                   <!-- ===[gabo 23 junio facturacion rh]=== -->
-                  <li class="nav-item" <?= Utils::isAdmin()?'':'hidden' ?>>
+                  <li class="nav-item" <?= Utils::isAdmin() ? '' : 'hidden' ?>>
                     <a href="<?= base_url ?>administracion_RH/cobranza" class="nav-link<?= $_GET['controller'] == 'administracion_RH' && $_GET['action'] == 'cobranza' ? ' active' : '' ?>">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>De RH</p>
@@ -765,8 +778,8 @@
                   </p>
                 </a>
               </li>
-			  
-			      <li class="nav-header"></li>
+
+              <li class="nav-header"></li>
               <li class="nav-item">
                 <a href="<?= base_url ?>Configuraciones/index" class="nav-link<?= $_GET['controller'] == 'configuraciones' && $_GET['action'] != 'index'  ? ' active' : '' ?>">
                   <i class="nav-icon fas fa-cog"></i>
@@ -775,7 +788,7 @@
                   </p>
                 </a>
               </li>
-			  
+
             <?php endif ?>
             <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor()) : ?>
               <li class="nav-item has-treeview <?= $_GET['controller'] == 'reporte' ? ' menu-open' : '' ?>">

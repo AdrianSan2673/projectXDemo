@@ -153,6 +153,29 @@ class Employee {
                            </div>
                         </div>
 
+
+
+
+
+
+
+                        <div class="row">
+                           <div class="col-sm-12 text-center">
+                               <b>Corrreo</b>
+                               <p>${json_app.employee.email == '' || json_app.employee.email == null ? 'Sin definir' : json_app.employee.email}</p>
+                           </div>
+
+                          
+                        </div>
+
+
+
+
+
+
+
+
+
                         <div class="row">
                             <div class="col-sm-4 text-center">
                                 <b>Fecha de creación</b>

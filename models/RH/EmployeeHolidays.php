@@ -322,7 +322,7 @@ class EmployeeHolidays
 			eh.status,
 			eh.comments,
             dbo.count_days(eh.start_date, eh.end_date) + 1 AS days,
-            ISNULL((SELECT holidays FROM root.holidays_by_years WHERE years = (dbo.GetMonthsDifference(e.start_date, GETDATE())/12)), 0) AS holidays_by_year,
+            ISNULL((SELECT top (1) holidays FROM root.holidays_by_years WHERE years = (dbo.GetMonthsDifference(e.start_date, GETDATE())/12)), 0) AS holidays_by_year,
             ISNULL((SELECT SUM(dbo.count_days(eh.start_date, eh.end_date) + 1) FROM root.employee_holidays eh WHERE eh.status='Aceptada' and  e.id=eh.id_employee AND eh.start_date BETWEEN DATEADD(YEAR, (dbo.GetMonthsDifference(e.start_date, GETDATE())/12), e.start_date) AND DATEADD(YEAR, (dbo.GetMonthsDifference(e.start_date, GETDATE())/12) + 1, e.start_date) ), 0) AS taken_holidays
         FROM  
             root.employees e INNER JOIN root.employee_holidays eh ON e.id=eh.id_employee

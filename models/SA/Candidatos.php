@@ -1,6 +1,7 @@
 <?php
 
-class Candidatos{
+class Candidatos
+{
     private $candidato;
     private $fecha_solicitud;
     private $fecha_aplicacion;
@@ -32,7 +33,7 @@ class Candidatos{
     private $Plaza_Cliente;
     private $Nivel;
     private $ID_Busqueda_RAL;
-	private $INFONAVIT;
+    private $INFONAVIT;
     private $Reactivado;
     private $IL;
     private $ESE;
@@ -45,368 +46,457 @@ class Candidatos{
     private $Fecha_Reanudado_IL;
     private $Fecha_Reanudado_ESE;
     private $Comentario_Pausa;
-  // ===[19 de mayo 2023 estudios]===
+    // ===[19 de mayo 2023 estudios]===
     private $replicado;
     // ===[19 de mayo 2023 estudios fin ]===
-	  // ===[27 jULIO 2023 REPLICADO fin ]===
+    // ===[27 jULIO 2023 REPLICADO fin ]===
     private $Ejecutivo_modificacion;
     private $Gestor_modificacion;
     // ===[27 jULIO 2023 REPLICADO fin ]===
     private $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = Connection::connectSA();
     }
 
-    public function getCandidato(){
+    public function getCandidato()
+    {
         return $this->candidato;
     }
 
-    public function setCandidato($candidato){
+    public function setCandidato($candidato)
+    {
         $this->candidato = $candidato;
     }
 
-    public function getFecha_solicitud(){
-		return $this->fecha_solicitud;
-	}
+    public function getFecha_solicitud()
+    {
+        return $this->fecha_solicitud;
+    }
 
-	public function setFecha_solicitud($fecha_solicitud){
-		$this->fecha_solicitud = $fecha_solicitud;
-	}
+    public function setFecha_solicitud($fecha_solicitud)
+    {
+        $this->fecha_solicitud = $fecha_solicitud;
+    }
 
-    public function getFecha_aplicacion(){
-		return $this->fecha_aplicacion;
-	}
+    public function getFecha_aplicacion()
+    {
+        return $this->fecha_aplicacion;
+    }
 
-	public function setFecha_aplicacion($fecha_aplicacion){
-		$this->fecha_aplicacion = $fecha_aplicacion;
-	}
+    public function setFecha_aplicacion($fecha_aplicacion)
+    {
+        $this->fecha_aplicacion = $fecha_aplicacion;
+    }
 
-	public function getFecha_entregado(){
-		return $this->fecha_entregado;
-	}
+    public function getFecha_entregado()
+    {
+        return $this->fecha_entregado;
+    }
 
-	public function setFecha_entregado($fecha_entregado){
-		$this->fecha_entregado = $fecha_entregado;
-	}
+    public function setFecha_entregado($fecha_entregado)
+    {
+        $this->fecha_entregado = $fecha_entregado;
+    }
 
-    public function getEjecutivo(){
+    public function getEjecutivo()
+    {
         return $this->Ejecutivo;
     }
 
-    public function setEjecutivo($Ejecutivo){
+    public function setEjecutivo($Ejecutivo)
+    {
         $this->Ejecutivo = $Ejecutivo;
     }
 
-    public function getLogistica(){
+    public function getLogistica()
+    {
         return $this->Logistica;
     }
 
-    public function setLogistica($Logistica){
+    public function setLogistica($Logistica)
+    {
         $this->Logistica = $Logistica;
     }
 
-    public function getTipo_Investigacion(){
+    public function getTipo_Investigacion()
+    {
         return $this->Tipo_Investigacion;
     }
-    
-    public function setTipo_Investigacion($Tipo_Investigacion){
+
+    public function setTipo_Investigacion($Tipo_Investigacion)
+    {
         $this->Tipo_Investigacion = $Tipo_Investigacion;
     }
 
-    public function getServicio_Solicitado(){
-		return $this->Servicio_Solicitado;
-	}
+    public function getServicio_Solicitado()
+    {
+        return $this->Servicio_Solicitado;
+    }
 
-	public function setServicio_Solicitado($Servicio_Solicitado){
-		$this->Servicio_Solicitado = $Servicio_Solicitado;
-	}
+    public function setServicio_Solicitado($Servicio_Solicitado)
+    {
+        $this->Servicio_Solicitado = $Servicio_Solicitado;
+    }
 
-	public function getFase(){
-		return $this->Fase;
-	}
+    public function getFase()
+    {
+        return $this->Fase;
+    }
 
-	public function setFase($Fase){
-		$this->Fase = $Fase;
-	}
+    public function setFase($Fase)
+    {
+        $this->Fase = $Fase;
+    }
 
-    public function getCiudad(){
+    public function getCiudad()
+    {
         return $this->Ciudad;
     }
-    
-    public function setCiudad($Ciudad){
+
+    public function setCiudad($Ciudad)
+    {
         $this->Ciudad = $Ciudad;
     }
 
-    public function getEstado(){
+    public function getEstado()
+    {
         return $this->Estado;
     }
 
-    public function setEstado($Estado){
+    public function setEstado($Estado)
+    {
         $this->Estado = $Estado;
     }
 
-    public function getContacto(){
+    public function getContacto()
+    {
         return $this->Contacto;
     }
 
-    public function setContacto($Contacto){
+    public function setContacto($Contacto)
+    {
         $this->Contacto = $Contacto;
     }
 
-    public function getRazon(){
+    public function getRazon()
+    {
         return $this->Razon;
     }
 
-    public function setRazon($Razon){
+    public function setRazon($Razon)
+    {
         $this->Razon = $Razon;
     }
 
-    public function getPuesto(){
+    public function getPuesto()
+    {
         return $this->Puesto;
     }
 
-    public function setPuesto($Puesto){
+    public function setPuesto($Puesto)
+    {
         $this->Puesto = $Puesto;
     }
 
-    public function getCliente(){
+    public function getCliente()
+    {
         return $this->Cliente;
     }
 
-    public function setCliente($Cliente){
+    public function setCliente($Cliente)
+    {
         $this->Cliente = $Cliente;
     }
 
-    public function getNombre_Cliente(){
+    public function getNombre_Cliente()
+    {
         return $this->Nombre_Cliente;
     }
 
-    public function setNombre_Cliente($Nombre_Cliente){
+    public function setNombre_Cliente($Nombre_Cliente)
+    {
         $this->Nombre_Cliente = $Nombre_Cliente;
     }
 
-    public function getCC_Cliente(){
+    public function getCC_Cliente()
+    {
         return $this->CC_Cliente;
     }
 
-    public function setCC_Cliente($CC_Cliente){
+    public function setCC_Cliente($CC_Cliente)
+    {
         $this->CC_Cliente = $CC_Cliente;
     }
 
-    public function getEnlace_Drive(){
+    public function getEnlace_Drive()
+    {
         return $this->Enlace_Drive;
     }
 
-    public function setEnlace_Drive($Enlace_Drive){
+    public function setEnlace_Drive($Enlace_Drive)
+    {
         $this->Enlace_Drive = $Enlace_Drive;
     }
 
-    public function getComentario_Escolaridad(){
+    public function getComentario_Escolaridad()
+    {
         return $this->Comentario_Escolaridad;
     }
-    
-    public function setComentario_Escolaridad($Comentario_Escolaridad){
+
+    public function setComentario_Escolaridad($Comentario_Escolaridad)
+    {
         $this->Comentario_Escolaridad = $Comentario_Escolaridad;
     }
 
-    public function getComentario_Documentos(){
+    public function getComentario_Documentos()
+    {
         return $this->Comentario_Documentos;
     }
-    
-    public function setComentario_Documentos($Comentario_Documentos){
+
+    public function setComentario_Documentos($Comentario_Documentos)
+    {
         $this->Comentario_Documentos = $Comentario_Documentos;
     }
 
-    public function getComentario_Economia(){
+    public function getComentario_Economia()
+    {
         return $this->Comentario_Economia;
     }
-    
-    public function setComentario_Economia($Comentario_Economia){
+
+    public function setComentario_Economia($Comentario_Economia)
+    {
         $this->Comentario_Economia = $Comentario_Economia;
     }
 
-    public function getComentario_Cliente(){
+    public function getComentario_Cliente()
+    {
         return $this->Comentario_Cliente;
     }
-    
-    public function setComentario_Cliente($Comentario_Cliente){
+
+    public function setComentario_Cliente($Comentario_Cliente)
+    {
         $this->Comentario_Cliente = $Comentario_Cliente;
     }
-    
-    public function getComentario_Cancelado(){
+
+    public function getComentario_Cancelado()
+    {
         return $this->Comentario_Cancelado;
     }
-    
-    public function setComentario_Cancelado($Comentario_Cancelado){
+
+    public function setComentario_Cancelado($Comentario_Cancelado)
+    {
         $this->Comentario_Cancelado = $Comentario_Cancelado;
     }
-    
-    public function getComentario_Cohabitan(){
+
+    public function getComentario_Cohabitan()
+    {
         return $this->Comentario_Cohabitan;
     }
-    
-    public function setComentario_Cohabitan($Comentario_Cohabitan){
+
+    public function setComentario_Cohabitan($Comentario_Cohabitan)
+    {
         $this->Comentario_Cohabitan = $Comentario_Cohabitan;
     }
-    
-    public function getComentario_Vivienda(){
+
+    public function getComentario_Vivienda()
+    {
         return $this->Comentario_Vivienda;
     }
-    
-    public function setComentario_Vivienda($Comentario_Vivienda){
+
+    public function setComentario_Vivienda($Comentario_Vivienda)
+    {
         $this->Comentario_Vivienda = $Comentario_Vivienda;
     }
-    
-    public function getComentario_Finalizacion(){
+
+    public function getComentario_Finalizacion()
+    {
         return $this->Comentario_Finalizacion;
     }
 
-    public function setComentario_Finalizacion($Comentario_Finalizacion){
+    public function setComentario_Finalizacion($Comentario_Finalizacion)
+    {
         $this->Comentario_Finalizacion = $Comentario_Finalizacion;
     }
 
-    public function getFactura(){
+    public function getFactura()
+    {
         return $this->Factura;
     }
 
-    public function setFactura($Factura){
+    public function setFactura($Factura)
+    {
         $this->Factura = $Factura;
     }
 
-    public function getFoto(){
-		return $this->Foto;
-	}
+    public function getFoto()
+    {
+        return $this->Foto;
+    }
 
-	public function setFoto($Foto){
-		$this->Foto = $Foto;
-	}
+    public function setFoto($Foto)
+    {
+        $this->Foto = $Foto;
+    }
 
-    public function getPlaza_Cliente(){
-		return $this->Plaza_Cliente;
-	}
+    public function getPlaza_Cliente()
+    {
+        return $this->Plaza_Cliente;
+    }
 
-	public function setPlaza_Cliente($Plaza_Cliente){
-		$this->Plaza_Cliente = $Plaza_Cliente;
-	}
+    public function setPlaza_Cliente($Plaza_Cliente)
+    {
+        $this->Plaza_Cliente = $Plaza_Cliente;
+    }
 
-    public function getNivel(){
-		return $this->Nivel;
-	}
+    public function getNivel()
+    {
+        return $this->Nivel;
+    }
 
-	public function setNivel($Nivel){
-		$this->Nivel = $Nivel;
-	}
+    public function setNivel($Nivel)
+    {
+        $this->Nivel = $Nivel;
+    }
 
-    public function getID_Busqueda_RAL(){
-		return $this->ID_Busqueda_RAL;
-	}
+    public function getID_Busqueda_RAL()
+    {
+        return $this->ID_Busqueda_RAL;
+    }
 
-	public function setID_Busqueda_RAL($ID_Busqueda_RAL){
-		$this->ID_Busqueda_RAL = $ID_Busqueda_RAL;
-	}
+    public function setID_Busqueda_RAL($ID_Busqueda_RAL)
+    {
+        $this->ID_Busqueda_RAL = $ID_Busqueda_RAL;
+    }
 
-    public function getINFONAVIT(){
-		return $this->INFONAVIT;
-	}
+    public function getINFONAVIT()
+    {
+        return $this->INFONAVIT;
+    }
 
-	public function setINFONAVIT($INFONAVIT){
-		$this->INFONAVIT = $INFONAVIT;
-	}
+    public function setINFONAVIT($INFONAVIT)
+    {
+        $this->INFONAVIT = $INFONAVIT;
+    }
 
-    public function getReactivado(){
-		return $this->Reactivado;
-	}
+    public function getReactivado()
+    {
+        return $this->Reactivado;
+    }
 
-	public function setReactivado($Reactivado){
-		$this->Reactivado = $Reactivado;
-	}
+    public function setReactivado($Reactivado)
+    {
+        $this->Reactivado = $Reactivado;
+    }
 
-    public function getIL(){
+    public function getIL()
+    {
         return $this->IL;
     }
 
-    public function setIL($IL){
+    public function setIL($IL)
+    {
         $this->IL = $IL;
     }
 
-    public function getESE(){
+    public function getESE()
+    {
         return $this->ESE;
     }
 
-    public function setESE($ESE){
+    public function setESE($ESE)
+    {
         $this->ESE = $ESE;
     }
 
-    public function getA_RAL(){
+    public function getA_RAL()
+    {
         return $this->A_RAL;
     }
 
-    public function setA_RAL($A_RAL){
+    public function setA_RAL($A_RAL)
+    {
         $this->A_RAL = $A_RAL;
     }
-	
-	public function getContactado(){
-		return $this->Contactado;
-	}
 
-	public function setContactado($Contactado){
-		$this->Contactado = $Contactado;
-	}
+    public function getContactado()
+    {
+        return $this->Contactado;
+    }
 
-	public function getFecha_Contactado(){
-		return $this->Fecha_Contactado;
-	}
+    public function setContactado($Contactado)
+    {
+        $this->Contactado = $Contactado;
+    }
 
-	public function setFecha_Contactado($Fecha_Contactado){
-		$this->Fecha_Contactado = $Fecha_Contactado;
-	}
+    public function getFecha_Contactado()
+    {
+        return $this->Fecha_Contactado;
+    }
 
-	public function getFecha_Pausado_RAL(){
-		return $this->Fecha_Pausado_RAL;
-	}
+    public function setFecha_Contactado($Fecha_Contactado)
+    {
+        $this->Fecha_Contactado = $Fecha_Contactado;
+    }
 
-	public function setFecha_Pausado_RAL($Fecha_Pausado_RAL){
-		$this->Fecha_Pausado_RAL = $Fecha_Pausado_RAL;
-	}
+    public function getFecha_Pausado_RAL()
+    {
+        return $this->Fecha_Pausado_RAL;
+    }
 
-	public function getFecha_Pausado_IL(){
-		return $this->Fecha_Pausado_IL;
-	}
+    public function setFecha_Pausado_RAL($Fecha_Pausado_RAL)
+    {
+        $this->Fecha_Pausado_RAL = $Fecha_Pausado_RAL;
+    }
 
-	public function setFecha_Pausado_IL($Fecha_Pausado_IL){
-		$this->Fecha_Pausado_IL = $Fecha_Pausado_IL;
-	}
+    public function getFecha_Pausado_IL()
+    {
+        return $this->Fecha_Pausado_IL;
+    }
 
-	public function getFecha_Pausado_ESE(){
-		return $this->Fecha_Pausado_ESE;
-	}
+    public function setFecha_Pausado_IL($Fecha_Pausado_IL)
+    {
+        $this->Fecha_Pausado_IL = $Fecha_Pausado_IL;
+    }
 
-	public function setFecha_Pausado_ESE($Fecha_Pausado_ESE){
-		$this->Fecha_Pausado_ESE = $Fecha_Pausado_ESE;
-	}
+    public function getFecha_Pausado_ESE()
+    {
+        return $this->Fecha_Pausado_ESE;
+    }
 
-	public function getFecha_Reanudado_IL(){
-		return $this->Fecha_Reanudado_IL;
-	}
+    public function setFecha_Pausado_ESE($Fecha_Pausado_ESE)
+    {
+        $this->Fecha_Pausado_ESE = $Fecha_Pausado_ESE;
+    }
 
-	public function setFecha_Reanudado_IL($Fecha_Reanudado_IL){
-		$this->Fecha_Reanudado_IL = $Fecha_Reanudado_IL;
-	}
+    public function getFecha_Reanudado_IL()
+    {
+        return $this->Fecha_Reanudado_IL;
+    }
 
-	public function getFecha_Reanudado_ESE(){
-		return $this->Fecha_Reanudado_ESE;
-	}
+    public function setFecha_Reanudado_IL($Fecha_Reanudado_IL)
+    {
+        $this->Fecha_Reanudado_IL = $Fecha_Reanudado_IL;
+    }
 
-	public function setFecha_Reanudado_ESE($Fecha_Reanudado_ESE){
-		$this->Fecha_Reanudado_ESE = $Fecha_Reanudado_ESE;
-	}
+    public function getFecha_Reanudado_ESE()
+    {
+        return $this->Fecha_Reanudado_ESE;
+    }
 
-    public function getComentario_Pausa(){
+    public function setFecha_Reanudado_ESE($Fecha_Reanudado_ESE)
+    {
+        $this->Fecha_Reanudado_ESE = $Fecha_Reanudado_ESE;
+    }
+
+    public function getComentario_Pausa()
+    {
         return $this->Comentario_Pausa;
     }
-    
-    public function setComentario_Pausa($Comentario_Pausa){
+
+    public function setComentario_Pausa($Comentario_Pausa)
+    {
         $this->Comentario_Pausa = $Comentario_Pausa;
     }
 
@@ -421,8 +511,8 @@ class Candidatos{
         $this->replicado = $replicado;
     }
     // ===[19 de mayo 2023 estudios fin ]===
-	
-	  public function getEjecutivo_modificacion()
+
+    public function getEjecutivo_modificacion()
     {
         return $this->Ejecutivo_modificacion;
     }
@@ -443,15 +533,17 @@ class Candidatos{
     }
 
 
-    public function getMax(){
+    public function getMax()
+    {
         $stmt = $this->db->prepare(
-            "SELECT ISNULL(MAX(Candidato), 0) AS Candidato FROM rh_Candidatos");
+            "SELECT ISNULL(MAX(Candidato), 0) AS Candidato FROM rh_Candidatos"
+        );
         $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->Candidato;
     }
 
-      public function create()
+    public function create()
     {
         $result = false;
 
@@ -500,7 +592,8 @@ class Candidatos{
         return $result;
     }
 
-    public function getServiciosDeHoy(){
+    public function getServiciosDeHoy()
+    {
         $stmt = $this->db->prepare("SELECT Folio=RC.Candidato
         ,[Solicitud]=RC.Fecha
         ,Estado =UPPER((SELECT ES.Descripcion FROM sys_Campos ES WHERE ES.Campo= RC.Estado))
@@ -548,7 +641,7 @@ class Candidatos{
         return $servicios;
     }
 
-   public function getServiciosUltimos30()
+    public function getServiciosUltimos30()
     {
         $stmt = $this->db->prepare("SELECT Folio=RC.Candidato
         ,[Solicitud]=RC.Fecha
@@ -589,7 +682,8 @@ class Candidatos{
     }
 
 
-  public function getServiciosPorEjecutivo(){
+    public function getServiciosPorEjecutivo()
+    {
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT Folio=RC.Candidato
         ,[Solicitud]=RC.Fecha
@@ -626,7 +720,8 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosPorLogistica(){
+    public function getServiciosPorLogistica()
+    {
         $Logistica = $this->getLogistica();
         $stmt = $this->db->prepare("SELECT Folio=RC.Candidato
         ,[Solicitud]=RC.Fecha
@@ -662,7 +757,8 @@ class Candidatos{
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-    public function getServiciosPorRangoDeFecha(){
+    public function getServiciosPorRangoDeFecha()
+    {
         $date1 = $this->getFecha_solicitud();
         $date2 = $this->getFecha_entregado();
 
@@ -707,7 +803,8 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosHoyConCancelados(){
+    public function getServiciosHoyConCancelados()
+    {
         $date1 = $this->getFecha_solicitud();
         $date2 = $this->getFecha_entregado();
 
@@ -757,7 +854,8 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosPorRangoDeFechaConCancelados(){
+    public function getServiciosPorRangoDeFechaConCancelados()
+    {
         $date1 = $this->getFecha_solicitud();
         $date2 = $this->getFecha_entregado();
 
@@ -825,7 +923,8 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosEnProceso(){
+    public function getServiciosEnProceso()
+    {
         $stmt = $this->db->prepare("SELECT Folio=RC.Candidato
         ,[Solicitud]=RC.Fecha
         ,RC.Estado
@@ -859,7 +958,8 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosEnProcesoPorEjecutivo(){
+    public function getServiciosEnProcesoPorEjecutivo()
+    {
         $Ejecutivo = $this->getEjecutivo();
 
         $stmt = $this->db->prepare("SELECT Folio=RC.Candidato
@@ -896,7 +996,8 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosEnProcesoPorEjecutivoLogistica(){
+    public function getServiciosEnProcesoPorEjecutivoLogistica()
+    {
         $Logistica = $this->getLogistica();
 
         $stmt = $this->db->prepare("SELECT Folio=RC.Candidato
@@ -933,7 +1034,8 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosAgendados(){
+    public function getServiciosAgendados()
+    {
         $Logistica = $this->getLogistica();
 
         $stmt = $this->db->prepare("SELECT Folio=RC.Candidato
@@ -969,7 +1071,8 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosAgendadosPorEjecutivoLogistica(){
+    public function getServiciosAgendadosPorEjecutivoLogistica()
+    {
         $Logistica = $this->getLogistica();
 
         $stmt = $this->db->prepare("SELECT Folio=RC.Candidato
@@ -1006,7 +1109,8 @@ class Candidatos{
         return $servicios;
     }
 
-	public function getServiciosPorContacto(){
+    public function getServiciosPorContacto()
+    {
         $Contacto = $this->getContacto();
         $stmt = $this->db->prepare("SELECT TOP(7200) Folio=RC.Candidato,RC.Cliente ID_Ciente
         ,[Solicitud]=RC.Fecha
@@ -1053,8 +1157,9 @@ class Candidatos{
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-	
-	public function getServiciosPorContactoTranspais(){
+
+    public function getServiciosPorContactoTranspais()
+    {
         $Contacto = $this->getContacto();
         $stmt = $this->db->prepare("SELECT TOP(7200) Folio=RC.Candidato
         ,[Solicitud]=RC.Fecha
@@ -1100,8 +1205,9 @@ class Candidatos{
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-	
-    public function getServiciosPorContacto1(){
+
+    public function getServiciosPorContacto1()
+    {
         $Contacto = $this->getContacto();
         $stmt = $this->db->prepare("SELECT TOP(400) Folio=RC.Candidato
         ,[Solicitud]=RC.Fecha
@@ -1147,7 +1253,8 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getAll(){
+    public function getAll()
+    {
         $stmt = $this->db->prepare("SELECT Folio=RC.Candidato
         ,[Solicitud]=RC.Fecha
         ,RC.Estado
@@ -1182,9 +1289,10 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getOne(){
+    public function getOne()
+    {
         $candidato = $this->getCandidato();
-        
+
         $stmt = $this->db->prepare("SELECT Folio=RC.Candidato
         ,[Solicitud]=RC.Fecha
         ,Estado =UPPER((SELECT ES.Descripcion FROM sys_Campos ES WHERE ES.Campo= RC.Estado))
@@ -1227,14 +1335,15 @@ class Candidatos{
          WHERE RC.Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $candidato, PDO::PARAM_INT);
         $stmt->execute();
-        
+
         $fetch = $stmt->fetchObject();
         return $fetch;
     }
 
-    public function getTime(){
+    public function getTime()
+    {
         $candidato = $this->getCandidato();
-        
+
         $stmt = $this->db->prepare("SELECT [Dias] = CASE WHEN RC.Fecha_Entregado IS NULL AND RC.Estado <> 258 THEN dbo.count_days(RC.Fecha, GETDATE()) WHEN RC.Estado <> 258 THEN dbo.count_days(RC.Fecha, RC.Fecha_Entregado) ELSE '-1' END
         ,[Tiempo_IL] = CASE WHEN RC.Fecha_Entregado_INV IS NULL AND RC.Fecha <= GETDATE() AND (RC.Estado<>258 AND RC.Estado<>249) THEN dbo.count_days_with_decimal(RC.Fecha, GETDATE()) WHEN RC.Fecha_Entregado_INV IS NULL AND RC.Fecha > GETDATE() AND (RC.Estado<>258 AND RC.Estado<>249) THEN '0.0' WHEN RC.Fecha_Entregado_INV IS NOT NULL AND RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, RC.Fecha_Entregado_INV) ELSE '0' END
         ,[Tiempo_ESE] = CASE WHEN RC.Fecha_Entregado_ESE IS NULL AND RC.Fecha <= GETDATE() AND (RC.Estado<>258 AND RC.Estado<>249) THEN dbo.count_days_with_decimal(RC.Fecha, GETDATE()) WHEN RC.Fecha_Entregado_ESE IS NULL AND RC.Fecha > GETDATE() AND (RC.Estado<>258 AND RC.Estado<>249) THEN '0.0' WHEN RC.Fecha_Entregado_ESE IS NOT NULL AND RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, RC.Fecha_Entregado_ESE) ELSE '0' END
@@ -1243,26 +1352,27 @@ class Candidatos{
          WHERE RC.Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $candidato, PDO::PARAM_INT);
         $stmt->execute();
-        
+
         $fetch = $stmt->fetchObject();
         return $fetch;
     }
 
-    public function updateConfig() {
-        
+    public function updateConfig()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $Fecha_Solicitud = $this->getFecha_solicitud();
         $Ejecutivo = $this->getEjecutivo();
         $Fecha_Entregado = $this->getFecha_entregado();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Fecha=:Fecha_Solicitud, Ejecutivo=:Ejecutivo, Fecha_Entregado=:Fecha_Entregado, Modificado=GETDATE() WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Fecha_Solicitud", $Fecha_Solicitud, PDO::PARAM_STR);
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
         $stmt->bindParam(":Fecha_Entregado", $Fecha_Entregado, PDO::PARAM_STR);
-        
+
         $flag = $stmt->execute();
         if ($flag) {
             $result = true;
@@ -1271,19 +1381,20 @@ class Candidatos{
         return $result;
     }
 
-    public function updateSchedule() {
-        
+    public function updateSchedule()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $fecha_aplicacion = $this->getFecha_aplicacion();
         $Logistica = $this->getLogistica();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Fecha_Aplicacion=:Fecha_Aplicacion, Gestor=:Logistica, Modificado=GETDATE() WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Fecha_Aplicacion", $fecha_aplicacion, PDO::PARAM_STR);
         $stmt->bindParam(":Logistica", $Logistica, PDO::PARAM_STR);
-        
+
         $flag = $stmt->execute();
         if ($flag) {
             $result = true;
@@ -1291,18 +1402,19 @@ class Candidatos{
         }
         return $result;
     }
-	
-	public function updateContact() {
-        
+
+    public function updateContact()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $Contactado = $this->getContactado();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Contactado=:Contactado, Fecha_Contactado=GETDATE() WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Contactado", $Contactado, PDO::PARAM_INT);
-        
+
         $flag = $stmt->execute();
         if ($flag) {
             $result = true;
@@ -1310,49 +1422,52 @@ class Candidatos{
         return $result;
     }
 
-    public function updateTipoInvestigacion() {
-        
+    public function updateTipoInvestigacion()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $Tipo_Investigacion = $this->getTipo_Investigacion();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Tipo_Investigacion=:Tipo_Investigacion WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Tipo_Investigacion", $Tipo_Investigacion, PDO::PARAM_INT);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
 
-    public function getTipoServicio(){
+    public function getTipoServicio()
+    {
         $candidato = $this->getCandidato();
-        
+
         $stmt = $this->db->prepare("SELECT Fecha, Fecha_Entregado, Servicio_Solicitado,Servicio AS Fase,(SELECT Nuevo_Procedimiento FROM rh_Ventas_Empresas WHERE Empresa=(SELECT Empresa FROM rh_Ventas_Alta WHERE Cliente=RC.Cliente)) as Nuevo_Procedimiento, RC.Estado, RC.Comentario_Cancelado, RC.Comentario_Finalizado, RC.Factura, RC.Comentario_Pausa FROM rh_candidatos RC WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $candidato, PDO::PARAM_INT);
         $stmt->execute();
-        
+
         $fetch = $stmt->fetchObject();
         return $fetch;
     }
 
-    public function updateService() {
-        
+    public function updateService()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $Servicio_Solicitado = $this->getServicio_Solicitado();
         $Fase = $this->getFase();
         $Estado = $this->getEstado();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Servicio_Solicitado=:Servicio_Solicitado, Servicio=:Fase, Estado=:Estado, Modificado=GETDATE() WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Servicio_Solicitado", $Servicio_Solicitado, PDO::PARAM_INT);
         $stmt->bindParam(":Fase", $Fase, PDO::PARAM_INT);
         $stmt->bindParam(":Estado", $Estado, PDO::PARAM_INT);
-        
+
         $flag = $stmt->execute();
         if ($flag) {
             $result = true;
@@ -1361,8 +1476,9 @@ class Candidatos{
         return $result;
     }
 
-    public function updateDatosEmpresa() {
-        
+    public function updateDatosEmpresa()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
@@ -1370,14 +1486,14 @@ class Candidatos{
         $Contacto = $this->getContacto();
         $Razon = $this->getRazon();
         $Puesto = $this->getPuesto();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Cliente=:Cliente, Nombre_Cliente=:Contacto, Razon=:Razon, Puesto=:Puesto, Modificado=GETDATE() WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
         $stmt->bindParam(":Contacto", $Contacto, PDO::PARAM_INT);
         $stmt->bindParam(":Razon", $Razon, PDO::PARAM_STR);
         $stmt->bindParam(":Puesto", $Puesto, PDO::PARAM_STR);
-        
+
         $flag = $stmt->execute();
         if ($flag) {
             $result = true;
@@ -1386,17 +1502,18 @@ class Candidatos{
         return $result;
     }
 
-    public function updateEnlaceDrive() {
-        
+    public function updateEnlaceDrive()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $Enlace_Drive = $this->getEnlace_Drive();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Enlace_Drive=:Enlace_Drive WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Enlace_Drive", $Enlace_Drive, PDO::PARAM_STR);
-        
+
         $flag = $stmt->execute();
         if ($flag) {
             $result = true;
@@ -1405,17 +1522,18 @@ class Candidatos{
         return $result;
     }
 
-    public function updateCiudad() {
-        
+    public function updateCiudad()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $Ciudad = $this->getCiudad();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Ciudad=:Ciudad WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Ciudad", $Ciudad, PDO::PARAM_STR);
-        
+
         $flag = $stmt->execute();
         if ($flag) {
             $result = true;
@@ -1424,121 +1542,129 @@ class Candidatos{
         return $result;
     }
 
-    public function getComentarios(){
+    public function getComentarios()
+    {
         $candidato = $this->getCandidato();
-        
+
         $stmt = $this->db->prepare("SELECT RC.Comentario_Escolaridad, RC.Comentario_Documentos, RC.Comentario_Economia, RC.Comentario_Cliente, RC.Comentario_Cancelado, RC.Comentario_Cohabitan, RC.Comentario_Vivienda, RC.INFONAVIT FROM rh_candidatos RC WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $candidato, PDO::PARAM_INT);
         $stmt->execute();
-        
+
         $fetch = $stmt->fetchObject();
         return $fetch;
     }
 
-    public function updateComentarioEscolaridad() {
-        
+    public function updateComentarioEscolaridad()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $Comentario_Escolaridad = $this->getComentario_Escolaridad();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Comentario_Escolaridad=:Comentario_Escolaridad WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Comentario_Escolaridad", $Comentario_Escolaridad, PDO::PARAM_STR);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
 
-    public function updateComentarioCohabitan() {
-        
+    public function updateComentarioCohabitan()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $Comentario_Cohabitan = $this->getComentario_Cohabitan();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Comentario_Cohabitan=:Comentario_Cohabitan WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Comentario_Cohabitan", $Comentario_Cohabitan, PDO::PARAM_STR);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
 
-    public function updateComentarioEconomia() {
-        
+    public function updateComentarioEconomia()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $Comentario_Economia = $this->getComentario_Economia();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Comentario_Economia=:Comentario_Economia WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Comentario_Economia", $Comentario_Economia, PDO::PARAM_STR);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
 
-    public function updateComentario_Vivienda() {
-        
+    public function updateComentario_Vivienda()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $Comentario_Vivienda = $this->getComentario_Vivienda();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Comentario_Vivienda=:Comentario_Vivienda WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Comentario_Vivienda", $Comentario_Vivienda, PDO::PARAM_STR);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
 
-    public function updateComentarioDocumentos() {
-        
+    public function updateComentarioDocumentos()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $Comentario_Documentos = $this->getComentario_Documentos();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Comentario_Documentos=:Comentario_Documentos WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Comentario_Documentos", $Comentario_Documentos, PDO::PARAM_STR);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
 
-    public function updateINFONAVIT() {
-        
+    public function updateINFONAVIT()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $INFONAVIT = $this->getINFONAVIT();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET INFONAVIT=:INFONAVIT WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":INFONAVIT", $INFONAVIT, PDO::PARAM_INT);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
 
-    public function saveCancelacion() {
-        
+    public function saveCancelacion()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
@@ -1550,20 +1676,21 @@ class Candidatos{
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=:Estado, Servicio=:Fase, Comentario_Cancelado=:Comentario_Cancelado, Fecha_Entregado=GETDATE() WHERE Candidato=:Candidato");
         else
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=:Estado, Servicio=:Fase, Comentario_Cancelado=:Comentario_Cancelado WHERE Candidato=:Candidato");
-        
+
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Estado", $Estado, PDO::PARAM_INT);
         $stmt->bindParam(":Fase", $Fase, PDO::PARAM_INT);
         $stmt->bindParam(":Comentario_Cancelado", $Comentario_Cancelado, PDO::PARAM_STR);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
 
-    public function saveFinalizacion() {
-        
+    public function saveFinalizacion()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
@@ -1573,36 +1700,37 @@ class Candidatos{
 
         if ($Fase == 298 || $Fase == 291) {
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=:Estado, Servicio=:Fase, Comentario_Finalizado=:Comentario_Finalizacion, Fecha_Entregado_RAL=GETDATE(), Fecha_Entregado=GETDATE() WHERE Candidato=:Candidato");
-        }elseif ($Fase == 231) {
+        } elseif ($Fase == 231) {
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=:Estado, Servicio=:Fase, Comentario_Finalizado=:Comentario_Finalizacion, Fecha_Entregado_INV=GETDATE(), Fecha_Entregado=GETDATE() WHERE Candidato=:Candidato");
-        }elseif ($Fase == 232) {
+        } elseif ($Fase == 232) {
             $Fase = 230;
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=:Estado, Servicio=:Fase, Comentario_Finalizado=:Comentario_Finalizacion, Fecha_Entregado_INV=GETDATE(), Fecha_Entregado=GETDATE() WHERE Candidato=:Candidato");
-        }elseif ($Fase == 299) {
+        } elseif ($Fase == 299) {
             $Fase = 300;
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=:Estado, Servicio=:Fase, Comentario_Finalizado=:Comentario_Finalizacion, Fecha_Entregado_ESE=GETDATE(), Fecha_Entregado=GETDATE() WHERE Candidato=:Candidato");
-        }elseif ($Fase == 230) {
+        } elseif ($Fase == 230) {
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=:Estado, Servicio=:Fase, Comentario_Finalizado=:Comentario_Finalizacion, Fecha_Entregado_ESE=GETDATE(), Fecha_Entregado=GETDATE() WHERE Candidato=:Candidato");
-        }elseif ($Fase == 300) {
+        } elseif ($Fase == 300) {
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=:Estado, Servicio=:Fase, Comentario_Finalizado=:Comentario_Finalizacion, Fecha_Entregado_INV=GETDATE(), Fecha_Entregado=GETDATE() WHERE Candidato=:Candidato");
-        }else{
+        } else {
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=:Estado, Servicio=:Fase, Comentario_Finalizado=:Comentario_Finalizacion, Fecha_Entregado=GETDATE() WHERE Candidato=:Candidato");
         }
-        
-        
+
+
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Estado", $Estado, PDO::PARAM_INT);
         $stmt->bindParam(":Fase", $Fase, PDO::PARAM_INT);
         $stmt->bindParam(":Comentario_Finalizacion", $Comentario_Finalizacion, PDO::PARAM_STR);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
-	
-	public function saveTerminado() {
-        
+
+    public function saveTerminado()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
@@ -1611,27 +1739,28 @@ class Candidatos{
 
         if ($Fase == 231) {
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET  Comentario_Finalizado=:Comentario_Finalizacion, Fecha_Entregado_INV=GETDATE() WHERE Candidato=:Candidato");
-        }elseif ($Fase == 230) {
+        } elseif ($Fase == 230) {
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Comentario_Finalizado=:Comentario_Finalizacion, Fecha_Entregado_ESE=GETDATE() WHERE Candidato=:Candidato");
-        }elseif ($Fase == 299) {
+        } elseif ($Fase == 299) {
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Comentario_Finalizado=:Comentario_Finalizacion, Fecha_Entregado_ESE=GETDATE() WHERE Candidato=:Candidato");
-        }elseif ($Fase == 300) {
+        } elseif ($Fase == 300) {
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Comentario_Finalizado=:Comentario_Finalizacion, Fecha_Entregado_INV=GETDATE(), Servicio=300 WHERE Candidato=:Candidato");
-        }elseif ($Fase == 232) {
+        } elseif ($Fase == 232) {
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Comentario_Finalizado=:Comentario_Finalizacion, Fecha_Entregado_INV=GETDATE() WHERE Candidato=:Candidato");
         }
-        
+
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Comentario_Finalizacion", $Comentario_Finalizacion, PDO::PARAM_STR);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
 
-    public function saveAvanzar() {
-        
+    public function saveAvanzar()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
@@ -1640,25 +1769,26 @@ class Candidatos{
 
         if ($Fase == 298) {
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Servicio=299, Fecha_Entregado_RAL=GETDATE() WHERE Candidato=:Candidato");
-        }elseif ($Fase == 299) {
+        } elseif ($Fase == 299) {
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Servicio=300, Fecha_Entregado_INV=GETDATE() WHERE Candidato=:Candidato");
-        }elseif ($Fase == 310) {
+        } elseif ($Fase == 310) {
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Servicio=298 WHERE Candidato=:Candidato");
-        }elseif ($Fase == 300)
+        } elseif ($Fase == 300)
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Servicio=324 WHERE Candidato=:Candidato");
-        
-        
+
+
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         //$stmt->bindParam(":Estado", $Estado, PDO::PARAM_INT);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
-	
-	public function saveServicioSiguienteRAL() {
-        
+
+    public function saveServicioSiguienteRAL()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
@@ -1677,15 +1807,16 @@ class Candidatos{
         $stmt->bindParam(":Comentario_Cliente", $Comentario_Cliente, PDO::PARAM_STR);
         $stmt->bindParam(":Fase", $Fase, PDO::PARAM_INT);
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
-	
-	public function savePausa() {
-        
+
+    public function savePausa()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
@@ -1695,24 +1826,25 @@ class Candidatos{
 
         if ($Fase == 298 || $Fase == 291) {
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=:Estado, Comentario_Pausa=:Comentario_Pausa, Fecha_Pausado_RAL=GETDATE() WHERE Candidato=:Candidato");
-        }elseif ($Fase == 231 || $Fase == 299) {
+        } elseif ($Fase == 231 || $Fase == 299) {
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=:Estado, Comentario_Pausa=:Comentario_Pausa, Fecha_Pausado_IL=GETDATE() WHERE Candidato=:Candidato");
-        }elseif ($Fase == 230 || $Fase == 300) {
+        } elseif ($Fase == 230 || $Fase == 300) {
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=:Estado, Comentario_Pausa=:Comentario_Pausa, Fecha_Pausado_ESE=GETDATE() WHERE Candidato=:Candidato");
         }
-        
+
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Estado", $Estado, PDO::PARAM_INT);
         $stmt->bindParam(":Comentario_Pausa", $Comentario_Pausa, PDO::PARAM_STR);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
-	
-	public function saveReanudar() {
-        
+
+    public function saveReanudar()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
@@ -1723,18 +1855,19 @@ class Candidatos{
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=:Estado, Fecha_Reanudado_IL=GETDATE() WHERE Candidato=:Candidato");
         elseif ($Fase == 230 || $Fase == 300)
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=:Estado, Fecha_Reanudado_ESE=GETDATE() WHERE Candidato=:Candidato");
-        
+
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Estado", $Estado, PDO::PARAM_INT);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
 
-    public function reactivar() {
-        
+    public function reactivar()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
@@ -1742,36 +1875,38 @@ class Candidatos{
         $Fase = $this->getFase();
 
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Servicio=:Fase, Fecha=GETDATE(), Fecha_Entregado=NULL, Estado=250, Reactivado=2 WHERE Candidato=:Candidato");
-        
+
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Fase", $Fase, PDO::PARAM_INT);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
 
-    public function eliminar() {
-        
+    public function eliminar()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
 
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Ejecutivo='miguelcasanova', Cliente=6 WHERE Candidato=:Candidato");
-        
+
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
-	
-	public function duplicate(){
-		$result = false;
 
-		$Candidato = $this->getMax() + 1;
+    public function duplicate()
+    {
+        $result = false;
+
+        $Candidato = $this->getMax() + 1;
         $Folio = $this->getCandidato();
 
         $stmt = $this->db->prepare("INSERT INTO rh_Candidatos(Candidato, Fecha, Puesto, Ciudad, Ejecutivo, Razon, Estado, Servicio_Solicitado, Servicio, Cliente, Nombre_Cliente, Viatico, Foto, Comentario_Cliente, CC_Cliente, Plaza_Cliente, Factura, Nivel) SELECT :Candidato, GETDATE(), Puesto, Ciudad, Ejecutivo, Razon, Estado, Servicio_Solicitado, Fase, Cliente, Nombre_Cliente, 0, 0, Comentario_Cliente, CC_Cliente, Plaza_Cliente, '', Nivel FROM rh_Candidatos WHERE Candidato=:Folio");
@@ -1785,11 +1920,12 @@ class Candidatos{
         }
         return $result;
     }
-    
-    public function copiarInfo($duplicado){
-		$result = false;
 
-		$Candidato = $this->getCandidato();
+    public function copiarInfo($duplicado)
+    {
+        $result = false;
+
+        $Candidato = $this->getCandidato();
         $Folio = $duplicado;
 
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Comentario_Escolaridad=t2.Comentario_Escolaridad, Comentario_Documentos=t2.Comentario_Documentos, Comentario_Economia=t2.Comentario_Economia, Comentario_Cohabitan=t2.Comentario_Cohabitan, Comentario_Vivienda=t2.Comentario_Vivienda FROM (SELECT * FROM rh_Candidatos WHERE Candidato=:Folio) t2 WHERE	rh_Candidatos.Candidato=:Candidato");
@@ -1802,21 +1938,22 @@ class Candidatos{
             $result = true;
         }
         return $result;
-    }  
+    }
 
-    public function updateFactura() {
-        
+    public function updateFactura()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $Estado = $this->getEstado();
         $Factura = $this->getFactura();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Factura=:Factura, Estado=:Estado WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Factura", $Factura, PDO::PARAM_STR);
         $stmt->bindParam(":Estado", $Estado, PDO::PARAM_INT);
-        
+
         $flag = $stmt->execute();
         if ($flag) {
             $result = true;
@@ -1825,383 +1962,421 @@ class Candidatos{
         return $result;
     }
 
-    public function updateFoto() {
-        
+    public function updateFoto()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $Foto = $this->getFoto();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Foto=:Foto WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Foto", $Foto, PDO::PARAM_INT);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
-            
+
         return $result;
     }
 
-    public function updateBusquedaRAL() {
-        
+    public function updateBusquedaRAL()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $ID_Busqueda_RAL = $this->getID_Busqueda_RAL();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET ID_Busqueda_RAL=:ID_Busqueda_RAL WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":ID_Busqueda_RAL", $ID_Busqueda_RAL, PDO::PARAM_INT);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
 
-    public function updateIL() {
-        
+    public function updateIL()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $IL = $this->getIL();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET IL=:IL WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":IL", $IL, PDO::PARAM_INT);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
 
-    public function updateESE() {
-        
+    public function updateESE()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $ESE = $this->getESE();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET ESE=:ESE WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":ESE", $ESE, PDO::PARAM_INT);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
 
-    public function updateARAL() {
-        
+    public function updateARAL()
+    {
+
         $result = false;
 
         $Candidato = $this->getCandidato();
         $A_RAL = $this->getA_RAL();
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET A_RAL=:A_RAL WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":A_RAL", $A_RAL, PDO::PARAM_INT);
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
 
-    public function getTotalServiciosPorDia(){
-    	$Fecha = $this->getFecha_solicitud();
+    public function getTotalServiciosPorDia()
+    {
+        $Fecha = $this->getFecha_solicitud();
         /* $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)"); */
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 AND ESE IS NULL AND IL IS NULL and (replicado<>2 OR replicado is null)");
         $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalRALESPorDia(){
-    	$Fecha = $this->getFecha_solicitud();
+    public function getTotalRALESPorDia()
+    {
+        $Fecha = $this->getFecha_solicitud();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=298 OR Servicio_Solicitado=291 OR Servicio_Solicitado=328) AND ESE IS NULL AND IL IS NULL and (replicado<>2 OR replicado is null)");
         $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalInvPorDia(){
-    	$Fecha = $this->getFecha_solicitud();
+    public function getTotalInvPorDia()
+    {
+        $Fecha = $this->getFecha_solicitud();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=231 and (replicado<>2 OR replicado is null)");
         $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-      public function getTotalESESPorDia(){
-    	$Fecha = $this->getFecha_solicitud();
+    public function getTotalESESPorDia()
+    {
+        $Fecha = $this->getFecha_solicitud();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230  or Servicio_Solicitado=340 or Servicio_Solicitado=341  AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
         $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
 
-    
 
 
-    public function getTotalServiciosPorDiaYEjecutivo(){
-    	$Fecha = $this->getFecha_solicitud();
+
+    public function getTotalServiciosPorDiaYEjecutivo()
+    {
+        $Fecha = $this->getFecha_solicitud();
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
         $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalRALESPorDiaYEjecutivo(){
-    	$Fecha = $this->getFecha_solicitud();
+    public function getTotalRALESPorDiaYEjecutivo()
+    {
+        $Fecha = $this->getFecha_solicitud();
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Servicio_Solicitado=298 AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo");
         $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalInvPorDiaYEjecutivo(){
-    	$Fecha = $this->getFecha_solicitud();
+    public function getTotalInvPorDiaYEjecutivo()
+    {
+        $Fecha = $this->getFecha_solicitud();
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Servicio_Solicitado=231 AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo");
         $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-   public function getTotalESESPorDiaYEjecutivo(){
-    	$Fecha = $this->getFecha_solicitud();
+    public function getTotalESESPorDiaYEjecutivo()
+    {
+        $Fecha = $this->getFecha_solicitud();
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND(Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Servicio=230 AND Estado<252)");
         $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
 
 
 
-    public function getTotalServiciosEnProceso(){
+    public function getTotalServiciosEnProceso()
+    {
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Estado < 252 AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalRALESEnProceso(){
+    public function getTotalRALESEnProceso()
+    {
         $stmt = $this->db->prepare("SELECT COUNT(c.Candidato) AS total FROM rh_Candidatos c INNER JOIN rh_Candidatos_Datos d ON c.Candidato=d.Candidato WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=298 AND Estado < 252 and (replicado<>2 OR replicado is null)");
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalInvEnProceso(){
+    public function getTotalInvEnProceso()
+    {
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=231 AND Estado < 252 and (replicado<>2 OR replicado is null)");
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
- 
-    public function getTotalESESEnProceso(){
+
+    public function getTotalESESEnProceso()
+    {
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Estado < 252 AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341)  AND Estado<252) and (replicado<>2 OR replicado is null)");
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
 
-    
 
 
-    public function getTotalServiciosEnProcesoEjecutivo(){
+
+    public function getTotalServiciosEnProcesoEjecutivo()
+    {
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Estado < 252 AND Ejecutivo=:Ejecutivo AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)");
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalRALESEnProcesoEjecutivo(){
+    public function getTotalRALESEnProcesoEjecutivo()
+    {
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Servicio_Solicitado=298 AND Estado < 252 AND Ejecutivo=:Ejecutivo");
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalInvEnProcesoEjecutivo(){
+    public function getTotalInvEnProcesoEjecutivo()
+    {
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Servicio_Solicitado=231 AND Estado < 252 AND Ejecutivo=:Ejecutivo");
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-     public function getTotalESESEnProcesoEjecutivo(){
+    public function getTotalESESEnProcesoEjecutivo()
+    {
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Estado < 252 AND Ejecutivo=:Ejecutivo AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Servicio=230 AND Estado<252)");
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
 
-    public function getTotalServiciosSemana(){
+    public function getTotalServiciosSemana()
+    {
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalRALESSemana(){
+    public function getTotalRALESSemana()
+    {
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=298 AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) and (replicado<>2 OR replicado is null)");
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalInvSemana(){
+    public function getTotalInvSemana()
+    {
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=231 AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) and (replicado<>2 OR replicado is null)");
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalESESSemana(){
+    public function getTotalESESSemana()
+    {
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalServiciosSemanaEjecutivo(){
+    public function getTotalServiciosSemanaEjecutivo()
+    {
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)");
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalRALESSemanaEjecutivo(){
+    public function getTotalRALESSemanaEjecutivo()
+    {
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Servicio_Solicitado=298 AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE())");
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalInvSemanaEjecutivo(){
+    public function getTotalInvSemanaEjecutivo()
+    {
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Servicio_Solicitado=231 AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE())");
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-   
-    public function getTotalESESSemanaEjecutivo(){
+
+    public function getTotalESESSemanaEjecutivo()
+    {
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Servicio=230 AND Estado<252)");
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalServiciosMes(){
+    public function getTotalServiciosMes()
+    {
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalRALESMes(){
+    public function getTotalRALESMes()
+    {
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=298 AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE()) and (replicado<>2 OR replicado is null)");
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalInvMes(){
+    public function getTotalInvMes()
+    {
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=231 AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE()) and (replicado<>2 OR replicado is null)");
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
- 
-    public function getTotalESESMes(){
+
+    public function getTotalESESMes()
+    {
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341)AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341)AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
-    
+    }
 
 
-    public function getTotalServiciosMesEjecutivo(){
+
+    public function getTotalServiciosMesEjecutivo()
+    {
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)");
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalRALESMesEjecutivo(){
+    public function getTotalRALESMesEjecutivo()
+    {
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Servicio_Solicitado=298 AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE())");
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-    public function getTotalInvMesEjecutivo(){
+    public function getTotalInvMesEjecutivo()
+    {
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Servicio_Solicitado=231 AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE())");
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-     public function getTotalESESMesEjecutivo(){
+    public function getTotalESESMesEjecutivo()
+    {
         $Ejecutivo = $this->getEjecutivo();
         $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Servicio=230 AND Estado<252)");
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
-        $stmt->execute();      
+        $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
-	}
+    }
 
-  public function getServiciosSolicitadosPorClientesHoy(){
+    public function getServiciosSolicitadosPorClientesHoy()
+    {
         $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, 
         SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291  Or RC.Servicio_Solicitado = 328  then 1 else 0 end) AS No_RAL, 
         SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, 
@@ -2214,7 +2389,8 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorClientesYEjecutivoHoy(){
+    public function getServiciosSolicitadosPorClientesYEjecutivoHoy()
+    {
         $Ejecutivo = $this->getEjecutivo();
 
         $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE CONVERT(date, Fecha)=CONVERT(date, GETDATE()) AND Ejecutivo=:Ejecutivo AND Estado<>257 AND Estado<>258 GROUP BY RVA.Nombre_Cliente ORDER BY No_Servicios DESC");
@@ -2224,14 +2400,16 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorClientesEnProceso(){
+    public function getServiciosSolicitadosPorClientesEnProceso()
+    {
         $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE Ejecutivo<>'miguelcasanova' AND Estado < 252 GROUP BY RVA.Nombre_Cliente ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorClientesYEjecutivoEnProceso(){
+    public function getServiciosSolicitadosPorClientesYEjecutivoEnProceso()
+    {
         $Ejecutivo = $this->getEjecutivo();
 
         $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE Ejecutivo=:Ejecutivo AND Estado < 252 GROUP BY RVA.Nombre_Cliente ORDER BY No_Servicios DESC");
@@ -2241,14 +2419,16 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorClientesSemana(){
+    public function getServiciosSolicitadosPorClientesSemana()
+    {
         $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258  and (replicado<>2 OR replicado is null) GROUP BY RVA.Nombre_Cliente ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorClientesYEjecutivoSemana(){
+    public function getServiciosSolicitadosPorClientesYEjecutivoSemana()
+    {
         $Ejecutivo = $this->getEjecutivo();
 
         $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Ejecutivo=:Ejecutivo AND Estado<>257 AND Estado<>258 GROUP BY RVA.Nombre_Cliente ORDER BY No_Servicios DESC");
@@ -2258,14 +2438,16 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorClientesMes(){
+    public function getServiciosSolicitadosPorClientesMes()
+    {
         $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha) = MONTH(GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258  and (replicado<>2 OR replicado is null) GROUP BY RVA.Nombre_Cliente ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorClientesYEjecutivoMes(){
+    public function getServiciosSolicitadosPorClientesYEjecutivoMes()
+    {
         $Ejecutivo = $this->getEjecutivo();
 
         $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha) = MONTH(GETDATE()) AND Ejecutivo=:Ejecutivo AND Estado<>257 AND Estado<>258 GROUP BY RVA.Nombre_Cliente ORDER BY No_Servicios DESC");
@@ -2276,7 +2458,8 @@ class Candidatos{
     }
 
 
-       public function getServiciosSolicitadosPorCCHoy(){
+    public function getServiciosSolicitadosPorCCHoy()
+    {
         $stmt = $this->db->prepare("SELECT RVA.Centro_Costos, 
         SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 Or RC.Servicio_Solicitado = 328 then 1 else 0 end) AS No_RAL, 
         SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, 
@@ -2287,7 +2470,8 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorCCYEjecutivoHoy(){
+    public function getServiciosSolicitadosPorCCYEjecutivoHoy()
+    {
         $Ejecutivo = $this->getEjecutivo();
 
         $stmt = $this->db->prepare("SELECT RVA.Centro_Costos, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE CONVERT(date, Fecha)=CONVERT(date, GETDATE()) AND Ejecutivo=:Ejecutivo AND Estado<>257 AND Estado<>258 GROUP BY RVA.Centro_Costos ORDER BY No_Servicios DESC");
@@ -2297,14 +2481,16 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorCCEnProceso(){
+    public function getServiciosSolicitadosPorCCEnProceso()
+    {
         $stmt = $this->db->prepare("SELECT RVA.Centro_Costos, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE Ejecutivo<>'miguelcasanova' AND Estado < 252  and (replicado<>2 OR replicado is null) GROUP BY RVA.Centro_Costos ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorCCYEjecutivoEnProceso(){
+    public function getServiciosSolicitadosPorCCYEjecutivoEnProceso()
+    {
         $Ejecutivo = $this->getEjecutivo();
 
         $stmt = $this->db->prepare("SELECT RVA.Centro_Costos, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE Ejecutivo=:Ejecutivo AND Estado < 252 GROUP BY RVA.Centro_Costos ORDER BY No_Servicios DESC");
@@ -2314,14 +2500,16 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorCCSemana(){
+    public function getServiciosSolicitadosPorCCSemana()
+    {
         $stmt = $this->db->prepare("SELECT RVA.Centro_Costos, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 GROUP BY RVA.Centro_Costos ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorCCYEjecutivoSemana(){
+    public function getServiciosSolicitadosPorCCYEjecutivoSemana()
+    {
         $Ejecutivo = $this->getEjecutivo();
 
         $stmt = $this->db->prepare("SELECT RVA.Centro_Costos, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Ejecutivo=:Ejecutivo AND Estado<>257 AND Estado<>258 GROUP BY RVA.Centro_Costos ORDER BY No_Servicios DESC");
@@ -2331,14 +2519,16 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorCCMes(){
+    public function getServiciosSolicitadosPorCCMes()
+    {
         $stmt = $this->db->prepare("SELECT RVA.Centro_Costos, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha) = MONTH(GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 GROUP BY RVA.Centro_Costos ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorCCYEjecutivoMes(){
+    public function getServiciosSolicitadosPorCCYEjecutivoMes()
+    {
         $Ejecutivo = $this->getEjecutivo();
 
         $stmt = $this->db->prepare("SELECT RVA.Centro_Costos, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha) = MONTH(GETDATE()) AND Ejecutivo=:Ejecutivo AND Estado<>257 AND Estado<>258 GROUP BY RVA.Centro_Costos ORDER BY No_Servicios DESC");
@@ -2348,14 +2538,16 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorEjecutivoHoy(){
+    public function getServiciosSolicitadosPorEjecutivoHoy()
+    {
         $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, SUM(case when RC.Servicio_Solicitado = 298 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios, AVG(CAST(dbo.count_days(RC.Fecha, RC.Fecha_Entregado) AS Decimal)) AS Tiempo FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Ejecutivo=U.username WHERE CONVERT(date, Fecha)=CONVERT(date, GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 GROUP BY U.first_name, U.last_name ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorEjecutivoUnicoHoy(){
+    public function getServiciosSolicitadosPorEjecutivoUnicoHoy()
+    {
         $Ejecutivo = $this->getEjecutivo();
 
         $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, SUM(case when RC.Servicio = 298 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio = 299 Or RC.Servicio = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio = 300 Or RC.Servicio = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios, AVG(CAST(dbo.count_days(RC.Fecha, RC.Fecha_Entregado) AS Decimal)) AS Tiempo FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Ejecutivo=U.username WHERE CONVERT(date, Fecha)=CONVERT(date, GETDATE()) AND Ejecutivo=:Ejecutivo AND Estado<>257 AND Estado<>258 GROUP BY U.first_name, U.last_name ORDER BY No_Servicios DESC");
@@ -2365,14 +2557,16 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosEntregadosPorEjecutivoHoy(){
+    public function getServiciosEntregadosPorEjecutivoHoy()
+    {
         $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, SUM(case when RC.Servicio = 298 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio = 299 Or RC.Servicio = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio = 300 Or RC.Servicio = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios, AVG(CAST(dbo.count_days(RC.Fecha, RC.Fecha_Entregado) AS Decimal)) AS Tiempo FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Ejecutivo=U.username WHERE CONVERT(date, Fecha)=CONVERT(date, GETDATE()) AND Ejecutivo<>'miguelcasanova' AND (Estado=254 OR Estado=252) GROUP BY U.first_name, U.last_name ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
 
-    public function getServiciosEntregadosPorEjecutivoUnicoHoy(){
+    public function getServiciosEntregadosPorEjecutivoUnicoHoy()
+    {
         $Ejecutivo = $this->getEjecutivo();
 
         $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, SUM(case when RC.Servicio = 298 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio = 299 Or RC.Servicio = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio = 300 Or RC.Servicio = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios, AVG(CAST(dbo.count_days(RC.Fecha, RC.Fecha_Entregado) AS Decimal)) AS Tiempo FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Ejecutivo=U.username WHERE CONVERT(date, Fecha)=CONVERT(date, GETDATE()) AND Ejecutivo=:Ejecutivo AND (Estado=254 OR Estado=252) GROUP BY U.first_name, U.last_name ORDER BY No_Servicios DESC");
@@ -2382,14 +2576,16 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosEntregadosPorEjecutivoSemana(){
+    public function getServiciosEntregadosPorEjecutivoSemana()
+    {
         $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, SUM(case when RC.Servicio = 298 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio = 299 Or RC.Servicio = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio = 300 Or RC.Servicio = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios, AVG(CAST(dbo.count_days(RC.Fecha, RC.Fecha_Entregado) AS Decimal)) AS Tiempo FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Ejecutivo=U.username WHERE YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Ejecutivo<>'miguelcasanova' AND (Estado=254 OR Estado=252) GROUP BY U.first_name, U.last_name ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
 
-    public function getServiciosEntregadosPorEjecutivoUnicoSemana(){
+    public function getServiciosEntregadosPorEjecutivoUnicoSemana()
+    {
         $Ejecutivo = $this->getEjecutivo();
 
         $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, SUM(case when RC.Servicio = 298 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio = 299 Or RC.Servicio = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio = 300 Or RC.Servicio = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios, AVG(CAST(dbo.count_days(RC.Fecha, RC.Fecha_Entregado) AS Decimal)) AS Tiempo FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Ejecutivo=U.username WHERE YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha) = MONTH(GETDATE()) AND Ejecutivo=:Ejecutivo AND (Estado=254 OR Estado=252) GROUP BY U.first_name, U.last_name ORDER BY No_Servicios DESC");
@@ -2399,14 +2595,16 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosEntregadosPorEjecutivoMes(){
+    public function getServiciosEntregadosPorEjecutivoMes()
+    {
         $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, SUM(case when RC.Servicio = 298 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio = 299 Or RC.Servicio = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio = 300 Or RC.Servicio = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios, AVG(CAST(dbo.count_days(RC.Fecha, RC.Fecha_Entregado) AS Decimal)) AS Tiempo FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Ejecutivo=U.username WHERE YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha) = MONTH(GETDATE()) AND Ejecutivo<>'miguelcasanova' AND (Estado=254 OR Estado=252) GROUP BY U.first_name, U.last_name ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
 
-    public function getServiciosEntregadosPorEjecutivoUnicoMes(){
+    public function getServiciosEntregadosPorEjecutivoUnicoMes()
+    {
         $Ejecutivo = $this->getEjecutivo();
 
         $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, SUM(case when RC.Servicio = 298 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio = 299 Or RC.Servicio = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio = 300 Or RC.Servicio = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios, AVG(CAST(dbo.count_days(RC.Fecha, RC.Fecha_Entregado) AS Decimal)) AS Tiempo FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Ejecutivo=U.username WHERE YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha) = MONTH(GETDATE()) AND Ejecutivo=:Ejecutivo AND (Estado=254 OR Estado=252) GROUP BY U.first_name, U.last_name ORDER BY No_Servicios DESC");
@@ -2416,7 +2614,8 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorEjecutivoRangoFechas(){
+    public function getServiciosSolicitadosPorEjecutivoRangoFechas()
+    {
         $date1 = $this->getFecha_solicitud();
         $date2 = $this->getFecha_entregado();
 
@@ -2428,7 +2627,8 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosSolicitadosPorLogisticaRangoFechas(){
+    public function getServiciosSolicitadosPorLogisticaRangoFechas()
+    {
         $date1 = $this->getFecha_solicitud();
         $date2 = $this->getFecha_entregado();
 
@@ -2440,7 +2640,8 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosFasePorEjecutivoRangoFechas(){
+    public function getServiciosFasePorEjecutivoRangoFechas()
+    {
         $date1 = $this->getFecha_solicitud();
         $date2 = $this->getFecha_entregado();
 
@@ -2452,7 +2653,8 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosPorClienteRangoFechas(){
+    public function getServiciosPorClienteRangoFechas()
+    {
         $date1 = $this->getFecha_solicitud();
         $date2 = $this->getFecha_entregado();
 
@@ -2475,7 +2677,8 @@ class Candidatos{
         return $servicios;
     }
 
-    public function getServiciosRALPorRangoDeFechaConCancelados(){
+    public function getServiciosRALPorRangoDeFechaConCancelados()
+    {
         $date1 = $this->getFecha_solicitud();
         $date2 = $this->getFecha_entregado();
 
@@ -2530,25 +2733,26 @@ class Candidatos{
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-	
-	public function inhabilitarRALExcesoTiempo () {
+
+    public function inhabilitarRALExcesoTiempo()
+    {
         $result = false;
-        
+
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=252, Fecha_Entregado=GETDATE(), Fecha_Entregado_RAL=GETDATE(), Comentario_Finalizado=CONCAT('Este servicio fue finalizado automáticamente, ya que tenía ', dbo.count_days_with_decimal(Fecha, GETDATE()), ' días activo.') WHERE Servicio=291 AND Estado<252 AND Ejecutivo<>'miguelcasanova' AND Cliente<>6 AND dbo.count_days_with_decimal(Fecha, GETDATE()) >= 7");
-        
+
         $flag = $stmt->execute();
         if ($flag)
             $result = true;
         return $result;
     }
-	
-	 
-	 public function getDetallePorAnio()
+
+
+    public function getDetallePorAnio()
     {
 
         //Servicios =324
         $Anio = $this->getFecha_solicitud();
-      $stmt = $this->db->prepare(
+        $stmt = $this->db->prepare(
             "SELECT 
 			v.Nombre_Cliente,
 			v.RAL,
@@ -2660,8 +2864,8 @@ class Candidatos{
         $fetch = $stmt->fetchAll();
         return $fetch;
     }
-	
-			   public function getDetallePorAnioClienteSinServicio()
+
+    public function getDetallePorAnioClienteSinServicio()
     {
         $Anio = $this->getFecha_solicitud();
         $stmt = $this->db->prepare("        SELECT Nombre_Cliente FROM rh_Ventas_Alta ve where ve.Cliente <> ALL
@@ -2679,14 +2883,15 @@ class Candidatos{
     }
 
 
-    public function getAnios(){
+    public function getAnios()
+    {
         $stmt = $this->db->prepare("SELECT DISTINCT YEAR(Fecha) AS Anio FROM rh_Candidatos ORDER BY Anio DESC");
         $stmt->execute();
         $anios = $stmt->fetchAll();
         return $anios;
     }
-	
-			  //============================[Ulises Marzo 07]==========================================
+
+    //============================[Ulises Marzo 07]==========================================
     public function getAllCandidatosPorPrefactura()
     {
         $Factura = $this->getFactura();
@@ -2727,7 +2932,7 @@ class Candidatos{
         return $servicios;
     }
     //==========================================================================================
-	
+
     //============================[Ulises Marzo 23]==========================================
     public function getServiciosPorRangoDeFechaEmpresa($Empresa)
     {
@@ -2778,7 +2983,7 @@ class Candidatos{
         return $servicios;
     }
     //==========================================================================================
-  //============================[Ulises Marzo 29]==========================================
+    //============================[Ulises Marzo 29]==========================================
     public function getServiciosPorRangoDeFechaConCanceladosEmpresa($Empresa)
     {
         $date1 = $this->getFecha_solicitud();
@@ -2839,7 +3044,7 @@ class Candidatos{
         return $servicios;
     }
     //==========================================================================================
-   //============================[Ulises Abril 20]==========================================
+    //============================[Ulises Abril 20]==========================================
     public function getDetallePorAnioYCliente()
     {
         $Anio = $this->getFecha_solicitud();
@@ -2955,7 +3160,7 @@ class Candidatos{
         return $fetch;
     }
     //==========================================================================================
-	 //===============================[Ulises Abril 26]==========================================================
+    //===============================[Ulises Abril 26]==========================================================
     public function getDetallePorAnioCortesias()
     {
         $Anio = $this->getFecha_solicitud();
@@ -3069,8 +3274,8 @@ class Candidatos{
         $fetch = $stmt->fetchAll();
         return $fetch;
     }
-	
-  // ===[19 de mayo 2023 estudios]===
+
+    // ===[19 de mayo 2023 estudios]===
     public function GetOnePorCurp($cliente, $curp)
     {
         $curp = $curp;
@@ -3086,11 +3291,11 @@ class Candidatos{
         $fetch = $stmt->fetchObject();
         return $fetch;
     }
-	
- public function updateReplicado()
+
+    public function updateReplicado()
     {
         $Candidato = $this->getCandidato();
-        $Replicado=$this->getReplicado();
+        $Replicado = $this->getReplicado();
         $stmt = $this->db->prepare("UPDATE TOP(1) rh_Candidatos SET replicado=:Replicado WHERE Candidato=:Candidato ");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Replicado", $Replicado, PDO::PARAM_INT);
@@ -3102,7 +3307,7 @@ class Candidatos{
     }
 
     // ===[19 de mayo 2023 estudios fin]===
-	 public function getServiciosPorUsuario()
+    public function getServiciosPorUsuario()
     {
         $Contacto = $this->getContacto();
         $stmt = $this->db->prepare("SELECT TOP(7200) Folio=RC.Candidato,RC.Cliente ID_Ciente
@@ -3151,8 +3356,8 @@ class Candidatos{
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-	
- public function getModificacionEjecutivoGestor()
+
+    public function getModificacionEjecutivoGestor()
     {
         $Candidato = $this->getCandidato();
         $stmt = $this->db->prepare("SELECT Ejecutivo_modificacion,Gestor_modificacion FROM rh_candidatos WHERE Candidato=:Candidato ");
@@ -3170,7 +3375,7 @@ class Candidatos{
         $stmt = $this->db->prepare("UPDATE TOP(1) rh_candidatos SET Ejecutivo_modificacion=(SELECT (CASE WHEN Ejecutivo_modificacion IS NULL THEN 0  ELSE Ejecutivo_modificacion END) +1 FROM rh_candidatos WHERE Candidato=:Candidato1) WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Candidato1", $Candidato, PDO::PARAM_INT);
-        $fetch =$stmt->execute();
+        $fetch = $stmt->execute();
         return $fetch;
     }
     public function updateModificacionGestor()
@@ -3179,7 +3384,17 @@ class Candidatos{
         $stmt = $this->db->prepare("UPDATE TOP(1) rh_candidatos SET Gestor_modificacion=(SELECT (CASE WHEN Gestor_modificacion IS NULL THEN 0  ELSE Gestor_modificacion END) +1 FROM rh_candidatos WHERE Candidato=:Candidato1) WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Candidato1", $Candidato, PDO::PARAM_INT);
-        $fetch =$stmt->execute();
+        $fetch = $stmt->execute();
+        return $fetch;
+    }
+    public function countCandidatosPorCliente()
+    {
+        $Cliente = $this->getCliente();
+        $stmt = $this->db->prepare("SELECT count(*) as Total FROM rh_Candidatos WHERE Cliente=:Cliente");
+        $stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
+        $fetch = $stmt->execute();
+        $fetch = $stmt->fetchObject();
+
         return $fetch;
     }
 }

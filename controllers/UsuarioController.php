@@ -21,11 +21,51 @@ class UsuarioController
 
     public function index()
     {
+
         if (isset($_SESSION['user_rh'])) {
-            unset($_SESSION['identity']);
-            unset($_SESSION);
-            session_destroy();
+            Utils::ChangeSession(1);
+            // // echo  $_SESSION['identity']->id_empleado;
+            // if (isset($_SESSION['identity']->id_empleado)) {
+            //     $employee = new Employees();
+            //     $employee->setId($_SESSION['identity']->id_empleado);
+            //     $empleado = $employee->getOne();
+
+
+            //     $user = new User();
+            //     if ($empleado) {
+            //         $user->setEmail($empleado->email);
+            //         $usuario = $user->GetUserByEmail();
+            //         if ($usuario) {
+            //             // echo "entre usuariio controller";
+            //             // var_dump($_SESSION);
+
+            //             UsuarioController::login_params($usuario->username, $usuario->password);
+            //             // var_dump($_SESSION);
+            //             // die();
+            //         } else {
+            //             // unset($_SESSION['identity']);
+            //             // unset($_SESSION);
+            //             // session_destroy();
+            //             var_dump("unset1");
+            //             die();
+            //         }
+            //     } else {
+            //         // unset($_SESSION['identity']);
+            //         // unset($_SESSION);
+            //         // session_destroy();
+            //         var_dump("unset2");
+            //         die();
+            //     }
+            // } else {
+            //     // unset($_SESSION['identity']);
+            //     // unset($_SESSION);
+            //     // session_destroy();
+            //     // var_dump("unset3");
+            //     // die();
+            // }
         }
+
+
         if (isset($_SESSION['identity']) && !empty($_SESSION['identity'])) {
             Utils::showProfilePicture();
             if (Utils::isCandidate()) {
@@ -175,6 +215,9 @@ class UsuarioController
             //if (Utils::isCustomerSA() || Utils::isCustomer()) 
             //require_once 'views/layout/modal-encuesta.php';
             require_once 'views/layout/footer.php';
+
+            // var_dump($_SESSION);
+            // die();
         } else {
 
             $page_title = 'Iniciar sesión | RRHH Ingenia';
@@ -1149,13 +1192,61 @@ class UsuarioController
 
     public function index_rh()
     {
-
+        //real
 
         if (!isset($_SESSION['user_rh'])) {
-            unset($_SESSION['identity']);
-            unset($_SESSION);
-            session_destroy();
+            Utils::ChangeSession(2);
+
+            // if (isset($_SESSION['identity']->email)) {
+
+            //     $employee = new Employees();
+            //     $employee->setEmail($_SESSION['identity']->email);
+            //     $empleado = $employee->getEmployeeByEmail();
+
+            //     $usuario_rh = new UsuariosRH();
+            //     if ($empleado) {
+
+            //         $usuario_rh->setId($empleado->usuario_rh);
+            //         $usuario = $usuario_rh->getOne();
+
+            //         if ($usuario) {
+
+            //             // var_dump($_SESSION);
+            //             // var_dump($_SESSION);
+
+            //             UsuarioController::login_rh_params($usuario->username, $usuario->password);
+            //             var_dump($_SESSION);
+
+            //             // var_dump($_SESSION);
+
+
+            //             // var_dump($_SESSION);
+            //             // die();
+            //         } else {
+            //             // unset($_SESSION['identity']);
+            //             // unset($_SESSION);
+            //             // session_destroy();
+            //             var_dump("unset1");
+            //             die();
+            //         }
+            //     } else {
+            //         // unset($_SESSION['identity']);
+            //         // unset($_SESSION);
+            //         // session_destroy();
+            //         var_dump("unset2");
+            //         die();
+            //     }
+            // } else {
+            //     // unset($_SESSION['identity']);
+            //     // unset($_SESSION);
+            //     // session_destroy();
+            //     // var_dump("unset3");
+            //     // die();
+            // }
         }
+
+        // var_dump($_SESSION);
+
         if (isset($_SESSION['identity']) && !empty($_SESSION['identity'])) {
 
 
@@ -1307,26 +1398,34 @@ class UsuarioController
             header("location:" . base_url . SID);
         }
     }
-
+    //gabo 11 sept
     public function registrar_asistencia()
     {
 
         if (isset($_SESSION['identity']) && !empty($_SESSION['identity'])) {
-            $direccion = isset($_POST['direccion']) ? trim($_POST['direccion']) : '';
+            $direccion = isset($_POST['direccion']) ? trim($_POST['direccion']) : false;
+            $id_type = isset($_POST['id_type']) ? Utils::sanitizeNumber($_POST['id_type']) : false;
 
-            //insertar asistencia
-            $asistencia = new AsistenciaRH();
-            $asistencia->setCoordenada($direccion);
-            $asistencia->setId_user_rh($_SESSION['identity']->id);
-            $save = $asistencia->Insertar_Asistencia();
-            $asistencias = $asistencia->getAll();
-            foreach ($asistencias as &$asistencia) {
-                $asistencia['created_at'] = Utils::getFullDate12($asistencia['created_at']);
-            }
-            if ($save) {
-                echo json_encode(array('asistencias' => $asistencias, 'status' => 1));
+            if ($id_type) {
+                //insertar asistencia
+                $asistencia = new AsistenciaRH();
+                $asistencia->setCoordenada($direccion);
+                $asistencia->setId_user_rh($_SESSION['identity']->id);
+                $asistencia->setType($id_type);
+                $save = $asistencia->Insertar_Asistencia();
+                $asistencias = $asistencia->getAll();
+
+                foreach ($asistencias as &$asistencia) {
+                    $asistencia['created_at'] = Utils::getFullDate12($asistencia['created_at']);
+                }
+
+                if ($save) {
+                    echo json_encode(array('asistencias' => $asistencias, 'status' => 1));
+                } else {
+                    echo json_encode(array('status' => 2));
+                }
             } else {
-                echo json_encode(array('status' => 2));
+                echo json_encode(array('status' => 3));
             }
         } else {
             header("location:" . base_url . SID);
@@ -1471,5 +1570,177 @@ class UsuarioController
 
     function crearexcelcontraseñas()
     {
+    }
+
+    public function login_params($username, $password)
+    {
+
+
+
+        $username = isset($username) ? trim($username) : FALSE;
+        $password = isset($password) ? Utils::decrypt(trim($password)) : FALSE;
+
+
+        if ($username && $password) {
+            $user = new User();
+            $user->setUsername($username);
+            $user->setEmail($username);
+            $user->setPassword($password);
+            $identity = $user->login();
+
+
+            if ($identity && is_object($identity)) {
+
+                session_unset();
+
+                $_SESSION['identity'] = $identity;
+                $user->lastSession($identity->id);
+
+                $_SESSION['dark_mode'] = $_SESSION['identity']->dark_mode;
+                switch ($identity->id_user_type) {
+                    case 1:
+                        $_SESSION['admin'] = TRUE;
+                        break;
+                    case 2:
+                        $_SESSION['senior'] = TRUE;
+                        break;
+                    case 3:
+                        $_SESSION['junior'] = TRUE;
+                        break;
+                    case 4:
+                        $_SESSION['manager'] = TRUE;
+                        break;
+                    case 5:
+                        $_SESSION['salesmanager'] = TRUE;
+                        break;
+                    case 6:
+                        $_SESSION['customer'] = TRUE;
+                        break;
+                    case 7:
+                        $_SESSION['candidate'] = TRUE;
+                        break;
+                    case 8:
+                        $_SESSION['sales'] = TRUE;
+                        break;
+                    case 9:
+                        $_SESSION['recruitmentmanager'] = TRUE;
+                        break;
+                    case 10:
+                        $_SESSION['samanager'] = TRUE;
+                    case 11:
+                        $_SESSION['operationssupervisor'] = TRUE;
+                        break;
+                    case 12:
+                        $_SESSION['logisticssupervisor'] = TRUE;
+                        break;
+                    case 13:
+                        $_SESSION['account'] = TRUE;
+                        break;
+                    case 14:
+                        $_SESSION['logistics'] = TRUE;
+                        break;
+                    case 15:
+                        $_SESSION['customerSA'] = TRUE;
+                        break;
+                    case 16:
+                        $_SESSION['humanresources'] = TRUE;
+                        break;
+                }
+                if (Utils::isCustomerSA()) { //Para el modulo de rh si esta activo se agrega el id del primer cliente que aprezca
+                    $contactoEmpresa = new ContactosEmpresa();
+                    $contactoEmpresa->setUsuario($_SESSION['identity']->username);
+                    $activeModule = $contactoEmpresa->getModuloRH();
+
+                    if (count($activeModule) > 1) {
+                        $_SESSION['id_cliente'] = $activeModule[0]['ID_Cliente'];
+                    } elseif (count($activeModule) == 1) {
+                        # marcaria directamente al cliente que tiene como 1
+                        $_SESSION['id_cliente'] = $activeModule[0]['ID_Cliente'];
+                    } else {
+                        $_SESSION['id_cliente'] = 0;
+                    }
+                }
+
+                // var_dump("hola");
+                // var_dump($identity);
+                // die();
+
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function login_rh_params($username, $password)
+    {
+
+
+        $username = isset($username) ? trim($username) : FALSE;
+        $password = isset($password) ? Encryption::decode(trim($password)) : FALSE;
+
+        if ($username && $password) {
+            $user = new UsuariosRH();
+            $user->setUsername($username);
+            $user->setPassword($password);
+            $user_rh = $user->login_rh();
+
+            if ($user_rh) {
+
+                session_unset();
+                $employee = new Employees();
+                $employee->setId_Usuario_Rh($user_rh->id);
+                $empleado = $employee->getOneByIdUserRh();
+                $_SESSION['id_contacto'] = $empleado->ID_Contacto;
+                $_SESSION['first_name'] = $empleado->first_name;
+                $_SESSION['last_name'] = $empleado->last_name;
+                $_SESSION['user_rh'] = 1;
+                $_SESSION['identity'] = $user_rh;
+                $_SESSION['identity']->id_empleado = $empleado->id;
+                $_SESSION['identity']->user = $user_rh->username;
+
+                if ($user_rh) {
+                    return true;
+                }
+                // ===[gabo 4 julio btn_asietencia fin]===
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+
+    //ulises 7 sep
+    function ulises()
+    {
+        $userObj = new User();
+        $users = $userObj->getAllUserIngenia();
+
+        // foreach ($users as  $user) {
+        //     $userObj->setId($user['id']);
+
+        //     $key = "";
+        //     $pattern = "1234567890abcdefghijklmnopqrstuvwxyz#$%&/";
+        //     $max = strlen($pattern) - 1;
+        //     for ($i = 0; $i < 10; $i++) {
+        //         $key .= substr($pattern, mt_rand(0, $max), 1);
+        //     }
+
+        //     $userObj->setPassword(Utils::encrypt($key));
+        //     $userObj->updatePasword();
+        // }
+
+
+        $userObj = new User();
+        $users = $userObj->getAllUserIngenia();
+
+        foreach ($users as  $user) {
+            var_dump(Utils::decrypt($user['password']));
+        }
+        die();
     }
 }

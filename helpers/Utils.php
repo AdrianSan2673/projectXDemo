@@ -1602,4 +1602,260 @@ class Utils
         }
         return $contacto;
     }
+
+
+    //gabo 8 sep
+
+    public static function ChangeSession($sesion)
+
+    {
+        require_once 'models/RH/Employees.php';
+
+
+        if ($sesion == 1) {
+            // echo  $_SESSION['identity']->id_empleado;
+            if (isset($_SESSION['identity']->id_empleado)) {
+                $employee = new Employees();
+                $employee->setId($_SESSION['identity']->id_empleado);
+                $empleado = $employee->getOne();
+
+
+                $user = new User();
+                if ($empleado) {
+                    $user->setEmail($empleado->email);
+                    $usuario = $user->GetUserByEmail();
+                    if ($usuario) {
+                        // echo "entre usuariio controller";
+                        // var_dump($_SESSION);
+
+                        Utils::login_params($usuario->username, $usuario->password);
+                        // var_dump($_SESSION);
+                        // die();
+                    } else {
+                        unset($_SESSION['identity']);
+                        unset($_SESSION);
+                        session_destroy();
+                        var_dump("unset1");
+                    }
+                } else {
+                    // unset($_SESSION['identity']);
+                    // unset($_SESSION);
+                    // session_destroy();
+                    var_dump("unset2");
+                    die();
+                }
+            } else {
+                // unset($_SESSION['identity']);
+                // unset($_SESSION);
+                // session_destroy();
+                // var_dump("unset3");
+                // die();
+            }
+        } else if ($sesion == 2) {
+
+            ////////////////////////////////
+
+
+            if (isset($_SESSION['identity']->email)) {
+
+                $employee = new Employees();
+                $employee->setEmail($_SESSION['identity']->email);
+                $empleado = $employee->getEmployeeByEmail();
+
+                $usuario_rh = new UsuariosRH();
+                if ($empleado) {
+
+                    $usuario_rh->setId($empleado->usuario_rh);
+                    $usuario = $usuario_rh->getOne();
+
+                    if ($usuario) {
+
+                        // var_dump($_SESSION);
+                        // var_dump($_SESSION);
+
+                        Utils::login_rh_params($usuario->username, $usuario->password);
+
+
+                        // var_dump($_SESSION);
+
+
+                        // var_dump($_SESSION);
+                        // die();
+                    } else {
+                        unset($_SESSION['identity']);
+                        unset($_SESSION);
+                        session_destroy();
+                        var_dump("unset1");
+                    }
+                } else {
+                    // unset($_SESSION['identity']);
+                    // unset($_SESSION);
+                    // session_destroy();
+                    var_dump("unset2");
+                    die();
+                }
+            } else {
+                // unset($_SESSION['identity']);
+                // unset($_SESSION);
+                // session_destroy();
+                // var_dump("unset3");
+                // die();
+            }
+        }
+    }
+
+
+
+
+
+    public function login_params($username, $password)
+    {
+
+
+
+        $username = isset($username) ? trim($username) : FALSE;
+        $password = isset($password) ? Utils::decrypt(trim($password)) : FALSE;
+
+
+        if ($username && $password) {
+            $user = new User();
+            $user->setUsername($username);
+            $user->setEmail($username);
+            $user->setPassword($password);
+            $identity = $user->login();
+
+
+            if ($identity && is_object($identity)) {
+
+                session_unset();
+
+                $_SESSION['identity'] = $identity;
+                $user->lastSession($identity->id);
+
+                $_SESSION['dark_mode'] = $_SESSION['identity']->dark_mode;
+                switch ($identity->id_user_type) {
+                    case 1:
+                        $_SESSION['admin'] = TRUE;
+                        break;
+                    case 2:
+                        $_SESSION['senior'] = TRUE;
+                        break;
+                    case 3:
+                        $_SESSION['junior'] = TRUE;
+                        break;
+                    case 4:
+                        $_SESSION['manager'] = TRUE;
+                        break;
+                    case 5:
+                        $_SESSION['salesmanager'] = TRUE;
+                        break;
+                    case 6:
+                        $_SESSION['customer'] = TRUE;
+                        break;
+                    case 7:
+                        $_SESSION['candidate'] = TRUE;
+                        break;
+                    case 8:
+                        $_SESSION['sales'] = TRUE;
+                        break;
+                    case 9:
+                        $_SESSION['recruitmentmanager'] = TRUE;
+                        break;
+                    case 10:
+                        $_SESSION['samanager'] = TRUE;
+                    case 11:
+                        $_SESSION['operationssupervisor'] = TRUE;
+                        break;
+                    case 12:
+                        $_SESSION['logisticssupervisor'] = TRUE;
+                        break;
+                    case 13:
+                        $_SESSION['account'] = TRUE;
+                        break;
+                    case 14:
+                        $_SESSION['logistics'] = TRUE;
+                        break;
+                    case 15:
+                        $_SESSION['customerSA'] = TRUE;
+                        break;
+                    case 16:
+                        $_SESSION['humanresources'] = TRUE;
+                        break;
+                }
+                if (Utils::isCustomerSA()) { //Para el modulo de rh si esta activo se agrega el id del primer cliente que aprezca
+                    $contactoEmpresa = new ContactosEmpresa();
+                    $contactoEmpresa->setUsuario($_SESSION['identity']->username);
+                    $activeModule = $contactoEmpresa->getModuloRH();
+
+                    if (count($activeModule) > 1) {
+                        $_SESSION['id_cliente'] = $activeModule[0]['ID_Cliente'];
+                    } elseif (count($activeModule) == 1) {
+                        # marcaria directamente al cliente que tiene como 1
+                        $_SESSION['id_cliente'] = $activeModule[0]['ID_Cliente'];
+                    } else {
+                        $_SESSION['id_cliente'] = 0;
+                    }
+                }
+
+                // var_dump("hola");
+                // var_dump($identity);
+                // die();
+
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function login_rh_params($username, $password)
+    {
+
+
+        $username = isset($username) ? trim($username) : FALSE;
+        $password = isset($password) ? Encryption::decode(trim($password)) : FALSE;
+
+        if ($username && $password) {
+            $user = new UsuariosRH();
+            $user->setUsername($username);
+            $user->setPassword($password);
+            $user_rh = $user->login_rh();
+
+            if ($user_rh) {
+
+                session_unset();
+                $employee = new Employees();
+                $employee->setId_Usuario_Rh($user_rh->id);
+                $empleado = $employee->getOneByIdUserRh();
+                $_SESSION['id_contacto'] = $empleado->ID_Contacto;
+                $_SESSION['first_name'] = $empleado->first_name;
+                $_SESSION['last_name'] = $empleado->last_name;
+                $_SESSION['user_rh'] = 1;
+                $_SESSION['identity'] = $user_rh;
+                $_SESSION['identity']->id_empleado = $empleado->id;
+                $_SESSION['identity']->user = $user_rh->username;
+
+                if ($user_rh) {
+                    return true;
+                }
+                // ===[gabo 4 julio btn_asietencia fin]===
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    //11 sep
+    public static function getTypesByCliente()
+    {
+        require_once 'models/RH/AsistenceTypes.php';
+        $Atypes = new AsistenceTypes();
+        $Atypes->setClient($_SESSION['identity']->id_cliente);
+        $tipos = $Atypes->getAllByClient();
+        return $tipos;
+    }
 }

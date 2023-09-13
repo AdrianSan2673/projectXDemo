@@ -3,9 +3,11 @@
 require_once 'models/Notification.php';
 require_once 'models/User.php';
 
-class NotificationsController {
+class NotificationsController
+{
 
-    public function getNotificacionsByUser(){
+    public function getNotificacionsByUser()
+    {
         if (Utils::isValid($_SESSION) && Utils::isValid($_SESSION['identity'])) {
             $id_user = $_SESSION['identity']->id;
             $notificacion = new Notification();
@@ -18,26 +20,27 @@ class NotificationsController {
             $user->setId($id_user);
             $user = $user->getOne();
             $activation = $user ? $user->activation : 0;
-            if ($activation == 0){
-                //unset($_SESSION['identity']);
-				 if (!isset($_SESSION['user_rh'])) 
-                    unset($_SESSION['identity']);
-                
-			}
+            // if ($activation == 0) {
+            //     echo "BORRE SESION";
+            //     //   unset($_SESSION['identity']);
+            //     if (!isset($_SESSION['user_rh']))
+            //         unset($_SESSION['identity']);
+            // }
             $data = array(
                 'notifications' => $notificaciones,
                 'id_user' => $id_user,
                 'new' => $new,
-                'status' => 1 ,
-                'received'=> $received,
+                'status' => 1,
+                'received' => $received,
                 'activation' => $activation
-             );
+            );
             $notificacion->received();
             echo json_encode($data);
         }
     }
 
-    public function checked (){
+    public function checked()
+    {
         if (Utils::isValid($_SESSION) && Utils::isValid($_SESSION['identity'])) {
             $id_user = $_SESSION['identity']->id;
             $notificacion = new Notification();
@@ -51,13 +54,14 @@ class NotificationsController {
                 'notifications' => $notificaciones,
                 'id_user' => $id_user,
                 'new' => $new,
-                'status' => 1 
+                'status' => 1
             );
             echo json_encode($data);
         }
     }
 
-    public function clicked (){
+    public function clicked()
+    {
         if (Utils::isValid($_SESSION['identity']) && isset($_POST) && isset($_POST['id'])) {
             $id = $_POST['id'];
             $id_user = $_SESSION['identity']->id;
@@ -73,7 +77,7 @@ class NotificationsController {
                 'notifications' => $notificaciones,
                 'id_user' => $id_user,
                 'new' => $new,
-                'status' => 1 
+                'status' => 1
             );
             echo json_encode($data);
         }

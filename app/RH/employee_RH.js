@@ -371,13 +371,15 @@ class Employee_RH {
             });
     }
 
-    //rafa
+    //gabo 11 sep
     registrar_asientencia(direccion) {
 
         document.querySelector("#btn_asistencia").disabled = true;
 
         const data = new FormData();
         data.append('direccion', direccion);
+        var id_type = document.getElementById('type').value;
+        data.append('id_type', id_type);
 
         fetch('../Usuario/registrar_asistencia', {
             method: 'POST',
@@ -402,6 +404,7 @@ class Employee_RH {
                             <tr>       
                              <td class="text-center text-bold" style="width:10px">${cont}</td>
                              <td class="text-center">${asistencia.created_at}</td>
+                             <td class="text-center">${asistencia.name}</td>
                              <td class="text-center">${asistencia.coordenada}</td>
                             </tr >
                             `;
@@ -419,13 +422,41 @@ class Employee_RH {
                             "sSortDescending": true
                         }
                     });
+                    //gabo 11 sept
+
+                    var total_asistencias = parseInt(document.getElementById('total_asistencias').value);
+                    if (total_asistencias < 2) {
+                        total_asistencias++;
+                        document.getElementById('total_asistencias').value = total_asistencias;
+                        document.querySelector("#btn_asistencia").disabled = false;
+                        utils.showToast('Asistencia registrada exitosamente', 'success');
+                    } else {
+
+                        utils.showToast('Asistencia registrada exitosamente', 'success');
+
+                        setTimeout(function () {
+                            utils.showToast('Espere 10 segundos para volver a presionar el boton', 'warning');
+                        }, 2000);
+                        setTimeout(function () {
+                            document.querySelector("#btn_asistencia").disabled = false;
+                            document.getElementById('total_asistencias').value = 0;
+                        }, 10000);
+                    }
+
+                    setTimeout(function () {
+                        document.getElementById('total_asistencias').value = 0;
+                    }, 60000 * 30);
 
 
-                    document.querySelector("#btn_asistencia").disabled = false;
-                    utils.showToast('Asistencia registrada exitosamente', 'success');
+
+
 
                 } else if (json_app.status == 2) {
                     utils.showToast('Ha ocurrido un error intentelo de nuevo', 'error');
+                    document.querySelector("#btn_asistencia").disabled = false;
+
+                } else if (json_app.status == 3) {
+                    utils.showToast('Seleccione un tipo de asistencia por favor', 'error');
                     document.querySelector("#btn_asistencia").disabled = false;
 
                 }
