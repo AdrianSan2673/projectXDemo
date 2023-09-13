@@ -4,10 +4,10 @@ require_once 'models/SA/ContactosEmpresa.php';
 require_once 'models/SA/ContactosCliente.php';
 require_once 'models/User.php';
 require_once 'models/SA/Clientes.php';
-require_once 'models/CustomerContact.php'; 
+require_once 'models/CustomerContact.php';
 // ===[gabo 16 de mayo duplicate]===
-require_once 'models/SA/ContactosClienteSolicitan.php'; 
- // ===[gabo 16 de mayo duplicate fin]===
+require_once 'models/SA/ContactosClienteSolicitan.php';
+// ===[gabo 16 de mayo duplicate fin]===
 class ClienteContacto_SAController
 {
 
@@ -100,8 +100,8 @@ class ClienteContacto_SAController
 
             $flag = $_POST['flag'];
             $user_flag = $_POST['user_flag'];
-
-            if ($Nombre_Contacto && $Apellido_Contacto && $Correo && $Usuario && $Password) {
+            //gabo 14 sept quitar el password
+            if ($Nombre_Contacto && $Apellido_Contacto && $Correo && $Usuario) {
                 $contacto = new ContactosEmpresa();
                 $contacto->setNombre_Contacto($Nombre_Contacto);
                 $contacto->setApellido_Contacto($Apellido_Contacto);
@@ -115,18 +115,26 @@ class ClienteContacto_SAController
 
                 $user = new User();
                 $user->setUsername($Usuario);
-                $user->setPassword($Password);
+
                 $user->setFirst_name($Nombre_Contacto);
                 $user->setLast_name($Apellido_Contacto);
                 $user->setEmail($Correo);
                 $user->setActivation(1);
                 $user->setId_user_type(15);
 
+                if (!isset($_POST['Password'])) {
+                    //gabo 13 sept
+                    $pattern = "1234567890abcdefghijklmnopqrstuvwxyz#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                    $max = strlen($pattern) - 1;
+                    for ($i = 0; $i < 10; $i++) {
+                        $Password .= substr($pattern, mt_rand(0, $max), 1);
+                    }
+                }
+
+                $user->setPassword($Password);
 
                 $userExists = $user->userExists();
                 $emailExists = $user->emailExists();
-
-
 
 
                 if ($user_flag == 1) {
@@ -323,10 +331,10 @@ class ClienteContacto_SAController
             $contactos = isset($_POST['contactos']) && !empty($_POST['contactos']) ? $_POST['contactos'] : false;
 
             if ($Cliente) {
-                 // ===[gabo 16 de mayo duplicate]===
+                // ===[gabo 16 de mayo duplicate]===
                 $contact = new ContactosCliente();
                 $contactoSolicita = new ContactosClienteSolicitan();
-                 // ===[gabo 16 de mayo duplicate fin]===
+                // ===[gabo 16 de mayo duplicate fin]===
 
                 $contactoCliente = new ContactosCliente();
                 $contactoCliente->setID_Cliente($Cliente);
@@ -337,23 +345,23 @@ class ClienteContacto_SAController
                     $contactoCliente->setNombre_Contacto('');
                     $contactoCliente->create();
 
-                  
-                 // ===[gabo 16 de mayo duplicate]===
+
+                    // ===[gabo 16 de mayo duplicate]===
                     $contactoCliente->setID_Contacto($contacto);
-                    $objeto =$contactoCliente->getOne();
-                    $Nombre_contacto =$objeto->Nombre_Contacto;
-                    $Usuario= $objeto->Usuario;
-                    
+                    $objeto = $contactoCliente->getOne();
+                    $Nombre_contacto = $objeto->Nombre_Contacto;
+                    $Usuario = $objeto->Usuario;
+
                     $contactoSolicita->setEmpresa($Empresa);
                     $contactoSolicita->setCliente($Cliente);
                     $contactoSolicita->setNombre($Nombre_contacto);
                     $contactoSolicita->setUsuario($Usuario);
-                    $result= $contactoSolicita->getOne();
+                    $result = $contactoSolicita->getOne();
 
-                    if(!$result){
-                    $result= $contactoSolicita->create();
+                    if (!$result) {
+                        $result = $contactoSolicita->create();
                     }
-                  // ===[gabo 16 de mayo duplicate]===
+                    // ===[gabo 16 de mayo duplicate]===
 
                 }
 

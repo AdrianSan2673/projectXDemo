@@ -48,7 +48,7 @@
                                 <select id="Dia" name="Dia" class="form-control" required>
                                     <option value="" hidden selected>Día</option>
                                     <?php foreach (range(1, 31) as $i) : ?>
-                                        <option value="<?= $i ?>"><?= $i ?></option>
+                                    <option value="<?= $i ?>"><?= $i ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
@@ -59,7 +59,7 @@
                                     <option value="" hidden selected>Mes</option>
                                     <?php $months = Utils::getMonths(); ?>
                                     <?php foreach ($months as $i => $m) : ?>
-                                        <option value="<?= $i + 1 ?>"><?= $m ?></option>
+                                    <option value="<?= $i + 1 ?>"><?= $m ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
@@ -67,34 +67,40 @@
                     </div>
                     <div class="form-group">
                         <label class="col-form-label">Usuario</label>
-                        <input type="text" name="Usuario" id="Usuario" class="form-control" maxlength="40" required  >
+                        <input type="text" name="Usuario" id="Usuario" class="form-control" maxlength="40" required>
                     </div>
                     <div class="form-group">
                         <label class="col-form-label">Contraseña</label>
-                        <input type="text" name="Password" class="form-control" required>
+                        <!-- gabo 13 sept -->
+                        <input type="text" name="Password" id="password" class="form-control" required>
                     </div>
-                    <input type="hidden" name="Empresa" value="<?= $_GET['controller'] == 'cliente_SA' ? $cliente->Empresa : Encryption::decode($_GET['id']) ?>">
-                    <input type="hidden" name="ID_Cliente" value="<?= $_GET['controller'] == 'cliente_SA' ? $_GET['id'] : 0 ?>">
+                    <input type="hidden" name="Empresa"
+                        value="<?= $_GET['controller'] == 'cliente_SA' ? $cliente->Empresa : Encryption::decode($_GET['id']) ?>">
+                    <input type="hidden" name="ID_Cliente"
+                        value="<?= $_GET['controller'] == 'cliente_SA' ? $_GET['id'] : 0 ?>">
                     <input type="hidden" name="user_flag">
                     <!-- id 82 -->
                     <!-- id contacto 1077 -->
 
-                    <!-- <?php // if (Utils::isSales()||Utils::isAdmin()) : ?>     -->
-                        <div class="form-group" id="select_empresa">  
-                            <label for="customer" class="col-form-label">Empresa</label>
-                            <?php $customers = Utils::showCustomers(); ?>
-                            <select name="cliente_asignado" id="cliente_asignado" class="form-control select2" >
-                                <option disabled selected="selected"></option>
-                                <?php foreach ($customers as $customer) : ?>
-                                    <option value="<?= $customer['id'] ?>"><?= $customer['customer'] ?></option>
-                                <?php endforeach ?>
-                            </select>
-                        </div>
-                    <!-- <?php // endif; ?> -->
+                    <!-- <?php // if (Utils::isSales()||Utils::isAdmin()) : 
+                            ?>     -->
+                    <div class="form-group" id="select_empresa">
+                        <label for="customer" class="col-form-label">Empresa</label>
+                        <?php $customers = Utils::showCustomers(); ?>
+                        <select name="cliente_asignado" id="cliente_asignado" class="form-control select2">
+                            <option disabled selected="selected"></option>
+                            <?php foreach ($customers as $customer) : ?>
+                            <option value="<?= $customer['id'] ?>"><?= $customer['customer'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                    <!-- <?php // endif; 
+                            ?> -->
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                    <input type="button" name="duplicar_candidato" class="btn btn-orange bn_duplicate" id="btn-duplicar-contacto" value="Migrar a Reclu">
+                    <input type="button" name="duplicar_candidato" class="btn btn-orange bn_duplicate"
+                        id="btn-duplicar-contacto" value="Migrar a Reclu">
                     <input type="submit" name="submit" class="btn btn-orange" value="Guardar">
                 </div>
             </form>
@@ -113,8 +119,10 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="ID_Contacto">
-                    <input type="hidden" name="Empresa" value="<?= $_GET['controller'] == 'cliente_SA' ? $cliente->Empresa : Encryption::decode($_GET['id']) ?>">
-                    <input type="hidden" name="ID_Cliente" value="<?= $_GET['controller'] == 'cliente_SA' ? $_GET['id'] : 0 ?>">
+                    <input type="hidden" name="Empresa"
+                        value="<?= $_GET['controller'] == 'cliente_SA' ? $cliente->Empresa : Encryption::decode($_GET['id']) ?>">
+                    <input type="hidden" name="ID_Cliente"
+                        value="<?= $_GET['controller'] == 'cliente_SA' ? $_GET['id'] : 0 ?>">
                     <input type="hidden" name="Usuario">
                     <p></p>
                 </div>
@@ -130,10 +138,9 @@
 
 
 <script>
-
-     document.querySelector('#btn-duplicar-contacto').addEventListener('click', e => {   //gabo duplicar
-        e.preventDefault();
-        let cliente = new Cliente();
-        cliente.duplicate_contact();
-    })
+document.querySelector('#btn-duplicar-contacto').addEventListener('click', e => { //gabo duplicar
+    e.preventDefault();
+    let cliente = new Cliente();
+    cliente.duplicate_contact();
+})
 </script>
