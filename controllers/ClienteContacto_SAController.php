@@ -102,6 +102,9 @@ class ClienteContacto_SAController
 
             $flag = $_POST['flag'];
             $user_flag = $_POST['user_flag'];
+            ///15 sept
+            $tipo_usuario = isset($_POST['tipo_usuario']) && !empty($_POST['tipo_usuario']) ? trim($_POST['tipo_usuario']) : 0;
+
 
 
 
@@ -116,6 +119,8 @@ class ClienteContacto_SAController
                 $contacto->setFecha_Cumpleaños($Fecha_Cumpleanos);
                 $contacto->setEmpresa($Empresa);
                 $contacto->setID($ID_Contacto);
+                $contacto->setTipo_usuario($tipo_usuario);
+
 
                 $user = new User();
                 $user->setUsername($Usuario);
@@ -124,7 +129,7 @@ class ClienteContacto_SAController
                 $user->setEmail($Correo);
                 $user->setActivation(1);
                 $user->setId_user_type(15);
-				
+
                 if (!isset($_POST['Password'])) {
                     //gabo 13 sept
                     $pattern = "1234567890abcdefghijklmnopqrstuvwxyz#ABCDEFGHIJKLMNOPQRSTUVWXYZ";

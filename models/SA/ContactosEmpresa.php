@@ -17,6 +17,8 @@ class ContactosEmpresa
     private $Activo;
     private $db;
     private $db1;
+    //15 sep
+    private $tipo_usuario;
 
     public function __construct()
     {
@@ -144,6 +146,17 @@ class ContactosEmpresa
         $this->Activo = $Activo;
     }
 
+    //15 sep
+    public function getTipo_usuario()
+    {
+        return $this->tipo_usuario;
+    }
+
+    public function setTipo_usuario($tipo_usuario)
+    {
+        $this->tipo_usuario = $tipo_usuario;
+    }
+
     public function create()
     {
         $result = false;
@@ -158,8 +171,9 @@ class ContactosEmpresa
         $Celular = $this->getCelular();
         $Fecha_Cumpleanos = $this->getFecha_Cumpleaños();
         $Usuario = $this->getUsuario();
+        $tipo_usuario = $this->getTipo_usuario();
 
-        $stmt = $this->db->prepare("INSERT INTO rh_Ventas_Alta_Contactos(Empresa,Cliente,  Nombre_Contacto, Apellido_Contacto, Puesto, Correo, Telefono, Extension, Celular, Fecha_Cumpleaños, Usuario) VALUES (:Empresa, 0, :Nombre_Contacto, :Apellido_Contacto, :Puesto, :Correo, :Telefono, :Extension, :Celular, :Fecha_Cumple, :Usuario)");
+        $stmt = $this->db->prepare("INSERT INTO rh_Ventas_Alta_Contactos(Empresa,Cliente,  Nombre_Contacto, Apellido_Contacto, Puesto, Correo, Telefono, Extension, Celular, Fecha_Cumpleaños, Usuario,tipo_usuario) VALUES (:Empresa, 0, :Nombre_Contacto, :Apellido_Contacto, :Puesto, :Correo, :Telefono, :Extension, :Celular, :Fecha_Cumple, :Usuario,:tipo_usuario)");
         $stmt->bindParam(":Empresa", $Empresa, PDO::PARAM_INT);
         $stmt->bindParam(":Nombre_Contacto", $Nombre_Contacto, PDO::PARAM_STR);
         $stmt->bindParam(":Apellido_Contacto", $Apellido_Contacto, PDO::PARAM_STR);
@@ -170,6 +184,7 @@ class ContactosEmpresa
         $stmt->bindParam(":Celular", $Celular, PDO::PARAM_STR);
         $stmt->bindParam(":Fecha_Cumple", $Fecha_Cumpleanos, PDO::PARAM_STR);
         $stmt->bindParam(":Usuario", $Usuario, PDO::PARAM_STR);
+        $stmt->bindParam(":tipo_usuario", $tipo_usuario, PDO::PARAM_INT);
         $flag = $stmt->execute();
 
         if ($flag) {
@@ -178,7 +193,7 @@ class ContactosEmpresa
         }
         return $result;
     }
-
+    //gabo 15 sept
     public function update()
     {
         $result = false;
@@ -194,8 +209,9 @@ class ContactosEmpresa
         $Celular = $this->getCelular();
         $Fecha_Cumpleanos = $this->getFecha_Cumpleaños();
         $Usuario = $this->getUsuario();
+        $tipo_usuario = $this->getTipo_usuario();
 
-        $stmt = $this->db->prepare("UPDATE rh_Ventas_Alta_Contactos SET Empresa=:Empresa, Nombre_Contacto=:Nombre_Contacto, Apellido_Contacto=:Apellido_Contacto, Puesto=:Puesto, Correo=:Correo, Telefono=:Telefono, Extension=:Extension, Celular=:Celular, Fecha_Cumpleaños=:Fecha_Cumple, Usuario=:Usuario WHERE ID=:ID");
+        $stmt = $this->db->prepare("UPDATE rh_Ventas_Alta_Contactos SET Empresa=:Empresa, Nombre_Contacto=:Nombre_Contacto, Apellido_Contacto=:Apellido_Contacto, Puesto=:Puesto, Correo=:Correo, Telefono=:Telefono, Extension=:Extension, Celular=:Celular, Fecha_Cumpleaños=:Fecha_Cumple, Usuario=:Usuario, tipo_usuario=:tipo_usuario WHERE ID=:ID");
         $stmt->bindParam(":ID", $ID, PDO::PARAM_INT);
         $stmt->bindParam(":Empresa", $Empresa, PDO::PARAM_INT);
         $stmt->bindParam(":Nombre_Contacto", $Nombre_Contacto, PDO::PARAM_STR);
@@ -207,6 +223,7 @@ class ContactosEmpresa
         $stmt->bindParam(":Celular", $Celular, PDO::PARAM_STR);
         $stmt->bindParam(":Fecha_Cumple", $Fecha_Cumpleanos, PDO::PARAM_STR);
         $stmt->bindParam(":Usuario", $Usuario, PDO::PARAM_STR);
+        $stmt->bindParam(":tipo_usuario", $tipo_usuario, PDO::PARAM_INT);
         $flag = $stmt->execute();
 
         if ($flag) {
@@ -367,8 +384,8 @@ class ContactosEmpresa
 
         return $fetch;
     }
-	
-	
+
+
 
     public function getOneClientesPorUsuarioContacto()
     {
@@ -397,7 +414,7 @@ class ContactosEmpresa
 
         return $fetch;
     }
-	 public function getEmpresayClienteByUsername()
+    public function getEmpresayClienteByUsername()
     {
 
         $username = $this->getUsuario();
