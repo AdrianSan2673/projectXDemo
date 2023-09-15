@@ -8,7 +8,8 @@ class Connection
         try {
             //148.72.144.152
             //$link = new PDO("mysql:host=localhost;dbname=reclutamiento", "root", "");
-            $link = new PDO("sqlsrv:Server=localhost;Database=reclutamiento3", "", "");
+            $link = new PDO("sqlsrv:Server=localhost;Database=reclutamiento", "", "");
+            //   $link = new PDO("sqlsrv:Server=148.72.144.152;Database=reclutamiento", "reclutador", "Sr65s$0z");
             $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $link->setAttribute(constant('PDO::SQLSRV_ATTR_DIRECT_QUERY'), true);
             $link->setAttribute(PDO::SQLSRV_ATTR_ENCODING, PDO::SQLSRV_ENCODING_UTF8);
@@ -21,7 +22,8 @@ class Connection
     public static function connectSA()
     {
         try {
-            $link = new PDO("sqlsrv:Server=localhost;Database=rrhhinge_Candidatos3", "", "");
+            $link = new PDO("sqlsrv:Server=localhost;Database=rrhhinge_Candidatos", "", "");
+            // $link = new PDO("sqlsrv:Server=148.72.144.152;Database=rrhhinge_Candidatos", "rrhhinge_Candidatos", "Sr65s$0z");
             $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $link->setAttribute(constant('PDO::SQLSRV_ATTR_DIRECT_QUERY'), true);
             $link->setAttribute(PDO::SQLSRV_ATTR_ENCODING, PDO::SQLSRV_ENCODING_UTF8);
