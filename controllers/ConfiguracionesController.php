@@ -18,7 +18,7 @@ class ConfiguracionesController
             require_once 'views/layout/sidebar.php';
             require_once 'views/configuraciones/index.php';
             require_once 'views/layout/footer.php';
-            require_once 'views/configuraciones/Areas/modal-areaVacante.php';
+            // require_once 'views/configuraciones/Areas/modal-areaVacante.php';
             require_once 'views/configuraciones/Areas/modal-verSubAreas.php';
             require_once 'views/configuraciones/Areas/modal-agregar-area.php';
             require_once 'views/configuraciones/Areas/modal-agregar-subarea.php';

@@ -6,7 +6,7 @@ class AsistenciaRH
     private $coordenada;
     private $created_at;
     private $db;
-	private $type;
+    private $type;
 
     public function __construct()
     {
@@ -51,7 +51,7 @@ class AsistenciaRH
     {
         $this->created_at = $created_at;
     }
-	  public function getType()
+    public function getType()
     {
         return $this->type;
     }

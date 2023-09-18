@@ -13,11 +13,11 @@ class Empresa_SAController
     {
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior() || Utils::isJunior() || Utils::isSAManager())) {
             $empresa = new Empresas();
- 
-            if ($_SESSION['identity']->id==9396) {
+
+            if ($_SESSION['identity']->id == 9396) {
                 $empresa->setCreado_por($_SESSION['identity']->username);
                 $empresas = $empresa->getAllByCreate();
-            }else{
+            } else {
                 $empresas = $empresa->getAll();
             }
 

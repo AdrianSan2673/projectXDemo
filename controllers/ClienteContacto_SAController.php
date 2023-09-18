@@ -107,7 +107,6 @@ class ClienteContacto_SAController
 
 
 
-
             if ($Nombre_Contacto && $Apellido_Contacto && $Correo && $Usuario) {
                 $contacto = new ContactosEmpresa();
                 $contacto->setNombre_Contacto($Nombre_Contacto);
@@ -162,13 +161,13 @@ class ClienteContacto_SAController
                                 $save_contacto = $contacto->update();
 
                                 //===[gabo 10 agosto usuarios ]===
-                                $contactos = $contacto->getContactosPorEmpresa();
+                                $contactos = ClienteContacto_SAController::formatearContactos($contacto->getContactosPorEmpresa());
                                 //===[gabo 10 agosto usuarios fin]===
                                 if ($save_contacto) {
                                     if ($ID_Cliente) {
                                         $contact = new ContactosCliente();
                                         $contact->setID_Cliente($ID_Cliente);
-                                        $contactos = $contact->getContactosPorCliente();
+                                        $contactos = ClienteContacto_SAController::formatearContactos($contact->getContactosPorCliente());
                                     }
 
                                     echo json_encode(
@@ -192,7 +191,8 @@ class ClienteContacto_SAController
                                         $contact->setID_Contacto($ID_Contacto);
                                         $contact->setNombre_Contacto($Nombre_Contacto . ' ' . $Apellido_Contacto);
                                         $exists = $contact->getByContactoYCliente();
-                                        $contactos = $contact->getContactosPorCliente();
+                                        $contactos = ClienteContacto_SAController::formatearContactos($contact->getContactosPorCliente());
+
                                         if (!$exists) {
                                             $contact->create();
                                         }
@@ -204,7 +204,7 @@ class ClienteContacto_SAController
                                             )
                                         );
                                     } else {
-                                        $contactos = $contacto->getContactosPorEmpresa();
+                                        $contactos = ClienteContacto_SAController::formatearContactos($contacto->getContactosPorEmpresa());
 
                                         echo json_encode(
                                             array(
@@ -236,7 +236,7 @@ class ClienteContacto_SAController
                                     if ($ID_Cliente) {
                                         $contact = new ContactosCliente();
                                         $contact->setID_Cliente($ID_Cliente);
-                                        $contactos = $contact->getContactosPorCliente();
+                                        $contactos = ClienteContacto_SAController::formatearContactos($contact->getContactosPorCliente());
                                     }
 
                                     echo json_encode(
@@ -298,7 +298,7 @@ class ClienteContacto_SAController
 
                                         }
 
-                                        $contactos = $contact->getContactosPorCliente();
+                                        $contactos = ClienteContacto_SAController::formatearContactos($contact->getContactosPorCliente());
                                         echo json_encode(
                                             array(
                                                 'contactos' => $contactos,
@@ -308,7 +308,7 @@ class ClienteContacto_SAController
                                         );
                                     } else {
                                         //===[gabo 10 agosto usuarios]===
-                                        $contactos = $contacto->getContactosPorEmpresa();
+                                        $contactos = ClienteContacto_SAController::formatearContactos($contacto->getContactosPorEmpresa());
                                         //===[gabo 10 agosto usuarios fin]===
                                         echo json_encode(
                                             array(
@@ -350,7 +350,7 @@ class ClienteContacto_SAController
                 $contact->setID_Cliente($ID_Cliente);
                 $contact->setID_Contacto($ID_Contacto);
                 $contact->deleteContactosPorContacto();
-                $contactos = $contact->getContactosPorCliente();
+                $contactos = ClienteContacto_SAController::formatearContactos($contact->getContactosPorCliente());
 
                 echo json_encode(
                     array(
@@ -366,7 +366,7 @@ class ClienteContacto_SAController
                 $contacto->setEmpresa($Empresa);
                 $contacto->inhabilitar();
 
-                $contactos = $contacto->getContactosPorEmpresa();
+                $contactos = ClienteContacto_SAController::formatearContactos($contacto->getContactosPorEmpresa());
                 $usuario = $contacto->getOne()->Usuario;
 
                 $user = new User();
@@ -447,7 +447,7 @@ class ClienteContacto_SAController
                 }
 
 
-                $contactos = $contactoCliente->getContactosPorCliente();
+                $contactos = ClienteContacto_SAController::formatearContactos($contactoCliente->getContactosPorCliente());
                 echo json_encode(
                     array(
                         'contactos' => $contactos,
@@ -554,4 +554,16 @@ class ClienteContacto_SAController
         } //end if
     }
     //=========================[Gabo Marzo 1]==============================================
+
+
+    static  function formatearContactos($contactos)
+    {
+
+        foreach ($contactos as &$contacto) {
+
+            $contacto['password'] = Utils::decrypt($contacto['password']);
+        }
+
+        return $contactos;
+    }
 }

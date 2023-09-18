@@ -68,7 +68,7 @@
            utils.dtTable(table);
 
 
-           var subareas = new Subarea();
+           var subarea = new Subarea();
            document.querySelector('#table_areas').addEventListener('click', e => {
                e.preventDefault();
 
@@ -82,7 +82,7 @@
                        id_area = e.target.offsetParent.dataset.id;
 
                    console.log(id_area)
-                   subareas.fillModalSubareas(id_area)
+                   subarea.fillModalSubareas(id_area)
 
                    $('#modal-ver-subareas').modal({
                        backdrop: 'static',

@@ -132,7 +132,7 @@ class Subarea {
                     const json_app = JSON.parse(r);
                     if (json_app.status == 1) {
 
-                        document.getElementById("titulo").textContent = json_app.area.area;
+                        document.getElementById("titulo").innerHTML = json_app.area.area;
 
                         let subareas = '';
                         let cont = json_app.subareas.length;

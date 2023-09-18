@@ -75,12 +75,12 @@ class ContactosCliente
     {
         $this->Fecha = $Fecha;
     }
-
+    //gabo 15 sept
     public function getContactosPorCliente()
     {
         $ID_Cliente = $this->getID_Cliente();
 
-        $stmt = $this->db->prepare("SELECT *, ce.Nombre_Contacto FROM rh_Ventas_Alta_Contactos ce INNER JOIN rh_Ventas_Cliente_Contactos cc ON ce.ID=cc.ID_Contacto  inner join reclutamiento.dbo.users u on ce.Usuario=u.username WHERE ID_Cliente=:ID_Cliente AND ce.Activo=1 ORDER BY ce.Nombre_Contacto");
+        $stmt = $this->db->prepare("SELECT *, ce.Nombre_Contacto, ct.nombre_tipo as nombre_tipo, u.password FROM rh_Ventas_Alta_Contactos ce INNER JOIN rh_Ventas_Cliente_Contactos cc ON ce.ID=cc.ID_Contacto INNER JOIN rh_ventaS_Contacto_tipo ct ON ce.tipo_usuario=ct.id  inner join reclutamiento.dbo.users u on ce.Usuario=u.username WHERE ID_Cliente=:ID_Cliente AND ce.Activo=1 ORDER BY ce.Nombre_Contacto");
         $stmt->bindParam(":ID_Cliente", $ID_Cliente, PDO::PARAM_INT);
         $stmt->execute();
         $fetch = $stmt->fetchAll();
@@ -240,7 +240,7 @@ class ContactosCliente
     }
 
     // ===[gabo 5 junio  departamento fin]===
-	  public function getClientesByContactoAcriveRH()
+    public function getClientesByContactoAcriveRH()
     {
 
         $ID_Contacto = $this->getID_Contacto();
@@ -252,8 +252,8 @@ class ContactosCliente
         $fetch = $stmt->fetchAll();
         return $fetch;
     }
-	
- public function getContactoByUsername()
+
+    public function getContactoByUsername()
     {
         $id = $this->getID();
 

@@ -246,7 +246,7 @@ class ContactosEmpresa
     {
         $Empresa = $this->getEmpresa();
 
-        $stmt = $this->db->prepare("SELECT *, ID AS ID_Contacto FROM rh_Ventas_Alta_Contactos WHERE Empresa=:Empresa AND Activo=1 ORDER BY Nombre_Contacto");
+        $stmt = $this->db->prepare("SELECT ac.*, ac.ID AS ID_Contacto, ct.nombre_tipo as nombre_tipo,u.password FROM rh_Ventas_Alta_Contactos ac INNER JOIN rh_ventaS_Contacto_tipo ct ON ac.tipo_usuario=ct.id INNER JOIN reclutamiento.dbo.users u on ac.Usuario=u.username WHERE Empresa=:Empresa AND Activo=1 ORDER BY Nombre_Contacto");
         $stmt->bindParam(":Empresa", $Empresa, PDO::PARAM_INT);
         $stmt->execute();
         $fetch = $stmt->fetchAll();

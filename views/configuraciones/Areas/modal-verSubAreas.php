@@ -42,13 +42,12 @@
         </div>
     </div>
 </div>
-
 <script>
     $(document).ready(function() {
         let table = document.querySelector('#table_subareas');
         utils.dtTable(table);
 
-        var subareas = new Subareas();
+
         document.querySelector('#table_subareas').addEventListener('click', e => {
             e.preventDefault();
 
@@ -61,7 +60,7 @@
                 } else {
                     id_subarea = e.target.offsetParent.dataset.id;
                 }
-
+                console.log(id_subarea);
 
                 Swal.fire({
                     title: '¿Estás seguro de ocultar esta subarea?',
@@ -76,7 +75,7 @@
 
                     if (result.value == true) {
                         console.log("entre1" + id_subarea)
-                        subareas.HideSubarea(id_subarea)
+                        subarea.HideSubarea(id_subarea)
                     }
                 })
 

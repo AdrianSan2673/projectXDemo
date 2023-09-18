@@ -548,6 +548,8 @@ class Cliente {
                                 <td>${element.Celular}</td>
                                 <td class="text-center">${element.Fecha_Cumpleaños}</td>
                                 <td>${element.Usuario}</td>
+                                <td>${element.password}</td>
+                                <td>${element.nombre_tipo}</td>
                                 <td class="text-center py-0 align-middle">
                                     <div class="btn-group btn-group-sm">
                                         <button class="btn btn-info" data-id="${element.ID_Contacto}">
@@ -619,13 +621,17 @@ class Cliente {
                                 <td>${element.Celular}</td>
                                 <td class="text-center">${element.Fecha_Cumpleaños}</td>
                                 <td>${element.Usuario}</td>
+                                <td>${element.password}</td>
+                                <td>${element.nombre_tipo}</td>
                                 <td class="text-center py-0 align-middle">
-                                    <button class="btn btn-info" data-id="${element.ID_Contacto}">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
-									<button class="btn btn-danger" data-id="${element.ID_Contacto}">
-										<i class="fas fa-trash"></i>
-									</button>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-info" data-id="${element.ID_Contacto}">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
+                                        <button class="btn btn-danger" data-id="${element.ID_Contacto}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             `
@@ -1346,14 +1352,18 @@ class Cliente {
                                 <td>${element.Celular}</td>
                                 <td class="text-center">${element.Fecha_Cumpleaños}</td>
                                 <td>${element.Usuario}</td>
+                                <td>${element.password}</td>
+                                <td>${element.nombre_tipo}</td>
                                 <td class="text-center py-0 align-middle">
-                                    <button class="btn btn-info" data-id="${element.ID_Contacto}">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
-									 <button class="btn btn-danger" data-id="${element.ID_Contacto}">
-                                    <i class="fas fa-trash"></i>
-                                	</button>
-                                </td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-info" data-id="${element.ID_Contacto}">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
+                                        <button class="btn btn-danger" data-id="${element.ID_Contacto}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                               </div>
+                               </td>
                             </tr>
                             `
                         });

@@ -12,7 +12,8 @@
                     <input onPaste="return false" type="hidden" name="id_area" id="input_id_area">
 
                     <div class="input-group mb-3">
-                        <input placeholder='Ingresa el nombre de la subarea' onPaste="return false" type="text" autocomplete="off" class="form-control" name="subarea" id="input_subarea">
+                        <input placeholder='Ingresa el nombre de la subarea' onPaste="return false" type="text"
+                            autocomplete="off" class="form-control" name="subarea" id="input_subarea">
                     </div>
                     <div class="modal-footer">
                         <button id="guardar" name="guardar" type="submit" class="btn btn-primary">Guardar
@@ -27,22 +28,22 @@
 
 
 <script>
-    var subarea = new Subarea();
-    document.querySelector('#agregar-subarea-form').addEventListener('submit', e => {
-        e.preventDefault();
-        subarea.save_subarea();
+var subarea = new Subarea();
+document.querySelector('#agregar-subarea-form').addEventListener('submit', e => {
+    e.preventDefault();
+    subarea.save_subarea();
 
-    });
+});
 
-    document.getElementById("input_subarea").addEventListener("keydown", teclear);
-    var flag = false;
-    var teclaAnterior = "";
+document.getElementById("input_subarea").addEventListener("keydown", teclear);
+var flag = false;
+var teclaAnterior = "";
 
-    function teclear(event) {
-        teclaAnterior = teclaAnterior + " " + event.keyCode;
-        var arregloTA = teclaAnterior.split(" ");
-        if (event.keyCode == 32 && arregloTA[arregloTA.length - 2] == 32) {
-            event.preventDefault();
-        }
+function teclear(event) {
+    teclaAnterior = teclaAnterior + " " + event.keyCode;
+    var arregloTA = teclaAnterior.split(" ");
+    if (event.keyCode == 32 && arregloTA[arregloTA.length - 2] == 32) {
+        event.preventDefault();
     }
+}
 </script>
