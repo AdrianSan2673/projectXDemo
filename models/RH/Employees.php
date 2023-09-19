@@ -30,10 +30,10 @@ class Employees
     private $civil_status;
     private $id_razon;
     private $id_boss;
-	private $id_usuario_rh;
+    private $id_usuario_rh;
     private $db;
     private $email;
-	
+
     public function __construct()
     {
         $this->db = Connection::connectSA();
@@ -309,8 +309,8 @@ class Employees
     {
         $this->id_boss = $id_boss;
     }
-	
-public function getId_Usuario_Rh()
+
+    public function getId_Usuario_Rh()
     {
         return $this->id_usuario_rh;
     }
@@ -319,7 +319,7 @@ public function getId_Usuario_Rh()
     {
         $this->id_usuario_rh = $id_usuario_rh;
     }
-	  public function getEmail()
+    public function getEmail()
     {
         return $this->email;
     }
@@ -328,7 +328,7 @@ public function getId_Usuario_Rh()
     {
         $this->email = $email;
     }
-	
+
     public function getOne()
     {
         $id = $this->getId();
@@ -379,15 +379,31 @@ public function getId_Usuario_Rh()
         return $fetch;
     }
 
+    // public function getAllEmployeesIncidenceByIdEmployee()
+    // {
+    //     $id = $this->getId();
+    //     $status = $this->getStatus();
+    //     $ID_Contacto = $this->getID_Contacto();
+    //     $stmt = $this->db->prepare("SELECT ei.id id_incident,e.id id_employe, p.title, CONCAT(e.first_name,' ',e.last_name,' ',e.surname) as employeFullName, ei.type,ei.comments,ei.created_at,ei.end_date,ei.modified_at,ei.amount,ei.type_of_foul,ei.hours,ei.type_of_incapacity
+    //     FROM root.employees e, root.positions p, root.employee_incidence ei
+    //     WHERE e.id=:id AND p.id=e.id_position AND e.status=:status AND e.id=ei.id_employee  AND Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) ORDER BY ei.created_at DESC");
+    //     $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
+    //     $stmt->bindParam(":status", $status, PDO::PARAM_INT);
+    //     $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+    //     $stmt->execute();
+    //     $fetch =  $stmt->fetchAll();
+    //     return $fetch;
+    // }
+
     public function getAllEmployeesIncidenceByIdEmployee()
     {
         $id = $this->getId();
         $status = $this->getStatus();
-        $ID_Contacto = $this->getID_Contacto();
+        $cliente = $this->getCliente();
         $stmt = $this->db->prepare("SELECT ei.id id_incident,e.id id_employe, p.title, CONCAT(e.first_name,' ',e.last_name,' ',e.surname) as employeFullName, ei.type,ei.comments,ei.created_at,ei.end_date,ei.modified_at,ei.amount,ei.type_of_foul,ei.hours,ei.type_of_incapacity
         FROM root.employees e, root.positions p, root.employee_incidence ei
-        WHERE e.id=:id AND p.id=e.id_position AND e.status=:status AND e.id=ei.id_employee  AND Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) ORDER BY ei.created_at DESC");
-        $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
+        WHERE e.id=:id AND p.id=e.id_position AND e.status=:status AND e.id=ei.id_employee  AND Cliente=:cliente ORDER BY ei.created_at DESC");
+        $stmt->bindParam(":cliente", $cliente, PDO::PARAM_INT);
         $stmt->bindParam(":status", $status, PDO::PARAM_INT);
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
@@ -564,7 +580,7 @@ public function getId_Usuario_Rh()
         $civil_status = $this->getCivil_status();
         $id_razon = $this->getId_razon();
         $id_boss = $this->getId_boss();
-		  $email = $this->getEmail();
+        $email = $this->getEmail();
 
         $stmt = $this->db->prepare("INSERT INTO root.employees (first_name, surname, last_name, Cliente, ID_Contacto, date_birth, id_gender, start_date,id_position,created_at,modified_at,scholarship,curp,rfc,nss,employee_number,civil_status,id_razon,id_boss,email) VALUES (:first_name, :surname, :last_name, :Cliente, :ID_Contacto, :date_birth, :id_gender, :start_date,:id_position,GETDATE(),GETDATE(),:scholarship,:curp,:rfc,:nss,:employee_number,:civil_status,:id_razon,:id_boss,:email)");
         //$stmt = $this->db->prepare("INSERT INTO root.employees (first_name, surname, last_name, Cliente, ID_Contacto, date_birth, id_gender, start_date, ID_Candidato) VALUES (:first_name, :surname, :last_name, :Cliente, :ID_Contacto, :date_birth, :id_gender, :start_date, :id_position, :ID_Candidato)");
@@ -625,7 +641,7 @@ public function getId_Usuario_Rh()
         $civil_status = $this->getCivil_status();
         $id_razon = $this->getId_razon();
         $id_boss = $this->getId_boss();
-		  $email = $this->getEmail();
+        $email = $this->getEmail();
 
 
         $stmt = $this->db->prepare("UPDATE root.employees 
@@ -655,7 +671,7 @@ public function getId_Usuario_Rh()
         $stmt->bindParam(":civil_status", $civil_status, PDO::PARAM_INT);
         $stmt->bindParam(":id_razon", $id_razon, PDO::PARAM_INT);
         $stmt->bindParam(":id_boss", $id_boss, PDO::PARAM_INT);
-		$stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
 
         $flag = $stmt->execute();
 
@@ -808,7 +824,7 @@ public function getId_Usuario_Rh()
 
     public function getEmployeesAllInformationByCliente()
     {
-        
+
         $Cliente = $this->getCliente();
         $status = $this->getStatus();
         $stmt = $this->db->prepare("SELECT e.id AS id_employee, CONCAT(e.first_name,' ',e.surname,' ',e.last_name) fullName,  p.title, d.department,e.date_birth, dbo.GetMonthsDifference(e.date_birth, GETDATE())/12 age,e.start_date,dbo.GetMonthsDifference(e.start_date, GETDATE())/12 antiquity ,e.modified_at, e.employee_number,e.civil_status, e.id_gender,
@@ -882,7 +898,7 @@ public function getId_Usuario_Rh()
         return $fetch;
     }
 
-      public function getOneByIdUserRh()
+    public function getOneByIdUserRh()
     {
         $id_usuario_rh = $this->getId_Usuario_Rh();
 
@@ -909,8 +925,8 @@ public function getId_Usuario_Rh()
         }
         return $result;
     }
-	
-	public function Update_Id_userRH()
+
+    public function Update_Id_userRH()
     {
 
         $id = $this->getId();
@@ -921,8 +937,8 @@ public function getId_Usuario_Rh()
         $flag = $stmt->execute();
         return $flag;
     }
-	
-	  public function Validate_Curp()
+
+    public function Validate_Curp()
     {
         $cliente = $this->getCliente();
         $curp = $this->getCurp();
@@ -936,8 +952,8 @@ public function getId_Usuario_Rh()
         $result =  $stmt->fetchObject();
         return $result;
     }
-	
-	public function getAllEmployeesByIDCliente()
+
+    public function getAllEmployeesByIDCliente()
     {
         $Cliente = $this->getCliente();
         $status = $this->getStatus();
@@ -950,8 +966,8 @@ public function getId_Usuario_Rh()
         $fetch =  $stmt->fetchAll();
         return $fetch;
     }
-	
-	 public function getEmployeesAllHolidaysRequested()
+
+    public function getEmployeesAllHolidaysRequested()
     {
         $Cliente = $this->getCliente();
         $stmt = $this->db->prepare(
@@ -979,7 +995,7 @@ public function getId_Usuario_Rh()
         $fetch = $stmt->fetchAll();
         return $fetch;
     }
-	  public function updateEmail()
+    public function updateEmail()
     {
         $id = $this->getId();
         $email = $this->getEmail();

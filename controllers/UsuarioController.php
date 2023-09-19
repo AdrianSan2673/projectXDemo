@@ -15,6 +15,8 @@ require_once 'models/RH/AsistenciaRH.php';
 require_once 'models/RH/EmployeeHolidays.php';
 require_once 'models/RH/Employees.php';
 require_once 'models/RH/UsuariosRH.php';
+//19 sept
+require_once 'models/RH/Employee_trainings.php';
 
 class UsuarioController
 {
@@ -1214,6 +1216,18 @@ class UsuarioController
             $empleado = new Employees();
             $empleado->setId_boss($_SESSION['identity']->id_empleado);
             $subordinados = $empleado->has_subordinates();
+
+
+            //16 sept
+            $employeeObj = new Employees();
+            $employeeObj->setId($_SESSION['identity']->id_empleado);
+            $employeeObj->setStatus(1);
+            $employeeObj->setCliente($_SESSION['identity']->id_cliente);
+            $incidens = $employeeObj->getAllEmployeesIncidenceByIdEmployee();
+
+            $employee_trainingsObj = new Employee_trainings();
+            $employee_trainingsObj->setId_employee($_SESSION['identity']->id_empleado);
+            $employee_trainings = $employee_trainingsObj->getAllByIdEmployee();
 
             $page_title = 'Bienvenido(a) | RRHH Ingenia';
             require_once 'views/layout/dashboard_rh.php';

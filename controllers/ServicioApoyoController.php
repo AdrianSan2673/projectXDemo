@@ -45,12 +45,14 @@ require_once 'models/SA/NotasEjecutivo.php';
 require_once 'models/SA/SOI.php';
 require_once 'helpers/FormatosSA/SOIQR.php';
 
-class ServicioApoyoController {
+class ServicioApoyoController
+{
 
-    public function index(){
+    public function index()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager() || Utils::isLogistics()) {
 
-           if (!Utils::isCustomerSA()) {
+            if (!Utils::isCustomerSA()) {
                 if (Utils::isAccount()) {
                     $estudio = new Candidatos();
                     $estudio->setEjecutivo($_SESSION['identity']->username);
@@ -92,32 +94,31 @@ class ServicioApoyoController {
                 require_once 'views/ese/modal-config.php';
                 require_once 'views/ese/modal-schedule.php';
                 require_once 'views/layout/footer.php';
-            }else {
-               //esto es para los clientes
+            } else {
+                //esto es para los clientes
                 //Para usuarios que tienen mas de una empresa
                 $contactoEmpresa = new ContactosEmpresa();
                 $contactoEmpresa->setUsuario($_SESSION['identity']->username);
                 $contactos = $contactoEmpresa->getContactoPorUsuario2();
 
                 $id = $_SESSION['identity']->id;
-                $id_empresa=$contactos[0]['Empresa'];
+                $id_empresa = $contactos[0]['Empresa'];
 
                 $estudios = [];
                 $estudioObj = new Candidatos();
 
                 //ciosa, estafeta,Prudential [Condcion solicitada de las empresas que los usuarios solo vean lo que solicitaron], Dalton
                 if ($id == 8084 || $id == 8844 || $id == 9034 || $id == 8826 || $id == 9051 || ($id_empresa == 525 && ($id != 9517 && $id != 9518 && $id != 9510 && $id != 9511 && $id != 9512 && $id != 9513)) || $id == 9628 || $id == 9629 || $id == 9630 || $id == 9631 || $id == 9632 || $id == 9633) { //
-                    $ContactosClienteSolicitanObj= new ContactosClienteSolicitan();
+                    $ContactosClienteSolicitanObj = new ContactosClienteSolicitan();
                     $ContactosClienteSolicitanObj->setUsuario($_SESSION['identity']->username);
-                    $ContactosClienteSolicitan=$ContactosClienteSolicitanObj->getAllContactoPorUsuario();
-                    
+                    $ContactosClienteSolicitan = $ContactosClienteSolicitanObj->getAllContactoPorUsuario();
+
                     foreach ($ContactosClienteSolicitan as $cliente) {
                         $estudioObj->setCliente($cliente['Cliente']);
                         $estudioObj->setContacto($_SESSION['identity']->username);
                         $estudio1 = $estudioObj->getServiciosPorUsuario();
                         $estudios = array_merge($estudios, $estudio1);
                     }
-
                 } else {
                     foreach ($contactos as $contacto) {
                         $id_contacto = $contacto['ID'];
@@ -135,7 +136,6 @@ class ServicioApoyoController {
                         }
                         $estudios = array_merge($estudios, $estudio1);
                     }
-
                 }
 
                 $page_title = 'Estudios SocioEconómicos | RRHH Ingenia';
@@ -152,31 +152,32 @@ class ServicioApoyoController {
                 }
                 require_once 'views/layout/modal-encuesta.php';
                 require_once 'views/layout/footer.php';
-            }   
+            }
         } else
-            header('location:'.base_url);
+            header('location:' . base_url);
     }
 
 
-    public function crear(){
+    public function crear()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isManager() || Utils::isCustomerSA()) {
             if (Utils::isCustomerSA()) {
-                
             }
 
             $page_title = 'Nuevo servicio de apoyo | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
             require_once 'views/ese/create.php';
-            if (Utils::isCustomerSA()) 
+            if (Utils::isCustomerSA())
                 require_once 'views/layout/modal-encuesta.php';
             require_once 'views/layout/footer.php';
         } else {
-            header('location:'.base_url);
+            header('location:' . base_url);
         }
     }
 
-    public function create(){
+    public function create()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager()) {
             $Nombres = Utils::sanitizeStringBlank($_POST['Nombres']);
             $Apellido_Paterno = Utils::sanitizeStringBlank($_POST['Apellido_Paterno']);
@@ -197,7 +198,7 @@ class ServicioApoyoController {
             $CC_Cliente = Utils::sanitizeStringBlank($_POST['CC_Cliente']);
             $Comentarios_Cliente = Utils::sanitizeStringBlank($_POST['Comentarios_Cliente']);
             $Plaza_Cliente = Utils::sanitizeStringBlank($_POST['Plaza_Cliente']);
-            
+
             $Nivel = Utils::sanitizeNumber($_POST['Nivel']);
 
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
@@ -208,7 +209,7 @@ class ServicioApoyoController {
 
             $resume = isset($_FILES['resume']) && $_FILES['resume']['name'] != '' ? $_FILES['resume'] : FALSE;
 
-			$duplicar = isset($_POST['duplicar']) && $_POST['duplicar'] != 0 ? $_POST['duplicar'] : false;
+            $duplicar = isset($_POST['duplicar']) && $_POST['duplicar'] != 0 ? $_POST['duplicar'] : false;
 
             if ($Nombres && $Apellido_Paterno && $Estado && $Ciudad && $Cliente && $Servicio_Solicitado) {
 
@@ -217,7 +218,7 @@ class ServicioApoyoController {
                 $Servicio_Solicitado = $Servicio_Solicitado == 299 ? 231 : ($Servicio_Solicitado == 300 ? 230 : ($Servicio_Solicitado));
 
                 if (Utils::isCustomerSA()) {
-                    $Empresa = Utils::sanitizeNumber($_POST['Empresa']);                 
+                    $Empresa = Utils::sanitizeNumber($_POST['Empresa']);
                     $persona_solicitan = new ContactosClienteSolicitan();
                     $persona_solicitan->setUsuario($_SESSION['identity']->username);
                     $persona_solicitan->setCliente($Cliente);
@@ -226,13 +227,13 @@ class ServicioApoyoController {
                         $Nombre_Cliente = $Nombre_Cliente->ID;
                     else {
                         $persona_solicitan->setEmpresa($Empresa);
-                        $persona_solicitan->setNombre($_SESSION['identity']->first_name.' '.$_SESSION['identity']->last_name);
+                        $persona_solicitan->setNombre($_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name);
                         if ($persona_solicitan->create())
                             $Nombre_Cliente = $persona_solicitan->getID();
-                        else 
+                        else
                             $Nombre_Cliente = 0;
                     }
-                }else {
+                } else {
                     //$Nombre_Cliente = 0;
                     $Nombre_Cliente = Utils::sanitizeNumber($_POST['Nombre_Cliente']);
                 }
@@ -246,7 +247,7 @@ class ServicioApoyoController {
                     // ===[19 de mayo 2023 estudios fin]===
                 } else
                     $estudio->setReplicado(Null);
-				
+
                 $estudio->setFecha_solicitud(Utils::getFechaIngresoSA($Cliente));
                 $estudio->setPuesto($Puesto);
                 $estudio->setCiudad($Ciudad);
@@ -263,21 +264,21 @@ class ServicioApoyoController {
                 $estudio->setPlaza_cliente($Plaza_Cliente);
                 $estudio->setNivel($Nivel);
 
-                if ($Servicio_Solicitado == 291){
+                if ($Servicio_Solicitado == 291) {
                     $estudio->setFecha_solicitud(date('Y-m-d H:i:s', time()));
                     $estudio->setFase(291);
                     $estudio->setEjecutivo('');
                     $estudio->setEstado(250);
                     $estudio->setNivel(1);
                 }
-           
-               
+
+
 
                 $save = $estudio->create();
                 if ($save) {
                     $Candidato = $estudio->getCandidato();
-					
-					if ($Folio != 0) {
+
+                    if ($Folio != 0) {
                         $cdto = new Candidatos();
                         if ($Servicio_Solicitado == 231 || $Servicio_Solicitado == 299) {
                             $cdto->setIL($Candidato);
@@ -370,7 +371,7 @@ class ServicioApoyoController {
                         if ($Nivel == 1) {
                             $progreso->setDatos_Adicionales(10);
                             $progreso->updateDatosAdicionales();
-                        }    
+                        }
                     }
 
                     /* if ($Servicio_Solicitado == 230 && $Nivel == 4) {
@@ -443,25 +444,25 @@ class ServicioApoyoController {
                         if ($resume) {
                             $allowed_formats = array("application/pdf");
                             $limit_kb = 20000;
-                            if(!in_array($_FILES["resume"]["type"], $allowed_formats) || $_FILES["resume"]["size"] > $limit_kb * 1024){
+                            if (!in_array($_FILES["resume"]["type"], $allowed_formats) || $_FILES["resume"]["size"] > $limit_kb * 1024) {
                                 //echo 4;
-                            }else{
-                                
+                            } else {
+
                                 $route = './curriculums/';
-                                $resume = $route.$Candidato.'.pdf';
-                                
+                                $resume = $route . $Candidato . '.pdf';
+
                                 //if(!file_exists($resume)){
-                                    $result = move_uploaded_file($_FILES["resume"]["tmp_name"], $resume);
+                                $result = move_uploaded_file($_FILES["resume"]["tmp_name"], $resume);
                                 //}
                             }
                         }
-						
-						if ($duplicar) {
+
+                        if ($duplicar) {
                             $estudio->copiarInfo($duplicar);
 
                             $candidato_datos->copiarInfo($duplicar);
 
-                            if (!$folio_docs->getOne()) 
+                            if (!$folio_docs->getOne())
                                 $folio_docs->duplicate($estudio);
                             else
                                 $folio_docs->copiarInfo($duplicar);
@@ -548,21 +549,21 @@ class ServicioApoyoController {
                         $Nombre_Cliente = $clientee->Nombre_Cliente;
                         $id_cliente = $clientee->Cliente;
 
-                        $Asunto = 'Nueva solicitud registrada de '.$Nombre_Cliente;
-                        $Reclutador = $_SESSION['identity']->first_name.' '.$_SESSION['identity']->last_name;
-                        
+                        $Asunto = 'Nueva solicitud registrada de ' . $Nombre_Cliente;
+                        $Reclutador = $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name;
+
                         $usuario_ejecutivo = Utils::getUserByUsername($Ejecutivo);
                         $Correo_Ejecutivo = $usuario_ejecutivo->email;
                         $id_user = $usuario_ejecutivo->id;
                         $Tipo_Solicitud = $Servicio_Solicitado == 230 ? 'Estudio Socioeconómico' : ($Servicio_Solicitado == 231 ? 'Investigación Laboral' : ($Servicio_Solicitado == 298 || $Servicio_Solicitado == 291 ? 'Reporte de Antecedentes Legales' : ($Servicio_Solicitado == 5 ? 'Reporte de Antecedentes Legales y Estudio Socioeconómico' : ($Servicio_Solicitado == 300 ? 'Verificación domiciliaria' : ($Servicio_Solicitado == 5 ? 'Reporte de Antecedentes Legales y Estudio Socioeconómico' : ($Servicio_Solicitado == 323 ? 'Estudio Socioeconómico con Visita Presencial' : ''))))));
-                        $Nombre_Candidato = $Nombres.' '.$Apellido_Paterno.' '.$Apellido_Materno;
-                        $Enlace = "https://rrhh-ingenia.com.mx/ServicioApoyo/ver&candidato=".Encryption::encode($Candidato);
+                        $Nombre_Candidato = $Nombres . ' ' . $Apellido_Paterno . ' ' . $Apellido_Materno;
+                        $Enlace = "https://rrhh-ingenia.com.mx/ServicioApoyo/ver&candidato=" . Encryption::encode($Candidato);
 
-						$auto_ral = 0;
+                        $auto_ral = 0;
 
                         if ($Servicio_Solicitado != 291) {
                             if ($Servicio_Solicitado == 5) {
-                                $Enlace2 = "https://rrhh-ingenia.com.mx/ServicioApoyo/ver&candidato=".Encryption::encode($Candidato2);
+                                $Enlace2 = "https://rrhh-ingenia.com.mx/ServicioApoyo/ver&candidato=" . Encryption::encode($Candidato2);
                                 $body = "
                                 <!DOCTYPE html>
                                 <html>
@@ -608,8 +609,7 @@ class ServicioApoyoController {
                                         <br/>
 <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                                </body>
                                 </html> ";
-                            }*/
-                            else {
+                            }*/ else {
                                 $body = "
                                 <!DOCTYPE html>
                                 <html>
@@ -629,25 +629,25 @@ class ServicioApoyoController {
                                         <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                                </body>
                                 </html>";
                             }
-							Utils::newNotification($Reclutador.' de '. $Nombre_Cliente.' solicita '. $Tipo_Solicitud, $Enlace, 1, $Servicio_Solicitado == 231 || $Servicio_Solicitado == 299 ? 1 : ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 300 ? 2 : ($Servicio_Solicitado == 328 ? 3 : 16)), $id_user, $_SESSION['identity']->id, $id_cliente);
+                            Utils::newNotification($Reclutador . ' de ' . $Nombre_Cliente . ' solicita ' . $Tipo_Solicitud, $Enlace, 1, $Servicio_Solicitado == 231 || $Servicio_Solicitado == 299 ? 1 : ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 300 ? 2 : ($Servicio_Solicitado == 328 ? 3 : 16)), $id_user, $_SESSION['identity']->id, $id_cliente);
                             Utils::sendEmail($Correo_Ejecutivo, $Reclutador, $Asunto, $body);
-							
-							if ($Servicio_Solicitado == 300 || $Servicio_Solicitado == 230) {
+
+                            if ($Servicio_Solicitado == 300 || $Servicio_Solicitado == 230) {
                                 $ejecutivo = new EjecutivosPlazas();
                                 $ejecutivo->setID_Cliente($Cliente);
                                 $Logistica = $ejecutivo->getEjecutivosPorClienteLogistica();
-								$id_logistica = $Logistica->id;
+                                $id_logistica = $Logistica->id;
                                 if ($Logistica) {
                                     $estudio->setLogistica(strtoupper($Logistica->username));
                                     $estudio->setFecha_aplicacion(NULL);
                                     $estudio->updateSchedule();
-                                    Utils::sendEmail($Logistica->email, $Logistica->first_name.' '.$Logistica->last_name, $Asunto, $body);
-                                    Utils::newNotification($Reclutador.' de '. $Nombre_Cliente.' solicita '. $Tipo_Solicitud, $Enlace, 1, $Servicio_Solicitado == 231 || $Servicio_Solicitado == 299 ? 1 : ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 300 ? 2 : ($Servicio_Solicitado == 328 ? 3 : 16)), $id_logistica, $_SESSION['identity']->id, $id_cliente);
+                                    Utils::sendEmail($Logistica->email, $Logistica->first_name . ' ' . $Logistica->last_name, $Asunto, $body);
+                                    Utils::newNotification($Reclutador . ' de ' . $Nombre_Cliente . ' solicita ' . $Tipo_Solicitud, $Enlace, 1, $Servicio_Solicitado == 231 || $Servicio_Solicitado == 299 ? 1 : ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 300 ? 2 : ($Servicio_Solicitado == 328 ? 3 : 16)), $id_logistica, $_SESSION['identity']->id, $id_cliente);
                                 }
                             }
 
 
-                            $Asunto2 = 'Confirmación de solicitud de '.$Tipo_Solicitud.' para '.$Nombre_Candidato;
+                            $Asunto2 = 'Confirmación de solicitud de ' . $Tipo_Solicitud . ' para ' . $Nombre_Candidato;
                             $body2 = "
                             <!DOCTYPE html>
                             <html>
@@ -661,11 +661,11 @@ class ServicioApoyoController {
                                     <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                                </body>
                             </html>";
                             Utils::sendEmail($Correo, $Reclutador, $Asunto2, $body2);
-                        }else{
+                        } else {
                             /***
                              * SOLICITUD DE RAL PODER JUDICIAL VIRTUAL
                              */
-                            $Apellidos = $Apellido_Paterno.' '.$Apellido_Materno;
+                            $Apellidos = $Apellido_Paterno . ' ' . $Apellido_Materno;
                             $Nombres_URL = urlencode($Nombres);
                             $Apellidos_URL = urlencode($Apellidos);
 
@@ -674,13 +674,13 @@ class ServicioApoyoController {
                             $curl = curl_init($api_url);
                             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
                             curl_setopt($curl, CURLOPT_HTTPHEADER, [
-                                'apikey: '.ral_api_key,
+                                'apikey: ' . ral_api_key,
                                 'Content-Type: application/json'
                             ]);
 
                             $response = curl_exec($curl);
 
-                            $url = base_url."registroantecedenteslegales/resultado&Nombres={$Nombres}&Apellidos={$Apellidos}";
+                            $url = base_url . "registroantecedenteslegales/resultado&Nombres={$Nombres}&Apellidos={$Apellidos}";
 
                             $ral = json_decode($response);
 
@@ -709,7 +709,7 @@ class ServicioApoyoController {
                                         $expediente_RAL->setTipo(isset($expediente->exp_tipo) ? ($expediente->exp_tipo) : '');
                                         $expediente_RAL->setID_Busqueda_RAL($ID_Busqueda_RAL);
                                         $save_expediente = $expediente_RAL->create();
-        
+
                                         if ($save_expediente) {
                                             $ID_Expediente_RAL = $expediente_RAL->getID();
                                             foreach ($resultado->objAcuerdos as $acuerdo) {
@@ -735,7 +735,7 @@ class ServicioApoyoController {
                             /** */
 
 
-                            $Asunto2 = 'Confirmación de solicitud de Consulta de '.$Tipo_Solicitud.' para '.$Nombre_Candidato;
+                            $Asunto2 = 'Confirmación de solicitud de Consulta de ' . $Tipo_Solicitud . ' para ' . $Nombre_Candidato;
                             $body2 = "
                             <!DOCTYPE html>
                             <html>
@@ -750,38 +750,38 @@ class ServicioApoyoController {
                             Utils::sendEmail($Correo, $Reclutador, $Asunto2, $body2);
                             $auto_ral = 1;
                         }
-                            
 
-                       echo json_encode(array(
-                           'status' => 1,
-                           'ral' => $auto_ral,
-                           'redireccion' => base_url.'ServicioApoyo/ver&candidato='.Encryption::encode($Candidato)
+
+                        echo json_encode(array(
+                            'status' => 1,
+                            'ral' => $auto_ral,
+                            'redireccion' => base_url . 'ServicioApoyo/ver&candidato=' . Encryption::encode($Candidato)
                         ));
-                       
-                    }else 
+                    } else
                         echo json_encode(array('status' => 2));
-                }else 
+                } else
                     echo json_encode(array('status' => 2));
-            }else 
+            } else
                 echo json_encode(array('status' => 0));
-        }else 
-            header('location:'.base_url);
+        } else
+            header('location:' . base_url);
     }
 
-    public function en_proceso(){
+    public function en_proceso()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager()) {
             $estudio = new Candidatos();
             if (Utils::isAccount()) {
                 $estudio->setEjecutivo($_SESSION['identity']->username);
                 $estudios = $estudio->getServiciosEnProcesoPorEjecutivo();
-            }elseif (Utils::isLogistics()) {
+            } elseif (Utils::isLogistics()) {
                 $estudio->setLogistica($_SESSION['identity']->username);
                 $estudios = $estudio->getServiciosEnProcesoPorEjecutivoLogistica();
-            }else{
+            } else {
                 $estudios = $estudio->getServiciosEnProceso();
             }
-            
-            
+
+
             $page_title = 'Estudios SocioEconómicos | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
@@ -790,21 +790,22 @@ class ServicioApoyoController {
             require_once 'views/ese/modal-schedule.php';
             require_once 'views/layout/footer.php';
         } else {
-            header('location:'.base_url);
+            header('location:' . base_url);
         }
     }
 
-    public function agendados(){
+    public function agendados()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isLogisticsSupervisor() || Utils::isLogistics() || Utils::isManager()) {
             $estudio = new Candidatos();
             if (Utils::isLogistics()) {
                 $estudio->setLogistica($_SESSION['identity']->username);
                 $estudios = $estudio->getServiciosAgendadosPorEjecutivoLogistica();
-            }else{
+            } else {
                 $estudios = $estudio->getServiciosAgendados();
             }
-            
-            
+
+
             $page_title = 'Estudios SocioEconómicos agendados | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
@@ -813,7 +814,7 @@ class ServicioApoyoController {
             require_once 'views/ese/modal-schedule.php';
             require_once 'views/layout/footer.php';
         } else {
-            header('location:'.base_url);
+            header('location:' . base_url);
         }
     }
 
@@ -833,14 +834,15 @@ class ServicioApoyoController {
         }
     }
 
-    public function ver(){
+    public function ver()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager()) {
             $folio = Encryption::decode($_GET['candidato']);
 
-             $candidato = new CandidatosDatos();
+            $candidato = new CandidatosDatos();
             $candidato->setCandidato($folio);
-           // Utils::isClienteVetado($candidato->getOne()->Cliente);
-			
+            // Utils::isClienteVetado($candidato->getOne()->Cliente);
+
             $page_title = 'Estudio | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
@@ -885,33 +887,36 @@ class ServicioApoyoController {
             require_once 'views/ese/modal-soi.php';
             require_once 'views/layout/footer.php';
         } else
-            header('location:'.base_url);
+            header('location:' . base_url);
     }
 
-    public function signos(){
+    public function signos()
+    {
         require_once 'views/layout/header.php';
         require_once 'views/layout/sidebar.php';
         require_once 'views/layout/signos.php';
         require_once 'views/layout/footer.php';
     }
 
-    public function datos(){
+    public function datos()
+    {
         if (Utils::isValid($_SESSION['identity']) && !Utils::isCandidate() && !Utils::isCustomer()) {
-           
+
             $page_title = 'Estudios SocioEconómicos | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
             require_once 'views/ese/edit.php';
             require_once 'views/layout/footer.php';
         } else {
-            header('location:'.base_url);
+            header('location:' . base_url);
         }
     }
 
-    public function getOne(){
+    public function getOne()
+    {
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isManager())) {
             $Folio = isset($_POST['Folio']) ? trim($_POST['Folio']) : FALSE;
-            
+
             if ($Folio) {
                 $estudio = new Candidatos();
                 $estudio->setCandidato($Folio);
@@ -919,18 +924,19 @@ class ServicioApoyoController {
 
                 header('Content-Type: text/html; charset=utf-8');
                 echo $json_vacancy = json_encode($data, \JSON_UNESCAPED_UNICODE);
-            }else{
+            } else {
                 echo 0;
             }
         } else {
-            header('location:'.base_url);
+            header('location:' . base_url);
         }
     }
 
-    public function getOneService(){
+    public function getOneService()
+    {
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager())) {
             $folio = ($_GET['candidato']);
-            
+
             if ($folio) {
                 $candidato = new CandidatosDatos();
                 $candidato->setCandidato($folio);
@@ -938,11 +944,11 @@ class ServicioApoyoController {
                 $candidato->setCURP($candidato_datos->CURP);
                 $candidato->setIMSS($candidato_datos->IMSS);
                 $historial_candidato = $candidato->getCandidatosPorCURPoIMSS();
-                for ($i=0; $i < count($historial_candidato); $i++) { 
+                for ($i = 0; $i < count($historial_candidato); $i++) {
                     $historial_candidato[$i]['Fecha'] = Utils::getFullDate($historial_candidato[$i]['Fecha']);
                     $historial_candidato[$i]['Candidato'] = Encryption::encode($historial_candidato[$i]['Candidato']);
                 }
-                $nombre = utf8_encode($candidato_datos->Nombres.' '.$candidato_datos->Apellido_Paterno.' '.$candidato_datos->Apellido_Materno);
+                $nombre = utf8_encode($candidato_datos->Nombres . ' ' . $candidato_datos->Apellido_Paterno . ' ' . $candidato_datos->Apellido_Materno);
 
                 $candidato_datos->Estado_Civil = Utils::getEstadoCivil($candidato_datos->Estado_Civil);
                 $candidato_datos->Sexo = Utils::getSexo($candidato_datos->Sexo);
@@ -989,11 +995,11 @@ class ServicioApoyoController {
                 $estudios = new CandidatosEscolaridad();
                 $estudios->setCandidato($folio);
                 $escolaridad = $estudios->getEscolaridadPorCandidato();
-                for ($i=0; $i < count($escolaridad); $i++) { 
+                for ($i = 0; $i < count($escolaridad); $i++) {
                     $escolaridad[$i]['Grado'] = Utils::getGradoEstudio($escolaridad[$i]['Grado']);
                     $escolaridad[$i]['Documento'] = Utils::getDocumentoEscolar($escolaridad[$i]['Documento']);
                 }
-                
+
                 $salud = new CandidatosSalud();
                 $salud->setCandidato($folio);
                 $historial_salud = $salud->getOne();
@@ -1006,7 +1012,7 @@ class ServicioApoyoController {
                 $cohabitan->setCandidato($folio);
                 $cohabitantes = $cohabitan->getCohabitantesPorCandidato($folio);
 
-                for ($i=0; $i < count($cohabitantes); $i++) { 
+                for ($i = 0; $i < count($cohabitantes); $i++) {
                     $cohabitantes[$i]['Parentesco'] = Utils::getParentesco($cohabitantes[$i]['Parentesco']);
                     $cohabitantes[$i]['Estado_Civil'] = Utils::getEstadoCivil($cohabitantes[$i]['Estado_Civil']);
                 }
@@ -1015,7 +1021,7 @@ class ServicioApoyoController {
                 $circulo->setCandidato($folio);
                 $circulo_familiar = $circulo->getFamiliaresPorCandidato();
 
-                for ($i=0; $i < count($circulo_familiar); $i++) { 
+                for ($i = 0; $i < count($circulo_familiar); $i++) {
                     $circulo_familiar[$i]['Parentesco'] = Utils::getParentesco($circulo_familiar[$i]['Parentesco']);
                 }
 
@@ -1026,12 +1032,12 @@ class ServicioApoyoController {
                     $vivienda->Tipo_Vivienda = Utils::getTipoVivienda($vivienda->Tipo_Vivienda);
                     $vivienda->Domicilio_es = Utils::getDomicilioEs($vivienda->Domicilio_es);
                 }
-                
+
                 $ubicacion = new CandidatosUbicacion();
                 $ubicacion->setCandidato($folio);
                 $domicilio = $ubicacion->getDomicilioCompleto();
                 $ubicacion = $ubicacion->getOne();
-                
+
                 $enser = new Enseres();
                 $enser->setCandidato($folio);
                 $enseres = $enser->getOne();
@@ -1088,34 +1094,34 @@ class ServicioApoyoController {
 
                 $ubicacion_exterior = new CfgImagenes();
                 $ubicacion_exterior->setFolio_Origen($folio);
-                $ubicacion_exterior = $ubicacion_exterior->getExteriorDomicilio();//$ubicacion_exterior->getExteriorDomicilio() ? $ubicacion_exterior->getExteriorDomicilio() : '../dist/img/image_unavailable.jpg';
+                $ubicacion_exterior = $ubicacion_exterior->getExteriorDomicilio(); //$ubicacion_exterior->getExteriorDomicilio() ? $ubicacion_exterior->getExteriorDomicilio() : '../dist/img/image_unavailable.jpg';
 
                 $ubicacion_no_exterior = new CfgImagenes();
                 $ubicacion_no_exterior->setCandidato($folio);
-                $ubicacion_no_exterior = $ubicacion_no_exterior->getNumeroExteriorDomicilio();//$ubicacion_no_exterior->getNumeroExteriorDomicilio() ? $ubicacion_no_exterior->getNumeroExteriorDomicilio() : '../dist/img/image_unavailable.jpg';
+                $ubicacion_no_exterior = $ubicacion_no_exterior->getNumeroExteriorDomicilio(); //$ubicacion_no_exterior->getNumeroExteriorDomicilio() ? $ubicacion_no_exterior->getNumeroExteriorDomicilio() : '../dist/img/image_unavailable.jpg';
 
                 $ubicacion_interior = new CfgImagenes();
                 $ubicacion_interior->setFolio_Origen($folio);
-                $ubicacion_interior = $ubicacion_interior->getInteriorDomicilio();//$ubicacion_interior->getInteriorDomicilio() ? $ubicacion_interior->getInteriorDomicilio() : '../dist/img/image_unavailable.jpg';
-				
-				$busq_RAL = new Busqueda_RAL();
+                $ubicacion_interior = $ubicacion_interior->getInteriorDomicilio(); //$ubicacion_interior->getInteriorDomicilio() ? $ubicacion_interior->getInteriorDomicilio() : '../dist/img/image_unavailable.jpg';
+
+                $busq_RAL = new Busqueda_RAL();
                 $busqueda_RAL = $busq_RAL->getOneByCandidato($candidato);
                 if ($busqueda_RAL) {
                     $busqueda_RAL->Fecha = Utils::getDate($busqueda_RAL->Fecha);
-					$busqueda_RAL->PDF_RAL = base_url.'formato/resumen_resultado_RAL&busqueda='.Encryption::encode($busqueda_RAL->ID);
+                    $busqueda_RAL->PDF_RAL = base_url . 'formato/resumen_resultado_RAL&busqueda=' . Encryption::encode($busqueda_RAL->ID);
                     $exp_RAL = new Expediente_RAL();
                     $exp_RAL->setID_Busqueda_RAL($busqueda_RAL->ID);
                     $expedientes_RAL = $exp_RAL->getExpedientesPorBusqueda();
-                    
+
                     if ($expedientes_RAL) {
-                        for ($i=0; $i < count($expedientes_RAL); $i++) { 
+                        for ($i = 0; $i < count($expedientes_RAL); $i++) {
                             $expedientes_RAL[$i]['Fecha'] = Utils::getDate($expedientes_RAL[$i]['Fecha']);
-                            
-                            $expedientes_RAL[$i]['PDF_RAL'] = base_url.'formato/resultado_RAL&expediente='.Encryption::encode($expedientes_RAL[$i]['ID']);
+
+                            $expedientes_RAL[$i]['PDF_RAL'] = base_url . 'formato/resultado_RAL&expediente=' . Encryption::encode($expedientes_RAL[$i]['ID']);
                             $acuerdo_RAL = new Acuerdos_RAL();
                             $acuerdo_RAL->setID_Expediente_RAL($expedientes_RAL[$i]['ID']);
                             $acuerdos = $acuerdo_RAL->getAcuerdosPorExpediente();
-                            for ($j=0; $j < count($acuerdos); $j++) 
+                            for ($j = 0; $j < count($acuerdos); $j++)
                                 $acuerdos[$j]['Fecha'] = $acuerdos[$j]['Fecha'] ? Utils::getDate($acuerdos[$j]['Fecha']) : '';
                             //array_push($expediente, array('acuerdos' => $acuerdos));
                             $expedientes_RAL[$i]['acuerdos'] = $acuerdos;
@@ -1123,7 +1129,7 @@ class ServicioApoyoController {
 
                         //array_push($busqueda_RAL, array('expedientes' => $expedientes_RAL));
                         $busqueda_RAL->expedientes = $expedientes_RAL;
-                    }else {
+                    } else {
                         $busqueda_RAL->expedientes = [];
                         if (!$ral) {
                             $ral = new CandidatosRAL();
@@ -1148,32 +1154,32 @@ class ServicioApoyoController {
                         $user->setUsername($busqueda_RAL->Creado);
                         $Usuario = $user->getUserByUsername();
 
-                        $busqueda_RAL->PDF_RAL = base_url.'formato/resumen_resultado_RAL&busqueda='.Encryption::encode($busqueda_RAL->ID);
+                        $busqueda_RAL->PDF_RAL = base_url . 'formato/resumen_resultado_RAL&busqueda=' . Encryption::encode($busqueda_RAL->ID);
                         $busqueda_RAL->Fecha = Utils::getDate($busqueda_RAL->Fecha);
-                        $busqueda_RAL->Creado = $Usuario->first_name.' '.$Usuario->last_name;
+                        $busqueda_RAL->Creado = $Usuario->first_name . ' ' . $Usuario->last_name;
                         $exp_RAL = new Expediente_RAL();
                         $exp_RAL->setID_Busqueda_RAL($busqueda_RAL->ID);
                         $expedientes_RAL = $exp_RAL->getExpedientesPorBusqueda();
                         if ($expedientes_RAL) {
-                            for ($i=0; $i < count($expedientes_RAL); $i++) { 
+                            for ($i = 0; $i < count($expedientes_RAL); $i++) {
                                 $expedientes_RAL[$i]['Fecha'] = Utils::getDate($expedientes_RAL[$i]['Fecha']);
 
-                                $expedientes_RAL[$i]['PDF_RAL'] = base_url.'formato/resultado_RAL&expediente='.Encryption::encode($expedientes_RAL[$i]['ID']);
+                                $expedientes_RAL[$i]['PDF_RAL'] = base_url . 'formato/resultado_RAL&expediente=' . Encryption::encode($expedientes_RAL[$i]['ID']);
                                 $acuerdo_RAL = new Acuerdos_RAL();
                                 $acuerdo_RAL->setID_Expediente_RAL($expedientes_RAL[$i]['ID']);
                                 $acuerdos = $acuerdo_RAL->getAcuerdosPorExpediente();
-                                for ($j=0; $j < count($acuerdos); $j++) 
+                                for ($j = 0; $j < count($acuerdos); $j++)
                                     $acuerdos[$j]['Fecha'] = $acuerdos[$j]['Fecha'] ? Utils::getDate($acuerdos[$j]['Fecha']) : '';
                                 //array_push($expediente, array('acuerdos' => $acuerdos));
                                 $expedientes_RAL[$i]['acuerdos'] = $acuerdos;
                             }
                             //array_push($busqueda_RAL, array('expedientes' => $expedientes_RAL));
                             $busqueda_RAL->expedientes = $expedientes_RAL;
-                        }else
+                        } else
                             $busqueda_RAL->expedientes = [];
                         //array_push($busqueda_RAL, array('status' => 1));
                         $busqueda_RAL->status = 3;
-                    }else {
+                    } else {
                         $candidato->setIL($folio);
                         $candidato->setESE($folio);
                         $busqueda_RAL = $busq_RAL->getOneByILOrESE($candidato);
@@ -1181,7 +1187,7 @@ class ServicioApoyoController {
                             $user = new User();
                             $user->setUsername($busqueda_RAL->Creado);
                             $Usuario = $user->getUserByUsername();
-    
+
                             $busqueda_RAL->PDF_RAL = base_url . 'formato/resumen_resultado_RAL&busqueda=' . Encryption::encode($busqueda_RAL->ID);
                             $busqueda_RAL->Fecha = Utils::getDate($busqueda_RAL->Fecha);
                             $busqueda_RAL->Creado = $Usuario->first_name . ' ' . $Usuario->last_name;
@@ -1191,7 +1197,7 @@ class ServicioApoyoController {
                             if ($expedientes_RAL) {
                                 for ($i = 0; $i < count($expedientes_RAL); $i++) {
                                     $expedientes_RAL[$i]['Fecha'] = Utils::getDate($expedientes_RAL[$i]['Fecha']);
-    
+
                                     $expedientes_RAL[$i]['PDF_RAL'] = base_url . 'formato/resultado_RAL&expediente=' . Encryption::encode($expedientes_RAL[$i]['ID']);
                                     $acuerdo_RAL = new Acuerdos_RAL();
                                     $acuerdo_RAL->setID_Expediente_RAL($expedientes_RAL[$i]['ID']);
@@ -1211,13 +1217,12 @@ class ServicioApoyoController {
                             $busqueda_RAL = (object)array('status' => 0);
                         }
                     }
-                        
                 }
 
-                
-                $Nombre_RAL = strtoupper(str_replace(" ", " AND ", (Utils::removeAccents(Utils::removeSpaces($candidato_datos->Nombres.' '.$candidato_datos->Apellido_Paterno.' '.$candidato_datos->Apellido_Materno)))));
-				
-				 //=========================RAL PROPIO=========================
+
+                $Nombre_RAL = strtoupper(str_replace(" ", " AND ", (Utils::removeAccents(Utils::removeSpaces($candidato_datos->Nombres . ' ' . $candidato_datos->Apellido_Paterno . ' ' . $candidato_datos->Apellido_Materno)))));
+
+                //=========================RAL PROPIO=========================
                 $ral_tamaulipas = new Tamaulipas();
                 $ral_tamaulipas->setResumen($Nombre_RAL);
                 $ral_tamaulipas = $ral_tamaulipas->getExpedientesPorNombre();
@@ -1233,46 +1238,45 @@ class ServicioApoyoController {
                 $expedientes_RAL = $this->formatExpedientes_RAL($expedientes_RAL, $arrya_ral_estados_obj);
                 //=========================RAL PROPIO=========================
 
-				$Nota_Ejecutivo = new NotasEjecutivo();
+                $Nota_Ejecutivo = new NotasEjecutivo();
                 $Nota_Ejecutivo->setCandidato($folio);
                 $notas = $Nota_Ejecutivo->getNotasPorCandidato();
 
-                for($i=0; $i < count($notas); $i++){
-                    $path = 'uploads/avatar/'.$notas[$i]['id_user'];
+                for ($i = 0; $i < count($notas); $i++) {
+                    $path = 'uploads/avatar/' . $notas[$i]['id_user'];
                     if (file_exists($path)) {
                         $directory = opendir($path);
-            
-                        while ($file = readdir($directory))
-                        {
+
+                        while ($file = readdir($directory)) {
                             if (!is_dir($file))
-                                $route = $path.'/'.$file;
+                                $route = $path . '/' . $file;
                         }
-                    }else
+                    } else
                         $route = "dist/img/user-icon.png";
-                        
-                    $notas[$i]['avatar'] = base_url.$route;
+
+                    $notas[$i]['avatar'] = base_url . $route;
                 }
-                
+
                 $cv_ruta = 0;
-                if (get_headers(base_url.'curriculums/'.$folio.'.pdf')[0] != 'HTTP/1.1 404 Not Found') {
-                    $cv_ruta = base_url.'curriculums/'.$folio.'.pdf';
-                }elseif (get_headers('http://reclutamiento.rrhh-ingenia.com/curriculums/'.$folio.'.pdf')[0] != 'HTTP/1.1 404 Not Found') {
-                    $cv_ruta = 'http://reclutamiento.rrhh-ingenia.com/curriculums/'.$folio.'.pdf';
+                if (get_headers(base_url . 'curriculums/' . $folio . '.pdf')[0] != 'HTTP/1.1 404 Not Found') {
+                    $cv_ruta = base_url . 'curriculums/' . $folio . '.pdf';
+                } elseif (get_headers('http://reclutamiento.rrhh-ingenia.com/curriculums/' . $folio . '.pdf')[0] != 'HTTP/1.1 404 Not Found') {
+                    $cv_ruta = 'http://reclutamiento.rrhh-ingenia.com/curriculums/' . $folio . '.pdf';
                 }
-				
-				$soiCer = new SOI();
-				$soiCer->setCandidato($folio);
-				$soiCer = $soiCer->getOne();
-				
-				$soi = 0;
-                if (get_headers(base_url.'uploads/soi/'.$folio.'.png')[0] != 'HTTP/1.1 404 Not Found')
-                    $soi = base_url.'uploads/soi/'.$folio.'.png';
-				
-				$google_search = 0;
-                if (get_headers(base_url.'uploads/google_search/'.$folio.'.pdf')[0] != 'HTTP/1.1 404 Not Found')
-                    $google_search = base_url.'uploads/google_search/'.$folio.'.pdf';
-				
-				$candidato_datos->folio = Encryption::encode($folio);
+
+                $soiCer = new SOI();
+                $soiCer->setCandidato($folio);
+                $soiCer = $soiCer->getOne();
+
+                $soi = 0;
+                if (get_headers(base_url . 'uploads/soi/' . $folio . '.png')[0] != 'HTTP/1.1 404 Not Found')
+                    $soi = base_url . 'uploads/soi/' . $folio . '.png';
+
+                $google_search = 0;
+                if (get_headers(base_url . 'uploads/google_search/' . $folio . '.pdf')[0] != 'HTTP/1.1 404 Not Found')
+                    $google_search = base_url . 'uploads/google_search/' . $folio . '.pdf';
+
+                $candidato_datos->folio = Encryption::encode($folio);
                 $all_info = array(
                     'candidato_datos' => $candidato_datos,
                     'historial_candidato' => $historial_candidato,
@@ -1311,31 +1315,28 @@ class ServicioApoyoController {
                     'display' => $display,
                     'busqueda_RAL' => $busqueda_RAL,
                     'expedientes_RAL' => $expedientes_RAL,
-					'soi' => $soi,
-					'soiCer' => $soiCer,
+                    'soi' => $soi,
+                    'soiCer' => $soiCer,
                     'notas' => $notas,
                     'google_search' => $google_search
                 );
                 header('Content-Type: text/html; charset=utf-8');
                 echo json_encode($all_info);
-            }else{
+            } else {
                 echo 0;
             }
         } else {
-            header('location:'.base_url);
+            header('location:' . base_url);
         }
-
-
-            
     }
-	
-					
+
+
     function formatExpedientes_RAL($expedientes_RAL, $arrya_ral_estados)
     {
         $arrayEstados = array('Tamaulipas', 'San Luis Potosi');
 
         for ($j = 0; $j < count($arrya_ral_estados); $j++) {
-            if (count($arrya_ral_estados[$j]) > 0) {//Si el ral del estado no tiene estados 
+            if (count($arrya_ral_estados[$j]) > 0) { //Si el ral del estado no tiene estados 
                 for ($i = 0; $i < count($arrya_ral_estados[$j]); $i++) {
                     if ($i == 0) {
                         array_push($expedientes_RAL, array(
@@ -1346,8 +1347,8 @@ class ServicioApoyoController {
                             'Fecha' => $arrya_ral_estados[$j][$i]['Fecha'],
                             'Resumen' => $arrya_ral_estados[$j][$i]['Resumen'],
                             'Juzgado' => $arrya_ral_estados[$j][$i]['Juzgado'],
-                            'Actor' => isset($arrya_ral_estados[$j][$i]['Actor']) ? $arrya_ral_estados[$j][$i]['Actor'] : '',//San luis
-                            'Demandado' => isset($arrya_ral_estados[$j][$i]['Demandado']) ? $arrya_ral_estados[$j][$i]['Demandado'] : '',//San luis
+                            'Actor' => isset($arrya_ral_estados[$j][$i]['Actor']) ? $arrya_ral_estados[$j][$i]['Actor'] : '', //San luis
+                            'Demandado' => isset($arrya_ral_estados[$j][$i]['Demandado']) ? $arrya_ral_estados[$j][$i]['Demandado'] : '', //San luis
                             'Acuerdos' => array($arrya_ral_estados[$j][$i]),
                             'id_estado' => $j
                         ));
@@ -1361,8 +1362,8 @@ class ServicioApoyoController {
                                 'Fecha' => $arrya_ral_estados[$j][$i]['Fecha'],
                                 'Resumen' => $arrya_ral_estados[$j][$i]['Resumen'],
                                 'Juzgado' => $arrya_ral_estados[$j][$i]['Juzgado'],
-                                'Actor' => isset($arrya_ral_estados[$j][$i]['Actor']) ? $arrya_ral_estados[$j][$i]['Actor'] : '',//San luis
-                                'Demandado' => isset($arrya_ral_estados[$j][$i]['Demandado']) ? $arrya_ral_estados[$j][$i]['Demandado'] : '',//San luis
+                                'Actor' => isset($arrya_ral_estados[$j][$i]['Actor']) ? $arrya_ral_estados[$j][$i]['Actor'] : '', //San luis
+                                'Demandado' => isset($arrya_ral_estados[$j][$i]['Demandado']) ? $arrya_ral_estados[$j][$i]['Demandado'] : '', //San luis
                                 'Acuerdos' => array($arrya_ral_estados[$j][$i]),
                                 'id_estado' => $j
 
@@ -1379,7 +1380,8 @@ class ServicioApoyoController {
     }
 
 
-    public function update_config(){
+    public function update_config()
+    {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor())) {
             $Folio = isset($_POST['Folio']) && !empty($_POST['Folio']) ? trim($_POST['Folio']) : FALSE;
             $Ejecutivo = isset($_POST['Ejecutivo']) && !empty($_POST['Ejecutivo']) ? trim($_POST['Ejecutivo']) : '';
@@ -1403,33 +1405,33 @@ class ServicioApoyoController {
                 $Solicitud = DateTime::createFromFormat('Y-m-d H:i', "{$Fecha_Solicitud} {$Hora_Solicitud}:{$Minuto_Solicitud}");
                 $Solicitud = $Solicitud->format('Y-m-d H:i');
 
-                
+
                 if ($Fecha_Entrega && $Minuto_Entrega) {
                     $Entrega = DateTime::createFromFormat('Y-m-d H:i', "{$Fecha_Entrega} {$Hora_Entrega}:{$Minuto_Entrega}");
                     $Entrega = $Entrega->format('Y-m-d H:i');
                 } else {
                     $Entrega = NULL;
                 }
-          
-                $nombre_usuario=$_SESSION['identity']->first_name.' '.$_SESSION['identity']->last_name;
+
+                $nombre_usuario = $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name;
                 $estudioE = new Candidatos();
                 $estudioE->setCandidato($Folio);
-                $candidato=$estudioE->getOne();
-               
-                $Nombre_Candidato=$candidato->Nombre_Candidato;
-                $Nombre_Cliente=$_POST['Cliente'];
+                $candidato = $estudioE->getOne();
+
+                $Nombre_Candidato = $candidato->Nombre_Candidato;
+                $Nombre_Cliente = $_POST['Cliente'];
                 $Solicitud_actual = Utils::getFullDate($candidato->Fecha);
-                $Entrega_actual = isset($candidato->Entrega)&&$candidato->Entrega!=null?  Utils::getFullDate($candidato->Entrega):'No cuenta con fecha de entrega';
-                $ejecutivo_actual=$candidato->Ejecutivo;
+                $Entrega_actual = isset($candidato->Entrega) && $candidato->Entrega != null ?  Utils::getFullDate($candidato->Entrega) : 'No cuenta con fecha de entrega';
+                $ejecutivo_actual = $candidato->Ejecutivo;
 
                 $Solicitud_nueva = Utils::getFullDate($Solicitud);
-                $Entrega_nueva = isset($Entrega)&& $Entrega!=null? Utils::getFullDate($Entrega):'No cuenta con fecha de entrega';
-                $ejecutivo_nueva=$Ejecutivo;
+                $Entrega_nueva = isset($Entrega) && $Entrega != null ? Utils::getFullDate($Entrega) : 'No cuenta con fecha de entrega';
+                $ejecutivo_nueva = $Ejecutivo;
 
-                $folio=Encryption::encode($Folio);
-                $url=base_url.'ServicioApoyo/ver&candidato='.$folio;
+                $folio = Encryption::encode($Folio);
+                $url = base_url . 'ServicioApoyo/ver&candidato=' . $folio;
 
-                 $body = "
+                $body = "
                         <!DOCTYPE html>
                         <html>
                             <head>
@@ -1453,23 +1455,23 @@ class ServicioApoyoController {
                     </html>
                     ";
 
-				if(!Utils::isAdmin()){
-				Utils::sendEmail('calidad@rrhhingenia.com', 'Calidad','Modificacion de '.$Nombre_Candidato, $body); 
-				}
-                
+                if (!Utils::isAdmin()) {
+                    Utils::sendEmail('calidad@rrhhingenia.com', 'Calidad', 'Modificacion de ' . $Nombre_Candidato, $body);
+                }
+
                 $estudio = new Candidatos();
                 $estudio->setCandidato($Folio);
                 $estudio->setFecha_solicitud($Solicitud);
                 $estudio->setFecha_entregado($Entrega);
                 $estudio->setEjecutivo($Ejecutivo);
-				$cambio = $estudio->getModificacionEjecutivoGestor();
-                if ($cambio->Ejecutivo_modificacion == 0 ||$cambio->Ejecutivo_modificacion == NULL) {
+                $cambio = $estudio->getModificacionEjecutivoGestor();
+                if ($cambio->Ejecutivo_modificacion == 0 || $cambio->Ejecutivo_modificacion == NULL) {
                     $estudio->updateModificacionEjecutivo();
-                } 
+                }
                 $update = $estudio->updateConfig();
-                
 
-                if ($update){
+
+                if ($update) {
                     if ($flag == 1) {
                         $candidato = new CandidatosDatos();
                         $candidato->setCandidato($Folio);
@@ -1496,24 +1498,23 @@ class ServicioApoyoController {
                             'status' => 1,
                             'display' => $display
                         ));
-                    }else{
+                    } else {
                         $time = $estudio->getTime();
                         echo json_encode(array('folio' => $Folio, 'solicitud' => Utils::getFullDate($Solicitud), 'ejecutivo' => $Ejecutivo, 'entregado' => $Entrega ? Utils::getFullDate($Entrega) : '', 'dias' => $time->Dias, 'tiempo' => $time->Tiempo, 'status' => 1));
                     }
-                    
-                }
-                else
+                } else
                     echo json_encode(array('status' => 2));
-            }else{
+            } else {
                 echo json_encode(array('status' => 0));
             }
-        }else{
-            header("location:".base_url); 
+        } else {
+            header("location:" . base_url);
         }
     }
 
-    public function update_schedule(){
-        if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isAccount() ||Utils::isLogistics() || Utils::isLogisticsSupervisor())) {
+    public function update_schedule()
+    {
+        if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isAccount() || Utils::isLogistics() || Utils::isLogisticsSupervisor())) {
             $Folio = isset($_POST['Folio_Candidato']) && !empty($_POST['Folio_Candidato']) ? trim($_POST['Folio_Candidato']) : FALSE;
             $Ejecutivo = isset($_POST['Logistica']) && !empty($_POST['Logistica']) ? trim($_POST['Logistica']) : '';
 
@@ -1530,22 +1531,22 @@ class ServicioApoyoController {
                 if ($Fecha_Aplicacion && $Hora_Aplicacion && $Minuto_Aplicacion) {
                     $Aplicacion = DateTime::createFromFormat('Y-m-d H:i', "{$Fecha_Aplicacion} {$Hora_Aplicacion}:{$Minuto_Aplicacion}");
                     $Aplicacion = $Aplicacion->format('Y-m-d H:i');
-                }else
+                } else
                     $Aplicacion = NULL;
 
-                
+
                 $estudio = new Candidatos();
                 $estudio->setCandidato($Folio);
                 $estudio->setFecha_aplicacion($Aplicacion);
                 $estudio->setLogistica($Ejecutivo);
                 $cambio = $estudio->getModificacionEjecutivoGestor();
-                if ($cambio->Gestor_modificacion == 0 ||$cambio->Gestor_modificacion == NULL) {
+                if ($cambio->Gestor_modificacion == 0 || $cambio->Gestor_modificacion == NULL) {
                     $estudio->updateModificacionGestor();
-                } 
-				
+                }
+
                 $update = $estudio->updateSchedule();
 
-                if ($update){
+                if ($update) {
                     $candidato = new CandidatosDatos();
                     $candidato->setCandidato($Folio);
                     $candidato_datos = $candidato->getOne();
@@ -1559,7 +1560,7 @@ class ServicioApoyoController {
                     $Logistica = $candidato_datos->Verificador;
                     $Fecha_Aplicacion = $candidato_datos->Fecha_Aplicacion ? Utils::getFullDate($candidato_datos->Fecha_Aplicacion) : '';
 
-                    $identity = $_SESSION['identity']->first_name.' '.$_SESSION['identity']->last_name;
+                    $identity = $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name;
 
                     $Nombre_Cliente = $candidato_datos->Nombre_Cliente;
 
@@ -1578,14 +1579,13 @@ class ServicioApoyoController {
                     </html>
                     ";
 
-                    if ($candidato_datos->Fecha_Aplicacion && $candidato_datos->Cliente != 408 ) {
+                    if ($candidato_datos->Fecha_Aplicacion && $candidato_datos->Cliente != 408) {
                         Utils::sendEmail($Correo_Analista, $Analista, 'Agenda de ' . $Nombre_Candidato, $body);
-					    Utils::sendEmail('calidad@rrhhingenia.com', $Analista, 'Agenda de ' . $Nombre_Candidato, $body);
-
+                        Utils::sendEmail('calidad@rrhhingenia.com', $Analista, 'Agenda de ' . $Nombre_Candidato, $body);
                     }
 
                     if ($flag == 1) {
-                        
+
                         $candidato_datos->Fecha = Utils::getFullDate($candidato_datos->Fecha);
                         $candidato_datos->Fecha_Entregado = $candidato_datos->Fecha_Entregado ? Utils::getFullDate($candidato_datos->Fecha_Entregado) : '';
                         $candidato_datos->Fecha_Aplicacion = $candidato_datos->Fecha_Aplicacion ? Utils::getFullDate($candidato_datos->Fecha_Aplicacion) : '';
@@ -1601,7 +1601,7 @@ class ServicioApoyoController {
                             else
                                 $perfil = array('../dist/img/user-icon.png', 'png');
                         }
-                        
+
                         $display = Utils::getDisplayBotones();
                         echo json_encode(array(
                             'candidato_datos' => $candidato_datos,
@@ -1609,46 +1609,45 @@ class ServicioApoyoController {
                             'status' => 1,
                             'display' => $display
                         ));
-                    }else{
+                    } else {
                         $Aplicacion = $Aplicacion ? Utils::getFullDate($Aplicacion) : '';
                         echo json_encode(array('folio' => $Folio, 'aplicacion' => $Aplicacion, 'logistica' => $Ejecutivo, 'status' => 1));
                     }
-                }
-                else
+                } else
                     echo json_encode(array('status' => 2));
-            }else
+            } else
                 echo json_encode(array('status' => 0));
-            
-        }else
-            header("location:".base_url);
+        } else
+            header("location:" . base_url);
     }
 
-    public function update_type(){
+    public function update_type()
+    {
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount())) {
             $Candidato = Utils::sanitizeNumber($_POST['Folio']);
             $Tipo_Investigacion = Utils::sanitizeNumber($_POST['Tipo_Investigacion']);
-            
+
             if ($Candidato) {
                 $investigacion = new Candidatos();
                 $investigacion->setCandidato($Candidato);
                 $investigacion->setTipo_Investigacion($Tipo_Investigacion);
                 $update = $investigacion->updateTipoInvestigacion();
-            
+
                 if ($update)
                     echo $Tipo_Investigacion;
                 else
                     echo 0;
-
-            }else
+            } else
                 echo 0;
         } else
-            header('location:'.base_url);
+            header('location:' . base_url);
     }
 
-    public function getTipoServicio(){
+    public function getTipoServicio()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics()) {
             $Folio = isset($_POST['Folio']) ? trim($_POST['Folio']) : FALSE;
-            
+
             if ($Folio) {
                 $estudio = new Candidatos();
                 $estudio->setCandidato($Folio);
@@ -1656,20 +1655,21 @@ class ServicioApoyoController {
 
                 header('Content-Type: text/html; charset=utf-8');
                 echo json_encode($data, \JSON_UNESCAPED_UNICODE);
-            }else{
+            } else {
                 echo 0;
             }
         } else {
-            header('location:'.base_url);
+            header('location:' . base_url);
         }
     }
 
-    public function getDatosGenerales(){
+    public function getDatosGenerales()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isCustomerSA()) {
             $Candidato = Utils::sanitizeNumber($_POST['Folio']);
-            
+
             if ($Candidato) {
-				$estudio = new Candidatos();
+                $estudio = new Candidatos();
 
                 $candidato = new CandidatosDatos();
                 $candidato->setCandidato($Candidato);
@@ -1686,29 +1686,29 @@ class ServicioApoyoController {
                 $contacto = new ContactosClienteSolicitan();
                 $contacto->setCliente($candidato_datos->Cliente);
                 $contactos = $contacto->getContactosPorCliente();
-				
-				$contactoCliente = new ContactosCliente();
+
+                $contactoCliente = new ContactosCliente();
                 $contactoCliente->setID_Cliente($candidato_datos->Cliente);
                 $contactosCliente = $contactoCliente->getContactosPorCliente();
-				
-				$busq_RAL = new Busqueda_RAL();
+
+                $busq_RAL = new Busqueda_RAL();
                 $busqueda_RAL = $busq_RAL->getOneByCandidato($estudio);
                 if ($busqueda_RAL) {
                     $busqueda_RAL->Fecha = Utils::getDate($busqueda_RAL->Fecha);
-					$busqueda_RAL->PDF_RAL = base_url.'formato/resumen_resultado_RAL&busqueda='.Encryption::encode($busqueda_RAL->ID);
+                    $busqueda_RAL->PDF_RAL = base_url . 'formato/resumen_resultado_RAL&busqueda=' . Encryption::encode($busqueda_RAL->ID);
                     $exp_RAL = new Expediente_RAL();
                     $exp_RAL->setID_Busqueda_RAL($busqueda_RAL->ID);
                     $expedientes_RAL = $exp_RAL->getExpedientesPorBusqueda();
-                    
+
                     if ($expedientes_RAL) {
-                        for ($i=0; $i < count($expedientes_RAL); $i++) { 
+                        for ($i = 0; $i < count($expedientes_RAL); $i++) {
                             $expedientes_RAL[$i]['Fecha'] = Utils::getDate($expedientes_RAL[$i]['Fecha']);
-                            
-                            $expedientes_RAL[$i]['PDF_RAL'] = base_url.'formato/resultado_RAL&expediente='.Encryption::encode($expedientes_RAL[$i]['ID']);
+
+                            $expedientes_RAL[$i]['PDF_RAL'] = base_url . 'formato/resultado_RAL&expediente=' . Encryption::encode($expedientes_RAL[$i]['ID']);
                             $acuerdo_RAL = new Acuerdos_RAL();
                             $acuerdo_RAL->setID_Expediente_RAL($expedientes_RAL[$i]['ID']);
                             $acuerdos = $acuerdo_RAL->getAcuerdosPorExpediente();
-                            for ($j=0; $j < count($acuerdos); $j++) 
+                            for ($j = 0; $j < count($acuerdos); $j++)
                                 $acuerdos[$j]['Fecha'] = $acuerdos[$j]['Fecha'] ? Utils::getDate($acuerdos[$j]['Fecha']) : '';
                             //array_push($expediente, array('acuerdos' => $acuerdos));
                             $expedientes_RAL[$i]['acuerdos'] = $acuerdos;
@@ -1716,7 +1716,7 @@ class ServicioApoyoController {
 
                         //array_push($busqueda_RAL, array('expedientes' => $expedientes_RAL));
                         $busqueda_RAL->expedientes = $expedientes_RAL;
-                    }else
+                    } else
                         $busqueda_RAL->expedientes = [];
                     //array_push($busqueda_RAL, array('status' => 1));
                     $busqueda_RAL->status = 1;
@@ -1728,61 +1728,61 @@ class ServicioApoyoController {
                         $user->setUsername($busqueda_RAL->Creado);
                         $Usuario = $user->getUserByUsername();
 
-                        $busqueda_RAL->PDF_RAL = base_url.'formato/resumen_resultado_RAL&busqueda='.Encryption::encode($busqueda_RAL->ID);
+                        $busqueda_RAL->PDF_RAL = base_url . 'formato/resumen_resultado_RAL&busqueda=' . Encryption::encode($busqueda_RAL->ID);
                         $busqueda_RAL->Fecha = Utils::getDate($busqueda_RAL->Fecha);
-                        $busqueda_RAL->Creado = $Usuario->first_name.' '.$Usuario->last_name;
+                        $busqueda_RAL->Creado = $Usuario->first_name . ' ' . $Usuario->last_name;
                         $exp_RAL = new Expediente_RAL();
                         $exp_RAL->setID_Busqueda_RAL($busqueda_RAL->ID);
                         $expedientes_RAL = $exp_RAL->getExpedientesPorBusqueda();
                         if ($expedientes_RAL) {
-                            for ($i=0; $i < count($expedientes_RAL); $i++) { 
+                            for ($i = 0; $i < count($expedientes_RAL); $i++) {
                                 $expedientes_RAL[$i]['Fecha'] = Utils::getDate($expedientes_RAL[$i]['Fecha']);
 
-                                $expedientes_RAL[$i]['PDF_RAL'] = base_url.'formato/resultado_RAL&expediente='.Encryption::encode($expedientes_RAL[$i]['ID']);
+                                $expedientes_RAL[$i]['PDF_RAL'] = base_url . 'formato/resultado_RAL&expediente=' . Encryption::encode($expedientes_RAL[$i]['ID']);
                                 $acuerdo_RAL = new Acuerdos_RAL();
                                 $acuerdo_RAL->setID_Expediente_RAL($expedientes_RAL[$i]['ID']);
                                 $acuerdos = $acuerdo_RAL->getAcuerdosPorExpediente();
-                                for ($j=0; $j < count($acuerdos); $j++) 
+                                for ($j = 0; $j < count($acuerdos); $j++)
                                     $acuerdos[$j]['Fecha'] = $acuerdos[$j]['Fecha'] ? Utils::getDate($acuerdos[$j]['Fecha']) : '';
                                 //array_push($expediente, array('acuerdos' => $acuerdos));
                                 $expedientes_RAL[$i]['acuerdos'] = $acuerdos;
                             }
                             //array_push($busqueda_RAL, array('expedientes' => $expedientes_RAL));
                             $busqueda_RAL->expedientes = $expedientes_RAL;
-                        }else
+                        } else
                             $busqueda_RAL->expedientes = [];
                         //array_push($busqueda_RAL, array('status' => 1));
                         $busqueda_RAL->status = 3;
-                    }else {
+                    } else {
                         $busqueda_RAL = (object)array('status' => 0);
                     }
-                        
                 }
-                
+
                 $all_info = array(
                     'candidato_datos' => $candidato_datos,
                     'razones' => $razones,
                     'contactos' => $contactos,
-					'contactosCliente' => $contactosCliente,
+                    'contactosCliente' => $contactosCliente,
                     'busqueda_RAL' => $busqueda_RAL,
                     'ejecutivos' => $ejecutivos,
-					'usuario'=> $_SESSION['identity']->id 
+                    'usuario' => $_SESSION['identity']->id
                 );
 
                 header('Content-Type: text/html; charset=utf-8');
                 echo json_encode($all_info);
-            }else{
+            } else {
                 echo 0;
             }
         } else {
-            header('location:'.base_url);
-        }            
+            header('location:' . base_url);
+        }
     }
 
-    public function getContactosYRazonesPorCliente(){
+    public function getContactosYRazonesPorCliente()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics()) {
             $Cliente = Utils::sanitizeNumber($_POST['Cliente']);
-            
+
             if ($Cliente) {
 
                 $razon = new RazonesSociales();
@@ -1792,7 +1792,7 @@ class ServicioApoyoController {
                 $contacto = new ContactosClienteSolicitan();
                 $contacto->setCliente($Cliente);
                 $contactos = $contacto->getContactosPorCliente();
-                
+
                 $all_info = array(
                     'razones' => $razones,
                     'contactos' => $contactos
@@ -1800,18 +1800,19 @@ class ServicioApoyoController {
 
                 header('Content-Type: text/html; charset=utf-8');
                 echo json_encode($all_info);
-            }else{
+            } else {
                 echo 0;
             }
         } else {
-            header('location:'.base_url);
-        }            
+            header('location:' . base_url);
+        }
     }
 
-    public function getEjecutivosYRazonesPorCliente(){
+    public function getEjecutivosYRazonesPorCliente()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isCustomerSA()) {
             $Cliente = Utils::sanitizeNumber($_POST['Cliente']);
-            
+
             if ($Cliente) {
 
                 $razon = new RazonesSociales();
@@ -1821,8 +1822,8 @@ class ServicioApoyoController {
                 $ejecutivo = new EjecutivosPlazas();
                 $ejecutivo->setID_Cliente($Cliente);
                 $ejecutivos = $ejecutivo->getEjecutivosPorCliente();
-				
-				/* if ($Cliente == 68) {
+
+                /* if ($Cliente == 68) {
                     $ejecutivos_transpais = [];
                     foreach ($ejecutivos as $ejecutivo) {
                         if ($_SESSION['identity']->username == 'cristinacastellanos' || $_SESSION['identity']->username == 'karlamartinez' || $_SESSION['identity']->username == 'anareyes' || $_SESSION['identity']->username == 'yoshiramarcos') {
@@ -1837,7 +1838,7 @@ class ServicioApoyoController {
                     }
                     $ejecutivos = $ejecutivos_transpais;
                 } */
-				
+
                 $all_info = array(
                     'razones' => $razones,
                     'ejecutivos' => $ejecutivos
@@ -1845,21 +1846,22 @@ class ServicioApoyoController {
 
                 header('Content-Type: text/html; charset=utf-8');
                 echo json_encode($all_info);
-            }else{
+            } else {
                 echo 0;
             }
         } else {
-            header('location:'.base_url);
-        }            
+            header('location:' . base_url);
+        }
     }
 
-    public function update_service(){
+    public function update_service()
+    {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor())) {
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
             $Servicio_Solicitado = Utils::sanitizeNumber(($_POST['Servicio_Solicitado']));
             $Fase = Utils::sanitizeNumber($_POST['Fase']);
             $Estado = Utils::sanitizeNumber($_POST['Estado']);
-            
+
 
             if ($Folio && $Servicio_Solicitado && $Fase) {
                 $estudio = new Candidatos();
@@ -1868,9 +1870,9 @@ class ServicioApoyoController {
                 $estudio->setFase($Fase);
                 $estudio->setEstado($Estado);
                 $update = $estudio->updateService();
-                
 
-                if ($update){
+
+                if ($update) {
                     $candidato = new CandidatosDatos();
                     $candidato->setCandidato($Folio);
                     $candidato_datos = $candidato->getOne();
@@ -1896,18 +1898,18 @@ class ServicioApoyoController {
                         'status' => 1,
                         'display' => $display
                     ));
-                }
-                else
+                } else
                     echo json_encode(array('status' => 2));
-            }else{
+            } else {
                 echo json_encode(array('status' => 0));
             }
-        }else{
-            header("location:".base_url); 
+        } else {
+            header("location:" . base_url);
         }
     }
 
-    public function update_datos_generales(){
+    public function update_datos_generales()
+    {
         if (Utils::isValid($_POST) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics()) {
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
             $Nombres = Utils::sanitizeStringBlank($_POST['Nombres']);
@@ -1917,7 +1919,9 @@ class ServicioApoyoController {
             $Contacto = Utils::sanitizeNumber($_POST['Contacto']);
             $Razon = Utils::sanitizeString($_POST['Razon']);
             $Puesto = Utils::sanitizeString($_POST['Puesto']);
-            
+            // 19 sept
+            $centro_costos = Utils::sanitizeString($_POST['centro_costos']);
+
             if ($Folio && $Cliente && $Razon && $Puesto) {
                 $estudio = new Candidatos();
                 $estudio->setCandidato($Folio);
@@ -1925,9 +1929,11 @@ class ServicioApoyoController {
                 $estudio->setContacto($Contacto);
                 $estudio->setRazon($Razon);
                 $estudio->setPuesto($Puesto);
+                // 19
+                $estudio->setCC_Cliente($centro_costos);
                 $update = $estudio->updateDatosEmpresa();
-                
-                if ($update){
+
+                if ($update) {
                     $candidato = new CandidatosDatos();
                     $candidato->setCandidato($Folio);
                     $candidato->setNombres($Nombres);
@@ -1950,25 +1956,25 @@ class ServicioApoyoController {
                         else
                             $perfil = array('../dist/img/user-icon.png', 'png');
                     }
-					
-					$busq_RAL = new Busqueda_RAL();
+
+                    $busq_RAL = new Busqueda_RAL();
                     $busqueda_RAL = $busq_RAL->getOneByCandidato($estudio);
                     if ($busqueda_RAL) {
                         $busqueda_RAL->Fecha = Utils::getDate($busqueda_RAL->Fecha);
-						$busqueda_RAL->PDF_RAL = base_url.'formato/resumen_resultado_RAL&busqueda='.Encryption::encode($busqueda_RAL->ID);
+                        $busqueda_RAL->PDF_RAL = base_url . 'formato/resumen_resultado_RAL&busqueda=' . Encryption::encode($busqueda_RAL->ID);
                         $exp_RAL = new Expediente_RAL();
                         $exp_RAL->setID_Busqueda_RAL($busqueda_RAL->ID);
                         $expedientes_RAL = $exp_RAL->getExpedientesPorBusqueda();
-                        
+
                         if ($expedientes_RAL) {
-                            for ($i=0; $i < count($expedientes_RAL); $i++) { 
+                            for ($i = 0; $i < count($expedientes_RAL); $i++) {
                                 $expedientes_RAL[$i]['Fecha'] = Utils::getDate($expedientes_RAL[$i]['Fecha']);
-                                
-                                $expedientes_RAL[$i]['PDF_RAL'] = base_url.'formato/resultado_RAL&expediente='.Encryption::encode($expedientes_RAL[$i]['ID']);
+
+                                $expedientes_RAL[$i]['PDF_RAL'] = base_url . 'formato/resultado_RAL&expediente=' . Encryption::encode($expedientes_RAL[$i]['ID']);
                                 $acuerdo_RAL = new Acuerdos_RAL();
                                 $acuerdo_RAL->setID_Expediente_RAL($expedientes_RAL[$i]['ID']);
                                 $acuerdos = $acuerdo_RAL->getAcuerdosPorExpediente();
-                                for ($j=0; $j < count($acuerdos); $j++) 
+                                for ($j = 0; $j < count($acuerdos); $j++)
                                     $acuerdos[$j]['Fecha'] = $acuerdos[$j]['Fecha'] ? Utils::getDate($acuerdos[$j]['Fecha']) : '';
                                 //array_push($expediente, array('acuerdos' => $acuerdos));
                                 $expedientes_RAL[$i]['acuerdos'] = $acuerdos;
@@ -1976,7 +1982,7 @@ class ServicioApoyoController {
 
                             //array_push($busqueda_RAL, array('expedientes' => $expedientes_RAL));
                             $busqueda_RAL->expedientes = $expedientes_RAL;
-                        }else
+                        } else
                             $busqueda_RAL->expedientes = [];
                         //array_push($busqueda_RAL, array('status' => 1));
                         $busqueda_RAL->status = 1;
@@ -1988,37 +1994,36 @@ class ServicioApoyoController {
                             $user->setUsername($busqueda_RAL->Creado);
                             $Usuario = $user->getUserByUsername();
 
-                            $busqueda_RAL->PDF_RAL = base_url.'formato/resumen_resultado_RAL&busqueda='.Encryption::encode($busqueda_RAL->ID);
+                            $busqueda_RAL->PDF_RAL = base_url . 'formato/resumen_resultado_RAL&busqueda=' . Encryption::encode($busqueda_RAL->ID);
                             $busqueda_RAL->Fecha = Utils::getDate($busqueda_RAL->Fecha);
-                            $busqueda_RAL->Creado = $Usuario->first_name.' '.$Usuario->last_name;
+                            $busqueda_RAL->Creado = $Usuario->first_name . ' ' . $Usuario->last_name;
                             $exp_RAL = new Expediente_RAL();
                             $exp_RAL->setID_Busqueda_RAL($busqueda_RAL->ID);
                             $expedientes_RAL = $exp_RAL->getExpedientesPorBusqueda();
                             if ($expedientes_RAL) {
-                                for ($i=0; $i < count($expedientes_RAL); $i++) { 
+                                for ($i = 0; $i < count($expedientes_RAL); $i++) {
                                     $expedientes_RAL[$i]['Fecha'] = Utils::getDate($expedientes_RAL[$i]['Fecha']);
 
-                                    $expedientes_RAL[$i]['PDF_RAL'] = base_url.'formato/resultado_RAL&expediente='.Encryption::encode($expedientes_RAL[$i]['ID']);
+                                    $expedientes_RAL[$i]['PDF_RAL'] = base_url . 'formato/resultado_RAL&expediente=' . Encryption::encode($expedientes_RAL[$i]['ID']);
                                     $acuerdo_RAL = new Acuerdos_RAL();
                                     $acuerdo_RAL->setID_Expediente_RAL($expedientes_RAL[$i]['ID']);
                                     $acuerdos = $acuerdo_RAL->getAcuerdosPorExpediente();
-                                    for ($j=0; $j < count($acuerdos); $j++) 
+                                    for ($j = 0; $j < count($acuerdos); $j++)
                                         $acuerdos[$j]['Fecha'] = $acuerdos[$j]['Fecha'] ? Utils::getDate($acuerdos[$j]['Fecha']) : '';
                                     //array_push($expediente, array('acuerdos' => $acuerdos));
                                     $expedientes_RAL[$i]['acuerdos'] = $acuerdos;
                                 }
                                 //array_push($busqueda_RAL, array('expedientes' => $expedientes_RAL));
                                 $busqueda_RAL->expedientes = $expedientes_RAL;
-                            }else
+                            } else
                                 $busqueda_RAL->expedientes = [];
                             //array_push($busqueda_RAL, array('status' => 1));
                             $busqueda_RAL->status = 3;
-                        }else {
+                        } else {
                             $busqueda_RAL = (object)array('status' => 0);
                         }
-                            
                     }
-                    
+
                     $display = Utils::getDisplayBotones();
 
                     echo json_encode(array(
@@ -2028,31 +2033,31 @@ class ServicioApoyoController {
                         'display' => $display,
                         'busqueda_RAL' => $busqueda_RAL
                     ));
-                }
-                else
+                } else
                     echo json_encode(array('status' => 2));
-            }else{
+            } else {
                 echo json_encode(array('status' => 0));
             }
-        }else{
-            header("location:".base_url); 
+        } else {
+            header("location:" . base_url);
         }
     }
 
-    public function save_enlace(){
+    public function save_enlace()
+    {
         if (Utils::isValid($_POST) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics()) {
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
             $Enlace_Drive = Utils::sanitizeString(($_POST['Enlace_Drive']));
-            
+
 
             if ($Folio && $Enlace_Drive) {
                 $estudio = new Candidatos();
                 $estudio->setCandidato($Folio);
                 $estudio->setEnlace_Drive($Enlace_Drive);
                 $update = $estudio->updateEnlaceDrive();
-                
 
-                if ($update){
+
+                if ($update) {
                     $candidato = new CandidatosDatos();
                     $candidato->setCandidato($Folio);
                     $candidato_datos = $candidato->getOne();
@@ -2078,18 +2083,18 @@ class ServicioApoyoController {
                         'status' => 1,
                         'display' => $display
                     ));
-                }
-                else
+                } else
                     echo json_encode(array('status' => 2));
-            }else{
+            } else {
                 echo json_encode(array('status' => 0));
             }
-        }else{
-            header("location:".base_url); 
+        } else {
+            header("location:" . base_url);
         }
     }
 
-    public function save_cancelacion(){
+    public function save_cancelacion()
+    {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics())) {
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
             $Servicio_Solicitado = Utils::sanitizeNumber($_POST['Servicio_Solicitado']);
@@ -2104,18 +2109,17 @@ class ServicioApoyoController {
                 if ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 231 || $Servicio_Solicitado == 323 || $Servicio_Solicitado == 340) {
                     if ($Finalizado == 1)
                         $Estado = 252;
-                    else{
+                    else {
                         if ($Fase == 299) {
                             $Fase = 298;
                             $Estado = 252;
-                        }elseif ($Fase == 300) {
+                        } elseif ($Fase == 300) {
                             $Fase = 299;
                             $Estado = 252;
                         }
                     }
-                        
                 }
-				if ($Servicio_Solicitado == 323) {
+                if ($Servicio_Solicitado == 323) {
                     if ($Fase == 324) {
                         $Fase = 300;
                         $Estado = 252;
@@ -2139,15 +2143,15 @@ class ServicioApoyoController {
                         die();
                     }
                 }else{ */
-                    $estudio = new Candidatos();
-                    $estudio->setCandidato($Folio);
-                    $estudio->setFase($Fase);
-                    $estudio->setEstado($Estado);
-                    $estudio->setComentario_Cancelado($Comentario_Cancelacion);
-                    $update = $estudio->saveCancelacion();
+                $estudio = new Candidatos();
+                $estudio->setCandidato($Folio);
+                $estudio->setFase($Fase);
+                $estudio->setEstado($Estado);
+                $estudio->setComentario_Cancelado($Comentario_Cancelacion);
+                $update = $estudio->saveCancelacion();
                 //}
 
-                if ($update){
+                if ($update) {
                     $candidato = new CandidatosDatos();
                     $candidato->setCandidato($Folio);
                     $candidato_datos = $candidato->getOne();
@@ -2156,13 +2160,13 @@ class ServicioApoyoController {
                     $candidato_datos->Fecha_Aplicacion = $candidato_datos->Fecha_Aplicacion ? Utils::getFullDate($candidato_datos->Fecha_Aplicacion) : '';
 
                     if ($Finalizado == 1) {
-                        $Nombre_Candidato = $candidato_datos->Nombres. ' '. $candidato_datos->Apellido_Paterno. ' ' .$candidato_datos->Apellido_Materno;
+                        $Nombre_Candidato = $candidato_datos->Nombres . ' ' . $candidato_datos->Apellido_Paterno . ' ' . $candidato_datos->Apellido_Materno;
 
-                        $subject = $Fase == 298 ? 'RAL de '.$Nombre_Candidato.' disponible' : ($Fase == 299 ? 'Investigación Laboral de '. $Nombre_Candidato. ' disponible' : ($Fase == 310 ? 'Validación de Licencia de '. $Nombre_Candidato. ' disponible' : ($Fase == 300 ? 'Verificación Domiciliaria de '. $Nombre_Candidato. ' disponible' : '')));
+                        $subject = $Fase == 298 ? 'RAL de ' . $Nombre_Candidato . ' disponible' : ($Fase == 299 ? 'Investigación Laboral de ' . $Nombre_Candidato . ' disponible' : ($Fase == 310 ? 'Validación de Licencia de ' . $Nombre_Candidato . ' disponible' : ($Fase == 300 ? 'Verificación Domiciliaria de ' . $Nombre_Candidato . ' disponible' : '')));
 
                         $saludo = date('G') < 6 || date('G') > 19 ? 'Buenas noches' : (date('G') >= 6 && date('G') < 12 ? 'Buenos días' : 'Buenas tardes');
 
-                        $body = $Fase == 298 ? $saludo.', '.$candidato_datos->Quien_Solicita.'<br><br>Se le informa que ya se encuentra disponible para su descarga el <b>RAL</b> de <b>'.$Nombre_Candidato.'</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 299 ? $saludo.', '.$candidato_datos->Quien_Solicita.'<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Investigación Laboral</b> de <b>'.$Nombre_Candidato.'</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 310 ? $saludo.', '.$candidato_datos->Quien_Solicita.'<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Validación de Licencia</b> de <b>'.$Nombre_Candidato.'</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 300 ? $saludo.', '.$candidato_datos->Quien_Solicita.'<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Verificación Domiciliaria</b> de <b>'.$Nombre_Candidato.'</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 324 ? $saludo.', '.$candidato_datos->Quien_Solicita.'<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Verificación Domiciliaria con Visita Presencial</b> de <b>'.$Nombre_Candidato.'</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ''))));
+                        $body = $Fase == 298 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga el <b>RAL</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 299 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Investigación Laboral</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 310 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Validación de Licencia</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 300 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Verificación Domiciliaria</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 324 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Verificación Domiciliaria con Visita Presencial</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ''))));
 
                         Utils::sendEmail($candidato_datos->Correo_Cliente, $candidato_datos->Quien_Solicita, $subject, $body);
                     }
@@ -2185,16 +2189,16 @@ class ServicioApoyoController {
                         'status' => 1,
                         'display' => $display
                     ));
-                }
-                else
+                } else
                     echo json_encode(array('status' => 2));
-            }else
+            } else
                 echo json_encode(array('status' => 0));
-        }else
-            header("location:".base_url); 
+        } else
+            header("location:" . base_url);
     }
 
-    public function save_finalizacion(){
+    public function save_finalizacion()
+    {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isCustomerSA())) {
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
             $Servicio_Solicitado = Utils::sanitizeNumber($_POST['Servicio_Solicitado']);
@@ -2202,7 +2206,7 @@ class ServicioApoyoController {
             $Estado = Utils::sanitizeNumber($_POST['Estado']);
             $Comentario_Finalizacion = Utils::sanitizeString(($_POST['Comentario_Finalizacion']));
 
-            if ($Folio && $Comentario_Finalizacion && ($Fase == 230 || $Fase == 231 || $Fase == 298 || ($Servicio_Solicitado == 231 && $Fase == 231) || ($Servicio_Solicitado == 291 && $Fase == 291) || ($Servicio_Solicitado == 230 && $Fase == 230) || ($Servicio_Solicitado == 230 && $Fase == 300) || ($Servicio_Solicitado == 231 && $Fase == 299) || ($Servicio_Solicitado == 323 && $Fase == 324) || ($Servicio_Solicitado == 230 && $Fase == 299) || ($Servicio_Solicitado == 230 && $Fase == 231) || ($Servicio_Solicitado == 328 && $Fase == 328) || ($Servicio_Solicitado == 340 && $Fase == 300)||($Servicio_Solicitado == 340 && $Fase == 299)|| ($Servicio_Solicitado == 341 && $Fase == 300)||($Servicio_Solicitado == 341 && $Fase == 299)) && ($Estado == 250 || $Estado == 251 || $Estado == 249)) {
+            if ($Folio && $Comentario_Finalizacion && ($Fase == 230 || $Fase == 231 || $Fase == 298 || ($Servicio_Solicitado == 231 && $Fase == 231) || ($Servicio_Solicitado == 291 && $Fase == 291) || ($Servicio_Solicitado == 230 && $Fase == 230) || ($Servicio_Solicitado == 230 && $Fase == 300) || ($Servicio_Solicitado == 231 && $Fase == 299) || ($Servicio_Solicitado == 323 && $Fase == 324) || ($Servicio_Solicitado == 230 && $Fase == 299) || ($Servicio_Solicitado == 230 && $Fase == 231) || ($Servicio_Solicitado == 328 && $Fase == 328) || ($Servicio_Solicitado == 340 && $Fase == 300) || ($Servicio_Solicitado == 340 && $Fase == 299) || ($Servicio_Solicitado == 341 && $Fase == 300) || ($Servicio_Solicitado == 341 && $Fase == 299)) && ($Estado == 250 || $Estado == 251 || $Estado == 249)) {
 
                 $Estado = 252;
 
@@ -2224,44 +2228,41 @@ class ServicioApoyoController {
                         die();
                     }
                 }else{ */
-				$estudio = new Candidatos();
-				$estudio->setCandidato($Folio);
-				$estudio->setFase($Fase);
-				$estudio->setEstado($Estado);
-				$estudio->setComentario_Finalizacion($Comentario_Finalizacion);
-				$Candidato = $estudio->getOne();
-                    
-				if (($Servicio_Solicitado == 230 || $Servicio_Solicitado == 340|| $Servicio_Solicitado == 341) && ($Fase == 230 || $Fase == 300)) {
+                $estudio = new Candidatos();
+                $estudio->setCandidato($Folio);
+                $estudio->setFase($Fase);
+                $estudio->setEstado($Estado);
+                $estudio->setComentario_Finalizacion($Comentario_Finalizacion);
+                $Candidato = $estudio->getOne();
+
+                if (($Servicio_Solicitado == 230 || $Servicio_Solicitado == 340 || $Servicio_Solicitado == 341) && ($Fase == 230 || $Fase == 300)) {
                     $Fase2 = $Fase == 230 ? 230 : ($Fase == 300 ? 299 : $Fase);
                     $estudio->setFase($Fase2);
                     if ($Candidato->Fecha_Entregado_INV == NULL) {
-                        
+
                         $update = $estudio->saveTerminado();
-                    }else {
+                    } else {
                         $update = $estudio->saveFinalizacion();
                         if ($Servicio_Solicitado == 340) {
                             $Enlace = "https://rrhh-ingenia.com.mx/ServicioApoyo/ver&candidato=" . Encryption::encode($Folio);
                             $id_user = 1207; //Juanita
-                            Utils::newNotification($_SESSION['identity']->first_name.' '.$_SESSION['identity']->last_name.' solicita aprobación de SOI', $Enlace, 1, 9, $id_user, $_SESSION['identity']->id, $Candidato->ID_Cliente);
+                            Utils::newNotification($_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name . ' solicita aprobación de SOI', $Enlace, 1, 9, $id_user, $_SESSION['identity']->id, $Candidato->ID_Cliente);
                         }
                     }
-                    
-                }
-                elseif (($Servicio_Solicitado == 230 || $Servicio_Solicitado == 340|| $Servicio_Solicitado == 341) && ($Fase == 231 || $Fase == 299)){
+                } elseif (($Servicio_Solicitado == 230 || $Servicio_Solicitado == 340 || $Servicio_Solicitado == 341) && ($Fase == 231 || $Fase == 299)) {
                     $Fase2 = $Fase == 231 ? 232 : ($Fase == 299 ? 300 : $Fase);
                     $estudio->setFase($Fase2);
-                    if ($Candidato->Fecha_Entregado_ESE == NULL){
+                    if ($Candidato->Fecha_Entregado_ESE == NULL) {
                         $update = $estudio->saveTerminado();
-                    }else{
+                    } else {
                         $update = $estudio->saveFinalizacion();
                     }
-                }
-                else {
+                } else {
                     $update = $estudio->saveFinalizacion();
                 }
                 //}
 
-                if ($update){
+                if ($update) {
                     $candidato = new CandidatosDatos();
                     $candidato->setCandidato($Folio);
                     $candidato_datos = $candidato->getOne();
@@ -2269,16 +2270,16 @@ class ServicioApoyoController {
                     $candidato_datos->Fecha_Entregado = $candidato_datos->Fecha_Entregado ? Utils::getFullDate($candidato_datos->Fecha_Entregado) : '';
                     $candidato_datos->Fecha_Aplicacion = $candidato_datos->Fecha_Aplicacion ? Utils::getFullDate($candidato_datos->Fecha_Aplicacion) : '';
 
-                    $Nombre_Candidato = $candidato_datos->Nombres. ' '. $candidato_datos->Apellido_Paterno. ' ' .$candidato_datos->Apellido_Materno;
+                    $Nombre_Candidato = $candidato_datos->Nombres . ' ' . $candidato_datos->Apellido_Paterno . ' ' . $candidato_datos->Apellido_Materno;
 
-                    $subject = $Fase == 298 ? 'RAL de ' . $Nombre_Candidato . ' disponible' : (($Fase == 299 || $Fase == 231) ? 'Investigación Laboral de ' . $Nombre_Candidato . ' disponible' : ($Fase == 310 ? 'Validación de Licencia de ' . $Nombre_Candidato . ' disponible' : (($Fase == 300 || $Fase == 230) ? 'Verificación Domiciliaria de ' . $Nombre_Candidato . ' disponible' : ($Fase == 324 ? 'Verificación Domiciliaria con Visita Presencial de ' . $Nombre_Candidato . ' disponible' : ($Fase == 328 ? 'Análisis de RAL de ' . $Nombre_Candidato . ' disponible' : '' )))));
+                    $subject = $Fase == 298 ? 'RAL de ' . $Nombre_Candidato . ' disponible' : (($Fase == 299 || $Fase == 231) ? 'Investigación Laboral de ' . $Nombre_Candidato . ' disponible' : ($Fase == 310 ? 'Validación de Licencia de ' . $Nombre_Candidato . ' disponible' : (($Fase == 300 || $Fase == 230) ? 'Verificación Domiciliaria de ' . $Nombre_Candidato . ' disponible' : ($Fase == 324 ? 'Verificación Domiciliaria con Visita Presencial de ' . $Nombre_Candidato . ' disponible' : ($Fase == 328 ? 'Análisis de RAL de ' . $Nombre_Candidato . ' disponible' : '')))));
 
                     $saludo = date('G') < 6 || date('G') > 19 ? 'Buenas noches' : (date('G') >= 6 && date('G') < 12 ? 'Buenos días' : 'Buenas tardes');
 
                     $body = $Fase == 298 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga el <b>RAL</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 299 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Investigación Laboral</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 310 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Validación de Licencia</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 300 || $Fase == 230 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Verificación Domiciliaria</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 324 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Verificación Domiciliaria con Visita Presencial</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 328 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que se ha concluído con el <b>Análisis de RAL</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : '')))));
 
-					if($candidato_datos->Cliente != 408)
-                    Utils::sendEmail($candidato_datos->Correo_Cliente, $candidato_datos->Quien_Solicita, $subject, $body);
+                    if ($candidato_datos->Cliente != 408)
+                        Utils::sendEmail($candidato_datos->Correo_Cliente, $candidato_datos->Quien_Solicita, $subject, $body);
 
                     $perfil = new CfgImagenes();
                     $perfil->setFolio_Origen($Folio);
@@ -2298,50 +2299,50 @@ class ServicioApoyoController {
                         'status' => 1,
                         'display' => $display
                     ));
-                }
-                else
+                } else
                     echo json_encode(array('status' => 2));
-            }else
+            } else
                 echo json_encode(array('status' => 0));
-        }else
-            header("location:".base_url); 
+        } else
+            header("location:" . base_url);
     }
 
-    public function save_avanzar(){
+    public function save_avanzar()
+    {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics())) {
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
             $Servicio_Solicitado = Utils::sanitizeNumber($_POST['Servicio_Solicitado']);
             $Fase = Utils::sanitizeNumber($_POST['Fase']);
             $Estado = Utils::sanitizeNumber($_POST['Estado']);
 
-            if ($Folio && ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 231 || $Servicio_Solicitado == 323 || $Servicio_Solicitado == 340||$Servicio_Solicitado == 341) && ($Estado == 250 || $Estado == 251)) {
+            if ($Folio && ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 231 || $Servicio_Solicitado == 323 || $Servicio_Solicitado == 340 || $Servicio_Solicitado == 341) && ($Estado == 250 || $Estado == 251)) {
 
                 /* if ($Fase == 298)
                     $Fase = 299;
                 elseif ($Fase == 299)
                     $Fase = 300; */
-                    
+
                 $estudio = new Candidatos();
                 $estudio->setCandidato($Folio);
                 $estudio->setFase($Fase);
                 $estudio->setEstado($Estado);
                 $update = $estudio->saveAvanzar();
 
-                if ($update){
+                if ($update) {
                     $candidato = new CandidatosDatos();
                     $candidato->setCandidato($Folio);
                     $candidato_datos = $candidato->getOne();
                     $candidato_datos->Fecha = Utils::getFullDate($candidato_datos->Fecha);
                     $candidato_datos->Fecha_Entregado = $candidato_datos->Fecha_Entregado ? Utils::getFullDate($candidato_datos->Fecha_Entregado) : '';
                     $candidato_datos->Fecha_Aplicacion = $candidato_datos->Fecha_Aplicacion ? Utils::getFullDate($candidato_datos->Fecha_Aplicacion) : '';
-					
-					$Nombre_Candidato = $candidato_datos->Nombres. ' '. $candidato_datos->Apellido_Paterno. ' ' .$candidato_datos->Apellido_Materno;
 
-                    $subject = $Fase == 298 ? 'RAL de '.$Nombre_Candidato.' disponible' : ($Fase == 299 ? 'Investigación Laboral de '. $Nombre_Candidato. ' disponible' : ($Fase == 310 ? 'Validación de Licencia de '. $Nombre_Candidato : ($Fase == 300 ? 'Verificación Domiciliaria de '. $Nombre_Candidato. ' disponible' : '')));
+                    $Nombre_Candidato = $candidato_datos->Nombres . ' ' . $candidato_datos->Apellido_Paterno . ' ' . $candidato_datos->Apellido_Materno;
+
+                    $subject = $Fase == 298 ? 'RAL de ' . $Nombre_Candidato . ' disponible' : ($Fase == 299 ? 'Investigación Laboral de ' . $Nombre_Candidato . ' disponible' : ($Fase == 310 ? 'Validación de Licencia de ' . $Nombre_Candidato : ($Fase == 300 ? 'Verificación Domiciliaria de ' . $Nombre_Candidato . ' disponible' : '')));
 
                     $saludo = date('G') < 6 || date('G') > 19 ? 'Buenas noches' : (date('G') >= 6 && date('G') < 12 ? 'Buenos días' : 'Buenas tardes');
 
-                    $body = $Fase == 298 ? $saludo.', '.$candidato_datos->Quien_Solicita.'<br><br>Se le informa que ya se encuentra disponible para su descarga el <b>RAL</b> de <b>'.$Nombre_Candidato.'</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 299 ? $saludo.', '.$candidato_datos->Quien_Solicita.'<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Investigación Laboral</b> de <b>'.$Nombre_Candidato.'</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 310 ? $saludo.', '.$candidato_datos->Quien_Solicita.'<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Validación de Licencia</b> de <b>'.$Nombre_Candidato.'</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 300 ? $saludo.', '.$candidato_datos->Quien_Solicita.'<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Verificación Domiciliaria</b> de <b>'.$Nombre_Candidato.'</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : '')));
+                    $body = $Fase == 298 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga el <b>RAL</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 299 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Investigación Laboral</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 310 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Validación de Licencia</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 300 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Verificación Domiciliaria</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : '')));
 
                     if ($Fase != 298 && $candidato_datos->Cliente != 408)
                         Utils::sendEmail($candidato_datos->Correo_Cliente, $candidato_datos->Quien_Solicita, $subject, $body);
@@ -2364,16 +2365,16 @@ class ServicioApoyoController {
                         'status' => 1,
                         'display' => $display
                     ));
-                }
-                else
+                } else
                     echo json_encode(array('status' => 2));
-            }else
+            } else
                 echo json_encode(array('status' => 0));
-        }else
-            header("location:".base_url); 
+        } else
+            header("location:" . base_url);
     }
 
-    public function reactivar(){
+    public function reactivar()
+    {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount())) {
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
             $Factura = Utils::sanitizeString($_POST['Factura']);
@@ -2387,13 +2388,13 @@ class ServicioApoyoController {
                     $Fase = 300;
                 elseif ($Fase == 298 && $Estado == 258)
                     $Fase = 298;
-                
+
                 $estudio = new Candidatos();
                 $estudio->setCandidato($Folio);
                 $estudio->setFase($Fase);
                 $update = $estudio->reactivar();
 
-                if ($update){
+                if ($update) {
                     $candidato = new CandidatosDatos();
                     $candidato->setCandidato($Folio);
                     $candidato_datos = $candidato->getOne();
@@ -2419,16 +2420,16 @@ class ServicioApoyoController {
                         'status' => 1,
                         'display' => $display
                     ));
-                }
-                else
+                } else
                     echo json_encode(array('status' => 2));
-            }else
+            } else
                 echo json_encode(array('status' => 0));
-        }else
-            header("location:".base_url); 
+        } else
+            header("location:" . base_url);
     }
 
-    public function eliminar(){
+    public function eliminar()
+    {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount())) {
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
             $Factura = Utils::sanitizeString($_POST['Factura']);
@@ -2440,7 +2441,7 @@ class ServicioApoyoController {
                 $estudio->setCandidato($Folio);
                 $update = $estudio->eliminar();
 
-                if ($update){
+                if ($update) {
                     $candidato = new CandidatosDatos();
                     $candidato->setCandidato($Folio);
                     $candidato_datos = $candidato->getOne();
@@ -2466,19 +2467,19 @@ class ServicioApoyoController {
                         'status' => 1,
                         'display' => $display
                     ));
-                }
-                else
+                } else
                     echo json_encode(array('status' => 2));
-            }else
+            } else
                 echo json_encode(array('status' => 0));
-        }else
-            header("location:".base_url); 
+        } else
+            header("location:" . base_url);
     }
 
-    public function getOneData(){
+    public function getOneData()
+    {
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isManager())) {
             $Folio = isset($_POST['Folio']) ? trim($_POST['Folio']) : FALSE;
-            
+
             if ($Folio) {
                 $estudio = new CandidatosDatos();
                 $estudio->setCandidato($Folio);
@@ -2486,15 +2487,16 @@ class ServicioApoyoController {
 
                 header('Content-Type: text/html; charset=utf-8');
                 echo json_encode($data, \JSON_UNESCAPED_UNICODE);
-            }else{
+            } else {
                 echo 0;
             }
         } else {
-            header('location:'.base_url);
+            header('location:' . base_url);
         }
     }
 
-    public function save_localizacion(){
+    public function save_localizacion()
+    {
         if (Utils::isValid($_POST) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics()) {
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
             $Municipio = Utils::sanitizeString(($_POST['Municipio']));
@@ -2505,14 +2507,14 @@ class ServicioApoyoController {
                 $estudio->setCandidato($Folio);
                 $estudio->setCiudad($Municipio);
                 $update = $estudio->updateCiudad();
-                
+
                 $ubicacion = new CandidatosUbicacion();
                 $ubicacion->setCandidato($Folio);
                 $ubicacion->setMunicipio($Municipio);
                 $ubicacion->setEstado($Estado);
                 $ubicacion->updateCiudadEstado();
 
-                if ($update){
+                if ($update) {
                     $candidato = new CandidatosDatos();
                     $candidato->setCandidato($Folio);
                     $candidato_datos = $candidato->getOne();
@@ -2538,18 +2540,17 @@ class ServicioApoyoController {
                         'status' => 1,
                         'display' => $display
                     ));
-                }
-                else
+                } else
                     echo json_encode(array('status' => 2));
-            }else{
+            } else {
                 echo json_encode(array('status' => 0));
             }
-        }else{
-            header("location:".base_url); 
+        } else {
+            header("location:" . base_url);
         }
     }
-	
-	public function continuar_servicio()
+
+    public function continuar_servicio()
     {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isCustomerSA())) {
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
@@ -2565,7 +2566,7 @@ class ServicioApoyoController {
             $Ejecutivo = Utils::sanitizeStringBlank($_POST['Ejecutivo']);
             $Comentarios_Cliente = Utils::sanitizeStringBlank($_POST['Comentarios_Cliente']);
             $resume = isset($_FILES['resume']) && $_FILES['resume']['name'] != '' ? $_FILES['resume'] : FALSE;
-			//$duplicar = isset($_POST['duplicar']) && $_POST['duplicar'] != 0 ? $_POST['duplicar'] : false;
+            //$duplicar = isset($_POST['duplicar']) && $_POST['duplicar'] != 0 ? $_POST['duplicar'] : false;
 
             if ($Folio && ($Servicio_Solicitado == 231 || $Servicio_Solicitado == 230 || $Servicio_Solicitado == 328 || $Servicio_Solicitado == 340 || $Servicio_Solicitado == 341)) {
                 $candidato_datos = new CandidatosDatos();
@@ -2576,19 +2577,19 @@ class ServicioApoyoController {
                 $candidato_datos->setCURP($CURP);
                 $candidato_datos->setIMSS($NSS);
                 $save_datos = $candidato_datos->updateDatosBasicos();
-				$duplicar = $CURP && $CURP != '' && !empty($CURP) ? $candidato_datos->getOneCurpForDuplicate() : FALSE;
-				
+                $duplicar = $CURP && $CURP != '' && !empty($CURP) ? $candidato_datos->getOneCurpForDuplicate() : FALSE;
+
                 $folio_docs = new CandidatosFolioDocumentos();
                 $folio_docs->setCandidato($Folio);
                 $folio_docs->setCURP($CURP);
                 $folio_docs->setNSS($NSS);
                 $folio_docs->setRFC('');
                 $save_folio = $folio_docs->updateFolios();
-                $Fase = $Servicio_Solicitado == 328 ? 328 : 299; 
+                $Fase = $Servicio_Solicitado == 328 ? 328 : 299;
 
                 if ($save_datos) {
-					
-					$Ejecutivo = $Ejecutivo && !empty($Ejecutivo) ? $Ejecutivo : 'angelesdelacruz';
+
+                    $Ejecutivo = $Ejecutivo && !empty($Ejecutivo) ? $Ejecutivo : 'angelesdelacruz';
                     $estudio = new Candidatos();
                     $estudio->setCandidato($Folio);
                     $estudio->setFecha_solicitud(Utils::getFechaIngresoSA($Cliente));
@@ -2608,30 +2609,30 @@ class ServicioApoyoController {
                     if ($Fecha_Actual < $Fecha_mas72) {
                         $update = $estudio->saveServicioSiguienteRAL();
 
-                        if ($update){
+                        if ($update) {
                             if ($resume) {
                                 $allowed_formats = array("application/pdf");
                                 $limit_kb = 20000;
                                 if (!in_array($_FILES["resume"]["type"], $allowed_formats) || $_FILES["resume"]["size"] > $limit_kb * 1024) {
                                     //echo 4;
                                 } else {
-    
+
                                     $route = './curriculums/';
                                     $resume = $route . $Folio . '.pdf';
-    
+
                                     //if(!file_exists($resume)){
                                     $result = move_uploaded_file($_FILES["resume"]["tmp_name"], $resume);
                                     //}
                                 }
                             }
-							
-							if ($duplicar) {
-								$duplicar = $duplicar->Candidato;
+
+                            if ($duplicar) {
+                                $duplicar = $duplicar->Candidato;
                                 $estudio->copiarInfo($duplicar);
 
                                 $candidato_datos->copiarInfo($duplicar);
 
-                                if (!$folio_docs->getOne()) 
+                                if (!$folio_docs->getOne())
                                     $folio_docs->duplicate($duplicar);
                                 else
                                     $folio_docs->copiarInfo($duplicar);
@@ -2670,10 +2671,10 @@ class ServicioApoyoController {
                                 $laboral = new CandidatosLaborales();
                                 $laboral->setCandidato($Folio);
                                 $laboral->duplicate($duplicar);
-								
-								$laboral_concepto = new CandidatosLaboralesConceptos();
-                            	$laboral_concepto->setCandidato($Folio);
-                            	$laboral_concepto->duplicate($duplicar);
+
+                                $laboral_concepto = new CandidatosLaboralesConceptos();
+                                $laboral_concepto->setCandidato($Folio);
+                                $laboral_concepto->duplicate($duplicar);
 
                                 $ingreso = new CandidatosIngresos();
                                 $ingreso->setCandidato($Folio);
@@ -2711,25 +2712,25 @@ class ServicioApoyoController {
                                 $conociendo_candidato->setCandidato($Folio);
                                 $conociendo_candidato->duplicate($duplicar);*/
                             }
-    
+
                             $customer = new Clientes();
                             $customer->setCliente($Cliente);
                             $clientee = $customer->getOne();
                             $Nombre_Cliente = $clientee->Nombre_Cliente;
                             $id_cliente = $clientee->Cliente;
-    
+
                             $Asunto = 'Nueva solicitud registrada de ' . $Nombre_Cliente;
                             $Reclutador = $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name;
                             $Correo = $_SESSION['identity']->email;
                             $usuario_ejecutivo = Utils::getUserByUsername($Ejecutivo);
-							$Correo_Ejecutivo = $usuario_ejecutivo->email;
+                            $Correo_Ejecutivo = $usuario_ejecutivo->email;
                             $id_user = $usuario_ejecutivo->id;
                             $Tipo_Solicitud = $Servicio_Solicitado == 230 ? 'Estudio Socioeconómico' : ($Servicio_Solicitado == 231 || $Servicio_Solicitado == 299 ? 'Investigación Laboral' : ($Servicio_Solicitado == 300 ? 'Verificación domiciliaria' : ''));
                             $Nombre_Candidato = $servicio->Nombre_Candidato;
                             $Enlace = "https://rrhh-ingenia.com.mx/ServicioApoyo/ver&candidato=" . Encryption::encode($Folio);
-        
+
                             if ($Servicio_Solicitado != 291) {
-                                
+
                                 $body = "
                                     <!DOCTYPE html>
                                     <html>
@@ -2749,30 +2750,30 @@ class ServicioApoyoController {
                                             <img style='align-content: center;' src='https://rrhh-ingenia.com/Imagenes/rrhh-ingenia.png' height='auto' width='550' ></img>
                                     </body>
                                     </html>";
-                                
-    							Utils::newNotification($Reclutador.' de '. $Nombre_Cliente.' solicita '. $Tipo_Solicitud, $Enlace, 1, $Servicio_Solicitado == 231 || $Servicio_Solicitado == 299 ? 1 : ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 300 ? 2 : ($Servicio_Solicitado == 328 ? 3 : 16)), $id_user, $_SESSION['identity']->id, $id_cliente);
+
+                                Utils::newNotification($Reclutador . ' de ' . $Nombre_Cliente . ' solicita ' . $Tipo_Solicitud, $Enlace, 1, $Servicio_Solicitado == 231 || $Servicio_Solicitado == 299 ? 1 : ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 300 ? 2 : ($Servicio_Solicitado == 328 ? 3 : 16)), $id_user, $_SESSION['identity']->id, $id_cliente);
                                 Utils::sendEmail($Correo_Ejecutivo, $Reclutador, $Asunto, $body);
-                                
-                                
+
+
                                 if ($Servicio_Solicitado == 300 || $Servicio_Solicitado == 230) {
                                     $ejecutivo = new EjecutivosPlazas();
                                     $ejecutivo->setID_Cliente($Cliente);
                                     $Logistica = $ejecutivo->getEjecutivosPorClienteLogistica();
-									$id_logistica = $Logistica->id;
+                                    $id_logistica = $Logistica->id;
                                     if ($Logistica) {
                                         $estudio->setLogistica(strtoupper($Logistica->username));
                                         $estudio->setFecha_aplicacion(NULL);
                                         $estudio->updateSchedule();
-                                        Utils::sendEmail($Logistica->email, $Logistica->first_name.' '.$Logistica->last_name, $Asunto, $body);
-                                        Utils::newNotification($Reclutador.' de '. $Nombre_Cliente.' solicita '. $Tipo_Solicitud, $Enlace, 1, $Servicio_Solicitado == 231 || $Servicio_Solicitado == 299 ? 1 : ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 300 ? 2 : ($Servicio_Solicitado == 328 ? 3 : 16)), $id_logistica, $_SESSION['identity']->id, $id_cliente);
+                                        Utils::sendEmail($Logistica->email, $Logistica->first_name . ' ' . $Logistica->last_name, $Asunto, $body);
+                                        Utils::newNotification($Reclutador . ' de ' . $Nombre_Cliente . ' solicita ' . $Tipo_Solicitud, $Enlace, 1, $Servicio_Solicitado == 231 || $Servicio_Solicitado == 299 ? 1 : ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 300 ? 2 : ($Servicio_Solicitado == 328 ? 3 : 16)), $id_logistica, $_SESSION['identity']->id, $id_cliente);
                                     }
                                 }
-    
+
                                 if ($Servicio_Solicitado == 328) {
                                     $estudio->setA_RAL(1);
                                     $estudio->updateARAL();
                                 }
-    
+
                                 $Asunto2 = 'Confirmación de solicitud de ' . $Tipo_Solicitud . ' para ' . $Nombre_Candidato;
                                 $body2 = "
                                 <!DOCTYPE html>
@@ -2786,26 +2787,26 @@ class ServicioApoyoController {
                                         <label>Telefono: <b>${Telefono}</b></label><br/>${Comentarios_Cliente}<br/><br><br/>
                                         <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                                    </body>
                                 </html>";
-								
-								if($Cliente != 408)
-                                Utils::sendEmail($Correo, $Reclutador, $Asunto2, $body2);
-								
+
+                                if ($Cliente != 408)
+                                    Utils::sendEmail($Correo, $Reclutador, $Asunto2, $body2);
+
                                 echo json_encode(array('status' => 1));
                             }
-                        }else
+                        } else
                             echo json_encode(array('status' => 2));
-                    }else 
+                    } else
                         echo json_encode(array('status' => 3));
-                }else
+                } else
                     echo json_encode(array('status' => 2));
-                
             } else
                 echo json_encode(array('status' => 0));
         } else
             header("location:" . base_url);
     }
-	
-	public function seguimiento(){
+
+    public function seguimiento()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager()) {
             $folio = Encryption::decode($_GET['candidato']);
             $candidato = new CandidatosDatos();
@@ -2889,7 +2890,7 @@ class ServicioApoyoController {
             $busq_RAL->setID($candidato_datos->ID_Busqueda_RAL);
             $busqueda_RAL = $busq_RAL->getOne();
 
-            $fechas = array('Fecha_RAL' => $busqueda_RAL ? $busqueda_RAL->Fecha : NULL, 'Fecha' => $candidato_datos->Fecha,'Fecha_Contactado' => $candidato_datos->Fecha_Contactado, 'Fecha_Entregado_INV' => $candidato_datos->Fecha_Entregado_INV, 'Fecha_Aplicacion' => $candidato_datos->Fecha_Aplicacion);
+            $fechas = array('Fecha_RAL' => $busqueda_RAL ? $busqueda_RAL->Fecha : NULL, 'Fecha' => $candidato_datos->Fecha, 'Fecha_Contactado' => $candidato_datos->Fecha_Contactado, 'Fecha_Entregado_INV' => $candidato_datos->Fecha_Entregado_INV, 'Fecha_Aplicacion' => $candidato_datos->Fecha_Aplicacion);
 
             asort($fechas);
             $fechas_nulas = [];
@@ -2901,16 +2902,16 @@ class ServicioApoyoController {
             }
             $fechas = array_merge($fechas, $fechas_nulas);
 
-            $page_title = $candidato_datos->Nombres.' '. $candidato_datos->Apellido_Paterno.' | RRHH Ingenia';
+            $page_title = $candidato_datos->Nombres . ' ' . $candidato_datos->Apellido_Paterno . ' | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
             require_once 'views/ese/follow-up.php';
             require_once 'views/layout/footer.php';
         }
-
     }
-	
-	public function previa(){
+
+    public function previa()
+    {
         if (Utils::isValid($_GET['candidato'])) {
             $folio = Encryption::decode(Encryption::decode($_GET['candidato']));
             $candidato = new CandidatosDatos();
@@ -2933,16 +2934,16 @@ class ServicioApoyoController {
             $obs->setCandidato($folio);
             $observaciones = $obs->getObservacionesPorCandidato();
 
-            $page_title = $candidato_datos->Nombres.' '. $candidato_datos->Apellido_Paterno.' | RRHH Ingenia';
+            $page_title = $candidato_datos->Nombres . ' ' . $candidato_datos->Apellido_Paterno . ' | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/navbar.php';
             require_once 'views/ese/preview.php';
             require_once 'views/layout/footer.php';
         }
-
     }
-	
-	public function contact(){
+
+    public function contact()
+    {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isLogisticsSupervisor())) {
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
             $Correos = ($_POST['Correos']);
@@ -2976,8 +2977,8 @@ class ServicioApoyoController {
                                 <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                            </body>
                         </html>
                         ";
-                    $cc = array('email' => $_SESSION['identity']->email, 'name' => $_SESSION['identity']->first_name.' '.$_SESSION['identity']->last_name);
-                    
+                    $cc = array('email' => $_SESSION['identity']->email, 'name' => $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name);
+
                     if ($Correos) {
                         Utils::sendMultipleEmail($Correos, 'Se contactó a ' . $Nombre_Candidato, $body, $cc);
                     }
@@ -3015,8 +3016,8 @@ class ServicioApoyoController {
         } else
             header("location:" . base_url);
     }
-	
-	public function save_pausar()
+
+    public function save_pausar()
     {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isCustomerSA())) {
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
@@ -3025,9 +3026,9 @@ class ServicioApoyoController {
             $Estado = Utils::sanitizeNumber($_POST['Estado']);
             $Comentario_Pausa = Utils::sanitizeString(($_POST['Comentario_Pausa']));
 
-            if ($Folio && $Comentario_Pausa && ($Fase == 230 || $Fase == 231 || $Fase == 298 || $Fase == 291 || ($Servicio_Solicitado == 231 && $Fase == 231) || ($Servicio_Solicitado == 230 && $Fase == 230) || ($Servicio_Solicitado == 230 && $Fase == 300) || ($Servicio_Solicitado == 231 && $Fase == 299) || ($Servicio_Solicitado == 323 && $Fase == 324) || ($Servicio_Solicitado == 230 && $Fase == 299) || ($Servicio_Solicitado == 230 && $Fase == 231)|| ($Servicio_Solicitado == 340 && $Fase == 300)||($Servicio_Solicitado == 340 && $Fase == 299)|| ($Servicio_Solicitado == 341 && $Fase == 300)||($Servicio_Solicitado == 341 && $Fase == 299) ) && ($Estado == 250 || $Estado == 251)) {
+            if ($Folio && $Comentario_Pausa && ($Fase == 230 || $Fase == 231 || $Fase == 298 || $Fase == 291 || ($Servicio_Solicitado == 231 && $Fase == 231) || ($Servicio_Solicitado == 230 && $Fase == 230) || ($Servicio_Solicitado == 230 && $Fase == 300) || ($Servicio_Solicitado == 231 && $Fase == 299) || ($Servicio_Solicitado == 323 && $Fase == 324) || ($Servicio_Solicitado == 230 && $Fase == 299) || ($Servicio_Solicitado == 230 && $Fase == 231) || ($Servicio_Solicitado == 340 && $Fase == 300) || ($Servicio_Solicitado == 340 && $Fase == 299) || ($Servicio_Solicitado == 341 && $Fase == 300) || ($Servicio_Solicitado == 341 && $Fase == 299)) && ($Estado == 250 || $Estado == 251)) {
 
-					 
+
                 $Estado = 249;
 
                 $estudio = new Candidatos();
@@ -3035,7 +3036,7 @@ class ServicioApoyoController {
                 $estudio->setFase($Fase);
                 $estudio->setEstado($Estado);
                 $estudio->setComentario_Pausa($Comentario_Pausa);
-                
+
                 $update = $estudio->savePausa();
 
                 if ($update) {
@@ -3083,8 +3084,8 @@ class ServicioApoyoController {
         } else
             header("location:" . base_url);
     }
-	
-	public function save_reanudar()
+
+    public function save_reanudar()
     {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics())) {
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
@@ -3092,7 +3093,7 @@ class ServicioApoyoController {
             $Fase = Utils::sanitizeNumber($_POST['Fase']);
             $Estado = Utils::sanitizeNumber($_POST['Estado']);
 
-            if ($Folio && ($Fase == 230 || $Fase == 231 || $Fase == 298 || ($Servicio_Solicitado == 231 && $Fase == 231) || ($Servicio_Solicitado == 230 && $Fase == 230) || ($Servicio_Solicitado == 230 && $Fase == 300) || ($Servicio_Solicitado == 231 && $Fase == 299) || ($Servicio_Solicitado == 323 && $Fase == 324) || ($Servicio_Solicitado == 230 && $Fase == 299) || ($Servicio_Solicitado == 230 && $Fase == 231)|| ($Servicio_Solicitado == 340 && $Fase == 300)||($Servicio_Solicitado == 340 && $Fase == 299)|| ($Servicio_Solicitado == 341 && $Fase == 300)||($Servicio_Solicitado == 341 && $Fase == 299)) && ($Estado == 249)) {
+            if ($Folio && ($Fase == 230 || $Fase == 231 || $Fase == 298 || ($Servicio_Solicitado == 231 && $Fase == 231) || ($Servicio_Solicitado == 230 && $Fase == 230) || ($Servicio_Solicitado == 230 && $Fase == 300) || ($Servicio_Solicitado == 231 && $Fase == 299) || ($Servicio_Solicitado == 323 && $Fase == 324) || ($Servicio_Solicitado == 230 && $Fase == 299) || ($Servicio_Solicitado == 230 && $Fase == 231) || ($Servicio_Solicitado == 340 && $Fase == 300) || ($Servicio_Solicitado == 340 && $Fase == 299) || ($Servicio_Solicitado == 341 && $Fase == 300) || ($Servicio_Solicitado == 341 && $Fase == 299)) && ($Estado == 249)) {
 
                 $Estado = 250;
 
@@ -3100,7 +3101,7 @@ class ServicioApoyoController {
                 $estudio->setCandidato($Folio);
                 $estudio->setFase($Fase);
                 $estudio->setEstado($Estado);
-                
+
                 $update = $estudio->saveReanudar();
 
                 if ($update) {
@@ -3121,7 +3122,7 @@ class ServicioApoyoController {
 
                     $body = $Fase == 298 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que el <b>RAL</b> de <b>' . $Nombre_Candidato . '</b> se reanudará.<br><br><br>No es necesario responder a este correo.' : ($Fase == 299 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Investigación Laboral</b> de <b>' . $Nombre_Candidato . '</b> se reanudará.<br><br><br>No es necesario responder a este correo.' : ($Fase == 310 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Validación de Licencia</b> de <b>' . $Nombre_Candidato . '</b> se reanudará.<br><br><br>No es necesario responder a este correo.' : ($Fase == 300 || $Fase == 230 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Verificación Domiciliaria</b> de <b>' . $Nombre_Candidato . '</b> se reanudará.<br><br><br>No es necesario responder a este correo.' : ($Fase == 324 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Verificación Domiciliaria con Visita Presencial</b> de <b>' . $Nombre_Candidato . '</b> se reanudará.<br><br><br>No es necesario responder a este correo.' : ''))));
 
-					
+
                     Utils::sendEmail($candidato_datos->Correo_Cliente, $candidato_datos->Quien_Solicita, $subject, $body);
 
                     $perfil = new CfgImagenes();
@@ -3149,8 +3150,9 @@ class ServicioApoyoController {
         } else
             header("location:" . base_url);
     }
-	
-	public function carga_masiva(){
+
+    public function carga_masiva()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager()) {
 
             $page_title = 'Solicitud de múltiples servicio de apoyo | RRHH Ingenia';
@@ -3158,15 +3160,15 @@ class ServicioApoyoController {
             require_once 'views/layout/sidebar.php';
             require_once 'views/ese/mass-create.php';
             require_once 'views/layout/footer.php';
-        }else 
-            header('location:'.base_url);
+        } else
+            header('location:' . base_url);
     }
-	
-	public function create_multiple()
+
+    public function create_multiple()
     {
         if (Utils::isValid($_SESSION['identity']) && isset($_POST) && isset($_POST['Nombres']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager()) {
             if ($_POST['Nombres']) {
-                for ($i=0; $i < count($_POST['Nombres']); $i++) { 
+                for ($i = 0; $i < count($_POST['Nombres']); $i++) {
                     $Nombres = Utils::sanitizeStringBlank($_POST['Nombres'][$i]);
                     $Apellido_Paterno = Utils::sanitizeStringBlank($_POST['Apellido_Paterno'][$i]);
                     $Apellido_Materno = Utils::sanitizeStringBlank($_POST['Apellido_Materno'][$i]);
@@ -3193,7 +3195,7 @@ class ServicioApoyoController {
 
                         $Servicio_Solicitado = $Servicio_Solicitado == 299 ? 231 : ($Servicio_Solicitado == 300 ? 230 : ($Servicio_Solicitado));
 
-                        
+
                         if (Utils::isCustomerSA()) {
                             $persona_solicitan = new ContactosClienteSolicitan();
                             $persona_solicitan->setUsuario($_SESSION['identity']->username);
@@ -3232,9 +3234,9 @@ class ServicioApoyoController {
                         $estudio->setNivel($Nivel);
                         $estudio->setContactado(0);
 
-						
 
-                        $save = $estudio->create(); 
+
+                        $save = $estudio->create();
                         if ($save) {
                             $Candidato = $estudio->getCandidato();
 
@@ -3330,17 +3332,14 @@ class ServicioApoyoController {
                                         $estudio->setLogistica(strtoupper($Logistica->username));
                                         $estudio->setFecha_aplicacion(NULL);
                                         $estudio->updateSchedule();
-                                        
                                     }
                                 }
 
-								if ($i == count($_POST['Nombres']) - 1) {
-									echo json_encode(array(
-										'status' => 1
-									));
-								}
-                                
-                                
+                                if ($i == count($_POST['Nombres']) - 1) {
+                                    echo json_encode(array(
+                                        'status' => 1
+                                    ));
+                                }
                             } else
                                 echo json_encode(array('status' => 2));
                         } else
@@ -3352,8 +3351,8 @@ class ServicioApoyoController {
         } else
             header('location:' . base_url);
     }
-	
-	public function soi()
+
+    public function soi()
     {
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isSAManager())) {
             $Candidato = Utils::sanitizeNumber($_POST['Folio']);
@@ -3384,8 +3383,8 @@ class ServicioApoyoController {
                         $soiImage->credencial($candidato_datos, $vl, $perfil);
 
                         $soi = 0;
-                        if (file_exists('uploads/soi/'.$Candidato.'.png'))
-                            $soi = base_url.'uploads/soi/'.$Candidato.'.png';
+                        if (file_exists('uploads/soi/' . $Candidato . '.png'))
+                            $soi = base_url . 'uploads/soi/' . $Candidato . '.png';
 
                         $display = Utils::getDisplayBotones();
                         echo json_encode(array(
@@ -3397,38 +3396,40 @@ class ServicioApoyoController {
                         ));
                     }
                 }
-
-                
             } else
                 echo 0;
         } else
             header('location:' . base_url);
     }
-	
-	public function upload_google_search() {
+
+    public function upload_google_search()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager()) {
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
             $search = isset($_FILES['search']) && $_FILES['search']['name'] != '' ? $_FILES['search'] : FALSE;
             if ($search && $Folio) {
-                if (file_exists('uploads/google_search/'.$Folio.'.pdf')) {
-                    Utils::deleteDir('uploads/google_search/'. $Folio.'.pdf');
+                if (file_exists('uploads/google_search/' . $Folio . '.pdf')) {
+                    Utils::deleteDir('uploads/google_search/' . $Folio . '.pdf');
                 }
-                
-                $allowed_formats = array("application/pdf"); 
-                $limit_kb = 16000;
-                
-                if(in_array($_FILES["search"]["type"], $allowed_formats) && $_FILES["search"]["size"] <= $limit_kb * 1024){
-                    $route = 'uploads/google_search/';
-                    $search = $route.$Folio.'.pdf';
-                    
-                        mkdir($route);
-                    
-                        $result = @move_uploaded_file($_FILES["search"]["tmp_name"], $search);
 
-                    if ($result) {echo json_encode(['status' => 1, 'google_search' => base_url.'uploads/google_search/'.$Folio.'.pdf']);}
-                    else{echo json_encode(['status' => 2]);}
+                $allowed_formats = array("application/pdf");
+                $limit_kb = 16000;
+
+                if (in_array($_FILES["search"]["type"], $allowed_formats) && $_FILES["search"]["size"] <= $limit_kb * 1024) {
+                    $route = 'uploads/google_search/';
+                    $search = $route . $Folio . '.pdf';
+
+                    mkdir($route);
+
+                    $result = @move_uploaded_file($_FILES["search"]["tmp_name"], $search);
+
+                    if ($result) {
+                        echo json_encode(['status' => 1, 'google_search' => base_url . 'uploads/google_search/' . $Folio . '.pdf']);
+                    } else {
+                        echo json_encode(['status' => 2]);
+                    }
                 }
-            }else{
+            } else {
                 echo json_encode(['status' => 0]);
             }
         }

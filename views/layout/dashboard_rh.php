@@ -26,7 +26,37 @@
     display: none;
 }
 
+/* //19 sept */
+#div-tabla-incidencias-movil {
+    display: none;
+}
+
+#div-tabla-capacitaciones-movil {
+    display: none;
+}
+
 @media (max-width:768px) {
+
+    /* 19 sept */
+    #div-tabla-incidencias-movil {
+        display: block;
+    }
+
+    #div-tabla-incidencias {
+        display: none;
+    }
+
+    #div-tabla-capacitaciones {
+        display: none;
+    }
+
+    #div-tabla-capacitaciones-movil {
+        display: block;
+    }
+
+
+
+
 
     #tabla-solicitudes-movil {
         display: block;
@@ -58,6 +88,8 @@
     #tabla-solicitudes-pendientes-movil {
         display: block
     }
+
+
 }
 
 @media (min-width:769px) {
@@ -114,15 +146,28 @@ maptilerClient.config.apiKey = "D5wN1aRujYvuBJ9nihTZ";
                                         aria-selected="false">Solicitudes Pendientes</a>
                                 </li>
                                 <?php endif; ?>
+                                <!-- 19 sept -->
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="pill" href="#div-incidencias" role="tab"
+                                        aria-selected="false">Incidencias</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="pill" href="#div-capacitaciones" role="tab"
+                                        aria-selected="false">Capacitaciones</a>
+                                </li>
+
+
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="pill" href="#div-contrasena" role="tab"
                                         aria-selected="false">Contraseña</a>
                                 </li>
+
                             </ul>
                         </div>
 
-                           <div class="col-sm-12 col-md-4" id="cerrar">
-                            <a href="<?= base_url ?>usuario/logout_rh" class="btn btn-maroon float-right">Cerrar sesión </a>
+                        <div class="col-sm-12 col-md-4" id="cerrar">
+                            <a href="<?= base_url ?>usuario/logout_rh" class="btn btn-maroon float-right">Cerrar sesión
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -136,20 +181,21 @@ maptilerClient.config.apiKey = "D5wN1aRujYvuBJ9nihTZ";
                                 <div class="col-sm-4 col-md-4  col-lg-4 ">
                                     <h5 class="card-title mb-3">Asistencias</h5>
                                 </div>
-                               <div class="col-sm-3 col-md-3 col-lg-2" id="btn-asietencia">
+                                <div class="col-sm-3 col-md-3 col-lg-2" id="btn-asietencia">
                                     <?php
                                     $types = Utils::getTypesByCliente();  ?>
                                     <select name="type" id="type" class="form-control">
                                         <option value="">Seleccione tipo </option>
                                         <?php foreach ($types as $type) :  ?>
-                                            <option value="<?= $type['id'] ?>"><?= $type['name'] ?></option>
+                                        <option value="<?= $type['id'] ?>"><?= $type['name'] ?></option>
                                         <?php endforeach;  ?>
                                     </select>
 
                                 </div>
                                 <div class="col-sm-5 col-md-4 col-lg-4" id="btn-asietencia" style="margin-top: 0.3rem;">
 
-                                    <button class="btn btn-orange" style="float: center;" data-toggle="modal" id="btn_asistencia" data-target="#">Registrar
+                                    <button class="btn btn-orange" style="float: center;" data-toggle="modal"
+                                        id="btn_asistencia" data-target="#">Registrar
                                         Asistencia</button>
 
                                 </div>
@@ -161,7 +207,7 @@ maptilerClient.config.apiKey = "D5wN1aRujYvuBJ9nihTZ";
                                         <tr>
                                             <th class="text-center" style="width:10px">#</th>
                                             <th class="text-center">Hora y fecha</th>
-											<th class="text-center">Tipo</th>
+                                            <th class="text-center">Tipo</th>
                                             <th class="text-center">Ubicación</th>
                                         </tr>
                                     </thead>
@@ -174,7 +220,7 @@ maptilerClient.config.apiKey = "D5wN1aRujYvuBJ9nihTZ";
                                         <tr>
                                             <td class="text-center text-bold"> <?= $cont  ?></td>
                                             <td class="text-center"> <?= $asistencia['created_at'];  ?></td>
-											<td class="text-center"> <?= $asistencia['name'];  ?></td>
+                                            <td class="text-center"> <?= $asistencia['name'];  ?></td>
                                             <td class="text-center"> <?= $asistencia['coordenada'];  ?></td>
                                         </tr>
 
@@ -188,9 +234,7 @@ maptilerClient.config.apiKey = "D5wN1aRujYvuBJ9nihTZ";
 
 
                         <div class="tab-pane fade" id="solicitudes" role="tabpanel">
-							
-							
-							     <div class="row">
+                            <div class="row">
                                 <div class="col-lg-3">
                                     <div class="small-box bg-success">
                                         <div class="inner">
@@ -199,9 +243,9 @@ maptilerClient.config.apiKey = "D5wN1aRujYvuBJ9nihTZ";
                                             <p>Años de antiguedad</p>
                                         </div>
                                         <div class="icon">
-                                          
+
                                         </div>
-                                       
+
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -222,19 +266,20 @@ maptilerClient.config.apiKey = "D5wN1aRujYvuBJ9nihTZ";
 
                                         </div>
                                         <div class="icon">
-                                          
+
                                         </div>
-                                      
+
                                     </div>
                                 </div>
 
                             </div>
-							
-							
+
+
                             <div style="padding-bottom:3rem">
                                 <h5 class="card-title mb-3">Solicitudes</h5>
                                 <div class="col-sm-2 ml-auto">
-                                    <button class="btn btn-orange float-right" data-toggle="modal" id="btn_new_holidays"  <?= ($holidays->holidays_by_year - $holidays->taken_holidays == 0) ? 'disabled' : ''; ?>
+                                    <button class="btn btn-orange float-right" data-toggle="modal" id="btn_new_holidays"
+                                        <?= ($holidays->holidays_by_year - $holidays->taken_holidays == 0) ? 'disabled' : ''; ?>
                                         data-target="#">Crear</button>
                                 </div>
                             </div>
@@ -400,8 +445,8 @@ maptilerClient.config.apiKey = "D5wN1aRujYvuBJ9nihTZ";
 
 
                         <div class="tab-pane fade" id="div-pendientes" role="tabpanel" aria-labelledby="">
-                            <h5 class="card-title mb-3">Solicitudes Pendientes</h5>
-                            <div class="col-sm-2 ml-auto">
+                            <div class="row m-3">
+                                <h5 class="card-title mb-3">Solicitudes Pendientes</h5>
                             </div>
                             <div class="content" id="tabla-solicitudes-pendientes">
                                 <div class="table-responsive">
@@ -500,7 +545,7 @@ maptilerClient.config.apiKey = "D5wN1aRujYvuBJ9nihTZ";
                                     <table class="table table-bordered table-sm" id="table-solicitud-pendiente-movil">
                                         <thead>
                                             <tr>
-                                                <th class="text-center" </th>
+                                                <th class="text-center"> </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -572,11 +617,246 @@ maptilerClient.config.apiKey = "D5wN1aRujYvuBJ9nihTZ";
                             </div>
                             <!-- tabla mobile -->
                         </div>
+
+                        <!-- 19 sept -->
+                        <div class="tab-pane fade" id="div-incidencias" role="tabpanel" aria-labelledby="">
+                            <div class="row m-3">
+                                <h5 class="card-title mb-3">Historial de Incidentes</h5>
+                            </div>
+
+                            <div class="content" id="div-tabla-incidencias">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="tabla-incidencias" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#</th>
+                                                <th class="text-center">Incidencia</th>
+                                                <th class="text-center">Movimiento</th>
+                                                <th class="text-center">Comentario</th>
+                                                <th class="text-center">Fecha de inicio</th>
+                                                <th class="text-center">Fecha de final</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tboodyInciden">
+                                            <?php $cont = count($incidens);
+                                            foreach ($incidens as $inc) : ?>
+
+                                            <tr>
+                                                <td class="text-center" style="width:5%"><?= $cont ?></td>
+                                                <td class="text-center align-middle">
+                                                    <?= $inc['type']  ?></td>
+                                                <td class="text-center align-middle">
+                                                    <?php
+                                                        if ($inc['type'] == 'Retraso' || $inc['type'] == 'Horas extras') {
+                                                            echo $inc['hours'] . ' hrs';
+                                                        } else if ($inc['type'] == 'Faltas') {
+                                                            echo $inc['type_of_foul'];
+                                                        } else if ($inc['type'] == 'Incapacidades') {
+                                                            echo $inc['type_of_incapacity'];
+                                                        } else if ($inc['type'] == 'Bonos') {
+                                                            echo '$' . number_format($inc['amount'], 2);
+                                                        }
+                                                        ?>
+                                                </td>
+
+                                                <td class="text-center align-middle">
+                                                    <?= $inc['comments']  ?></td>
+                                                <td class="text-center align-middle">
+                                                    <?= Utils::getDate($inc['created_at'])  ?>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <?= Utils::getDate($inc['end_date'])  ?>
+                                                </td>
+
+                                            </tr>
+                                            <?php $cont--;
+                                            endforeach;
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- tabla mobile -->
+                            <div class="content" id="div-tabla-incidencias-movil">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-lg" id="tabla-incidencias-movil"
+                                        style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $cont = count($incidens);
+                                            foreach ($incidens as $inc) :
+                                            ?>
+                                            <tr>
+                                                <td class="text-left">
+                                                    <div class="card-body">
+                                                        <b> # <?= $cont ?> </b>
+                                                        <hr style="border-color:green; margin-top:0.1rem;">
+                                                        <b> Incidencia : </b>
+                                                        <?= $inc['type'] ?>
+                                                        <hr style="margin:0.1rem;opacity:0% ">
+                                                        <b> Movimiento: </b>
+                                                        <?php
+                                                            if ($inc['type'] == 'Retraso' || $inc['type'] == 'Horas extras') {
+                                                                echo $inc['hours'] . ' hrs';
+                                                            } else if ($inc['type'] == 'Faltas') {
+                                                                echo $inc['type_of_foul'];
+                                                            } else if ($inc['type'] == 'Incapacidades') {
+                                                                echo $inc['type_of_incapacity'];
+                                                            } else if ($inc['type'] == 'Bonos') {
+                                                                echo '$' . number_format($inc['amount'], 2);
+                                                            }
+                                                            ?>
+                                                        <hr style="margin:0.1rem;opacity:0% ">
+                                                        <b> Comentario :</b>
+                                                        <?= $inc['comments'] ?>
+                                                        <hr style="margin:0.1rem;opacity:0% ">
+                                                        <b> Fecha de inicio :</b>
+                                                        <?= Utils::getDate($inc['created_at'])  ?>
+                                                        <hr style="margin:0.1rem;opacity:0% ">
+                                                        <b> Fecha final :</b>
+                                                        <?= Utils::getDate($inc['end_date'])  ?>
+                                                        <hr style="margin:0.1rem;opacity:0% ">
+                                                </td>
+                                            </tr>
+                                            <?php $cont--;
+                                            endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- tabla mobile -->
+                        </div>
+
+
+
+                        <!-- 19 sept -->
+                        <div class="tab-pane fade" id="div-capacitaciones" role="tabpanel" aria-labelledby="">
+                            <div class="row m-3">
+                                <h5 class="card-title mb-3">Historial de Capacitaciones</h5>
+                            </div>
+
+                            <div class="content" id="div-tabla-capacitaciones">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="tabla-capacitaciones" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#</th>
+                                                <th class="text-center">Nombre de
+                                                    la capacitacion</th>
+                                                <th class="text-center">Descripcion
+                                                </th>
+                                                <th class="text-center">Horas</th>
+                                                <th class="text-center">Empresa
+                                                    contratante</th>
+                                                <th class="text-center">Fecha de
+                                                    inicio</th>
+                                                <th class="text-center">Fecha final
+                                                </th>
+                                                <th class="text-center">Fecha de
+                                                    modificacion</th>
+
+                                            </tr>
+                                        </thead>
+
+                                        <tbody id="tboodyTraining">
+                                            <?php $cont = count($employee_trainings);
+                                            foreach ($employee_trainings as $tra) : ?>
+                                            <tr>
+                                                <td class="text-center"><?= $cont ?>
+                                                </td>
+                                                <td class="text-center"><?= $tra['title']  ?>
+                                                </td>
+                                                <td class="text-center">
+                                                    <?= $tra['description']  ?></td>
+                                                <td class="text-center">
+                                                    <?= $tra['hours'] . ' hrs'  ?></td>
+                                                <td class="text-center">
+                                                    <?= $tra['nombre_cliente']  ?></td>
+                                                <td class="text-center">
+                                                    <?= Utils::getDate($tra['start_date'])  ?>
+                                                </td>
+                                                <td class="text-center">
+                                                    <?= Utils::getDate($tra['end_date'])  ?>
+                                                </td>
+                                                <td class="text-center">
+                                                    <?= ($tra['modified_at']!='')? Utils::getFullDate($tra['modified_at']):'' ?>
+                                                </td>
+
+                                            </tr>
+                                            <?php $cont--;
+                                            endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- tabla mobile -->
+                            <div class="content" id="div-tabla-capacitaciones-movil">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-lg" id="tabla-capacitaciones-movil"
+                                        style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $cont = count($solicitudes_pendientes);
+                                            foreach ($solicitudes_pendientes as $solicitud) :
+                                            ?>
+                                            <tr>
+                                                <td class="text-left">
+                                                    <div class="card-body">
+                                                        <b> # <?= $cont ?> </b>
+                                                        <hr style="border-color:green; margin-top:0.1rem;">
+                                                        <b> Nombre de la capacitación : </b>
+                                                        <?= $tra['title'] ?>
+                                                        <hr style="margin:0.1rem;opacity:0% ">
+                                                        <b> Descripción: </b>
+                                                        <?= $tra['description']   ?>
+                                                        <hr style="margin:0.1rem;opacity:0% ">
+                                                        <b> Horas :</b>
+                                                        <?= $tra['hours'] . ' hrs'   ?>
+                                                        <hr style="margin:0.1rem;opacity:0% ">
+                                                        <b> Empresa Contrante :</b>
+                                                        <?= $tra['nombre_cliente']   ?>
+                                                        <hr style="margin:0.1rem;opacity:0% ">
+                                                        <b> Fecha de incio :</b>
+                                                        <?= Utils::getDate($tra['start_date']) ?>
+                                                        <hr style="margin:0.1rem;opacity:0% ">
+                                                        <b> Fecha final :</b>
+                                                        <?= Utils::getDate($tra['end_date']) ?>
+                                                        <hr style="margin:0.1rem;opacity:0% ">
+                                                        <b> Fecha de modificación :</b>
+                                                        <?= ($tra['modified_at']!='')? Utils::getFullDate($tra['modified_at']):'' ?>
+                                                        <hr style="margin:0.1rem;opacity:0% ">
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <?php $cont--;
+                                            endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- tabla mobile -->
+                        </div>
+
                     </div>
+
+
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 </div>
 </div>
@@ -618,6 +898,53 @@ document.addEventListener('DOMContentLoaded', e => {
             "sSortDescending": true
         }
     });
+    // 19 sept
+    $("#tabla-incidencias").DataTable({
+        "searching": true,
+        "aaSorting": [], //Agregar o Quitar segun se necesite desactivar orden
+        "oAria": {
+            "sSortAscending": false,
+            "sSortDescending": true
+        }
+    });
+    $("#tabla-incidencias-movil").DataTable({
+        "searching": true,
+        "aaSorting": [], //Agregar o Quitar segun se necesite desactivar orden
+        "oAria": {
+            "sSortAscending": false,
+            "sSortDescending": true
+        }
+    });
+    $("#table-solicitud-pendiente-movil").DataTable({
+        "searching": true,
+        "aaSorting": [], //Agregar o Quitar segun se necesite desactivar orden
+        "oAria": {
+            "sSortAscending": false,
+            "sSortDescending": true
+        }
+    });
+    $("#tabla-capacitaciones-movil").DataTable({
+        "searching": true,
+        "aaSorting": [], //Agregar o Quitar segun se necesite desactivar orden
+        "oAria": {
+            "sSortAscending": false,
+            "sSortDescending": true
+        }
+    });
+
+    $("#tabla-capacitaciones").DataTable({
+        "searching": true,
+        "aaSorting": [], //Agregar o Quitar segun se necesite desactivar orden
+        "oAria": {
+            "sSortAscending": false,
+            "sSortDescending": true
+        }
+    });
+
+
+
+
+
 });
 
 

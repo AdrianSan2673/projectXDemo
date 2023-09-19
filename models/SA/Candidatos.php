@@ -1157,8 +1157,8 @@ class Candidatos
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-	
-	public function getServiciosPorContactoYViabilidad()
+
+    public function getServiciosPorContactoYViabilidad()
     {
         $Contacto = $this->getContacto();
         $stmt = $this->db->prepare("SELECT TOP(7200) Folio=RC.Candidato,RC.Cliente ID_Ciente,va.Empresa id_empresa
@@ -1207,7 +1207,7 @@ class Candidatos
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-	
+
 
     public function getServiciosPorContactoTranspais()
     {
@@ -1527,6 +1527,7 @@ class Candidatos
         return $result;
     }
 
+    // 19 sept
     public function updateDatosEmpresa()
     {
 
@@ -1537,13 +1538,15 @@ class Candidatos
         $Contacto = $this->getContacto();
         $Razon = $this->getRazon();
         $Puesto = $this->getPuesto();
+        $cc_cliente = $this->getCC_Cliente();
 
-        $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Cliente=:Cliente, Nombre_Cliente=:Contacto, Razon=:Razon, Puesto=:Puesto, Modificado=GETDATE() WHERE Candidato=:Candidato");
+        $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Cliente=:Cliente, Nombre_Cliente=:Contacto, Razon=:Razon, Puesto=:Puesto, Modificado=GETDATE(),CC_Cliente=:cc_cliente WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
         $stmt->bindParam(":Contacto", $Contacto, PDO::PARAM_INT);
         $stmt->bindParam(":Razon", $Razon, PDO::PARAM_STR);
         $stmt->bindParam(":Puesto", $Puesto, PDO::PARAM_STR);
+        $stmt->bindParam(":cc_cliente", $cc_cliente, PDO::PARAM_STR);
 
         $flag = $stmt->execute();
         if ($flag) {
@@ -3395,7 +3398,7 @@ class Candidatos
     }
 
     // ===[19 de mayo 2023 estudios fin]===
-     public function getServiciosPorUsuario()
+    public function getServiciosPorUsuario()
     {
         $Contacto = $this->getContacto();
         $Cliente = $this->getCliente();
@@ -3446,7 +3449,7 @@ class Candidatos
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-	
+
 
     public function getModificacionEjecutivoGestor()
     {
@@ -3479,7 +3482,8 @@ class Candidatos
         return $fetch;
     }
 
-    public function getServiciosSOI(){
+    public function getServiciosSOI()
+    {
 
         $stmt = $this->db->prepare("SELECT Creado, Folio=RC.Candidato
         ,[Solicitud]=RC.Fecha
@@ -3531,8 +3535,8 @@ class Candidatos
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-	
-	    public function countCandidatosPorCliente()
+
+    public function countCandidatosPorCliente()
     {
         $Cliente = $this->getCliente();
         $stmt = $this->db->prepare("SELECT count(*) as Total FROM rh_Candidatos WHERE Cliente=:Cliente");
