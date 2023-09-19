@@ -1303,6 +1303,7 @@ class UsuarioController
                     echo json_encode(array('status' => 3));
                     die();
                 }
+
                 $user = new UsuariosRH();
                 $user->setId($id_user_rh);
                 $user->setPassword(Encryption::encode($nueva));

@@ -16,7 +16,7 @@ class EncuestaCliente {
     
     public function __construct() {
         $this->db = Connection::connectSA();
-        $this->db2 = Connection::connectSA2();
+        // $this->db2 = Connection::connectSA2();
     }
 
     public function getId(){
