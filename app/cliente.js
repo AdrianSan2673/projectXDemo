@@ -1628,6 +1628,81 @@ class Cliente {
 
 
 
+    eliminarEmpresa(Empresa) {
+        const formData = new FormData();
+        formData.append('Empresa', Empresa);
+        fetch('../Empresa_SA/eliminarEmpresa', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('Network response was not ok.');
+                }
+            })
+            .then(r => {
+                console.log(r);
+                try {
+                    const json_app = JSON.parse(r);
+                    if (json_app.status == 1) {
+                        utils.showToast('Fue eliminado con exito', 'success');
+
+                        let clientes = '';
+
+                        json_app.empresas.forEach(element => {
+                            clientes += `
+                                                      <tr>
+                                                    <td class="text-left align-middle">${element.Nombre_Empresa}</td>
+                                                    <td class="text-center py-0 align-middle">${element.creado_por}</td>
+                                                    <td class="text-center py-0 align-middle">
+                                                        <div class="btn-group btn-group-sm">
+                                                            <a href="${element.baseurl}"
+                                                                class="btn btn-success">
+                                                                <i class="fas fa-eye"></i> Ver
+                                                            </a>
+                                                            <button class="btn btn-danger ml-3"
+                                                                data-id="${element.Empresa}">
+                                                                <b class="h6 text-bold">X</b>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                    `
+                        });
+
+
+                        utils.destruir_datatable('#tb_customers', '#tb_customers tbody', clientes);
+
+                    } else if (json_app.status == 2) {
+                        let aviso = '';
+                        json_app.aviso.forEach(element => {
+                            aviso += `${element}<br>`
+                        });
+
+                        Swal.fire({
+                            title: '<strong>No se puede eliminar esta empresa.</strong>',
+                            icon: 'info',
+                            html: aviso,
+                            showCloseButton: true,
+                            focusConfirm: false,
+                            cancelButtonAriaLabel: 'Thumbs down'
+                        })
+
+                    } else {
+                        utils.showToast('No se pudo consultar la informacion dentro', 'error');
+                    }
+                } catch (error) {
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                }
+            })
+            .catch(error => {
+                utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+
+            });
+    }
+
 
 
 

@@ -54,6 +54,8 @@ class Candidatos
     private $Gestor_modificacion;
     // ===[27 jULIO 2023 REPLICADO fin ]===
     private $db;
+    //21 sept
+    private $empresa;
 
     public function __construct()
     {
@@ -531,6 +533,18 @@ class Candidatos
     {
         $this->Gestor_modificacion = $Gestor_modificacion;
     }
+
+    //21 sept
+    public function setEmpresa($empresa)
+    {
+        $this->empresa = $empresa;
+    }
+
+    public function getEmpresa()
+    {
+        return $this->empresa;
+    }
+
 
 
     public function getMax()
@@ -3541,6 +3555,19 @@ class Candidatos
         $Cliente = $this->getCliente();
         $stmt = $this->db->prepare("SELECT count(*) as Total FROM rh_Candidatos WHERE Cliente=:Cliente");
         $stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
+        $fetch = $stmt->execute();
+        $fetch = $stmt->fetchObject();
+
+        return $fetch;
+    }
+
+
+    //19 sept
+    public function countCandidatosPorEmpresa()
+    {
+        $empresa = $this->getEmpresa();
+        $stmt = $this->db->prepare("SELECT count(*) as Total FROM rh_Candidatos rc INNER JOIN rh_Ventas_Alta rva ON rc.Cliente=rva.Cliente WHERE rva.empresa=:empresa");
+        $stmt->bindParam(":empresa", $empresa, PDO::PARAM_INT);
         $fetch = $stmt->execute();
         $fetch = $stmt->fetchObject();
 

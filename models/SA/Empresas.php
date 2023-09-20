@@ -13,6 +13,11 @@ class Empresas
     //===[gabo 7 agosto creado por ]===
     private $creado_por;
     //===[gabo 7 agosto creado por fin===
+
+    private $Eliminado_por;
+    private $Fecha_eliminado;
+
+
     public function __construct()
     {
         $this->db = Connection::connectSA();
@@ -91,6 +96,29 @@ class Empresas
     }
     //===[gabo 7 agosto creado por fin===
 
+
+    //19 sept
+    public function getEliminado_por()
+    {
+        return $this->Eliminado_por;
+    }
+
+    public function setEliminado_por($Eliminado_por)
+    {
+        $this->Eliminado_por = $Eliminado_por;
+    }
+
+    public function getFecha_eliminado()
+    {
+        return $this->Fecha_eliminado;
+    }
+
+    public function setFecha_eliminado($Fecha_eliminado)
+    {
+        $this->Fecha_eliminado = $Fecha_eliminado;
+    }
+
+
     public function getOne()
     {
         $Empresa = $this->getEmpresa();
@@ -110,10 +138,10 @@ class Empresas
         $fetch = $stmt->fetchAll();
         return $fetch;
     }
-	
-	  public function getAllByCreate()
+
+    public function getAllByCreate()
     {
-        $creado_por= $this->getCreado_por();
+        $creado_por = $this->getCreado_por();
         $stmt = $this->db->prepare("SELECT * FROM rh_Ventas_Empresas WHERE creado_por=:creado_por ORDER BY Nombre_Empresa");
         $stmt->bindParam(":creado_por", $creado_por, PDO::PARAM_STR);
 
@@ -184,4 +212,32 @@ class Empresas
         $fetch = $stmt->fetchAll();
         return $fetch;
     }
+
+    //19 sept
+    public function saveEmpresaeliminada()
+    {
+
+        $Usuario = $this->getEliminado_por();
+        $empresa = $this->getEmpresa();
+
+        $stmt = $this->db->prepare(" INSERT INTO root.[rh_Ventas_Empresas_eliminadas] (Empresa, Nombre_Empresa,Alias,Fecha_Entrega,Nuevo_Procedimiento,Especificaciones,creado_por,eliminado_por,Fecha_eliminado) Select *,:Usuario,GETDATE() from rh_Ventas_Empresas where Empresa=:empresa
+        ");
+        $stmt->bindParam(":empresa", $empresa, PDO::PARAM_INT);
+        $stmt->bindParam(":Usuario", $Usuario, PDO::PARAM_STR);
+        $flag = $stmt->execute();
+
+        return $flag;
+    }
+
+    public function eliminarEmpresa()
+    {
+        $empresa = $this->getEmpresa();
+        $stmt = $this->db->prepare("DELETE TOP(1) rh_Ventas_Empresas where Empresa=:empresa");
+        $stmt->bindParam(":empresa", $empresa, PDO::PARAM_INT);
+        $flag = $stmt->execute();
+        return $flag;
+    }
 };
+// INSERT INTO root.rh_Ventas_Empresas_eliminadas (
+// 			Empresa, Nombre_Empresa,Alias,Fecha_Entrega,Nuevo_Procedimiento,Especificaciones,creado_por,,Eliminado_por,Fecha_eliminado
+// 		)  Select *,:Usuario,GETDATE() from rh_Ventas_Empresas where Empresa=:Empresa

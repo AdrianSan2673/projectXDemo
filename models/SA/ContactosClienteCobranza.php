@@ -10,6 +10,8 @@ class ContactosClienteCobranza
     private $Telefono;
     private $Extension;
     private $db;
+    //gabo 21 sept
+    private $empresa;
 
     public function __construct()
     {
@@ -75,6 +77,17 @@ class ContactosClienteCobranza
     public function setExtension($Extension)
     {
         $this->Extension = $Extension;
+    }
+    //21 sept
+
+    public function getEmpresa()
+    {
+        return $this->empresa;
+    }
+
+    public function setEmpresa($empresa)
+    {
+        $this->empresa = $empresa;
     }
 
     public function save()
@@ -152,6 +165,20 @@ class ContactosClienteCobranza
 
         $stmt = $this->db->prepare("SELECT * FROM rh_Ventas_Alta_Contactos_Cobranza WHERE id_cliente=:id_cliente ORDER BY Nombre");
         $stmt->bindParam(":id_cliente", $id_cliente, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $fetch = $stmt->fetchAll();
+        return $fetch;
+    }
+
+    //21 sept
+
+    public function getALLByEmpresa()
+    {
+        $empresa = $this->getEmpresa();
+
+        $stmt = $this->db->prepare("SELECT * FROM rh_Ventas_Alta_Contactos_Cobranza cc INNER JOIN rh_Ventas_Alta va ON cc.id_cliente=va.Cliente  WHERE va.Empresa=:empresa ORDER BY Nombre");
+        $stmt->bindParam(":empresa", $empresa, PDO::PARAM_INT);
         $stmt->execute();
 
         $fetch = $stmt->fetchAll();

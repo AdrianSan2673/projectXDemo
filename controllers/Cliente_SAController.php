@@ -588,6 +588,7 @@ class Cliente_SAController
                 }
 
                 if ($eliminar == true) {
+
                     $clienteObj = new Clientes();
                     $clienteObj->setCliente($id);
                     $clienteObj->setEliminado_por($_SESSION['identity']->username);
@@ -624,3 +625,18 @@ class Cliente_SAController
         }
     }
 }
+
+
+
+
+// CREATE TABLE root.[rh_Ventas_Empresas_eliminados](
+// 	[Empresa] [int] IDENTITY(1,1) NOT NULL,
+// 	[Nombre_Empresa] [varchar](100) NOT NULL,
+// 	[Alias] [varchar](100) NOT NULL,
+// 	[Fecha_Entrega] [datetime] NULL,
+// 	[Nuevo_Procedimiento] [int] NOT NULL,
+// 	[Especificaciones] [text] NULL,
+// 	[creado_por] [varchar](30) NULL,
+// 	[eliminado_por] [varchar](50) NULL,
+// 	[Fecha_eliminado]datetime NULL
+// )

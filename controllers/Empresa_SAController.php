@@ -5,6 +5,21 @@ require_once 'models/SA/ContactosEmpresa.php';
 require_once 'models/SA/RazonesSocialesEmpresa.php';
 require_once 'models/SA/Clientes.php';
 require_once 'models/SA/Prospecto.php';
+//19 SEPT
+require_once 'models/SA/Candidatos.php';
+
+require_once 'models/SA/ContactosCliente.php';
+require_once 'models/SA/ContactosClienteCobranza.php';
+require_once 'models/SA/RazonesSociales.php';
+require_once 'models/SA/ClientesNotas.php';
+
+
+
+
+
+
+
+
 
 class Empresa_SAController
 {
@@ -332,6 +347,110 @@ class Empresa_SAController
             );
         } else {
             header("location:" . base_url);
+        }
+    }
+
+    //19
+
+    public function eliminarEmpresa()
+    {
+        if (Utils::isValid($_POST) && (Utils::isAdmin())) {
+            $id = Encryption::decode($_POST['Empresa']);
+
+            if ($id) {
+                $cliente = new Clientes();
+                $cliente->setEmpresa($id);
+                $clientes = $cliente->getClientesPorEmpresa();
+
+                $Candidatos = new Candidatos();
+                $Candidatos->setEmpresa($id);
+                $Candidatos = $Candidatos->countCandidatosPorEmpresa()->Total;
+
+                $contacto = new ContactosEmpresa();
+                $contacto->setID($id);
+                $contactos = $contacto->getContactosPorEmpresa();
+
+                $contactoCobranzaObj = new ContactosClienteCobranza();
+                $contactoCobranzaObj->setEmpresa($id);
+                $contactoCobranza = $contactoCobranzaObj->getALLByEmpresa();
+
+                $razon = new RazonesSociales();
+                $razon->setID_Empresa($id);
+                $razones = $razon->getRazonesSocialesPorEmpresa();
+
+
+                $cliente->setEmpresa($id);
+                $notas = $cliente->getNotasPorEmpresa();
+
+
+
+
+
+                $eliminar = true;
+                $aviso = [];
+
+                if (count($clientes) > 0) {
+                    $texto = 'Contiene ' . count($clientes) . " clientes";
+                    array_push($aviso, $texto);
+                    $eliminar = false;
+                }
+
+                if ($Candidatos > 0) {
+                    $texto = 'Contiene ' . $Candidatos . " candidatos";
+                    array_push($aviso, $texto);
+                    $eliminar = false;
+                }
+
+                if (count($contactos) > 0) {
+                    array_push($aviso, 'Contiene ' . count($contactos) . " contactos.");
+                    $eliminar = false;
+                }
+
+                if (count($contactoCobranza) > 0) {
+                    array_push($aviso, 'Contiene ' . count($contactoCobranza) . " contacto de cobranza.");
+                    $eliminar = false;
+                }
+
+                if (count($razones) > 0) {
+                    array_push($aviso, 'Contiene ' . count($razones) . " razones.");
+                    $eliminar = false;
+                }
+
+                if (count($notas) > 0) {
+                    array_push($aviso, 'Contiene ' . count($notas) . ' notas.');
+                    $eliminar = false;
+                }
+
+                if ($eliminar == true) {
+                    $empresaObj = new Empresas();
+                    $empresaObj->setEmpresa($id);
+                    $empresaObj->setEliminado_por($_SESSION['identity']->username);
+                    $duplicado = $empresaObj->saveEmpresaeliminada();
+
+                    $duplicado == true ? $eliminado = $empresaObj->eliminarEmpresa() : $eliminado = false;
+
+
+
+                    if ($eliminado) {
+                        $empresas = $empresaObj->getAll();
+                        foreach ($empresas as &$empresa) {
+                            $empresa['Empresa'] = Encryption::encode($empresa['Empresa']);
+                            $empresa['creado_por'] = $empresa['creado_por'] == null ? '' : $empresa['creado_por'];
+                            $empresa['baseurl'] = base_url . 'empresa_SA/ver&id=' . $empresa['Empresa'];
+                        }
+
+                        echo json_encode(array('status' => 1, 'empresas' => $empresas));
+                    } else {
+                        echo json_encode(array('status' => 0));
+                    }
+                } else {
+                    echo json_encode(array('status' => 2, 'aviso' => $aviso));
+                }
+            } else {
+                echo json_encode(array('status' => 0));
+            }
+        } else {
+            echo json_encode(array('status' => 0));
         }
     }
 }
