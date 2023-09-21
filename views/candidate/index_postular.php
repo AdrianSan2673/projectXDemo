@@ -291,6 +291,7 @@
                                 <th></th>
                                 <th></th>
                                 <th></th>
+                                <th></th>
                             </tr>
                             <tr>
                                 <th></th>
@@ -309,6 +310,7 @@
                                 <th>Fortalezas</th>
                                 <th>fecha de creacion</th>
                                 <th>creado por</th>
+                                <th>Postulaciones</th>
                                 <th>Acciones</th>
 
 
@@ -337,6 +339,7 @@
                                 <th>Fortalezas</th>
                                 <th>fecha de creacion</th>
                                 <th>creado por</th>
+                                <th>Postulaciones</th>
                                 <th>Acciones</th>
                             </tr>
                         </tfoot>

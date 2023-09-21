@@ -99,7 +99,7 @@ class PostulacionesController
             header('location:' . base_url);
         }
     }
-	
+
 
     public function postulate_multiple()
     {
@@ -343,11 +343,11 @@ class PostulacionesController
                 $candidates = $candidate->getCandidatesByApplicationStatus($vacancy, 2);
                 $total = $candidate->getTotal();
 
-           
+
                 $c = new Candidate();
                 for ($i = 0; $i < count($candidates); $i++) {
-					
-					
+
+
                     $candidates[$i]['area'] = "";
                     $candidates[$i]['subarea'] = "";
                     $candidates[$i]['language'] = "";
@@ -418,7 +418,7 @@ class PostulacionesController
 
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
-               require_once 'views/candidate/enviados_a_reclutador.php';
+                require_once 'views/candidate/enviados_a_reclutador.php';
                 require_once 'views/layout/footer.php';
             } else {
                 header('location:' . base_url . 'vacante/index');
@@ -604,16 +604,16 @@ class PostulacionesController
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
                 require_once 'views/applicant/selected.php';
-                  // ===[gabo 2 junio modal-experiencia]=== 
-                  require_once 'views/applicant/modal-experiencia.php';
-                  // ===[gabo 2 junio modal-experiencia fin]===
+                // ===[gabo 2 junio modal-experiencia]=== 
+                require_once 'views/applicant/modal-experiencia.php';
+                // ===[gabo 2 junio modal-experiencia fin]===
                 require_once 'views/applicant/modal-eliminar-postulante.php';
                 require_once 'views/applicant/modal-reactivar-postulante.php';
                 require_once 'views/applicant/modal-descartar-postulante.php';
                 require_once 'views/applicant/modal-mover-postulante.php';
                 require_once 'views/applicant/modal-perfil-postulante.php';
-              
-               
+
+
                 require_once 'views/layout/footer.php';
             } else {
                 header('location:' . base_url . 'vacante/index');
@@ -936,15 +936,15 @@ class PostulacionesController
     public function getVacanciesByCandidato()
     {
         if (Utils::isValid($_SESSION['identity'])) {
-           
+
             $id_candidato = isset($_POST['id_candidato']) ? trim(Encryption::decode($_POST['id_candidato'])) : FALSE;
 
-            if ($id_candidato ) {
+            if ($id_candidato) {
 
                 $vacantes = new Vacancy();
                 //===[gabo 9 agosto postular]=== correcion
-                $vacantes->setId_recruiter($id_recruiter);
-                $vacantes = Utils::isAdmin() ? $vacantes->getVacanciesInProcess() : $vacantes->getVacanciesInProcessByIdRecruiter($_SESSION['identity']->id);
+                $vacantes->setId_recruiter($_SESSION['identity']->id);
+                $vacantes = Utils::isAdmin() ? $vacantes->getVacanciesInProcess() : $vacantes->getVacanciesInProcessByIdRecruiter();
                 //===[gabo 9 agosto postular fin]===
                 $applicant = new VacancyApplicant();
                 $applicant->setId_candidate($id_candidato);
@@ -961,19 +961,18 @@ class PostulacionesController
                     }
                 }
 
-                    echo json_encode(array(
-                        'vacantes' => $vacantesFiltradas,
-                        'status' => 1
-                    ));
-              
+                echo json_encode(array(
+                    'vacantes' => $vacantesFiltradas,
+                    'status' => 1
+                ));
             } else
                 echo json_encode(array('status' => 0));
         } else
             echo json_encode(array('status' => 0));
     }
 
-//sideserver
-	
+    //sideserver
+
     function postulate_one()
     {
 
@@ -997,7 +996,7 @@ class PostulacionesController
             $postulado = $cdto->getOne();
 
             $save =  $applicant->move_postulant();
-		
+
 
             $subject = 'Nueva postulación para ' . $vacante->vacancy;
 
@@ -1007,14 +1006,14 @@ class PostulacionesController
                 $user->setId($recruiter);
                 $executive = $user->getOne();
 
-                  Utils::sendEmail($executive->email, $executive->first_name . ' ' . $executive->last_name, $subject, $body);
+                Utils::sendEmail($executive->email, $executive->first_name . ' ' . $executive->last_name, $subject, $body);
 
                 $exe = new ExecutiveJRRecruiter();
                 $exe->setId_recruiter($executive->id);
                 $executiveJR = $exe->getExecutiveJRByRecruiter();
 
                 if ($executiveJR) {
-                       Utils::sendEmail($executiveJR->email, $executiveJR->first_name . ' ' . $executiveJR->last_name, $subject, $body);
+                    Utils::sendEmail($executiveJR->email, $executiveJR->first_name . ' ' . $executiveJR->last_name, $subject, $body);
                 }
             }
 
@@ -1025,10 +1024,9 @@ class PostulacionesController
             echo json_encode(array('status' => 0));
         }
     }
-	
-	  public function sideserver()
+
+    public function sideserver()
     {
-		
 
         $_GET['filtros'] .= ($_GET['id_language'] != '') ? "and id_language like " . "'%" . $_GET['id_language'] . "%'" : '';
         $extrawhere = substr($_GET['filtros'], 3);
@@ -1061,15 +1059,15 @@ class PostulacionesController
             array('db' => 'id_gender',  'dt' => 16),
             array('db' => 'surname',  'dt' => 18),
             array('db' => 'last_name',  'dt' => 19),
-            array('db' => 'id_language',  'dt' => 20)
+            array('db' => 'postulaciones',  'dt' => 24)
         );
 
-         $sql_details = array(
-             'user' => 'reclutador',
-             'pass' => 'Sr65s$0z',
-             'db'   => 'reclutamiento',
-             'host' => '148.72.144.152'
-         );
+        $sql_details = array(
+            'user' => '',
+            'pass' => '',
+            'db'   => 'reclutamiento',
+            'host' => 'localhost'
+        );
 
         $botones = 1;
 
@@ -1089,5 +1087,4 @@ class PostulacionesController
             SSP::simple($_POST, $sql_details,  $tabla, $primaryKey, $columns, $botones, $extrawhere, $extraFields)
         );
     }
-
 }

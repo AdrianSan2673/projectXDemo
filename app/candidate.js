@@ -188,7 +188,7 @@ class Candidate {
 	}
 
 	create() {
-        document.querySelector("#candidate-form #candidate_submit").disabled = true;
+		document.querySelector("#candidate-form #candidate_submit").disabled = true;
 		var form = document.querySelector("#candidate-form");
 		var formData = new FormData(form);
 		if (document.querySelector("#avatar").value.length > 0) {
@@ -224,13 +224,13 @@ class Candidate {
 							setTimeout(() => {
 								window.history.back();
 							}, 3000);
-						} else  {
+						} else {
 							utils.showToast('Candidato creado exitosamente', 'success');
 							setTimeout(() => {
 								window.location.href = `./profile&id_vacancy=${json_app.id_vacancy}&id_candidate=${json_app.id_candidate}`;
 							}, 3000);
 
-						} 
+						}
 					} else if (json_app.status == 2) {
 						utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
@@ -240,7 +240,7 @@ class Candidate {
 					} else if (json_app.status == 4) {
 						utils.showToast('El archivo de tu cv excede el peso permitido o tiene un formato no admitido', 'warning');
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
-					}else if (json_app.status == 5) {
+					} else if (json_app.status == 5) {
 						utils.showToast('Fecha de nacimiento no permitida', 'warning');
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
 					} else {
@@ -883,7 +883,7 @@ class Candidate {
 				document.querySelector("#profile-candidate-form [name='submit']").disabled = false
 			});
 	}
-	
+
 	postulate() {
 
 		var form = document.querySelector("#postular-form");
@@ -891,9 +891,9 @@ class Candidate {
 		var formData = new FormData(form);
 
 		fetch('../Candidato/postulate', {
-				method: 'POST',
-				body: formData
-			})
+			method: 'POST',
+			body: formData
+		})
 			.then(response => {
 				//console.log(response.json());
 				if (response.ok) {
@@ -919,7 +919,7 @@ class Candidate {
 
 							vacancies += `
                                 <tr> `;
-							(json_app.isCustomer == false) ? vacancies += `<td>${vacancy.applicant_date}</td>`: '';
+							(json_app.isCustomer == false) ? vacancies += `<td>${vacancy.applicant_date}</td>` : '';
 
 							vacancies += `
                                     <td>${vacancy.applicant_status}</td>
@@ -927,15 +927,15 @@ class Candidate {
                                     <td>${vacancy.interview_date}</td>
                                     <td>${vacancy.interview_comments}</td>
                                     <td> ${vacancy.request_date}</td>`;
-							(json_app.isCustomer == false) ? vacancies += `<td> ${vacancy.customer}</td >`: '';
+							(json_app.isCustomer == false) ? vacancies += `<td> ${vacancy.customer}</td >` : '';
 							vacancies += ` 
                                     <td>${vacancy.vacancy}</td>
                                     <td>${vacancy.city} , ${vacancy.abbreviation}</td>
                                     `;
 
-							(vacancy.salary_min != vacancy.salary_max) ? vacancies += `<td class="text-center">$${vacancy.salary_min} - $${vacancy.salary_max}</td>`: vacancies += `<td class="text-center">$${vacancy.salary_max}`;
+							(vacancy.salary_min != vacancy.salary_max) ? vacancies += `<td class="text-center">$${vacancy.salary_min} - $${vacancy.salary_max}</td>` : vacancies += `<td class="text-center">$${vacancy.salary_max}`;
 
-							(json_app.isCustomer == false) ? vacancies += `<td> ${vacancy.end_date}</td >`: '';
+							(json_app.isCustomer == false) ? vacancies += `<td> ${vacancy.end_date}</td >` : '';
 
 							vacancies += `
                                     <td class="text-center ${vacancy.class_color}">${vacancy.status}</td>
@@ -945,9 +945,9 @@ class Candidate {
                                                 class="btn btn-success">
                                                 <i class="fas fa-eye"></i>
                                             </a> `;
-							(json_app.isAdmin == true || json_app.isJunior == true) ? vacancies += `<a href="${vacancy.base_url}vacante/editar&id=${vacancy.id}" class="btn btn-info"><i class="fas fa-pencil-alt"></i></a>`: '';
+							(json_app.isAdmin == true || json_app.isJunior == true) ? vacancies += `<a href="${vacancy.base_url}vacante/editar&id=${vacancy.id}" class="btn btn-info"><i class="fas fa-pencil-alt"></i></a>` : '';
 
-							(json_app.isJunior == true) ? vacancies += `<a href="${vacancy.base_url}postulaciones/buscar&id=${vacancy.id}&area=${vacancy.id}" class="btn btn-info"> <i class="fas fa-search"></i></a>`: '';
+							(json_app.isJunior == true) ? vacancies += `<a href="${vacancy.base_url}postulaciones/buscar&id=${vacancy.id}&area=${vacancy.id}" class="btn btn-info"> <i class="fas fa-search"></i></a>` : '';
 							vacancies += `
                                         </div>
                                     </td>
@@ -979,8 +979,306 @@ class Candidate {
 				document.querySelector("#postular-form [name='submit']").disabled = false
 			});
 	}
-	
-	
+
+
+	// //side server
+	// cargarTabla() {
+
+	// 	var form = document.querySelector("#filtros");
+	// 	let datos = '';
+	// 	let clave = (form.querySelector('#clave').value != '') ? form.querySelector('#clave').value.trim() : '';
+	// 	datos += (form.querySelector('#id_level').value != '') ? 'and id_level=' + form.querySelector('#id_level').value + ' ' : '';
+	// 	datos += (form.querySelector('#id_area').value != '') ? 'and id_area=' + form.querySelector('#id_area').value + ' ' : '';
+	// 	datos += (form.querySelector('#id_subarea').value != '') ? 'and id_subarea=' + form.querySelector('#id_subarea').value + ' ' : '';
+	// 	datos += (form.querySelector('#id_state').value != '') ? 'and id_state=' + form.querySelector('#id_state').value + ' ' : '';
+	// 	datos += (form.querySelector('#id_city').value != '') ? 'and id_city=' + form.querySelector('#id_city').value + ' ' : '';
+	// 	let id_language = (form.querySelector('#language').value != '') ? form.querySelector('#language').value : '';
+
+	// 	datos += (form.querySelector('#id_gender').value != '') ? 'and id_gender=' + form.querySelector('#id_gender').value + ' ' : '';
+
+	// 	let edad1 = (form.querySelector('#edad1').value != '') ? parseInt(form.querySelector('#edad1').value) + ' ' : 0;
+	// 	let edad2 = (form.querySelector('#edad2').value != '') ? parseInt(form.querySelector('#edad2').value) + ' ' : 0;
+
+	// 	edad1 > edad2 ? edad2 = edad1 : '';
+	// 	edad1 == '' ? edad1 = edad2 : '';
+	// 	edad2 == '' ? edad2 = edad1 : '';
+
+	// 	if (edad1 != 0 && edad2 != 0) {
+	// 		datos += 'and age  BETWEEN ' + edad1 + ' AND ' + edad2 + ' ';
+	// 	}
+
+	// 	if (clave != '') {
+	// 		document.getElementById('div_search').hidden = false;
+	// 	} else {
+	// 		document.getElementById('div_search').hidden = true;
+	// 	}
+
+
+	// 	$('#tb_candidates').DataTable().destroy();
+	// 	var table = $('#tb_candidates').DataTable({
+	// 		ajax:{ url: '../candidato/sideserver?filtros=' + datos + '&id_language=' + id_language + '&clave=' + clave,
+	// 		type: "POST"},
+	// 		processing: true,
+	// 		serverSide: true,
+	// 		"pageLength": 50,
+	// 		"columnDefs": [{
+	// 			"targets": -1,
+	// 			"data": null,
+	// 			render: function (data, type, row) { // con row obtienes la información por fila
+
+	// 				let botones = `  <div class="btn-group btn-group-sm align-middle">
+
+	// 				<button id="btn_postular" class="btn btn-warning" data-id="${data[1]} ${data[18]} ${data[19]}" value="${data[15]}">
+	// 				<i class="fas fa-check"></i> Postular
+	// 				</button>
+	//                                <a href="ver&id=${data[15]}"
+	//                                     class="btn btn-success">
+	//                                     <i class="fas fa-eye"></i> Ver
+	//                                 </a>
+	//                                 <a href="editar&id=${data[15]}"
+	//                                     class="btn btn-info" hidden>
+	//                                     <i class="fas fa-pencil-alt"></i> Editar
+	//                                 </a>
+	//                                 <a href="../resume/generate&id=${data[15]}"
+	//                                     target="_blank" class="btn btn-danger" hidden>
+	//                                     <i class="fas fa-download"></i> Plantilla
+	//                                 </a>
+	//                                `;
+
+	// 				if (data[17] != '') {
+	// 					botones += `
+	//                                <a href="${data[17]}" target="_blank" class="btn btn-orange">
+	//                                     <i class="fas fa-file-download"></i> CV
+	//                                 </a></div>`;
+	// 				}
+	// 				return botones;
+	// 			}
+	// 		}, {
+	// 			"targets": 0,
+	// 			"data": null,
+	// 			"class": 'image',
+	// 			render: function (data, type, row) { // con row obtienes la información por fila
+	// 				return ` <img class="img-circle img-fluid img-responsive elevation-2"
+	//                                 src="${data[0]}" style="width:60px; height:auto;">`
+	// 			}
+	// 		}], "drawCallback": function (settings) {
+	// 			document.querySelector('#encontrados').innerHTML = 'Candidatos Encontrados : ' + settings.json.recordsFiltered;
+	// 			console.log(settings.json.recordsFiltered);
+
+	// 			document.querySelector('#clean').disabled = false;
+	// 			document.querySelector('#search').disabled = false;
+
+	// 			$(`#tb_candidates thead tr:eq(0) th`).each(function (i) {
+	// 				if (this.classList.contains('filterhead')) {
+	// 					var select = $('<select class="form-control" style="select2" style="width: 100% !important"><option value="">Sin filtro</option></select>')
+	// 						.appendTo($(this).empty())
+	// 						.on('change', function () {
+
+	// 							var valor_buscado = $(this).val();
+	// 							$.each($("#tb_candidates tbody tr"), function () {
+
+	// 								if ($(this).text().toLowerCase().indexOf(valor_buscado.toLowerCase()) === -1)
+	// 									$(this).hide();
+	// 								else
+	// 									$(this).show();
+	// 							});
+
+	// 						});
+	// 					table.column(i).data().unique().sort().each(function (d, j) {
+	// 						if (d != null) {
+	// 							select.append('<option value="' + d + '">' + d + '</option>')
+	// 						}
+
+	// 					});
+	// 				}
+	// 			});
+	// 			//do whatever  
+	// 		},
+	// 	});
+
+	// }
+
+
+	// //===[gabo 30 agosto]===
+	// LoadTablePostulate() {
+
+	// 	var form = document.querySelector("#filtros");
+	// 	let datos = '';
+	// 	let clave = (form.querySelector('#clave').value != '') ? form.querySelector('#clave').value.trim() : '';
+	// 	datos += (form.querySelector('#id_level').value != '') ? 'and id_level=' + form.querySelector('#id_level').value + ' ' : '';
+	// 	datos += (form.querySelector('#id_area').value != '') ? 'and id_area=' + form.querySelector('#id_area').value + ' ' : '';
+	// 	datos += (form.querySelector('#id_subarea').value != '') ? 'and id_subarea=' + form.querySelector('#id_subarea').value + ' ' : '';
+	// 	datos += (form.querySelector('#id_state').value != '') ? 'and id_state=' + form.querySelector('#id_state').value + ' ' : '';
+	// 	datos += (form.querySelector('#id_city').value != '') ? 'and id_city=' + form.querySelector('#id_city').value + ' ' : '';
+	// 	let id_language = (form.querySelector('#language').value != '') ? form.querySelector('#language').value : '';
+
+	// 	datos += (form.querySelector('#id_gender').value != '') ? 'and id_gender=' + form.querySelector('#id_gender').value + ' ' : '';
+
+	// 	let edad1 = (form.querySelector('#edad1').value != '') ? parseInt(form.querySelector('#edad1').value) + ' ' : 0;
+	// 	let edad2 = (form.querySelector('#edad2').value != '') ? parseInt(form.querySelector('#edad2').value) + ' ' : 0;
+
+	// 	edad1 > edad2 ? edad2 = edad1 : '';
+	// 	edad1 == '' ? edad1 = edad2 : '';
+	// 	edad2 == '' ? edad2 = edad1 : '';
+
+	// 	if (edad1 != 0 && edad2 != 0) {
+	// 		datos += 'and age  BETWEEN ' + edad1 + ' AND ' + edad2 + ' ';
+	// 	}
+
+	// 	if (clave != '') {
+	// 		document.getElementById('div_search').hidden = false;
+	// 	} else {
+	// 		document.getElementById('div_search').hidden = true;
+	// 	}
+	// 	let id_vacancy = (form.querySelector('#id_vacancy').value != '') ? form.querySelector('#id_vacancy').value : 0;
+
+
+	// 	$('#tb_candidates_postulate').DataTable().destroy();
+	// 	var table = $('#tb_candidates_postulate').DataTable({
+	// 			ajax:{ url: '../postulaciones/sideserver?filtros=' + datos + '&id_language=' + id_language + '&clave=' + clave + '&id_vacancy=' + id_vacancy,
+	// 		type: "POST"},
+	// 		processing: true,
+	// 		serverSide: true,
+	// 		"pageLength": 50,
+	// 		"columnDefs": [{
+	// 			"targets": -1,
+	// 			"data": null,
+	// 			render: function (data, type, row) { // con row obtienes la información por fila
+
+	// 				let botones = `<div class="btn-group btn-group-sm align-middle">`;
+	// 				console.log(data[22]);
+	// 				if (data[22] == 1 || data[22] == '' || data[22] === null) {
+	// 					botones += `	
+	// 					<button id="btn_postular" class="btn btn-warning" data-id="${data[1]} ${data[18]} ${data[19]}" value="${data[15]}">
+	// 					<i class="fas fa-check"></i>Postular
+	// 					</button>`;
+	// 				}
+
+	// 				botones += `<a href="../Candidato/ver&id=${data[15]}"
+	//                                     class="btn btn-success">
+	//                                     <i class="fas fa-eye"></i> Ver
+	//                                 </a>
+	//                                 <a href="../Candidato/editar&id=${data[15]}"
+	//                                     class="btn btn-info" hidden>
+	//                                     <i class="fas fa-pencil-alt"></i> Editar
+	//                                 </a>
+	//                                 <a href="../resume/generate&id=${data[15]}"
+	//                                     target="_blank" class="btn btn-danger" hidden>
+	//                                     <i class="fas fa-download"></i> Plantilla
+	//                                 </a>
+	//                                `;
+
+
+	// 				if (data[17] != '') {
+	// 					botones += `
+	//                                <a href="${data[17]}" target="_blank" class="btn btn-orange">
+	//                                     <i class="fas fa-file-download"></i> CV
+	//                                 </a></div>`;
+	// 				}
+	// 				return botones;
+	// 			}
+	// 		}, {
+	// 			"targets": 0,
+	// 			"data": null,
+	// 			"class": 'image',
+	// 			render: function (data, type, row) { // con row obtienes la información por fila
+	// 				return ` <img class="img-circle img-fluid img-responsive elevation-2"
+	//                                 src="${data[0]}" style="width:70px; height:auto;">`
+	// 			}
+	// 		}, {
+	// 			"targets": 1,
+	// 			"data": null,
+	// 			render: function (data, type, row) { // con row obtienes la información por fila
+	// 				if (data[22] == 1 || data[22] == '' || data[22] === null) {
+	// 					return `<input type="checkbox" name="postulate[]" value="${data[15]}" class="form-control" >`;
+	// 				} else {
+	// 					return `<input type="checkbox" name="postulate[]" value="${data[15]}" disabled class="form-control" checked >`;
+
+	// 				}
+
+	// 			}
+	// 		}, {
+	// 			"targets": 2,
+	// 			"data": 1,
+	// 		}, {
+	// 			"targets": 3,
+	// 			"data": 2,
+	// 		}, {
+	// 			"targets": 4,
+	// 			"data": 3,
+	// 		}, {
+	// 			"targets": 5,
+	// 			"data": 4,
+	// 		}, {
+	// 			"targets": 6,
+	// 			"data": 5,
+	// 		}, {
+	// 			"targets": 7,
+	// 			"data": 6,
+	// 		}, {
+	// 			"targets": 8,
+	// 			"data": 7,
+	// 		}, {
+	// 			"targets": 9,
+	// 			"data": 8,
+	// 		}, {
+	// 			"targets": 10,
+	// 			"data": 9,
+	// 		}, {
+	// 			"targets": 11,
+	// 			"data": 10,
+	// 		}, {
+	// 			"targets": 12,
+	// 			"data": 11,
+	// 		}, {
+	// 			"targets": 13,
+	// 			"data": 12,
+	// 		}, {
+	// 			"targets": 14,
+	// 			"data": 13,
+	// 		}, {
+	// 			"targets": 15,
+	// 			"data": 14,
+	// 		}, {
+	// 			"targets": 16,
+	// 			"data": 15,
+	// 		}], "drawCallback": function (settings) {
+
+	// 			document.querySelector('#encontrados').innerHTML = 'Candidatos Encontrados : ' + settings.json.recordsFiltered;
+
+
+	// 			document.querySelector('#clean').disabled = false;
+	// 			document.querySelector('#search').disabled = false;
+
+	// 			$(`#tb_candidates_postulate thead tr:eq(0) th`).each(function (i) {
+	// 				if (this.classList.contains('filterhead')) {
+	// 					var select = $('<select class="form-control" style="select2" style="width: 100% !important"><option value="">Sin filtro</option></select>')
+	// 						.appendTo($(this).empty())
+	// 						.on('change', function () {
+
+	// 							var valor_buscado = $(this).val();
+	// 							$.each($("#tb_candidates_postulate tbody tr"), function () {
+
+	// 								if ($(this).text().toLowerCase().indexOf(valor_buscado.toLowerCase()) === -1)
+	// 									$(this).hide();
+	// 								else
+	// 									$(this).show();
+	// 							});
+
+	// 						});
+	// 					table.column(i).data().unique().sort().each(function (d, j) {
+	// 						if (d != null) {
+	// 							select.append('<option value="' + d + '">' + d + '</option>')
+	// 						}
+
+	// 					});
+	// 				}
+	// 			});
+	// 			//do whatever  
+	// 		},
+	// 	});
+
+	// }
 	//side server
 	cargarTabla() {
 
@@ -1016,8 +1314,10 @@ class Candidate {
 
 		$('#tb_candidates').DataTable().destroy();
 		var table = $('#tb_candidates').DataTable({
-			ajax:{ url: '../candidato/sideserver?filtros=' + datos + '&id_language=' + id_language + '&clave=' + clave,
-			type: "POST"},
+			ajax: {
+				url: '../candidato/sideserver&filtros=' + datos + '&id_language=' + id_language + '&clave=' + clave,
+				type: "POST"
+			},
 			processing: true,
 			serverSide: true,
 			"pageLength": 50,
@@ -1061,16 +1361,23 @@ class Candidate {
 					return ` <img class="img-circle img-fluid img-responsive elevation-2"
 	                                src="${data[0]}" style="width:60px; height:auto;">`
 				}
+			},
+			//gabo 20 sept
+			{
+				"targets": -2,
+				"data": 24,
+
 			}], "drawCallback": function (settings) {
 				document.querySelector('#encontrados').innerHTML = 'Candidatos Encontrados : ' + settings.json.recordsFiltered;
 				console.log(settings.json.recordsFiltered);
 
 				document.querySelector('#clean').disabled = false;
 				document.querySelector('#search').disabled = false;
-
+				let colores = ["#C295FE", "#FFEB90", "#84D4FE", "#9FFF90", "#F095FE", "#81A3FC", "#FFB47C", "#FF7C7C"];
+				var cont = 0;
 				$(`#tb_candidates thead tr:eq(0) th`).each(function (i) {
 					if (this.classList.contains('filterhead')) {
-						var select = $('<select class="form-control" style="select2" style="width: 100% !important"><option value="">Sin filtro</option></select>')
+						var select = $('<select class="form-control"  style="width: 100% !important;background-color:' + colores[cont] + '"><option value="">Sin filtro</option></select>')
 							.appendTo($(this).empty())
 							.on('change', function () {
 
@@ -1090,6 +1397,7 @@ class Candidate {
 							}
 
 						});
+						cont++;
 					}
 				});
 				//do whatever  
@@ -1135,8 +1443,10 @@ class Candidate {
 
 		$('#tb_candidates_postulate').DataTable().destroy();
 		var table = $('#tb_candidates_postulate').DataTable({
-				ajax:{ url: '../postulaciones/sideserver?filtros=' + datos + '&id_language=' + id_language + '&clave=' + clave + '&id_vacancy=' + id_vacancy,
-			type: "POST"},
+			ajax: {
+				url: '../postulaciones/sideserver&filtros=' + datos + '&id_language=' + id_language + '&clave=' + clave + '&id_vacancy=' + id_vacancy,
+				type: "POST"
+			},
 			processing: true,
 			serverSide: true,
 			"pageLength": 50,
@@ -1241,18 +1551,22 @@ class Candidate {
 				"data": 14,
 			}, {
 				"targets": 16,
-				"data": 15,
-			}], "drawCallback": function (settings) {
+				"data": 24,
+			},
+			], "drawCallback": function (settings) {
 
 				document.querySelector('#encontrados').innerHTML = 'Candidatos Encontrados : ' + settings.json.recordsFiltered;
 
 
 				document.querySelector('#clean').disabled = false;
 				document.querySelector('#search').disabled = false;
-
+				let colores = ["#C295FE", "#FFEB90", "#84D4FE", "#9FFF90", "#F095FE", "#81A3FC", "#FFB47C", "#FF7C7C"];
+				var cont = 0;
 				$(`#tb_candidates_postulate thead tr:eq(0) th`).each(function (i) {
 					if (this.classList.contains('filterhead')) {
-						var select = $('<select class="form-control" style="select2" style="width: 100% !important"><option value="">Sin filtro</option></select>')
+
+
+						var select = $('<select class="form-control"  style="width: 100% !important;background-color:' + colores[cont] + '"><option value="">Sin filtro</option></select>')
 							.appendTo($(this).empty())
 							.on('change', function () {
 
@@ -1272,7 +1586,9 @@ class Candidate {
 							}
 
 						});
+						cont++;
 					}
+
 				});
 				//do whatever  
 			},
@@ -1280,6 +1596,5 @@ class Candidate {
 
 	}
 
-	
-	
+
 }
