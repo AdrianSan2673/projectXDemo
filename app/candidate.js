@@ -229,6 +229,8 @@ class Candidate {
 							setTimeout(() => {
 								window.location.href = `./profile&id_vacancy=${json_app.id_vacancy}&id_candidate=${json_app.id_candidate}`;
 							}, 3000);
+							gabo
+							document.querySelector("#candidate-form #candidate_submit").disabled = false;
 
 						}
 					} else if (json_app.status == 2) {
@@ -242,6 +244,12 @@ class Candidate {
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
 					} else if (json_app.status == 5) {
 						utils.showToast('Fecha de nacimiento no permitida', 'warning');
+						document.querySelector("#candidate-form #candidate_submit").disabled = false;
+					} else if (json_app.status == 6) {
+						utils.showToast('Formato de fecha incorrecto, verifiquelas por favor', 'warning');
+						document.querySelector("#candidate-form #candidate_submit").disabled = false;
+					} else if (json_app.status == 7) {
+						utils.showToast('Llene todos los campos por favor, verifiquelas por favor', 'warning');
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
 					} else {
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
@@ -444,6 +452,7 @@ class Candidate {
 						let primero = 1;
 
 						const div = document.querySelector('#div_experience');
+						console.log(experiencias);
 
 						experiencias.forEach((element) => {
 
@@ -460,31 +469,33 @@ class Candidate {
 							}
 
 							row += `
-						<div class="row borrados">
+							<div class="row borrados" style="margin-bottom:0.6rem; border:1px solid #98AE98 ; border-radius:15px;padding:1rem">
 							<div class="col-md-2">
 							<div class="form-group" style="text-align: center">
-							  <label for="" class="col-form-label" style="margin-top:30px">`+ titulo + `</label>
+							  <label for="" class="col-form-label" style="margin-top:30px">Información:</label>
 							</div>
 						  </div>
 						  <div class="col-md-4">
-							<div class="form-group" style="text-align: center">`;
-							if (primero == 1) {
-								row += ` <label class="col-form-label">Empresa/Puesto</label>`;
-							} else {
-								row += `<label class="col-form-label"></label>`;
-							}
+							<div class="form-group" style="text-align: center">
+							<label class="col-form-label">Fecha Inicio:</label>
+							<input type="date" name="start_date[]"  style="text-align:center;margin-bottom:0.5rem" value="`+ element.start_date + `" value="" required class=" form-control" > 					  
+							`;
+
+							row += ` <label class="col-form-label">Empresa/Puesto</label>`;
+
 							row += `
 							  <input required type="text" `+ enterprise + `  style="text-align:center" value="` + element.enterprise + `" class=" form-control"  ` + readonly + ` >
 							</div>
 						  </div>
 
 						  <div class="col-md-5">
+						  <label class="col-form-label">Fecha Fin:</label>
+						  <input type="date" name="end_date[]"  style="text-align:center;margin-bottom:0.5rem;width:70%" value="`+ element.end_date + `" required class=" form-control" > 
+						
 							<div class="form-group" style="text-align: center">`;
-							if (primero == 1) {
-								row += `<label class="col-form-label">Descripcion</label>`;
-							} else {
-								row += `<label class="col-form-label"></label>`;
-							}
+
+							row += `<label class="col-form-label">Descripcion</label>`;
+
 							row += `
 							 <textarea  required  `+ review + `  id="review_experience" rows="4"  class=" form-control" ` + readonly + ` >` + element.review + `</textarea>
 							</div>
@@ -548,6 +559,11 @@ class Candidate {
 
 					} else if (json_app.status == 2) {
 						utils.showToast(' No se pudo guardar la informacion', 'error');
+						document.querySelector("#modal-experiencia #submit").disabled = false;
+
+					}
+					else if (json_app.status == 6) {
+						utils.showToast('Formato de fecha incorrecto, verifiquelas por favor', 'error');
 						document.querySelector("#modal-experiencia #submit").disabled = false;
 
 					}

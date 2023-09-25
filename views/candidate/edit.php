@@ -308,27 +308,40 @@
                                         <i class="fas fa-plus"></i>
                                     </btn>
                                 </div>
-                                <div class="card-body">
-                                    <div class="card-body" id="div_experience">
+                                <div class="card-body" id="div_experience">
+                                    <div class="card-body" style="margin-bottom:0.6rem;border:1px solid #98AE98; border-radius:15px; padding:1rem">
                                         <div class="row">
-                                            <div class="col-md-2">
+                                            <div class="col-md-1">
                                                 <div class="form-group" style="text-align: center">
                                                     <label for="" class="col-form-label" style="margin-top:30px">Información:</label>
 
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-2">
                                                 <div class="form-group" style="text-align: center">
-                                                    <label class="col-form-label">Empresa/puesto</label>
+                                                    <label class="col-form-label">Fecha Inicio:</label>
+                                                    <input type="date" name="start_date[]" id="start_dates" style="text-align:center" class=" form-control" value="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group" style="text-align: center">
+                                                    <label class="col-form-label">Fecha Fin:</label>
+                                                    <input type="date" name="end_date[]" id="end_dates" style="text-align:center" class=" form-control" value="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group" style="text-align: center">
+                                                    <label class="col-form-label">Empresa/puesto:</label>
                                                     <input onblur="verificar()" type="text" name="enterprise_experience[]" id="enterprise_experience" style="text-align:center" class=" form-control" value="">
                                                 </div>
                                             </div>
-                                            <div class="col-md-5">
+                                            <div class="col-md-3">
                                                 <div class="form-group" style="text-align: center">
-                                                    <label class="col-form-label">Descripción</label>
+                                                    <label class="col-form-label">Descripción:</label>
                                                     <textarea onblur="verificar()" name="review_experience[]" id="review_experience" class=" form-control" <?= Utils::isCustomer() ? 'disabled' : '' ?>></textarea>
                                                 </div>
                                             </div>
+
                                             <div class="col-md-1">
                                                 <div class="form-group" style="text-align: center">
                                                 </div>
@@ -541,22 +554,40 @@
             const row = document.createElement('div');
             row.classList.add('row');
             row.classList.add('borrados');
+            row.style.marginBottom = "0.6rem";
+            row.style.border = "1px solid #98AE98";
+            row.style.borderRadius = "15px";
+            row.style.padding = "1rem";
             row.innerHTML = `
-                          <div class="col-md-2">
+                          <div class="col-md-1">
                             <div class="form-group" style="text-align: center">
-                              <label for="" class="col-form-label" style="margin-top:30px"></label>
+                              <label for="" class="col-form-label" style="margin-top:30px">Información:</label>
                             </div>
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-md-2">
+                                            <div class="form-group" style="text-align: center">
+                                                <label class="col-form-label">Fecha Inicio:</label>
+                                                <input type="date" name="start_date[]" id="start_dates"
+                                                    style="text-align:center" class=" form-control" value="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group" style="text-align: center">
+                                                <label class="col-form-label">Fecha Fin:</label>
+                                                <input type="date" name="end_date[]" id="end_dates"
+                                                    style="text-align:center" class=" form-control" value="">
+                                            </div>
+                                        </div>
+                          <div class="col-md-3">
                             <div class="form-group" style="text-align: center">
-                               <label class="col-form-label"></label>
+                               <label class="col-form-label">Empresa/puesto:</label>
                               <input type="text" name="enterprise_experience[]"  style="text-align:center" class="multiple form-control" required >
                             </div>
                           </div>
 
-                          <div class="col-md-5">
+                          <div class="col-md-3">
                             <div class="form-group" style="text-align: center">
-                             <label class="col-form-label"></label>
+                             <label class="col-form-label">Descripción:</label>
                              <textarea   name="review_experience[]"  rows="4"  class="multiple form-control"  required ></textarea>
                             </div>
                           </div>

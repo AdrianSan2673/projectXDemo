@@ -200,11 +200,11 @@ class CandidateExperience
 	}
 
 	// ===[ 31 mayo gabo review fin]=== 
-
+	//21 sept
 	public function getExperiencesByCandidate()
 	{
 		$candidate = $this->getId_candidate();
-		$stmt = $this->db->prepare("SELECT *, ce.id AS id_experience FROM candidate_experience ce INNER JOIN states s ON ce.id_state=s.id INNER JOIN cities ct ON ce.id_city=ct.id WHERE id_candidate=:id_candidate ORDER BY ce.id, ce.still_works DESC, ce.end_date DESC, ce.start_date DESC");
+		$stmt = $this->db->prepare("SELECT *, ce.id AS id_experience,ce.start_date,ce.end_date FROM candidate_experience ce INNER JOIN states s ON ce.id_state=s.id INNER JOIN cities ct ON ce.id_city=ct.id WHERE id_candidate=:id_candidate ORDER BY ce.id, ce.still_works DESC, ce.end_date DESC, ce.start_date DESC");
 		$stmt->bindParam(":id_candidate", $candidate, PDO::PARAM_STR);
 		$stmt->execute();
 		$experiences = $stmt->fetchAll();
@@ -253,9 +253,9 @@ class CandidateExperience
 		$flag = $stmt->execute();
 
 		if ($flag) {
-            $result = true;
-            $this->setId($this->db->lastInsertId());
-        }
+			$result = true;
+			$this->setId($this->db->lastInsertId());
+		}
 		return $result;
 	}
 	// ===[ 31 mayo gabo review fin]=== 
