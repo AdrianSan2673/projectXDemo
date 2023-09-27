@@ -565,4 +565,18 @@ class VacancyApplicant
 		}
 		return $result;
 	}
+
+	//gabo 26
+	public function getOneByCandidate()
+	{
+
+		$id_candidate = $this->getId_candidate();
+		$stmt = $this->db->prepare("SELECT  TOP (1) *  from vacancy_applicants WHERE id_candidate=:id_candidate AND id_profile is not null order by applicant_date  DESC ");
+
+		$stmt->bindParam(":id_candidate", $id_candidate, PDO::PARAM_INT);
+		$stmt->execute();
+
+		$fetch = $stmt->fetchObject();
+		return $fetch;
+	}
 }

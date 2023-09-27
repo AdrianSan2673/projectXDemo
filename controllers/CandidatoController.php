@@ -99,7 +99,6 @@ class CandidatoController
             header('location:' . base_url);
         }
     }
-
     /**OLD */
     public function create()
     {
@@ -1028,7 +1027,6 @@ class CandidatoController
                 $candidato->setId($id_candidato);
                 $name_candidate = $candidato->getOne()->first_name . ' ' . $candidato->getOne()->surname . ' ' . $candidato->getOne()->last_name;
                 //    ===[gabo 21 mayo operativa fin]=== 
-
 
                 if ($result) {
                     if ($result->id_profile !== NULL) {

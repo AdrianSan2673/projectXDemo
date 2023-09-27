@@ -457,4 +457,24 @@ class ApplicantProfile
         }
         return $result;
     }
+
+
+    //gabo 26 sept
+
+    public function duplicateProfile()
+    {
+
+        $id = $this->getId();
+        $stmt = $this->db->prepare(" INSERT INTO root.vacancy_applicant_profile ( gender, status_gender,age,status_age,civil_status,status_civil_status, level,status_level,language,status_language,language_level,status_language_level,functions,experience_years,status_experience_years,general_comments,status_functions ,functions_comments,experiencia_comments,created_at,tiempo)   SELECT gender, status_gender,age,status_age,civil_status,status_civil_status, level,status_level,language,status_language,language_level,status_language_level,functions,experience_years,status_experience_years,general_comments,status_functions ,functions_comments,experiencia_comments,created_at,tiempo from root.vacancy_applicant_profile WHERE id=:id");
+
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+
+        $flag = $stmt->execute();
+        if ($flag) {
+            $result = true;
+            $this->setId($this->db->lastInsertId());
+        }
+
+        return $flag;
+    }
 }

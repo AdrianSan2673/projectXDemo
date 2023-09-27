@@ -368,7 +368,7 @@ class Candidate {
 		xhr.onreadystatechange = function () {
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				let r = xhr.responseText;
-				//console.log(r);
+				console.log(r);
 				try {
 					let json_app = JSON.parse(this.responseText);
 
@@ -1457,6 +1457,11 @@ class Candidate {
 		let id_vacancy = (form.querySelector('#id_vacancy').value != '') ? form.querySelector('#id_vacancy').value : 0;
 
 
+		var table = $('#tb_candidates_postulate').DataTable();
+		var actualpage = table.page.info().page;
+
+
+
 		$('#tb_candidates_postulate').DataTable().destroy();
 		var table = $('#tb_candidates_postulate').DataTable({
 			ajax: {
@@ -1472,7 +1477,7 @@ class Candidate {
 				render: function (data, type, row) { // con row obtienes la información por fila
 
 					let botones = `<div class="btn-group btn-group-sm align-middle">`;
-					console.log(data[22]);
+
 					if (data[22] == 1 || data[22] == '' || data[22] === null) {
 						botones += `	
 						<button id="btn_postular" class="btn btn-warning" data-id="${data[1]} ${data[18]} ${data[19]}" value="${data[15]}">
@@ -1570,7 +1575,8 @@ class Candidate {
 				"data": 24,
 			},
 			], "drawCallback": function (settings) {
-
+				// table.page(table.page.info().page).draw('page');
+				// table.page('next').draw('page');
 				document.querySelector('#encontrados').innerHTML = 'Candidatos Encontrados : ' + settings.json.recordsFiltered;
 
 
@@ -1608,6 +1614,35 @@ class Candidate {
 				});
 				//do whatever  
 			},
+
+			initComplete: function () {
+				// Get the page info, so we know what the last is
+				var pageInfo = table.page.info(),
+
+					// Set the ending interval to the last page
+					endInt = actualpage, // Change this to pages
+
+					// Current page
+					currentInt = 0;
+
+
+
+
+				var interval = setInterval(function () {
+					console.log("hoa");
+					if (currentInt <= actualpage) {
+						table.page(currentInt).draw('page');
+					} else {
+						clearInterval(interval);
+					}
+					// Increment the current page int
+					currentInt++;
+				}, 0); // 3 seconds    
+
+
+
+			}
+
 		});
 
 	}

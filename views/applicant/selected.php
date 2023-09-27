@@ -7,12 +7,10 @@
                     <ol class="breadcrumb float-sm-left mb-2">
                         <li class="breadcrumb-item"><a href="<?= base_url ?>">Inicio</a></li>
                         <li class="breadcrumb-item"><a href="<?= base_url . "vacante/index" ?>">Vacantes</a></li>
-                        <li class="breadcrumb-item"><a
-                                href="<?= base_url . "vacante/ver&id=" . $_GET['id'] ?>"><?= $vacante && is_object($vacante) ? $vacante->vacancy : '' ?></a>
+                        <li class="breadcrumb-item"><a href="<?= base_url . "vacante/ver&id=" . $_GET['id'] ?>"><?= $vacante && is_object($vacante) ? $vacante->vacancy : '' ?></a>
                         </li>
                         <?php if (!Utils::isCustomer()) : ?>
-                        <li class="breadcrumb-item"><a
-                                href="<?= base_url . "postulaciones/ver&id=" . $_GET['id'] ?>">Postulaciones</a></li>
+                            <li class="breadcrumb-item"><a href="<?= base_url . "postulaciones/ver&id=" . $_GET['id'] ?>">Postulaciones</a></li>
                         <?php endif ?>
                         <li class="breadcrumb-item active">Candidatos selectos</li>
                     </ol>
@@ -49,233 +47,209 @@
             <div class="card-body">
                 <div class="row d-flex align-items-stretch">
                     <?php foreach ($candidates as $candidate) : ?>
-                    <div class="col-12 col-sm-6 col-md-4  align-items-stretch">
-                        <!-- gabo act -->
-                        <?php if ($candidate['id_status'] == 3 and $candidate['id_profile'] != "") {
-                $color = 'card-info';
-                $tipo_estatus = 'Notas de entrevista realizadas';
-              } else if ($candidate['id_status'] == 7) {
-                $color = 'card-danger';
-                $tipo_estatus = 'Descartado';
-              } else if ($candidate['id_status'] == 4) {
-                $color = 'card-warning';
-                $tipo_estatus = 'Elegido';
-              } else {
-                $color = 'card-secondary';
-                $tipo_estatus = 'Pendiente';
-              } ?>
+                        <div class="col-12 col-sm-6 col-md-4  align-items-stretch">
+                            <!-- gabo act -->
+                            <?php if ($candidate['id_status'] == 3 and $candidate['id_profile'] != "") {
+                                $color = 'card-info';
+                                $tipo_estatus = 'Notas de entrevista realizadas';
+                            } else if ($candidate['id_status'] == 7) {
+                                $color = 'card-danger';
+                                $tipo_estatus = 'Descartado';
+                            } else if ($candidate['id_status'] == 4) {
+                                $color = 'card-warning';
+                                $tipo_estatus = 'Elegido';
+                            } else {
+                                $color = 'card-secondary';
+                                $tipo_estatus = 'Pendiente';
+                            } ?>
 
 
-                        <div class="card <?= $color ?> ">
-                            <div class="card-header">
-                                <h6><?= $tipo_estatus ?></h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="text-center">
-                                    <img src="<?= $candidate['avatar'] ?>" alt="<?= $candidate['first_name'] ?>"
-                                        class="profile-user-img img-circle img-fluid">
+                            <div class="card <?= $color ?> ">
+                                <div class="card-header">
+                                    <h6><?= $tipo_estatus ?></h6>
                                 </div>
+                                <div class="card-body">
+                                    <div class="text-center">
+                                        <img src="<?= $candidate['avatar'] ?>" alt="<?= $candidate['first_name'] ?>" class="profile-user-img img-circle img-fluid">
+                                    </div>
 
-                                <h2 class="profile-username text-center">
-                                    <?= $candidate['first_name'] . ' ' . $candidate['surname'] . ' ' . $candidate['last_name'] ?>
-                                </h2>
-                                <p class="text-muted text-center"><?= mb_strtoupper($candidate['job_title']) ?></p>
-                                <?php if ($candidate['id_status'] == 4) : ?>
-                                <p class="text-orange text-xl text-center">
-                                    <i class="fas fa-trophy"></i>
-                                </p>
-                                <?php endif ?>
-                                <?php if ($candidate['customer_date'] != '') : ?>
-                                <p class="text-center"><i class="fas fa-check-circle"></i> Enviado el
-                                    <?= Utils::getFullDate($candidate['customer_date']) ?></p>
-                                <?php endif ?>
-                                <p class="text-muted text-center">
-                                    <?= $candidate['description'] ?>
-                                </p>
-                                <!-- gabi act -->
-                                <?php if ($candidate['id_status'] == 7) : ?>
-
-                                <p class="text-muted text-center">
-                                    <b>Motivos de descartado: </b>
-                                    <i class="fas fa-message"> </i>
-                                    <?= $candidate['comments'] ?>
-                                </p>
-
-                                <p class="text-muted text-center">
-                                    <b>Fecha de descarte:</b>
-                                    <?= Utils::getFullDate($candidate['descard_date']) ?>
-                                </p>
-                                <?php endif;  ?>
-                                <!-- fin gabo act -->
-
-                                <div hidden>
-                                    <hr>
-                                    <b>ReseÃ±a</b><br>
-                                    <p class="text-muted">
-                                        <?= $candidate['about'] ?>
-                                    </p>
-                                    <?php if (!empty($candidate['interview_comments'])) : ?>
-                                    <hr>
-                                    <b>Comentarios de la entrevista |
-                                        <?= Utils::getShortDate($candidate['interview_date']) ?></b>
-                                    <p class="text-muted"><?= $candidate['interview_comments'] ?></p>
+                                    <h2 class="profile-username text-center">
+                                        <?= $candidate['first_name'] . ' ' . $candidate['surname'] . ' ' . $candidate['last_name'] ?>
+                                    </h2>
+                                    <p class="text-muted text-center"><?= mb_strtoupper($candidate['job_title']) ?></p>
+                                    <?php if ($candidate['id_status'] == 4) : ?>
+                                        <p class="text-orange text-xl text-center">
+                                            <i class="fas fa-trophy"></i>
+                                        </p>
                                     <?php endif ?>
-                                </div>
+                                    <?php if ($candidate['customer_date'] != '') : ?>
+                                        <p class="text-center"><i class="fas fa-check-circle"></i> Enviado el
+                                            <?= Utils::getFullDate($candidate['customer_date']) ?></p>
+                                    <?php endif ?>
+                                    <p class="text-muted text-center">
+                                        <?= $candidate['description'] ?>
+                                    </p>
+                                    <!-- gabi act -->
+                                    <?php if ($candidate['id_status'] == 7) : ?>
 
-                                <?php if (!Utils::isCustomer()) : ?>
+                                        <p class="text-muted text-center">
+                                            <b>Motivos de descartado: </b>
+                                            <i class="fas fa-message"> </i>
+                                            <?= $candidate['comments'] ?>
+                                        </p>
 
-                                <a href="<?= base_url ?>postulaciones/descripcion_candidato&id_candidate=<?= Encryption::encode($candidate['id']) ?>&id_vacancy=<?= $_GET['id'] ?>"
-                                    class="btn btn-lg btn-info btn-block" hidden><i class="fas fa-pen"></i> Editar</a>
-                                <hr>
+                                        <p class="text-muted text-center">
+                                            <b>Fecha de descarte:</b>
+                                            <?= Utils::getFullDate($candidate['descard_date']) ?>
+                                        </p>
+                                    <?php endif;  ?>
+                                    <!-- fin gabo act -->
 
-                                <?php if ($candidate['id_status'] == 3) : ?>
-                                <form method="post" action="./choose_for_vacancy">
-                                    <input type="hidden" name="id_candidate"
-                                        value="<?= Encryption::encode($candidate['id']) ?>">
-                                    <input type="hidden" name="id_vacancy" value="<?= $_GET['id'] ?>">
-                                    <input type="hidden" name="id_status" value="3">
-                                    <div class="form-group">
-                                        <label for="entry_date" class="col-form-label">Fecha de ingreso</label>
-                                        <input type="date" name="entry_date" class="form-control"
-                                            value="<?= $candidate['entry_date'] ?>">
+                                    <div hidden>
+                                        <hr>
+                                        <b>ReseÃ±a</b><br>
+                                        <p class="text-muted">
+                                            <?= $candidate['about'] ?>
+                                        </p>
+                                        <?php if (!empty($candidate['interview_comments'])) : ?>
+                                            <hr>
+                                            <b>Comentarios de la entrevista |
+                                                <?= Utils::getShortDate($candidate['interview_date']) ?></b>
+                                            <p class="text-muted"><?= $candidate['interview_comments'] ?></p>
+                                        <?php endif ?>
                                     </div>
-                                    <div class="form-group" hidden>
-                                        <label class="col-form-label" for="amount">Monto a facturar</label>
-                                        <input type="number" name="amount" class="form-control"
-                                            value="<?= round($candidate['amount'], 2) ?>" step="0.01">
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-lg btn-orange btn-block"><i
-                                                class="far fa-thumbs-up"></i> Elegir para la vacante</button>
-                                    </div>
-
-                                    <div class="form-group" <?= $candidate['id_profile'] == null ? 'hidden' : ''  ?>>
-                                        <p class="text-center"><i class="fas fa-check-circle"></i> Candidato
-                                            Entrevistado</p>
-
-                                    </div>
-
-                                </form>
-                                <?php endif ?>
-
-                                <?php if ($candidate['id_status'] == 4) : ?>
-                                <form method="post" action="./choose_for_vacancy">
-                                    <input type="hidden" name="id_candidate"
-                                        value="<?= Encryption::encode($candidate['id']) ?>">
-                                    <input type="hidden" name="id_vacancy" value="<?= $_GET['id'] ?>">
-                                    <input type="hidden" name="id_status" value="4">
-                                    <div class="form-group">
-                                        <label for="entry_date" class="col-form-label">Fecha de ingreso</label>
-                                        <input type="date" name="entry_date" class="form-control"
-                                            value="<?= $candidate['entry_date'] ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label" for="amount">Monto a facturar</label>
-                                        <input type="number" name="amount" class="form-control"
-                                            value="<?= round($candidate['amount'], 2) ?>" step="0.01">
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-lg btn-secondary btn-block"><i
-                                                class="far fa-thumbs-down"></i> Descartar de la vacante</button>
-                                    </div>
-                                </form>
-                                <?php endif ?>
-                                <?php if ($_SESSION['identity']->id == 1) : ?>
-                                <a href="<?= base_url ?>psicometria/crear&candidate=<?= Encryption::encode($candidate['id']) ?>&customer=<?= Encryption::encode($vacante->id_customer) ?>"
-                                    target="_blank" class="btn btn-lg btn-outline-info btn-block"><i
-                                        class="fas fa-brain"></i> Registrar una psicometrÃ­a</a>
-                                <?php endif ?>
-
-                                <?php endif ?>
-                            </div>
-                            <div class="card-footer">
-                                <div class="text-center">
 
                                     <?php if (!Utils::isCustomer()) : ?>
-                                    <a href="<?= base_url ?>resume/generate&id=<?= Encryption::encode($candidate['id']) ?>"
-                                        target="_blank" class="btn btn-lg bg-maroon " hidden>
-                                        <i class="fas fa-download mr-1"></i>Generar CV
-                                    </a>
 
-                                    <a href="<?= base_url ?>candidato/editar&id=<?= Encryption::encode($candidate['id']) ?>"
-                                        class="btn btn-lg btn-success mr-1" target="_blank">
-                                        <i class="fas fa-user "></i> Editar perfil
-                                    </a>
-                                    <?php endif ?>
+                                        <a href="<?= base_url ?>postulaciones/descripcion_candidato&id_candidate=<?= Encryption::encode($candidate['id']) ?>&id_vacancy=<?= $_GET['id'] ?>" class="btn btn-lg btn-info btn-block" hidden><i class="fas fa-pen"></i> Editar</a>
+                                        <hr>
 
-                                    <!-- // ===[20 mayo gabo operativa ]=== -->
-                                    <?php if ($vacante->type == 1 || $vacante->type == 4) : ?>
-                                    <a href="<?= base_url ?>resume/CVoperador&id=<?= Encryption::encode($candidate['id']) ?>"
-                                        target="_blank" class="btn btn-lg bg-maroon">
-                                        <i class="fas fa-download mr-1"></i>Generar solicitud
-                                    </a>
-                                    <?php endif ?>
-                                    <!-- // ===[20 mayo gabo estudios  operativa fin]=== -->
+                                        <?php if ($candidate['id_status'] == 3) : ?>
+                                            <form method="post" action="./choose_for_vacancy">
+                                                <input type="hidden" name="id_candidate" value="<?= Encryption::encode($candidate['id']) ?>">
+                                                <input type="hidden" name="id_vacancy" value="<?= $_GET['id'] ?>">
+                                                <input type="hidden" name="id_status" value="3">
+                                                <div class="form-group">
+                                                    <label for="entry_date" class="col-form-label">Fecha de ingreso</label>
+                                                    <input type="date" name="entry_date" class="form-control" value="<?= $candidate['entry_date'] ?>">
+                                                </div>
+                                                <div class="form-group" hidden>
+                                                    <label class="col-form-label" for="amount">Monto a facturar</label>
+                                                    <input type="number" name="amount" class="form-control" value="<?= round($candidate['amount'], 2) ?>" step="0.01">
+                                                </div>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-lg btn-orange btn-block"><i class="far fa-thumbs-up"></i> Elegir para la vacante</button>
+                                                </div>
 
-                                    <?php if (isset($candidate['resume'])) : ?>
-                                    <a href="<?= $candidate['resume'] ?>" target="_blank"
-                                        class="btn btn-lg btn-orange mt-1">
-                                        <i class="fas fa-file-download"></i> Descargar Currículum vitae
-                                    </a>
-                                    <?php endif ?>
+                                                <div class="form-group" <?= $candidate['id_profile'] == null ? 'hidden' : ''  ?>>
+                                                    <p class="text-center"><i class="fas fa-check-circle"></i> Candidato
+                                                        Entrevistado</p>
 
-                                    <?php if ($candidate['video_call_url']) : ?>
-                                    <a href="<?= $candidate['video_call_url'] ?>" target="_blank"
-                                        class="btn btn-lg btn-warning">
-                                        <i class="fas fa-video mr-1"></i> Videollamada
-                                    </a>
-                                    <?php endif ?>
+                                                </div>
 
-                                    <!--=============================[Gabo Marzo 21]======================== -->
-                                    <?php if ((Utils::isAdmin()) && ($candidate['id_status'] == 3)) : ?>
-                                    <btn class="btn btn-lg btn-info mr-1"
-                                        onclick="metodo('<?= Encryption::encode($candidate['id']) ?>')">
-                                        <i class="fas fa-arrows-alt"></i> Mover
-                                    </btn>
-                                    <?php endif ?>
+                                            </form>
+                                        <?php endif ?>
 
-                                    <?php if ((Utils::isAdmin() || Utils::isSenior() || Utils::isRecruitmentManager() || Utils::isCustomer()) && ($candidate['id_status'] == 3 || $candidate['id_status'] == 4 || $candidate['id_status'] == 7)) : ?>
-                                    <btn class="btn btn-lg btn-warning mr-1" style="margin: 3px;"
-                                        onclick="abrir_formato('<?= Encryption::encode($candidate['id']) ?>','<?= $_GET['id']  ?> ','<?= $candidate['avatar'] ?>')"
-                                        <?= Utils::isCustomer() && $candidate['id_profile'] == null ? 'hidden' : ''  ?>>
-                                        <i class="fas fa-file-invoice  "></i> Notas de entrevista
-                                    </btn>
-                                    <?php endif ?>
+                                        <?php if ($candidate['id_status'] == 4) : ?>
+                                            <form method="post" action="./choose_for_vacancy">
+                                                <input type="hidden" name="id_candidate" value="<?= Encryption::encode($candidate['id']) ?>">
+                                                <input type="hidden" name="id_vacancy" value="<?= $_GET['id'] ?>">
+                                                <input type="hidden" name="id_status" value="4">
+                                                <div class="form-group">
+                                                    <label for="entry_date" class="col-form-label">Fecha de ingreso</label>
+                                                    <input type="date" name="entry_date" class="form-control" value="<?= $candidate['entry_date'] ?>">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-form-label" for="amount">Monto a facturar</label>
+                                                    <input type="number" name="amount" class="form-control" value="<?= round($candidate['amount'], 2) ?>" step="0.01">
+                                                </div>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-lg btn-secondary btn-block"><i class="far fa-thumbs-down"></i> Descartar de la vacante</button>
+                                                </div>
+                                            </form>
+                                        <?php endif ?>
+                                        <?php if ($_SESSION['identity']->id == 1) : ?>
+                                            <a href="<?= base_url ?>psicometria/crear&candidate=<?= Encryption::encode($candidate['id']) ?>&customer=<?= Encryption::encode($vacante->id_customer) ?>" target="_blank" class="btn btn-lg btn-outline-info btn-block"><i class="fas fa-brain"></i> Registrar una psicometrÃ­a</a>
+                                        <?php endif ?>
 
-                                    <!-- gabo act -->
-                                    <?php if ((Utils::isAdmin() || Utils::isSenior() || Utils::isRecruitmentManager() || Utils::isCustomer()) && ($candidate['id_status'] == 3)) : ?>
-                                    <btn class="btn btn-lg btn-danger mt-1"
-                                        onclick="descartar('<?= Encryption::encode($candidate['id']) ?>','<?= $_GET['id']; ?>','<?= $candidate['id_status'] ?>','<?= $candidate['first_name'] . ' ' . $candidate['surname'] . ' ' . $candidate['last_name'] ?>')">
-                                        <i class="fas fa-times-circle "></i> Descartar
-                                    </btn>
                                     <?php endif ?>
-                                    <!-- GABO REACTIVAR -->
-                                    <?php if ((Utils::isAdmin() || Utils::isSenior() || Utils::isRecruitmentManager() || Utils::isCustomer())  && ($candidate['id_status'] == 7)) : ?>
-                                    <btn class="btn btn-lg btn-info  "
-                                        onclick="reactivar('<?= Encryption::encode($candidate['id']) ?>','<?= $_GET['id']; ?>','<?= $candidate['id_status'] ?>','<?= $candidate['first_name'] . ' ' . $candidate['surname'] . ' ' . $candidate['last_name'] ?>')">
-                                        <i class="fas fa-badge-check"></i> Reactivar
-                                    </btn>
-                                    <?php endif ?>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="text-center">
 
-                                    <!-- GABO DELETE -->
-                                    <?php if (Utils::isAdmin()) : ?>
-                                    <btn class="btn btn-lg btn-dark mt-1 "
-                                        onclick="eliminar('<?= Encryption::encode($candidate['id']) ?>','<?= $_GET['id']; ?>','<?= $candidate['id_status'] ?>','<?= $candidate['first_name'] . ' ' . $candidate['surname'] . ' ' . $candidate['last_name'] ?>')">
-                                        <i class="fas fa-user-slash"></i> Eliminar
-                                    </btn>
-                                    <?php endif ?>
+                                        <?php if (!Utils::isCustomer()) : ?>
+                                            <a href="<?= base_url ?>resume/generate&id=<?= Encryption::encode($candidate['id']) ?>" target="_blank" class="btn btn-lg bg-maroon " hidden>
+                                                <i class="fas fa-download mr-1"></i>Generar CV
+                                            </a>
 
-                                    <?php if ($vacante->type == 1 || $vacante->type == 4 && (Utils::isAdmin() || Utils::isSenior() || Utils::isRecruitmentManager())) : ?>
-                                    <btn class="btn btn-lg btn-success mt-1 "
-                                        onclick="abrir_experiencia('<?= Encryption::encode($candidate['id']) ?>','<?= $candidate['first_name'] . ' ' . $candidate['surname'] . ' ' . $candidate['last_name'] ?>')">
-                                        <i class="fas fa-file-invoice"></i> Editar experiencia
-                                    </btn>
-                                    <?php endif ?>
+                                            <a href="<?= base_url ?>candidato/editar&id=<?= Encryption::encode($candidate['id']) ?>" class="btn btn-lg btn-success mr-1" target="_blank">
+                                                <i class="fas fa-user "></i> Editar perfil
+                                            </a>
+                                        <?php endif ?>
 
+                                        <!-- // ===[20 mayo gabo operativa ]=== -->
+                                        <?php if ($vacante->type == 1 || $vacante->type == 4) : ?>
+                                            <a href="<?= base_url ?>resume/CVoperador&id=<?= Encryption::encode($candidate['id']) ?>" target="_blank" class="btn btn-lg bg-maroon">
+                                                <i class="fas fa-download mr-1"></i>Generar solicitud
+                                            </a>
+                                        <?php endif ?>
+                                        <!-- // ===[20 mayo gabo estudios  operativa fin]=== -->
+
+                                        <?php if (isset($candidate['resume'])) : ?>
+                                            <a href="<?= $candidate['resume'] ?>" target="_blank" class="btn btn-lg btn-orange mt-1">
+                                                <i class="fas fa-file-download"></i> Descargar Currículum vitae
+                                            </a>
+                                        <?php endif ?>
+
+                                        <?php if ($candidate['video_call_url']) : ?>
+                                            <a href="<?= $candidate['video_call_url'] ?>" target="_blank" class="btn btn-lg btn-warning">
+                                                <i class="fas fa-video mr-1"></i> Videollamada
+                                            </a>
+                                        <?php endif ?>
+
+                                        <!--=============================[Gabo Marzo 21]======================== -->
+                                        <?php if ((Utils::isAdmin()) && ($candidate['id_status'] == 3)) : ?>
+                                            <btn class="btn btn-lg btn-info mr-1" onclick="metodo('<?= Encryption::encode($candidate['id']) ?>')">
+                                                <i class="fas fa-arrows-alt"></i> Mover
+                                            </btn>
+                                        <?php endif ?>
+
+                                        <?php if ((Utils::isAdmin() || Utils::isSenior() || Utils::isRecruitmentManager() || Utils::isCustomer()) && ($candidate['id_status'] == 3 || $candidate['id_status'] == 4 || $candidate['id_status'] == 7)) : ?>
+                                            <btn class="btn btn-lg btn-warning mr-1" style="margin: 3px;" onclick="abrir_formato('<?= Encryption::encode($candidate['id']) ?>','<?= $_GET['id']  ?> ','<?= $candidate['avatar'] ?>')" <?= Utils::isCustomer() && $candidate['id_profile'] == null ? 'hidden' : ''  ?>>
+                                                <i class="fas fa-file-invoice  "></i> Notas de entrevista
+                                            </btn>
+                                        <?php endif ?>
+
+                                        <!-- gabo act -->
+                                        <?php if ((Utils::isAdmin() || Utils::isSenior() || Utils::isRecruitmentManager() || Utils::isCustomer()) && ($candidate['id_status'] == 3)) : ?>
+                                            <btn class="btn btn-lg btn-danger mt-1" onclick="descartar('<?= Encryption::encode($candidate['id']) ?>','<?= $_GET['id']; ?>','<?= $candidate['id_status'] ?>','<?= $candidate['first_name'] . ' ' . $candidate['surname'] . ' ' . $candidate['last_name'] ?>')">
+                                                <i class="fas fa-times-circle "></i> Descartar
+                                            </btn>
+                                        <?php endif ?>
+                                        <!-- GABO REACTIVAR -->
+                                        <?php if ((Utils::isAdmin() || Utils::isSenior() || Utils::isRecruitmentManager() || Utils::isCustomer())  && ($candidate['id_status'] == 7)) : ?>
+                                            <btn class="btn btn-lg btn-info  " onclick="reactivar('<?= Encryption::encode($candidate['id']) ?>','<?= $_GET['id']; ?>','<?= $candidate['id_status'] ?>','<?= $candidate['first_name'] . ' ' . $candidate['surname'] . ' ' . $candidate['last_name'] ?>')">
+                                                <i class="fas fa-badge-check"></i> Reactivar
+                                            </btn>
+                                        <?php endif ?>
+
+                                        <!-- GABO DELETE -->
+                                        <?php if (Utils::isAdmin()) : ?>
+                                            <btn class="btn btn-lg btn-dark mt-1 " onclick="eliminar('<?= Encryption::encode($candidate['id']) ?>','<?= $_GET['id']; ?>','<?= $candidate['id_status'] ?>','<?= $candidate['first_name'] . ' ' . $candidate['surname'] . ' ' . $candidate['last_name'] ?>')">
+                                                <i class="fas fa-user-slash"></i> Eliminar
+                                            </btn>
+                                        <?php endif ?>
+
+                                        <?php if ($vacante->type == 1 || $vacante->type == 4 && (Utils::isAdmin() || Utils::isSenior() || Utils::isRecruitmentManager())) : ?>
+                                            <btn class="btn btn-lg btn-success mt-1 " onclick="abrir_experiencia('<?= Encryption::encode($candidate['id']) ?>','<?= $candidate['first_name'] . ' ' . $candidate['surname'] . ' ' . $candidate['last_name'] ?>')">
+                                                <i class="fas fa-file-invoice"></i> Editar experiencia
+                                            </btn>
+                                        <?php endif ?>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     <?php endforeach ?>
 
                 </div>
@@ -287,30 +261,54 @@
 
 <script src="<?= base_url ?>app/candidate.js?v=<?= rand() ?>"></script>
 <script src="<?= base_url ?>app/vacancy.js?v=<?= rand() ?>"></script>
-
+<script src="<?= base_url ?>plugins/Sortable/Sortable.min.js?v=<?= rand() ?>"></script>
 <script>
-//==================================[Gabo Marzo 21]========================
-function metodo(valor) {
-    $("#id_candidato").val(valor);
+    const referencia = document.getElementById('div_experience');
+    Sortable.create(referencia, {
+        animation: 150,
+        swapThreshold: 1,
+        easing: "cubic-bezier(0.895, 0.03, 0.685, 0.22)",
+        handle: ".fas",
+        chosenClass: "active",
+        group: "lista-referencias",
+        dataIdAttr: "renglon",
+        store: {
+            set: function(sortable) {
+                const orden = sortable.toArray();
+                let estudioObj = new Estudio()
+                //  estudioObj.update_referencia_laboral_renglon(orden, referencia.className)
+                //localStorage.setItem('lista-tareas', orden.join('|'));
+            },
 
-    $('#modal_mover_postulante').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
-    $('#id_vacancy').val('1'); // Select the option with a value of '1'
-    $('#id_vacancy').trigger('change');
-}
-//===========================================================
+            get: function() {
+                //const orden = localStorage.getItem('lista-tareas');
+                //return orden ? orden.split('|') : [];
+            }
+        }
+    })
 
-//  ===[gabo 2 junio modal-experiencia]=== 
+    //==================================[Gabo Marzo 21]========================
+    function metodo(valor) {
+        $("#id_candidato").val(valor);
 
-function abrir_experiencia(id_candidate, nombre) {
+        $('#modal_mover_postulante').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+        $('#id_vacancy').val('1'); // Select the option with a value of '1'
+        $('#id_vacancy').trigger('change');
+    }
+    //===========================================================
 
-    const div = document.querySelector('#div_experience');
-    div.innerHTML = ``;
-    row = '';
+    //  ===[gabo 2 junio modal-experiencia]=== 
 
-    row += `
+    function abrir_experiencia(id_candidate, nombre) {
+
+        const div = document.querySelector('#div_experience');
+        div.innerHTML = ``;
+        row = '';
+
+        row += `
 
   <div class="row borrados" style="margin-bottom:0.6rem; border:1px solid #98AE98 ; border-radius:15px;padding:1rem">
     <div class="col-md-2">
@@ -344,85 +342,85 @@ function abrir_experiencia(id_candidate, nombre) {
     </div> `;
 
 
-    row += `</div></div>`;
+        row += `</div></div>`;
 
-    div.innerHTML = row;
-
-
-    document.querySelector('#titulo_experiencia').textContent = nombre;
-    $('#id_candidate_exp').val(id_candidate);
-
-    let candidate = new Candidate();
-    candidate.llenar_experiencia(id_candidate);
-
-    $('#modal-experiencia').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
-
-}
-// < ===[gabo 2 junio modal-experiencia fin]===
-
-function abrir_formato(id_candidate, id_vacancy, image) {
-
-    let vacancy = new Vacancy();
-    let form = document.querySelector('#modal_perfil_postulante form');
-    form.reset();
-    vacancy.llenar_perfil(id_vacancy);
-
-    let candidate = new Candidate();
-    candidate.llenar_perfil(id_candidate, id_vacancy);
-
-    $("#id_candidate").val(id_candidate);
-    $("#vacancy_id").val(id_vacancy);
-    $('#photo').attr('src', image);
-
-    $('#modal_perfil_postulante').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
-
-}
-//===========================================================
-
-//gabo act
-function descartar(id_candidate, id_vacancy, id_status, nombre) {
-
-    $("#id_candidate_modal").val(id_candidate);
-    $("#id_vacancy_modal").val(id_vacancy);
-    $("#id_status_modal").val(id_status);
-    document.querySelector('#titulo').innerHTML = nombre;
-
-    $('#modal_descartar_postulante').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
-
-}
-
-function reactivar(id_candidate, id_vacancy, id_status, nombre) {
-    $("#id_candidate_reactivar").val(id_candidate);
-    $("#id_vacancy_reactivar").val(id_vacancy);
-    $("#id_status_reactivar").val(id_status);
-    document.querySelector('#nombre_reactivar').innerHTML = nombre;
-    $('#modal_reactivar_postulante').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
-}
+        div.innerHTML = row;
 
 
-function eliminar(id_candidate, id_vacancy, id_status, nombre) {
+        document.querySelector('#titulo_experiencia').textContent = nombre;
+        $('#id_candidate_exp').val(id_candidate);
 
-    $("#id_candidate_eliminar").val(id_candidate);
-    $("#id_vacancy_eliminar").val(id_vacancy);
-    $("#id_status_eliminar").val(id_status);
-    document.querySelector('#nombre_eliminar').innerHTML = nombre;
+        let candidate = new Candidate();
+        candidate.llenar_experiencia(id_candidate);
 
-    $('#modal_eliminar_postulante').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
+        $('#modal-experiencia').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
 
-}
+    }
+    // < ===[gabo 2 junio modal-experiencia fin]===
+
+    function abrir_formato(id_candidate, id_vacancy, image) {
+
+        let vacancy = new Vacancy();
+        let form = document.querySelector('#modal_perfil_postulante form');
+        form.reset();
+        vacancy.llenar_perfil(id_vacancy);
+
+        let candidate = new Candidate();
+        candidate.llenar_perfil(id_candidate, id_vacancy);
+
+        $("#id_candidate").val(id_candidate);
+        $("#vacancy_id").val(id_vacancy);
+        $('#photo').attr('src', image);
+
+        $('#modal_perfil_postulante').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+
+    }
+    //===========================================================
+
+    //gabo act
+    function descartar(id_candidate, id_vacancy, id_status, nombre) {
+
+        $("#id_candidate_modal").val(id_candidate);
+        $("#id_vacancy_modal").val(id_vacancy);
+        $("#id_status_modal").val(id_status);
+        document.querySelector('#titulo').innerHTML = nombre;
+
+        $('#modal_descartar_postulante').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+
+    }
+
+    function reactivar(id_candidate, id_vacancy, id_status, nombre) {
+        $("#id_candidate_reactivar").val(id_candidate);
+        $("#id_vacancy_reactivar").val(id_vacancy);
+        $("#id_status_reactivar").val(id_status);
+        document.querySelector('#nombre_reactivar').innerHTML = nombre;
+        $('#modal_reactivar_postulante').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    }
+
+
+    function eliminar(id_candidate, id_vacancy, id_status, nombre) {
+
+        $("#id_candidate_eliminar").val(id_candidate);
+        $("#id_vacancy_eliminar").val(id_vacancy);
+        $("#id_status_eliminar").val(id_status);
+        document.querySelector('#nombre_eliminar').innerHTML = nombre;
+
+        $('#modal_eliminar_postulante').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+
+    }
 </script>

@@ -100,7 +100,7 @@ class PostulacionesController
         }
     }
 
-
+    //gabo 26 sept
     public function postulate_multiple()
     {
         if (Utils::isValid($_SESSION['identity']) && isset($_POST['postulate']) && isset($_POST['id_vacancy'])) {
@@ -127,6 +127,26 @@ class PostulacionesController
                         $cdto->setId(Encryption::decode($p));
                         $candidate = $cdto->getOne();
                         $postulado .= "  * " . $candidate->first_name . " " . $candidate->surname . " " . $candidate->last_name . "<br>";
+
+
+                        $candidato = new VacancyApplicant();
+                        $candidato->setId_candidate(Encryption::decode($p));
+                        $result = $candidato->getOneByCandidate();
+
+
+                        if ($result) {
+                            $id_perfil_anterior = $result->id_profile;
+                            $profile = new ApplicantProfile();
+                            $profile->setId($id_perfil_anterior);
+                            $insertado = $profile->duplicateProfile();
+
+                            if ($insertado) {
+                                $candidato->setId_vacancy($id_vacancy);
+                                $candidato->setId_candidate(Encryption::decode($p));
+                                $candidato->setId_profile($profile->getId());
+                                $candidato->update_id_profile();
+                            }
+                        }
                     }
                 }
 
@@ -142,14 +162,14 @@ class PostulacionesController
                     $user->setId($recruiter);
                     $executive = $user->getOne();
 
-                    Utils::sendEmail($executive->email, $executive->first_name . ' ' . $executive->last_name, $subject, $body);
+                    //Utils::sendEmail($executive->email, $executive->first_name . ' ' . $executive->last_name, $subject, $body);
 
                     $exe = new ExecutiveJRRecruiter();
                     $exe->setId_recruiter($executive->id);
                     $executiveJR = $exe->getExecutiveJRByRecruiter();
 
                     if ($executiveJR) {
-                        Utils::sendEmail($executiveJR->email, $executiveJR->first_name . ' ' . $executiveJR->last_name, $subject, $body);
+                        //   Utils::sendEmail($executiveJR->email, $executiveJR->first_name . ' ' . $executiveJR->last_name, $subject, $body);
                     }
                 }
                 //Utils::sendEmail('ernesto.rivas@rrhhingenia.com', 'Ernesto Rivas', $subject, $body);
@@ -763,6 +783,7 @@ class PostulacionesController
     }
 
     //==================================[Gabo Marzo 21]==========================
+    //gabo 26  sept
     public function mover_postulante()
     {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin()) {
@@ -775,8 +796,33 @@ class PostulacionesController
                 $vacante->setId_candidate($id_candidate);
                 $existe = $vacante->getOne();
 
+
                 if (!$existe) {
                     $save = $vacante->move_postulant();
+
+                    if ($save) {
+                        $candidato = new VacancyApplicant();
+                        $candidato->setId_candidate($id_candidate);
+                        $result = $candidato->getOneByCandidate();
+
+
+                        if ($result) {
+                            $id_perfil_anterior = $result->id_profile;
+                            $profile = new ApplicantProfile();
+                            $profile->setId($id_perfil_anterior);
+                            $insertado = $profile->duplicateProfile();
+
+                            if ($insertado) {
+                                $candidato->setId_vacancy($id_vacancy);
+                                $candidato->setId_candidate($id_candidate);
+                                $candidato->setId_profile($profile->getId());
+                                $candidato->update_id_profile();
+                            }
+                        }
+                    }
+
+
+
                     if ($save) {
                         echo json_encode(array('status' => 1));
                     } else {
@@ -903,7 +949,7 @@ class PostulacionesController
     }
 
 
-    //===[Gabo 2 mayo modal vacantes]===
+    //gabo 26 sept
     public function agregar_a_vacante()
     {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin()) {
@@ -916,9 +962,32 @@ class PostulacionesController
                 $vacante->setId_candidate($id_candidate);
                 for ($i = 0; $i < count($id_vacancies); $i++) {
                     $vacante->setId_vacancy($id_vacancies[$i]);
+
                     $existe = $vacante->getOne();
                     if (!$existe) {
+                        //gabo 26 sept
                         $save = $vacante->move_postulant();
+
+                        if ($save) {
+                            $candidato = new VacancyApplicant();
+                            $candidato->setId_candidate($id_candidate);
+                            $result = $candidato->getOneByCandidate();
+
+
+                            if ($result) {
+                                $id_perfil_anterior = $result->id_profile;
+                                $profile = new ApplicantProfile();
+                                $profile->setId($id_perfil_anterior);
+                                $insertado = $profile->duplicateProfile();
+
+                                if ($insertado) {
+                                    $candidato->setId_vacancy($id_vacancies[$i]);
+                                    $candidato->setId_candidate($id_candidate);
+                                    $candidato->setId_profile($profile->getId());
+                                    $candidato->update_id_profile();
+                                }
+                            }
+                        }
                     }
                 }
 
