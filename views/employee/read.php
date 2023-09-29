@@ -8,11 +8,8 @@
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-left mb-2">
                                 <li class="breadcrumb-item"><a href="<?= base_url ?>">Inicio</a></li>
-                                <li class="breadcrumb-item"><a href="<?= base_url ?>Empleado/index&flag=<?= Encryption::encode($employee->status) ?>">Empleados</a>
-                                </li>
-                                <li class="breadcrumb-item active title-empelado">
-                                    <?= $employee->first_name . " " . $employee->surname . " " . $employee->last_name  ?>
-                                </li>
+                                <li class="breadcrumb-item"><a href="<?= base_url ?>Empleado/index&flag=<?= Encryption::encode($employee->status) ?>">Empleados</a></li>
+                                <li class="breadcrumb-item active title-empelado"> <?= $employee->first_name . " " . $employee->surname . " " . $employee->last_name  ?></li>
                             </ol>
                         </div>
                         <div class="col-sm-12">
@@ -50,9 +47,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <h3 class="profile-username text-center title-empelado">
-                                        <?= $employee->first_name . " " . $employee->surname . " " . $employee->last_name  ?>
-                                    </h3>
+                                    <h3 class="profile-username text-center title-empelado"><?= $employee->first_name . " " . $employee->surname . " " . $employee->last_name  ?></h3>
 
                                     <p class="text-muted text-center title-position"><?= $position->title ?></p>
 
@@ -61,15 +56,11 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <strong><i class="fas fa-user"></i> Edad</strong>
-                                                    <p class="text-muted" id="age">
-                                                        <?= date("Y") - date("Y", strtotime($employee->date_birth)) . ' Años'; ?>
-                                                    </p>
+                                                    <p class="text-muted" id="age"><?= date("Y") - date("Y", strtotime($employee->date_birth)) . ' Años'; ?></p>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <strong><i class="fas fa-user-friends"></i> Estado Civíl</strong>
-                                                    <p class="text-muted" id="civil_status">
-                                                        <?= isset($employee->civil_status) ? $employee->civil_status : 'Sin definir' ?>
-                                                    </p>
+                                                    <p class="text-muted" id="civil_status"> <?= isset($employee->civil_status) ? $employee->civil_status : 'Sin definir' ?></p>
                                                 </div>
                                             </div>
                                         </li>
@@ -78,17 +69,13 @@
                                             <div class="row">
                                                 <div class="col-6">
                                                     <strong><i class="fas fa-trophy"></i> No. de empleado</strong>
-                                                    <p class="text-muted" id="employee_number">
-                                                        <?= isset($employee->employee_number) ? $employee->employee_number : 'Sin definir' ?>
-                                                    </p>
+                                                    <p class="text-muted" id="employee_number"><?= isset($employee->employee_number) ? $employee->employee_number : 'Sin definir' ?></p>
 
                                                 </div>
                                                 <div class="col-6">
 
                                                     <strong><i class="fas fa-trophy"></i> Antiguedad</strong>
-                                                    <p class="text-muted">
-                                                        <?= date('Y', time()) - date("Y", strtotime($employee->start_date)) . ' Años'; ?>
-                                                    </p>
+                                                    <p class="text-muted"><?= date('Y', time()) - date("Y", strtotime($employee->start_date)) . ' Años'; ?></p>
 
                                                 </div>
                                             </div>
@@ -96,22 +83,16 @@
 
                                         <li class="list-group-item">
                                             <strong><i class="fas fa-file-alt"></i> Curriculum vitae</strong>
-                                            <p class="text-muted" id="cv_employee_url">
-                                                <?= $routeDocu == false ? 'No cuenta con cv' : '<a href="' . $routeDocu . '" target="_blank">CV_' . $employee->first_name . "_" . $employee->surname . "_" . $employee->last_name .  '.pdf</a>'  ?>
-                                            </p>
+                                            <p class="text-muted" id="cv_employee_url"><?= $routeDocu == false ? 'No cuenta con cv' : '<a href="' . $routeDocu . '" target="_blank">CV_' . $employee->first_name . "_" . $employee->surname . "_" . $employee->last_name .  '.pdf</a>'  ?></p>
                                         </li>
 
                                         <li class="list-group-item">
                                             <strong><i class="fas fa-file-alt"></i> RFC</strong>
-                                            <p class="text-muted" id="rfc_employee_url">
-                                                <?= $routeDocuRFC == false ? 'No cuenta con el documento' : '<a href="' . $routeDocuRFC . '" target="_blank">RFC_' . $employee->first_name . "_" . $employee->surname . "_" . $employee->last_name .  '.pdf</a>'  ?>
-                                            </p>
+                                            <p class="text-muted" id="rfc_employee_url"><?= $routeDocuRFC == false ? 'No cuenta con el documento' : '<a href="' . $routeDocuRFC . '" target="_blank">RFC_' . $employee->first_name . "_" . $employee->surname . "_" . $employee->last_name .  '.pdf</a>'  ?></p>
                                         </li>
                                         <li class="list-group-item">
                                             <strong><i class="fas fa-file-alt"></i> CIF</strong>
-                                            <p class="text-muted" id="cfdi_employee_url">
-                                                <?= $routeDocuCFDI == false ? 'No cuenta con el documento' : '<a href="' . $routeDocuCFDI . '" target="_blank">CFDI_' . $employee->first_name . "_" . $employee->surname . "_" . $employee->last_name .  '.pdf</a>'  ?>
-                                            </p>
+                                            <p class="text-muted" id="cfdi_employee_url"><?= $routeDocuCFDI == false ? 'No cuenta con el documento' : '<a href="' . $routeDocuCFDI . '" target="_blank">CFDI_' . $employee->first_name . "_" . $employee->surname . "_" . $employee->last_name .  '.pdf</a>'  ?></p>
                                         </li>
                                     </ul>
                                 </div>
@@ -162,21 +143,17 @@
                                                                     <div class="row">
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>Nombre del empleado</b>
-                                                                            <p class="title-empelado">
-                                                                                <?= $employee->first_name . " " . $employee->surname . " " . $employee->last_name  ?>
-                                                                            </p>
+                                                                            <p class="title-empelado"><?= $employee->first_name . " " . $employee->surname . " " . $employee->last_name  ?></p>
                                                                         </div>
 
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>Titulo profesional</b>
-                                                                            <p><?= isset($employee->scholarship) ? $employee->scholarship : 'Sin definir' ?>
-                                                                            </p>
+                                                                            <p><?= isset($employee->scholarship) ? $employee->scholarship : 'Sin definir' ?></p>
                                                                         </div>
 
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>Sexo</b>
-                                                                            <p><?= $employee->id_gender == 1 ? 'Hombre' : 'Mujer' ?>
-                                                                            </p>
+                                                                            <p><?= $employee->id_gender == 1 ? 'Hombre' : 'Mujer' ?></p>
                                                                         </div>
                                                                     </div>
 
@@ -184,24 +161,21 @@
                                                                     <div class="row">
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>CURP</b>
-                                                                            <p><?= !isset($employee->curp) || $employee->curp == '' ? 'Sin definir' : $employee->curp  ?>
-                                                                            </p>
+                                                                            <p><?= !isset($employee->curp) || $employee->curp == '' ? 'Sin definir' : $employee->curp  ?></p>
                                                                         </div>
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>NSS</b>
-                                                                            <p><?= !isset($employee->nss) || $employee->nss == '' ? 'Sin definir' : $employee->nss  ?>
-                                                                            </p>
+                                                                            <p><?= !isset($employee->nss) || $employee->nss == '' ? 'Sin definir' : $employee->nss  ?></p>
                                                                         </div>
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>RFC</b>
-                                                                            <p><?= !isset($employee->rfc) || $employee->rfc == '' ? 'Sin definir' : $employee->rfc  ?>
-                                                                            </p>
+                                                                            <p><?= !isset($employee->rfc) || $employee->rfc == '' ? 'Sin definir' : $employee->rfc  ?></p>
                                                                         </div>
                                                                     </div>
 
-
-
-                                                                    <!-- 7 SEP -->
+																	
+																	
+																	   <!-- 7 SEP -->
                                                                     <div class="row">
                                                                         <div class="col-sm-12 text-center">
                                                                             <b>Corrreo</b>
@@ -212,7 +186,7 @@
                                                                     <!-- 7 SEP -->
 
 
-                                                                    <div class="row">
+                                                                   <div class="row">
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>Fecha de creación</b>
                                                                             <p><?= Utils::getDate($employee->date_birth) ?>
@@ -239,11 +213,10 @@
                                                                             <b>Departamento</b>
                                                                             <p><?= $deparment->department ?></p>
                                                                         </div>
-
+                                                                     
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>A quien reporta</b>
-                                                                            <p><?= isset($employee->id_boss) ? $employee->nameBoss : 'Sin definir' ?>
-                                                                            </p>
+                                                                            <p><?= isset($employee->id_boss)?$employee->nameBoss:'Sin definir' ?></p>
                                                                         </div>
                                                                     </div>
 
@@ -261,51 +234,41 @@
                                                                         <div class="col-sm-6 text-center">
                                                                             <b>Razón social</b>
                                                                             <?php $razonSocial = Utils::showRazonesSocialesPorID($employee->id_razon); ?>
-                                                                            <p><?= isset($employee->id_razon) ? $razonSocial->Nombre_Razon : 'Sin definir' ?>
-                                                                            </p>
+                                                                            <p><?= isset($employee->id_razon) ? $razonSocial->Nombre_Razon : 'Sin definir' ?></p>
                                                                         </div>
                                                                     </div>
-
+                                                                    
 
                                                                     <div class="row divReasion" <?= isset($employee->end_date) ? '' : 'hidden' ?>>
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>Fecha de terminacion</b>
-                                                                            <p class="end_date">
-                                                                                <?= isset($employee->end_date) ? Utils::getDate($employee->end_date) : 'Sin definir' ?>
-                                                                            </p>
+                                                                            <p class="end_date"><?= isset($employee->end_date) ? Utils::getDate($employee->end_date) : 'Sin definir' ?></p>
                                                                         </div>
 
                                                                         <div class="col-sm-4 text-center" id="divReasion">
                                                                             <b>Motivo de baja</b>
-                                                                            <p class="reason_for_leaving">
-                                                                                <?= isset($employee->reason_for_leaving) ?  $employee->reason_for_leaving : 'sin definir' ?>
-                                                                            </p>
+                                                                            <p class="reason_for_leaving"><?= isset($employee->reason_for_leaving) ?  $employee->reason_for_leaving : 'sin definir' ?></p>
                                                                         </div>
 
                                                                         <div class="col-sm-4 text-center" id="divReasion">
                                                                             <b>Comentario de baja</b>
-                                                                            <p class="comment_for_leaving">
-                                                                                <?= isset($employee->comment_for_leaving) ?  $employee->comment_for_leaving : 'sin definir' ?>
-                                                                            </p>
+                                                                            <p class="comment_for_leaving"><?= isset($employee->comment_for_leaving) ?  $employee->comment_for_leaving : 'sin definir' ?></p>
                                                                         </div>
                                                                     </div>
                                                                     <div class="row divRe_entrry_date" <?= isset($employee->re_entry_date) ? '' : 'hidden' ?>>
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>Fecha de reingreso </b>
-                                                                            <p id="re_entry_dateP">
-                                                                                <?= isset($employee->re_entry_date) ? Utils::getDate($employee->re_entry_date) : 'Sin definir' ?>
-                                                                            </p>
+                                                                            <p id="re_entry_dateP"><?= isset($employee->re_entry_date) ? Utils::getDate($employee->re_entry_date) : 'Sin definir' ?></p>
                                                                         </div>
                                                                     </div>
 
                                                                 </div>
                                                                 <?php if (Utils::isAdmin() || Utils::isCustomerSA()) : ?>
                                                                     <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                                        <div class="text-center">
+                                                                            <button class="btn btn-info" id="btn-editar-empleado">Editar</button>
+                                                                        </div>
                                                                     <?php endif ?>
-                                                                    <div class="text-center">
-                                                                        <button class="btn btn-info" id="btn-editar-empleado">Editar</button>
-                                                                    </div>
-
                                                                 <?php endif ?>
                                                             </div>
                                                         </div>
@@ -327,26 +290,22 @@
                                                                     <div class="row">
                                                                         <div class="col-sm-6 text-center">
                                                                             <b>Telefono 1</b>
-                                                                            <p><?= isset($employee_contacts->phone_number1) && $employee_contacts->phone_number1 != '' ? $employee_contacts->phone_number1 . ' ' . Utils::labelContact($employee_contacts->label1) : 'Sin definir' ?>
-                                                                            </p>
+                                                                            <p><?= isset($employee_contacts->phone_number1) && $employee_contacts->phone_number1 != '' ? $employee_contacts->phone_number1 . ' ' . Utils::labelContact($employee_contacts->label1) : 'Sin definir' ?></p>
                                                                         </div>
                                                                         <div class="col-sm-6 text-center">
                                                                             <b>Telefono 2</b>
-                                                                            <p><?= isset($employee_contacts->phone_number2) && $employee_contacts->phone_number2 != '' ? $employee_contacts->phone_number2 . ' ' . Utils::labelContact($employee_contacts->label2) : 'Sin definir' ?>
-                                                                            </p>
+                                                                            <p><?= isset($employee_contacts->phone_number2) && $employee_contacts->phone_number2 != '' ? $employee_contacts->phone_number2 . ' ' . Utils::labelContact($employee_contacts->label2) : 'Sin definir' ?></p>
                                                                         </div>
                                                                     </div>
 
                                                                     <div class="row">
                                                                         <div class="col-sm-6 text-center">
                                                                             <b>Correo</b>
-                                                                            <p><?= !isset($employee_contacts->email) || $employee_contacts->email == '' ? 'Sin definir' : $employee_contacts->email  ?>
-                                                                            </p>
+                                                                            <p><?= !isset($employee_contacts->email) || $employee_contacts->email == '' ? 'Sin definir' : $employee_contacts->email  ?></p>
                                                                         </div>
                                                                         <div class="col-sm-6 text-center">
                                                                             <b>Correo empresarial</b>
-                                                                            <p><?= !isset($employee_contacts->institutional_email) || $employee_contacts->institutional_email == '' ? 'Sin definir' : $employee_contacts->institutional_email  ?>
-                                                                            </p>
+                                                                            <p><?= !isset($employee_contacts->institutional_email) || $employee_contacts->institutional_email == '' ? 'Sin definir' : $employee_contacts->institutional_email  ?></p>
                                                                         </div>
                                                                     </div>
 
@@ -385,20 +344,17 @@
                                                                     <div class="row">
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>Nombre</b>
-                                                                            <p><?= isset($employee_contacts->emergency_contact1) ? $employee_contacts->emergency_contact1 : 'Sin definir' ?>
-                                                                            </p>
+                                                                            <p><?= isset($employee_contacts->emergency_contact1) ? $employee_contacts->emergency_contact1 : 'Sin definir' ?></p>
                                                                         </div>
 
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>Parentesco</b>
-                                                                            <p><?= isset($employee_contacts->emergency_relationship1) ? $employee_contacts->emergency_relationship1 : 'Sin definir' ?>
-                                                                            </p>
+                                                                            <p><?= isset($employee_contacts->emergency_relationship1) ? $employee_contacts->emergency_relationship1 : 'Sin definir' ?></p>
                                                                         </div>
 
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>Telefono</b>
-                                                                            <p><?= isset($employee_contacts->emergency_number1) ? $employee_contacts->emergency_number1 : 'Sin definir' ?>
-                                                                            </p>
+                                                                            <p><?= isset($employee_contacts->emergency_number1) ? $employee_contacts->emergency_number1 : 'Sin definir' ?></p>
                                                                         </div>
                                                                     </div>
 
@@ -411,20 +367,17 @@
                                                                     <div class="row">
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>Nombre</b>
-                                                                            <p><?= isset($employee_contacts->emergency_contact2) ? $employee_contacts->emergency_contact2 : 'Sin definir' ?>
-                                                                            </p>
+                                                                            <p><?= isset($employee_contacts->emergency_contact2) ? $employee_contacts->emergency_contact2 : 'Sin definir' ?></p>
                                                                         </div>
 
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>Parentesco</b>
-                                                                            <p><?= isset($employee_contacts->emergency_relationship2) ? $employee_contacts->emergency_relationship2 : 'Sin definir' ?>
-                                                                            </p>
+                                                                            <p><?= isset($employee_contacts->emergency_relationship2) ? $employee_contacts->emergency_relationship2 : 'Sin definir' ?></p>
                                                                         </div>
 
                                                                         <div class="col-sm-4 text-center">
                                                                             <b id="colores">Telefono</b>
-                                                                            <p><?= isset($employee_contacts->emergency_number2) ? $employee_contacts->emergency_number2 : 'Sin definir' ?>
-                                                                            </p>
+                                                                            <p><?= isset($employee_contacts->emergency_number2) ? $employee_contacts->emergency_number2 : 'Sin definir' ?></p>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -441,54 +394,56 @@
 
                                                         </div>
 
-                                                        <?php if ($usuario_rh) : ?>
-                                                            <div class="card col-md-12 collapsed-card collapsed-card mt-3">
-                                                                <div class="card-header">
-                                                                    <h3 class="card-title">Datos de Acceso</h3>
-                                                                    <div class="card-tools">
-                                                                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                                                            <i class="fas fa-plus text-primary"></i>
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="card-body" style="display: none;">
-                                                                    <div id="datos_Contacto">
-
-                                                                        <div class="row">
-                                                                            <div class="col-sm-6 text-center">
-                                                                                <b>Usuario</b>
-                                                                                <p id="usernamep">
-                                                                                    <?= $usuario_rh->username ?>
-                                                                                </p>
-                                                                            </div>
-                                                                            <div class="col-sm-6 text-center">
-                                                                                <b>Contraseña</b>
-                                                                                <p id="passwordp">
-                                                                                    <?= Encryption::decode($usuario_rh->password) ?>
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="row">
-                                                                            <div class="col-sm-12 text-center">
-                                                                                <b>Status</b>
-                                                                                <p id="statusp">
-                                                                                    <?= $usuario_rh->status == 1 ? 'Activo' : 'Inactivo'  ?>
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-
-                                                                    </div>
-                                                                    <?php if (Utils::isAdmin() || Utils::isCustomerSA()) : ?>
-                                                                        <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
-                                                                            <div class="text-center">
-                                                                                <button class="btn btn-info" id="btn-editar-acceso">Editar</button>
-                                                                            </div>
-                                                                        <?php endif ?>
-                                                                    <?php endif ?>
+														 <?php if ($usuario_rh) : ?>
+                                                        <div class="card col-md-12 collapsed-card collapsed-card mt-3">
+                                                            <div class="card-header">
+                                                                <h3 class="card-title">Datos de Acceso</h3>
+                                                                <div class="card-tools">
+                                                                    <button type="button" class="btn btn-tool"
+                                                                        data-card-widget="collapse" title="Collapse">
+                                                                        <i class="fas fa-plus text-primary"></i>
+                                                                    </button>
                                                                 </div>
                                                             </div>
+
+                                                            <div class="card-body" style="display: none;">
+                                                                <div id="datos_Contacto">
+
+                                                                    <div class="row">
+                                                                        <div class="col-sm-6 text-center">
+                                                                            <b>Usuario</b>
+                                                                            <p id="usernamep">
+                                                                                <?= $usuario_rh->username ?>
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="col-sm-6 text-center">
+                                                                            <b>Contraseña</b>
+                                                                            <p id="passwordp">
+                                                                                <?= Encryption::decode($usuario_rh->password) ?>
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12 text-center">
+                                                                            <b>Status</b>
+                                                                            <p id="statusp">
+                                                                                <?= $usuario_rh->status == 1 ? 'Activo' : 'Inactivo'  ?>
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                                <?php if (Utils::isAdmin() || Utils::isCustomerSA()) : ?>
+                                                                    <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                                        <div class="text-center">
+                                                                            <button class="btn btn-info"
+                                                                                id="btn-editar-acceso">Editar</button>
+                                                                        </div>
+                                                                    <?php endif ?>
+                                                                <?php endif ?>
+                                                            </div>
+                                                        </div>
                                                         <?php endif; ?>
                                                     </div>
                                                 </div>
@@ -503,11 +458,9 @@
                                                     <table id="tb_history_positions" class="table table-responsive table-striped table-sm" style="display: none;">
                                                         <thead>
                                                             <tr>
-                                                                <th class="align-middle text-center">Nombre de puesto
-                                                                </th>
+                                                                <th class="align-middle text-center">Nombre de puesto</th>
                                                                 <th class="align-middle text-center">Departamento</th>
-                                                                <th class="align-middle text-center">Fecha del ultimo
-                                                                    cambio</th>
+                                                                <th class="align-middle text-center">Fecha del ultimo cambio</th>
                                                                 <th class="align-middle text-center">Accion</th>
                                                             </tr>
                                                         </thead>
@@ -516,10 +469,8 @@
                                                             <?php foreach ($historyPositions as $hp) : ?>
                                                                 <tr>
                                                                     <td class=" align-middle "><?= $hp['title']  ?></td>
-                                                                    <td class=" align-middle "><?= $hp['department']  ?>
-                                                                    </td>
-                                                                    <td class=" align-middle ">
-                                                                        <?= Utils::getDate($hp['start_date'])  ?></td>
+                                                                    <td class=" align-middle "><?= $hp['department']  ?></td>
+                                                                    <td class=" align-middle "><?= Utils::getDate($hp['start_date'])  ?></td>
                                                                     <td class=" text-center ">
                                                                         <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
                                                                             <button class="btn btn-info" value="<?= Encryption::encode($hp['id'])    ?>"><i class="fas fa-edit"></i></button>
@@ -549,18 +500,15 @@
                                                             </div>
                                                             <div class="col-sm-4 text-center">
                                                                 <b>Fecha de inicio</b>
-                                                                <p><?= isset($employeeContract->contract_start) ? Utils::getDate($employeeContract->contract_start) : 'Sin definir' ?>
-                                                                </p>
+                                                                <p><?= isset($employeeContract->contract_start) ? Utils::getDate($employeeContract->contract_start) : 'Sin definir' ?></p>
                                                             </div>
                                                             <div class="col-sm-4 text-center">
                                                                 <b>Fecha de finalizacion</b>
-                                                                <p><?= isset($employeeContract->contract_end) ? Utils::getDate($employeeContract->contract_end) : 'Sin finalizacion' ?>
-                                                                </p>
+                                                                <p><?= isset($employeeContract->contract_end) ? Utils::getDate($employeeContract->contract_end) : 'Sin finalizacion' ?></p>
                                                             </div>
                                                             <div class="col-sm-4 text-center">
                                                                 <b>Tipo de contrato</b>
-                                                                <p><?= isset($employeeContract->type) ? $employeeContract->type : 'Sin definir' ?>
-                                                                </p>
+                                                                <p><?= isset($employeeContract->type) ? $employeeContract->type : 'Sin definir' ?></p>
                                                             </div>
                                                         </div>
 
@@ -569,28 +517,19 @@
                                                                 <table id="tb_contract" class="table table-responsive table-striped table-sm" style="display: none;">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th class="align-middle text-center">Fecha
-                                                                                de inicio</th>
-                                                                            <th class="align-middle text-center">Fecha
-                                                                                de finalizacion</th>
-                                                                            <th class="align-middle text-center">Tipo de
-                                                                                contrato</th>
-                                                                            <th class="align-middle text-center">Accion
-                                                                            </th>
+                                                                            <th class="align-middle text-center">Fecha de inicio</th>
+                                                                            <th class="align-middle text-center">Fecha de finalizacion</th>
+                                                                            <th class="align-middle text-center">Tipo de contrato</th>
+                                                                            <th class="align-middle text-center">Accion</th>
                                                                         </tr>
                                                                     </thead>
 
                                                                     <tbody id="tboodycontract">
                                                                         <?php foreach ($employeeContractAll as $emplContrac) : ?>
                                                                             <tr>
-                                                                                <td class=" align-middle ">
-                                                                                    <?= Utils::getDate($emplContrac['contract_start'])  ?>
-                                                                                </td>
-                                                                                <td class=" align-middle ">
-                                                                                    <?= isset($emplContrac['contract_end']) ? Utils::getDate($emplContrac['contract_end']) : 'Sin finalizacion'  ?>
-                                                                                </td>
-                                                                                <td class=" align-middle ">
-                                                                                    <?= $emplContrac['type']  ?></td>
+                                                                                <td class=" align-middle "><?= Utils::getDate($emplContrac['contract_start'])  ?></td>
+                                                                                <td class=" align-middle "><?= isset($emplContrac['contract_end']) ? Utils::getDate($emplContrac['contract_end']) : 'Sin finalizacion'  ?></td>
+                                                                                <td class=" align-middle "><?= $emplContrac['type']  ?></td>
                                                                                 <td class=" text-center ">
                                                                                     <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
                                                                                         <button class="btn btn-danger text-bold" value="<?= Encryption::encode($emplContrac['id'])   ?>">X</button>
@@ -630,18 +569,10 @@
                                                                 <tbody id="tboodyFamily">
                                                                     <?php foreach ($employeeFamily as $empfam) : ?>
                                                                         <tr>
-                                                                            <td class="text-center align-middle text-bold">
-                                                                                <?= Utils::labelFamily($empfam['type'])  ?>
-                                                                            </td>
-                                                                            <td class="text-center align-middle">
-                                                                                <?= isset($empfam['name']) && $empfam['name'] != null ? $empfam['name'] : 'Sin definir' ?>
-                                                                            </td>
-                                                                            <td class="text-center align-middle">
-                                                                                <?= isset($empfam['age']) ? $empfam['age'] . ' Años' : 'Sin definir'  ?>
-                                                                            </td>
-                                                                            <td class="text-center align-middle">
-                                                                                <?= Utils::getFullDate($empfam['created_at'])  ?>
-                                                                            </td>
+                                                                            <td class="text-center align-middle text-bold"> <?= Utils::labelFamily($empfam['type'])  ?></td>
+                                                                            <td class="text-center align-middle"><?= isset($empfam['name']) && $empfam['name'] != null ? $empfam['name'] : 'Sin definir' ?></td>
+                                                                            <td class="text-center align-middle"><?= isset($empfam['age']) ? $empfam['age'] . ' Años' : 'Sin definir'  ?> </td>
+                                                                            <td class="text-center align-middle"><?= Utils::getFullDate($empfam['created_at'])  ?></td>
                                                                             <td class="text-center align-middle">
                                                                                 <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
                                                                                     <button class="btn btn-info" value="<?= Encryption::encode($empfam['id']) ?>"><i class="fas fa-edit"></i></button>
@@ -668,39 +599,33 @@
 
                                                             <div class="col-sm-4 text-center">
                                                                 <b>Fecha del último ajuste</b>
-                                                                <p><?= isset($employeePayroll->created_at) ? Utils::getDate($employeePayroll->created_at) : 'Sin definir' ?>
-                                                                </p>
+                                                                <p><?= isset($employeePayroll->created_at) ? Utils::getDate($employeePayroll->created_at) : 'Sin definir' ?></p>
                                                             </div>
 
                                                             <div class="col-sm-4 text-center">
                                                                 <b>Salario actual o final</b>
-                                                                <p><?= isset($employeePayroll->gross_pay) ? '$' . number_format($employeePayroll->gross_pay, 2) : 'Sin definir' ?>
-                                                                </p>
+                                                                <p><?= isset($employeePayroll->gross_pay) ? '$' . number_format($employeePayroll->gross_pay, 2) : 'Sin definir' ?></p>
                                                             </div>
 
                                                             <div class="col-sm-4 text-center">
                                                                 <b>Salario inicial</b>
-                                                                <p><?= isset($employeePayroll->start_pay) ? '$' . number_format($employeePayroll->start_pay, 2) : 'Sin definir' ?>
-                                                                </p>
+                                                                <p><?= isset($employeePayroll->start_pay) ? '$' . number_format($employeePayroll->start_pay, 2) : 'Sin definir' ?></p>
                                                             </div>
                                                         </div>
 
                                                         <div class="row">
                                                             <div class="col-sm-4 text-center">
                                                                 <b>Banco</b>
-                                                                <p><?= isset($employeePayroll->bank) ? $employeePayroll->bank : 'Sin definir' ?>
-                                                                </p>
+                                                                <p><?= isset($employeePayroll->bank) ? $employeePayroll->bank : 'Sin definir' ?></p>
                                                             </div>
 
                                                             <div class="col-sm-4 text-center">
                                                                 <b>Cuenta</b>
-                                                                <p><?= isset($employeePayroll->account_number)  && $employeePayroll->account_number != '' ? $employeePayroll->account_number : 'Sin definir' ?>
-                                                                </p>
+                                                                <p><?= isset($employeePayroll->account_number)  && $employeePayroll->account_number != '' ? $employeePayroll->account_number : 'Sin definir' ?></p>
                                                             </div>
                                                             <div class="col-sm-4 text-center">
                                                                 <b>CLABE</b>
-                                                                <p><?= isset($employeePayroll->CLABE) && $employeePayroll->CLABE != '' ? $employeePayroll->CLABE : 'Sin definir' ?>
-                                                                </p>
+                                                                <p><?= isset($employeePayroll->CLABE) && $employeePayroll->CLABE != '' ? $employeePayroll->CLABE : 'Sin definir' ?></p>
                                                             </div>
                                                         </div>
 
@@ -723,18 +648,11 @@
                                                                 <tbody id="tableRollPay">
                                                                     <?php foreach ($employeePayrollAll as $employeePayro) :  ?>
                                                                         <tr>
-                                                                            <td class="text-center align-middle">
-                                                                                <?= '$' . number_format($employeePayro['gross_pay'], 2) ?>
-                                                                            </td>
-                                                                            <td class="text-center align-middle">
-                                                                                <?= $employeePayro['bank'] ?></td>
-                                                                            <td class="text-center align-middle">
-                                                                                <?= $employeePayro['account_number'] ?></td>
-                                                                            <td class="text-center align-middle">
-                                                                                <?= $employeePayro['CLABE'] ?></td>
-                                                                            <td class="text-center align-middle">
-                                                                                <?= Utils::getDate($employeePayro['created_at']) ?>
-                                                                            </td>
+                                                                            <td class="text-center align-middle"><?= '$' . number_format($employeePayro['gross_pay'], 2) ?></td>
+                                                                            <td class="text-center align-middle"><?= $employeePayro['bank'] ?></td>
+                                                                            <td class="text-center align-middle"><?= $employeePayro['account_number'] ?></td>
+                                                                            <td class="text-center align-middle"><?= $employeePayro['CLABE'] ?></td>
+                                                                            <td class="text-center align-middle"><?= Utils::getDate($employeePayro['created_at']) ?></td>
                                                                             <td class=" text-center ">
                                                                                 <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
                                                                                     <button class="btn btn-danger text-bold" value="<?= Encryption::encode($employeePayro['id'])   ?>">X</button>
@@ -754,8 +672,7 @@
                                                                 <button class="btn btn-info" id="btn-editar-payroll">Editar</button>
                                                             <?php endif ?>
                                                             <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
-                                                                <button class="btn btn-success" id="btn-history-payroll">Ver
-                                                                    historial de cambios</button>
+                                                                <button class="btn btn-success" id="btn-history-payroll">Ver historial de cambios</button>
                                                             <?php endif ?>
                                                         </div>
                                                     <?php endif ?>
@@ -789,8 +706,7 @@
                                                                 <tbody id="tboodyInciden">
                                                                     <?php foreach ($incidens as $inc) : ?>
                                                                         <tr>
-                                                                            <td class="text-center align-middle">
-                                                                                <?= $inc['type']  ?></td>
+                                                                            <td class="text-center align-middle"> <?= $inc['type']  ?></td>
                                                                             <td class="text-center align-middle">
                                                                                 <?php
                                                                                 if ($inc['type'] == 'Retraso' || $inc['type'] == 'Horas extras') {
@@ -805,14 +721,9 @@
                                                                                 ?>
                                                                             </td>
 
-                                                                            <td class="text-center align-middle">
-                                                                                <?= $inc['comments']  ?></td>
-                                                                            <td class="text-center align-middle">
-                                                                                <?= Utils::getDate($inc['created_at'])  ?>
-                                                                            </td>
-                                                                            <td class="text-center align-middle">
-                                                                                <?= Utils::getDate($inc['end_date'])  ?>
-                                                                            </td>
+                                                                            <td class="text-center align-middle"><?= $inc['comments']  ?></td>
+                                                                            <td class="text-center align-middle"><?= Utils::getDate($inc['created_at'])  ?></td>
+                                                                            <td class="text-center align-middle"><?= Utils::getDate($inc['end_date'])  ?></td>
                                                                             <td class="text-center align-middle">
                                                                                 <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
                                                                                     <button class="btn btn-danger text-bold" value="<?= Encryption::encode($inc['id_incident'])  ?>">X</button>
@@ -828,16 +739,14 @@
                                                     </div>
 
                                                     <div class="text-center " hidden>
-                                                        <button class="btn btn-success" id="btn-historial-incidente">Ver
-                                                            historial de incidencias</button>
+                                                        <button class="btn btn-success" id="btn-historial-incidente">Ver historial de incidencias</button>
                                                     </div>
                                                 </div>
 
                                                 <div class="tab-pane fade" id="vert-tabs-capacitacion" role="tabpanel" aria-labelledby="vert-tabs-capacitacion-tab">
                                                     <div class="row">
                                                         <div class="col-12 ">
-                                                            <a href="<?= base_url  ?>capacitaciones/index" class="btn btn-orange float-right">Ver
-                                                                capacitaciones</a>
+                                                            <a href="<?= base_url  ?>capacitaciones/index" class="btn btn-orange float-right">Ver capacitaciones</a>
                                                         </div>
                                                     </div>
 
@@ -846,19 +755,13 @@
                                                             <table id="tb_employees_training" class="table table-responsive table-striped table-sm" style="display: none;">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th class="align-middle text-center">Nombre de
-                                                                            la capacitacion</th>
-                                                                        <th class="align-middle text-center">Descripcion
-                                                                        </th>
+                                                                        <th class="align-middle text-center">Nombre de la capacitacion</th>
+                                                                        <th class="align-middle text-center">Descripcion</th>
                                                                         <th class="align-middle text-center">Horas</th>
-                                                                        <th class="align-middle text-center">Empresa
-                                                                            contratante</th>
-                                                                        <th class="align-middle text-center">Fecha de
-                                                                            inicio</th>
-                                                                        <th class="align-middle text-center">Fecha final
-                                                                        </th>
-                                                                        <th class="align-middle text-center">Fecha de
-                                                                            modificacion</th>
+                                                                        <th class="align-middle text-center">Empresa contratante</th>
+                                                                        <th class="align-middle text-center">Fecha de inicio</th>
+                                                                        <th class="align-middle text-center">Fecha final</th>
+                                                                        <th class="align-middle text-center">Fecha de modificacion</th>
                                                                         <th class="align-middle text-center">Accion</th>
                                                                     </tr>
                                                                 </thead>
@@ -866,23 +769,13 @@
                                                                 <tbody id="tboodyTraining">
                                                                     <?php foreach ($employee_trainings as $tra) : ?>
                                                                         <tr>
-                                                                            <td class=" align-middle "><?= $tra['title']  ?>
-                                                                            </td>
-                                                                            <td class=" align-middle ">
-                                                                                <?= $tra['description']  ?></td>
-                                                                            <td class=" align-middle ">
-                                                                                <?= $tra['hours'] . ' hrs'  ?></td>
-                                                                            <td class=" align-middle ">
-                                                                                <?= $tra['nombre_cliente']  ?></td>
-                                                                            <td class=" align-middle ">
-                                                                                <?= Utils::getDate($tra['start_date'])  ?>
-                                                                            </td>
-                                                                            <td class=" align-middle ">
-                                                                                <?= Utils::getDate($tra['end_date'])  ?>
-                                                                            </td>
-                                                                            <td class=" align-middle ">
-                                                                                <?= Utils::getFullDate($tra['modified_at'])  ?>
-                                                                            </td>
+                                                                            <td class=" align-middle "><?= $tra['title']  ?></td>
+                                                                            <td class=" align-middle "><?= $tra['description']  ?></td>
+                                                                            <td class=" align-middle "><?= $tra['hours'] . ' hrs'  ?></td>
+                                                                            <td class=" align-middle "><?= $tra['nombre_cliente']  ?></td>
+                                                                            <td class=" align-middle "><?= Utils::getDate($tra['start_date'])  ?></td>
+                                                                            <td class=" align-middle "><?= Utils::getDate($tra['end_date'])  ?></td>
+                                                                            <td class=" align-middle "><?= Utils::getFullDate($tra['modified_at'])  ?></td>
                                                                             <td class=" align-middle ">
                                                                                 <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
                                                                                     <button class="btn btn-danger text-bold" value="<?= Encryption::encode($tra['id_employee_training']) . ',' . Encryption::encode($tra['id_employee'])  ?>">X</button>
@@ -897,8 +790,7 @@
                                                     </div>
 
                                                     <div class="text-center " hidden>
-                                                        <button class="btn btn-success" id="btn-historial-capacitaciones">Ver historial de
-                                                            capacitaciones</button>
+                                                        <button class="btn btn-success" id="btn-historial-capacitaciones">Ver historial de capacitaciones</button>
                                                     </div>
                                                 </div>
 
@@ -907,8 +799,7 @@
                                                     <form action="" id="form_cv">
                                                         <div class="row">
                                                             <div class="col-8">
-                                                                <label for="cv" class="col-form-label">Curriculum
-                                                                    Vitae</label>
+                                                                <label for="cv" class="col-form-label">Curriculum Vitae</label>
                                                                 <input type="file" id="input_cv" class="form-control" name="cv" placeholder="Adjuntar currículum" class="form-control-file text-white" accept=" application/pdf">
                                                             </div>
                                                             <input type="hidden" name="id_employee" value="<?= $_GET['id'] ?>">
@@ -960,27 +851,27 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="content-documentos">
-                                                                <?php foreach ($documents as $document) : ?>
-                                                                    <tr>
-                                                                        <td><?= $document['Descripcion'] ?></td>
-                                                                        <td class="text-right py-0 align-middle">
-                                                                            <div class="btn-group btn-group-sm">
-                                                                                <button class="btn btn-success" data-id="<?= $document['id'] ?>">
-                                                                                    <i class="fas fa-eye"></i>
+                                                                <?php foreach ($documents as $document): ?>
+                                                                <tr>
+                                                                    <td><?=$document['Descripcion']?></td>
+                                                                    <td class="text-right py-0 align-middle">
+                                                                        <div class="btn-group btn-group-sm">
+                                                                            <button class="btn btn-success" data-id="<?=$document['id']?>">
+                                                                                <i class="fas fa-eye"></i>
+                                                                            </button>
+                                                                            <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                                                <button class="btn btn-info" data-id="<?=$document['id']?>">
+                                                                                    <i class="fas fa-pencil-alt"></i>
                                                                                 </button>
-                                                                                <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
-                                                                                    <button class="btn btn-info" data-id="<?= $document['id'] ?>">
-                                                                                        <i class="fas fa-pencil-alt"></i>
-                                                                                    </button>
-                                                                                <?php endif ?>
-                                                                                <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
-                                                                                    <button class="btn btn-danger" data-id="<?= $document['id'] ?>">
-                                                                                        <i class="fas fa-times"></i>
-                                                                                    </button>
-                                                                                <?php endif ?>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
+                                                                            <?php endif ?>
+                                                                            <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
+                                                                                <button class="btn btn-danger" data-id="<?=$document['id']?>">
+                                                                                    <i class="fas fa-times"></i>
+                                                                                </button>
+                                                                            <?php endif ?>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr> 
                                                                 <?php endforeach ?>
                                                             </tbody>
                                                         </table>
@@ -1000,13 +891,12 @@
                         </div>
                     </div><!-- /.container-fluid -->
             </section>
-            <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
-                <div class="row">
-                    <div class="col-sm-6 p-3">
-                        <button class="btn btn-<?= $employee->status == 1 ? 'danger' : 'success' ?>" id="btn-debaja-empleado" value="<?= $_GET['id']  ?>">Dar de
-                            <?= $employee->status == 1 ? 'baja' : 'alta' ?></button>
-                    </div>
+            <?php if (Utils::permission($_GET['controller'], 'update')) : ?>    
+            <div class="row">
+                <div class="col-sm-6 p-3">
+                    <button class="btn btn-<?= $employee->status == 1 ? 'danger' : 'success' ?>" id="btn-debaja-empleado" value="<?= $_GET['id']  ?>">Dar de <?= $employee->status == 1 ? 'baja' : 'alta' ?></button>
                 </div>
+            </div>
             <?php endif ?>
         </div>
 
@@ -1065,12 +955,10 @@
             let div = document.querySelector('#divTableIncidens')
             if (div.hidden == true) {
                 div.hidden = false
-                document.querySelector('#btn-historial-incidente').textContent =
-                    'Cerrar historial de incidencias'
+                document.querySelector('#btn-historial-incidente').textContent = 'Cerrar historial de incidencias'
             } else {
                 div.hidden = true
-                document.querySelector('#btn-historial-incidente').textContent =
-                    'Ver historial de incidencias'
+                document.querySelector('#btn-historial-incidente').textContent = 'Ver historial de incidencias'
             }
         })
 
@@ -1079,12 +967,10 @@
             let div = document.querySelector('#divTableTraining')
             if (div.hidden == true) {
                 div.hidden = false
-                document.querySelector('#btn-historial-capacitaciones').textContent =
-                    'Cerrar historial de capacitaciones'
+                document.querySelector('#btn-historial-capacitaciones').textContent = 'Cerrar historial de capacitaciones'
             } else {
                 div.hidden = true
-                document.querySelector('#btn-historial-capacitaciones').textContent =
-                    'Ver historial de capacitaciones'
+                document.querySelector('#btn-historial-capacitaciones').textContent = 'Ver historial de capacitaciones'
             }
         })
 
@@ -1226,28 +1112,27 @@
             e.preventDefault();
             employee.updateRe_entry_date();
         });
+		
+		  document.querySelector('#modal-acceso form').addEventListener('submit', e => {
+        e.preventDefault();
+        usuario_rh = new Employee_RH();
+        usuario_rh.Update_UserRH();
+    });
 
-        document.querySelector('#modal-acceso form').addEventListener('submit', e => {
-            e.preventDefault();
-            usuario_rh = new Employee_RH();
-            usuario_rh.Update_UserRH();
+    document.querySelector('#btn-editar-acceso').addEventListener('click', e => {
+        e.preventDefault();
+        $('#modal-acceso').modal({
+            backdrop: 'static',
+            keyboard: false
         });
-
-        document.querySelector('#btn-editar-acceso').addEventListener('click', e => {
-            e.preventDefault();
-            $('#modal-acceso').modal({
-                backdrop: 'static',
-                keyboard: false
-            });
-        })
+    })
 
 
 
         document.querySelector('#tboodyInciden').addEventListener('click', function(e) {
             var incidente = new Incidence();
 
-            if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains(
-                    'btn-info')) {
+            if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains('btn-info')) {
                 document.querySelectorAll('#modal_create_incidencias input')[0].value = 3
                 if (e.target.offsetParent.classList.contains('btn-info')) {
                     incidente.getIncident(e.target.offsetParent.value)
@@ -1261,8 +1146,7 @@
             }
 
 
-            if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains(
-                    'btn-denger')) {
+            if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains('btn-denger')) {
                 Swal.fire({
                     title: '¿Quieres eliminar esta incidente?',
                     icon: 'warning',
@@ -1283,8 +1167,7 @@
         document.querySelector('#tboodyFamily').addEventListener('click', function(e) {
             var form = document.querySelector("#modal_family form");
             form.reset()
-            if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains(
-                    'btn-info')) {
+            if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains('btn-info')) {
                 if (e.target.offsetParent.classList.contains('btn-info')) {
                     employee.getFamily(e.target.offsetParent.value);
                 } else {
@@ -1352,8 +1235,7 @@
         })
 
         document.querySelector('#tboodyTraining').addEventListener('click', function(e) {
-            if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains(
-                    'btn-denger')) {
+            if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains('btn-denger')) {
                 Swal.fire({
                     title: '¿Quieres eliminar esta capacitacion?',
                     icon: 'warning',
@@ -1377,8 +1259,7 @@
             var form = document.querySelector("#modal-historyposition form");
             form.reset()
 
-            if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains(
-                    'btn-info')) {
+            if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains('btn-info')) {
                 if (e.target.offsetParent.classList.contains('btn-info')) {
                     history_position.getHistoryposition(e.target.offsetParent.value);
                 } else {
@@ -1390,8 +1271,7 @@
                 });
             }
 
-            if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains(
-                    'btn-danger')) {
+            if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains('btn-danger')) {
                 Swal.fire({
                     title: '¿Quieres eliminar el puesto?',
                     icon: 'warning',
@@ -1511,8 +1391,7 @@
 
         var new_image = document.querySelector('#modal_imagen img');
         document.addEventListener('change', e => {
-            if (e.target.classList.contains('btn-upload-photo') || e.target.parentElement.classList
-                .contains('btn-upload-photo')) {
+            if (e.target.classList.contains('btn-upload-photo') || e.target.parentElement.classList.contains('btn-upload-photo')) {
 
                 var files = e.target.files;
                 var done = function(url) {
@@ -1668,8 +1547,7 @@
 
                     let xhr = new XMLHttpRequest();
                     xhr.open('POST', '../EmpleadoFoto/save');
-                    let data =
-                        `id=${id}&id_employee=${id_employee}&file_name=${file_name}&Objeto=${base64data}&flag=${flag}`;
+                    let data = `id=${id}&id_employee=${id_employee}&file_name=${file_name}&Objeto=${base64data}&flag=${flag}`;
                     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                     xhr.send(data);
                     xhr.onreadystatechange = function() {
@@ -1686,8 +1564,7 @@
                                     form.querySelectorAll('.btn-orange')[0].disabled = false;
                                 }
                             } catch (error) {
-                                utils.showToast('Algo salió mal. Inténtalo de nuevo' + error,
-                                    'error');
+                                utils.showToast('Algo salió mal. Inténtalo de nuevo' + error, 'error');
                                 form.querySelectorAll('.btn-orange')[0].disabled = false;
                             }
                         }
@@ -1700,8 +1577,7 @@
         }
 
         document.addEventListener('click', e => {
-            if (e.target.classList.contains('btn-watch-photo') || e.target.parentElement.classList.contains(
-                    'btn-watch-photo')) {
+            if (e.target.classList.contains('btn-watch-photo') || e.target.parentElement.classList.contains('btn-watch-photo')) {
                 let id;
                 if (e.target.classList.contains('btn-watch-photo'))
                     id = e.target.dataset.id;
@@ -1739,8 +1615,7 @@
                 }
             }
 
-            if (e.target.classList.contains('btn-edit-photo') || e.target.parentElement.classList.contains(
-                    'btn-edit-photo')) {
+            if (e.target.classList.contains('btn-edit-photo') || e.target.parentElement.classList.contains('btn-edit-photo')) {
                 let id;
                 if (e.target.classList.contains('btn-edit-photo'))
                     id = e.target.dataset.id;
@@ -1789,19 +1664,13 @@
                                             rotatable: true,
                                             preview: '.preview',
                                             ready: function(e) {
-                                                document.querySelectorAll(
-                                                    '#modal_imagen .btn-primary'
-                                                )[0].addEventListener(
-                                                    'click', e => {
-                                                        cropper.rotate(-45);
-                                                    })
+                                                document.querySelectorAll('#modal_imagen .btn-primary')[0].addEventListener('click', e => {
+                                                    cropper.rotate(-45);
+                                                })
 
-                                                document.querySelectorAll(
-                                                    '#modal_imagen .btn-primary'
-                                                )[1].addEventListener(
-                                                    'click', e => {
-                                                        cropper.rotate(45);
-                                                    })
+                                                document.querySelectorAll('#modal_imagen .btn-primary')[1].addEventListener('click', e => {
+                                                    cropper.rotate(45);
+                                                })
                                             }
                                         });
 
@@ -1824,25 +1693,23 @@
                 }
             }
 
-            if (e.target.classList.contains('btn-delete-photo') || e.target.parentElement.classList
-                .contains('btn-delete-photo')) {
+            if (e.target.classList.contains('btn-delete-photo') || e.target.parentElement.classList.contains('btn-delete-photo')) {
 
             }
             e.stopPropagation();
         })
-
-
+		
+		
         <?php if ($employee->status == 0) : ?>
             var botones = document.querySelectorAll("button");
             botones.forEach(function(boton) {
-                if (boton.classList.contains('btn-info') || boton.classList.contains('btn-danger') || boton
-                    .classList.contains('btn-orange')) {
+                if (boton.classList.contains('btn-info') || boton.classList.contains('btn-danger') || boton.classList.contains('btn-orange')) {
                     boton.remove();
                 }
             });
         <?php endif; ?>
-
-        let cropperr;
+		
+		let cropperr;
         let optionsDocs = {
             autoCropArea: 1,
             //preview:'.previeww',
@@ -1852,156 +1719,152 @@
 
         $('#modal_documento').on('shown.bs.modal', function() {
             cropperr = new Cropper(document.querySelector('#modal_documento img'), optionsDocs);
-        }).on('hidden.bs.modal', function() {
+        }).on('hidden.bs.modal', function(){
             cropperr.destroy();
             cropperr = null;
         });
 
-        document.querySelector('#modal_documento .docs-buttons').onclick = function(event) {
+        document.querySelector('#modal_documento .docs-buttons').onclick = function (event) {
             var e = event || window.event;
             var target = e.target || e.srcElement;
             var cropped;
             var result;
             var input;
             var data;
-
+        
             if (!cropperr) {
-                return;
+            return;
             }
-
+        
             while (target !== this) {
-                if (target.getAttribute('data-method')) {
-                    break;
-                }
-
-                target = target.parentNode;
+            if (target.getAttribute('data-method')) {
+                break;
             }
-
+        
+            target = target.parentNode;
+            }
+        
             if (target === this || target.disabled || target.className.indexOf('disabled') > -1) {
-                return;
+            return;
             }
-
+        
             data = {
-                method: target.getAttribute('data-method'),
-                target: target.getAttribute('data-target'),
-                option: target.getAttribute('data-option') || undefined,
-                secondOption: target.getAttribute('data-second-option') || undefined
+            method: target.getAttribute('data-method'),
+            target: target.getAttribute('data-target'),
+            option: target.getAttribute('data-option') || undefined,
+            secondOption: target.getAttribute('data-second-option') || undefined
             };
-
+        
             cropped = cropperr.cropped;
-
+        
             if (data.method) {
-                if (typeof data.target !== 'undefined') {
-                    input = document.querySelector(data.target);
-
-                    if (!target.hasAttribute('data-option') && data.target && input) {
-                        try {
-                            data.option = JSON.parse(input.value);
-                        } catch (e) {
-                            console.log(e.message);
-                        }
-                    }
+            if (typeof data.target !== 'undefined') {
+                input = document.querySelector(data.target);
+        
+                if (!target.hasAttribute('data-option') && data.target && input) {
+                try {
+                    data.option = JSON.parse(input.value);
+                } catch (e) {
+                    console.log(e.message);
                 }
-
-                switch (data.method) {
-                    case 'rotate':
-                        if (cropped && optionsDocs.viewMode > 0) {
-                            cropperr.clear();
-                        }
-
-                        break;
                 }
-
-                result = cropperr[data.method](data.option, data.secondOption);
-
-                switch (data.method) {
-                    case 'rotate':
-                        if (cropped && optionsDocs.viewMode > 0) {
-                            cropperr.crop();
-                        }
-
-                        break;
-
-                    case 'scaleX':
-                    case 'scaleY':
-                        target.setAttribute('data-option', -data.option);
-                        break;
+            }
+        
+            switch (data.method) {
+                case 'rotate':
+                if (cropped && optionsDocs.viewMode > 0) {
+                    cropperr.clear();
                 }
-
-                if (typeof result === 'object' && result !== cropperr && input) {
-                    try {
-                        input.value = JSON.stringify(result);
-                    } catch (e) {
-                        console.log(e.message);
-                    }
+        
+                break;
+            }
+        
+            result = cropperr[data.method](data.option, data.secondOption);
+        
+            switch (data.method) {
+                case 'rotate':
+                if (cropped && optionsDocs.viewMode > 0) {
+                    cropperr.crop();
                 }
+        
+                break;
+        
+                case 'scaleX':
+                case 'scaleY':
+                target.setAttribute('data-option', -data.option);
+                break;
+            }
+        
+            if (typeof result === 'object' && result !== cropperr && input) {
+                try {
+                input.value = JSON.stringify(result);
+                } catch (e) {
+                console.log(e.message);
+                }
+            }
             }
         };
 
-        document.querySelectorAll('.content-documentos')[0].parentElement.parentElement.parentElement.children[0]
-            .children[1].addEventListener('change', e => {
-                var files = e.target.files;
-                let data = `id_employee=${document.querySelectorAll('#modal_documento form input')[1].value}`;
-                let xhr = new XMLHttpRequest();
-                xhr.open('POST', '../EmpleadoDocumento/getDocumentosPorCompletar');
-                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                xhr.send(data);
-                xhr.clase = this;
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        let r = this.responseText;
-                        console.log(r);
-                        try {
-                            let json_app = JSON.parse(r);
-                            let data = '';
-                            json_app.forEach(element => {
-                                data +=
-                                    `<option value="${element.Campo}">${element.Descripcion}</option>`;
-                            });
-                            document.querySelector('#modal_documento select').innerHTML = data;
-                        } catch (error) {
-                            utils.showToast('Algo salió mal. Inténtalo de nuevo' + error, 'error');
-                            //form.querySelectorAll('.btn')[1].disabled = false;
-                        }
+        document.querySelectorAll('.content-documentos')[0].parentElement.parentElement.parentElement.children[0].children[1].addEventListener('change', e => {
+            var files = e.target.files;
+            let data = `id_employee=${document.querySelectorAll('#modal_documento form input')[1].value}`;
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '../EmpleadoDocumento/getDocumentosPorCompletar');
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.send(data);
+            xhr.clase = this;
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    let r = this.responseText;
+                    console.log(r);
+                    try {
+                        let json_app = JSON.parse(r);
+                        let data = '';
+                        json_app.forEach(element => {
+                            data += `<option value="${element.Campo}">${element.Descripcion}</option>`;
+                        });
+                        document.querySelector('#modal_documento select').innerHTML = data;
+                    } catch (error) {
+                        utils.showToast('Algo salió mal. Inténtalo de nuevo'+error, 'error');
+                        //form.querySelectorAll('.btn')[1].disabled = false;
                     }
                 }
+            }
+            
+            var done = function(url){
+                
+                document.querySelector('#modal_documento img').src = url;
 
-                var done = function(url) {
+                var form = document.querySelector("#modal_documento form");
+                //var formData = new FormData(form);
+                form.querySelectorAll('input')[0].value = 0;
+                form.querySelectorAll('input')[2].value = files[0].name;
+                form.querySelectorAll('input')[4].value = 0;
 
-                    document.querySelector('#modal_documento img').src = url;
+                form.querySelectorAll('.btn')[3].disabled = false;
+                $('#modal_documento').modal({backdrop: 'static', keyboard: false});
+            };
 
-                    var form = document.querySelector("#modal_documento form");
-                    //var formData = new FormData(form);
-                    form.querySelectorAll('input')[0].value = 0;
-                    form.querySelectorAll('input')[2].value = files[0].name;
-                    form.querySelectorAll('input')[4].value = 0;
-
-                    form.querySelectorAll('.btn')[3].disabled = false;
-                    $('#modal_documento').modal({
-                        backdrop: 'static',
-                        keyboard: false
-                    });
+            if(files && files.length > 0)
+            {
+                reader = new FileReader();
+                reader.onload = function(e)
+                {
+                    done(reader.result);
                 };
-
-                if (files && files.length > 0) {
-                    reader = new FileReader();
-                    reader.onload = function(e) {
-                        done(reader.result);
-                    };
-                    reader.readAsDataURL(files[0]);
-                }
-            })
+                reader.readAsDataURL(files[0]);
+            }
+        })
 
         document.querySelectorAll('.content-documentos')[0].addEventListener('click', e => {
 
-            if (e.target.classList.contains('btn-success') || e.target.offsetParent.classList.contains(
-                    'btn-success')) {
+            if (e.target.classList.contains('btn-success') || e.target.offsetParent.classList.contains('btn-success')) {
                 let id;
                 if (e.target.classList.contains('btn-success'))
                     id = e.target.dataset.id;
                 else
                     id = e.target.offsetParent.dataset.id;
-
+        
                 let xhr = new XMLHttpRequest();
                 let data = `id=${id}`;
                 let image = document.querySelector('#modal_ver_imagen img');
@@ -2033,14 +1896,13 @@
                 }
             }
 
-            if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains(
-                    'btn-info')) {
+            if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains('btn-info')) {
                 let id;
                 if (e.target.classList.contains('btn-info'))
                     id = e.target.dataset.id;
                 else
                     id = e.target.offsetParent.dataset.id;
-
+        
                 let xhr = new XMLHttpRequest();
                 let data = `id=${id}`;
                 let form = document.querySelector('#modal_imagen form');
@@ -2083,19 +1945,13 @@
                                             rotatable: true,
                                             preview: '.preview',
                                             ready: function(e) {
-                                                document.querySelectorAll(
-                                                    '#modal_imagen .btn-primary'
-                                                )[0].addEventListener(
-                                                    'click', e => {
-                                                        cropper.rotate(-45);
-                                                    })
+                                                document.querySelectorAll('#modal_imagen .btn-primary')[0].addEventListener('click', e => {
+                                                    cropper.rotate(-45);
+                                                })
 
-                                                document.querySelectorAll(
-                                                    '#modal_imagen .btn-primary'
-                                                )[1].addEventListener(
-                                                    'click', e => {
-                                                        cropper.rotate(45);
-                                                    })
+                                                document.querySelectorAll('#modal_imagen .btn-primary')[1].addEventListener('click', e => {
+                                                    cropper.rotate(45);
+                                                })
                                             }
                                         });
 
@@ -2118,24 +1974,18 @@
                 }
             }
 
-            if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains(
-                    'btn-danger')) {
-                $('#modal_delete_imagen').modal({
-                    backdrop: 'static',
-                    keyboard: false
-                });
+            if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains('btn-danger')) {
+                $('#modal_delete_imagen').modal({backdrop: 'static', keyboard: false});
                 let imagen;
-                if (e.target.classList.contains('btn-danger')) {
+                if (e.target.classList.contains('btn-danger')){
                     imagen = e.target.dataset.id;
                     nombre = e.target.parentElement.parentElement.parentElement.children[0].innerText;
-                } else {
+                }else{
                     imagen = e.target.offsetParent.dataset.id;
-                    nombre = e.target.parentElement.parentElement.parentElement.parentElement.children[0]
-                        .innerText;
+                    nombre = e.target.parentElement.parentElement.parentElement.parentElement.children[0].innerText;
                 }
                 document.querySelectorAll('#modal_delete_imagen form input[type=hidden]')[0].value = imagen;
-                document.querySelector('#modal_delete_imagen form p').textContent =
-                    `¿Estás seguro(a) de que deseas eliminar la imagen ${nombre}?  `;
+                document.querySelector('#modal_delete_imagen form p').textContent = `¿Estás seguro(a) de que deseas eliminar la imagen ${nombre}?  `;
             }
             e.stopPropagation();
         })

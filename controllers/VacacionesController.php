@@ -12,7 +12,6 @@ class VacacionesController
 
     public function index()
     {
-
         if (Utils::isAdmin() || Utils::isCustomerSA()) {
             if (Utils::isCustomerSA()) {
                 $contactoEmpresa = new ContactosEmpresa();
@@ -28,7 +27,7 @@ class VacacionesController
 
 
                 $employee->setID_Contacto('132');
-                $employee->setStatus('1');
+                $employee->setStatus('1'); 
 
                 $employees = $employee->getEmployeesHolidaysByCliente();
                 $holidays = $employee->getEmployeesHolidaysRequestedByCliente();
@@ -97,8 +96,9 @@ class VacacionesController
                         $emplo['start_date'] = Utils::getDate($emplo['start_date']);
                         $emplo['due_date'] = Utils::getDate($emplo['due_date']);
                         $emplo['rest_vacation'] = $emplo['holidays_by_year'] - $emplo['taken_holidays'];
+                        
                     }
-
+                    
                     $empleado = new Employees();
                     $empleado->setCliente($_SESSION['id_cliente']);
                     // AQUI verfiicar si es adminisrador
@@ -255,7 +255,7 @@ class VacacionesController
                 $holidaysObj = new EmployeeHolidays();
                 $holidaysObj->setId($id);
                 $holidaysObj->delete();
-
+               
                 $holidaysObj->setID_Contacto($_SESSION['id_cliente']);
                 $employees = $holidaysObj->getEmployeesHolidaysByCliente();
                 foreach ($employees as &$emplo) {
@@ -296,44 +296,6 @@ class VacacionesController
             $end_date = Utils::sanitizeString($_POST['end_date']);
             $id_contacto = Utils::sanitizeNumber($_SESSION['id_contacto']);
 
-            //18 sept
-            $holidays = new EmployeeHolidays();
-            $holidays->setId_employee($_SESSION['identity']->id_empleado);
-            $holidays = $holidays->getEmployeeHoliday();
-
-
-
-
-            $total_dias = $holidays->holidays_by_year - $holidays->taken_holidays;
-
-            $start = new DateTime($start_date);
-            $end = new DateTime($end_date);
-            $interval = $start->diff($end);
-            $days = $interval->days;
-
-            $period = new DatePeriod($start, new DateInterval('P1D'), $end);
-            //$holidays = array('2012-09-07'); para omitir festivos
-            $holidays = array();
-
-
-            foreach ($period as $dt) {
-                $curr = $dt->format('D');
-                // obtiene si es Sábado o Domingo
-                if ($curr == 'Sat' || $curr == 'Sun') {
-                    $days--;
-                } elseif (in_array($dt->format('Y-m-d'), $holidays)) {
-                    $days--;
-                }
-            }
-
-            if ($days + 1 > $total_dias) {
-                echo json_encode(array('status' => 2));
-                die();
-            }
-
-
-
-
             if ($id_employee && $start_date && $end_date) {
                 if ($start_date > $end_date) {
                     $aux = $start_date;
@@ -350,39 +312,37 @@ class VacacionesController
                 $holiday->setComments('');
                 //===[gabo 20 julio movil-responsive fin]===
                 $save = $holiday->create();
-
-
+				
+				
                 //gabo 6 sep
-                $start_date = Utils::getDate($start_date);
-                $end_date = Utils::getDate($end_date);
+                $start_date = Utils::getShortDate($start_date);
+                $end_date = Utils::getShortDate($end_date);
 
                 $holidays = new EmployeeHolidays();
                 $holidays->setId_employee($id_employee);
                 $holidays = $holidays->getEmployeeHoliday();
 
-                $url = 'https://empleado.rrhh-ingenia.com.mx/usuario/index_rh';
+                $url = base_url . 'vacaciones/index';
 
                 $subject = 'Solicitud de vacaciones';
                 $body = "El empleado {$holidays->first_name} {$holidays->surname} {$holidays->last_name} solicitó  vacaciones del periodo {$start_date} al {$end_date} <br/> <br /> Para aceptar o denegar la solicitud favor de hacer lick en el enlace| <a href={$url}>enlace</a>";
 
-                // Utils::sendEmail('nelson.gonzalez@rrhhingenia.com', $holidays->first_name . ' ' . $holidays->surname, $subject, $body);
-                Utils::sendEmail('nelson.gonzalez@rrhhingenia.com', 'Nelson Gonzalez Peña', $subject, $body);
+                Utils::sendEmail('nelson.gonzalez@rrhhingenia.com', $holidays->first_name . ' ' . $holidays->surname, $subject, $body);
 
                 $employee = new Employees();
                 $employee->setId($holidays->id_boss);
                 $empleado = $employee->getOne();
 
-
-
-                $subject = 'Solicitud de vacaciones';
-                $body = "Creaste una solicitud de vacaciones del periodo {$start_date} al {$end_date} <br/> <br /> Para mas detalles favor de hacer lick en el enlace| <a href={$url}>enlace</a>";
-
                 if ($empleado->email != '' && $empleado->email != NULL) {
-                    Utils::sendEmail($empleado->email, $holidays->first_name . ' ' . $holidays->surname, $subject, $body);
-                    // Utils::sendEmail('gabriel.izaguirre@rrhhingenia.com', $empleado->first_name . ' ' . $empleado->surname, $subject, $body);
+                //   Utils::sendEmail($empleado->email, $holidays->first_name . ' ' . $holidays->surname, $subject, $body);
                 }
 
 
+				
+				
+				
+				
+				
 
                 if ($save) {
                     $solicitudes = $holiday->getEmployeesHolidaysRequestedByID_User($_SESSION['identity']->id);
@@ -428,61 +388,10 @@ class VacacionesController
 
                     $holiday->setStatus('Aceptada');
                     $save = $holiday->approved_vacation();
-
-
-                    $info = $holiday->getOne();
-                    $employee = new Employees();
-
-                    $employee->setId($info->id_employee);
-                    $empleado = $employee->getOne();
-                    //gabo 18 sept
-                    $url = base_url . 'usuario/index_rh';
-                    $subject = 'Solicitud de vacaciones';
-                    $body = "Tu solicitud de vacaciones ha sido Aprobada para el periodo " . Utils::getDate($info->start_date) . " Al " . Utils::getDate($info->end_date) . ". Para mas detalles da click en el siguiente enlace| <a href={$url}>enlace</a>";
-                    if ($empleado->email != '') {
-                        Utils::sendEmail($empleado->email, $empleado->first_name . ' ' . $empleado->surname, $subject, $body);
-                        //  Utils::sendEmail('gabriel.izaguirre@rrhhingenia.com.mx', $empleado->email, $subject, $body);
-                    }
-
-
-                    $body = "Haz aceptado la solicitud de vacaciones del colaborador " . $empleado->first_name . ' ' . $empleado->surname . " para el periodo " . Utils::getDate($info->start_date) . " Al " . Utils::getDate($info->end_date) . ". Para mas detalles da click en el siguiente enlace| <a href={$url}>enlace</a>";
-
-                    $employee->setId($empleado->id_boss);
-                    $boss = $employee->getOne();
-                    if ($boss->email != '') {
-                        Utils::sendEmail($boss->email, $boss->first_name . ' ' . $boss->surname, $subject, $body);
-                        // Utils::sendEmail('gabriel.izaguirre@rrhhingenia.com.mx', $boss->email, $subject, $body);
-                    }
                 } else { //rechazada
                     $holiday->setComments($comments);
                     $holiday->setStatus('Declinada');
                     $save = $holiday->declined_vacation();
-
-
-                    $info = $holiday->getOne();
-                    $employee = new Employees();
-                    $employee->setId($info->id_employee);
-                    $empleado = $employee->getOne();
-
-                    //gabo 18 sept
-                    $url = base_url . 'usuario/index_rh';
-                    $subject = 'Solicitud de vacaciones';
-                    $body = "Tu solicitud de vacaciones ha sido declinada para el periodo " . Utils::getDate($info->start_date) . " Al " . Utils::getDate($info->end_date) . ". Para mas detalles da click en el siguiente enlace| <a href={$url}>enlace</a>";
-                    if ($empleado->email != '') {
-                        Utils::sendEmail($empleado->email, $empleado->first_name . ' ' . $empleado->surname, $subject, $body);
-                        // Utils::sendEmail('gabriel.izaguirre@rrhhingenia.com', $empleado->first_name . ' ' . $empleado->surname, $subject, $body);
-                    }
-
-
-                    $body = "Haz declinado la solicitud de vacaciones del colaborador " . $empleado->first_name . ' ' . $empleado->surname . " para el periodo " . Utils::getDate($info->start_date) . " Al " . Utils::getDate($info->end_date) . ". Para mas detalles da click en el siguiente enlace| <a href={$url}>enlace</a>";
-
-
-                    $employee->setId($empleado->id_boss);
-                    $boss = $employee->getOne();
-                    if ($boss->email != '') {
-                        Utils::sendEmail($boss->email, $boss->first_name . ' ' . $boss->surname, $subject, $body);
-                        //  Utils::sendEmail('gabriel.izaguirre@rrhhingenia.com', $empleado->first_name . ' ' . $empleado->surname, $subject, $body);
-                    }
                 }
 
                 if ($save) {
@@ -536,60 +445,11 @@ class VacacionesController
                     $holiday->setStatus('Aceptada');
                     $holiday->setID_Admin($contacto->ID);
                     $save = $holiday->approved_vacation();
-
-
-                    //18 sept
-                    $info = $holiday->getOne();
-                    $employee = new Employees();
-
-                    $employee->setId($info->id_employee);
-                    $empleado = $employee->getOne();
-                    //gabo 18 sept
-                    $url = base_url . 'usuario/index_rh';
-                    $subject = 'Solicitud de vacaciones';
-                    $body = "Tu solicitud de vacaciones ha sido Aprobada para el periodo " . Utils::getDate($info->start_date) . " Al " . Utils::getDate($info->end_date) . ". Para mas detalles da click en el siguiente enlace| <a href={$url}>enlace</a>";
-                    if ($empleado->email != '') {
-                        Utils::sendEmail($empleado->email, $empleado->first_name . ' ' . $empleado->surname, $subject, $body);
-                        //   Utils::sendEmail('gabriel.izaguirre@rrhhingenia.com', $empleado->first_name . ' ' . $empleado->surname, $subject, $body);
-                    }
-
-
-                    $body = "Haz aceptado la solicitud de vacaciones del colaborador " . $empleado->first_name . ' ' . $empleado->surname . " para el periodo " . Utils::getDate($info->start_date) . " Al " . Utils::getDate($info->end_date) . ". Para mas detalles da click en el siguiente enlace| <a href={$url}>enlace</a>";
-
-                    // $employee->setId($empleado->id_boss);
-                    // $boss = $employee->getOne();
-                    if ($_SESSION['identity']->email != '') {
-                        Utils::sendEmail($_SESSION['identity']->email, $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->surname, $subject, $body);
-                        //  Utils::sendEmail('gabriel.izaguirre@rrhhingenia.com', $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name, $subject, $body);
-                    }
                 } else { //rechazada
                     $holiday->setComments($comments);
                     $holiday->setStatus('Declinada');
                     $holiday->setID_Admin($contacto->ID);
                     $save = $holiday->declined_vacation();
-
-                    //18 sept
-                    $info = $holiday->getOne();
-                    $employee = new Employees();
-
-                    $employee->setId($info->id_employee);
-                    $empleado = $employee->getOne();
-                    //gabo 18 sept
-                    $url = base_url . 'usuario/index_rh';
-                    $subject = 'Solicitud de vacaciones';
-                    $body = "Tu solicitud de vacaciones ha sido declinada para el periodo " . Utils::getDate($info->start_date) . " Al " . Utils::getDate($info->end_date) . ". Para mas detalles da click en el siguiente enlace| <a href={$url}>enlace</a>";
-                    if ($empleado->email != '') {
-                        Utils::sendEmail($empleado->email, $empleado->first_name . ' ' . $empleado->surname, $subject, $body);
-                        //  Utils::sendEmail('gabriel.izaguirre@rrhhingenia.com', $empleado->first_name . ' ' . $empleado->surname, $subject, $body);
-                    }
-
-
-                    $body = "Haz declinado la solicitud de vacaciones del colaborador " . $empleado->first_name . ' ' . $empleado->surname . " para el periodo " . Utils::getDate($info->start_date) . " Al " . Utils::getDate($info->end_date) . ". Para mas detalles da click en el siguiente enlace| <a href={$url}>enlace</a>";
-
-                    if ($_SESSION['identity']->email != '') {
-                        Utils::sendEmail($_SESSION['identity']->email, $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->surname, $subject, $body);
-                        //   Utils::sendEmail('gabriel.izaguirre@rrhhingenia.com', $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name, $subject, $body);
-                    }
                 }
 
                 if ($save) {
@@ -629,211 +489,3 @@ class VacacionesController
             header('location:' . base_url);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-// public function save_solicitud_rh()
-// {
-
-//     if (isset($_SESSION['identity']) && $_SESSION['identity'] != FALSE) {
-
-//         $id_employee =  Utils::sanitizeNumber($_SESSION['identity']->id_empleado);
-//         $start_date = Utils::sanitizeString($_POST['start_date']);
-//         $end_date = Utils::sanitizeString($_POST['end_date']);
-//         $id_contacto = Utils::sanitizeNumber($_SESSION['id_contacto']);
-
-//         if ($id_employee && $start_date && $end_date) {
-//             if ($start_date > $end_date) {
-//                 $aux = $start_date;
-//                 $start_date = $end_date;
-//                 $end_date = $aux;
-//             }
-//             $holiday = new EmployeeHolidays();
-//             $holiday->setId_employee($id_employee);
-//             $holiday->setStart_date($start_date);
-//             $holiday->setEnd_date($end_date);
-//             $holiday->setID_Contacto($id_contacto);
-//             $holiday->setStatus('En revisión');
-//             //===[gabo 20 julio movil-responsive]===
-//             $holiday->setComments('');
-//             //===[gabo 20 julio movil-responsive fin]===
-//             $save = $holiday->create();
-            
-            
-//             //gabo 6 sep
-//             $start_date = Utils::getShortDate($start_date);
-//             $end_date = Utils::getShortDate($end_date);
-
-//             $holidays = new EmployeeHolidays();
-//             $holidays->setId_employee($id_employee);
-//             $holidays = $holidays->getEmployeeHoliday();
-
-//             $url = base_url . 'usuario/index';
-
-//             $subject = 'Solicitud de vacaciones';
-//             $body = "El empleado {$holidays->first_name} {$holidays->surname} {$holidays->last_name} solicitó  vacaciones del periodo {$start_date} al {$end_date} <br/> <br /> Para aceptar o denegar la solicitud favor de hacer lick en el enlace| <a href={$url}>enlace</a>";
-
-//            Utils::sendEmail('nelson.gonzalez@rrhhingenia.com', $holidays->first_name . ' ' . $holidays->surname, $subject, $body);
-
-//             $employee = new Employees();
-//             $employee->setId($holidays->id_boss);
-//             $empleado = $employee->getOne();
-
-//             if ($empleado->email != '' && $empleado->email != NULL) {
-//                Utils::sendEmail($empleado->email, $holidays->first_name . ' ' . $holidays->surname, $subject, $body);
-//             }
-
-
-//             if ($save) {
-//                 $solicitudes = $holiday->getEmployeesHolidaysRequestedByID_User($_SESSION['identity']->id);
-
-
-//                 for ($i = 0; $i < count($solicitudes); $i++) {
-//                     $solicitudes[$i]['start_date'] = Utils::getFullDate12($solicitudes[$i]['start_date']);
-//                     $solicitudes[$i]['created_at'] = Utils::getDate($solicitudes[$i]['created_at']);
-//                     $solicitudes[$i]['end_date'] = Utils::getDate($solicitudes[$i]['end_date']);
-//                     $solicitudes[$i]['days'] = $solicitudes[$i]['days'] == 1 ? $solicitudes[$i]['days'] . ' Dia' : $solicitudes[$i]['days'] . ' Dias';
-//                 }
-
-//                 $data = array(
-//                     'solicitudes' => $solicitudes,
-//                     'status' => 1
-//                 );
-//                 echo json_encode($data);
-//             } else
-//                 echo json_encode(array('status' => 0));
-//         } else
-//             echo json_encode(array('status' => 0));
-//     } else
-//         header('location:' . base_url);
-// }
-
-
-// public function responder_solicitud_rh()
-// {
-
-//     if (isset($_SESSION['identity']) && $_SESSION['identity'] != FALSE) {
-
-//         $id_solicitud = (isset($_POST['id_solicitud'])) ? Encryption::decode($_POST['id_solicitud'])  : FALSE;
-//         $accion = (isset($_POST['accion'])) ? Utils::sanitizeNumber($_POST['accion'])  : FALSE;
-//         $comments = (isset($_POST['comments'])) ? Utils::sanitizeStringBlank($_POST['comments'])  :  '';
-
-
-//         $holiday = new EmployeeHolidays();
-//         $holiday->setId($id_solicitud);
-
-//         if ($id_solicitud) {
-
-//             if ($accion == 1) {  //aceptada
-
-//                 $holiday->setStatus('Aceptada');
-//                 $save = $holiday->approved_vacation();
-//             } else { //rechazada
-//                 $holiday->setComments($comments);
-//                 $holiday->setStatus('Declinada');
-//                 $save = $holiday->declined_vacation();
-//             }
-
-//             if ($save) {
-
-//                 $holiday->setId_employee($_SESSION['identity']->id_empleado);
-//                 $solicitudes = $holiday->getEmployeesHolidaysRequested();
-
-
-//                 for ($i = 0; $i < count($solicitudes); $i++) {
-//                     $solicitudes[$i]['id'] =   Encryption::encode($solicitudes[$i]['id']);
-//                     $solicitudes[$i]['start_date'] = Utils::getFullDate12($solicitudes[$i]['start_date']);
-//                     $solicitudes[$i]['created_at'] = Utils::getDate($solicitudes[$i]['created_at']);
-//                     $solicitudes[$i]['end_date'] = Utils::getDate($solicitudes[$i]['end_date']);
-//                     $solicitudes[$i]['days'] = $solicitudes[$i]['days'] == 1 ? $solicitudes[$i]['days'] . ' Dia' : $solicitudes[$i]['days'] . ' Dias';
-//                 }
-
-//                 $data = array(
-//                     'solicitudes' => $solicitudes,
-//                     'status' => 1
-//                 );
-//                 echo json_encode($data);
-//             } else
-//                 echo json_encode(array('status' => 4));
-//         } else
-//             echo json_encode(array('status' => 0));
-//     } else
-//         header('location:' . base_url);
-// }
-
-// public function responder_solicitud_admin()
-// {
-
-//     if (isset($_SESSION['identity']) && $_SESSION['identity'] != FALSE) {
-//         $id_solicitud = (isset($_POST['id_solicitud'])) ? Encryption::decode($_POST['id_solicitud'])  : FALSE;
-//         $accion = (isset($_POST['accion'])) ? Utils::sanitizeNumber($_POST['accion'])  : FALSE;
-//         $comments = (isset($_POST['comments'])) ? Utils::sanitizeStringBlank($_POST['comments'])  :  '';
-
-
-//         $holiday = new EmployeeHolidays();
-//         $holiday->setId($id_solicitud);
-
-//         $contacto = new ContactosCliente();
-//         $contacto->setID($_SESSION['identity']->id);
-//         $contacto = $contacto->getContactoByUsername();
-
-
-//         if ($id_solicitud) {
-
-//             if ($accion == 1) {  //aceptada
-
-//                 $holiday->setStatus('Aceptada');
-//                 $holiday->setID_Admin($contacto->ID);
-//                 $save = $holiday->approved_vacation();
-//             } else { //rechazada
-//                 $holiday->setComments($comments);
-//                 $holiday->setStatus('Declinada');
-//                 $holiday->setID_Admin($contacto->ID);
-//                 $save = $holiday->declined_vacation();
-//             }
-
-//             if ($save) {
-
-//                 $holidaysObj = new EmployeeHolidays();
-//                 $holidaysObj->setID_Contacto($_SESSION['id_cliente']);
-//                 $employees = $holidaysObj->getEmployeesHolidaysByCliente();
-//                 foreach ($employees as &$emplo) {
-//                     $emplo['start_date'] = Utils::getDate($emplo['start_date']);
-//                     $emplo['due_date'] = Utils::getDate($emplo['due_date']);
-//                     $emplo['rest_vacation'] = $emplo['holidays_by_year'] - $emplo['taken_holidays'];
-//                 }
-
-//                 $empleado = new Employees();
-//                 $empleado->setCliente($_SESSION['id_cliente']);
-//                 $solicitudes = $empleado->getEmployeesAllHolidaysRequested();
-
-//                 for ($i = 0; $i < count($solicitudes); $i++) {
-
-//                     $solicitudes[$i]['id'] =   Encryption::encode($solicitudes[$i]['id']);
-//                     $solicitudes[$i]['start_date'] = Utils::getDate($solicitudes[$i]['start_date']);
-//                     $solicitudes[$i]['end_date'] =  Utils::getDate($solicitudes[$i]['end_date']);
-//                     $solicitudes[$i]['created_at'] = Utils::getDate($solicitudes[$i]['created_at']);
-//                 }
-
-//                 $data = array(
-//                     'employees' => $employees,
-//                     'solicitudes' => $solicitudes,
-//                     'status' => 1
-//                 );
-//                 echo json_encode($data);
-//             } else
-//                 echo json_encode(array('status' => 4));
-//         } else
-//             echo json_encode(array('status' => 0));
-//     } else
-//         header('location:' . base_url);
-// }

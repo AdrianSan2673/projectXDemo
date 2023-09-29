@@ -238,7 +238,7 @@ class Vacancy {
                         btn.disabled = false;
                     } else if (r == 1) {
                         utils.showToast('La vacante fue editada exitosamente', 'success');
-                        setTimeout("location.href='./index'", 3000);
+                        //setTimeout("location.href='./index'", 3000);
                     } else if (r == 2) {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                         btn.disabled = false;
@@ -641,13 +641,13 @@ class Vacancy {
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
-
+                
                 try {
                     let json_app = JSON.parse(this.responseText);
                     if (json_app.status == 0) {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     } else if (json_app.status == 1) {
-
+                        
                         document.querySelector('#vacancy').innerHTML = json_app.vacante.vacancy;
                         document.querySelector('#department').innerHTML = json_app.vacante.department;
                         document.querySelector('#type').innerHTML = json_app.vacante.type;
@@ -671,15 +671,15 @@ class Vacancy {
                         }
                         if (document.querySelector('#salary_min_and_salary_max')) {
                             document.querySelector('#salary_min_and_salary_max').innerHTML = "$" + json_app.vacante.salary_min + "- $" + json_app.vacante.salary_max + " (mensual)";
-                        } else {
+                        }else{
                             document.querySelector('#salary_min').innerHTML = "$" + json_app.vacante.salary_min + "(mensual)";
                         }
 
 
-                        // document.querySelector('#commitment_date').innerHTML = json_app.vacante.commitment_date;
+                       // document.querySelector('#commitment_date').innerHTML = json_app.vacante.commitment_date;
                         document.querySelector('#city_and_state').innerHTML = json_app.vacante.city + "," + json_app.vacante.state;
                         document.querySelector('#working_day').innerHTML = json_app.vacante.working_day;
-
+                       
 
                         utils.showToast('Se actualizó correctamente', 'success');
                         $('#modal_perfil').modal('hide');
@@ -807,7 +807,7 @@ class Vacancy {
         }
     }
 
-
+    
 
     //==================================[Gabo Marzo 21]==========================
     mover_postulante() {
@@ -883,9 +883,9 @@ class Vacancy {
                         }
                         document.querySelector('#modal_perfil_postulante [name="language"]').value = json_app.vacante.language;
                         document.querySelector('#modal_perfil_postulante [name="language_level"]').value = json_app.vacante.language_level;
-                        document.querySelector('#modal_perfil_postulante [name="experience_years"]').value = json_app.vacante.experience_years == null ? '0' + ' ' + json_app.vacante.experience_type : json_app.vacante.experience_years + ' ' + json_app.vacante.experience_type;
+                                                document.querySelector('#modal_perfil_postulante [name="experience_years"]').value = json_app.vacante.experience_years==null?'0'+' '+json_app.vacante.experience_type:json_app.vacante.experience_years+' '+json_app.vacante.experience_type;
 
-                        //  document.querySelector('#modal_perfil_postulante [name="requirements"]').value = json_app.vacante.requirements;
+                      //  document.querySelector('#modal_perfil_postulante [name="requirements"]').value = json_app.vacante.requirements;
                         document.querySelector('#modal_perfil_postulante [name="functions"]').value = json_app.vacante.functions;
                     } else if (json_app.status == 0) {
                         utils.showToast(' No se pudo consultar la informacion', 'error');
@@ -901,7 +901,7 @@ class Vacancy {
 
     // ===[gabo 28 abrill modal vacantes]===
     agregar_candidato() {
-        document.querySelector("#add-candidate-form #add_candidate_submit").disabled = true;
+		document.querySelector("#add-candidate-form #add_candidate_submit").disabled = true;
         var form = document.querySelector("#add-candidate-form");
         var formData = new FormData(form);
         let xhr = new XMLHttpRequest();
@@ -916,37 +916,37 @@ class Vacancy {
                     if (json_app.status == 0) {
                         utils.showToast(' Datos Incompletos. Inténtalo de nuevo', 'error');
                     } else if (json_app.status == 1) {
-                        utils.showToast(' Candidatos enviados al cliente correctamente', 'success');
+                       utils.showToast(' Candidatos enviados al cliente correctamente', 'success');
                         $('#modal_vacantes').modal('hide');
                         $("#id_vacancy_v").val("");
                         $('#id_vacancy_v').trigger('change');
-                        document.querySelector("#add-candidate-form #add_candidate_submit").disabled = false;
+						 document.querySelector("#add-candidate-form #add_candidate_submit").disabled = false;
 
                     } else if (json_app.status == 2) {
                         utils.showToast(' No se pudo crear', 'error');
-                        document.querySelector("#add-candidate-form #add_candidate_submit").disabled = false;
+						 document.querySelector("#add-candidate-form #add_candidate_submit").disabled = false;
                     } else if (json_app.status == 3) {
                         utils.showToast(' El candidado ya se encuentra en esa vacante', 'error');
-                        document.querySelector("#add-candidate-form #add_candidate_submit").disabled = false;
+						 document.querySelector("#add-candidate-form #add_candidate_submit").disabled = false;
                     }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
-                    document.querySelector("#add-candidate-form #add_candidate_submit").disabled = false;
+					 document.querySelector("#add-candidate-form #add_candidate_submit").disabled = false;
                 }
             }
         }
     }
-    //===Gabo 28 abril modal vacantes fin]===
+	//===Gabo 28 abril modal vacantes fin]===
 
 
     getVacancySateCity(id_vacancy) {
         fetch('../vacante/getVacancySateCity', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/x-www-form-urlencoded'
-            },
-            body: 'id_vacancy=' + id_vacancy
-        })
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/x-www-form-urlencoded'
+                },
+                body: 'id_vacancy=' + id_vacancy
+            })
             .then(response => {
                 if (response.ok) {
                     return response.text();
@@ -966,7 +966,7 @@ class Vacancy {
                         let State = ''
                         json_app.State.forEach(element => {
                             State += `
-                            <option value='${element.id}' ${element.id == json_app.vacancy_data.id_state ? 'selected' : ''}  >${element.state}</option>
+                            <option value='${element.id}' ${element.id == json_app.vacancy_data.id_state?'selected' :''}  >${element.state}</option>
                             `;
                         });
                         document.querySelector("#modal_create form [name='id_state']").innerHTML = State;
@@ -974,7 +974,7 @@ class Vacancy {
                         let citys = ''
                         json_app.City.forEach(element => {
                             citys += `
-                            <option value='${element.id}' ${element.id == json_app.vacancy_data.id_city ? 'selected' : ''} >${element.city}</option>
+                            <option value='${element.id}' ${element.id == json_app.vacancy_data.id_city?'selected' :''} >${element.city}</option>
                             `;
                         });
                         document.querySelector("#modal_create form [name='id_city']").innerHTML = citys;
@@ -989,8 +989,7 @@ class Vacancy {
                 utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
             });
     }
-
-    //gabo 29
+	 //gabo 29
 
 
     save_notes() {

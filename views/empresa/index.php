@@ -19,14 +19,14 @@
         </div><!-- /.container-fluid -->
     </section>
     <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager()) : ?>
-    <section class="content-header">
-        <div class="row">
-            <div class="col-sm-2 ml-auto">
-                <a class="btn btn-orange float-right" href="<?= base_url ?>empresa_SA/crear">Crear empresa</a>
+        <section class="content-header">
+            <div class="row">
+                <div class="col-sm-2 ml-auto">
+                    <a class="btn btn-orange float-right" href="<?= base_url ?>empresa_SA/crear">Crear empresa</a>
+                </div>
             </div>
-        </div>
-    </section>
-    <br>
+        </section>
+        <br>
     <?php endif ?>
     <!-- Main content -->
     <section class="content">
@@ -49,23 +49,21 @@
                     </thead>
                     <tbody>
                         <?php foreach ($empresas as $empresa) : ?>
-                        <tr>
-                            <td class="text-left align-middle"><?= $empresa['Nombre_Empresa'] ?></td>
-                            <td class="text-center py-0 align-middle"> <?= $empresa['creado_por'] ?> </td>
-                            <td class="text-center py-0 align-middle">
-                                <div class="btn-group btn-group-sm">
-                                    <a href="<?= base_url ?>empresa_SA/ver&id=<?= Encryption::encode($empresa['Empresa']) ?>"
-                                        class="btn btn-success">
-                                        <i class="fas fa-eye"></i> Ver
-                                    </a>
-                                    <button class="btn btn-danger ml-3"
+                            <tr>
+                                <td class="text-left align-middle"><?= $empresa['Nombre_Empresa'] ?></td>
+                                <td class="text-center py-0 align-middle"> <?= $empresa['creado_por'] ?> </td>
+                                <td class="text-center py-0 align-middle">
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="<?= base_url ?>empresa_SA/ver&id=<?= Encryption::encode($empresa['Empresa']) ?>" class="btn btn-success"> <i class="fas fa-eye"></i> Ver
+                                        </a>  <button class="btn btn-danger ml-3"
                                         data-id="<?= Encryption::encode($empresa['Empresa']) ?>"
                                         <?= (!Utils::isAdmin()) ? 'hidden' : ''; ?>>
                                         <b class="h6 text-bold">X</b>
                                     </button>
-                                </div>
-                            </td>
-                        </tr>
+                                           
+                                    </div>
+                                </td>
+                            </tr>
                         <?php endforeach; ?>
 
                     </tbody>
@@ -86,7 +84,7 @@
 </div>
 <script type="text/javascript" src="<?= base_url ?>app/cliente.js?v=<?= rand() ?>"></script>
 <script>
-$(document).ready(function() {
+  $(document).ready(function() {
     let table = document.querySelector('#tb_customers');
     utils.dtTable(table);
 

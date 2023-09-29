@@ -27,8 +27,9 @@
                           <?php foreach ($usuarios as $usuario): ?>
                             <option value="<?=$usuario['Usuario']?>"><?=$usuario['Nombre']?></option>
                           <?php endforeach ?>
-							<option value="LITZYBARRERA">Litzy Fisela Barrera Olvera</option>
+							<option value="PAMELAPULIDO">Pamela Ivonne Pulido Díaz</option>
 							<option value="GRISELDABAUTISTA">Griselda Bautista Del Ángel</option>
+						   <option value="EVA.GONZALEZ">Eva Daniela González Pérez</option>
 						</select>
                     </div>
                     

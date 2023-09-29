@@ -565,8 +565,7 @@ class VacancyApplicant
 		}
 		return $result;
 	}
-
-	//gabo 26
+		//gabo 26
 	public function getOneByCandidate()
 	{
 
@@ -579,7 +578,7 @@ class VacancyApplicant
 		$fetch = $stmt->fetchObject();
 		return $fetch;
 	}
-	//gabo 27
+		//gabo 27
 	public function getVacanciesTypeOperativaByCandidate()
 	{
 

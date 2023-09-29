@@ -229,7 +229,6 @@ class CandidateDirectory
 
 	public function getAllById_customer()
 	{
-
 		$id_customer = $this->getId_customer();
 		$stmt = $this->db->prepare("SELECT cd.*, (SELECT state FROM states WHERE id=cd.id_state ) state, (SELECT city FROM cities WHERE id=cd.id_city) city FROM root.candidate_directory cd WHERE cd.status<>0 and cd.id_customer=:id_customer ORDER BY cd.created_at DESC");
 		$stmt->bindParam(":id_customer", $id_customer, PDO::PARAM_STR);
@@ -351,5 +350,49 @@ class CandidateDirectory
 		$stmt->bindParam(":id", $id, PDO::PARAM_STR);
 		$result = $stmt->execute();
 		return $result;
+	}
+
+
+	public function updateByVacancy()
+	{
+		$result = false;
+
+		$id_vacancy = $this->getId_vacancy();
+		$id_state = $this->getId_state();
+		$id_city = $this->getId_city();
+
+		$stmt = $this->db->prepare("UPDATE root.candidate_directory SET id_state=:id_state,id_city=:id_city WHERE id_vacancy=:id_vacancy AND id_candidate is null");
+
+		$stmt->bindParam(":id_vacancy", $id_vacancy, PDO::PARAM_INT);
+		$stmt->bindParam(":id_state", $id_state, PDO::PARAM_INT);
+		$stmt->bindParam(":id_city", $id_city, PDO::PARAM_INT);
+		
+		$result = $stmt->execute();
+		return $result;
+	}
+
+
+
+	public function getAllCandidateByVacancy()
+	{
+		$stmt = $this->db->prepare("SELECT v.id,v.vacancy, c.customer
+		FROM root.candidate_directory cd inner join vacancies v on cd.id_vacancy=v.id  INNER JOIN customers c on c.id=v.id_customer
+		GROUP BY v.id ,v.vacancy, c.customer ");
+		$stmt->execute();
+		$cities = $stmt->fetchAll();
+		return $cities;
+	}
+
+
+	
+	public function getAllByVacancy()
+	{
+		$id_vacancy = $this->getId_vacancy();
+		$stmt = $this->db->prepare("SELECT cd.*, (SELECT state FROM states WHERE id=cd.id_state ) state, (SELECT city FROM cities WHERE id=cd.id_city) city,(select vacancy from vacancies where id=cd.id_vacancy) vacancy  FROM root.candidate_directory cd WHERE cd.status<>0 AND id_vacancy=:id_vacancy  ORDER BY cd.created_at DESC");
+		$stmt->bindParam(":id_vacancy", $id_vacancy, PDO::PARAM_INT);
+
+		$stmt->execute();
+		$cities = $stmt->fetchAll();
+		return $cities;
 	}
 }

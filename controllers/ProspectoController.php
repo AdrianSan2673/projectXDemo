@@ -455,7 +455,7 @@ Costo total y único si completa todo el proceso, este precio ya incluye el RAL 
             $descripcion = array('-Se revisan los antecedentes legales del candidato y se comparten los resultados por medio de la plataforma.
 
 -Tiempo de entrega, inmediata.
-', '-Investigación de referencias laborales del 2022 a la fecha.
+', '-Investigación de referencias laborales del 2021 a la fecha.
 
 -Aseguramos que no sea una persona inestable.
 

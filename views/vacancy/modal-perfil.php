@@ -30,7 +30,7 @@
                                         <option value="1" <?= isset($vacante) && is_object($vacante) && $vacante->type == '1' ? 'selected' : ''; ?>>Operativa</option>
                                         <option value="2" <?= isset($vacante) && is_object($vacante) && $vacante->type == '2' ? 'selected' : ''; ?>>Orden Común</option>
                                         <option value="3" <?= isset($vacante) && is_object($vacante) && $vacante->type == '3' ? 'selected' : '' ?>>Head Hunting</option>
-										                                        <option value="4" <?= isset($vacante) && is_object($vacante) && $vacante->type == 4 ? 'selected' : '' ?>>Iguala</option>
+										                        
 
                                         <!-- fin -->
 

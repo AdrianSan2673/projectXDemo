@@ -46,8 +46,6 @@
               <th></th>
               <th></th>
               <th></th>
-              <th class="filterhead"></th>
-              <th class="filterhead"></th>
             </tr>
             <tr>
               <th class="align-middle">Solicitud</th>
@@ -62,8 +60,6 @@
               <th class="align-middle text-center">Entrega</th>
               <th class="align-middle">Tiempo</th>
               <th class="align-middle text-center">Seguir</th>
-              <th class="align-middle text-center">Estado</th>
-              <th class="align-middle text-center">Viabilidad</th>
             </tr>
           </thead>
           <tbody>
@@ -161,9 +157,6 @@
                     </a>
                   </div>
                 </td>
-                <td class="text-center align-middle <?= $Color_Estatus ?>"><?= $estudio['Estatus'] ?></td>
-                <td class="text-center align-middle <?= $Color_Viabilidad ?>"><?= $estudio['Viable'] == '0' && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254) ? 'Viable' : ($estudio['Viable'] == 1 && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254) ? 'No viable' : ($estudio['Viable'] == 2 && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254) ? 'Viable con Reservas' : ($estudio['Viable'] == 5 && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254) ? 'Viable con observaciones' : '-'))) ?></td>
-             
               </tr>
             <?php endforeach; ?>
 
@@ -182,8 +175,6 @@
               <th class="align-middle text-center">Entrega</th>
               <th class="align-middle">Tiempo</th>
               <th class="align-middle text-center">Seguir</th>
-              <th class="align-middle text-center">Estado</th>
-              <th class="align-middle text-center">Viabilidad</th>
             </tr>
           </tfoot>
         </table>

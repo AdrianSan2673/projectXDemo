@@ -122,7 +122,7 @@
                                             <i class="fas fa-eye"></i> Ver
                                         </a>
 
-                                        <button class="btn btn-danger ml-3" data-id="<?= Encryption::encode($cliente['Cliente']) ?>">
+                                        <button class="btn btn-danger ml-3" data-id="<?= Encryption::encode($cliente['Cliente']) ?>"  <?= (!Utils::isAdmin()) ? 'hidden' : ''; ?>>
                                             <b class="h6 text-bold">X</b>
                                         </button>
                                 </td>

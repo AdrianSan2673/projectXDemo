@@ -65,6 +65,8 @@ class InvestigacionLaboralController
             
             $Familiar_Empresa =isset($_POST['Familiar_Empresa'])? Utils::sanitizeString($_POST['Familiar_Empresa']):null;
 
+            $Reingreso =isset($_POST['Reingreso'])? Utils::sanitizeString($_POST['Reingreso']):null;
+
             $flag = $_POST['flag'];
 
             if ($Candidato) {
@@ -93,6 +95,7 @@ class InvestigacionLaboralController
                 $investigacion->setAccidentes_Empresa($Accidentes_Empresa);
                 $investigacion->setAbandono_Unidad($Abandono_Unidad);
                 $investigacion->setFamiliar_Empresa($Familiar_Empresa);
+                $investigacion->setReingreso($Reingreso);
 
                 if ($flag == 1)
                     $save = $investigacion->update();

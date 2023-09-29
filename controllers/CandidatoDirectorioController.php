@@ -10,10 +10,17 @@ require_once 'models/City.php';
 
 class CandidatoDirectorioController
 {
+
     public function index()
     {
         if (Utils::isAdmin()  || Utils::isSenior() || Utils::isJunior() || Utils::isRecruitmentManager() || Utils::isCustomer()) {
-            $candidatesDirector = $this->candidatesDirectory();
+            $id_vacancy = isset($_POST['vacancy']) && $_POST['vacancy'] != 0 ? $_POST['vacancy'] : 0;
+
+            $candidatesDirector = $this->candidatesDirectory($id_vacancy);
+
+            $candidateDirectoryObj = new CandidateDirectory();
+            $vacancies = $candidateDirectoryObj->getAllCandidateByVacancy();
+
             $page_title = 'Directorio Candidatos | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
@@ -27,8 +34,9 @@ class CandidatoDirectorioController
     public function save()
     {
         if (Utils::isAdmin()  || Utils::isSenior() || Utils::isJunior() || Utils::isRecruitmentManager() || Utils::isCustomer() && $_POST) {
-            $flag =  isset($_POST['flag']) ? $_POST['flag'] : 1;   // cuando no hay flag se asigna 1 para que entre cuando se agregue desde crear candidato
-            $id = isset($_POST['id']) ?  Encryption::decode($_POST['id']) : NULL;
+
+            $flag = $_POST['flag'];
+            $id = Encryption::decode($_POST['id']);
             $first_name =  isset($_POST['first_name']) ? Utils::sanitizeStringBlank($_POST['first_name']) : NULL;
             $surname =  isset($_POST['surname']) ? Utils::sanitizeStringBlank($_POST['surname']) : NULL;
             $last_name =  isset($_POST['last_name']) ? Utils::sanitizeStringBlank($_POST['last_name']) : NULL;
@@ -42,24 +50,7 @@ class CandidatoDirectorioController
             $url = isset($_POST['url']) ? Utils::sanitizeStringBlank($_POST['url']) : Null;
             $comment = isset($_POST['comment']) ? Utils::sanitizeStringBlank($_POST['comment']) : Null;
             $status = isset($_POST['status']) ? Utils::sanitizeStringBlank($_POST['status']) : Null;
-
-
-            //   $experience = isset($_POST['job_title']) ? Utils::sanitizeStringBlank($_POST['job_title']) : false;
-
-
-
-            if (isset($_POST['bandera'])) {
-                $experience = isset($_POST['job_title']) ? Utils::sanitizeStringBlank($_POST['job_title']) : false;
-
-                if ($experience) {
-
-                    echo json_encode(array('status' => 0));
-                    die();
-                }
-            }
-
-            // var_dump("hola");
-            // die();
+            $id_vacancy_filter = isset($_POST['id_vacancy_filter']) ? Utils::sanitizeNumber($_POST['id_vacancy_filter']) : NULL;
 
             if (($flag == 1 || $flag == 2) && $first_name && $surname && $last_name && $telephone  && $id_state) {
                 if (Utils::isCustomer()) {
@@ -90,7 +81,7 @@ class CandidatoDirectorioController
                     $respons = $candidateDirectoryObj->update();
                 }
 
-                $candidatesDirector = $this->candidatesDirectory();
+                $candidatesDirector = $this->candidatesDirectory($id_vacancy_filter == null || $id_vacancy_filter == ''|| $id_vacancy_filter == 0 ? $id_vacancy_filter: $id_vacancy);
 
                 if ($respons) {
                     echo json_encode(
@@ -147,12 +138,18 @@ class CandidatoDirectorioController
 
         if (Utils::isAdmin()  || Utils::isSenior() || Utils::isJunior() || Utils::isRecruitmentManager() || Utils::isCustomer() && $_POST) {
             $id = Encryption::decode($_POST['id']);
+            $id_vacancy_filter = Utils::sanitizeNumber($_POST['id_vacancy']);
 
             if ($id) {
                 $candidateDirectoryObj = new CandidateDirectory();
                 $candidateDirectoryObj->setId($id);
+
+                $id_vacancy = $id_vacancy_filter != 0 ? $candidateDirectoryObj->getOne()->id_vacancy : $id_vacancy_filter;
+
                 $candidateDirectoryObj->delete();
-                $candidatesDirector = $this->candidatesDirectory();
+
+
+                $candidatesDirector = $this->candidatesDirectory($id_vacancy);
                 echo json_encode(
                     array(
                         'status' => 1,
@@ -168,7 +165,8 @@ class CandidatoDirectorioController
         }
     }
 
-    public function candidatesDirectory()
+    public function candidatesDirectory($id_vacancy = 0)
+
     {
         $candidateDirectoryObj = new CandidateDirectory();
 
@@ -179,7 +177,13 @@ class CandidatoDirectorioController
             $candidateDirectoryObj->setId_customer($contactos->id_customer);
             $candidatesDirector = $candidateDirectoryObj->getAllById_customer();
         } else {
-            $candidatesDirector = $candidateDirectoryObj->getAll();
+
+            if ($id_vacancy != 0) {
+                $candidateDirectoryObj->setId_vacancy($id_vacancy);
+                $candidatesDirector = $candidateDirectoryObj->getAllByVacancy();
+            } else {
+                $candidatesDirector = $candidateDirectoryObj->getAll();
+            }
         }
         foreach ($candidatesDirector as &$candidate) {
             $candidate['id'] = Encryption::encode($candidate['id']);

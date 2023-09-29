@@ -42,11 +42,11 @@
         </div>
     </div>
 </div>
+
 <script>
     $(document).ready(function() {
         let table = document.querySelector('#table_subareas');
         utils.dtTable(table);
-
 
         document.querySelector('#table_subareas').addEventListener('click', e => {
             e.preventDefault();
@@ -60,7 +60,7 @@
                 } else {
                     id_subarea = e.target.offsetParent.dataset.id;
                 }
-                console.log(id_subarea);
+
 
                 Swal.fire({
                     title: '¿Estás seguro de ocultar esta subarea?',

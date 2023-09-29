@@ -660,7 +660,6 @@
               </li>
 
 			  
-              <li class="nav-header">CONFIGURACIONES</li>
               <li class="nav-item">
                 <a href="<?= base_url ?>configuracionesRH/index" class="nav-link<?= $_GET['controller'] == 'configuracionesRH' ? ' active' : '' ?>">
                   <i class="nav-icon fas fa-users-cog"></i>

@@ -11,6 +11,7 @@
                 <div class="modal-body">
                     <input type="hidden" name="flag" id="flag" value="1">
                     <input type="hidden" name="id">
+                    <input type="hidden" name="id_vacancy_filter" value="<?= $id_vacancy ?>">
 
                     <div class="form-group">
                         <label class="col-form-label" for="name">Nombre*</label>

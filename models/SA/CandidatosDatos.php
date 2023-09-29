@@ -558,7 +558,8 @@ class CandidatosDatos{
 				V.Tiene_ESE,
 				V.Tiene_SOI,
 				V.Tiene_SMART,
-				uc.id AS id_user_Cliente
+				uc.id AS id_user_Cliente,
+				[Especificacion_cliente]=v.Comentario 
 			FROM rh_Candidatos_Datos CD 
 				INNER JOIN rh_Candidatos C 
 					ON CD.Candidato=C.Candidato 

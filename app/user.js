@@ -270,8 +270,10 @@ class User {
 
 
     activate_user(id_user) {
+
         var formData = new FormData();
         formData.append('id_user', id_user);
+
         fetch('../usuario/activate_user', {
             method: 'POST',
             body: formData
@@ -286,12 +288,15 @@ class User {
                 }
             })
             .then(r => {
-                console.log(r);
+
                 try {
                     const json_app = JSON.parse(r);
+
                     if (json_app.status == 1) {
+
                         utils.destruir_datatable('#tb_users', '#tb_users tbody', User.tabla_formato(json_app.usuarios, 1));
                         utils.destruir_datatable('#tb_users_inactive', '#tb_users_inactive tbody', User.tabla_formato(json_app.usuarios_inactivos, 0));
+
                         utils.showToast('EL usuario se ha activado correctamente', 'success');
                     } else {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');

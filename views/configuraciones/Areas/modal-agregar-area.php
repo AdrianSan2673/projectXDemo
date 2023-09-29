@@ -10,12 +10,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="input-group mb-3">
-                        <input placeholder='Ingresa el nombre del Area' type="text" onPaste="return false"
-                            class="form-control" name="area" id="area_input" autocomplete="off" required>
+                        <input placeholder='Ingresa el nombre del Area' type="text" onPaste="return false" class="form-control" name="area" id="area_input" autocomplete="off" required>
                     </div>
                     <div class="input-group mb-3">
-                        <input placeholder='Ingresa una subarea (Opcional)' onPaste="return false" type="text"
-                            autocomplete="off" class="form-control" name="subarea" id="subarea_input">
+                        <input placeholder='Ingresa una subarea (Opcional)' onPaste="return false" type="text" autocomplete="off" class="form-control" name="subarea" id="subarea_input">
                     </div>
                     <div class="modal-footer">
                         <button id="guardar" name="guardar" type="submit" class="btn btn-primary">Guardar
@@ -30,24 +28,25 @@
 
 
 <script>
-var area = new Area();
+   
+    var area = new Area();
 
-document.querySelector('#modal-agregar-area').addEventListener('submit', e => {
-    e.preventDefault();
-    area.save();
+    document.querySelector('#modal-agregar-area').addEventListener('submit', e => {
+        e.preventDefault();
+        area.save();
 
-});
+    });
 
-document.getElementById("area_input").addEventListener("keydown", teclear);
-document.getElementById("subarea_input").addEventListener("keydown", teclear);
-var flag = false;
-var teclaAnterior = "";
+    document.getElementById("area_input").addEventListener("keydown", teclear);
+    document.getElementById("subarea_input").addEventListener("keydown", teclear);
+    var flag = false;
+    var teclaAnterior = "";
 
-function teclear(event) {
-    teclaAnterior = teclaAnterior + " " + event.keyCode;
-    var arregloTA = teclaAnterior.split(" ");
-    if (event.keyCode == 32 && arregloTA[arregloTA.length - 2] == 32) {
-        event.preventDefault();
+    function teclear(event) {
+        teclaAnterior = teclaAnterior + " " + event.keyCode;
+        var arregloTA = teclaAnterior.split(" ");
+        if (event.keyCode == 32 && arregloTA[arregloTA.length - 2] == 32) {
+            event.preventDefault();
+        }
     }
-}
 </script>

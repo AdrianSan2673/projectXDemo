@@ -134,6 +134,7 @@ class Subarea {
 
                         document.getElementById("titulo").innerHTML = json_app.area.area;
 
+
                         let subareas = '';
                         let cont = json_app.subareas.length;
                         json_app.subareas.forEach(subarea => {

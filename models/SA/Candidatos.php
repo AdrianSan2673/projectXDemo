@@ -54,8 +54,7 @@ class Candidatos
     private $Gestor_modificacion;
     // ===[27 jULIO 2023 REPLICADO fin ]===
     private $db;
-    //21 sept
-    private $empresa;
+	private $empresa;
 
     public function __construct()
     {
@@ -533,9 +532,7 @@ class Candidatos
     {
         $this->Gestor_modificacion = $Gestor_modificacion;
     }
-
-    //21 sept
-    public function setEmpresa($empresa)
+	  public function setEmpresa($empresa)
     {
         $this->empresa = $empresa;
     }
@@ -544,7 +541,6 @@ class Candidatos
     {
         return $this->empresa;
     }
-
 
 
     public function getMax()
@@ -1171,8 +1167,8 @@ class Candidatos
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-
-    public function getServiciosPorContactoYViabilidad()
+	
+	public function getServiciosPorContactoYViabilidad()
     {
         $Contacto = $this->getContacto();
         $stmt = $this->db->prepare("SELECT TOP(7200) Folio=RC.Candidato,RC.Cliente ID_Ciente,va.Empresa id_empresa
@@ -1221,7 +1217,7 @@ class Candidatos
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-
+	
 
     public function getServiciosPorContactoTranspais()
     {
@@ -1263,7 +1259,7 @@ class Candidatos
         INNER JOIN [rh_Candidatos_Datos] CD on CD.Candidato=RC.Candidato
         LEFT JOIN rh_Candidatos_Obs_Generales ob ON RC.Candidato=ob.Candidato
 		LEFT JOIN rh_Candidatos_RAL cral ON RC.Candidato=cral.Candidato
-         WHERE RC.Cliente IN (SELECT ID_Cliente FROM rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:Contacto) AND  rc.Ejecutivo<>'miguelcasanova' AND RC.Fecha>='2022-12-01' 
+         WHERE RC.Cliente IN (SELECT ID_Cliente FROM rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:Contacto) AND  rc.Ejecutivo<>'miguelcasanova' AND RC.Fecha>='2023-01-01' 
         ORDER BY RC.Fecha DESC");
         $stmt->bindParam(":Contacto", $Contacto, PDO::PARAM_STR);
         $stmt->execute();
@@ -1541,7 +1537,6 @@ class Candidatos
         return $result;
     }
 
-    // 19 sept
     public function updateDatosEmpresa()
     {
 
@@ -1552,7 +1547,7 @@ class Candidatos
         $Contacto = $this->getContacto();
         $Razon = $this->getRazon();
         $Puesto = $this->getPuesto();
-        $cc_cliente = $this->getCC_Cliente();
+		$cc_cliente = $this->getCC_Cliente();
 
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Cliente=:Cliente, Nombre_Cliente=:Contacto, Razon=:Razon, Puesto=:Puesto, Modificado=GETDATE(),CC_Cliente=:cc_cliente WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
@@ -1560,7 +1555,7 @@ class Candidatos
         $stmt->bindParam(":Contacto", $Contacto, PDO::PARAM_INT);
         $stmt->bindParam(":Razon", $Razon, PDO::PARAM_STR);
         $stmt->bindParam(":Puesto", $Puesto, PDO::PARAM_STR);
-        $stmt->bindParam(":cc_cliente", $cc_cliente, PDO::PARAM_STR);
+		$stmt->bindParam(":cc_cliente", $cc_cliente, PDO::PARAM_STR);
 
         $flag = $stmt->execute();
         if ($flag) {
@@ -3412,7 +3407,7 @@ class Candidatos
     }
 
     // ===[19 de mayo 2023 estudios fin]===
-    public function getServiciosPorUsuario()
+     public function getServiciosPorUsuario()
     {
         $Contacto = $this->getContacto();
         $Cliente = $this->getCliente();
@@ -3463,7 +3458,7 @@ class Candidatos
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-
+	
 
     public function getModificacionEjecutivoGestor()
     {
@@ -3496,8 +3491,7 @@ class Candidatos
         return $fetch;
     }
 
-    public function getServiciosSOI()
-    {
+    public function getServiciosSOI(){
 
         $stmt = $this->db->prepare("SELECT Creado, Folio=RC.Candidato
         ,[Solicitud]=RC.Fecha
@@ -3549,8 +3543,8 @@ class Candidatos
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-
-    public function countCandidatosPorCliente()
+	
+	    public function countCandidatosPorCliente()
     {
         $Cliente = $this->getCliente();
         $stmt = $this->db->prepare("SELECT count(*) as Total FROM rh_Candidatos WHERE Cliente=:Cliente");
@@ -3560,10 +3554,7 @@ class Candidatos
 
         return $fetch;
     }
-
-
-    //19 sept
-    public function countCandidatosPorEmpresa()
+	   public function countCandidatosPorEmpresa()
     {
         $empresa = $this->getEmpresa();
         $stmt = $this->db->prepare("SELECT count(*) as Total FROM rh_Candidatos rc INNER JOIN rh_Ventas_Alta rva ON rc.Cliente=rva.Cliente WHERE rva.empresa=:empresa");

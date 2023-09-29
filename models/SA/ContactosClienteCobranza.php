@@ -10,8 +10,7 @@ class ContactosClienteCobranza
     private $Telefono;
     private $Extension;
     private $db;
-    //gabo 21 sept
-    private $empresa;
+	private $empresa;
 
     public function __construct()
     {
@@ -78,9 +77,7 @@ class ContactosClienteCobranza
     {
         $this->Extension = $Extension;
     }
-    //21 sept
-
-    public function getEmpresa()
+	 public function getEmpresa()
     {
         return $this->empresa;
     }
@@ -89,6 +86,7 @@ class ContactosClienteCobranza
     {
         $this->empresa = $empresa;
     }
+
 
     public function save()
     {
@@ -170,10 +168,7 @@ class ContactosClienteCobranza
         $fetch = $stmt->fetchAll();
         return $fetch;
     }
-
-    //21 sept
-
-    public function getALLByEmpresa()
+	  public function getALLByEmpresa()
     {
         $empresa = $this->getEmpresa();
 
@@ -184,4 +179,5 @@ class ContactosClienteCobranza
         $fetch = $stmt->fetchAll();
         return $fetch;
     }
+	
 }

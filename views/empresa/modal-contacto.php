@@ -26,7 +26,7 @@
                     <div class="form-group">
                         <label class="col-form-label" for="Correo">Dirección de correo electrónico</label>
                         <input type="text" class="form-control" name="Correo" id="email" maxlength="60" required>
-                        <div id="email_exists" style="display:none"></div>
+						<div id="email_exists" style="display:none"></div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col">
@@ -66,8 +66,8 @@
                             </div>
                         </div>
                     </div>
-                    <!-- 15 sept -->
-
+					    <?php if ($_GET['controller'] == 'empresa_SA' && $_GET['action'] == 'ver') :  ?>
+					 <?php endif;  ?>
                     <div class="form-group" id="select_tipo">
                         <label for="customer" class="col-form-label">Tipo Usuario</label>
                         <select name="tipo_usuario" id="tipo_usuario" class="form-control" required>
@@ -78,15 +78,11 @@
                             <?php endforeach ?>
                         </select>
                     </div>
-                    <?php if ($_GET['controller'] == 'empresa_SA' && $_GET['action'] == 'ver') :  ?>
-                    <?php endif;  ?>
-
-
-
+                   
                     <div class="form-group">
                         <label class="col-form-label">Usuario</label>
-                        <input type="text" name="Usuario" id="username" class="form-control" maxlength="40" required>
-                        <div id="user_exists" style="display: none"></div>
+                        <input type="text" name="Usuario" id="username" class="form-control" maxlength="40" required  >
+						<div id="user_exists" style="display: none"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-form-label">Contraseña</label>
@@ -98,20 +94,18 @@
                     <!-- id 82 -->
                     <!-- id contacto 1077 -->
 
-                    <!-- <?php // if (Utils::isSales()||Utils::isAdmin()) : 
-                            ?>     -->
-                    <div class="form-group" id="select_empresa">
-                        <label for="customer" class="col-form-label">Empresa</label>
-                        <?php $customers = Utils::showCustomers(); ?>
-                        <select name="cliente_asignado" id="cliente_asignado" class="form-control select2">
-                            <option disabled selected="selected"></option>
-                            <?php foreach ($customers as $customer) : ?>
-                                <option value="<?= $customer['id'] ?>"><?= $customer['customer'] ?></option>
-                            <?php endforeach ?>
-                        </select>
-                    </div>
-                    <!-- <?php // endif; 
-                            ?> -->
+                    <!-- <?php // if (Utils::isSales()||Utils::isAdmin()) : ?>     -->
+                        <div class="form-group" id="select_empresa">  
+                            <label for="customer" class="col-form-label">Empresa</label>
+                            <?php $customers = Utils::showCustomers(); ?>
+                            <select name="cliente_asignado" id="cliente_asignado" class="form-control select2" >
+                                <option disabled selected="selected"></option>
+                                <?php foreach ($customers as $customer) : ?>
+                                    <option value="<?= $customer['id'] ?>"><?= $customer['customer'] ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                    <!-- <?php // endif; ?> -->
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -151,13 +145,14 @@
 
 
 <script>
-    document.querySelector('#btn-duplicar-contacto').addEventListener('click', e => { //gabo duplicar
+
+     document.querySelector('#btn-duplicar-contacto').addEventListener('click', e => {   //gabo duplicar
         e.preventDefault();
         let cliente = new Cliente();
         cliente.duplicate_contact();
     })
-
-    const checkusername = () => {
+	
+	  const checkusername = () => {
         let user = new User();
         user.checkUsernameWithInfo();
 

@@ -1,7 +1,6 @@
 <?php
 
-class EmployeeHolidays
-{
+class EmployeeHolidays{
     private $id;
     private $start_date;
     private $end_date;
@@ -13,73 +12,60 @@ class EmployeeHolidays
 
     private $db;
 
-    public function __construct()
-    {
-        $this->db = Connection::connectSA();
-    }
+	public function __construct(){
+		$this->db = Connection::connectSA();
+	}
 
 
-    public function getId()
-    {
-        return $this->id;
-    }
+    public function getId(){
+		return $this->id;
+	}
 
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
+	public function setId($id){
+		$this->id = $id;
+	}
 
-    public function getStart_date()
-    {
-        return $this->start_date;
-    }
+	public function getStart_date(){
+		return $this->start_date;
+	}
 
-    public function setStart_date($start_date)
-    {
-        $this->start_date = $start_date;
-    }
+	public function setStart_date($start_date){
+		$this->start_date = $start_date;
+	}
 
-    public function getEnd_date()
-    {
-        return $this->end_date;
-    }
+	public function getEnd_date(){
+		return $this->end_date;
+	}
 
-    public function setEnd_date($end_date)
-    {
-        $this->end_date = $end_date;
-    }
+	public function setEnd_date($end_date){
+		$this->end_date = $end_date;
+	}
 
-    public function getComments()
-    {
-        return $this->comments;
-    }
+	public function getComments(){
+		return $this->comments;
+	}
 
-    public function setComments($comments)
-    {
-        $this->comments = $comments;
-    }
+	public function setComments($comments){
+		$this->comments = $comments;
+	}
 
-    public function getId_employee()
-    {
-        return $this->id_employee;
-    }
+	public function getId_employee(){
+		return $this->id_employee;
+	}
 
-    public function setId_employee($id_employee)
-    {
-        $this->id_employee = $id_employee;
-    }
+	public function setId_employee($id_employee){
+		$this->id_employee = $id_employee;
+	}
 
-    public function getID_Contacto()
-    {
-        return $this->ID_Contacto;
-    }
+	public function getID_Contacto(){
+		return $this->ID_Contacto;
+	}
 
-    public function setID_Contacto($ID_Contacto)
-    {
-        $this->ID_Contacto = $ID_Contacto;
-    }
-
-    public function getStatus()
+	public function setID_Contacto($ID_Contacto){
+		$this->ID_Contacto = $ID_Contacto;
+	}
+	
+	public function getStatus()
     {
         return $this->status;
     }
@@ -89,7 +75,7 @@ class EmployeeHolidays
         $this->status = $status;
     }
 
-    public function getID_Admin()
+      public function getID_Admin()
     {
         return $this->id_admin;
     }
@@ -98,9 +84,7 @@ class EmployeeHolidays
     {
         $this->id_admin = $id_admin;
     }
-
-    //gabo 18 sept
-    public function getOne()
+	   public function getOne()
     {
         $id = $this->getId();
 
@@ -111,8 +95,8 @@ class EmployeeHolidays
         return $fetch;
     }
 
-    public function getEmployeesHolidaysByContacto()
-    {
+	
+    public function getEmployeesHolidaysByContacto(){
         $ID_Contacto = $this->getID_Contacto();
 
         $stmt = $this->db->prepare(
@@ -131,20 +115,18 @@ class EmployeeHolidays
             root.employees e
         WHERE e.Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) AND e.status=1
         GROUP BY e.id, e.first_name, e.surname, e.last_name, e.ID_Contacto, e.start_date, e.end_date
-        ORDER BY e.surname"
-        );
+        ORDER BY e.surname");
         $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
         $stmt->execute();
         $fetch = $stmt->fetchAll();
         return $fetch;
     }
 
-    public function getEmployeesHolidaysRequestedByContacto()
-    {
+    public function getEmployeesHolidaysRequestedByContacto(){
         $ID_Contacto = $this->getID_Contacto();
 
         $stmt = $this->db->prepare(
-            "SELECT 
+        "SELECT 
             eh.id,
             e.first_name,
             e.surname,
@@ -157,15 +139,14 @@ class EmployeeHolidays
         FROM  
             root.employees e INNER JOIN root.employee_holidays eh ON e.id=eh.id_employee
         WHERE e.Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) AND e.status=1
-        ORDER BY eh.start_date DESC,eh.end_date  DESC"
-        );
+        ORDER BY eh.start_date DESC,eh.end_date  DESC");
         $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
         $stmt->execute();
         $fetch = $stmt->fetchAll();
         return $fetch;
     }
 
-
+    
     public function create()
     {
         $result = false;
@@ -197,46 +178,46 @@ class EmployeeHolidays
     }
 
     public function update()
-    {
-        $id = $this->getId();
-        $id_employee = $this->getId_employee();
+	{
+		$id = $this->getId();
+		$id_employee = $this->getId_employee();
         $start_date = $this->getStart_date();
         $end_date = $this->getEnd_date();
-        $comments = $this->getComments();
+		$comments = $this->getComments();
         $ID_Contacto = $this->getID_Contacto();
 
-        $stmt = $this->db->prepare("UPDATE root.employee_holidays SET start_date=:start_date, end_date=:end_date, comments=:comments, id_employee=:id_employee, ID_Contacto=:ID_Contacto, modified_at=GETDATE() WHERE id=:id");
+		$stmt = $this->db->prepare("UPDATE root.employee_holidays SET start_date=:start_date, end_date=:end_date, comments=:comments, id_employee=:id_employee, ID_Contacto=:ID_Contacto, modified_at=GETDATE() WHERE id=:id");
 
-        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-        $stmt->bindParam(":start_date", $start_date, PDO::PARAM_STR);
-        $stmt->bindParam(":end_date", $end_date, PDO::PARAM_STR);
+		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		$stmt->bindParam(":start_date", $start_date, PDO::PARAM_STR);
+		$stmt->bindParam(":end_date", $end_date, PDO::PARAM_STR);
         $stmt->bindParam(":comments", $comments, PDO::PARAM_STR);
         $stmt->bindParam(":id_employee", $id_employee, PDO::PARAM_INT);
-        $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
-        $flag = $stmt->execute();
+		$stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
+		$flag = $stmt->execute();
 
-        if ($flag)
-            $result = true;
+		if ($flag)
+			$result = true;
 
-        return $result;
-    }
+		return $result;
+	}
 
 
-    public function delete()
-    {
-        $id = $this->getId();
+	public function delete()
+	{
+		$id = $this->getId();
+		
+		$stmt = $this->db->prepare("DELETE root.employee_holidays  WHERE id=:id");
+		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		$flag = $stmt->execute();
 
-        $stmt = $this->db->prepare("DELETE root.employee_holidays  WHERE id=:id");
-        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-        $flag = $stmt->execute();
+		if ($flag)
+			$result = true;
 
-        if ($flag)
-            $result = true;
-
-        return $result;
-    }
-
-    public function getEmployeesHolidaysByCliente()
+		return $result;
+	}
+	
+	  public function getEmployeesHolidaysByCliente()
     {
         $ID_Contacto = $this->getID_Contacto();
 
@@ -349,7 +330,7 @@ class EmployeeHolidays
     }
 
 
-
+  
     public function approved_vacation()
     {
         $id_solicitud = $this->getId();
@@ -393,7 +374,7 @@ class EmployeeHolidays
 
         return $result;
     }
-    //gabo 6 sep
+	  //gabo 6 sep
     public function getEmployeeHoliday()
     {
         $id_employee = $this->getId_employee();

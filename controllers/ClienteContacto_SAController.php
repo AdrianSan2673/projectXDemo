@@ -102,8 +102,8 @@ class ClienteContacto_SAController
 
             $flag = $_POST['flag'];
             $user_flag = $_POST['user_flag'];
-            ///15 sept
-            $tipo_usuario = isset($_POST['tipo_usuario']) && !empty($_POST['tipo_usuario']) ? trim($_POST['tipo_usuario']) : 0;
+			$tipo_usuario = isset($_POST['tipo_usuario']) && !empty($_POST['tipo_usuario']) ? trim($_POST['tipo_usuario']) : 0;
+
 
 
 
@@ -118,8 +118,7 @@ class ClienteContacto_SAController
                 $contacto->setFecha_Cumpleaños($Fecha_Cumpleanos);
                 $contacto->setEmpresa($Empresa);
                 $contacto->setID($ID_Contacto);
-                $contacto->setTipo_usuario($tipo_usuario);
-
+				$contacto->setTipo_usuario($tipo_usuario);
 
                 $user = new User();
                 $user->setUsername($Usuario);
@@ -128,7 +127,7 @@ class ClienteContacto_SAController
                 $user->setEmail($Correo);
                 $user->setActivation(1);
                 $user->setId_user_type(15);
-
+				
                 if (!isset($_POST['Password'])) {
                     //gabo 13 sept
                     $pattern = "1234567890abcdefghijklmnopqrstuvwxyz#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -192,7 +191,6 @@ class ClienteContacto_SAController
                                         $contact->setNombre_Contacto($Nombre_Contacto . ' ' . $Apellido_Contacto);
                                         $exists = $contact->getByContactoYCliente();
                                         $contactos = ClienteContacto_SAController::formatearContactos($contact->getContactosPorCliente());
-
                                         if (!$exists) {
                                             $contact->create();
                                         }
@@ -554,9 +552,7 @@ class ClienteContacto_SAController
         } //end if
     }
     //=========================[Gabo Marzo 1]==============================================
-
-
-    static  function formatearContactos($contactos)
+	 static  function formatearContactos($contactos)
     {
 
         foreach ($contactos as &$contacto) {

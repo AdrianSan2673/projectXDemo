@@ -287,10 +287,10 @@
                                 <th class="filterhead"></th>
                                 <th></th>
                                 <th></th>
+								<th></th>
                                 <th></th>
                                 <th></th>
-                                <th></th>
-                                <th></th>
+                                <th class="filterhead"></th>
                                 <th></th>
                             </tr>
                             <tr>
@@ -310,7 +310,7 @@
                                 <th>Fortalezas</th>
                                 <th>fecha de creacion</th>
                                 <th>creado por</th>
-                                <th>Postulaciones</th>
+								<th>Vacantes Anteriores</th>
                                 <th>Acciones</th>
 
 
@@ -339,7 +339,7 @@
                                 <th>Fortalezas</th>
                                 <th>fecha de creacion</th>
                                 <th>creado por</th>
-                                <th>Postulaciones</th>
+								<th>Vacantes Anteriores</th>
                                 <th>Acciones</th>
                             </tr>
                         </tfoot>

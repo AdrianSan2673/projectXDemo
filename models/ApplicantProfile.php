@@ -457,9 +457,8 @@ class ApplicantProfile
         }
         return $result;
     }
-
-
-    //gabo 26 sept
+	
+	 //gabo 26 sept
 
     public function duplicateProfile()
     {

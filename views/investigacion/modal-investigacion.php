@@ -154,6 +154,17 @@
                             </select>
                         </div>
                     </div>
+					
+					       <div class="reingreso" style="display: none;">
+                        <div class="form-group ">
+                            <label class="col-form-label" for="Reingreso">¿Es reingreso de la empresa?</label>
+                            <select class="form-control" name="Reingreso">
+                                <option value="" disabled selected>Selecciona</option>
+                                <option value="Si">Sí</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
 
                 </div>
                 <div class="modal-footer justify-content-between">

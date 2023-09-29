@@ -10,7 +10,7 @@ require_once 'models/User.php';
 require_once 'models/Vacancy.php';
 require_once 'models/VacancyApplicant.php';
 require_once 'models/Psychometry.php';
-require_once 'models/ApplicantProfile.php';
+require_once 'models/ApplicantProfile.php';   
 require_once 'models/CandidateDirectory.php';
 require_once 'models/Area.php';
 require_once 'models/Subarea.php';
@@ -24,7 +24,6 @@ class CandidatoController
         if (Utils::isValid($_SESSION['identity']) && !Utils::isCandidate() && !Utils::isCustomer()) {
             $candidate = new Candidate();
             $total = $candidate->getTotal();
-
 
             $page_title = 'Candidatos | RRHH Ingenia';
             require_once 'views/layout/header.php';
@@ -74,8 +73,8 @@ class CandidatoController
                         $VacancyObj->setId($candidateDirectory->id_vacancy);
                         $vacante = $VacancyObj->getOne();
                     }
-                    $candidato->id_area = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_area : 0;
-                    $candidato->id_subarea = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_subarea : 0;
+                    $candidato->id_area = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_area:0;
+                    $candidato->id_subarea = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_subarea:0;
 
                     $candidato->id_gender = 0;
                     $candidato->id_civil_status = 0;
@@ -83,18 +82,16 @@ class CandidatoController
                     $candidato->description = '';
                     $candidato->id = null;
                     $candidato->job_title = $candidato->experience;
-                    $candidato->experience = $candidato->experience;
+					$candidato->experience =$candidato->experience;
                     $candidato->cellphone = '';
                     $candidato->linkedinn = '';
                     $candidato->facebook = '';
                     $candidato->instagram = '';
                 }
             }
-
-            if (!isset($_GET['contact']) and isset($_GET['vacante'])) {
+			  if (!isset($_GET['contact']) and isset($_GET['vacante'])) {
                 $guardar_en_bolsa = true;
             }
-
 
             $page_title = 'Nuevo candidato | RRHH Ingenia';
             require_once 'views/layout/header.php';
@@ -105,6 +102,7 @@ class CandidatoController
             header('location:' . base_url);
         }
     }
+
     /**OLD */
     public function create()
     {
@@ -332,66 +330,67 @@ class CandidatoController
             $id_vacancy = isset($_POST['id_vacancy']) && !empty($_POST['id_vacancy']) ? Encryption::decode($_POST['id_vacancy']) : FALSE;
             $id_contacto = isset($_POST['contact']) ? Encryption::decode($_POST['contact']) : NULL; //id del contacto del directorio
 
-
-            $start_date = isset($_POST['start_date']) ?  $_POST['start_date'] : null;
+			
+			$start_date = isset($_POST['start_date']) ?  $_POST['start_date'] : null;
             $end_date = isset($_POST['end_date']) ?  $_POST['end_date'] : null;
             $enterpise_experience = isset($_POST['enterprise_experience']) ?  $_POST['enterprise_experience'] : null;
             $review_experience = isset($_POST['review_experience']) ?  $_POST['review_experience'] : null;
+			
+		// if ($start_date and $end_date and $enterpise_experience and $review_experience and !Utils::isCandidate()) {
+//     $tamanio = count($start_date);
+//     for ($i = 0; $i < $tamanio; $i++) {
 
+
+//         if ($start_date[$i] != '' or $end_date[$i] != '') {
+
+//             if ($start_date[$i] < '1950-01-01'  or  $start_date[$i] > '2050-01-01' or  $end_date[$i] < '1950-01-01'  or  $end_date[$i] > '2050-01-01') {
+//                 echo json_encode(array('status' => 6));
+//                 die();
+//             }
+
+//             if (trim($enterpise_experience[$i]) == '' or  trim($review_experience[$i]) == '') {
+//                 echo json_encode(array('status' => 7));
+//                 die();
+//             }
+//         }
+
+
+//         if ($start_date[$i] == '' and $end_date[$i] == '' and (trim($enterpise_experience[$i]) != '' or trim($review_experience[$i]) != '')) {
+//             echo json_encode(array('status' => 7));
+//             die();
+//         }
+//     }
+// }
+
+			
 
             //===[gabo 1 agosto  operativa]==      
             $isCandidate = false;
             $vacancy = new Vacancy();
             $vacancy->setId($id_vacancy);
             $vacante = $vacancy->getOne();
-
-            if (isset($vacante) && isset($vacante->type) && ($vacante->type != "1" && $vacante->type != "4")) {
+			
+			 if (isset($vacante) && isset($vacante->type) && ($vacante->type != "1" && $vacante->type != "4")) {
+                if ($date_birth < '1950-01-01') {
+                    echo json_encode(array('status' => 5));
+                    die();
+                }
+            }
+			
+			if (!$id_vacancy) {
                 if ($date_birth < '1950-01-01') {
                     echo json_encode(array('status' => 6));
                     die();
                 }
             }
 
-            if (!$id_vacancy) {
-                if ($date_birth < '1950-01-01') {
-                    echo json_encode(array('status' => 6));
-                    die();
-                }
-            }
-
-
-            if ($start_date and $end_date and $enterpise_experience and $review_experience and !Utils::isCandidate()) {
-                $tamanio = count($start_date);
-                for ($i = 0; $i < $tamanio; $i++) {
-
-
-                    if ($start_date[$i] != '' or $end_date[$i] != '') {
-
-                        if ($start_date[$i] < '1950-01-01'  or  $start_date[$i] > '2050-01-01' or  $end_date[$i] < '1950-01-01'  or  $end_date[$i] > '2050-01-01') {
-                            echo json_encode(array('status' => 6));
-                            die();
-                        }
-
-                        if (trim($enterpise_experience[$i]) == '' or  trim($review_experience[$i]) == '') {
-                            echo json_encode(array('status' => 7));
-                            die();
-                        }
-                    }
-
-
-                    if ($start_date[$i] == '' and $end_date[$i] == '' and (trim($enterpise_experience[$i]) != '' or trim($review_experience[$i]) != '')) {
-                        echo json_encode(array('status' => 7));
-                        die();
-                    }
-                }
-            }
-
-            if (isset($_POST['directory'])) {
+			
+			  if (isset($_POST['directory'])) {
                 $id_vacancy = false;
             }
 
 
-            if (($vacante && ($vacante->type == 1 || $vacante->type == 4)  && $first_name && $surname && $last_name && $id_level && $job_title  && $id_state && $id_city && $id_area && $id_subarea) || ($first_name && $surname && $last_name && $id_level && $job_title && $email && $id_state && $id_city && $id_area && $id_subarea)) {
+            if (($vacante && $first_name && $surname && $last_name && $id_level && $job_title  && $id_state && $id_city && $id_area && $id_subarea) ) {
                 //===[gabo 1 agosto  operativa fin]==   
                 if ($resume) {
                     $allowed_formats = array("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/pdf");
@@ -479,10 +478,12 @@ class CandidatoController
                             $applicant->updateStatus();
 
                             //gabi nuevo
-
                             if ($aplicante && !Utils::isCandidate()) {
+
                                 //===[gabo 15 junio experiencia candidato ]=== */
 
+                                //$enterpise_experience = isset($_POST['enterprise_experience']) ?  $_POST['enterprise_experience'] : null;
+                                //$review_experience = isset($_POST['review_experience']) ?  $_POST['review_experience'] : null;
                                 if ($id) {
                                     $experience = new CandidateExperience;
                                     $experience->setId_candidate($id);
@@ -498,28 +499,22 @@ class CandidatoController
                                         for ($i = 0; $i < $tamanio; $i++) {
                                             $enterpise_experience[$i] =  trim($enterpise_experience[$i]);
                                             $review_experience[$i] =  trim($review_experience[$i]);
-
-                                            $start_date[$i] =  trim($start_date[$i]);
+											
+											$start_date[$i] =  trim($start_date[$i]);
                                             $end_date[$i] =  trim($end_date[$i]);
-
+											
                                             if ($enterpise_experience[$i] != '' and  $review_experience[$i] != '') {
                                                 $experience->setEnterprise($enterpise_experience[$i]);
                                                 $experience->setPosition($enterpise_experience[$i]);
                                                 $experience->setReview($review_experience[$i]);
-
-                                                $experience->setStart_date($start_date[$i]);
+												
+												$experience->setStart_date($start_date[$i]);
                                                 $experience->setEnd_date($end_date[$i]);
-
                                                 $result = $experience->save();
                                             }
                                         }
                                     }
                                 }
-
-                                // if ($aplicante && !Utils::isCandidate()) {
-                                //     var_dump("ya paso");
-                                //     die();
-                                // }
                                 //===[gabo 15 junio experiencia candidato fin ]===
                             }
                         }
@@ -608,21 +603,21 @@ class CandidatoController
                     }else{
                         echo 4;
                     } */
+                }else {if ($save) {
+                    //===[gabo 2 julio operativa]===
+                    echo json_encode(array(
+                        'status' => 1,
+                        'id_vacancy' => $id_vacancy,
+                        'id_candidate' => $id_candidate,
+                        'type' => $vacante->type,
+                        'isCandidate' => $isCandidate
+                    ));
+                    //===[gabo 2 julio operativa]===
                 } else {
-                    if ($save) {
-                        //===[gabo 2 julio operativa]===
-                        echo json_encode(array(
-                            'status' => 1,
-                            'id_vacancy' => $id_vacancy,
-                            'id_candidate' => $id_candidate,
-                            'type' => $vacante->type,
-                            'isCandidate' => $isCandidate
-                        ));
-                        //===[gabo 2 julio operativa]===
-                    } else {
-                        echo json_encode(array('status' => 2));
-                    }
+                    echo json_encode(array('status' => 2));
                 }
+					  }
+				
             } else {
                 echo json_encode(array('status' => 0));
             }
@@ -955,7 +950,6 @@ class CandidatoController
 
     public function editar()
     {
-
         if (isset($_SESSION['identity']) && $_SESSION['identity'] != FALSE) {
             if (isset($_GET['id']) || Utils::isCandidate()) {
 
@@ -1009,14 +1003,12 @@ class CandidatoController
                 $language = new CandidateLanguage();
                 $language->setId_candidate($id);
                 $languages = $language->getLanguagesByCandidate();
-
-
-                //gabo 27 sept
+				
+				  //gabo 27 sept
                 $vacante = new VacancyApplicant();
                 $vacante->setId_candidate($id);
                 $vacante = $vacante->getVacanciesTypeOperativaByCandidate();
-
-                //gabo 29
+				  //gabo 29 sept
                 $resumepath = 'uploads/resume/' . $id;
                 if (file_exists($resumepath)) {
                     $resumedirectory = opendir($resumepath);
@@ -1028,6 +1020,7 @@ class CandidatoController
                     }
                     $resume = base_url . $cvroute;
                 }
+
 
 
                 $page_title = $candidato->first_name . ' ' . $candidato->surname . ' | RRHH Ingenia';
@@ -1066,6 +1059,7 @@ class CandidatoController
                 $candidato->setId($id_candidato);
                 $name_candidate = $candidato->getOne()->first_name . ' ' . $candidato->getOne()->surname . ' ' . $candidato->getOne()->last_name;
                 //    ===[gabo 21 mayo operativa fin]=== 
+
 
                 if ($result) {
                     if ($result->id_profile !== NULL) {
@@ -1117,62 +1111,73 @@ class CandidatoController
 
             $enterpise_experience = isset($_POST['enterprise_experience']) ?  $_POST['enterprise_experience'] : null;
             $review_experience = isset($_POST['review_experience']) ?  $_POST['review_experience'] : null;
-            $start_date = isset($_POST['start_date']) ?  $_POST['start_date'] : null;
+			
+			 $start_date = isset($_POST['start_date']) ?  $_POST['start_date'] : null;
             $end_date = isset($_POST['end_date']) ?  $_POST['end_date'] : null;
 
 
-            if ($start_date and $end_date and $enterpise_experience and $review_experience and !Utils::isCandidate()) {
-                $tamanio = count($start_date);
-                for ($i = 0; $i < $tamanio; $i++) {
+
+// if ($start_date and $end_date and $enterpise_experience and $review_experience and !Utils::isCandidate()) {
+//     $tamanio = count($start_date);
+//     for ($i = 0; $i < $tamanio; $i++) {
 
 
-                    if ($start_date[$i] != '' or $end_date[$i] != '') {
+//         if ($start_date[$i] != '' or $end_date[$i] != '') {
 
-                        if ($start_date[$i] < '1950-01-01'  or  $start_date[$i] > '2050-01-01' or  $end_date[$i] < '1950-01-01'  or  $end_date[$i] > '2050-01-01') {
-                            echo json_encode(array('status' => 6));
-                            die();
-                        }
+//             if ($start_date[$i] < '1950-01-01'  or  $start_date[$i] > '2050-01-01' or  $end_date[$i] < '1950-01-01'  or  $end_date[$i] > '2050-01-01') {
+//                 echo json_encode(array('status' => 6));
+//                 die();
+//             }
 
-                        if (trim($enterpise_experience[$i]) == '' or  trim($review_experience[$i]) == '') {
-                            echo json_encode(array('status' => 7));
-                            die();
-                        }
-                    }
+//             if (trim($enterpise_experience[$i]) == '' or  trim($review_experience[$i]) == '') {
+//                 echo json_encode(array('status' => 7));
+//                 die();
+//             }
+//         }
 
 
-                    if ($start_date[$i] == '' and $end_date[$i] == '' and (trim($enterpise_experience[$i]) != '' or trim($review_experience[$i]) != '')) {
-                        echo json_encode(array('status' => 7));
-                        die();
-                    }
-                }
-            }
+//         if ($start_date[$i] == '' and $end_date[$i] == '' and (trim($enterpise_experience[$i]) != '' or trim($review_experience[$i]) != '')) {
+//             echo json_encode(array('status' => 7));
+//             die();
+//         }
+//     }
+// }
 
+
+
+			
+			
+			
 
             if ($id_candidate) {
+
+                $experience = new CandidateExperience;
+                $experience->setId_candidate($id_candidate);
+                $result = $experience->delete_experiences();
+
                 if (isset($_POST['enterprise_experience'])) {
-                    $experience = new CandidateExperience;
-                    $experience->setId_candidate($id_candidate);
-                    $result = $experience->delete_experiences();
                     $experience->setId_area(1);
                     $experience->setId_subarea(1);
                     $experience->setId_state(1);
                     $experience->setId_city(1);
                     $experience->setType('operativa');
+                    $experience->setStart_date(date('Y-m-d', time()));
 
                     $tamanio = count($enterpise_experience);
                     for ($i = 0; $i < $tamanio; $i++) {
 
                         $enterpise_experience[$i] =  trim($enterpise_experience[$i]);
                         $review_experience[$i] =  trim($review_experience[$i]);
-
-                        $start_date[$i] =  trim($start_date[$i]);
+						
+						$start_date[$i] =  trim($start_date[$i]);
                         $end_date[$i] =  trim($end_date[$i]);
 
                         if ($enterpise_experience[$i] != '' and  $review_experience[$i] != '') {
                             $experience->setEnterprise($enterpise_experience[$i]);
                             $experience->setPosition($enterpise_experience[$i]);
                             $experience->setReview($review_experience[$i]);
-                            $experience->setStart_date($start_date[$i]);
+							
+							$experience->setStart_date($start_date[$i]);
                             $experience->setEnd_date($end_date[$i]);
 
                             $result = $experience->save();
@@ -1236,32 +1241,31 @@ class CandidatoController
                 // ===[ 31 mayo gabo review]=== 
                 $experience = new CandidateExperience;
                 $experience->setId_candidate($id_candidate);
+                //$experience->delete_experiences();
 
+                if (isset($_POST['enterprise_experience'])) {
+                    $experience->setId_area(1);
+                    $experience->setId_subarea(1);
+                    $experience->setId_state(1);
+                    $experience->setId_city(1);
+                    $experience->setType('operativa');
+                    $experience->setStart_date(date('Y-m-d', time()));
 
-                // $experience->delete_experiences();
-                // if (isset($_POST['enterprise_experience'])) {
-                //     $experience->setId_area(1);
-                //     $experience->setId_subarea(1);
-                //     $experience->setId_state(1);
-                //     $experience->setId_city(1);
-                //     $experience->setType('operativa');
-                //     $experience->setStart_date(date('Y-m-d', time()));
+                    $tamanio = count($enterpise_experience);
+                    for ($i = 0; $i < $tamanio; $i++) {
 
-                //     $tamanio = count($enterpise_experience);
-                //     for ($i = 0; $i < $tamanio; $i++) {
+                        $enterpise_experience[$i] =  trim($enterpise_experience[$i]);
+                        $review_experience[$i] =  trim($review_experience[$i]);
 
-                //         $enterpise_experience[$i] =  trim($enterpise_experience[$i]);
-                //         $review_experience[$i] =  trim($review_experience[$i]);
+                        if ($enterpise_experience[$i] != '' and  $review_experience[$i] != '') {
+                            $experience->setEnterprise($enterpise_experience[$i]);
+                            $experience->setPosition($enterpise_experience[$i]);
+                            $experience->setReview($review_experience[$i]);
 
-                //         if ($enterpise_experience[$i] != '' and  $review_experience[$i] != '') {
-                //             $experience->setEnterprise($enterpise_experience[$i]);
-                //             $experience->setPosition($enterpise_experience[$i]);
-                //             $experience->setReview($review_experience[$i]);
-
-                //             $experience->save();
-                //         }
-                //     }
-                // }
+                            $experience->save();
+                        }
+                    }
+                }
 
 
                 // ===[ 31 mayo gabo review fin]=== 
@@ -1572,8 +1576,8 @@ class CandidatoController
             header('location:' . base_url);
         }
     }
-
-    public function postulate()
+	
+	  public function postulate()
     {
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isRecruitmentManager())) {
             $id_vacancy = isset($_POST['id_vacancy']) ? trim(Encryption::decode($_POST['id_vacancy'])) : FALSE;
@@ -1644,8 +1648,7 @@ class CandidatoController
             echo json_encode(array('status' => 0));
     }
 
-    public function registrar()
-    {
+    public function registrar() {
         if (isset($_POST)) {
             $_SESSION['data'] = isset($_SESSION['data']) && !empty($_SESSION['data']) ? $_SESSION['data'] : [];
             $data = (object) array(
@@ -1666,7 +1669,7 @@ class CandidatoController
             $user->setUsername(NULL);
             $user->setPassword($data->password);
             $user->setFirst_name($data->first_name);
-            $user->setLast_name($data->surname . ' ' . $data->last_name);
+            $user->setLast_name($data->surname.' '.$data->last_name);
             $user->setEmail($data->email);
             $user->setActivation(2);
             $user->setId_user_type(7);
@@ -1710,14 +1713,14 @@ class CandidatoController
                         $_SESSION['data']->id = $candidate->getId();
                         $id_user = Encryption::encode($user->getId());
                         $token = $user->getToken();
-
-                        $url = base_url . 'usuario/activar_cuenta&id=' . $id_user . '&val=' . $token;
-
+                        
+                        $url = base_url.'usuario/activar_cuenta&id='.$id_user.'&val='.$token;
+                        
                         $subject = 'Verificación de correo electrónico';
                         $body = "Gracias por registrarte en RRHH Ingenia, {$data->first_name}, ingresa a nuestra página e inicia sesión con tu correo electrónico.<br/><br/> Contraseña : {$data->password} <br /> <br /> Para continuar, es necesario que verifiques tu correo dando clic en el siguiente <a href={$url}>enlace</a>";
-
-                        Utils::sendEmail($data->email, $data->first_name . ' ' . $data->surname, $subject, $body);
-                        header('location:' . base_url . 'candidato/datos_cv');
+                        
+                        Utils::sendEmail($data->email, $data->first_name.' '.$data->surname, $subject, $body);
+                        header('location:'.base_url.'candidato/datos_cv');
                     } else {
                         $color = 'alert-danger';
                         $message = 'Error al guardar sus datos';
@@ -1730,20 +1733,20 @@ class CandidatoController
                     $icon = 'fas fa-ban';
                     $status = 2;
                 }
-            } else {
+            }else {
                 $color = 'alert-warning';
-                $message = 'La dirección de correo ' . $data->email . ' ya se encuentra registrada.';
+                $message = 'La dirección de correo '.$data->email.' ya se encuentra registrada.';
                 $icon = 'fas fa-exclamation-triangle';
                 $status = 3;
             }
+
         }
         require_once './views/user/header.php';
         require_once './views/candidate/register.php';
         require_once './views/user/footer.php';
     }
 
-    public function datos_cv()
-    {
+    public function datos_cv() {
         if (isset($_SESSION['data'])) {
             $id_candidate = $_SESSION['data']->id_candidate;
             $candidate = new Candidate();
@@ -1760,12 +1763,12 @@ class CandidatoController
                 $experiences = $experience->getExperiencesByCandidate();
                 if ($experiences)
                     $_SESSION['data']->experiences = $experiences;
-            } else
+            }  else
                 $experiences = $_SESSION['data']->experiences;
 
             foreach ($_SESSION['data']->experiences as $key => $value)
                 $_SESSION['data']->experiences[$key]['experience_id'] = $key + 1;
-
+            
             $education = [];
             if (!isset($_SESSION['data']->education)) {
                 $education = new CandidateEducation();
@@ -1809,7 +1812,7 @@ class CandidatoController
                 $aptitudes = $aptitude->getAptitudesByCandidate();
                 if ($aptitudes)
                     $_SESSION['data']->aptitudes = $aptitudes;
-            } else
+            }else
                 $aptitudes = $_SESSION['data']->aptitudes;
 
             foreach ($_SESSION['data']->aptitudes as $key => $value)
@@ -1819,12 +1822,12 @@ class CandidatoController
             require_once './views/layout/navbar.php';
             require_once './views/candidate/cv.php';
             require_once './views/layout/footer.php';
-        } else
-            header('location:' . base_url . 'candidato/registrar');
-    }
 
-    public function image()
-    {
+        }else
+            header('location:'.base_url.'candidato/registrar');
+    }
+    
+    public function image() {
         if (isset($_POST['Objeto'])) {
             $Objeto = $_POST['Objeto'];
 
@@ -1837,39 +1840,38 @@ class CandidatoController
 
             $tempFilePath = sys_get_temp_dir() . '\\' . $filename;
 
-            file_put_contents($tempFilePath, $Objeto);
+            file_put_contents($tempFilePath, $Objeto); 
 
             $type = pathinfo($tempFilePath, PATHINFO_EXTENSION);
             $img_content = file_get_contents($tempFilePath);
-
+                    
             $img_base64 = 'data:image/' . $type . ';base64,' . base64_encode($img_content);
             $_SESSION['route'] = $img_base64;
             echo json_encode(array('status' => 1, 'imagen' => $_SESSION['route']));
-        } else
-            header('location:' . base_url);
+        }else
+            header('location:'.base_url);
     }
 
-    public function delete_image()
-    {
+    public function delete_image(){
         if (isset($_SESSION['route']) && !empty($_SESSION['route'])) {
             unset($_SESSION['route']);
-            echo json_encode(array('status' => 1, 'imagen' => base_url . 'dist/img/user-icon.png'));
-        } else
-            header('location:' . base_url);
+            echo json_encode(array('status' => 1, 'imagen' => base_url.'dist/img/user-icon.png'));
+        }else
+            header('location:'.base_url);
     }
-
-
-
-
+	
+	
+	
+	
+	
     public function sideserver()
     {
-
-
+		
         $_GET['filtros'] .= ($_GET['id_language'] != '') ? "and id_language like " . "'%" . $_GET['id_language'] . "%'" : '';
         $extrawhere = substr($_GET['filtros'], 3);
         $tabla = "rrhhinge_Candidatos.filtros_candidatos fc";
-
-        if ($_GET['clave'] != '') {
+		
+		  if ($_GET['clave'] != '') {
             $extrawhere = " ( first_name LIKE " . "'%" . $_GET['clave'] . "%' OR job_title LIKE " . "'%" . $_GET['clave'] . "%' OR description LIKE " . "'%" . $_GET['clave'] . "%' OR experiences LIKE " . "'%" . $_GET['clave'] . "%' OR aptitudes LIKE " . "'%" . $_GET['clave'] . "%')";
         }
 
@@ -1896,7 +1898,6 @@ class CandidatoController
             array('db' => 'surname',  'dt' => 18),
             array('db' => 'last_name',  'dt' => 19),
             array('db' => 'id_language',  'dt' => 20),
-
             array('db' => 'postulaciones',  'dt' => 24)
             // array('db' => 'first_name',  'dt' => 11),
             // array('db' => 'first_name',  'dt' => 12),
@@ -1904,17 +1905,17 @@ class CandidatoController
 
         );
 
-        $sql_details = array(
-            'user' => '',
-            'pass' => '',
-            'db'   => 'reclutamiento',
-            'host' => 'localhost'
-        );
+         $sql_details = array(
+             'user' => 'reclutador',
+             'pass' => 'Sr65s$0z',
+             'db'   => 'reclutamiento',
+             'host' => '148.72.144.152'
+         );
 
         $botones = 1;
 
         require("helpers/SideServer/Candidatos/ssp.php");
-
+     
         //si la busqueda viene del datatable input
         $_POST['search']['value'] != "" ? $extrawhere = '' : '';
 
@@ -1922,4 +1923,7 @@ class CandidatoController
             SSP::simple($_POST, $sql_details,  $tabla, $primaryKey, $columns, $botones, $extrawhere)
         );
     }
+
+
+
 }

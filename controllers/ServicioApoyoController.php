@@ -95,6 +95,7 @@ class ServicioApoyoController
                 require_once 'views/ese/modal-schedule.php';
                 require_once 'views/layout/footer.php';
             } else {
+
                 //esto es para los clientes
                 //Para usuarios que tienen mas de una empresa
                 $contactoEmpresa = new ContactosEmpresa();
@@ -102,40 +103,33 @@ class ServicioApoyoController
                 $contactos = $contactoEmpresa->getContactoPorUsuario2();
 
                 $id = $_SESSION['identity']->id;
-                $id_empresa = $contactos[0]['Empresa'];
-
                 $estudios = [];
                 $estudioObj = new Candidatos();
 
-                //ciosa, estafeta,Prudential [Condcion solicitada de las empresas que los usuarios solo vean lo que solicitaron], Dalton
-                if ($id == 8084 || $id == 8844 || $id == 9034 || $id == 8826 || $id == 9051 || ($id_empresa == 525 && ($id != 9517 && $id != 9518 && $id != 9510 && $id != 9511 && $id != 9512 && $id != 9513)) || $id == 9628 || $id == 9629 || $id == 9630 || $id == 9631 || $id == 9632 || $id == 9633) { //
-                    $ContactosClienteSolicitanObj = new ContactosClienteSolicitan();
-                    $ContactosClienteSolicitanObj->setUsuario($_SESSION['identity']->username);
-                    $ContactosClienteSolicitan = $ContactosClienteSolicitanObj->getAllContactoPorUsuario();
+                foreach ($contactos as $contacto) {
+                    $id_contacto = $contacto['ID'];
+                    $id_empresa = $contacto['Empresa'];
 
-                    foreach ($ContactosClienteSolicitan as $cliente) {
-                        $estudioObj->setCliente($cliente['Cliente']);
-                        $estudioObj->setContacto($_SESSION['identity']->username);
-                        $estudio1 = $estudioObj->getServiciosPorUsuario();
-                        $estudios = array_merge($estudios, $estudio1);
-                    }
-                } else {
-                    foreach ($contactos as $contacto) {
-                        $id_contacto = $contacto['ID'];
-                        $id_empresa = $contacto['Empresa'];
-                        $estudioObj->setContacto($id_contacto);
+                    $estudioObj->setContacto($id_contacto);
+                    if ($contacto['tipo_usuario'] != 0) {
+                        $ContactosClienteSolicitanObj = new ContactosClienteSolicitan();
+                        $ContactosClienteSolicitanObj->setUsuario($_SESSION['identity']->username);
+                        $ContactosClienteSolicitan = $ContactosClienteSolicitanObj->getAllContactoPorUsuario();
+                        $estudio1 = [];
 
-                        if ($id_empresa == 45) { //Para transpais del 2022 a actual
-                            $estudio1 = $estudioObj->getServiciosPorContactoTranspais();
-                        } else {
-                            if ($id == 9517 || $id == 9518) {
-                                $estudio1 = $estudioObj->getServiciosPorContactoYViabilidad();
-                            } else {
-                                $estudio1 = $estudioObj->getServiciosPorContacto();
-                            }
+                        foreach ($ContactosClienteSolicitan as $cliente) {
+                            $estudioObj->setCliente($cliente['Cliente']);
+                            $estudioObj->setContacto($_SESSION['identity']->username);
+                            $estudio2 = $estudioObj->getServiciosPorUsuario();
+                            $estudio1 = array_merge($estudio1, $estudio2);
                         }
-                        $estudios = array_merge($estudios, $estudio1);
+                    } else if ($id_empresa == 45) { //Para transpais del 2022 a actual
+                        $estudio1 = $estudioObj->getServiciosPorContactoTranspais();
+                    } else {
+                        $estudio1 = $estudioObj->getServiciosPorContacto();
                     }
+
+                    $estudios = array_merge($estudios, $estudio1);
                 }
 
                 $page_title = 'Estudios SocioEconómicos | RRHH Ingenia';
@@ -585,31 +579,7 @@ class ServicioApoyoController
                                         <br/>
                                         <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                                </body>
                                 </html> ";
-                            }
-                            /*elseif ($Servicio_Solicitado == 230 && $Nivel == 4) {
-                                $Enlace2 = "http://reclutamiento.rrhh-ingenia.com/ServicioApoyo/ver&candidato=".Encryption::encode($Candidato2);
-                                $body = "
-                                <!DOCTYPE html>
-                                <html>
-                                    <head>
-                                        <title>Nueva Solicitud</title> 
-                                    </head>
-                                    <body>
-                                        <label>Nueva solicitud de <b>${Tipo_Solicitud}</b> registrado por <b>${Reclutador}</b>.</label>
-                                        <br/><br/>
-                                        <label>Candidato: <b>${Nombre_Candidato}</b></label><br/>
-                                        <label>Telefono: <b>${Telefono}</b></label><br/>
-                                        ${Comentarios_Cliente}
-                                        <br></br>
-                                        <label>Para mas detalles del RAL + Investigación Laboral hacer clic </label>
-                                        <a href='${Enlace}'>aqui!</a>
-                                        <br/>
-                                        <label>Para mas detalles de la Verificación Domiciliaria hacer clic </label>
-                                        <a href='${Enlace2}'>aqui!</a>
-                                        <br/>
-<img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                                </body>
-                                </html> ";
-                            }*/ else {
+                            } else {
                                 $body = "
                                 <!DOCTYPE html>
                                 <html>
@@ -629,6 +599,7 @@ class ServicioApoyoController
                                         <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                                </body>
                                 </html>";
                             }
+
                             Utils::newNotification($Reclutador . ' de ' . $Nombre_Cliente . ' solicita ' . $Tipo_Solicitud, $Enlace, 1, $Servicio_Solicitado == 231 || $Servicio_Solicitado == 299 ? 1 : ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 300 ? 2 : ($Servicio_Solicitado == 328 ? 3 : 16)), $id_user, $_SESSION['identity']->id, $id_cliente);
                             Utils::sendEmail($Correo_Ejecutivo, $Reclutador, $Asunto, $body);
 
@@ -941,6 +912,10 @@ class ServicioApoyoController
                 $candidato = new CandidatosDatos();
                 $candidato->setCandidato($folio);
                 $candidato_datos = $candidato->getOne();
+
+                $candidato_datos->Especificacion_cliente = Utils::lineBreak($candidato_datos->Especificacion_cliente);
+                $candidato_datos->Especificaciones = Utils::lineBreak($candidato_datos->Especificaciones);
+
                 $candidato->setCURP($candidato_datos->CURP);
                 $candidato->setIMSS($candidato_datos->IMSS);
                 $historial_candidato = $candidato->getCandidatosPorCURPoIMSS();
@@ -1579,7 +1554,7 @@ class ServicioApoyoController
                     </html>
                     ";
 
-                    if ($candidato_datos->Fecha_Aplicacion && $candidato_datos->Cliente != 408) {
+                    if ($candidato_datos->Fecha_Aplicacion && $candidato_datos->Cliente != 408 && !Utils::isAdmin()) {
                         Utils::sendEmail($Correo_Analista, $Analista, 'Agenda de ' . $Nombre_Candidato, $body);
                         Utils::sendEmail('calidad@rrhhingenia.com', $Analista, 'Agenda de ' . $Nombre_Candidato, $body);
                     }
@@ -1920,7 +1895,7 @@ class ServicioApoyoController
             $Razon = Utils::sanitizeString($_POST['Razon']);
             $Puesto = Utils::sanitizeString($_POST['Puesto']);
             // 19 sept
-            $centro_costos = Utils::sanitizeString($_POST['centro_costos']);
+            $centro_costos = $_POST['centro_costos'] != '' ? Utils::sanitizeString($_POST['centro_costos']) : '';
 
             if ($Folio && $Cliente && $Razon && $Puesto) {
                 $estudio = new Candidatos();
@@ -1929,7 +1904,6 @@ class ServicioApoyoController
                 $estudio->setContacto($Contacto);
                 $estudio->setRazon($Razon);
                 $estudio->setPuesto($Puesto);
-                // 19
                 $estudio->setCC_Cliente($centro_costos);
                 $update = $estudio->updateDatosEmpresa();
 
@@ -2278,7 +2252,7 @@ class ServicioApoyoController
 
                     $body = $Fase == 298 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga el <b>RAL</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 299 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Investigación Laboral</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 310 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Validación de Licencia</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 300 || $Fase == 230 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Verificación Domiciliaria</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 324 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Verificación Domiciliaria con Visita Presencial</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 328 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que se ha concluído con el <b>Análisis de RAL</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : '')))));
 
-                    if ($candidato_datos->Cliente != 408)
+                    if ($candidato_datos->Cliente != 408 && !Utils::isAdmin())
                         Utils::sendEmail($candidato_datos->Correo_Cliente, $candidato_datos->Quien_Solicita, $subject, $body);
 
                     $perfil = new CfgImagenes();
@@ -2344,7 +2318,7 @@ class ServicioApoyoController
 
                     $body = $Fase == 298 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga el <b>RAL</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 299 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Investigación Laboral</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 310 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Validación de Licencia</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : ($Fase == 300 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que ya se encuentra disponible para su descarga la <b>Verificación Domiciliaria</b> de <b>' . $Nombre_Candidato . '</b> en nuestra plataforma.<br><br><br>No es necesario responder a este correo.' : '')));
 
-                    if ($Fase != 298 && $candidato_datos->Cliente != 408)
+                    if ($Fase != 298 && $candidato_datos->Cliente != 408 && !Utils::isAdmin())
                         Utils::sendEmail($candidato_datos->Correo_Cliente, $candidato_datos->Quien_Solicita, $subject, $body);
 
                     $perfil = new CfgImagenes();
@@ -2752,7 +2726,10 @@ class ServicioApoyoController
                                     </html>";
 
                                 Utils::newNotification($Reclutador . ' de ' . $Nombre_Cliente . ' solicita ' . $Tipo_Solicitud, $Enlace, 1, $Servicio_Solicitado == 231 || $Servicio_Solicitado == 299 ? 1 : ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 300 ? 2 : ($Servicio_Solicitado == 328 ? 3 : 16)), $id_user, $_SESSION['identity']->id, $id_cliente);
-                                Utils::sendEmail($Correo_Ejecutivo, $Reclutador, $Asunto, $body);
+                               
+                                if (!Utils::isAdmin()) {
+                                    Utils::sendEmail($Correo_Ejecutivo, $Reclutador, $Asunto, $body);
+                                }
 
 
                                 if ($Servicio_Solicitado == 300 || $Servicio_Solicitado == 230) {
@@ -2788,7 +2765,7 @@ class ServicioApoyoController
                                         <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                                    </body>
                                 </html>";
 
-                                if ($Cliente != 408)
+                                if ($Cliente != 408 && !Utils::isAdmin())
                                     Utils::sendEmail($Correo, $Reclutador, $Asunto2, $body2);
 
                                 echo json_encode(array('status' => 1));
@@ -3057,6 +3034,7 @@ class ServicioApoyoController
 
                     $body = $Fase == 298 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que el <b>RAL</b> de <b>' . $Nombre_Candidato . '</b> ha quedado temporalmente pausado.<br><br><br>No es necesario responder a este correo.' : ($Fase == 299 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Investigación Laboral</b> de <b>' . $Nombre_Candidato . '</b> ha quedado temporalmente pausado.<br><br><br>No es necesario responder a este correo.' : ($Fase == 310 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Validación de Licencia</b> de <b>' . $Nombre_Candidato . '</b> ha quedado temporalmente pausado.<br><br><br>No es necesario responder a este correo.' : ($Fase == 300 || $Fase == 230 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Verificación Domiciliaria</b> de <b>' . $Nombre_Candidato . '</b> ha quedado temporalmente pausado.<br><br><br>No es necesario responder a este correo.' : ($Fase == 324 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Verificación Domiciliaria con Visita Presencial</b> de <b>' . $Nombre_Candidato . '</b> ha quedado temporalmente pausado.<br><br><br>No es necesario responder a este correo.' : ''))));
 
+                    if (!Utils::isAdmin()) 
                     Utils::sendEmail($candidato_datos->Correo_Cliente, $candidato_datos->Quien_Solicita, $subject, $body);
 
                     $perfil = new CfgImagenes();
@@ -3122,7 +3100,7 @@ class ServicioApoyoController
 
                     $body = $Fase == 298 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que el <b>RAL</b> de <b>' . $Nombre_Candidato . '</b> se reanudará.<br><br><br>No es necesario responder a este correo.' : ($Fase == 299 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Investigación Laboral</b> de <b>' . $Nombre_Candidato . '</b> se reanudará.<br><br><br>No es necesario responder a este correo.' : ($Fase == 310 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Validación de Licencia</b> de <b>' . $Nombre_Candidato . '</b> se reanudará.<br><br><br>No es necesario responder a este correo.' : ($Fase == 300 || $Fase == 230 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Verificación Domiciliaria</b> de <b>' . $Nombre_Candidato . '</b> se reanudará.<br><br><br>No es necesario responder a este correo.' : ($Fase == 324 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Verificación Domiciliaria con Visita Presencial</b> de <b>' . $Nombre_Candidato . '</b> se reanudará.<br><br><br>No es necesario responder a este correo.' : ''))));
 
-
+                    if (!Utils::isAdmin()) 
                     Utils::sendEmail($candidato_datos->Correo_Cliente, $candidato_datos->Quien_Solicita, $subject, $body);
 
                     $perfil = new CfgImagenes();

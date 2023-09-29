@@ -71,7 +71,7 @@ class EmpleadoController
                 $positionObj2->setStatus(1);
                 $positionObj2->setType_position(5);
                 $positionObj = $positionObj2->getPositionsByContacto();
-                $positionObj2->setID_Cliente($_SESSION['id_cliente']);
+				$positionObj2->setID_Cliente($_SESSION['id_cliente']);
                 $type_positions = $positionObj2->getAllPositionByTypePositionAndCliente();
 
                 $deparment = new Department();
@@ -106,8 +106,8 @@ class EmpleadoController
             $employeeObj = new Employees();
             $employeeObj->setId($id);
             $employee = $employeeObj->getOne();
-
-            $usuario_rh = new UsuariosRH();
+			
+			$usuario_rh = new UsuariosRH();
             $usuario_rh->setId($employee->usuario_rh);
             $usuario_rh =  $usuario_rh->getOne();
 
@@ -247,14 +247,14 @@ class EmpleadoController
             require_once 'views/employee/modal-incidence.php';
             require_once 'views/employee/modal-payroll.php';
             require_once 'views/employee/modal-imagen.php';
-            require_once 'views/employee/modal-acceso.php';
+			require_once 'views/employee/modal-acceso.php';
             require_once 'views/employee/read.php';
             require_once 'views/layout/footer.php';
         } else
             header("location:" . base_url);
     }
 
-
+   
     public function save()
     {
         if (Utils::isAdmin() || Utils::isCustomerSA()) {
@@ -284,7 +284,7 @@ class EmpleadoController
             $civil_status =  isset($_POST['civil_status']) ?  Utils::sanitizeString($_POST['civil_status']) : null;
             $id_razon = Utils::sanitizeNumber($_POST['id_razon']);
             $id_boss =  Encryption::decode($_POST['id_boss']) ?  Encryption::decode($_POST['id_boss']) : null;
-            //gabo 6 sep
+			//gabo 6 sep
             $email =  isset($_POST['email']) ?  Utils::sanitizeString($_POST['email']) : null;
             //gabo 6 sep
 
@@ -379,7 +379,7 @@ class EmpleadoController
                 $employee->setCivil_status($civil_status);
                 $employee->setId_razon($id_razon);
                 $employee->setId_boss($id_boss);
-                //gabo 6 sep
+				//gabo 6 sep
                 $employee->setEmail($email);
                 //gabo 6 sep
 
@@ -420,7 +420,7 @@ class EmpleadoController
                     }
 
 
-
+                    
                     $save = $employee->update();
                 } else {
 
@@ -441,7 +441,7 @@ class EmpleadoController
                     $user_rh->setUsername($curp);
                     $user_rh->setId_cliente($Cliente);
                     $password = random_int(111111, 999999);
-                    $user_rh->setPassword(Encryption::encode($password));
+                    $user_rh->setPassword( Encryption::encode($password));
                     $usuario_saved = $user_rh->save();
                     //actualizar su  id_user_rh
                     if ($usuario_saved) {
@@ -790,8 +790,6 @@ class EmpleadoController
 
                 if ($cv) {
                     $full_name_employee = 'CV_' . $employee->first_name . '_' . $employee->surname . '_' . $employee->last_name;
-
-
                     if (!in_array($_FILES["cv"]["type"], $allowed_formats) || $_FILES["cv"]["size"] > $limit_kb) {
                         echo 0;
                         die();
@@ -952,7 +950,7 @@ class EmpleadoController
         } else
             echo json_encode(array('status' => 0));
     }
-    public function Traspasarcorreos()
+	 public function Traspasarcorreos()
     {
 
 

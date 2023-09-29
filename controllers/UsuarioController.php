@@ -15,8 +15,6 @@ require_once 'models/RH/AsistenciaRH.php';
 require_once 'models/RH/EmployeeHolidays.php';
 require_once 'models/RH/Employees.php';
 require_once 'models/RH/UsuariosRH.php';
-//19 sept
-require_once 'models/RH/Employee_trainings.php';
 
 class UsuarioController
 {
@@ -92,8 +90,8 @@ class UsuarioController
                 $ultimoDiaMes = date('t', mktime(0, 0, 0, $mes, 1, $anio));
                 $ultimaSemana = strtotime("last Sunday", strtotime("$ultimoDiaMes-$mes-$anio"));
                 $ultimaSemanaSabado = date('Y-m-d', strtotime("next Saturday", $ultimaSemana));
-                $fechaActual = date('Y-m-d', time());
-                $ultimaSemana = date('Y-m-d', $ultimaSemana);
+				$fechaActual = date('Y-m-d', time());
+				$ultimaSemana = date('Y-m-d', $ultimaSemana);
                 if (($fechaActual >= $ultimaSemana && $fechaActual <= $ultimaSemanaSabado) || $_SESSION['id_cliente'] == 132) {
                     $contactoEmpresa = new ContactosEmpresa();
                     $contactoEmpresa->setUsuario($_SESSION['identity']->username);
@@ -128,7 +126,7 @@ class UsuarioController
                         $calificacion->setID_Cliente($clienteconta->Cliente);
                         $calificacion->setID_Empresa($clienteconta->Empresa);
                         $calificacion->setFecha($ultimaSemana);
-                        $calificacion->setId($ultimaSemanaSabado);
+						$calificacion->setId($ultimaSemanaSabado);
                         //$calificacionCliente = $calificacion->getOneSA();
                         $calificacionCliente = $calificacion->getOneSAByRange();
                         if (!$calificacionCliente) {
@@ -160,8 +158,8 @@ class UsuarioController
                 $contacto = $contact->getContactByUser();
                 if ($contacto)
                     $_SESSION['customer'] = TRUE;
-
-                $access = new UserAccess();
+				
+				$access = new UserAccess();
                 $access->setId_user($_SESSION['identity']->id);
                 $accesos = $access->getAccessById_user();
                 if ($accesos) {
@@ -1208,7 +1206,7 @@ class UsuarioController
             }
 
 
-            //gabo 6 sep
+			//gabo 6 sep
             $holidays = new EmployeeHolidays();
             $holidays->setId_employee($_SESSION['identity']->id_empleado);
             $holidays = $holidays->getEmployeeHoliday();
@@ -1216,18 +1214,6 @@ class UsuarioController
             $empleado = new Employees();
             $empleado->setId_boss($_SESSION['identity']->id_empleado);
             $subordinados = $empleado->has_subordinates();
-
-
-            //16 sept
-            $employeeObj = new Employees();
-            $employeeObj->setId($_SESSION['identity']->id_empleado);
-            $employeeObj->setStatus(1);
-            $employeeObj->setCliente($_SESSION['identity']->id_cliente);
-            $incidens = $employeeObj->getAllEmployeesIncidenceByIdEmployee();
-
-            $employee_trainingsObj = new Employee_trainings();
-            $employee_trainingsObj->setId_employee($_SESSION['identity']->id_empleado);
-            $employee_trainings = $employee_trainingsObj->getAllByIdEmployee();
 
             $page_title = 'Bienvenido(a) | RRHH Ingenia';
             require_once 'views/layout/dashboard_rh.php';
@@ -1244,6 +1230,7 @@ class UsuarioController
 
     public function login_rh()
     {
+
         if (Utils::isValid($_POST)) {
             $username = isset($_POST['username']) ? trim($_POST['username']) : FALSE;
             $password = isset($_POST['password']) ? trim($_POST['password']) : FALSE;
@@ -1280,8 +1267,9 @@ class UsuarioController
                 echo 0;
             }
         } else {
-            header("location:" . base_url . SID);
+           echo 0;
         }
+
     }
 
     public function logout_rh()
@@ -1317,7 +1305,6 @@ class UsuarioController
                     echo json_encode(array('status' => 3));
                     die();
                 }
-
                 $user = new UsuariosRH();
                 $user->setId($id_user_rh);
                 $user->setPassword(Encryption::encode($nueva));
@@ -1336,7 +1323,7 @@ class UsuarioController
         }
     }
 
-    public function registrar_asistencia()
+      public function registrar_asistencia()
     {
 
         if (isset($_SESSION['identity']) && !empty($_SESSION['identity'])) {
@@ -1373,7 +1360,7 @@ class UsuarioController
     {
 
         foreach ($usuarios as &$usuario) {
-            $usuario['password'] = Utils::decrypt($usuario['password']);
+           // $usuario['password'] = Utils::decrypt($usuario['password']);
             $usuario['last_session'] = ($usuario['last_session'] != NULL) ? Utils::getFullDate($usuario['last_session']) : '';
             $usuario['id'] = Encryption::encode($usuario['id']);
 
@@ -1402,7 +1389,7 @@ class UsuarioController
 
 
 
-    public function activate_user()
+     public function activate_user()
     {
 
         if (isset($_SESSION['identity']) && !empty($_SESSION['identity'])) {
@@ -1410,9 +1397,7 @@ class UsuarioController
 
             $user = new User();
             $user->setId($id_user);
-            $activation = $user->getOne()->activation == 1 ? '0' : '1';
-
-            $user->setActivation($activation);
+            $user->setActivation(1);
             $save = $user->updateActivation();
 
             $users = $user->getEmployees();
@@ -1526,14 +1511,14 @@ class UsuarioController
         } else
             echo json_encode(array('status' => 2));
     }
-    public function getOneByUsername()
+	   public function getOneByUsername()
     {
         if (Utils::isValid($_POST['username'])) {
             $user = new User();
             $user->setUsername($_POST['username']);
             $user = $user->getOneByUsername();
-
-            $contacto = new ContactosEmpresa();
+			
+			$contacto = new ContactosEmpresa();
             $contacto->setUsuario($_POST['username']);
             $info = $contacto->getEmpresayClienteByUsername();
 
@@ -1553,8 +1538,8 @@ class UsuarioController
             $user = new User();
             $user->setEmail($_POST['email']);
             $user = $user->getOneByEmail();
-
-            $contacto = new ContactosEmpresa();
+			
+			$contacto = new ContactosEmpresa();
             $contacto->setCorreo($_POST['email']);
             $info = $contacto->getEmpresayClienteByUsername();
 
@@ -1567,8 +1552,8 @@ class UsuarioController
             echo json_encode(array('status' => 0));
         }
     }
-
-    public function update_UserRH()
+	
+	  public function update_UserRH()
     {
         if (Utils::isValid($_POST)) {
             $username = isset($_POST['username']) ? trim($_POST['username']) : FALSE;
@@ -1608,8 +1593,8 @@ class UsuarioController
             echo json_encode(array('status' => 0));
         }
     }
-
-    function crearempleadosrh()
+	
+	function crearempleadosrh()
     {
 
 
@@ -1646,10 +1631,8 @@ class UsuarioController
             }
         }
     }
-
-
-
-    function usuariosexcel()
+	
+	  function usuariosexcel()
     {
 
         require_once "libraries/Excel/vendor/autoload.php";
@@ -1657,7 +1640,7 @@ class UsuarioController
 
         # Recomiendo poner la ruta absoluta si no está junto al script
         # Nota: no necesariamente tiene que tener la extensión XLSX
-        $rutaArchivo = 'C:\xampp\htdocs\usuarios.xlsx';
+        $rutaArchivo = "libraries/usuarios.xlsx";
         $inputFileType = PhpOffice\PhpSpreadsheet\IOFactory::identify($rutaArchivo);
         $objReader = PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
         $documento = $objReader->load($rutaArchivo);
@@ -1697,11 +1680,12 @@ class UsuarioController
 
             $user->setPassword($password);
 
-
+echo nombre;
+			die();
             $userExists = $user->userExists();
             $emailExists = $user->emailExists();
             if (!$userExists  && !$emailExists && $username[0] != '') {
-                $save =   $user->save();
+            //    $save =   $user->save();
             } else {
                 echo " usuarios repetidos.\n";
                 echo $correo . "---" . $nombre . "\n";
@@ -1720,7 +1704,7 @@ class UsuarioController
                 $contacto_empresa->setExtension(' ');
                 $contacto_empresa->setCelular(' ');
                 $contacto_empresa->setPuesto('Promotor');
-                $save = $contacto_empresa->create();
+            //    $save = $contacto_empresa->create();
             } else {
                 echo "rh_Ventas_Alta_Contactos repetidos\n";
                 echo $correo . "---" . $nombre, "\n";
@@ -1735,7 +1719,7 @@ class UsuarioController
                 $contacto_cliente->setID_Cliente(716);
 
                 $contacto_cliente->setFecha(date('2023-09-14'));
-                $save = $contacto_cliente->create();
+            //    $save = $contacto_cliente->create();
             } else {
                 echo "rh_Ventas_Cliente_Contactos repetidos\n";
                 echo $correo . "---" . $nombre . "\n";
@@ -1748,26 +1732,5 @@ class UsuarioController
 
 
 
-    }
-
-
-    function cambiarcontraseñaspru()
-    {
-
-        $user = new User();
-        $usuarios = $user->getallUsersprudential();
-
-        foreach ($usuarios as $usuario) {
-            $password = '';
-            $pattern = "1234567890abcdefghijklmnopqrstuvwxyz#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            $max = strlen($pattern) - 1;
-            for ($i = 0; $i < 10; $i++) {
-                $password .= substr($pattern, mt_rand(0, $max), 1);
-            }
-
-            $user->setPassword(Utils::encrypt($password));
-            $user->setId($usuario['id']);
-            $user->updatePasword();
-        }
     }
 }

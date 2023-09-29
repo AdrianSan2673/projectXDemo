@@ -1,6 +1,6 @@
-class ServicioApoyo {
+class ServicioApoyo{
 
-    getEstudio(folio) {
+    getEstudio(folio){
         this.folio = folio;
         let xhr = new XMLHttpRequest();
         let data = `Folio=${this.folio}`;
@@ -9,10 +9,10 @@ class ServicioApoyo {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
 
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
-                if (r != 0) {
+                if (r != 0){
                     let json_app = JSON.parse(this.responseText);
                     document.querySelector("#update-form").reset();
                     document.querySelector("#Folio").value = json_app.Folio;
@@ -24,7 +24,7 @@ class ServicioApoyo {
                     /* document.querySelector("#Dia_Solicitud").value = Solicitud.getDate();
                     document.querySelector("#Mes_Solicitud").value = Solicitud.getMonth() + 1;
                     document.querySelector("#Anio_Solicitud").value = Solicitud.getFullYear(); */
-                    document.querySelector('#Fecha_Solicitud').value = `${Solicitud.getFullYear()}-${("0" + (Solicitud.getMonth() + 1)).slice(-2)}-${("0" + Solicitud.getDate()).slice(-2)}`;
+                    document.querySelector('#Fecha_Solicitud').value = `${Solicitud.getFullYear()}-${("0"+(Solicitud.getMonth()+1)).slice(-2)}-${("0" + Solicitud.getDate()).slice(-2)}`;
                     document.querySelector("#Hora_Solicitud").value = Solicitud.getHours();
                     document.querySelector("#Minuto_Solicitud").value = Solicitud.getMinutes();
 
@@ -33,7 +33,7 @@ class ServicioApoyo {
                         /* document.querySelector("#Dia_Entrega").value = Entrega.getDate();
                         document.querySelector("#Mes_Entrega").value = Entrega.getMonth() + 1;
                         document.querySelector("#Anio_Entrega").value = Entrega.getFullYear(); */
-                        document.querySelector('#Fecha_Entrega').value = `${Entrega.getFullYear()}-${("0" + (Entrega.getMonth() + 1)).slice(-2)}-${("0" + Entrega.getDate()).slice(-2)}`;
+                        document.querySelector('#Fecha_Entrega').value = `${Entrega.getFullYear()}-${("0"+(Entrega.getMonth()+1)).slice(-2)}-${("0" + Entrega.getDate()).slice(-2)}`;
                         document.querySelector("#Hora_Entrega").value = Entrega.getHours();
                         document.querySelector("#Minuto_Entrega").value = Entrega.getMinutes();
                     }
@@ -42,7 +42,7 @@ class ServicioApoyo {
         }
     }
 
-    getAgenda(folio) {
+    getAgenda(folio){
         this.folio = folio;
         let xhr = new XMLHttpRequest();
         let data = `Folio=${this.folio}`;
@@ -51,10 +51,10 @@ class ServicioApoyo {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
 
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
-                if (r != 0) {
+                if (r != 0){
                     let json_app = JSON.parse(this.responseText);
                     document.querySelector("#update-schedule-form").reset();
                     document.querySelector("#Folio_Candidato").value = json_app.Folio;
@@ -67,7 +67,7 @@ class ServicioApoyo {
                         /* document.querySelector("#Dia_Aplicacion").value = Aplicacion.getDate();
                         document.querySelector("#Mes_Aplicacion").value = Aplicacion.getMonth() + 1;
                         document.querySelector("#Anio_Aplicacion").value = Aplicacion.getFullYear(); */
-                        document.querySelector('#Fecha_Aplicacion').value = `${Aplicacion.getFullYear()}-${("0" + (Aplicacion.getMonth() + 1)).slice(-2)}-${("0" + Aplicacion.getDate()).slice(-2)}`;
+                        document.querySelector('#Fecha_Aplicacion').value = `${Aplicacion.getFullYear()}-${("0"+(Aplicacion.getMonth()+1)).slice(-2)}-${("0" + Aplicacion.getDate()).slice(-2)}`;
                         document.querySelector("#Hora_Aplicacion").value = Aplicacion.getHours();
                         document.querySelector("#Minuto_Aplicacion").value = Aplicacion.getMinutes();
                     }
@@ -76,7 +76,7 @@ class ServicioApoyo {
         }
     }
 
-    getLocalizacion() {
+    getLocalizacion(){
         let xhr = new XMLHttpRequest();
         let data = `Folio=${folio}`;
         xhr.open('POST', '../ServicioApoyo/getOneData');
@@ -85,12 +85,12 @@ class ServicioApoyo {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
         xhr.clase = this;
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
-
+                
                 try {
-                    if (r != 0) {
+                    if (r != 0){
                         let json_app = JSON.parse(r);
                         console.log(json_app);
                         form.querySelectorAll('input')[0].value = folio;
@@ -98,17 +98,17 @@ class ServicioApoyo {
                         form.querySelectorAll('input')[2].value = json_app.Ciudad;
                         form.querySelectorAll('select')[0].value = json_app.id_Estado;
 
-                    } else {
+                    }else {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
-            }
+			}
         }
     }
 
-    getTipoServicio() {
+    getTipoServicio(){
         let xhr = new XMLHttpRequest();
         let data = `Folio=${folio}`;
         xhr.open('POST', '../ServicioApoyo/getTipoServicio');
@@ -117,17 +117,17 @@ class ServicioApoyo {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
         xhr.clase = this;
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
-
+                
                 try {
-                    if (r != 0) {
+                    if (r != 0){
                         let json_app = JSON.parse(r);
                         console.log(json_app);
                         if (json_app.Nuevo_Procedimiento != 1) {
-                            form.querySelectorAll('select')[1].innerHTML =
-                                `
+                            form.querySelectorAll('select')[1].innerHTML = 
+                            `
                             <option value="298">RAL</option>
                             <option value="231">INV.LAB</option>
                             <option value="230">ESE</option>
@@ -138,17 +138,17 @@ class ServicioApoyo {
                         form.querySelectorAll('select')[1].value = json_app.Fase;
                         form.querySelectorAll('select')[2].value = json_app.Estado;
 
-                    } else {
+                    }else {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
-            }
+			}
         }
     }
 
-    getDatosGenerales(folio) {
+    getDatosGenerales(folio){
         let xhr = new XMLHttpRequest();
         let data = `Folio=${folio}`;
         xhr.open('POST', '../ServicioApoyo/getDatosGenerales');
@@ -157,17 +157,17 @@ class ServicioApoyo {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
         xhr.clase = this;
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
-                    if (r != 0) {
+                    if (r != 0){
                         let json_app = JSON.parse(r);
                         let contactos = '';
                         json_app.contactos.forEach(contacto => {
-                            contactos +=
-                                `
+                            contactos += 
+                            `
                             <option value="${contacto.ID}">${contacto.Nombre}</option>
                             `;
                         });
@@ -175,8 +175,8 @@ class ServicioApoyo {
 
                         let razones = '';
                         json_app.razones.forEach(razon => {
-                            razones +=
-                                `
+                            razones += 
+                            `
                             <option value="${razon.Razon.trim()}">${razon.Razon}</option>
                             `;
                         });
@@ -193,95 +193,96 @@ class ServicioApoyo {
                         form.querySelectorAll('input')[2].value = json_app.candidato_datos.Apellido_Paterno;
                         form.querySelectorAll('input')[3].value = json_app.candidato_datos.Apellido_Materno;
                         form.querySelectorAll('input')[4].value = json_app.candidato_datos.Puesto;
+						form.querySelectorAll('input')[5].value = json_app.candidato_datos.CC_Cliente;
 
-                    } else {
+                    }else {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo '+error, 'error');
                 }
-
-            }
+                    
+			}
         }
     }
 
-    update_config() {
+    update_config(){
         var form = document.querySelector("#update-form");
-        var formData = new FormData(form);
-
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', '../ServicioApoyo/update_config');
-        //xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.send(formData);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
+		var formData = new FormData(form);
+		
+		let xhr = new XMLHttpRequest();
+		xhr.open('POST', '../ServicioApoyo/update_config');
+		//xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		xhr.send(formData);
+		xhr.onreadystatechange = function(){
+			if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = this.responseText;
                 try {
                     let json_app = JSON.parse(r);
-                    if (json_app.status == 0)
-                        utils.showToast('Omitiste algún dato', 'error');
-                    else if (json_app.status == 1) {
-                        document.querySelector("#solicitud" + json_app.folio).textContent = json_app.solicitud;
-                        document.querySelector("#ejecutivo" + json_app.folio).textContent = json_app.ejecutivo;
-                        document.querySelector("#entregado" + json_app.folio).textContent = json_app.entregado;
-                        document.querySelector("#tiempo" + json_app.folio).textContent = json_app.tiempo;
+                    if(json_app.status == 0)
+                        utils.showToast('Omitiste algún dato','error');
+                    else if (json_app.status == 1){
+                        document.querySelector("#solicitud"+json_app.folio).textContent = json_app.solicitud;
+                        document.querySelector("#ejecutivo"+json_app.folio).textContent = json_app.ejecutivo;
+                        document.querySelector("#entregado"+json_app.folio).textContent = json_app.entregado;
+                        document.querySelector("#tiempo"+json_app.folio).textContent = json_app.tiempo;
                         let timeclass = "text-center align-middle ";
                         if (json_app.dias < 2)
-                            document.querySelector("#tiempo" + json_app.folio).className = timeclass + 'bg-success';
-                        else if (json_app.dias > 2)
-                            document.querySelector("#tiempo" + json_app.folio).className = timeclass + 'bg-danger';
+                            document.querySelector("#tiempo"+json_app.folio).className = timeclass+'bg-success';
+                        else if(json_app.dias > 2)
+                            document.querySelector("#tiempo"+json_app.folio).className = timeclass+'bg-danger';
                         else
-                            document.querySelector("#tiempo" + json_app.folio).className = timeclass + 'bg-orange';
+                            document.querySelector("#tiempo"+json_app.folio).className = timeclass+'bg-orange';
 
                         utils.showToast('Servicio actualizado exitosamente', 'success');
                         $('#modal_config').modal('hide');
-                    } else if (json_app.status == 2)
+                    }else if(json_app.status == 2)
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     else
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
+                
+			}
+		}
+	}
 
-            }
-        }
-    }
-
-    update_schedule() {
+    update_schedule(){
         var form = document.querySelector("#update-schedule-form");
-        var formData = new FormData(form);
-
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', '../ServicioApoyo/update_schedule');
-        //xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.send(formData);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
+		var formData = new FormData(form);
+		
+		let xhr = new XMLHttpRequest();
+		xhr.open('POST', '../ServicioApoyo/update_schedule');
+		//xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		xhr.send(formData);
+		xhr.onreadystatechange = function(){
+			if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if (json_app.status == 0) {
-                        utils.showToast('Omitiste algún dato', 'error');
-                    } else if (json_app.status == 1) {
-                        document.querySelector("#aplicacion" + json_app.folio).textContent = json_app.aplicacion;
-                        document.querySelector("#logistica" + json_app.folio).textContent = json_app.logistica;
+                    if(json_app.status == 0){
+                        utils.showToast('Omitiste algún dato','error');
+                    }else if (json_app.status == 1){
+                        document.querySelector("#aplicacion"+json_app.folio).textContent = json_app.aplicacion;
+                        document.querySelector("#logistica"+json_app.folio).textContent = json_app.logistica;
                         utils.showToast('Servicio agendado exitosamente', 'success');
                         $('#modal_schedule').modal('hide');
-                    } else if (json_app.status == 2) {
+                    }else if(json_app.status == 2){
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    } else {
+                    }else{
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
+                    
+			}
+		}
+	}
 
-            }
-        }
-    }
-
-    getContactosYRazonesPorCliente(Cliente) {
+    getContactosYRazonesPorCliente(Cliente){
         let xhr = new XMLHttpRequest();
         xhr.s = this.selector;
         let data = `Cliente=${Cliente}`;
@@ -289,16 +290,16 @@ class ServicioApoyo {
         xhr.open('POST', '../ServicioApoyo/getContactosYRazonesPorCliente');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
-                if (r != 0) {
+                if (r != 0){
                     let json_app = JSON.parse(r);
                     let contactos = '';
                     json_app.contactos.forEach(contacto => {
-                        contactos +=
-                            `
+                        contactos += 
+                        `
                         <option value="${contacto.ID}">${contacto.Nombre}</option>
                         `;
                     });
@@ -306,13 +307,13 @@ class ServicioApoyo {
 
                     let razones = '';
                     json_app.razones.forEach(razon => {
-                        razones +=
-                            `
+                        razones += 
+                        `
                         <option value="${razon.Razon.trim()}">${razon.Razon}</option>
                         `;
                     });
                     razones += '<option value="Pendiente">Pendiente</option>';
-
+                    
                     form.querySelectorAll('select')[1].innerHTML = contactos;
                     form.querySelectorAll('select')[2].innerHTML = razones;
                 }
@@ -320,108 +321,108 @@ class ServicioApoyo {
         }
     }
 
-    save_servicio() {
+    save_servicio(){
         var form = document.querySelector("#candidate-form");
-        var formData = new FormData(form);
+		var formData = new FormData(form);
         form.querySelectorAll('.btn')[0].disabled = true;
+		
+		let xhr = new XMLHttpRequest();
+		xhr.open('POST', '../ServicioApoyo/create');
+		xhr.send(formData);
 
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', '../ServicioApoyo/create');
-        xhr.send(formData);
-
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if (json_app.status == 0) {
+                    if(json_app.status == 0){
                         form.querySelectorAll('.btn')[0].disabled = false;
-                        utils.showToast('Omitiste algún dato', 'error');
-                    } else if (json_app.status == 1) {
+                        utils.showToast('Omitiste algún dato','error');
+                    }else if(json_app.status == 1){
                         utils.showToast('El candidato fue registrado exitosamente', 'success');
                         form.reset();
                         form.querySelectorAll('.btn')[0].disabled = false;
                         //if (json_app.ral == 1) 
-                        setTimeout(() => { window.location.href = json_app.redireccion; }, 1800);
-                    } else if (json_app.status == 2) {
+                            setTimeout(() => { window.location.href = json_app.redireccion;}, 1800);
+                    }else if (json_app.status == 2){
                         form.querySelectorAll('.btn')[0].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    } else {
+                    }else{
                         form.querySelectorAll('.btn')[0].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     form.querySelectorAll('.btn')[0].disabled = false;
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo '+error, 'error');
                 }
 
-            }
+            }        
         }
     }
-
-    save_continuar_servicio() {
+	
+	save_continuar_servicio(){
         var form = document.querySelector("#modal_continuar_servicio form");
-        var formData = new FormData(form);
+		var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;
+		
+		let xhr = new XMLHttpRequest();
+		xhr.open('POST', '../ServicioApoyo/continuar_servicio');
+		xhr.send(formData);
 
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', '../ServicioApoyo/continuar_servicio');
-        xhr.send(formData);
-
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if (json_app.status == 0) {
+                    if(json_app.status == 0){
                         form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Omitiste algún dato', 'error');
-                    } else if (json_app.status == 1) {
+                        utils.showToast('Omitiste algún dato','error');
+                    }else if(json_app.status == 1){
                         utils.showToast('El candidato fue registrado exitosamente', 'success');
                         form.reset();
                         //form.querySelectorAll('.btn')[1].disabled = false;
-                        setTimeout(() => { window.location.href = './crear'; }, 3000);
-                    } else if (json_app.status == 2) {
+                            setTimeout(() => { window.location.href = './crear';}, 3000);
+                    }else if (json_app.status == 2){
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    } else if (json_app.status == 3) {
+                    }else if (json_app.status == 3){
                         utils.showToast('Este servicio excede de los 7 dias permitidas para ser continuado. Solicítalo de nuevo', 'warning');
-                        setTimeout(() => { window.location.href = './crear'; }, 3000);
-                    } else {
+                        setTimeout(() => { window.location.href = './crear';}, 3000);
+                    }else{
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     form.querySelectorAll('.btn')[1].disabled = false;
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo '+error, 'error');
                 }
 
-            }
+            }        
         }
     }
-
-    checkCURP(curp) {
-        if (curp.length >= 18) {
+	
+	checkCURP(curp){
+        if(curp.length >= 18){
             let xhr = new XMLHttpRequest();
             xhr.open('POST', '../Datos/checkCURP');
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.send('curp=' + curp);
+            xhr.send('curp='+curp);
 
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4 && xhr.status == 200){
                     let r = xhr.responseText;
                     console.log(r);
                     try {
                         let json_app = JSON.parse(r);
-                        if (json_app.status == 0) {
+                        if(json_app.status == 0){
                             document.querySelector('#div_curp_duplicado').style.display = 'none';
-                        } else if (json_app.status == 1) {
+                        }else if (json_app.status == 1){
                             document.querySelector('#div_curp_duplicado p').textContent = `Detectamos a través del CURP que ya tenemos información de ${json_app.Nombre} en nuestras bases de datos`;
                             document.querySelectorAll('#div_curp_duplicado input[type="radio"]')[1].value = json_app.Candidato;
                             document.querySelector('#div_curp_duplicado').style.display = 'block';
-                        } else {
+                        }else{
                             document.querySelector('#div_curp_duplicado').style.display = 'none';
                         }
                     } catch (error) {
@@ -429,7 +430,7 @@ class ServicioApoyo {
                     }
                 }
             }
-        } else {
+        }else{
             document.querySelector('#div_curp_duplicado').style.display = 'none';
         }
     }

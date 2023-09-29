@@ -165,7 +165,7 @@ class Cliente_SAController
         } else
             header('location:' . base_url);
     }
-
+    
     public function save()
     {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior() || Utils::isSalesManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor())) {
@@ -284,9 +284,8 @@ class Cliente_SAController
         }
     }
 
-    public function updateServicios()
-    {
-        if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager())) {
+    public function updateServicios(){
+        if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager()|| Utils::isSales()||Utils::isSalesManager())) {
             $Cliente = Utils::sanitizeNumber($_POST['Cliente']);
             $Tiene_IL = isset($_POST['Tiene_IL']) ? 1 : 0;
             $Tiene_ESE = isset($_POST['Tiene_ESE']) ? 1 : 0;
@@ -300,7 +299,7 @@ class Cliente_SAController
                 $cliente->setTiene_ESE($Tiene_ESE);
                 $cliente->setTiene_SOI($Tiene_SOI);
                 $cliente->setTiene_SMART($Tiene_SMART);
-
+                
                 $save = $cliente->updateServicios();
                 if ($save) {
                     echo json_encode(
@@ -309,10 +308,11 @@ class Cliente_SAController
                             'cliente' => $cliente->getOne()
                         )
                     );
-                } else echo json_encode(array('status' => 2));
-            } else echo json_encode(array('status' => 0));
-        } else {
-            header('location:' . base_url);
+                }else echo json_encode(array('status' => 2));
+
+            }else echo json_encode(array('status' => 0));
+        }else{
+            header('location:'.base_url);
         }
     }
 
@@ -324,7 +324,7 @@ class Cliente_SAController
             $RAL = Utils::sanitizeString($_POST['RAL']);
             $Investigacion_L = Utils::sanitizeString($_POST['Investigacion_L']);
             $Validacion_Licencia = Utils::sanitizeString($_POST['Validacion_Licencia']);
-            $ESE_Visita =  isset($_POST['ESE_Visita']) ? Utils::sanitizeString($_POST['ESE_Visita']) : 0.00;
+            $ESE_Visita =  isset($_POST['ESE_Visita'])? Utils::sanitizeString($_POST['ESE_Visita']):0.00;
             $Paquetes = Utils::sanitizeStringBlank($_POST['Paquetes']);
             $Plazo_Credito = Utils::sanitizeStringBlank($_POST['Plazo_Credito']);
             $Dias_Credito = Utils::sanitizeNumber($_POST['Dias_Credito']);
@@ -358,7 +358,7 @@ class Cliente_SAController
 
                 $save = $cliente->updateCondicionesCliente();
                 if ($save) {
-                    if (($precioRAL != $RAL) || ($precioIL != $Investigacion_L) || ($precioESE != $ESE) || ($precioVL != $Validacion_Licencia) || ($precioESE_Visita != $ESE_Visita) || ($precioESE_SMART != $SMART)) {
+                    if (($precioRAL != $RAL) || ($precioIL != $Investigacion_L) || ($precioESE != $ESE) || ($precioVL != $Validacion_Licencia) || ($precioESE_Visita != $ESE_Visita)|| ($precioESE_SMART != $SMART)) {
                         $email = 'facturacion@rrhhingenia.com';
                         $email1 = 'yadira.villanueva@rrhhingenia.com';
                         $name = 'Marisa Vallejo';
@@ -378,13 +378,13 @@ class Cliente_SAController
                         Utils::sendEmail($email, $name, $subject, $body);
                         Utils::sendEmail($email1, $name1, $subject, $body1);
                     }
-                    $cliente = $cliente->getOne();
-                    $cliente->Validacion_Licencia = number_format($cliente->Validacion_Licencia, 2);
-                    $cliente->RAL = number_format($cliente->RAL, 2);
-                    $cliente->Investigacion_L = number_format($cliente->Investigacion_L, 2);
-                    $cliente->ESE = number_format($cliente->ESE, 2);
-                    $cliente->ESE_Visita = number_format($cliente->ESE_Visita, 2);
-                    $cliente->SMART = number_format($cliente->SMART, 2);
+                	$cliente=$cliente->getOne();
+                    $cliente->Validacion_Licencia=number_format($cliente->Validacion_Licencia, 2);
+                    $cliente->RAL=number_format($cliente->RAL, 2);
+                    $cliente->Investigacion_L=number_format($cliente->Investigacion_L, 2);
+                    $cliente->ESE=number_format($cliente->ESE, 2);
+                    $cliente->ESE_Visita=number_format($cliente->ESE_Visita, 2);
+                    $cliente->SMART=number_format($cliente->SMART, 2);
 
 
                     echo json_encode(
@@ -396,7 +396,7 @@ class Cliente_SAController
                 } else echo json_encode(array('status' => 2));
             } else echo json_encode(array('status' => 0));
         } else {
-            echo json_encode(array('status' => 0));
+           echo json_encode(array('status' => 0));
         }
     }
 
@@ -526,8 +526,8 @@ class Cliente_SAController
             header('location:' . base_url);
         }
     }
-
-
+	
+	
     public function eliminarCliente()
     {
         if (Utils::isValid($_POST) && (Utils::isAdmin())) {
@@ -588,7 +588,6 @@ class Cliente_SAController
                 }
 
                 if ($eliminar == true) {
-
                     $clienteObj = new Clientes();
                     $clienteObj->setCliente($id);
                     $clienteObj->setEliminado_por($_SESSION['identity']->username);
@@ -624,19 +623,6 @@ class Cliente_SAController
             echo json_encode(array('status' => 0));
         }
     }
+
+    
 }
-
-
-
-
-// CREATE TABLE root.[rh_Ventas_Empresas_eliminados](
-// 	[Empresa] [int] IDENTITY(1,1) NOT NULL,
-// 	[Nombre_Empresa] [varchar](100) NOT NULL,
-// 	[Alias] [varchar](100) NOT NULL,
-// 	[Fecha_Entrega] [datetime] NULL,
-// 	[Nuevo_Procedimiento] [int] NOT NULL,
-// 	[Especificaciones] [text] NULL,
-// 	[creado_por] [varchar](30) NULL,
-// 	[eliminado_por] [varchar](50) NULL,
-// 	[Fecha_eliminado]datetime NULL
-// )

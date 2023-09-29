@@ -744,10 +744,22 @@
             <div class="card-header">
               <h3 class="card-title">Especificaciones del proceso</h3>
             </div>
-            <div class="card-body">
+            <div class="card-body h6">
               <h6></h6>
             </div>
             </div>
+				
+				    <div class="card  card-orange" id="especificaciones_Cliente" style="display: none;">
+            <div class="card-header">
+              <h3 class="card-title">Especificaciones del cliente</h3>
+            </div>
+            <div class="card-body h6">
+            </div>
+          </div>
+
+
+				
+				
 			<div class="card" id="Comentarios_Cliente" style="display: none;">
               <div class="card-header">
                 <h3 class="card-title">Comentarios del cliente</h3>
@@ -1497,6 +1509,12 @@
     <b>¿Cuentan con algún familiar dentro de la empresa?</b>
     <p></p>
   </div>
+	
+	  <div class="reingreso" style="display: none;">
+    <b>¿Es reingreso de la empresa?</b>
+    <p></p>
+  </div>
+	
 </template>
 <template id="template-google_search">
   <embed src="" type="application/pdf" width="100%" height="500">

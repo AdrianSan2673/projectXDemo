@@ -1,47 +1,84 @@
 <?php
 require_once 'libraries/fpdf/fpdf.php';
 require_once 'helpers/Resume.php';
+require_once 'helpers/Psicometria.php';
 require_once 'helpers/FormatosCV/CVoperativo.php';
+require_once 'helpers/FormatosCV/CVoperativo1.php';
 require_once 'models/Candidate.php';
 require_once 'models/CandidateExperience.php';
 require_once 'models/CandidateAptitude.php';
 require_once 'models/CandidateLanguage.php';
 require_once 'models/CandidateAdditionalPreparation.php';
 require_once 'models/CandidateEducation.php';
+require_once 'models/CustomerContact.php';
 require_once 'models/User.php';
+require_once 'models/Customer.php';
+require_once 'models/Psychometry.php';
+require_once 'models/User.php';
+require_once 'models/Vacancy.php';
 
+class ResumeController{
+	
+	public function psicometria(){
+		if (true) {
+			  //$id = Encryption::decode($_GET['id']);
+            $psychometry = new Psychometry();
+            $psychometry->setId(218);
+            $psycho = $psychometry->getOne();
+			
+            $pdf = new Psicometria("P", "pt", "Letter");
+ 			$pdf->AliasNbPages();
+            $pdf->AddFont('SinkinSansLight', '', 'SinkinSans-300Light.php');
+            $pdf->AddFont('SinkinSans', '', 'SinkinSans-400Regular.php');
+            $pdf->AddFont('SinkinSans', 'I', 'SinkinSans-400Italic.php');
+            $pdf->AddFont('SinkinSans', 'B', 'SinkinSans-700Bold.php');
+            $pdf->AddFont('SinkinSans', 'BI', 'SinkinSans-700BoldItalic.php');
+            $pdf->AddFont('SinkinSansBold', 'B', 'SinkinSans-800Black.php');
+            $pdf->SetTitle("Psicometria - " . utf8_decode($psycho->candidate), true);
+            $pdf->SetMargins(0, 55, 0, 0);
+            $pdf->tieneHeader = false;
+            $pdf->AddPage();
+			$pdf->setPortada($psycho);
+			$pdf->setInterpretation( $psycho);
+			$pdf->AddPagesFromPDF("./uploads/psychometrics/1.pdf");
 
-class ResumeController
-{
-    public function generate()
-    {
-        if (isset($_SESSION['identity']) || Utils::isCandidate()) {
-
+			$pdf->Output('I', "Psicometria - " . utf8_decode($psycho->candidate) . '.pdf', true);
+		}else{
+			header("location:".base_url);
+		}
+	}
+	
+	
+	public function generate(){
+		if (isset($_SESSION['identity']) || Utils::isCandidate()) {
+            
             if (Utils::isCandidate()) {
                 $id_username = $_SESSION['identity']->id;
                 $candidate = new Candidate();
                 $candidate->setId_user($id_username);
                 $candidato = $candidate->getCandidateByUsername();
                 $id = $candidato->id;
-            } else {
+                
+            }else{
                 $id = Encryption::decode($_GET['id']);
                 $candidate = new Candidate();
                 $candidate->setId($id);
                 $candidato = $candidate->getOne();
             }
 
-            $path = 'uploads/candidate/' . $candidato->id;
+            $path = 'uploads/candidate/'.$candidato->id;
             if (file_exists($path) && !empty($candidato->id)) {
                 $directory = opendir($path);
-
-                while ($file = readdir($directory)) {
-                    if (!is_dir($file)) {
+    
+                while ($file = readdir($directory))
+                {
+                    if (!is_dir($file)){
                         $type = pathinfo($path, PATHINFO_EXTENSION);
-                        $img_content = file_get_contents($path . "/" . $file);
-                        $route = $path . '/' . $file;
+                        $img_content = file_get_contents($path."/".$file);
+                        $route = $path.'/'.$file;
                     }
                 }
-            } else {
+            }else{
                 $route = "dist/img/user-icon.png";
             }
 
@@ -62,46 +99,112 @@ class ResumeController
             $languages = $language->getLanguagesByCandidate();
 
             $apt_lang = array_merge($preparations, $languages);
-
+            
             $pdf = new Resume("P", "pt", "Letter");
             require('./libraries/fpdf/makefont/makefont.php');
-            $pdf->AddFont('SinkinSansLight', '', 'SinkinSans-300Light.php');
-            $pdf->AddFont('SinkinSans', '', 'SinkinSans-400Regular.php');
-            $pdf->AddFont('SinkinSans', 'I', 'SinkinSans-400Italic.php');
-            $pdf->AddFont('SinkinSans', 'B', 'SinkinSans-700Bold.php');
-            $pdf->AddFont('SinkinSans', 'BI', 'SinkinSans-700BoldItalic.php');
+            $pdf->AddFont('SinkinSansLight','', 'SinkinSans-300Light.php');
+            $pdf->AddFont('SinkinSans','', 'SinkinSans-400Regular.php');
+            $pdf->AddFont('SinkinSans','I', 'SinkinSans-400Italic.php');
+            $pdf->AddFont('SinkinSans','B', 'SinkinSans-700Bold.php');
+            $pdf->AddFont('SinkinSans','BI', 'SinkinSans-700BoldItalic.php');
             $pdf->AddFont('IBMPlexSans-Regular', '', 'IBMPlexSans-Regular.php');
             $pdf->AddFont('IBMPlexSans-Light', '', 'IBMPlexSans-Light.php');
             $pdf->AddFont('IBMPlexSans-Bold', 'B', 'IBMPlexSans-Bold.php');
             $pdf->AddFont('IBMPlexSans-Italic', 'I', 'IBMPlexSans-Italic.php');
             $pdf->AddFont('IBMPlexSans-BoldItalic', 'BI', 'IBMPlexSans-BoldItalic.php');
-            $pdf->AddFont('NotoSans-Regular', '', 'NotoSans-Regular.php');
-            $pdf->AddFont('NotoSans-Light', '', 'NotoSans-Light.php');
-            $pdf->AddFont('NotoSans-Bold', 'B', 'NotoSans-Bold.php');
-            $pdf->AddFont('NotoSans-Italic', 'I', 'NotoSans-Italic.php');
-            $pdf->AddFont('NotoSans-BoldItalic', 'BI', 'NotoSans-BoldItalic.php');
-            $pdf->AddFont('Lato-Regular', '', 'Lato-Regular.php');
-            $pdf->AddFont('Lato-Light', '', 'Lato-Light.php');
-            $pdf->AddFont('Lato-Bold', 'B', 'Lato-Bold.php');
-            $pdf->AddFont('Lato-Italic', 'I', 'Lato-Italic.php');
-            $pdf->AddFont('Lato-BoldItalic', 'BI', 'Lato-BoldItalic.php');
-            $pdf->SetTitle("CV_" . $candidato->first_name . '_' . $candidato->surname, true);
-            $pdf->SetFont('Times');
-            $pdf->SetMargins(0, 55, 0, 0);
+            $pdf->AddFont('NotoSans-Regular','', 'NotoSans-Regular.php');
+            $pdf->AddFont('NotoSans-Light','', 'NotoSans-Light.php');
+            $pdf->AddFont('NotoSans-Bold','B', 'NotoSans-Bold.php');
+            $pdf->AddFont('NotoSans-Italic','I', 'NotoSans-Italic.php');
+            $pdf->AddFont('NotoSans-BoldItalic','BI', 'NotoSans-BoldItalic.php');
+            $pdf->AddFont('Lato-Regular','', 'Lato-Regular.php');
+            $pdf->AddFont('Lato-Light','', 'Lato-Light.php');
+            $pdf->AddFont('Lato-Bold','B', 'Lato-Bold.php');
+            $pdf->AddFont('Lato-Italic','I', 'Lato-Italic.php');
+            $pdf->AddFont('Lato-BoldItalic','BI', 'Lato-BoldItalic.php');
+			$pdf->SetTitle("CV_".$candidato->first_name.'_'.$candidato->surname, true);
+			$pdf->SetFont('Times');
+			$pdf->SetMargins(0, 55, 0, 0);
             $pdf->AddPage();
-            $pdf->SetAbout($candidato, $route);
+			$pdf->SetAbout($candidato, $route);
             $pdf->SetExperience($experiences);
             $pdf->SetEducation($candidato, $apt_lang);
             $pdf->setAdditionalPreparation($preparations);
             $pdf->setLanguages($languages);
             $pdf->SetAptitude($aptitudes);
-            $pdf->Output('I', 'CV ' . $candidato->first_name . ' ' . $candidato->surname . ' ' . $candidato->last_name . '.pdf', true);
-        } else {
-            header("location:" . base_url);
+			$pdf->Output('I', 'CV '.$candidato->first_name.' '.$candidato->surname.' '.$candidato->last_name.'.pdf', true);
+		}else{
+			header("location:".base_url);
+		}
+	}
+	
+	  public function CVoperador()
+    {
+        if (isset($_SESSION['identity'])) {
+
+            $id = Encryption::decode($_GET['id']);
+            $candidate = new Candidate();
+            $candidate->setId($id);
+            $candidato = $candidate->getOne();
+
+            $id_vacancy = Encryption::decode($_GET['vacancy']);
+            $vacancy = new Vacancy();
+            $vacancy->setId($id_vacancy);
+            $vacante = $vacancy->getOne();
+        
+            $experience = new CandidateExperience();
+            $experience->setId_candidate($id);
+            $experiences = $experience->getExperiencesByCandidate();
+
+            $user_obj = new User();
+            $user_obj->setId($candidato->created_by);
+            $user = $user_obj->getOne();
+            $user =  $user != false ? $user->first_name . ' ' . $user->last_name : Null;
+
+
+            if ($candidato->date_birth) {
+                $fechaNacimiento = $candidato->date_birth; // La fecha de nacimiento en formato YYYY-MM-DD
+                $fechaNacimiento = new DateTime($fechaNacimiento);
+                $hoy = new DateTime(date('Y-m-d'));
+                $candidato->date_birth  = $fechaNacimiento->diff($hoy)->y;
+            }
+
+
+            $datos = array(
+                'nombre' => $candidato->first_name . ' ' . $candidato->surname . ' ' . $candidato->last_name,
+                'tvacante' => $candidato->job_title,
+                'edad' => $candidato->age != '' || $candidato->age != null ? $candidato->age : $candidato->date_birth,
+                'telefono' => $candidato->cellphone != '' || $candidato->cellphone != null ? $candidato->cellphone : $candidato->telephone,
+                'escolaridad' => $candidato->level . ' ' . $candidato->title,
+                'estadores' => $candidato->state,
+                'telephoneCheck'=>$vacante->telephoneCheck
+            );
+
+
+            $entrevista = array(
+                'comentarios' => $candidato->description,
+                'entrevistador' =>  $user
+            );
+
+
+            $pdf = new CVoperativo("P", "pt", "Letter");
+            $pdf->AddFont('SinkinSans', '', 'SinkinSans-400Regular.php');
+            $pdf->AddFont('SinkinSans', '', 'SinkinSans-300Light.php');
+            $pdf->AddFont('SinkinSans', 'B', 'SinkinSans-700Bold.php');
+            $pdf->AddFont('SinkinSans', 'I', 'SinkinSans-400Italic.php');
+            $pdf->AddFont('SinkinSans', 'BI', 'SinkinSans-700BoldItalic.php');
+            $pdf->SetTitle("CV_" . utf8_decode($candidato->first_name . '_' . $candidato->surname));
+            $pdf->SetFont('Times');
+            $pdf->SetMargins(0, 55, 87, 0);
+            $pdf->AddPage();
+            $pdf->datosGenerales($datos, $entrevista);
+            $pdf->expLaborales($experiences, $entrevista);
+            $pdf->Output('I', "CV_" . $candidato->first_name . '_' . $candidato->surname . '.pdf', true);
+            $pdf->SetTitle("CV_" . $candidato->first_name . '_' . $candidato->surname . '.pdf', true);
         }
     }
-
-    public function CVoperador()
+	
+	 public function CVoperador1()
     {
         $id = Encryption::decode($_GET['id']);
         $candidate = new Candidate();
@@ -133,7 +236,7 @@ class ResumeController
 
 
         if ($candidato->date_birth) {
-            $fechaNacimiento = $candidato->date_birth; // La fecha de nacimiento en formato YYYY-MM-DD
+            $fechaNacimiento = $candidato->date_birth ; // La fecha de nacimiento en formato YYYY-MM-DD
             $fechaNacimiento = new DateTime($fechaNacimiento);
             $hoy = new DateTime(date('Y-m-d'));
             $candidato->date_birth  = $fechaNacimiento->diff($hoy)->y;
@@ -143,7 +246,7 @@ class ResumeController
         $datos = array(
             'nombre' => $candidato->first_name . ' ' . $candidato->surname . ' ' . $candidato->last_name,
             'tvacante' => $candidato->job_title,
-            'edad' => $candidato->age != '' || $candidato->age != null ? $candidato->age : $candidato->date_birth,
+            'edad' => $candidato->age != '' || $candidato->age != null ? $candidato->age : $candidato->date_birth ,
             'telefono' => $candidato->cellphone,
             'escolaridad' => $candidato->level . ' ' . $candidato->title,
             'estadores' => $candidato->state
@@ -156,7 +259,7 @@ class ResumeController
         );
 
 
-        $pdf = new CVoperativo("P", "pt", "Letter");
+       $pdf = new CVoperativo1("P", "pt", "Letter");
         $pdf->AddFont('SinkinSans', '', 'SinkinSans-400Regular.php');
         $pdf->AddFont('SinkinSans', '', 'SinkinSans-300Light.php');
         $pdf->AddFont('SinkinSans', 'B', 'SinkinSans-700Bold.php');
@@ -168,14 +271,12 @@ class ResumeController
         $pdf->AddPage();
         $pdf->datosGenerales($datos, $entrevista);
         $pdf->expLaborales($experiences, $entrevista);
-        $pdf->Output('I', 'Formato Entrevista Reclutamiento.pdf', true);
-        $pdf->SetTitle("CV_" . $candidato->first_name . '_' . $candidato->surname . '.pdf', true);
+        $pdf->Output('I', 'Formato Entrevista Reclutamiento.pdf', true);		  
+        $pdf->SetTitle("CV_" . $candidato->first_name . '_' . $candidato->surname.'.pdf', true);
     }
-
-    public function creator()
-    {
-        if (isset($_POST) && isset($_SESSION['data'])) {
-            $_SESSION['data']->id = 18803;
+    public function creator(){
+		if (isset($_POST) && isset($_SESSION['data'])) {
+			$_SESSION['data']->id = 18803;
             $id = Utils::sanitizeNumber($_SESSION['data']->id);
             $first_name = Utils::sanitizeStringBlank($_POST['first_name']);
             $surname = Utils::sanitizeStringBlank($_POST['surname']);
@@ -216,7 +317,7 @@ class ResumeController
                 $candidate->setId_subarea($id_subarea);
                 $candidate->update();
             }
-
+            
             if (($education_level != $_SESSION['data']->education->id_level) || ($education_institution != $_SESSION['data']->education->institution) || ($education_title != $_SESSION['data']->education->title) || ($education_start_date != $_SESSION['data']->education->start_date) || ($education_end_date != $_SESSION['data']->education->end_date) || ($education_still_studies != $_SESSION['data']->education->still_studies)) {
                 $candidateEducation = new CandidateEducation();
                 $candidateEducation->setId_candidate($id);
@@ -226,7 +327,7 @@ class ResumeController
                 $candidateEducation->setStart_date($education_start_date);
                 $candidateEducation->setEnd_date($education_end_date);
                 $candidateEducation->setStill_studies($education_still_studies);
-
+                
                 $education = $candidateEducation->getOne();
                 if ($education)
                     $candidateEducation->update();
@@ -239,7 +340,7 @@ class ResumeController
             if (isset($_POST['position_experience'])) {
                 foreach ($_POST['position_experience'] as $key => $value) {
                     if (isset($_POST['position_experience'][$key]) && !empty($_POST['position_experience'][$key])) {
-                        $experiences[$key]['item']  = isset($_POST['experience_id'][$key]) ? Utils::sanitizeNumber($_POST['experience_id'][$key]) : 0;
+                        $experiences[$key]['item']  = isset($_POST['experience_id'][$key]) ? Utils::sanitizeNumber($_POST['experience_id'][$key]): 0;
                         $experiences[$key]['id_experience'] = isset($_POST['id_experience'][$key]) ? Utils::sanitizeNumber($_POST['id_experience'][$key]) : (isset(array_column($_SESSION['data']->experiences, 'id_experience')[$key]) ? array_column($_SESSION['data']->experiences, 'id_experience')[$key] : 0);
                         $experiences[$key]['position'] = Utils::sanitizeStringBlank($_POST['position_experience'][$key]);
                         $experiences[$key]['enterprise'] = Utils::sanitizeStringBlank(@$_POST['enterprise_experience'][$key]);
@@ -278,7 +379,7 @@ class ResumeController
                         if ($experiences[$key]['id_experience'] == 0 && !isset(array_column($_SESSION['data']->experiences, 'id_experience')[$key]) && !in_array($experiences[$key]['item'], array_column($_SESSION['data']->experiences, 'experience_id'))) {
                             $candidateExperience->save();
                             $experiences[$key]['id_experience'] = $candidateExperience->getId();
-                        } else {
+                        }else {
                             if (($experiences[$key]['position'] != $_SESSION['data']->experiences[$key]['position']) || ($experiences[$key]['enterprise'] != $_SESSION['data']->experiences[$key]['enterprise']) || ($experiences[$key]['id_city'] != $_SESSION['data']->experiences[$key]['id_city']) || ($experiences[$key]['id_state'] != $_SESSION['data']->experiences[$key]['id_state']) || ($experiences[$key]['start_date'] != $_SESSION['data']->experiences[$key]['start_date']) || ($experiences[$key]['end_date'] != $_SESSION['data']->experiences[$key]['end_date']) || ($experiences[$key]['still_works'] != $_SESSION['data']->experiences[$key]['still_works']) || ($experiences[$key]['review'] != $_SESSION['data']->experiences[$key]['review']) || ($experiences[$key]['activity1'] != $_SESSION['data']->experiences[$key]['activity1']) || ($experiences[$key]['activity2'] != $_SESSION['data']->experiences[$key]['activity2']) || ($experiences[$key]['activity3'] != $_SESSION['data']->experiences[$key]['activity3']) || ($experiences[$key]['activity4'] != $_SESSION['data']->experiences[$key]['activity4'])) {
                                 $candidateExperience->setId($experiences[$key]['id_experience']);
                                 $candidateExperience->update();
@@ -293,7 +394,7 @@ class ResumeController
             if (isset($_POST['preparation_level'])) {
                 foreach ($_POST['preparation_level'] as $key => $value) {
                     if (isset($_POST['preparation_course'][$key]) && !empty($_POST['preparation_course'][$key])) {
-                        $preparations[$key]['item']  = isset($_POST['preparation_id'][$key]) ? Utils::sanitizeNumber($_POST['preparation_id'][$key]) : 0;
+                        $preparations[$key]['item']  = isset($_POST['preparation_id'][$key]) ? Utils::sanitizeNumber($_POST['preparation_id'][$key]): 0;
                         $preparations[$key]['id'] = isset($_POST['id_preparation'][$key]) ? Utils::sanitizeNumber($_POST['id_preparation'][$key]) : (isset(array_column($_SESSION['data']->preparations, 'id_preparation')[$key]) ? array_column($_SESSION['data']->preparations, 'id_preparation')[$key] : 0);
                         $preparations[$key]['id_level'] = Utils::sanitizeNumber(@$_POST['preparation_level'][$key]);
                         $preparations[$key]['course'] = Utils::sanitizeStringBlank(@$_POST['preparation_course'][$key]);
@@ -312,7 +413,7 @@ class ResumeController
                         if ($preparations[$key]['id'] == 0 && !isset(array_column($_SESSION['data']->preparations, 'id_preparation')[$key]) && !in_array($preparations[$key]['item'], array_column($_SESSION['data']->preparations, 'preparation_id'))) {
                             $candidatePreparation->save();
                             $preparations[$key]['id'] = $candidatePreparation->getId();
-                        } else {
+                        }else {
                             if (($preparations[$key]['id_level'] != $_SESSION['data']->preparations[$key]['id_level']) || ($preparations[$key]['course'] != $_SESSION['data']->preparations[$key]['course']) || ($preparations[$key]['institution'] != $_SESSION['data']->preparations[$key]['institution']) || ($preparations[$key]['start_date'] != $_SESSION['data']->preparations[$key]['start_date']) || ($preparations[$key]['end_date'] != $_SESSION['data']->preparations[$key]['end_date'])) {
                                 $candidatePreparation->setId($preparations[$key]['id']);
                                 $candidatePreparation->update();
@@ -326,7 +427,7 @@ class ResumeController
             if (isset($_POST['language'])) {
                 foreach ($_POST['language'] as $key => $value) {
                     if (isset($_POST['language'][$key]) && !empty($_POST['language'][$key])) {
-                        $languages[$key]['item']  = isset($_POST['language_id'][$key]) ? Utils::sanitizeNumber($_POST['language_id'][$key]) : 0;
+                        $languages[$key]['item']  = isset($_POST['language_id'][$key]) ? Utils::sanitizeNumber($_POST['language_id'][$key]): 0;
                         $languages[$key]['id'] = isset($_POST['id_language'][$key]) ? Utils::sanitizeNumber($_POST['id_language'][$key]) : (isset(array_column($_SESSION['data']->languages, 'id')[$key]) ? array_column($_SESSION['data']->languages, 'id')[$key] : 0);
                         $languages[$key]['id_language'] = Utils::sanitizeNumber($_POST['language'][$key]);
                         $languages[$key]['language'] = isset($_POST['language'][$key]) ? Utils::showLanguageById($_POST['language'][$key])->language : '';
@@ -347,12 +448,12 @@ class ResumeController
                         if ($languages[$key]['id'] == 0 && !isset(array_column($_SESSION['data']->languages, 'id')[$key]) && !in_array($languages[$key]['item'], array_column($_SESSION['data']->languages, 'language_id'))) {
                             $candidateLanguage->save();
                             $languages[$key]['id_language'] = $candidateLanguage->getId();
-                        } else {
+                        }else {
                             if (($languages[$key]['id_language'] != $_SESSION['data']->languages[$key]['id_language']) || ($languages[$key]['level'] != $_SESSION['data']->languages[$key]['level']) || ($languages[$key]['institution'] != $_SESSION['data']->languages[$key]['institution']) || ($languages[$key]['start_date'] != $_SESSION['data']->languages[$key]['start_date']) || ($languages[$key]['end_date'] != $_SESSION['data']->languages[$key]['end_date'])) {
                                 $candidateLanguage->setId($languages[$key]['id']);
                                 $candidateLanguage->update();
                             }
-                        }
+                        }    
                     }
                 }
             }
@@ -361,7 +462,7 @@ class ResumeController
             if (isset($_POST['aptitude'])) {
                 foreach ($_POST['aptitude'] as $key => $value) {
                     if ($_POST['aptitude'][$key]) {
-                        $aptitudes[$key]['item']  = isset($_POST['aptitude_id'][$key]) ? Utils::sanitizeNumber($_POST['aptitude_id'][$key]) : 0;
+                        $aptitudes[$key]['item']  = isset($_POST['aptitude_id'][$key]) ? Utils::sanitizeNumber($_POST['aptitude_id'][$key]): 0;
                         $aptitudes[$key]['id'] = isset($_POST['id_aptitude'][$key]) ? Utils::sanitizeNumber($_POST['id_aptitude'][$key]) : (isset(array_column($_SESSION['data']->aptitudes, 'id_aptitude')[$key]) ? array_column($_SESSION['data']->aptitudes, 'id_aptitude')[$key] : 0);
                         $aptitudes[$key]['aptitude'] = Utils::sanitizeStringBlank($_POST['aptitude'][$key]);
                         $aptitudes[$key]['level'] = Utils::sanitizeNumber(@$_POST['aptitude_level'][$key]);
@@ -374,84 +475,85 @@ class ResumeController
                         if ($aptitudes[$key]['id'] == 0 && !isset(array_column($_SESSION['data']->aptitudes, 'id_aptitude')[$key]) && !in_array($aptitudes[$key]['item'], array_column($_SESSION['data']->aptitudes, 'aptitude_id'))) {
                             $candidateAptitude->save();
                             $aptitudes[$key]['id'] = $candidateAptitude->getId();
-                        } else {
+                        }else {
                             if (($aptitudes[$key]['aptitude'] != $_SESSION['data']->aptitudes[$key]['aptitude']) || ($aptitudes[$key]['level'] != $_SESSION['data']->aptitudes[$key]['level'])) {
                                 $candidateAptitude->setId($aptitudes[$key]['id']);
                                 $candidateAptitude->update();
                             }
                         }
                     }
+                        
                 }
             }
 
-            $template = isset($_SESSION['data']->template) ? $_SESSION['data']->template : 'Resume';
+			$template = isset($_SESSION['data']->template) ? $_SESSION['data']->template : 'Resume';
             $candidato = [];
-            $candidato =
-                (object) array(
-                    'id' => $_SESSION['data']->id,
-                    'first_name' => $first_name,
-                    'surname' => $surname,
-                    'last_name' => $last_name,
-                    'date_birth' => $date_birth,
-                    'job_title' => $job_title,
-                    'description' => $description,
-                    'telephone' => $telephone,
-                    'cellphone' => $cellphone,
-                    'email' => $email,
-                    'state' => @Utils::showStateById($id_state)->state,
-                    'city' => @Utils::showCityById($id_city)->city,
-                    'id_state' => @$id_state,
-                    'id_city' => @$id_city,
-                    'id_area' => $id_area,
-                    'id_subarea' => $id_subarea,
-                    'template' => $template,
-                    'education' => (object)
-                    array(
-                        'id_level' => $education_level,
-                        'level' => Utils::showEducationById($education_level)->level,
-                        'institution' => $education_institution,
-                        'title' => $education_title,
-                        'start_date' => $education_start_date,
-                        'end_date' => $education_end_date,
-                        'still_studies' => $education_still_studies
-                    ),
-                    'experiences' => $experiences,
-                    'preparations' => $preparations,
-                    'languages' => $languages,
-                    'aptitudes' => $aptitudes
-                );
-
+            $candidato = 
+                    (object) array(
+                        'id' => $_SESSION['data']->id,
+                        'first_name' => $first_name,
+                        'surname' => $surname,
+                        'last_name' => $last_name,
+                        'date_birth' => $date_birth,
+                        'job_title' => $job_title,
+                        'description' => $description,
+                        'telephone' => $telephone,
+                        'cellphone' => $cellphone,
+                        'email' => $email,
+                        'state' => @Utils::showStateById($id_state)->state,
+                        'city' => @Utils::showCityById($id_city)->city,
+                        'id_state' => @$id_state,
+                        'id_city' => @$id_city,
+                        'id_area' => $id_area,
+                        'id_subarea' => $id_subarea,
+                    	'template' => $template,
+                        'education' => (object) 
+                            array(
+                                'id_level' => $education_level,
+                                'level' => Utils::showEducationById($education_level)->level,
+                                'institution'=> $education_institution,
+                                'title' => $education_title ,
+                                'start_date' => $education_start_date,
+                                'end_date'=>$education_end_date,
+                                'still_studies'=>$education_still_studies
+                            ),
+                        'experiences' => $experiences,
+                        'preparations' => $preparations,
+                        'languages' => $languages,
+                        'aptitudes' => $aptitudes
+                    );
+            
             $_SESSION['data'] = $candidato;
             $route = isset($_SESSION['route']) && !empty($_SESSION['route']) ? Utils::getImage($_SESSION['route'])[0] : "dist/img/user-icon.png";
-            $apt_lang = array_merge($preparations, $languages);
-
+            $apt_lang = array_merge($preparations, $languages);            
+            
             $pdf = new Resume("P", "pt", "Letter");
             require('./libraries/fpdf/makefont/makefont.php');
-            $pdf->AddFont('SinkinSansLight', '', 'SinkinSans-300Light.php');
-            $pdf->AddFont('SinkinSans', '', 'SinkinSans-400Regular.php');
-            $pdf->AddFont('SinkinSans', 'I', 'SinkinSans-400Italic.php');
-            $pdf->AddFont('SinkinSans', 'B', 'SinkinSans-700Bold.php');
-            $pdf->AddFont('SinkinSans', 'BI', 'SinkinSans-700BoldItalic.php');
+            $pdf->AddFont('SinkinSansLight','', 'SinkinSans-300Light.php');
+            $pdf->AddFont('SinkinSans','', 'SinkinSans-400Regular.php');
+            $pdf->AddFont('SinkinSans','I', 'SinkinSans-400Italic.php');
+            $pdf->AddFont('SinkinSans','B', 'SinkinSans-700Bold.php');
+            $pdf->AddFont('SinkinSans','BI', 'SinkinSans-700BoldItalic.php');
             $pdf->AddFont('IBMPlexSans-Regular', '', 'IBMPlexSans-Regular.php');
             $pdf->AddFont('IBMPlexSans-Light', '', 'IBMPlexSans-Light.php');
             $pdf->AddFont('IBMPlexSans-Bold', 'B', 'IBMPlexSans-Bold.php');
             $pdf->AddFont('IBMPlexSans-Italic', 'I', 'IBMPlexSans-Italic.php');
             $pdf->AddFont('IBMPlexSans-BoldItalic', 'BI', 'IBMPlexSans-BoldItalic.php');
-            $pdf->AddFont('NotoSans-Regular', '', 'NotoSans-Regular.php');
-            $pdf->AddFont('NotoSans-Light', '', 'NotoSans-Light.php');
-            $pdf->AddFont('NotoSans-Bold', 'B', 'NotoSans-Bold.php');
-            $pdf->AddFont('NotoSans-Italic', 'I', 'NotoSans-Italic.php');
-            $pdf->AddFont('NotoSans-BoldItalic', 'BI', 'NotoSans-BoldItalic.php');
-            $pdf->AddFont('Lato-Regular', '', 'Lato-Regular.php');
-            $pdf->AddFont('Lato-Light', '', 'Lato-Light.php');
-            $pdf->AddFont('Lato-Bold', 'B', 'Lato-Bold.php');
-            $pdf->AddFont('Lato-Italic', 'I', 'Lato-Italic.php');
-            $pdf->AddFont('Lato-BoldItalic', 'BI', 'Lato-BoldItalic.php');
-            $pdf->SetTitle("CV_" . $candidato->first_name . '_' . $candidato->surname, true);
-            $pdf->SetFont('Times');
-            $pdf->SetMargins(0, 55, 0, 0);
+            $pdf->AddFont('NotoSans-Regular','', 'NotoSans-Regular.php');
+            $pdf->AddFont('NotoSans-Light','', 'NotoSans-Light.php');
+            $pdf->AddFont('NotoSans-Bold','B', 'NotoSans-Bold.php');
+            $pdf->AddFont('NotoSans-Italic','I', 'NotoSans-Italic.php');
+            $pdf->AddFont('NotoSans-BoldItalic','BI', 'NotoSans-BoldItalic.php');
+            $pdf->AddFont('Lato-Regular','', 'Lato-Regular.php');
+            $pdf->AddFont('Lato-Light','', 'Lato-Light.php');
+            $pdf->AddFont('Lato-Bold','B', 'Lato-Bold.php');
+            $pdf->AddFont('Lato-Italic','I', 'Lato-Italic.php');
+            $pdf->AddFont('Lato-BoldItalic','BI', 'Lato-BoldItalic.php');
+			$pdf->SetTitle("CV_".$candidato->first_name.'_'.$candidato->surname, true);
+			$pdf->SetFont('Times');
+			$pdf->SetMargins(0, 55, 0, 0);
             $pdf->AddPage();
-            $pdf->SetAbout($candidato, $route);
+			$pdf->SetAbout($candidato, $route);
             $pdf->SetExperience($experiences);
             $pdf->SetEducation($candidato->education, $apt_lang);
             $pdf->setAdditionalPreparation($preparations);
@@ -459,16 +561,16 @@ class ResumeController
             $pdf->SetAptitude($aptitudes);
             $pdfData = $pdf->Output('S');
             echo base64_encode($pdfData);
-        } else {
-            header("location:" . base_url);
-        }
-    }
+		}else{
+			header("location:".base_url);
+		}
+	}
 
-    public function selectTemplate()
-    {
+    public function selectTemplate() {
         if (isset($_POST) && isset($_SESSION['data'])) {
             $template = isset($_POST['template']) ? $_POST['template'] : 'Resume';
             $_SESSION['data']->template = $template;
         }
     }
+	
 }

@@ -287,7 +287,6 @@ class Candidate
 		return $fetch;
 	}
 
-	//GABO 26 SEPTIEMBIRE
 	public function getOne()
 	{
 		$id = $this->getId();
@@ -394,7 +393,7 @@ FROM candidates c LEFT JOIN candidate_experience cexp ON c.id=cexp.id_candidate 
 		$candidates = $stmt->fetchAll();
 		return $candidates;
 	}
-	// gabo 26 SEPTIEMBRE
+	// gabo activar
 	public function getCandidatesByApplicationStatus2(Vacancy $vacancy, $id_status)
 	{
 		$id_vacancy = $vacancy->getId();
@@ -683,8 +682,6 @@ FROM candidates c LEFT JOIN candidate_experience cexp ON c.id=cexp.id_candidate 
 	//========================================================
 
 	//======================[Gabo Marzo 28 Perfil Postulado]===============
-
-	//GABO 26 SEPT
 	public function getOneFull()
 	{
 		$id = $this->getId();

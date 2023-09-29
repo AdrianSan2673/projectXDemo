@@ -78,7 +78,6 @@ class Candidatedirectory {
                     if (json_app.status == 0) {
                         utils.showToast('Ocurrio un error', 'success');
                     } else if (json_app.status == 1) {
-                        console.log(json_app.candidate.status);
                         form.querySelector('[name="id"]').value = json_app.candidate.id
                         form.querySelector('[name="first_name"]').value = json_app.candidate.first_name
                         form.querySelector('[name="surname"]').value = json_app.candidate.surname
@@ -131,13 +130,13 @@ class Candidatedirectory {
     }
 
 
-    delete(id) {
+    delete(id, id_vacancy) {
         fetch('../CandidatoDirectorio/delete', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/x-www-form-urlencoded'
                 },
-                body: 'id=' + id
+                body: 'id=' + id + '&' + 'id_vacancy=' + id_vacancy
             })
             .then(response => {
                 if (response.ok) {

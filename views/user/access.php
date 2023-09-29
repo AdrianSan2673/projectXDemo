@@ -159,6 +159,7 @@
                         </tr>`;
                     });
                     document.querySelector('#modal_permission table tbody').innerHTML = accesos;
+					$('#modal_permission').modal('hide');
                   }else {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                   }

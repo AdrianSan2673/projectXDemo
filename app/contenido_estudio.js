@@ -300,6 +300,10 @@ class ContenidoEstudio{
                     document.querySelectorAll('#content_botones a')[4].style.display = "block";
                 }
             }
+			if ((data.Servicio_Solicitado == 'ESE SMART') && (data.Servicio == 299 || data.Servicio == 300) && data.Fecha_Entregado_ESE == null && (data.Estado == 250 || data.Estado == 251)) {
+                this.template_botones_estatus.querySelectorAll('.btn-group')[2].style.display = 'block';
+                document.querySelectorAll('#content_botones a')[1].style.display = "block";
+            }
 
 			if (data.Estado == 250 || data.Estado == 251) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[10].style.display = 'block';
@@ -470,8 +474,13 @@ class ContenidoEstudio{
         }
         
   	     if (data.Especificaciones != '' && data.Especificaciones != null) {
-             document.querySelector('#especificaciones_Empresa h6').textContent = data.Especificaciones;
+             document.querySelector('#especificaciones_Empresa .card-body').innerHTML = data.Especificaciones;
              document.querySelector('#especificaciones_Empresa').style.display = display.SA;
+         }
+		
+		     if (data.Especificacion_cliente != '' && data.Especificacion_cliente != null) {
+             document.querySelector('#especificaciones_Cliente .card-body').innerHTML = data.Especificacion_cliente;
+             document.querySelector('#especificaciones_Cliente').style.display = display.SA;
          }
 		
         if (data.Comentario_Cancelado != '' || data.Comentario_Cliente != '') {
@@ -516,7 +525,6 @@ class ContenidoEstudio{
 
         this.content_ral.innerHTML = '';
         this.content_ral.appendChild(this.fragment_ral);
-        console.log(data && display.Account);
 
         //document.querySelectorAll('#content_botones a')[1].style.display = data && (display.Account == 'block')? 'block' : 'none';
     }
@@ -827,7 +835,7 @@ class ContenidoEstudio{
         this.template_datos_generales.querySelectorAll('p')[10].textContent = data.IMSS;
         this.template_datos_generales.querySelectorAll('p')[11].textContent = data.RFC;
 		
- 	  if (data.ID_Empresa==413) {
+ 	  if (data.ID_Empresa==413|| data.ID_Empresa==480) {
             this.template_datos_generales.querySelectorAll('b')[12].style.display='block'
             this.template_datos_generales.querySelectorAll('p')[12].textContent = data.Numero_Licencia;
         }
@@ -1131,10 +1139,16 @@ class ContenidoEstudio{
             document.querySelector('#modal_investigacion .preguntas-operador').style.display = 'block';
         }
 
-		  if (Empresa == 523) {//Dalton
+		  if (Empresa == 523||Empresa == 561||Empresa == 573) {//Dalton,Actinver
             this.template_investigacion.querySelector('.trabajo-dalton').style.display = 'block';
             document.querySelector('#modal_investigacion .trabajo-dalton').style.display = 'block';
             document.querySelector('#modal_investigacion [name="Familiar_Empresa"]').required=true
+        }
+		
+		  if (Empresa == 573) {//Actinver
+            this.template_investigacion.querySelector('.reingreso').style.display = 'block';
+            document.querySelector('#modal_investigacion .reingreso').style.display = 'block';
+            document.querySelector('#modal_investigacion [name="Reingreso"]').required=true
         }
 		
         this.template_investigacion.querySelectorAll('p')[6].textContent = data.Sindicalizado == 1 ? 'Sí' : ( data.Sindicalizado == 0 ? 'No' : '');
@@ -1152,6 +1166,8 @@ class ContenidoEstudio{
         this.template_investigacion.querySelectorAll('p')[17].textContent = data.Accidentes_Empresa;
         this.template_investigacion.querySelectorAll('p')[18].textContent = data.Abandono_Unidad;
 		this.template_investigacion.querySelectorAll('p')[19].textContent = data.Familiar_Empresa;
+	this.template_investigacion.querySelectorAll('p')[20].textContent = data.Reingreso;
+
         const clone_investigacion = this.template_investigacion.cloneNode(true);
         this.fragment_investigacion.appendChild(clone_investigacion);
 
@@ -1163,7 +1179,7 @@ class ContenidoEstudio{
 		this.content_google_search.innerHTML = '';
         if (pdf != 0) {
             //const fileURL = URL.createObjectURL(pdf);
-            console.log(this.template_google_search.querySelector('embed').setAttribute('src', pdf));
+            //console.log(this.template_google_search.querySelector('embed').setAttribute('src', pdf));
 			
             const clone_google_search = this.template_google_search.cloneNode(true);
             this.fragment_google_search.appendChild(clone_google_search);
@@ -1218,8 +1234,10 @@ class ContenidoEstudio{
         this.template_comentarios_generales_inv.querySelectorAll('p')[1].innerText = observaciones.Viable == 0 ? 'Viable' : (observaciones.Viable == 1 ? 'No viable' : (observaciones.Viable == 2 ? 'Viable con reservas' : (observaciones.Viable == 4 ? 'Sin viabilidad' : (observaciones.Viable == 5 ? 'Viable con observaciones' : ''))));
 		
 		if (candidato.Servicio_Solicitado == 'ESE SMART') {
-            this.template_comentarios_generales_inv.querySelectorAll('p')[0].style.display = 'none';
-            this.template_comentarios_generales_inv.querySelectorAll('b')[0].style.display = 'none';
+			  if (observaciones.Comentario_General_il== '' ) {    
+                this.template_comentarios_generales_inv.querySelectorAll('p')[0].style.display = 'none';
+                this.template_comentarios_generales_inv.querySelectorAll('b')[0].style.display = 'none';
+            }
 			let tabla = this.template_comentarios_generales_inv.querySelectorAll('table')[1];
             tabla.style.display = '';
 			if (observaciones.Proporciona_Contacto == 1){
@@ -1502,7 +1520,6 @@ class ContenidoEstudio{
         this.template_ubicacion.querySelectorAll('p')[21].textContent = candidato.Comentario_Vivienda;
         this.template_ubicacion.querySelectorAll('p')[22].textContent = ubicacion.Maps;
 		
-		console.log(candidato.Servicio_Solicitado);
 		if (candidato.Servicio_Solicitado == 'ESE SMART') {
             this.template_ubicacion.querySelectorAll('b')[12].style.display = 'none';
             this.template_ubicacion.querySelectorAll('p')[12].style.display = 'none';

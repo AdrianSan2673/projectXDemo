@@ -177,7 +177,7 @@ class Applicant {
                         let cities = '';
                         cities += `<option value=""></option>`
                         for (let i in json_app.vacantes) {
-                            cities += `<option value="${json_app.vacantes[i].id}">${json_app.vacantes[i].id} - ${json_app.vacantes[i].vacancy}</option>`
+                            cities += `<option value="${json_app.vacantes[i].id}">${json_app.vacantes[i].id} - ${json_app.vacantes[i].vacancy}-${json_app.vacantes[i].customer}-${json_app.vacantes[i].status}</option>`
                         }
                         document.getElementById("id_vacancy_v").innerHTML = cities;
 

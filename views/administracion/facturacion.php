@@ -194,8 +194,8 @@
                   <?php foreach($servicios as $servicio): ?>
                       <tr> 
                         <?php 
-                        if ($servicio['Solicitud_De'] > 0)
-                          $Color_Solicitud_De = 'bg-orange';
+                        if ($servicio['Repetidos'] > 1)
+                          $Color_Solicitud_De = 'bg-danger';
                         else
                           $Color_Solicitud_De = '';
                          

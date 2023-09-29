@@ -41,4 +41,3 @@
     </section>
 </div>
 <script src="<?= base_url ?>app/area.js?v=<?= rand() ?>"></script>
-<!-- <script src="<?= base_url ?>app/subarea.js?v=<?= rand() ?>"></script> -->

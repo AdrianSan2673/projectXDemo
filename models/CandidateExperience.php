@@ -200,7 +200,7 @@ class CandidateExperience
 	}
 
 	// ===[ 31 mayo gabo review fin]=== 
-	//21 sept
+
 	public function getExperiencesByCandidate()
 	{
 		$candidate = $this->getId_candidate();
@@ -253,9 +253,9 @@ class CandidateExperience
 		$flag = $stmt->execute();
 
 		if ($flag) {
-			$result = true;
-			$this->setId($this->db->lastInsertId());
-		}
+            $result = true;
+            $this->setId($this->db->lastInsertId());
+        }
 		return $result;
 	}
 	// ===[ 31 mayo gabo review fin]=== 

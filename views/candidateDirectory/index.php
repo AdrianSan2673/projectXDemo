@@ -31,12 +31,29 @@
                     </div>
                 </div>
 
-
                 <div class="row pt-3 pb-3">
                     <div class="col-sm-12 ml-auto">
                         <p class="h5">Aquí podrás agregar tus contactos de candidatos para incluirlos en futuras entrevistas. Esta funcionalidad te permite ingresar los datos de contacto de personas que deseas considerar para posibles entrevistas en el futuro.</p>
                     </div>
                 </div>
+
+                <form method="post" action="<?= base_url . "CandidatoDirectorio/index" ?>">
+                    <div class="row " <?= !Utils::isCustomer() || !Utils::isCustomerSA() ? '' : 'hidden' ?>>
+                        <div class="col-6 mx-auto">
+                            <select name="vacancy" id="search" class="form-control select2">
+                                <option value="0" selected>Sin filtro</option>
+                                <?php foreach ($vacancies as $vacancy) : ?>
+                                    <option value="<?= $vacancy['id'] ?>" <?= isset($_POST['vacancy']) && $_POST['vacancy'] == $vacancy['id'] ? 'selected' : '' ?>><?= $vacancy['customer'] . ' / ' . $vacancy['vacancy'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="col-3">
+                            <button type="submit" class="btn btn-app btn-block btn-info form-control" style="background-color: #17a2b8; color: #fff;"><i class="fas fa-search"></i>Buscar</button>
+                        </div>
+                    </div>
+                </form>
+
 
                 <table id="tb_candidates" class="table table-responsive table-striped table-sm" style="display: none;">
                     <thead>
@@ -49,8 +66,8 @@
                             <th class="filterhead"></th>
                             <?= !Utils::isCustomer() ? '<th class="filterhead"></th>' : '' ?>
                             <th class="filterhead"></th>
-                            <th></th>
                             <?= !Utils::isCustomer() ? '<th class="filterhead"></th>' : '' ?>
+                            <th></th>
                             <th></th>
                         </tr>
                         <tr>
@@ -94,7 +111,7 @@
                                             <i class="fas fa-user-plus"></i> Agregar
                                         </a>
 
-                                        <button class="btn btn-danger " data-id="<?= $candidate['id'] ?>" <?= $candidate['hidden'] ?>>
+                                        <button class="btn btn-danger " data-id="<?= $candidate['id'] ?>" value="<?= $id_vacancy ?>" <?= $candidate['hidden'] ?>>
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -131,6 +148,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', e => {
         let table = document.querySelector('#tb_candidates');
+
         table.style.display = "table";
         utils.dtTable(table, true);
 
@@ -187,6 +205,8 @@
                 }).then((result) => {
                     if (result.value == true) {
 
+                        console.log(e.target.value);
+
                         //Eliminar
                         let ID;
                         if (e.target.classList.contains('btn-danger'))
@@ -195,7 +215,7 @@
                             ID = e.target.offsetParent.dataset.id;
 
                         let candidatedirectory = new Candidatedirectory();
-                        candidatedirectory.delete(ID);
+                        candidatedirectory.delete(ID, e.target.value);
 
                     }
                 })
