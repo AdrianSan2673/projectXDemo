@@ -25,6 +25,7 @@ class CandidatoController
             $candidate = new Candidate();
             $total = $candidate->getTotal();
 
+
             $page_title = 'Candidatos | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
@@ -332,13 +333,21 @@ class CandidatoController
             $enterpise_experience = isset($_POST['enterprise_experience']) ?  $_POST['enterprise_experience'] : null;
             $review_experience = isset($_POST['review_experience']) ?  $_POST['review_experience'] : null;
 
+
             //===[gabo 1 agosto  operativa]==      
             $isCandidate = false;
             $vacancy = new Vacancy();
             $vacancy->setId($id_vacancy);
             $vacante = $vacancy->getOne();
 
-            if (isset($vacante) && ($vacante->type != "1" && $vacante->type != "4")) {
+            if (isset($vacante) && isset($vacante->type) && ($vacante->type != "1" && $vacante->type != "4")) {
+                if ($date_birth < '1950-01-01') {
+                    echo json_encode(array('status' => 6));
+                    die();
+                }
+            }
+
+            if (!$id_vacancy) {
                 if ($date_birth < '1950-01-01') {
                     echo json_encode(array('status' => 6));
                     die();
@@ -370,6 +379,10 @@ class CandidatoController
                         die();
                     }
                 }
+            }
+
+            if (isset($_POST['directory'])) {
+                $id_vacancy = false;
             }
 
 
@@ -642,7 +655,7 @@ class CandidatoController
             $resume = isset($_FILES['resume']) && $_FILES['resume']['name'] != '' ? $_FILES['resume'] : FALSE;
             $email = Utils::isCandidate() ? $_SESSION['identity']->email : $email;
 
-            if ($first_name && $surname && $last_name && $id_level && $job_title && $email && $id_state && $id_city && $id_area && $id_subarea) {
+            if ($first_name && $surname && $last_name && $id_level && $job_title  && $id_state && $id_city && $id_area && $id_subarea) {
                 $candidate = new Candidate();
                 $candidate->setId($id);
                 $candidate->setFirst_name($first_name);
@@ -937,6 +950,7 @@ class CandidatoController
 
     public function editar()
     {
+
         if (isset($_SESSION['identity']) && $_SESSION['identity'] != FALSE) {
             if (isset($_GET['id']) || Utils::isCandidate()) {
 
@@ -990,6 +1004,12 @@ class CandidatoController
                 $language = new CandidateLanguage();
                 $language->setId_candidate($id);
                 $languages = $language->getLanguagesByCandidate();
+
+
+                //gabo 27 sept
+                $vacante = new VacancyApplicant();
+                $vacante->setId_candidate($id);
+                $vacante = $vacante->getVacanciesTypeOperativaByCandidate();
 
                 $page_title = $candidato->first_name . ' ' . $candidato->surname . ' | RRHH Ingenia';
                 require_once 'views/layout/header.php';

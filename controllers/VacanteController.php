@@ -121,6 +121,8 @@ class VacanteController
 
     public function en_proceso()
     {
+
+
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSenior() || Utils::isJunior() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isCustomer() || Utils::isCandidate() || Utils::isRecruitmentManager()) {
             if (Utils::isCandidate()) {
                 header('location:' . base_url . 'bolsa/vacantes');
@@ -253,7 +255,7 @@ class VacanteController
             $advance_payment = isset($_POST['advance_payment']) ?  Utils::sanitizeStringBlank($_POST['advance_payment']) : null;
             $payment_amount = isset($_POST['payment_amount']) ?  Utils::sanitizeStringBlank($_POST['payment_amount']) : null;
             $experience_type = isset($_POST['experience_type']) ?  Utils::sanitizeStringBlank($_POST['experience_type']) : 'Años';
- $recruitment_service_cost = isset($_POST['recruitment_service_cost']) ? Utils::sanitizeNumber($_POST['recruitment_service_cost']) : 0;
+            $recruitment_service_cost = isset($_POST['recruitment_service_cost']) ? Utils::sanitizeNumber($_POST['recruitment_service_cost']) : 0;
 
             $how_many_interviews = isset($_POST['how_many_interviews']) ? trim($_POST['how_many_interviews']) : NULL;
             $accept_reentry = isset($_POST['accept_reentry']) ? trim($_POST['accept_reentry']) : NULL;
@@ -264,12 +266,13 @@ class VacanteController
             $comments = isset($_POST['comments']) ? trim($_POST['comments']) : NULL;
             // gabo 17 abril quitar a ventas
             $type =  isset($_POST['type']) ?  Utils::sanitizeNumber($_POST['type'])  : NULL;
-           $warranty_time = isset($_POST['warranty_time']) ? Utils::sanitizeNumber($_POST['warranty_time']) : null;
+            $warranty_time = isset($_POST['warranty_time']) ? Utils::sanitizeNumber($_POST['warranty_time']) : null;
             $amount_to_invoice = isset($_POST['amount_to_invoice']) ? Utils::sanitizeString($_POST['amount_to_invoice']) : null;
             $authorization_date = isset($_POST['authorization_date']) ? Utils::sanitizeString($_POST['authorization_date']) : null;
             $commitment_date = isset($_POST['commitment_date']) ? Utils::sanitizeString($_POST['commitment_date']) : null;
 
 
+            $telephone = isset($_POST['telephone']) ? 0 : 1;
 
             // gabo 17 abril quitar a ventas
             if ($customer && $vacancy && $working_day && $department && $education_level && $position_number && $age_min && $age_max && $gender && $civil_status && $salary_min && $salary_max && $workdays && $schedule && $state && $city  && $area && $subarea) {
@@ -323,6 +326,8 @@ class VacanteController
                 $vacante->setExperience_type($experience_type);
                 $vacante->setRecruitment_service_cost($recruitment_service_cost);
 
+                $vacante->setTelephone($telephone);
+
                 $save = $vacante->save();
 
                 if ($save) {
@@ -350,11 +355,11 @@ class VacanteController
                             $ejecutivo = '<br>El ejecutivo que la atenderá será <b>' . $executive->first_name . ' ' . $executive->last_name . '</b>';
                             $body = "{$body} {$ejecutivo}";
 
-                            Utils::sendEmail($executive->email, $executive->first_name . ' ' . $executive->last_name, $subject, $body);
+                            //    Utils::sendEmail($executive->email, $executive->first_name . ' ' . $executive->last_name, $subject, $body);
                         }
                         echo 1; //if everything is ok, returns 1
-                        Utils::sendEmail('cindy.luna@rrhhingenia.com', 'Cindy Luna', $subject, $body);
-                        Utils::sendEmail('iveth.gomez@rrhhingenia.com', 'Iveth Gómez', $subject, $body);
+                        // Utils::sendEmail('cindy.luna@rrhhingenia.com', 'Cindy Luna', $subject, $body);
+                        //  Utils::sendEmail('iveth.gomez@rrhhingenia.com', 'Iveth Gómez', $subject, $body);
                     }
                 } else {
                     echo 2;
@@ -399,7 +404,7 @@ class VacanteController
                         break;
                 }
 
-				
+
                 $page_title = $vacante->vacancy . ' | RRHH Ingenia';
 
                 require_once 'views/layout/header.php';
@@ -443,6 +448,8 @@ class VacanteController
 
     public function update()
     {
+
+
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSenior() || Utils::isJunior() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isCustomer() || Utils::isRecruitmentManager()) {
             $id = isset($_POST['id']) ? trim(Encryption::decode($_POST['id'])) : FALSE;
             $customer = isset($_POST['customer']) ? trim($_POST['customer']) : FALSE;
@@ -497,6 +504,9 @@ class VacanteController
             $authorization_date = isset($_POST['authorization_date']) ? Utils::sanitizeString($_POST['authorization_date']) : null;
             $commitment_date = isset($_POST['commitment_date']) ? Utils::sanitizeString($_POST['commitment_date']) : null;
 
+            $telephone = isset($_POST['telephone']) ? 0 : 1;
+
+
             if ($customer && $vacancy && $department && $education_level && $position_number && $age_min && $age_max && $gender && $civil_status && $salary_min && $salary_max && $workdays && $schedule && $state && $city  && $area && $subarea) {
                 $authorization_date = $authorization_date ? date_format(date_create($authorization_date), 'Y-m-d H:i') : NULL;
                 $vacante = new Vacancy();
@@ -544,6 +554,8 @@ class VacanteController
                 $vacante->setPayment_amount($payment_amount);
                 $vacante->setExperience_type($experience_type);
                 $vacante->setRecruitment_service_cost($recruitment_service_cost);
+
+                $vacante->setTelephone($telephone);
 
                 //$vacante->setCreated_by($_SESSION['identity']->id);
                 //$vacante->setId_status(1);
@@ -1031,7 +1043,7 @@ class VacanteController
             echo json_encode(array('status' => 0));
     }
     //==========================================================
-  //======================[Gabo Junio 02 Entregable]=======
+    //======================[Gabo Junio 02 Entregable]=======
 
     public function entregableVacante()
     {
@@ -1064,7 +1076,7 @@ class VacanteController
         }
     }
     //==========================================================
- public function getVacancySateCity()
+    public function getVacancySateCity()
     {
         if (Utils::isValid($_SESSION['identity'])) {
             $id_vacancy = isset($_POST['id_vacancy']) ? trim($_POST['id_vacancy']) : FALSE;
@@ -1089,7 +1101,6 @@ class VacanteController
 
 
                 echo json_encode(array('status' => 1, 'vacancy_data' => $vacancy_data, 'State' => $State, 'City' => $City));
-
             } else {
                 echo json_encode(array('status' => 0));
             }

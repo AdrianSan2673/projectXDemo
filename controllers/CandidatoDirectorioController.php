@@ -27,8 +27,8 @@ class CandidatoDirectorioController
     public function save()
     {
         if (Utils::isAdmin()  || Utils::isSenior() || Utils::isJunior() || Utils::isRecruitmentManager() || Utils::isCustomer() && $_POST) {
-            $flag = $_POST['flag'];
-            $id = Encryption::decode($_POST['id']);
+            $flag =  isset($_POST['flag']) ? $_POST['flag'] : 1;   // cuando no hay flag se asigna 1 para que entre cuando se agregue desde crear candidato
+            $id = isset($_POST['id']) ?  Encryption::decode($_POST['id']) : NULL;
             $first_name =  isset($_POST['first_name']) ? Utils::sanitizeStringBlank($_POST['first_name']) : NULL;
             $surname =  isset($_POST['surname']) ? Utils::sanitizeStringBlank($_POST['surname']) : NULL;
             $last_name =  isset($_POST['last_name']) ? Utils::sanitizeStringBlank($_POST['last_name']) : NULL;
@@ -42,6 +42,24 @@ class CandidatoDirectorioController
             $url = isset($_POST['url']) ? Utils::sanitizeStringBlank($_POST['url']) : Null;
             $comment = isset($_POST['comment']) ? Utils::sanitizeStringBlank($_POST['comment']) : Null;
             $status = isset($_POST['status']) ? Utils::sanitizeStringBlank($_POST['status']) : Null;
+
+
+            //   $experience = isset($_POST['job_title']) ? Utils::sanitizeStringBlank($_POST['job_title']) : false;
+
+
+
+            if (isset($_POST['bandera'])) {
+                $experience = isset($_POST['job_title']) ? Utils::sanitizeStringBlank($_POST['job_title']) : false;
+
+                if ($experience) {
+
+                    echo json_encode(array('status' => 0));
+                    die();
+                }
+            }
+
+            // var_dump("hola");
+            // die();
 
             if (($flag == 1 || $flag == 2) && $first_name && $surname && $last_name && $telephone  && $id_state) {
                 if (Utils::isCustomer()) {
@@ -176,30 +194,30 @@ class CandidatoDirectorioController
             $candidate['id_city'] = $candidate['id_city'] == null ? 'Sin verificar' : $candidate['city'];
             $candidate['comment'] = $candidate['comment'] == null || $candidate['comment'] == '' ? '' : $candidate['comment'];
             $candidate['modified_at'] = Utils::getFullDate12($candidate['modified_at']);
-            
-            $candidate['hidden_ver'] = $candidate['id_candidate'] == null || $candidate['id_candidate'] == '' ? ' hidden' : ''; 
+
+            $candidate['hidden_ver'] = $candidate['id_candidate'] == null || $candidate['id_candidate'] == '' ? ' hidden' : '';
             $candidate['hidden'] = $candidate['id_candidate'] == null || $candidate['id_candidate'] == '' ? ' ' : 'hidden';
 
-            $candidate['url_ver']=base_url.'candidato/ver&id='.$candidate['id_candidate'];
-            $candidate['url_crear']=base_url.'candidato/crear&id='.$candidate['id_vacancy'].'&contact='.$candidate['id'];
+            $candidate['url_ver'] = base_url . 'candidato/ver&id=' . $candidate['id_candidate'];
+            $candidate['url_crear'] = base_url . 'candidato/crear&id=' . $candidate['id_vacancy'] . '&contact=' . $candidate['id'];
 
             switch ($candidate['status']) {
-                case 1://nuevo
+                case 1: //nuevo
                     $candidate['color'] = '';
                     break;
-                case 2://Por contactar
+                case 2: //Por contactar
                     $candidate['color'] = 'bg-warning';
                     break;
-                case 3://Contactado
+                case 3: //Contactado
                     $candidate['color'] = 'bg-success';
                     break;
-                case 4://Pendiente
+                case 4: //Pendiente
                     $candidate['color'] = 'bg-orange';
                     break;
-                case 5://No recomendado
+                case 5: //No recomendado
                     $candidate['color'] = 'bg-danger';
                     break;
-                case 6://Postulado
+                case 6: //Postulado
                     $candidate['color'] = 'bg-info';
                     break;
                 default:

@@ -188,12 +188,23 @@ class Candidate {
 	}
 
 	create() {
+
+
+
 		document.querySelector("#candidate-form #candidate_submit").disabled = true;
 		var form = document.querySelector("#candidate-form");
 		var formData = new FormData(form);
 		if (document.querySelector("#avatar").value.length > 0) {
 			this.avatar = document.querySelector("#candidate-form #preview").toDataURL("image/png");
 			formData.append('avatar', this.avatar);
+		}
+
+		if (document.querySelector("#bandera")) {
+			document.querySelector("#directory").disabled = true;
+			if (document.querySelector("#bandera").value == 1) {
+				document.querySelector("#directory").disabled = true;
+				formData.append('directory', document.querySelector("#bandera").value);
+			}
 		}
 
 		fetch('./new', {
@@ -224,15 +235,20 @@ class Candidate {
 							setTimeout(() => {
 								window.history.back();
 							}, 3000);
+						} if (json_app.id_vacancy == false) {
+							utils.showToast('Informacion registrada exitosamente', 'success');
+							setTimeout(() => {
+								window.history.back();
+							}, 3000);
 						} else {
 							utils.showToast('Candidato creado exitosamente', 'success');
 							setTimeout(() => {
 								window.location.href = `./profile&id_vacancy=${json_app.id_vacancy}&id_candidate=${json_app.id_candidate}`;
 							}, 3000);
-							gabo
-							document.querySelector("#candidate-form #candidate_submit").disabled = false;
+
 
 						}
+
 					} else if (json_app.status == 2) {
 						utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
@@ -300,7 +316,8 @@ class Candidate {
 		this.start_date_additional = document.querySelector("#candidate-form #start_date_additional").value;
 		this.end_date_additional = document.querySelector("#candidate-form #end_date_additional").value; */
 
-		if (this.id.length > 0 && this.first_name.length > 0 && this.surname.length > 0 && this.last_name.length > 0 && this.id_level.length > 0 && this.job_title.length > 0 && this.telephone.length > 0 && this.cellphone.length > 0 && this.email.length > 0 && this.id_state.length > 0 && this.id_city.length > 0 && this.id_area.length > 0 && this.id_subarea.length > 0) {
+		//aqui
+		if (this.id.length > 0 && this.first_name.length > 0 && this.surname.length > 0 && this.last_name.length > 0 && this.id_level.length > 0 && this.job_title.length > 0 && this.telephone.length > 0 && this.id_state.length > 0 && this.id_city.length > 0 && this.id_area.length > 0 && this.id_subarea.length > 0) {
 			/* let data = `id=${this.id}&first_name=${this.first_name}&surname=${this.surname}&last_name=${this.last_name}&date_birth=${this.date_birth}&id_gender=${this.id_gender}&id_civil_status=${this.id_civil_status}&job_title=${this.job_title}&description=${this.description}&telephone=${this.telephone}&cellphone=${this.cellphone}&email=${this.email}&id_state=${this.id_state}&id_city=${this.id_city}&linkedinn=${this.linkedinn}&facebook=${this.facebook}&instagram=${this.instagram}${data_avatar}`; */
 			var form = document.querySelector("#candidate-form");
 			var formData = new FormData(form);

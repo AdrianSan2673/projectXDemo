@@ -579,4 +579,18 @@ class VacancyApplicant
 		$fetch = $stmt->fetchObject();
 		return $fetch;
 	}
+	//gabo 27
+	public function getVacanciesTypeOperativaByCandidate()
+	{
+
+		$id_candidate = $this->getId_candidate();
+		$stmt = $this->db->prepare("select * from candidates c INNER JOIN vacancy_applicants va ON va.id_candidate=c.id INNER JOIN vacancies 
+		v ON va.id_vacancy=v.id where v.type=1 and va.id_candidate=:id_candidate");
+
+		$stmt->bindParam(":id_candidate", $id_candidate, PDO::PARAM_INT);
+		$stmt->execute();
+
+		$fetch = $stmt->fetchObject();
+		return $fetch;
+	}
 }
