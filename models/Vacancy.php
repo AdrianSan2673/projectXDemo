@@ -63,6 +63,8 @@ class Vacancy
 
     private $telephone;
 
+    private $notes;
+
     public function __construct()
     {
         $this->db = Connection::connect();
@@ -629,6 +631,17 @@ class Vacancy
         $this->recruitment_service_cost = $recruitment_service_cost;
     }
 
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+    }
+
+
 
 
     public function getTelephone()
@@ -641,11 +654,11 @@ class Vacancy
         $this->telephone = $telephone;
     }
 
-    //gabo 28
+    //gabo 29
     public function getOne()
     {
         $id = $this->getId();
-        $stmt = $this->db->prepare("SELECT *,v.telephone as telephoneCheck, v.id AS id_vacancy, vs.status AS vacancy_status, CONCAT(u.first_name, ' ', u.last_name) AS recruiter, u.email AS recruiter_email, CONCAT(cc.first_name, ' ', cc.last_name) AS customer_contact, business_name, cc.email AS customer_contact_email, c.id AS id_customer, (SELECT SUM(CASE WHEN va.id_status >= 3 THEN 1 ELSE 0 END) FROM vacancy_applicants va WHERE va.id_vacancy=v.id) AS n_sent FROM vacancies v INNER JOIN vacancy_status vs ON v.id_status=vs.id INNER JOIN customers c ON v.id_customer=c.id LEFT JOIN customers_contacts cc ON v.id_customer_contact=cc.id INNER JOIN states s ON v.id_state=s.id INNER JOIN cities ct ON v.id_city=ct.id INNER JOIN education_levels e ON v.id_education_level=e.id INNER JOIN genders g ON V.id_gender=g.id INNER JOIN civil_status cs ON v.id_civil_status=cs.id LEFT JOIN languages l ON v.id_language=l.id LEFT JOIN language_levels ll ON v.id_language_level=ll.id LEFT JOIN vacancy_questionnaire vq ON vq.id_vacancy=v.id LEFT JOIN users u ON v.id_recruiter=u.id LEFT JOIN areas a ON v.id_area=a.id LEFT JOIN subareas sa ON v.id_subarea=sa.id LEFT JOIN customer_business_name cbn ON v.id_business_name=cbn.id WHERE v.id=:id");
+        $stmt = $this->db->prepare("SELECT *,v.telephone as telephoneCheck,v.notes, v.id AS id_vacancy, vs.status AS vacancy_status, CONCAT(u.first_name, ' ', u.last_name) AS recruiter, u.email AS recruiter_email, CONCAT(cc.first_name, ' ', cc.last_name) AS customer_contact, business_name, cc.email AS customer_contact_email, c.id AS id_customer, (SELECT SUM(CASE WHEN va.id_status >= 3 THEN 1 ELSE 0 END) FROM vacancy_applicants va WHERE va.id_vacancy=v.id) AS n_sent FROM vacancies v INNER JOIN vacancy_status vs ON v.id_status=vs.id INNER JOIN customers c ON v.id_customer=c.id LEFT JOIN customers_contacts cc ON v.id_customer_contact=cc.id INNER JOIN states s ON v.id_state=s.id INNER JOIN cities ct ON v.id_city=ct.id INNER JOIN education_levels e ON v.id_education_level=e.id INNER JOIN genders g ON V.id_gender=g.id INNER JOIN civil_status cs ON v.id_civil_status=cs.id LEFT JOIN languages l ON v.id_language=l.id LEFT JOIN language_levels ll ON v.id_language_level=ll.id LEFT JOIN vacancy_questionnaire vq ON vq.id_vacancy=v.id LEFT JOIN users u ON v.id_recruiter=u.id LEFT JOIN areas a ON v.id_area=a.id LEFT JOIN subareas sa ON v.id_subarea=sa.id LEFT JOIN customer_business_name cbn ON v.id_business_name=cbn.id WHERE v.id=:id");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
 
@@ -1017,8 +1030,9 @@ class Vacancy
         $recruitment_service_cost = $this->getRecruitment_service_cost();
 
         $telephone = $this->getTelephone();
+        $notes = $this->getNotes();
 
-        $stmt = $this->db->prepare("INSERT INTO vacancies (id_customer, id_customer_contact, request_date, id_business_name, id_recruiter, vacancy, department, report_to, personal_in_charge, id_education_level, position_number, experience_years, experience, age_min, age_max, id_gender, id_civil_status, id_language, id_language_level, salary_min, salary_max, benefits, workdays, schedule, requirements, functions, skills, technical_knowledge, id_state, id_city, created_by, id_status, created_at, modified_at, end_date, id_area, id_subarea, comments, type, warranty_time, amount_to_invoice, authorization_date, commitment_date,working_day,send_date_candidate,advance_payment,payment_amount,experience_type,recruitment_service_cost,telephone) VALUES(:id_customer, :id_customer_contact, :request_date, :id_business_name, :recruiter, :vacancy, :department, :report_to, :personal_in_charge, :id_education_level, :position_number, :experience_years, :experience, :age_min, :age_max, :id_gender, :id_civil_status, :id_language, :id_language_level, :salary_min, :salary_max, :benefits, :workdays, :schedule, :requirements, :functions, :skills, :technical_knowledge, :id_state, :id_city, :created_by, :id_status, GETDATE(), GETDATE(), NULL, :id_area, :id_subarea, :comments, :type, :warranty_time, :amount_to_invoice, :authorization_date, :commitment_date,:working_day,:send_date_candidate,:advance_payment,:payment_amount,:experience_type,:recruitment_service_cost,:telephone)");
+        $stmt = $this->db->prepare("INSERT INTO vacancies (id_customer, id_customer_contact, request_date, id_business_name, id_recruiter, vacancy, department, report_to, personal_in_charge, id_education_level, position_number, experience_years, experience, age_min, age_max, id_gender, id_civil_status, id_language, id_language_level, salary_min, salary_max, benefits, workdays, schedule, requirements, functions, skills, technical_knowledge, id_state, id_city, created_by, id_status, created_at, modified_at, end_date, id_area, id_subarea, comments, type, warranty_time, amount_to_invoice, authorization_date, commitment_date,working_day,send_date_candidate,advance_payment,payment_amount,experience_type,recruitment_service_cost,telephone,notes) VALUES(:id_customer, :id_customer_contact, :request_date, :id_business_name, :recruiter, :vacancy, :department, :report_to, :personal_in_charge, :id_education_level, :position_number, :experience_years, :experience, :age_min, :age_max, :id_gender, :id_civil_status, :id_language, :id_language_level, :salary_min, :salary_max, :benefits, :workdays, :schedule, :requirements, :functions, :skills, :technical_knowledge, :id_state, :id_city, :created_by, :id_status, GETDATE(), GETDATE(), NULL, :id_area, :id_subarea, :comments, :type, :warranty_time, :amount_to_invoice, :authorization_date, :commitment_date,:working_day,:send_date_candidate,:advance_payment,:payment_amount,:experience_type,:recruitment_service_cost,:telephone,:notes)");
         $stmt->bindParam(":id_customer", $customer, PDO::PARAM_INT);
         $stmt->bindParam(":id_customer_contact", $customer_contact, PDO::PARAM_INT);
         $stmt->bindParam(":request_date", $request_date, PDO::PARAM_STR);
@@ -1066,7 +1080,7 @@ class Vacancy
         $stmt->bindParam(":experience_type", $experience_type, PDO::PARAM_STR);
         $stmt->bindParam(":recruitment_service_cost", $recruitment_service_cost, PDO::PARAM_STR);
         $stmt->bindParam(":telephone", $telephone, PDO::PARAM_INT);
-
+        $stmt->bindParam(":notes", $notes, PDO::PARAM_INT);
         $flag = $stmt->execute();
 
         if ($flag) {
@@ -1124,14 +1138,14 @@ class Vacancy
         $advance_payment = $this->getAdvance_payment();
         $payment_amount = $this->getPayment_amount();
         $experience_type = $this->getExperience_type();
-        $recruitment_service_cost = $this->getRecruitment_service_cost();
+        // $recruitment_service_cost = $this->getRecruitment_service_cost();
         $telephone = $this->getTelephone();
-
+        $notes = $this->getNotes();
 
         //$created_by = $this->getCreated_by();
         //$id_status = $this->getId_status();
 
-        $stmt = $this->db->prepare("UPDATE vacancies SET id_customer=:id_customer, id_customer_contact=:id_customer_contact, id_business_name=:id_business_name, id_recruiter=:id_recruiter, vacancy=:vacancy, department=:department, report_to=:report_to, personal_in_charge=:personal_in_charge, id_education_level=:id_education_level, position_number=:position_number, experience_years=:experience_years, experience=:experience, age_min=:age_min, age_max=:age_max, id_gender=:id_gender, id_civil_status=:id_civil_status, id_language=:id_language, id_language_level=:id_language_level, salary_min=:salary_min, salary_max=:salary_max, benefits=:benefits, workdays=:workdays, schedule=:schedule, requirements=:requirements, functions=:functions, skills=:skills, technical_knowledge=:technical_knowledge, id_state=:id_state, id_city=:id_city, id_area=:id_area, id_subarea=:id_subarea, comments=:comments, type=:type, warranty_time=:warranty_time, amount_to_invoice=:amount_to_invoice , authorization_date=:authorization_date, commitment_date=:commitment_date, modified_at=GETDATE(),working_day=:working_day,send_date_candidate=:send_date_candidate,advance_payment=:advance_payment,payment_amount=:payment_amount,experience_type=:experience_type,recruitment_service_cost=:recruitment_service_cost,telephone=:telephone  WHERE id=:id");
+        $stmt = $this->db->prepare("UPDATE vacancies SET id_customer=:id_customer, id_customer_contact=:id_customer_contact, id_business_name=:id_business_name, id_recruiter=:id_recruiter, vacancy=:vacancy, department=:department, report_to=:report_to, personal_in_charge=:personal_in_charge, id_education_level=:id_education_level, position_number=:position_number, experience_years=:experience_years, experience=:experience, age_min=:age_min, age_max=:age_max, id_gender=:id_gender, id_civil_status=:id_civil_status, id_language=:id_language, id_language_level=:id_language_level, salary_min=:salary_min, salary_max=:salary_max, benefits=:benefits, workdays=:workdays, schedule=:schedule, requirements=:requirements, functions=:functions, skills=:skills, technical_knowledge=:technical_knowledge, id_state=:id_state, id_city=:id_city, id_area=:id_area, id_subarea=:id_subarea, comments=:comments, type=:type, warranty_time=:warranty_time, amount_to_invoice=:amount_to_invoice , authorization_date=:authorization_date, commitment_date=:commitment_date, modified_at=GETDATE(),working_day=:working_day,send_date_candidate=:send_date_candidate,advance_payment=:advance_payment,payment_amount=:payment_amount,experience_type=:experience_type,telephone=:telephone,notes=:notes  WHERE id=:id");
         //$stmt = $this->db->prepare("UPDATE vacancies SET id_customer=:id_customer, id_customer_contact=:id_customer_contact, id_business_name=:id_business_name, id_recruiter=:id_recruiter, vacancy=:vacancy, department=:department, report_to=:report_to, personal_in_charge=:personal_in_charge, id_education_level=:id_education_level, position_number=:position_number, experience_years=:experience_years, experience=:experience, age_min=:age_min, age_max=:age_max, id_gender=:id_gender, id_civil_status=:id_civil_status, id_language=:id_language, id_language_level=:id_language_level, salary_min=:salary_min, salary_max=:salary_max, benefits=:benefits, workdays=:workdays, schedule=:schedule, requirements=:requirements, functions=:functions, skills=:skills, technical_knowledge=:technical_knowledge, id_state=:id_state, id_city=:id_city, id_area=:id_area, id_subarea=:id_subarea, comments=:comments, type=:type, warranty_time=:warranty_time, amount_to_invoice=:amount_to_invoice, authorization_date=:authorization_date, commitment_date=:commitment_date, modified_at=GETDATE(),working_day=:working_day,send_date_candidate=:send_date_candidate,advance_payment=:advance_payment WHERE id=:id");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->bindParam(":id_customer", $customer, PDO::PARAM_INT);
@@ -1176,10 +1190,10 @@ class Vacancy
         $stmt->bindParam(":advance_payment", $advance_payment, PDO::PARAM_STR);
         $stmt->bindParam(":payment_amount", $payment_amount, PDO::PARAM_STR);
         $stmt->bindParam(":experience_type", $experience_type, PDO::PARAM_INT);
-        $stmt->bindParam(":recruitment_service_cost", $recruitment_service_cost, PDO::PARAM_STR);
+        //  $stmt->bindParam(":recruitment_service_cost", $recruitment_service_cost, PDO::PARAM_STR);
 
         $stmt->bindParam(":telephone", $telephone, PDO::PARAM_INT);
-
+        $stmt->bindParam(":notes", $notes, PDO::PARAM_INT);
         //$stmt->bindParam(":created_by", $created_by, PDO::PARAM_INT);
         //$stmt->bindParam(":id_status", $id_status, PDO::PARAM_INT);
 
@@ -1480,4 +1494,24 @@ class Vacancy
     }
 
     //===========FIN GABO=============
+
+    //gabo 29
+    public function update_notes()
+    {
+        $result = false;
+
+        $id = $this->getId();
+        $notes = $this->getNotes();
+
+
+        $stmt = $this->db->prepare("UPDATE vacancies SET notes=:notes WHERE id=:id");
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->bindParam(":notes", $notes, PDO::PARAM_STR);
+
+        $flag = $stmt->execute();
+        if ($flag) {
+            $result = true;
+        }
+        return $result;
+    }
 }

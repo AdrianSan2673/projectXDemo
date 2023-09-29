@@ -273,6 +273,8 @@ class VacanteController
 
 
             $telephone = isset($_POST['telephone']) ? 0 : 1;
+            //29
+            $notes = isset($_POST['notes']) ? Utils::sanitizeString($_POST['notes']) : NULL;
 
             // gabo 17 abril quitar a ventas
             if ($customer && $vacancy && $working_day && $department && $education_level && $position_number && $age_min && $age_max && $gender && $civil_status && $salary_min && $salary_max && $workdays && $schedule && $state && $city  && $area && $subarea) {
@@ -327,7 +329,8 @@ class VacanteController
                 $vacante->setRecruitment_service_cost($recruitment_service_cost);
 
                 $vacante->setTelephone($telephone);
-
+                //29
+                $vacante->setNotes($notes);
                 $save = $vacante->save();
 
                 if ($save) {
@@ -505,6 +508,8 @@ class VacanteController
             $commitment_date = isset($_POST['commitment_date']) ? Utils::sanitizeString($_POST['commitment_date']) : null;
 
             $telephone = isset($_POST['telephone']) ? 0 : 1;
+            //29
+            $notes = isset($_POST['notes']) ? Utils::sanitizeString($_POST['notes']) : NULL;
 
 
             if ($customer && $vacancy && $department && $education_level && $position_number && $age_min && $age_max && $gender && $civil_status && $salary_min && $salary_max && $workdays && $schedule && $state && $city  && $area && $subarea) {
@@ -556,6 +561,8 @@ class VacanteController
                 $vacante->setRecruitment_service_cost($recruitment_service_cost);
 
                 $vacante->setTelephone($telephone);
+                //29
+                $vacante->setNotes($notes);
 
                 //$vacante->setCreated_by($_SESSION['identity']->id);
                 //$vacante->setId_status(1);
@@ -1101,6 +1108,35 @@ class VacanteController
 
 
                 echo json_encode(array('status' => 1, 'vacancy_data' => $vacancy_data, 'State' => $State, 'City' => $City));
+            } else {
+                echo json_encode(array('status' => 0));
+            }
+        } else {
+            echo json_encode(array('status' => 0));
+        }
+    }
+
+    //gabo 29 
+    public function save_notes()
+    {
+        if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin())) {
+
+            $id_vacancy = isset($_POST['id_vacancy']) ? trim(Encryption::decode($_POST['id_vacancy'])) : FALSE;
+            $notes = isset($_POST['notes']) ?  Utils::sanitizeStringBlank($_POST['notes']) : null;
+
+            if ($id_vacancy && $notes) {
+
+
+                $vacante = new Vacancy();
+                $vacante->setId($id_vacancy);
+                $vacante->setNotes($notes);
+                $save = $vacante->update_notes();
+
+                if ($save) {
+                    echo json_encode(array('status' => 1));
+                } else {
+                    echo json_encode(array('status' => 2));
+                }
             } else {
                 echo json_encode(array('status' => 0));
             }

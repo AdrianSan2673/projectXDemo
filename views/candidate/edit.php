@@ -422,24 +422,43 @@
                             </div>
                         </div>
                         <?php endif; ?>
-                        <input type="hidden" id="bandera" name="bandera" value="0">
+                        <input type="" id="bandera" name="bandera" value="0">
 
                         <div class="card-footer">
-                            <?php if (Utils::isCandidate()) : ?>
-                            <a href="<?= base_url ?>candidato/ver"
-                                class="btn btn-secondary btn-lg float-left">Regresar</a>
-                            <?php else : ?>
-                            <a href="javascript: history.back()"
-                                class="btn btn-lg btn-secondary float-left">Regresar</a>
-                            <?php endif ?>
+                            <div class="card-body">
+                                <div class="row">
 
-                            <button class="btn btn-lg btn-orange float-right ml-1"
-                                id="candidate_submit"><?= ($_GET['action'] == 'crear' ? 'Crear' : 'Guardar') ?></button>
+                                    <div class="col-md-5"> <?php if (Utils::isCandidate()) : ?> <a
+                                            href="<?= base_url ?>candidato/ver"
+                                            class="btn btn-secondary btn-lg float-left">Regresar</a>
+                                        <?php else : ?>
+                                        <a href="javascript: history.back()"
+                                            class="btn btn-lg btn-secondary float-left">Regresar</a>
+                                        <?php endif ?>
+                                    </div>
 
-                            <?php if ((Utils::isAdmin() or Utils::isRecruitmentManager() or Utils::isJunior()  or Utils::isSenior()) and isset($guardar_en_bolsa)) : ?>
-                            <button class="btn btn-lg btn-orange float-right " type="submit" value="0" name="directory"
-                                id="directory">Guardar en bolsa</button>
-                            <?php endif ?>
+                                    <div class="col-md-2" style="text-align:center">
+                                        <?php if ((Utils::isAdmin() or Utils::isRecruitmentManager() or Utils::isJunior()  or Utils::isSenior()) and isset($guardar_en_bolsa)) : ?>
+                                        <button class="btn btn-lg btn-orange float-left " type="submit" value="0"
+                                            name="directory" id="directory">Guardar en
+                                            bolsa</button>
+                                        <?php endif ?>
+
+
+                                    </div>
+
+
+                                    <div class="col-md-5">
+                                        <button class="btn btn-lg btn-orange float-right ml-1"
+                                            id="candidate_submit"><?= ($_GET['action'] == 'crear' ? 'Crear' : 'Guardar') ?></button>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
 
                         </div>
                     </form>
@@ -481,6 +500,7 @@ $(function() {
         submitHandler: function() {
 
             //document.querySelector("#candidate-form #candidate_submit").disabled = true;
+
             let candidate = new Candidate();
 
 
@@ -515,6 +535,7 @@ $(function() {
                 candidate.update();
             } else {
                 if (vacios == 0) {
+
                     candidate.create();
                 } else {
                     document.querySelector("#bandera").value = 0;

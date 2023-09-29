@@ -199,13 +199,13 @@ class Candidate {
 			formData.append('avatar', this.avatar);
 		}
 
-		if (document.querySelector("#bandera")) {
-			document.querySelector("#directory").disabled = true;
-			if (document.querySelector("#bandera").value == 1) {
-				document.querySelector("#directory").disabled = true;
-				formData.append('directory', document.querySelector("#bandera").value);
-			}
-		}
+		// if (document.querySelector("#bandera")) {
+		// 	document.querySelector("#directory").disabled = true;
+		// 	if (document.querySelector("#bandera").value == 1) {
+		// 		document.querySelector("#directory").disabled = true;
+		// 		formData.append('directory', document.querySelector("#bandera").value);
+		// 	}
+		// }
 
 		fetch('./new', {
 			method: 'POST',
