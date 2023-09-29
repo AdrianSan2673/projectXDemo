@@ -227,6 +227,23 @@
                                             <input type="file" id="resume" name="resume" class="form-control"
                                                 accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf">
                                         </div>
+                                        <!-- gabo 29 sept -->
+
+
+
+                                        <div class="row" id="documento_cargado">
+                                            <?php if (isset($resume)  and $_GET['action'] == 'editar') : ?>
+                                            <div class="col-8">
+                                                <label for="psycho" class="col-form-label">Documento Cargado:</label>
+                                                <a class="btn-success btn" href="<?= $resume ?>" target="_blank">Ver
+                                                    psicometria</a>
+                                            </div>
+                                            <br>
+                                            <?php endif; ?>
+                                        </div>
+
+
+
                                     </div>
                                 </div>
                             </div>
@@ -419,9 +436,9 @@
                             <button class="btn btn-lg btn-orange float-right ml-1"
                                 id="candidate_submit"><?= ($_GET['action'] == 'crear' ? 'Crear' : 'Guardar') ?></button>
 
-                            <?php if (Utils::isAdmin() or Utils::isRecruitmentManager() or Utils::isJunior()  or Utils::isSenior() and $_GET['action'] == 'crear') : ?>
+                            <?php if ((Utils::isAdmin() or Utils::isRecruitmentManager() or Utils::isJunior()  or Utils::isSenior()) and isset($guardar_en_bolsa)) : ?>
                             <button class="btn btn-lg btn-orange float-right " type="submit" value="0" name="directory"
-                                id="directory">Guardar en Directorio</button>
+                                id="directory">Guardar en bolsa</button>
                             <?php endif ?>
 
                         </div>

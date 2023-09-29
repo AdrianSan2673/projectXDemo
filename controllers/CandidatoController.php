@@ -91,6 +91,11 @@ class CandidatoController
                 }
             }
 
+            if (!isset($_GET['contact']) and isset($_GET['vacante'])) {
+                $guardar_en_bolsa = true;
+            }
+
+
             $page_title = 'Nuevo candidato | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
@@ -1010,6 +1015,20 @@ class CandidatoController
                 $vacante = new VacancyApplicant();
                 $vacante->setId_candidate($id);
                 $vacante = $vacante->getVacanciesTypeOperativaByCandidate();
+
+                //gabo 29
+                $resumepath = 'uploads/resume/' . $id;
+                if (file_exists($resumepath)) {
+                    $resumedirectory = opendir($resumepath);
+                    while ($cv = readdir($resumedirectory)) {
+                        if (!is_dir($cv)) {
+                            $cvtype = pathinfo($resumepath, PATHINFO_EXTENSION);
+                            $cvroute = $resumepath . '/' . $cv;
+                        }
+                    }
+                    $resume = base_url . $cvroute;
+                }
+
 
                 $page_title = $candidato->first_name . ' ' . $candidato->surname . ' | RRHH Ingenia';
                 require_once 'views/layout/header.php';
