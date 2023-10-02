@@ -521,61 +521,62 @@ class Utils
 
     public static function sendMultipleEmail($emails, $subject, $body, $cc = false)
     {
+        return true;
+        // require_once 'libraries/PHPMailer/PHPMailerAutoload.php';
 
-        require_once 'libraries/PHPMailer/PHPMailerAutoload.php';
+        // $mail = new PHPMailer();
+        // $mail->isSMTP();
+        // $mail->SMTPAuth = true;
+        // $mail->SMTPSecure = 'tls';
+        // $mail->Host = 'smtp.gmail.com';
+        // $mail->Port = '587';
 
-        $mail = new PHPMailer();
-        $mail->isSMTP();
-        $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'tls';
-        $mail->Host = 'smtp.gmail.com';
-        $mail->Port = '587';
+        // $mail->Username = 'soporte.ingenia@rrhhingenia.com';
+        // $mail->Password = 'miguel2019';
 
-        $mail->Username = 'soporte.ingenia@rrhhingenia.com';
-        $mail->Password = 'miguel2019';
+        // $mail->setFrom('soporte.ingenia@rrhhingenia.com', 'RRHH Ingenia');
+        // foreach ($emails as $email) {
+        //     $mail->addAddress($email);
+        // }
+        // if ($cc)
+        //     $mail->addCC($cc['email'], $cc['name']);
 
-        $mail->setFrom('soporte.ingenia@rrhhingenia.com', 'RRHH Ingenia');
-        foreach ($emails as $email) {
-            $mail->addAddress($email);
-        }
-        if ($cc)
-            $mail->addCC($cc['email'], $cc['name']);
-
-        $mail->Subject = $subject;
-        $mail->Body    = $body;
-        $mail->IsHTML(true);
-        $mail->CharSet = 'UTF-8';
-        if ($mail->send())
-            return true;
-        else
-            return false;
+        // $mail->Subject = $subject;
+        // $mail->Body    = $body;
+        // $mail->IsHTML(true);
+        // $mail->CharSet = 'UTF-8';
+        // if ($mail->send())
+        //     return true;
+        // else
+        //     return false;
     }
 
     public static function sendEmailPayment($email, $name, $subject, $body, $cc = false)
     {
-        $mail = new PHPMailer();
-        $mail->isSMTP();
-        $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'tls';
-        $mail->Host = 'smtp.gmail.com';
-        $mail->Port = '587';
+        return true;
+        // $mail = new PHPMailer();
+        // $mail->isSMTP();
+        // $mail->SMTPAuth = true;
+        // $mail->SMTPSecure = 'tls';
+        // $mail->Host = 'smtp.gmail.com';
+        // $mail->Port = '587';
 
-        $mail->Username = 'cuentasxcobrar@rrhhingenia.com';
-        $mail->Password = 'RRHHI2023';
+        // $mail->Username = 'cuentasxcobrar@rrhhingenia.com';
+        // $mail->Password = 'RRHHI2023';
 
-        $mail->setFrom('cuentasxcobrar@rrhhingenia.com', 'Cuentas Por Cobrar RRHH Ingenia');
-        $mail->addAddress($email, $name);
+        // $mail->setFrom('cuentasxcobrar@rrhhingenia.com', 'Cuentas Por Cobrar RRHH Ingenia');
+        // $mail->addAddress($email, $name);
 
-        $mail->Subject = $subject;
-        $mail->Body    = $body;
-        $mail->IsHTML(true);
-        $mail->CharSet = 'UTF-8';
-        if ($cc)
-            $mail->addCC($cc['email'], $cc['name']);
-        if ($mail->send())
-            return true;
-        else
-            return false;
+        // $mail->Subject = $subject;
+        // $mail->Body    = $body;
+        // $mail->IsHTML(true);
+        // $mail->CharSet = 'UTF-8';
+        // if ($cc)
+        //     $mail->addCC($cc['email'], $cc['name']);
+        // if ($mail->send())
+        //     return true;
+        // else
+        //     return false;
     }
 
     public static function getFullDate($date)

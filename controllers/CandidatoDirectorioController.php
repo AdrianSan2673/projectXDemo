@@ -81,7 +81,7 @@ class CandidatoDirectorioController
                     $respons = $candidateDirectoryObj->update();
                 }
 
-                $candidatesDirector = $this->candidatesDirectory($id_vacancy_filter == null || $id_vacancy_filter == ''|| $id_vacancy_filter == 0 ? $id_vacancy_filter: $id_vacancy);
+                $candidatesDirector = $this->candidatesDirectory($id_vacancy_filter == null || $id_vacancy_filter == '' || $id_vacancy_filter == 0 ? $id_vacancy_filter : $id_vacancy);
 
                 if ($respons) {
                     echo json_encode(
@@ -203,7 +203,7 @@ class CandidatoDirectorioController
             $candidate['hidden'] = $candidate['id_candidate'] == null || $candidate['id_candidate'] == '' ? ' ' : 'hidden';
 
             $candidate['url_ver'] = base_url . 'candidato/ver&id=' . $candidate['id_candidate'];
-            $candidate['url_crear'] = base_url . 'candidato/crear&id=' . $candidate['id_vacancy'] . '&contact=' . $candidate['id'];
+            $candidate['url_crear'] = base_url . 'candidato/crear&vacante=' . $candidate['id_vacancy'] . '&contact=' . $candidate['id'];
 
             switch ($candidate['status']) {
                 case 1: //nuevo

@@ -188,15 +188,14 @@ class Candidate {
 	}
 
 	create() {
-        document.querySelector("#candidate-form #candidate_submit").disabled = true;
+		document.querySelector("#candidate-form #candidate_submit").disabled = true;
 		var form = document.querySelector("#candidate-form");
 		var formData = new FormData(form);
 		if (document.querySelector("#avatar").value.length > 0) {
 			this.avatar = document.querySelector("#candidate-form #preview").toDataURL("image/png");
 			formData.append('avatar', this.avatar);
 		}
-			if (document.querySelector("#bandera")) {
-			document.querySelector("#directory").disabled = true;
+		if (document.querySelector("#bandera")) {
 			if (document.querySelector("#bandera").value == 1) {
 				document.querySelector("#directory").disabled = true;
 				formData.append('directory', document.querySelector("#bandera").value);
@@ -241,7 +240,7 @@ class Candidate {
 							setTimeout(() => {
 								window.location.href = `./profile&id_vacancy=${json_app.id_vacancy}&id_candidate=${json_app.id_candidate}`;
 							}, 3000);
-							
+
 
 						}
 					} else if (json_app.status == 2) {
@@ -253,10 +252,10 @@ class Candidate {
 					} else if (json_app.status == 4) {
 						utils.showToast('El archivo de tu cv excede el peso permitido o tiene un formato no admitido', 'warning');
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
-					}else if (json_app.status == 5) {
+					} else if (json_app.status == 5) {
 						utils.showToast('Fecha de nacimiento no permitida', 'warning');
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
-					}else if (json_app.status == 6) {
+					} else if (json_app.status == 6) {
 						utils.showToast('Formato de fecha incorrecto, verifiquelas por favor', 'warning');
 						document.querySelector("#candidate-form #candidate_submit").disabled = false;
 					} else if (json_app.status == 7) {
@@ -311,54 +310,54 @@ class Candidate {
 		this.start_date_additional = document.querySelector("#candidate-form #start_date_additional").value;
 		this.end_date_additional = document.querySelector("#candidate-form #end_date_additional").value; */
 
-		
-			/* let data = `id=${this.id}&first_name=${this.first_name}&surname=${this.surname}&last_name=${this.last_name}&date_birth=${this.date_birth}&id_gender=${this.id_gender}&id_civil_status=${this.id_civil_status}&job_title=${this.job_title}&description=${this.description}&telephone=${this.telephone}&cellphone=${this.cellphone}&email=${this.email}&id_state=${this.id_state}&id_city=${this.id_city}&linkedinn=${this.linkedinn}&facebook=${this.facebook}&instagram=${this.instagram}${data_avatar}`; */
-			var form = document.querySelector("#candidate-form");
-			var formData = new FormData(form);
-			formData.append('id', this.id);
-			if (document.querySelector("#avatar").value.length > 0) {
-				this.avatar = document.querySelector("#candidate-form #preview").toDataURL("image/png");
-				formData.append('avatar', this.avatar);
-			}
 
-			let xhr = new XMLHttpRequest();
-			xhr.open('POST', './update');
-			//xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-			xhr.send(formData);
-			xhr.id_candidate = this.id;
+		/* let data = `id=${this.id}&first_name=${this.first_name}&surname=${this.surname}&last_name=${this.last_name}&date_birth=${this.date_birth}&id_gender=${this.id_gender}&id_civil_status=${this.id_civil_status}&job_title=${this.job_title}&description=${this.description}&telephone=${this.telephone}&cellphone=${this.cellphone}&email=${this.email}&id_state=${this.id_state}&id_city=${this.id_city}&linkedinn=${this.linkedinn}&facebook=${this.facebook}&instagram=${this.instagram}${data_avatar}`; */
+		var form = document.querySelector("#candidate-form");
+		var formData = new FormData(form);
+		formData.append('id', this.id);
+		if (document.querySelector("#avatar").value.length > 0) {
+			this.avatar = document.querySelector("#candidate-form #preview").toDataURL("image/png");
+			formData.append('avatar', this.avatar);
+		}
 
-			xhr.onreadystatechange = function () {
-				if (xhr.readyState == 4 && xhr.status == 200) {
-					let r = xhr.responseText;
-					console.log(r);
-					if (r == 0) {
-						utils.showToast('Omitiste algún dato', 'error');
-						document.querySelector("#candidate-form #candidate_submit").disabled = false;
-					} else if (r == 1) {
-						utils.showToast('Currículum editado exitosamente', 'success');
-						document.querySelector("#candidate-form #candidate_submit").disabled = true;
-						setTimeout(() => {
-							window.location.href = `./ver&id=${xhr.id_candidate}`;
-						}, 3000);
+		let xhr = new XMLHttpRequest();
+		xhr.open('POST', './update');
+		//xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		xhr.send(formData);
+		xhr.id_candidate = this.id;
 
-					} else if (r == 2) {
-						utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-						document.querySelector("#candidate-form #candidate_submit").disabled = false;
-					} else if (r == 3) {
-						utils.showToast('Error al subir la imagen', 'error');
-						document.querySelector("#candidate-form #candidate_submit").disabled = false;
-					} else if (r == 4) {
-						utils.showToast('El archivo de tu cv excede el peso permitido o tiene un formato no admitido', 'warning');
-						document.querySelector("#candidate-form #candidate_submit").disabled = false;
-					} else {
-						document.querySelector("#candidate-form #candidate_submit").disabled = false;
-					}
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				let r = xhr.responseText;
+				console.log(r);
+				if (r == 0) {
+					utils.showToast('Omitiste algún dato', 'error');
+					document.querySelector("#candidate-form #candidate_submit").disabled = false;
+				} else if (r == 1) {
+					utils.showToast('Currículum editado exitosamente', 'success');
+					document.querySelector("#candidate-form #candidate_submit").disabled = true;
+					setTimeout(() => {
+						window.location.href = `./ver&id=${xhr.id_candidate}`;
+					}, 3000);
+
+				} else if (r == 2) {
+					utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+					document.querySelector("#candidate-form #candidate_submit").disabled = false;
+				} else if (r == 3) {
+					utils.showToast('Error al subir la imagen', 'error');
+					document.querySelector("#candidate-form #candidate_submit").disabled = false;
+				} else if (r == 4) {
+					utils.showToast('El archivo de tu cv excede el peso permitido o tiene un formato no admitido', 'warning');
+					document.querySelector("#candidate-form #candidate_submit").disabled = false;
 				} else {
 					document.querySelector("#candidate-form #candidate_submit").disabled = false;
 				}
+			} else {
+				document.querySelector("#candidate-form #candidate_submit").disabled = false;
 			}
+		}
 
-		
+
 	}
 
 
@@ -566,7 +565,7 @@ class Candidate {
 						utils.showToast(' No se pudo guardar la informacion', 'error');
 						document.querySelector("#modal-experiencia #submit").disabled = false;
 
-					}else if (json_app.status == 6) {
+					} else if (json_app.status == 6) {
 						utils.showToast('Formato de fecha incorrecto, verifiquelas por favor', 'error');
 						document.querySelector("#modal-experiencia #submit").disabled = false;
 
@@ -903,7 +902,7 @@ class Candidate {
 				document.querySelector("#profile-candidate-form [name='submit']").disabled = false
 			});
 	}
-	
+
 	postulate() {
 
 		var form = document.querySelector("#postular-form");
@@ -911,9 +910,9 @@ class Candidate {
 		var formData = new FormData(form);
 
 		fetch('../Candidato/postulate', {
-				method: 'POST',
-				body: formData
-			})
+			method: 'POST',
+			body: formData
+		})
 			.then(response => {
 				//console.log(response.json());
 				if (response.ok) {
@@ -939,7 +938,7 @@ class Candidate {
 
 							vacancies += `
                                 <tr> `;
-							(json_app.isCustomer == false) ? vacancies += `<td>${vacancy.applicant_date}</td>`: '';
+							(json_app.isCustomer == false) ? vacancies += `<td>${vacancy.applicant_date}</td>` : '';
 
 							vacancies += `
                                     <td>${vacancy.applicant_status}</td>
@@ -947,15 +946,15 @@ class Candidate {
                                     <td>${vacancy.interview_date}</td>
                                     <td>${vacancy.interview_comments}</td>
                                     <td> ${vacancy.request_date}</td>`;
-							(json_app.isCustomer == false) ? vacancies += `<td> ${vacancy.customer}</td >`: '';
+							(json_app.isCustomer == false) ? vacancies += `<td> ${vacancy.customer}</td >` : '';
 							vacancies += ` 
                                     <td>${vacancy.vacancy}</td>
                                     <td>${vacancy.city} , ${vacancy.abbreviation}</td>
                                     `;
 
-							(vacancy.salary_min != vacancy.salary_max) ? vacancies += `<td class="text-center">$${vacancy.salary_min} - $${vacancy.salary_max}</td>`: vacancies += `<td class="text-center">$${vacancy.salary_max}`;
+							(vacancy.salary_min != vacancy.salary_max) ? vacancies += `<td class="text-center">$${vacancy.salary_min} - $${vacancy.salary_max}</td>` : vacancies += `<td class="text-center">$${vacancy.salary_max}`;
 
-							(json_app.isCustomer == false) ? vacancies += `<td> ${vacancy.end_date}</td >`: '';
+							(json_app.isCustomer == false) ? vacancies += `<td> ${vacancy.end_date}</td >` : '';
 
 							vacancies += `
                                     <td class="text-center ${vacancy.class_color}">${vacancy.status}</td>
@@ -965,9 +964,9 @@ class Candidate {
                                                 class="btn btn-success">
                                                 <i class="fas fa-eye"></i>
                                             </a> `;
-							(json_app.isAdmin == true || json_app.isJunior == true) ? vacancies += `<a href="${vacancy.base_url}vacante/editar&id=${vacancy.id}" class="btn btn-info"><i class="fas fa-pencil-alt"></i></a>`: '';
+							(json_app.isAdmin == true || json_app.isJunior == true) ? vacancies += `<a href="${vacancy.base_url}vacante/editar&id=${vacancy.id}" class="btn btn-info"><i class="fas fa-pencil-alt"></i></a>` : '';
 
-							(json_app.isJunior == true) ? vacancies += `<a href="${vacancy.base_url}postulaciones/buscar&id=${vacancy.id}&area=${vacancy.id}" class="btn btn-info"> <i class="fas fa-search"></i></a>`: '';
+							(json_app.isJunior == true) ? vacancies += `<a href="${vacancy.base_url}postulaciones/buscar&id=${vacancy.id}&area=${vacancy.id}" class="btn btn-info"> <i class="fas fa-search"></i></a>` : '';
 							vacancies += `
                                         </div>
                                     </td>
@@ -999,8 +998,8 @@ class Candidate {
 				document.querySelector("#postular-form [name='submit']").disabled = false
 			});
 	}
-	
-	
+
+
 	//side server
 	cargarTabla() {
 
@@ -1036,8 +1035,10 @@ class Candidate {
 
 		$('#tb_candidates').DataTable().destroy();
 		var table = $('#tb_candidates').DataTable({
-			ajax:{ url: '../candidato/sideserver?filtros=' + datos + '&id_language=' + id_language + '&clave=' + clave,
-			type: "POST"},
+			ajax: {
+				url: '../candidato/sideserver&filtros=' + datos + '&id_language=' + id_language + '&clave=' + clave,
+				type: "POST"
+			},
 			processing: true,
 			serverSide: true,
 			"pageLength": 50,
@@ -1090,8 +1091,8 @@ class Candidate {
 
 				document.querySelector('#clean').disabled = false;
 				document.querySelector('#search').disabled = false;
-				
-let colores = ["#C295FE", "#FFEB90", "#84D4FE","#9FFF90", "#F095FE", "#81A3FC", "#FFB47C","#FF7C7C"];
+
+				let colores = ["#C295FE", "#FFEB90", "#84D4FE", "#9FFF90", "#F095FE", "#81A3FC", "#FFB47C", "#FF7C7C"];
 				var cont = 0;
 				$(`#tb_candidates thead tr:eq(0) th`).each(function (i) {
 					if (this.classList.contains('filterhead')) {
@@ -1115,9 +1116,9 @@ let colores = ["#C295FE", "#FFEB90", "#84D4FE","#9FFF90", "#F095FE", "#81A3FC", 
 							}
 
 						});
-						cont=cont+1;
+						cont = cont + 1;
 					}
-					
+
 				});
 				//do whatever  
 			},
@@ -1162,8 +1163,10 @@ let colores = ["#C295FE", "#FFEB90", "#84D4FE","#9FFF90", "#F095FE", "#81A3FC", 
 
 		$('#tb_candidates_postulate').DataTable().destroy();
 		var table = $('#tb_candidates_postulate').DataTable({
-				ajax:{ url: '../postulaciones/sideserver?filtros=' + datos + '&id_language=' + id_language + '&clave=' + clave + '&id_vacancy=' + id_vacancy,
-			type: "POST"},
+			ajax: {
+				url: '../postulaciones/sideserver&filtros=' + datos + '&id_language=' + id_language + '&clave=' + clave + '&id_vacancy=' + id_vacancy,
+				type: "POST"
+			},
 			processing: true,
 			serverSide: true,
 			"pageLength": 50,
@@ -1276,7 +1279,7 @@ let colores = ["#C295FE", "#FFEB90", "#84D4FE","#9FFF90", "#F095FE", "#81A3FC", 
 
 				document.querySelector('#clean').disabled = false;
 				document.querySelector('#search').disabled = false;
-let colores = ["#C295FE", "#FFEB90", "#84D4FE","#9FFF90", "#F095FE", "#81A3FC", "#FFB47C","#FF7C7C"];
+				let colores = ["#C295FE", "#FFEB90", "#84D4FE", "#9FFF90", "#F095FE", "#81A3FC", "#FFB47C", "#FF7C7C"];
 				var cont = 0;
 				$(`#tb_candidates_postulate thead tr:eq(0) th`).each(function (i) {
 					if (this.classList.contains('filterhead')) {
@@ -1300,9 +1303,9 @@ let colores = ["#C295FE", "#FFEB90", "#84D4FE","#9FFF90", "#F095FE", "#81A3FC", 
 							}
 
 						});
-						cont=cont+1;
+						cont = cont + 1;
 					}
-					
+
 				});
 				//do whatever  
 			},
@@ -1310,6 +1313,6 @@ let colores = ["#C295FE", "#FFEB90", "#84D4FE","#9FFF90", "#F095FE", "#81A3FC", 
 
 	}
 
-	
-	
+
+
 }

@@ -33,7 +33,9 @@
 
                 <div class="row pt-3 pb-3">
                     <div class="col-sm-12 ml-auto">
-                        <p class="h5">Aquí podrás agregar tus contactos de candidatos para incluirlos en futuras entrevistas. Esta funcionalidad te permite ingresar los datos de contacto de personas que deseas considerar para posibles entrevistas en el futuro.</p>
+                        <p class="h5">Aquí podrás agregar tus contactos de candidatos para incluirlos en futuras
+                            entrevistas. Esta funcionalidad te permite ingresar los datos de contacto de personas que
+                            deseas considerar para posibles entrevistas en el futuro.</p>
                     </div>
                 </div>
 
@@ -43,7 +45,8 @@
                             <select name="vacancy" id="search" class="form-control select2">
                                 <option value="0" selected>Sin filtro</option>
                                 <?php foreach ($vacancies as $vacancy) : ?>
-                                    <option value="<?= $vacancy['id'] ?>" <?= isset($_POST['vacancy']) && $_POST['vacancy'] == $vacancy['id'] ? 'selected' : '' ?>><?= $vacancy['customer'] . ' / ' . $vacancy['vacancy'] ?></option>
+                                    <option value="<?= $vacancy['id'] ?>" <?= isset($_POST['vacancy']) && $_POST['vacancy'] == $vacancy['id'] ? 'selected' : '' ?>>
+                                        <?= $vacancy['customer'] . ' / ' . $vacancy['vacancy'] ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -106,10 +109,11 @@
                                         <a href="<?= base_url ?>candidato/ver&id=<?= $candidate['id_candidate'] ?>" class="btn btn-success ml-2 mr-2" target="_blank" <?= $candidate['hidden_ver'] ?>>
                                             <i class="fas fa-eye"></i> Ver
                                         </a>
-
-                                        <a href="<?= base_url ?>candidato/crear&vacante=<?= $candidate['id_vacancy'] ?>&contact=<?= $candidate['id'] ?>" class="btn btn-orange ml-2 mr-2" target="_blank" <?= $candidate['hidden'] ?>>
-                                            <i class="fas fa-user-plus"></i> Agregar
-                                        </a>
+                                        <?php if ($candidate['id_vacancy'] != false && $candidate['vacancy'] != false) :  ?>
+                                            <a href="<?= base_url ?>candidato/crear&vacante=<?= $candidate['id_vacancy'] ?>&contact=<?= $candidate['id'] ?>" class="btn btn-orange ml-2 mr-2" target="_blank" <?= $candidate['hidden'] ?>>
+                                                <i class="fas fa-user-plus"></i> Agregar
+                                            </a>
+                                        <?php endif;    ?>
 
                                         <button class="btn btn-danger " data-id="<?= $candidate['id'] ?>" value="<?= $id_vacancy ?>" <?= $candidate['hidden'] ?>>
                                             <i class="fas fa-trash"></i>
@@ -171,7 +175,8 @@
 
 
         document.querySelector('#tb_candidates').addEventListener('click', e => {
-            if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains('btn-info')) {
+            if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains(
+                    'btn-info')) {
 
                 let ID;
                 if (e.target.classList.contains('btn-info'))
@@ -192,7 +197,8 @@
 
             }
 
-            if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains('btn-danger')) {
+            if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains(
+                    'btn-danger')) {
                 Swal.fire({
                     title: '¿Quieres eliminar este candidato?',
                     //text: "Se eliminara permanetemente y ya no aparecera en la lista.",

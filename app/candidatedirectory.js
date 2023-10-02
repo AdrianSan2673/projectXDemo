@@ -6,12 +6,12 @@ class Candidatedirectory {
         const formData = new FormData(form);
 
         fetch('../CandidatoDirectorio/save', {
-                method: 'POST',
-                /* headers: {
-                    'Content-type': 'application/x-www-form-urlencoded'
-                }, */
-                body: formData
-            })
+            method: 'POST',
+            /* headers: {
+                'Content-type': 'application/x-www-form-urlencoded'
+            }, */
+            body: formData
+        })
             .then(response => {
                 if (response.ok) {
                     return response.text();
@@ -58,12 +58,12 @@ class Candidatedirectory {
         var form = document.querySelector("#modal_create form");
         var formData = new FormData(form);
         fetch('../CandidatoDirectorio/getOne', {
-                method: 'POST',
-                /*        headers: {
-                           'Content-type': 'application/x-www-form-urlencoded'
-                       }, */
-                body: formData
-            })
+            method: 'POST',
+            /*        headers: {
+                       'Content-type': 'application/x-www-form-urlencoded'
+                   }, */
+            body: formData
+        })
             .then(response => {
                 if (response.ok) {
                     return response.text();
@@ -97,7 +97,7 @@ class Candidatedirectory {
                         let State = ''
                         json_app.State.forEach(element => {
                             State += `
-                            <option value='${element.id}' ${element.id == json_app.candidate.id_state?'selected' :''}  >${element.state}</option>
+                            <option value='${element.id}' ${element.id == json_app.candidate.id_state ? 'selected' : ''}  >${element.state}</option>
                             `;
                         });
                         document.querySelector("#modal_create form [name='id_state']").innerHTML = State;
@@ -105,7 +105,7 @@ class Candidatedirectory {
                         let citys = ''
                         json_app.City.forEach(element => {
                             citys += `
-                            <option value='${element.id}' ${element.id == json_app.candidate.id_city?'selected' :''} >${element.city}</option>
+                            <option value='${element.id}' ${element.id == json_app.candidate.id_city ? 'selected' : ''} >${element.city}</option>
                             `;
                         });
                         document.querySelector("#modal_create form [name='id_city']").innerHTML = citys;
@@ -132,12 +132,12 @@ class Candidatedirectory {
 
     delete(id, id_vacancy) {
         fetch('../CandidatoDirectorio/delete', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/x-www-form-urlencoded'
-                },
-                body: 'id=' + id + '&' + 'id_vacancy=' + id_vacancy
-            })
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded'
+            },
+            body: 'id=' + id + '&' + 'id_vacancy=' + id_vacancy
+        })
             .then(response => {
                 if (response.ok) {
                     return response.text();
@@ -211,11 +211,14 @@ class Candidatedirectory {
                          
                          <a href="${element.url_ver}" class="btn btn-success ml-2 mr-2" target="_blank" ${element.hidden_ver}>
                          <i class="fas fa-eye"></i> Ver
-                        </a>
-
-                        <a href="${element.url_crear}" class="btn btn-orange ml-2 mr-2" target="_blank" ${element.hidden}>
+                        </a>`;
+                if (element.vacancy == false || element.id_vacancy != false) {
+                    candidatesDirector += ` <a href="${element.url_crear}" class="btn btn-orange ml-2 mr-2" target="_blank" ${element.hidden}>
                          <i class="fas fa-user-plus"></i> Agregar
-                        </a>
+                        </a> `;
+                }
+
+                candidatesDirector += `
                           <button class="btn btn-danger " data-id="${element.id}" ${element.hidden}>
                               <i class="fas fa-trash"></i>
                           </button>
