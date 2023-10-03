@@ -100,10 +100,25 @@ class SysCampo
         return $estados;
     }
 
-    public function getEstados(){
+    public function getEstados()
+    {
         $stmt = $this->db->prepare("SELECT * FROM General_Estados ORDER BY Descripcion");
         $stmt->execute();
         $estados = $stmt->fetchAll();
         return $estados;
+    }
+
+
+    public function getCampoById()
+    {
+        $Tabla = $this->getTabla();
+        $Campo = $this->getCampo();
+        $stmt = $this->db->prepare("SELECT * FROM sys_Campos WHERE Tabla=:Tabla and Campo=:Campo ");
+        $stmt->bindParam(":Tabla", $Tabla, PDO::PARAM_INT);
+        $stmt->bindParam(":Campo", $Campo, PDO::PARAM_INT);
+
+        $stmt->execute();
+        $campo = $stmt->fetchObject();
+        return $campo;
     }
 }

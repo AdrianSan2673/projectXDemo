@@ -1,6 +1,6 @@
 class Cliente {
 
-    getEjecutivosYRazonesPorCliente(Cliente){
+    getEjecutivosYRazonesPorCliente(Cliente) {
         let xhr = new XMLHttpRequest();
         xhr.s = this.selector;
         let data = `Cliente=${Cliente}`;
@@ -8,29 +8,29 @@ class Cliente {
         xhr.open('POST', '../ServicioApoyo/getEjecutivosYRazonesPorCliente');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
-        xhr.onreadystatechange = function(){
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
-                if (r != 0){
+                if (r != 0) {
                     let json_app = JSON.parse(r);
                     let ejecutivos = '';
                     json_app.ejecutivos.forEach(ejecutivo => {
-                        ejecutivos += 
-                        `
+                        ejecutivos +=
+                            `
                         <option value="${ejecutivo.username}">${ejecutivo.first_name} ${ejecutivo.last_name}</option>
                         `;
                     });
 
                     let razones = '';
                     json_app.razones.forEach(razon => {
-                        razones += 
-                        `
+                        razones +=
+                            `
                         <option value="${razon.Razon.trim()}">${razon.Razon}</option>
                         `;
                     });
                     razones += '<option value="Pendiente">Pendiente</option>';
-                    
+
                     form.querySelectorAll('select')[3].innerHTML = ejecutivos;
                     form.querySelectorAll('select')[4].innerHTML = razones;
                     form.querySelectorAll('.form-row')[0].style.display = 'flex';
@@ -39,7 +39,7 @@ class Cliente {
         }
     }
 
-    getContactosYRazonesPorCliente(Cliente){
+    getContactosYRazonesPorCliente(Cliente) {
         let xhr = new XMLHttpRequest();
         xhr.s = this.selector;
         let data = `Cliente=${Cliente}`;
@@ -47,16 +47,16 @@ class Cliente {
         xhr.open('POST', '../ServicioApoyo/getContactosYRazonesPorCliente');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
-        xhr.onreadystatechange = function(){
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
-                if (r != 0){
+                if (r != 0) {
                     let json_app = JSON.parse(r);
                     let contactos = '';
                     json_app.contactos.forEach(contacto => {
-                        contactos += 
-                        `
+                        contactos +=
+                            `
                         <option value="${contacto.ID}">${contacto.Nombre}</option>
                         `;
                     });
@@ -64,13 +64,13 @@ class Cliente {
 
                     let razones = '';
                     json_app.razones.forEach(razon => {
-                        razones += 
-                        `
+                        razones +=
+                            `
                         <option value="${razon.Razon.trim()}">${razon.Razon}</option>
                         `;
                     });
                     razones += '<option value="Pendiente">Pendiente</option>';
-                    
+
                     form.querySelectorAll('select')[5].innerHTML = contactos;
                     form.querySelectorAll('select')[4].innerHTML = razones;
                     form.querySelectorAll('.form-row')[0].style.display = 'flex';
@@ -154,7 +154,7 @@ class Cliente {
         }
     }
 
-    getServicios(Cliente){
+    getServicios(Cliente) {
         let xhr = new XMLHttpRequest();
         let data = `Cliente=${Cliente}`;
         let form = document.querySelector('#modal_servicios');
@@ -162,12 +162,12 @@ class Cliente {
         xhr.open('POST', '../Cliente_SA/getOne');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
-        xhr.onreadystatechange = function(){
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
-                    if (r != 0){
+                    if (r != 0) {
                         let json_app = JSON.parse(r);
                         form.querySelectorAll('input')[0].value = json_app.Cliente;
                         form.querySelectorAll('input')[1].value = 1;
@@ -175,19 +175,19 @@ class Cliente {
                         form.querySelectorAll('input[type=checkbox]')[1].checked = json_app.Tiene_ESE == 1 ? true : false;
                         form.querySelectorAll('input[type=checkbox]')[2].checked = json_app.Tiene_SOI == 1 ? true : false;
                         form.querySelectorAll('input[type=checkbox]')[3].checked = json_app.Tiene_SMART == 1 ? true : false;
-                    }else {
+                    } else {
                         form.querySelectorAll('input')[0].value = 0;
                         form.querySelectorAll('input')[1].value = 0;
                     }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
-                    
-			}
+
+            }
         }
     }
 
-    getCondiciones(Cliente){
+    getCondiciones(Cliente) {
         let xhr = new XMLHttpRequest();
         let data = `Cliente=${Cliente}`;
         let form = document.querySelector('#modal_condiciones');
@@ -195,13 +195,13 @@ class Cliente {
         xhr.open('POST', '../Cliente_SA/getOne');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
-        xhr.onreadystatechange = function(){
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
-                    if (r != 0){
-                		let json_app = JSON.parse(r);
+                    if (r != 0) {
+                        let json_app = JSON.parse(r);
                         form.querySelectorAll('input')[0].value = json_app.Cliente;
                         form.querySelectorAll('input')[1].value = 1;
                         form.querySelectorAll('input')[2].value = Math.round(json_app.Validacion_Licencia);
@@ -213,19 +213,19 @@ class Cliente {
                         form.querySelectorAll('input')[8].value = json_app.Paquetes;
                         form.querySelectorAll('input')[9].value = json_app.Plazo_Credito;
                         form.querySelectorAll('select')[0].value = json_app.Dias_Credito;
-                    }else {
+                    } else {
                         form.querySelectorAll('input')[0].value = 0;
                         form.querySelectorAll('input')[1].value = 0;
                     }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
-                    
-			}
+
+            }
         }
     }
 
-    getFacturacion(Cliente){
+    getFacturacion(Cliente) {
         let xhr = new XMLHttpRequest();
         let data = `Cliente=${Cliente}`;
         let form = document.querySelector('#modal_facturacion');
@@ -233,12 +233,12 @@ class Cliente {
         xhr.open('POST', '../Cliente_SA/getOne');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
-        xhr.onreadystatechange = function(){
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
-                    if (r != 0){
+                    if (r != 0) {
                         let json_app = JSON.parse(r);
                         form.querySelectorAll('input')[0].value = json_app.Cliente;
                         form.querySelectorAll('input')[1].value = 1;
@@ -249,23 +249,23 @@ class Cliente {
                             form.querySelectorAll('#cortes_content .form-group')[0].style.display = 'none';
                             form.querySelectorAll('#cortes_content .form-group')[1].style.display = 'none';
                             form.querySelectorAll('#cortes_content .form-group')[2].style.display = 'none';
-                        }else if (json_app.Corte_Servicio == 2){
+                        } else if (json_app.Corte_Servicio == 2) {
                             form.querySelectorAll('#cortes_content .form-group')[0].style.display = 'block';
                             form.querySelectorAll('#cortes_content .form-group')[1].style.display = 'none';
                             form.querySelectorAll('#cortes_content .form-group')[2].style.display = 'none';
                             form.querySelectorAll('#cortes_content select')[0].value = json_app.Fechas_Especificas;
-                        }else if (json_app.Corte_Servicio == 3) {
+                        } else if (json_app.Corte_Servicio == 3) {
                             form.querySelectorAll('#cortes_content .form-group')[0].style.display = 'none';
                             form.querySelectorAll('#cortes_content .form-group')[1].style.display = 'block';
                             form.querySelectorAll('#cortes_content .form-group')[2].style.display = 'none';
                             form.querySelectorAll('#cortes_content select')[1].value = parseInt(json_app.Fechas_Especificas.split(',')[0]);
                             form.querySelectorAll('#cortes_content select')[2].value = parseInt(json_app.Fechas_Especificas.split(',')[1]);
-                        }else if (json_app.Corte_Servicio == 4){
+                        } else if (json_app.Corte_Servicio == 4) {
                             form.querySelectorAll('#cortes_content .form-group')[0].style.display = 'none';
                             form.querySelectorAll('#cortes_content .form-group')[1].style.display = 'none';
                             form.querySelectorAll('#cortes_content .form-group')[2].style.display = 'block';
                             form.querySelectorAll('#cortes_content select')[3].value = parseInt(json_app.Fechas_Especificas);
-                        }else{
+                        } else {
                             form.querySelectorAll('#cortes_content .form-group')[0].style.display = 'none';
                             form.querySelectorAll('#cortes_content .form-group')[1].style.display = 'none';
                             form.querySelectorAll('#cortes_content .form-group')[2].style.display = 'none';
@@ -278,19 +278,19 @@ class Cliente {
                         form.querySelectorAll('input')[5].value = json_app.Portal_Usuario;
                         form.querySelectorAll('input')[6].value = json_app.Portal_Contraseña;
                         form.querySelectorAll('select')[6].value = json_app.Centro_Costos;
-                    }else {
+                    } else {
                         form.querySelectorAll('input')[0].value = 0;
                         form.querySelectorAll('input')[1].value = 0;
                     }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
-                    
-			}
+
+            }
         }
     }
 
-    getCuentas(Cliente){
+    getCuentas(Cliente) {
         let xhr = new XMLHttpRequest();
         let data = `Cliente=${Cliente}`;
         let form = document.querySelector('#modal_cuentas');
@@ -298,12 +298,12 @@ class Cliente {
         xhr.open('POST', '../Cliente_SA/getOne');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
-        xhr.onreadystatechange = function(){
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
-                    if (r != 0){
+                    if (r != 0) {
                         let json_app = JSON.parse(r);
                         form.querySelectorAll('input')[0].value = json_app.Cliente;
                         form.querySelectorAll('input')[1].value = 1;
@@ -311,19 +311,19 @@ class Cliente {
                         form.querySelectorAll('input')[3].value = json_app.Cuentas_Correo;
                         form.querySelectorAll('input')[4].value = json_app.Cuentas_Telefono;
                         form.querySelectorAll('input')[5].value = json_app.Cuentas_Extension;
-                    }else {
+                    } else {
                         form.querySelectorAll('input')[0].value = 0;
                         form.querySelectorAll('input')[1].value = 0;
                     }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
-                    
-			}
+
+            }
         }
     }
 
-    getComentario(Cliente){
+    getComentario(Cliente) {
         let xhr = new XMLHttpRequest();
         let data = `Cliente=${Cliente}`;
         let form = document.querySelector('#modal_comentario');
@@ -331,29 +331,29 @@ class Cliente {
         xhr.open('POST', '../Cliente_SA/getOne');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
-        xhr.onreadystatechange = function(){
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
-                    if (r != 0){
+                    if (r != 0) {
                         let json_app = JSON.parse(r);
                         form.querySelectorAll('input')[0].value = json_app.Cliente;
                         form.querySelectorAll('input')[1].value = 1;
                         form.querySelectorAll('textarea')[0].value = json_app.Comentario;
-                    }else {
+                    } else {
                         form.querySelectorAll('input')[0].value = 0;
                         form.querySelectorAll('input')[1].value = 0;
                     }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
-                    
-			}
+
+            }
         }
     }
 
-  
+
     save_empresa2() {
         var form = document.querySelector("#modal_empresa form");
         var formData = new FormData(form);
@@ -399,8 +399,8 @@ class Cliente {
             }
         }
     }
-    
-    getContacto(ID){
+
+    getContacto(ID) {
         let xhr = new XMLHttpRequest();
         let data = `ID_Contacto=${ID}`;
         let form = document.querySelector('#modal_contacto');
@@ -408,12 +408,12 @@ class Cliente {
         xhr.open('POST', '../ClienteContacto_SA/getOne');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
-        xhr.onreadystatechange = function(){
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
-                    if (r != 0){
+                    if (r != 0) {
                         let json_app = JSON.parse(r);
                         form.querySelectorAll('input')[0].value = json_app.ID;
                         form.querySelectorAll('input')[1].value = 1;
@@ -434,9 +434,9 @@ class Cliente {
                         form.querySelectorAll('input')[11].value = json_app.Empresa;
                         //form.querySelectorAll('input')[12].value = json_app.ID_Cliente;
                         form.querySelectorAll('input')[13].value = json_app.username != null ? 1 : 0;
-						form.querySelectorAll('select')[2].value = json_app.tipo_usuario;
+                        form.querySelectorAll('select')[2].value = json_app.tipo_usuario;
 
-                    }else {
+                    } else {
                         form.querySelectorAll('input')[0].value = 0;
                         form.querySelectorAll('input')[1].value = 0;
                         form.querySelectorAll('input')[13].value = 0;
@@ -444,12 +444,12 @@ class Cliente {
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
-                    
-			}
+
+            }
         }
     }
 
-    deleteContacto(ID){
+    deleteContacto(ID) {
         let xhr = new XMLHttpRequest();
         let data = `ID_Contacto=${ID}`;
         let form = document.querySelector('#modal_delete_contacto');
@@ -457,27 +457,27 @@ class Cliente {
         xhr.open('POST', '../ClienteContacto_SA/getOne');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
-        xhr.onreadystatechange = function(){
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
-                    if (r != 0){
+                    if (r != 0) {
                         let json_app = JSON.parse(r);
                         form.querySelectorAll('input')[0].value = json_app.ID;
                         form.querySelectorAll('input')[3].value = json_app.username;
-                        form.querySelector('p').textContent = "¿Estás seguro de que deseas eliminar el usuario de "+json_app.Nombre_Contacto+" "+json_app.Apellido_Contacto+"?";
-                    }else 
+                        form.querySelector('p').textContent = "¿Estás seguro de que deseas eliminar el usuario de " + json_app.Nombre_Contacto + " " + json_app.Apellido_Contacto + "?";
+                    } else
                         form.querySelectorAll('input')[0].value = 0;
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
-                    
-			}
+
+            }
         }
     }
 
-    getRazonSocial(ID){
+    getRazonSocial(ID) {
         let xhr = new XMLHttpRequest();
         let data = `ID_Razon=${ID}`;
         let form = document.querySelector('#modal_razon');
@@ -485,12 +485,12 @@ class Cliente {
         xhr.open('POST', '../RazonesSociales/getOne');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
-        xhr.onreadystatechange = function(){
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
-                    if (r != 0){
+                    if (r != 0) {
                         let json_app = JSON.parse(r);
                         form.querySelectorAll('input')[0].value = json_app.ID;
                         form.querySelectorAll('input')[1].value = 1;
@@ -505,37 +505,37 @@ class Cliente {
                         form.querySelectorAll('input')[7].value = json_app.Contacto;
                         form.querySelectorAll('input')[8].value = json_app.Otro;
                         form.querySelectorAll('input')[10].value = json_app.Empresa;
-                    }else {
+                    } else {
                         form.querySelectorAll('input')[0].value = 0;
                         form.querySelectorAll('input')[1].value = 0;
                     }
                 } catch (error) {
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo '+error, 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
                 }
-                    
-			}
+
+            }
         }
     }
-
-    save_contacto(){
+    //gabo 2 oct
+    save_contacto() {
         var form = document.querySelector("#modal_contacto form");
-		var formData = new FormData(form);
+        var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../ClienteContacto_SA/save');
-		xhr.send(formData);
 
-        xhr.onreadystatechange = function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '../ClienteContacto_SA/save');
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
+                    if (json_app.status == 0) {
                         form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Omitiste algún dato','error');
-                    }else if(json_app.status == 1){
+                        utils.showToast('Omitiste algún dato', 'error');
+                    } else if (json_app.status == 1) {
                         let contactos = '';
                         json_app.contactos.forEach(element => {
                             contactos += `
@@ -552,6 +552,13 @@ class Cliente {
                                 <td>${element.nombre_tipo}</td>
                                 <td class="text-center py-0 align-middle">
                                     <div class="btn-group btn-group-sm">
+
+                                
+                                    <button class="btn btn-warning" data-id="${element.Usuario}" data-nombre="${element.Nombre_Contacto} ${element.Apellido_Contacto}">
+                                        <i class="fas fa-envelope"></i>
+                                    </button>
+                                   
+
                                         <button class="btn btn-info" data-id="${element.ID_Contacto}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </button>
@@ -567,48 +574,50 @@ class Cliente {
                         utils.showToast('El contacto fue registrado exitosamente', 'success');
                         $('#modal_contacto').modal('hide');
                         form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app.status == 2){
+
+
+                    } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else if (json_app.status == 3){
+                    } else if (json_app.status == 3) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('El usuario o la dirección de correo electrónico ya existe.', 'error');
-                    }else if (json_app.status == 4){
+                    } else if (json_app.status == 4) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else{
+                    } else {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     form.querySelectorAll('.btn')[1].disabled = false;
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo '+error, 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
                 }
 
-            }        
+            }
         }
 
     }
-
-    delete_contacto(){
+    //gabo 2 oct
+    delete_contacto() {
         var form = document.querySelector("#modal_delete_contacto form");
-		var formData = new FormData(form);
+        var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../ClienteContacto_SA/delete');
-		xhr.send(formData);
 
-        xhr.onreadystatechange = function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '../ClienteContacto_SA/delete');
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
+                    if (json_app.status == 0) {
                         form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Omitiste algún dato','error');
-                    }else if(json_app.status == 1){
+                        utils.showToast('Omitiste algún dato', 'error');
+                    } else if (json_app.status == 1) {
                         let contactos = '';
                         json_app.contactos.forEach(element => {
                             contactos += `
@@ -625,6 +634,12 @@ class Cliente {
                                 <td>${element.nombre_tipo}</td>
                                 <td class="text-center py-0 align-middle">
                                     <div class="btn-group btn-group-sm">
+
+                                    <button class="btn btn-warning" data-id="${element.Usuario}" data-nombre="${element.Nombre_Contacto} ${element.Apellido_Contacto}">
+                                    <i class="fas fa-envelope"></i>
+                                </button>
+                               
+
                                         <button class="btn btn-info" data-id="${element.ID_Contacto}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </button>
@@ -639,48 +654,48 @@ class Cliente {
                         utils.showToast('El contacto fue eliminado exitosamente', 'success');
                         $('#modal_delete_contacto').modal('hide');
                         form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app.status == 2){
+                    } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else if (json_app.status == 3){
+                    } else if (json_app.status == 3) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('El usuario o la dirección de correo electrónico ya existe.', 'error');
-                    }else if (json_app.status == 4){
+                    } else if (json_app.status == 4) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else{
+                    } else {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     form.querySelectorAll('.btn')[1].disabled = false;
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo '+error, 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
                 }
 
-            }        
+            }
         }
 
     }
 
-    save_razon(){
+    save_razon() {
         var form = document.querySelector("#modal_razon form");
-		var formData = new FormData(form);
+        var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../RazonesSociales/save');
-		xhr.send(formData);
 
-        xhr.onreadystatechange = function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '../RazonesSociales/save');
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
+                    if (json_app.status == 0) {
                         form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Omitiste algún dato','error');
-                    }else if(json_app.status == 1){
+                        utils.showToast('Omitiste algún dato', 'error');
+                    } else if (json_app.status == 1) {
                         let razones = '';
                         json_app.razones.forEach(element => {
                             razones += `
@@ -705,19 +720,19 @@ class Cliente {
                         utils.showToast('La razón social fue registrada exitosamente', 'success');
                         $('#modal_razon').modal('hide');
                         form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app.status == 2){
+                    } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else{
+                    } else {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
 
-            }        
+            }
         }
     }
     save_nombre_cliente() {
@@ -776,25 +791,25 @@ class Cliente {
     }
 
 
-    save_servicios(){
+    save_servicios() {
         var form = document.querySelector("#modal_servicios form");
-		var formData = new FormData(form);
+        var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../Cliente_SA/updateServicios');
-		xhr.send(formData);
 
-        xhr.onreadystatechange = function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '../Cliente_SA/updateServicios');
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
+                    if (json_app.status == 0) {
                         form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Omitiste algún dato','error');
-                    }else if(json_app.status == 1){
+                        utils.showToast('Omitiste algún dato', 'error');
+                    } else if (json_app.status == 1) {
                         let content = '';
                         content = `
                         <div class="row">
@@ -822,42 +837,42 @@ class Cliente {
                         utils.showToast('Los servicios fueron actualizados exitosamente', 'success');
                         $('#modal_servicios').modal('hide');
                         form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app.status == 2){
+                    } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else{
+                    } else {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
 
-            }        
+            }
         }
     }
 
 
-   save_condiciones(){
+    save_condiciones() {
         var form = document.querySelector("#modal_condiciones form");
-		var formData = new FormData(form);
+        var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../Cliente_SA/updateCondiciones');
-		xhr.send(formData);
 
-        xhr.onreadystatechange = function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '../Cliente_SA/updateCondiciones');
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
+                    if (json_app.status == 0) {
                         form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Omitiste algún dato','error');
-                    }else if(json_app.status == 1){
+                        utils.showToast('Omitiste algún dato', 'error');
+                    } else if (json_app.status == 1) {
                         let content = '';
                         content = `
                         <div class="row">
@@ -901,41 +916,41 @@ class Cliente {
                         utils.showToast('Las condiciones de venta fueron actualizadas exitosamente', 'success');
                         $('#modal_condiciones').modal('hide');
                         form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app.status == 2){
+                    } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else{
+                    } else {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
 
-            }        
+            }
         }
     }
 
-    save_facturacion(){
+    save_facturacion() {
         var form = document.querySelector("#modal_facturacion form");
-		var formData = new FormData(form);
+        var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../Cliente_SA/updateFacturacion');
-		xhr.send(formData);
 
-        xhr.onreadystatechange = function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '../Cliente_SA/updateFacturacion');
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
+                    if (json_app.status == 0) {
                         form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Omitiste algún dato','error');
-                    }else if(json_app.status == 1){
+                        utils.showToast('Omitiste algún dato', 'error');
+                    } else if (json_app.status == 1) {
                         let content = '';
                         content = `
                         <div class="row">
@@ -945,7 +960,7 @@ class Cliente {
                             </div>
                             <div class="col text-center">
                                 <b>${json_app.cliente.Corte_Servicio == 1 ? '' : (json_app.cliente.Corte_Servicio == 2 ? 'Corte Semanal:' : (json_app.cliente.Corte_Servicio == 3 ? 'Corte Quincenal: ' : (json_app.cliente.Corte_Servicio == 4 ? 'Corte Mensual:' : '')))}</b>
-                                <p>${json_app.cliente.Corte_Servicio == 1 ? '' : (json_app.cliente.Corte_Servicio == 2 ? 'Cada '+json_app.cliente.Fechas_Especificas : (json_app.cliente.Corte_Servicio == 3 ? 'Los días '+json_app.cliente.Fechas_Especificas.split('.')[0]+' y '+json_app.cliente.Fechas_Especificas.split('.')[1] : (json_app.cliente.Corte_Servicio == 4 ? 'El día '+json_app.cliente.Fechas_Especificas : '')))}</p>
+                                <p>${json_app.cliente.Corte_Servicio == 1 ? '' : (json_app.cliente.Corte_Servicio == 2 ? 'Cada ' + json_app.cliente.Fechas_Especificas : (json_app.cliente.Corte_Servicio == 3 ? 'Los días ' + json_app.cliente.Fechas_Especificas.split('.')[0] + ' y ' + json_app.cliente.Fechas_Especificas.split('.')[1] : (json_app.cliente.Corte_Servicio == 4 ? 'El día ' + json_app.cliente.Fechas_Especificas : '')))}</p>
                             </div>
                         </div>
                         <div class="row">
@@ -989,41 +1004,41 @@ class Cliente {
                         utils.showToast('Los datos de facturación del cliente han sido actualizados exitosamente', 'success');
                         $('#modal_facturacion').modal('hide');
                         form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app.status == 2){
+                    } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else{
+                    } else {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
 
-            }        
+            }
         }
     }
 
-    save_cuentas(){
+    save_cuentas() {
         var form = document.querySelector("#modal_cuentas form");
-		var formData = new FormData(form);
+        var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../Cliente_SA/updateCuentas');
-		xhr.send(formData);
 
-        xhr.onreadystatechange = function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '../Cliente_SA/updateCuentas');
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
+                    if (json_app.status == 0) {
                         form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Omitiste algún dato','error');
-                    }else if(json_app.status == 1){
+                        utils.showToast('Omitiste algún dato', 'error');
+                    } else if (json_app.status == 1) {
                         let content = '';
                         content = `
                         <div class="row">
@@ -1051,41 +1066,41 @@ class Cliente {
                         utils.showToast('La información de cuentas por pagar del cliente fue actualizada exitosamente', 'success');
                         $('#modal_cuentas').modal('hide');
                         form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app.status == 2){
+                    } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else{
+                    } else {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
 
-            }        
+            }
         }
     }
 
-    save_comentario_cliente(){
+    save_comentario_cliente() {
         var form = document.querySelector("#modal_comentario form");
-		var formData = new FormData(form);
+        var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../Cliente_SA/updateComentario');
-		xhr.send(formData);
 
-        xhr.onreadystatechange = function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '../Cliente_SA/updateComentario');
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
+                    if (json_app.status == 0) {
                         form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Omitiste algún dato','error');
-                    }else if(json_app.status == 1){
+                        utils.showToast('Omitiste algún dato', 'error');
+                    } else if (json_app.status == 1) {
                         let content = '';
                         content = `
                         <p>${json_app.cliente.Comentario}</p>
@@ -1094,41 +1109,41 @@ class Cliente {
                         utils.showToast('Los comentarios del cliente fueron actualizados exitosamente', 'success');
                         $('#modal_comentario').modal('hide');
                         form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app.status == 2){
+                    } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else{
+                    } else {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
 
-            }        
+            }
         }
     }
 
-    save_nota(){
+    save_nota() {
         var form = document.querySelector("#modal_nota form");
-		var formData = new FormData(form);
+        var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../ClienteNotas/save');
-		xhr.send(formData);
 
-        xhr.onreadystatechange = function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '../ClienteNotas/save');
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
+                    if (json_app.status == 0) {
                         form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Omitiste algún dato','error');
-                    }else if(json_app.status == 1){
+                        utils.showToast('Omitiste algún dato', 'error');
+                    } else if (json_app.status == 1) {
                         let notas = '';
                         json_app.notas.forEach(element => {
                             notas += `
@@ -1148,97 +1163,97 @@ class Cliente {
                         utils.showToast('La nota fue registrada exitosamente', 'success');
                         $('#modal_nota').modal('hide');
                         form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app.status == 2){
+                    } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else{
+                    } else {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
 
-            }        
+            }
         }
     }
 
-    save_empresa(){
+    save_empresa() {
         var form = document.querySelector("#empresa-form");
-		var formData = new FormData(form);
+        var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../Empresa_SA/save');
-		xhr.send(formData);
 
-        xhr.onreadystatechange = function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '../Empresa_SA/save');
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
+                    if (json_app.status == 0) {
                         form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Omitiste algún dato','error');
-                    }else if(json_app.status == 1){
+                        utils.showToast('Omitiste algún dato', 'error');
+                    } else if (json_app.status == 1) {
                         utils.showToast('La empresa fue registrada exitosamente', 'success');
-                        setTimeout("location.href='./ver&id="+json_app.id+"'", 3000);
-                    }else if (json_app.status == 2){
+                        setTimeout("location.href='./ver&id=" + json_app.id + "'", 3000);
+                    } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else{
+                    } else {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Algo salió mal. Inténtalo de nuevo '+error, 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
                 }
 
-            }        
+            }
         }
     }
 
-    save_cliente(){
+    save_cliente() {
         var form = document.querySelector("#cliente-form");
-		var formData = new FormData(form);
+        var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../Cliente_SA/save');
-		xhr.send(formData);
 
-        xhr.onreadystatechange = function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '../Cliente_SA/save');
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
+                    if (json_app.status == 0) {
                         form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Omitiste algún dato','error');
-                    }else if(json_app.status == 1){
+                        utils.showToast('Omitiste algún dato', 'error');
+                    } else if (json_app.status == 1) {
                         utils.showToast('El cliente fue registrado exitosamente', 'success');
-                        setTimeout("location.href='./ver&id="+json_app.id+"'", 3000);
-                    }else if (json_app.status == 2){
+                        setTimeout("location.href='./ver&id=" + json_app.id + "'", 3000);
+                    } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else{
+                    } else {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Algo salió mal. Inténtalo de nuevo '+error, 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
                 }
 
-            }        
+            }
         }
     }
 
-    getContactos(Cliente, Empresa){
+    getContactos(Cliente, Empresa) {
         let xhr = new XMLHttpRequest();
         let data = `Cliente=${Cliente}&Empresa=${Empresa}`;
         let form = document.querySelector('#modal_contactos');
@@ -1246,12 +1261,12 @@ class Cliente {
         xhr.open('POST', '../ClienteContacto_SA/getContactosByCliente');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
-        xhr.onreadystatechange = function(){
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
-                    if (r != 0){
+                    if (r != 0) {
                         let json_app = JSON.parse(r);
                         let contactos = '';
                         json_app.contactosEmpresa.forEach(element => {
@@ -1267,19 +1282,19 @@ class Cliente {
                                 }
                             });
                         })
-                    }else {
+                    } else {
                         form.querySelectorAll('input')[0].value = 0;
                         form.querySelectorAll('input')[1].value = 0;
                     }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
-                    
-			}
+
+            }
         }
     }
 
-    getRazonesSociales(Cliente, Empresa){
+    getRazonesSociales(Cliente, Empresa) {
         let xhr = new XMLHttpRequest();
         let data = `Cliente=${Cliente}&Empresa=${Empresa}`;
         let form = document.querySelector('#modal_razones');
@@ -1287,12 +1302,12 @@ class Cliente {
         xhr.open('POST', '../RazonesSociales/getRazonesByCliente');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
-        xhr.onreadystatechange = function(){
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
-                    if (r != 0){
+                    if (r != 0) {
                         let json_app = JSON.parse(r);
                         let razones = '';
                         json_app.razonesEmpresa.forEach(element => {
@@ -1308,37 +1323,37 @@ class Cliente {
                                 }
                             });
                         })
-                    }else {
+                    } else {
                         form.querySelectorAll('input')[0].value = 0;
                         form.querySelectorAll('input')[1].value = 0;
                     }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
-                    
-			}
+
+            }
         }
     }
-
-    save_contactos_cliente(){
+    //gabo  2 oct
+    save_contactos_cliente() {
         var form = document.querySelector("#modal_contactos form");
-		var formData = new FormData(form);
+        var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../ClienteContacto_SA/save_contactos_cliente');
-		xhr.send(formData);
 
-        xhr.onreadystatechange = function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '../ClienteContacto_SA/save_contactos_cliente');
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
+                    if (json_app.status == 0) {
                         form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Omitiste algún dato','error');
-                    }else if(json_app.status == 1){
+                        utils.showToast('Omitiste algún dato', 'error');
+                    } else if (json_app.status == 1) {
                         let contactos = '';
                         json_app.contactos.forEach(element => {
                             contactos += `
@@ -1355,6 +1370,12 @@ class Cliente {
                                 <td>${element.nombre_tipo}</td>
                                 <td class="text-center py-0 align-middle">
                                     <div class="btn-group btn-group-sm">
+
+                                    <button class="btn btn-warning" data-id="${element.Usuario}" data-nombre="${element.Nombre_Contacto} ${element.Apellido_Contacto}">
+                                    <i class="fas fa-envelope"></i>
+                                </button>
+                               
+
                                         <button class="btn btn-info" data-id="${element.ID_Contacto}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </button>
@@ -1370,42 +1391,42 @@ class Cliente {
                         utils.showToast('Los contactos fueron actualizados exitosamente', 'success');
                         $('#modal_contactos').modal('hide');
                         form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app.status == 2){
+                    } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else{
+                    } else {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     form.querySelectorAll('.btn')[1].disabled = false;
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo '+error, 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
                 }
 
-            }        
+            }
         }
 
     }
 
-    save_razones_cliente(){
+    save_razones_cliente() {
         var form = document.querySelector("#modal_razones form");
-		var formData = new FormData(form);
+        var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../RazonesSociales/save_razones_cliente');
-		xhr.send(formData);
 
-        xhr.onreadystatechange = function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '../RazonesSociales/save_razones_cliente');
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
+                    if (json_app.status == 0) {
                         form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Omitiste algún dato','error');
-                    }else if(json_app.status == 1){
+                        utils.showToast('Omitiste algún dato', 'error');
+                    } else if (json_app.status == 1) {
                         let razones = '';
                         json_app.razones.forEach(element => {
                             razones += `
@@ -1427,54 +1448,54 @@ class Cliente {
                         if (json_app.razones.length > 0) {
                             document.querySelector('#btn-nuevo-contacto').parentElement.style.display = 'block';
                             document.querySelector('#btn-modificar-contactos').parentElement.style.display = 'block';
-                        }else{
+                        } else {
                             document.querySelector('#btn-nuevo-contacto').parentElement.style.display = 'none';
                             document.querySelector('#btn-modificar-contactos').parentElement.style.display = 'none';
                         }
                         $('#modal_razones').modal('hide');
                         form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app.status == 2){
+                    } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else{
+                    } else {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
                     form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
-            }        
+            }
         }
     }
 
-    save_encuesta(){
+    save_encuesta() {
         var form = document.querySelector("#modal_encuesta form");
-		var formData = new FormData(form);
+        var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../EncuestaCliente/save');
-		xhr.send(formData);
 
-        xhr.onreadystatechange = function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '../EncuestaCliente/save');
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
+                    if (json_app.status == 0) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         //utils.showToast('Omitiste algún dato','error');
-                    }else if(json_app.status == 1){
-                        
+                    } else if (json_app.status == 1) {
+
                         utils.showToast('Gracias por sus comentarios', 'success');
                         $('#modal_encuesta').modal('hide');
                         form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app.status == 2){
+                    } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         //utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else{
+                    } else {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         //utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
@@ -1483,69 +1504,69 @@ class Cliente {
                     //utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
 
-            }        
+            }
         }
     }
-	
 
-	
+
+
     //=========================[Gabo Marzo 1]==============================================
-    duplicate_contact(){  //gabo     saaaaa a reclu duplicar
-       
+    duplicate_contact() {  //gabo     saaaaa a reclu duplicar
+
         var form = document.querySelector("#modal_contacto form");
-		var formData = new FormData(form);
+        var formData = new FormData(form);
         form.querySelectorAll('.bn_duplicate').disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../ClienteContacto_SA/duplicate_contact');
-		xhr.send(formData);
-       
-        xhr.onreadystatechange = function(){
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '../ClienteContacto_SA/duplicate_contact');
+        xhr.send(formData);
+
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
-                 console.log(r);
+                console.log(r);
                 try {
-                    let json_app = JSON.parse(r); 
-                    if(json_app.status == 1){
+                    let json_app = JSON.parse(r);
+                    if (json_app.status == 1) {
                         utils.showToast('Contacto duplicado', 'success');
                         window.open(json_app.url, '_blank');
                         $('#modal_contacto').modal('hide');
                         form.querySelectorAll('.bn_duplicate').disabled = false;
-                    }else if (json_app.status == 2){
+                    } else if (json_app.status == 2) {
                         utils.showToast('El usuario ya existe', 'error');
                         form.querySelectorAll('.bn_duplicate').disabled = false;
-                        
-                    }else if (json_app.status == 3){
+
+                    } else if (json_app.status == 3) {
                         utils.showToast('El usuario no existe', 'error');
                         form.querySelectorAll('.bn_duplicate').disabled = false;
-                       
-                    }else if (json_app.status == 4){
+
+                    } else if (json_app.status == 4) {
                         utils.showToast('Completa todos los campos', 'error');
                         form.querySelectorAll('.bn_duplicate').disabled = false;
-                       
-                    }else{
+
+                    } else {
                         utils.showToast('Error', 'error');
                         form.querySelectorAll('.bn_duplicate').disabled = false;
-                        
+
                     }
                 } catch (error) {
                     utils.showToast('Error', 'error');
                     form.querySelectorAll('.bn_duplicate').disabled = false;
-                    
+
                 }
 
-            }        
+            }
         }
     }
-//=========================[Gabo Marzo 1]==============================================
-	
-	   eliminarCliente(cliente) {
+    //=========================[Gabo Marzo 1]==============================================
+
+    eliminarCliente(cliente) {
         const formData = new FormData();
         formData.append('Cliente', cliente);
         fetch('../Cliente_SA/eliminarCliente', {
-                method: 'POST',
-                body: formData
-            })
+            method: 'POST',
+            body: formData
+        })
             .then(response => {
                 if (response.ok) {
                     return response.text();
@@ -1701,8 +1722,8 @@ class Cliente {
             });
     }
 
-	
-	
-	
-	
+
+
+
+
 }

@@ -312,7 +312,7 @@ class User {
     }
 
     //===[gabo 4 agosto usuarios fin]===
-	 checkUsernameWithInfo() {
+    checkUsernameWithInfo() {
         var formData = new FormData();
         let username = document.querySelector('#username').value;
         formData.append('username', username);
@@ -322,7 +322,7 @@ class User {
         })
 
             .then(response => {
-               //  console.log(response.json());
+                //  console.log(response.json());
                 if (response.ok) {
                     return response.text();
                 } else {
@@ -442,5 +442,79 @@ class User {
 
             });
     }
+    //gabo 2 oct
+
+    Send_Email() {
+        var formData = new FormData();
+        let usuario = document.querySelector('#modal_send_email #Usuario').value;
+        formData.append('usuario', usuario);
+
+        fetch('../usuario/Send_email', {
+            method: 'POST',
+            body: formData
+        })
+
+            .then(response => {
+                console.log(response.json());
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('Network response was not ok.');
+                }
+            })
+            .then(r => {
+                try {
+
+                    const json_app = JSON.parse(r);
+
+                    if (json_app.status == 1) {
+
+                        document.getElementById("btn_send_email").disabled = false;
+                        document.getElementById("btn_send_email").value = 'Enviar';
+                        document.getElementById("texto").hidden = false;
+
+                        document.getElementById("imagen").hidden = true;
+
+
+
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Enviado',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                        $('#modal_send_email').modal('hide');
+
+                    } else {
+                        document.getElementById("btn_send_email").disabled = false;
+                        document.getElementById("btn_send_email").value = 'Enviar';
+                        document.getElementById("texto").hidden = false;
+
+                        document.getElementById("imagen").hidden = true;
+
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'warning',
+                            title: 'No enviado',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+
+                    }
+                } catch (error) {
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                }
+            })
+        // .catch(error => {
+        //     utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+
+        // });
+    }
+
+
+
 
 }

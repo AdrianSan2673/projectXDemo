@@ -90,8 +90,8 @@ class UsuarioController
                 $ultimoDiaMes = date('t', mktime(0, 0, 0, $mes, 1, $anio));
                 $ultimaSemana = strtotime("last Sunday", strtotime("$ultimoDiaMes-$mes-$anio"));
                 $ultimaSemanaSabado = date('Y-m-d', strtotime("next Saturday", $ultimaSemana));
-				$fechaActual = date('Y-m-d', time());
-				$ultimaSemana = date('Y-m-d', $ultimaSemana);
+                $fechaActual = date('Y-m-d', time());
+                $ultimaSemana = date('Y-m-d', $ultimaSemana);
                 if (($fechaActual >= $ultimaSemana && $fechaActual <= $ultimaSemanaSabado) || $_SESSION['id_cliente'] == 132) {
                     $contactoEmpresa = new ContactosEmpresa();
                     $contactoEmpresa->setUsuario($_SESSION['identity']->username);
@@ -126,7 +126,7 @@ class UsuarioController
                         $calificacion->setID_Cliente($clienteconta->Cliente);
                         $calificacion->setID_Empresa($clienteconta->Empresa);
                         $calificacion->setFecha($ultimaSemana);
-						$calificacion->setId($ultimaSemanaSabado);
+                        $calificacion->setId($ultimaSemanaSabado);
                         //$calificacionCliente = $calificacion->getOneSA();
                         $calificacionCliente = $calificacion->getOneSAByRange();
                         if (!$calificacionCliente) {
@@ -158,8 +158,8 @@ class UsuarioController
                 $contacto = $contact->getContactByUser();
                 if ($contacto)
                     $_SESSION['customer'] = TRUE;
-				
-				$access = new UserAccess();
+
+                $access = new UserAccess();
                 $access->setId_user($_SESSION['identity']->id);
                 $accesos = $access->getAccessById_user();
                 if ($accesos) {
@@ -1206,7 +1206,7 @@ class UsuarioController
             }
 
 
-			//gabo 6 sep
+            //gabo 6 sep
             $holidays = new EmployeeHolidays();
             $holidays->setId_employee($_SESSION['identity']->id_empleado);
             $holidays = $holidays->getEmployeeHoliday();
@@ -1267,9 +1267,8 @@ class UsuarioController
                 echo 0;
             }
         } else {
-           echo 0;
+            echo 0;
         }
-
     }
 
     public function logout_rh()
@@ -1323,7 +1322,7 @@ class UsuarioController
         }
     }
 
-      public function registrar_asistencia()
+    public function registrar_asistencia()
     {
 
         if (isset($_SESSION['identity']) && !empty($_SESSION['identity'])) {
@@ -1360,7 +1359,7 @@ class UsuarioController
     {
 
         foreach ($usuarios as &$usuario) {
-           // $usuario['password'] = Utils::decrypt($usuario['password']);
+            // $usuario['password'] = Utils::decrypt($usuario['password']);
             $usuario['last_session'] = ($usuario['last_session'] != NULL) ? Utils::getFullDate($usuario['last_session']) : '';
             $usuario['id'] = Encryption::encode($usuario['id']);
 
@@ -1389,7 +1388,7 @@ class UsuarioController
 
 
 
-     public function activate_user()
+    public function activate_user()
     {
 
         if (isset($_SESSION['identity']) && !empty($_SESSION['identity'])) {
@@ -1511,14 +1510,14 @@ class UsuarioController
         } else
             echo json_encode(array('status' => 2));
     }
-	   public function getOneByUsername()
+    public function getOneByUsername()
     {
         if (Utils::isValid($_POST['username'])) {
             $user = new User();
             $user->setUsername($_POST['username']);
             $user = $user->getOneByUsername();
-			
-			$contacto = new ContactosEmpresa();
+
+            $contacto = new ContactosEmpresa();
             $contacto->setUsuario($_POST['username']);
             $info = $contacto->getEmpresayClienteByUsername();
 
@@ -1538,8 +1537,8 @@ class UsuarioController
             $user = new User();
             $user->setEmail($_POST['email']);
             $user = $user->getOneByEmail();
-			
-			$contacto = new ContactosEmpresa();
+
+            $contacto = new ContactosEmpresa();
             $contacto->setCorreo($_POST['email']);
             $info = $contacto->getEmpresayClienteByUsername();
 
@@ -1552,8 +1551,8 @@ class UsuarioController
             echo json_encode(array('status' => 0));
         }
     }
-	
-	  public function update_UserRH()
+
+    public function update_UserRH()
     {
         if (Utils::isValid($_POST)) {
             $username = isset($_POST['username']) ? trim($_POST['username']) : FALSE;
@@ -1593,8 +1592,8 @@ class UsuarioController
             echo json_encode(array('status' => 0));
         }
     }
-	
-	function crearempleadosrh()
+
+    function crearempleadosrh()
     {
 
 
@@ -1631,8 +1630,8 @@ class UsuarioController
             }
         }
     }
-	
-	  function usuariosexcel()
+
+    function usuariosexcel()
     {
 
         require_once "libraries/Excel/vendor/autoload.php";
@@ -1680,12 +1679,11 @@ class UsuarioController
 
             $user->setPassword($password);
 
-echo nombre;
-			die();
+
             $userExists = $user->userExists();
             $emailExists = $user->emailExists();
             if (!$userExists  && !$emailExists && $username[0] != '') {
-            //    $save =   $user->save();
+                //    $save =   $user->save();
             } else {
                 echo " usuarios repetidos.\n";
                 echo $correo . "---" . $nombre . "\n";
@@ -1704,7 +1702,7 @@ echo nombre;
                 $contacto_empresa->setExtension(' ');
                 $contacto_empresa->setCelular(' ');
                 $contacto_empresa->setPuesto('Promotor');
-            //    $save = $contacto_empresa->create();
+                //    $save = $contacto_empresa->create();
             } else {
                 echo "rh_Ventas_Alta_Contactos repetidos\n";
                 echo $correo . "---" . $nombre, "\n";
@@ -1719,7 +1717,7 @@ echo nombre;
                 $contacto_cliente->setID_Cliente(716);
 
                 $contacto_cliente->setFecha(date('2023-09-14'));
-            //    $save = $contacto_cliente->create();
+                //    $save = $contacto_cliente->create();
             } else {
                 echo "rh_Ventas_Cliente_Contactos repetidos\n";
                 echo $correo . "---" . $nombre . "\n";
@@ -1732,5 +1730,41 @@ echo nombre;
 
 
 
+    }
+
+    //gabo 2 oct
+    function Send_email()
+    {
+        if (Utils::isValid($_POST)) {
+
+
+            $usuario = isset($_POST['usuario']) ? trim($_POST['usuario']) : FALSE;
+
+            $user = new User();
+            $user->setUsername($usuario);
+            $objectuser = $user->getOneByUsername();
+            $contrasena = Utils::decrypt($objectuser->password);
+            $email = $objectuser->email;
+            $nombre = $objectuser->first_name . " " . $objectuser->last_name;
+
+
+            $subject = 'Envio de Usuario de RRHH Ingenia';
+            $body = "Se envíael usuario de la plataforma, para acceder presione <a href='" . base_url . "usuario/index' target='_blank'>Aqui</a> " . $email . "/" . $nombre;
+            $body .= " : <br> username:" . $objectuser->username;
+            $body .= " <br> contraseña:" . $contrasena;
+            $email = 'gabriel.izaguirre@rrhhingenia.com';
+            $name = 'Gabriel Izguirre';
+
+
+            if (Utils::sendEmail('gabriel.izaguirre@rrhhingenia.com', $name, $subject, $body)) {
+                $subject = 'Copia a' . $_SESSION['identity']->first_name . " " . $_SESSION['identity']->last_name;
+                Utils::sendEmail($_SESSION['identity']->email, $name, $subject, $body);
+                echo json_encode(array('status' => 1));
+            } else {
+                echo json_encode(array('status' => 0));
+            }
+        } else {
+            echo json_encode(array('status' => 2));
+        }
     }
 }

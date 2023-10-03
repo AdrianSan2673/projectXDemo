@@ -517,6 +517,7 @@ class Utils
         //     return true;
         // else
         //     return false;
+
     }
 
     public static function sendMultipleEmail($emails, $subject, $body, $cc = false)
@@ -1440,11 +1441,11 @@ class Utils
     {
         require_once 'models/Vacancy.php';
         $vacantes = new Vacancy();
-        if (Utils::isRecruitmentManager()) {
+        if (Utils::isRecruitmentManager() && $_SESSION['identity']->id != 42) {
             $vacantes->setId_recruiter($_SESSION['identity']->id);
             $vacantes = $vacantes->getVacanciesInProcessByIdRecruiter();
         } else {
-            $vacantes = $vacantes->getVacanciesInProcess();
+            $vacantes = $vacantes->getAll();
         }
 
         return $vacantes;

@@ -227,21 +227,23 @@ class Candidate {
 						console.log(json_app);
 						if (json_app.isCandidate == true) {
 							utils.showToast('Informacion registrada exitosamente', 'success');
+
 							setTimeout(() => {
-								window.history.back();
+								window.location.href = `../vacante/en_proceso`;
 							}, 3000);
-						} if (json_app.id_vacancy == false) {
+
+						} else if (json_app.id_vacancy == false) {
 							utils.showToast('Informacion registrada exitosamente', 'success');
+
 							setTimeout(() => {
-								window.history.back();
+								window.location.href = `../vacante/en_proceso`;
 							}, 3000);
+
 						} else {
 							utils.showToast('Candidato creado exitosamente', 'success');
 							setTimeout(() => {
 								window.location.href = `./profile&id_vacancy=${json_app.id_vacancy}&id_candidate=${json_app.id_candidate}`;
 							}, 3000);
-
-
 						}
 					} else if (json_app.status == 2) {
 						utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');

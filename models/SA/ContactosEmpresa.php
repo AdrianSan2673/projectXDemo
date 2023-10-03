@@ -15,16 +15,16 @@ class ContactosEmpresa
     private $Fecha_Cumpleaños;
     private $Usuario;
     private $Activo;
-	private $tipo_usuario;
+    private $tipo_usuario;
     private $Master;
-	
+
     private $db;
     private $db1;
 
     public function __construct()
     {
         $this->db = Connection::connectSA();
-        $this->db1 = Connection::connectSA2();
+        // $this->db1 = Connection::connectSA2();
     }
 
     public function getID()
@@ -146,8 +146,8 @@ class ContactosEmpresa
     {
         $this->Activo = $Activo;
     }
-	
-	 public function getTipo_usuario()
+
+    public function getTipo_usuario()
     {
         return $this->tipo_usuario;
     }
@@ -157,13 +157,15 @@ class ContactosEmpresa
         $this->tipo_usuario = $tipo_usuario;
     }
 
-	public function getMaster(){
-		return $this->Master;
-	}
+    public function getMaster()
+    {
+        return $this->Master;
+    }
 
-	public function setMaster($Master){
-		$this->Master = $Master;
-	}
+    public function setMaster($Master)
+    {
+        $this->Master = $Master;
+    }
 
 
     public function create()
@@ -180,7 +182,7 @@ class ContactosEmpresa
         $Celular = $this->getCelular();
         $Fecha_Cumpleanos = $this->getFecha_Cumpleaños();
         $Usuario = $this->getUsuario();
-		$tipo_usuario = $this->getTipo_usuario();
+        $tipo_usuario = $this->getTipo_usuario();
         $Master = $this->getMaster();
 
         $stmt = $this->db->prepare("INSERT INTO rh_Ventas_Alta_Contactos(Empresa,Cliente,  Nombre_Contacto, Apellido_Contacto, Puesto, Correo, Telefono, Extension, Celular, Fecha_Cumpleaños, Usuario,tipo_usuario, Master) VALUES (:Empresa, 0, :Nombre_Contacto, :Apellido_Contacto, :Puesto, :Correo, :Telefono, :Extension, :Celular, :Fecha_Cumple, :Usuario,:tipo_usuario, :Master)");
@@ -194,7 +196,7 @@ class ContactosEmpresa
         $stmt->bindParam(":Celular", $Celular, PDO::PARAM_STR);
         $stmt->bindParam(":Fecha_Cumple", $Fecha_Cumpleanos, PDO::PARAM_STR);
         $stmt->bindParam(":Usuario", $Usuario, PDO::PARAM_STR);
-		        $stmt->bindParam(":tipo_usuario", $tipo_usuario, PDO::PARAM_INT);
+        $stmt->bindParam(":tipo_usuario", $tipo_usuario, PDO::PARAM_INT);
         $stmt->bindParam(":Master", $Master, PDO::PARAM_INT);
 
         $flag = $stmt->execute();
@@ -221,7 +223,7 @@ class ContactosEmpresa
         $Celular = $this->getCelular();
         $Fecha_Cumpleanos = $this->getFecha_Cumpleaños();
         $Usuario = $this->getUsuario();
-		$tipo_usuario = $this->getTipo_usuario();
+        $tipo_usuario = $this->getTipo_usuario();
         $Master = $this->getMaster();
 
 
@@ -237,7 +239,7 @@ class ContactosEmpresa
         $stmt->bindParam(":Celular", $Celular, PDO::PARAM_STR);
         $stmt->bindParam(":Fecha_Cumple", $Fecha_Cumpleanos, PDO::PARAM_STR);
         $stmt->bindParam(":Usuario", $Usuario, PDO::PARAM_STR);
-		$stmt->bindParam(":tipo_usuario", $tipo_usuario, PDO::PARAM_INT);
+        $stmt->bindParam(":tipo_usuario", $tipo_usuario, PDO::PARAM_INT);
         $stmt->bindParam(":Master", $Master, PDO::PARAM_INT);
 
         $flag = $stmt->execute();
@@ -262,7 +264,7 @@ class ContactosEmpresa
     {
         $Empresa = $this->getEmpresa();
 
-                $stmt = $this->db->prepare("SELECT ac.*, ac.ID AS ID_Contacto, ct.nombre_tipo as nombre_tipo,u.password FROM rh_Ventas_Alta_Contactos ac INNER JOIN rh_ventaS_Contacto_tipo ct ON ac.tipo_usuario=ct.id INNER JOIN reclutamiento.dbo.users u on ac.Usuario=u.username WHERE Empresa=:Empresa AND Activo=1 ORDER BY Nombre_Contacto");
+        $stmt = $this->db->prepare("SELECT ac.*, ac.ID AS ID_Contacto, ct.nombre_tipo as nombre_tipo,u.password FROM rh_Ventas_Alta_Contactos ac INNER JOIN rh_ventaS_Contacto_tipo ct ON ac.tipo_usuario=ct.id INNER JOIN reclutamiento.dbo.users u on ac.Usuario=u.username WHERE Empresa=:Empresa AND Activo=1 ORDER BY Nombre_Contacto");
 
         $stmt->bindParam(":Empresa", $Empresa, PDO::PARAM_INT);
         $stmt->execute();
@@ -401,8 +403,8 @@ class ContactosEmpresa
 
         return $fetch;
     }
-	
-	
+
+
 
     public function getOneClientesPorUsuarioContacto()
     {
@@ -431,7 +433,7 @@ class ContactosEmpresa
 
         return $fetch;
     }
-	 public function getEmpresayClienteByUsername()
+    public function getEmpresayClienteByUsername()
     {
 
         $username = $this->getUsuario();

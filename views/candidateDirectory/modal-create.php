@@ -22,7 +22,8 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label class="col-form-label" for="surname">Apellido Paterno*</label>
-                                <input type="text" class="form-control" name="surname" maxlength="100" value="" required>
+                                <input type="text" class="form-control" name="surname" maxlength="100" value=""
+                                    required>
                             </div>
                         </div>
 
@@ -36,7 +37,9 @@
 
                     <div class="form-group">
                         <label class="col-form-label" for="telephone">Telefono*</label>
-                        <input type="text" name="telephone" maxlength="13" class="form-control" value="" placeholder="Ingresa tu número telefónico" data-inputmask='"mask": "999 999 9999"' data-mask required>
+                        <input type="text" name="telephone" maxlength="13" class="form-control" value=""
+                            placeholder="Ingresa tu número telefónico" data-inputmask='"mask": "999 999 9999"' data-mask
+                            required>
                     </div>
 
                     <div class="form-group">
@@ -49,8 +52,15 @@
                         <?php $vacantes = Utils::getVacantesEnProceso(); ?>
                         <select name="id_vacancy" id="id_vacancy" class="form-control select2">
                             <option value="" disabled selected>Selecciona vacante</option>
-                            <?php foreach ($vacantes as $vacant) : ?>
-                                <option value="<?= $vacant['id'] ?>"><?= $vacant['customer'] . " / " . $vacant['vacancy'] . " / " . $vacant['city'] ?></option>
+                            <?php foreach ($vacantes as $vacant) :
+                                $activo = '';
+                                if ($vacant['id_status'] < 5) {
+                                    $activo = '/ (ACTIVO)';
+                                }
+                            ?>
+                            <option style="background-color:blue" value="<?= $vacant['id'] ?>">
+                                <?= $vacant['customer'] . " / " . $vacant['vacancy'] . " / " . $vacant['city'] . "      " . $activo     ?>
+                            </option>
                             <?php endforeach ?>
                         </select>
                     </div>
@@ -63,7 +73,7 @@
                                 <select name="id_state" id="id_state" class="form-control select2" required>
                                     <option disabled selected="selected"></option>
                                     <?php foreach ($states as $state) : ?>
-                                        <option value="<?= $state['id'] ?>"><?= $state['state'] ?></option>
+                                    <option value="<?= $state['id'] ?>"><?= $state['state'] ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -92,7 +102,7 @@
                         <label class="col-form-label" for="status">Resultado</label>
                         <select name="status" class="form-control">
                             <option value="" disabled selected>Selecciona resultado</option>
-                            <option value="1"  selected>Nuevo</option>
+                            <option value="1" selected>Nuevo</option>
                             <option value="2">Por contactar</option>
                             <option value="3">Contactado</option>
                             <option value="4">Pendiente</option>
@@ -117,26 +127,27 @@
 </div>
 
 
+
 <script type="text/javascript">
-    window.onload = function() {
-        document.querySelector('#id_state').onchange = function() {
-            let cities = new City();
-            cities.id_state = document.querySelector('#id_state').value;
-            cities.selector = document.querySelector('#id_city');
-            cities.getCitiesByState();
-        }
-
-        document.querySelector('#modal_create form').onsubmit = function(e) {
-            e.preventDefault();
-            let candidatedirectory = new Candidatedirectory();
-            candidatedirectory.save();
-        }
-
-        $("#id_vacancy").on("select2:select", function(e) {
-            var data = e.params.data;
-
-            let vacancy = new Vacancy();
-            vacancy.getVacancySateCity(data.id);
-        });
+window.onload = function() {
+    document.querySelector('#id_state').onchange = function() {
+        let cities = new City();
+        cities.id_state = document.querySelector('#id_state').value;
+        cities.selector = document.querySelector('#id_city');
+        cities.getCitiesByState();
     }
+
+    document.querySelector('#modal_create form').onsubmit = function(e) {
+        e.preventDefault();
+        let candidatedirectory = new Candidatedirectory();
+        candidatedirectory.save();
+    }
+
+    $("#id_vacancy").on("select2:select", function(e) {
+        var data = e.params.data;
+
+        let vacancy = new Vacancy();
+        vacancy.getVacancySateCity(data.id);
+    });
+}
 </script>
