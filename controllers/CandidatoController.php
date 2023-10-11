@@ -841,6 +841,7 @@ class CandidatoController
                     $va = new VacancyApplicant();
                     $va->setId_candidate($id);
                     $vacancies = $va->getApplicantsByCandidate();
+
                     if (isset($_GET['vacante'])) {
                         $id_vacancy = Encryption::decode($_GET['vacante']);
                         $va->setId_vacancy($id_vacancy);
@@ -1870,13 +1871,22 @@ class CandidatoController
     public function sideserver()
     {
 
+        $extrawhere = '';
+
         $_GET['filtros'] .= ($_GET['id_language'] != '') ? "and id_language like " . "'%" . $_GET['id_language'] . "%'" : '';
-        $extrawhere = substr($_GET['filtros'], 3);
+        $extrawhere .= substr($_GET['filtros'], 3);
         $tabla = "rrhhinge_Candidatos.filtros_candidatos fc";
 
         if ($_GET['clave'] != '') {
             $extrawhere = " ( first_name LIKE " . "'%" . $_GET['clave'] . "%' OR job_title LIKE " . "'%" . $_GET['clave'] . "%' OR description LIKE " . "'%" . $_GET['clave'] . "%' OR experiences LIKE " . "'%" . $_GET['clave'] . "%' OR aptitudes LIKE " . "'%" . $_GET['clave'] . "%')";
         }
+
+        if ($extrawhere != '') {
+            $extrawhere .= " AND created_at > '2022-06-01' ";
+        } else {
+            $extrawhere = " created_at > '2022-06-01' ";
+        }
+
 
 
         $primaryKey = 'id';

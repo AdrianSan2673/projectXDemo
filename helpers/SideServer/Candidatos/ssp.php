@@ -264,7 +264,7 @@ class SSP
         $data = self::sql_exec(
             $db,
             $bindings,
-            "SELECT " . implode(", ", self::pluck($columns, 'db')) . " $extraFields
+            "SELECT  " . implode(", ", self::pluck($columns, 'db')) . " $extraFields
 			 FROM $table
 			 $where
              $extraWhere

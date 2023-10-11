@@ -1043,6 +1043,7 @@ class Candidate {
 			},
 			processing: true,
 			serverSide: true,
+			"searching": false,
 			"pageLength": 50,
 			"columnDefs": [{
 				"targets": -1,

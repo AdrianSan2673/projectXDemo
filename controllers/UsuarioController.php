@@ -34,14 +34,15 @@ class UsuarioController
                 $candidato = $candidate->getCandidateByUsername();
                 if (!$candidato) {
                     header('location:' . base_url . 'candidato/crear_curriculum');
-                } else {
-                    if ($candidato->job_title == NUll || $candidato->description == NULL || $candidato->id_state == NULL || $candidato->id_city == NULL || $candidato->id_civil_status == NULL || $candidato->id_area == NULL || ($candidato->telephone == NULL && $candidato->cellphone == NULL)) {
-                        header('location:' . base_url . 'candidato/editar');
-                    }
-                    if (isset($_GET['vacante'])) {
-                        header('location:' . base_url . 'postulaciones/postulate&id_candidate=' . Encryption::encode($_SESSION['identity']->id) . '&id_vacancy=' . $_GET['vacante']);
-                    }
-                }
+                } 
+                // else {
+                //     if ($candidato->job_title == NUll || $candidato->description == NULL || $candidato->id_state == NULL || $candidato->id_city == NULL || $candidato->id_civil_status == NULL || $candidato->id_area == NULL || ($candidato->telephone == NULL && $candidato->cellphone == NULL)) {
+                //         header('location:' . base_url . 'candidato/editar');
+                //     }
+                //     if (isset($_GET['vacante'])) {
+                //         header('location:' . base_url . 'postulaciones/postulate&id_candidate=' . Encryption::encode($_SESSION['identity']->id) . '&id_vacancy=' . $_GET['vacante']);
+                //     }
+                // }
             }
 
             if (Utils::isCustomer()) {
