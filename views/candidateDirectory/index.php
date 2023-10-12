@@ -45,14 +45,17 @@
                             <select name="vacancy" id="search" class="form-control select2">
                                 <option value="0" selected>Sin filtro</option>
                                 <?php foreach ($vacancies as $vacancy) : ?>
-                                    <option value="<?= $vacancy['id'] ?>" <?= isset($_POST['vacancy']) && $_POST['vacancy'] == $vacancy['id'] ? 'selected' : '' ?>>
-                                        <?= $vacancy['customer'] . ' / ' . $vacancy['vacancy'] ?></option>
+                                <option value="<?= $vacancy['id'] ?>"
+                                    <?= isset($_POST['vacancy']) && $_POST['vacancy'] == $vacancy['id'] ? 'selected' : '' ?>>
+                                    <?= $vacancy['customer'] . ' / ' . $vacancy['vacancy'] ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
 
                         <div class="col-3">
-                            <button type="submit" class="btn btn-app btn-block btn-info form-control" style="background-color: #17a2b8; color: #fff;"><i class="fas fa-search"></i>Buscar</button>
+                            <button type="submit" class="btn btn-app btn-block btn-info form-control"
+                                style="background-color: #17a2b8; color: #fff;"><i
+                                    class="fas fa-search"></i>Buscar</button>
                         </div>
                     </div>
                 </form>
@@ -89,38 +92,42 @@
                     </thead>
                     <tbody>
                         <?php foreach ($candidatesDirector as $candidate) :  ?>
-                            <tr class="">
-                                <?= !Utils::isCustomer() ? '<td class="text-center align-middle">' . $candidate['created_at_month'] . '</td>' : '' ?>
-                                <td class="text-center align-middle"><?= $candidate['created_at'] ?></td>
-                                <?= !Utils::isCustomer() ? '<td class="text-center align-middle">' . $candidate['modified_at'] . '</td>' : '' ?>
-                                <td class="text-center align-middle"><?= $candidate['name'] ?></td>
-                                <td class="text-center align-middle"><?= $candidate['telephone'] ?></td>
-                                <td class="text-center align-middle"><?= $candidate['experience']  ?></td>
-                                <?= !Utils::isCustomer() ? '<td class="text-center align-middle">' . $candidate['vacancy'] . '</td>' : '' ?>
-                                <td class="text-center align-middle"><?= $candidate['id_state'] ?></td>
-                                <td class="text-center align-middle"><?= $candidate['id_city']  ?></td>
-                                <?= !Utils::isCustomer() ? '<td class="text-center align-middle ' . $candidate['color'] . '">' . $candidate['comment'] . '</td>' : '' ?>
-                                <td class="text-center  align-middle">
-                                    <div class="btn-group">
-                                        <button class="btn btn-info" data-id="<?= $candidate['id'] ?>">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>
+                        <tr class="">
+                            <?= !Utils::isCustomer() ? '<td class="text-center align-middle">' . $candidate['created_at_month'] . '</td>' : '' ?>
+                            <td class="text-center align-middle"><?= $candidate['created_at'] ?></td>
+                            <?= !Utils::isCustomer() ? '<td class="text-center align-middle">' . $candidate['modified_at'] . '</td>' : '' ?>
+                            <td class="text-center align-middle"><?= $candidate['name'] ?></td>
+                            <td class="text-center align-middle"><?= $candidate['telephone'] ?></td>
+                            <td class="text-center align-middle"><?= $candidate['experience']  ?></td>
+                            <?= !Utils::isCustomer() ? '<td class="text-center align-middle">' . $candidate['vacancy'] . '</td>' : '' ?>
+                            <td class="text-center align-middle"><?= $candidate['id_state'] ?></td>
+                            <td class="text-center align-middle"><?= $candidate['id_city']  ?></td>
+                            <?= !Utils::isCustomer() ? '<td class="text-center align-middle ' . $candidate['color'] . '">' . $candidate['comment'] . '</td>' : '' ?>
+                            <td class="text-center  align-middle">
+                                <div class="btn-group">
+                                    <button class="btn btn-info" data-id="<?= $candidate['id'] ?>">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
 
-                                        <a href="<?= base_url ?>candidato/ver&id=<?= $candidate['id_candidate'] ?>" class="btn btn-success ml-2 mr-2" target="_blank" <?= $candidate['hidden_ver'] ?>>
-                                            <i class="fas fa-eye"></i> Ver
-                                        </a>
-                                        <?php if ($candidate['id_vacancy'] != false && $candidate['vacancy'] != false) :  ?>
-                                            <a href="<?= base_url ?>candidato/crear&vacante=<?= $candidate['id_vacancy'] ?>&contact=<?= $candidate['id'] ?>" class="btn btn-orange ml-2 mr-2" target="_blank" <?= $candidate['hidden'] ?>>
-                                                <i class="fas fa-user-plus"></i> Agregar
-                                            </a>
-                                        <?php endif;    ?>
+                                    <a href="<?= base_url ?>candidato/ver&id=<?= $candidate['id_candidate'] ?>"
+                                        class="btn btn-success ml-2 mr-2" target="_blank"
+                                        <?= $candidate['hidden_ver'] ?>>
+                                        <i class="fas fa-eye"></i> Ver
+                                    </a>
+                                    <!-- <?php if ($candidate['id_vacancy'] != false && $candidate['vacancy'] != false) :  ?>
+                                    <a href="<?= base_url ?>candidato/crear&vacante=<?= $candidate['id_vacancy'] ?>&contact=<?= $candidate['id'] ?>"
+                                        class="btn btn-orange ml-2 mr-2" target="_blank" <?= $candidate['hidden'] ?>>
+                                        <i class="fas fa-user-plus"></i> Agregar
+                                    </a>
+                                    <?php endif;    ?> -->
 
-                                        <button class="btn btn-danger " data-id="<?= $candidate['id'] ?>" value="<?= $id_vacancy ?>" <?= $candidate['hidden'] ?>>
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                                    <button class="btn btn-danger " data-id="<?= $candidate['id'] ?>"
+                                        value="<?= $id_vacancy ?>" <?= $candidate['hidden'] ?>>
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
                         <?php endforeach;
                         ?>
                     </tbody>
@@ -150,84 +157,160 @@
 <script type="text/javascript" src="<?= base_url ?>app/vacancy.js?v=<?= rand() ?>"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', e => {
-        let table = document.querySelector('#tb_candidates');
+document.addEventListener('DOMContentLoaded', e => {
+    let table = document.querySelector('#tb_candidates');
 
-        table.style.display = "table";
-        utils.dtTable(table, true);
+    table.style.display = "table";
+    utils.dtTable(table, true);
 
-        document.querySelector('#btn_new_candidate').addEventListener('click', e => {
-            e.preventDefault();
-            document.querySelector('#modal_create [name="flag"]').value = 1
-            document.querySelector('#modal_create [name="id"]').value = ''
-            document.querySelector('#modal_create [name="submit"]').hidden = false
-            document.querySelector('#modal_create form').reset()
+    //gabo 9 oct
+    document.querySelector('#btn_new_candidate').addEventListener('click', e => {
+        e.preventDefault();
+        //document.querySelector('#modal_create [name="flag"]').value = 1
+        //document.querySelector('#modal_create [name="id"]').value = ''
+        // document.querySelector('#modal_create [name="candidate_submit"]').hidden = false
+        document.querySelector('#modal_create form').reset()
+        $('#modal_create form #id_vacancy').val('').trigger('change.select2');
+        $("#modal_create form [name='id_state']").val(null).trigger('change');
+        $("#modal_create form [name='id_city']").val(null).trigger('change');
+        $("#modal_create form [name='id_subarea']").val(null).trigger('change');
+        $("#modal_create form [name='id_city']").val(null).trigger('change');
 
-            $('#modal_create form #id_vacancy').val('').trigger('change.select2');
-            $("#modal_create form [name='id_state']").val(null).trigger('change');
-            $("#modal_create form [name='id_city']").val(null).trigger('change');
+        document.querySelector('#div-sexo').hidden = false;
+        document.querySelector('#div-civil-status').hidden = false;
+        document.querySelector('#div-email').hidden = false;
+        document.querySelector('#div-celular').hidden = false;
+        document.querySelector('#div-curriculum').hidden = false;
+        document.querySelector('#div-url').hidden = false;
+        document.querySelector('#div-experience').hidden = true;
+        document.querySelector('#documento_cargado').hidden = true;
+        document.querySelector('#div_experience').innerHTML = `
+        <div class="card-body"
+                                style="margin-bottom:0.6rem;border:1px solid #98AE98; border-radius:15px; padding:1rem">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="form-group" style="text-align: center">
+                                            <label for="" class="col-form-label"
+                                                style="margin-top:30px">Información:</label>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2" hidden>
+                                        <div class="form-group" style="text-align: center">
+                                            <label class="col-form-label">Fecha Inicio:</label>
+                                            <input type="date" name="start_date[]" id="start_dates"
+                                                style="text-align:center" class=" form-control" value="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2" hidden>
+                                        <div class="form-group" style="text-align: center">
+                                            <label class="col-form-label">Fecha Fin:</label>
+                                            <input type="date" name="end_date[]" id="end_dates"
+                                                style="text-align:center" class=" form-control" value="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group" style="text-align: center">
+                                            <label class="col-form-label">Empresa/puesto:</label>
+                                            <input onblur="verificar()" type="text" name="enterprise_experience[]"
+                                                id="enterprise_experience" style="text-align:center"
+                                                class=" form-control" value="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group" style="text-align: center">
+                                            <label class="col-form-label">Descripción:</label>
+                                            <textarea onblur="verificar()" name="review_experience[]"
+                                                id="review_experience" class=" form-control"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group" style="text-align: center">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+        $('#id_gender').prop("required", true);
+        $('#id_civil_status').prop("required", true);
+        $('#email').prop("required", true);
+        $('#celular').prop("required", true);
+
+        document.querySelector('#flag').value = 'create';
+        document.querySelector('#id_candidate_directory').value = '';
+        document.querySelector('#postulate').hidden = true;
+        document.querySelector('#create').hidden = true;
+
+
+        document.querySelector('#directory').hidden = false;
+        document.querySelector('#ver').hidden = true;
+
+        //gabo
+        document.querySelector('#directory').innerHTML = 'Crear';
+
+        $('#modal_create').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    })
+
+
+    document.querySelector('#tb_candidates').addEventListener('click', e => {
+        if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains(
+                'btn-info')) {
+
+            let ID;
+            if (e.target.classList.contains('btn-info'))
+                ID = e.target.dataset.id;
+            else
+                ID = e.target.offsetParent.dataset.id;
 
             $('#modal_create').modal({
                 backdrop: 'static',
                 keyboard: false
             });
-        })
+
+            document.querySelector('#flag').value = 'update';
+            document.querySelector('#directory').innerHTML = 'Guardar';
 
 
-        document.querySelector('#tb_candidates').addEventListener('click', e => {
-            if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains(
-                    'btn-info')) {
+            let candidatedirectory = new Candidatedirectory();
+            candidatedirectory.fill_modal(ID);
 
-                let ID;
-                if (e.target.classList.contains('btn-info'))
-                    ID = e.target.dataset.id;
-                else
-                    ID = e.target.offsetParent.dataset.id;
+        }
 
-                document.querySelector('#modal_create [name="flag"]').value = 2
-                document.querySelector('#modal_create [name="id"]').value = ID
+        if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains(
+                'btn-danger')) {
+            Swal.fire({
+                title: '¿Quieres eliminar este candidato?',
+                //text: "Se eliminara permanetemente y ya no aparecera en la lista.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Eliminar'
+            }).then((result) => {
+                if (result.value == true) {
 
-                $('#modal_create').modal({
-                    backdrop: 'static',
-                    keyboard: false
-                });
+                    console.log(e.target.value);
 
-                let candidatedirectory = new Candidatedirectory();
-                candidatedirectory.getOne();
+                    //Eliminar
+                    let ID;
+                    if (e.target.classList.contains('btn-danger'))
+                        ID = e.target.dataset.id;
+                    else
+                        ID = e.target.offsetParent.dataset.id;
 
-            }
+                    let candidatedirectory = new Candidatedirectory();
+                    candidatedirectory.delete(ID, e.target.value);
 
-            if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains(
-                    'btn-danger')) {
-                Swal.fire({
-                    title: '¿Quieres eliminar este candidato?',
-                    //text: "Se eliminara permanetemente y ya no aparecera en la lista.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#6c757d',
-                    cancelButtonText: 'Cancelar',
-                    confirmButtonText: 'Eliminar'
-                }).then((result) => {
-                    if (result.value == true) {
-
-                        console.log(e.target.value);
-
-                        //Eliminar
-                        let ID;
-                        if (e.target.classList.contains('btn-danger'))
-                            ID = e.target.dataset.id;
-                        else
-                            ID = e.target.offsetParent.dataset.id;
-
-                        let candidatedirectory = new Candidatedirectory();
-                        candidatedirectory.delete(ID, e.target.value);
-
-                    }
-                })
-            }
-            e.stopPropagation();
-        })
-
+                }
+            })
+        }
+        e.stopPropagation();
     })
+
+})
 </script>
