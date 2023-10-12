@@ -16,6 +16,10 @@ require_once 'models/Area.php';
 require_once 'models/Subarea.php';
 require_once 'models/CivilStatus.php';
 
+
+//gabo 12 oct
+require_once 'models/CandidateContact.php';
+
 class CandidatoController
 {
 
@@ -1694,7 +1698,7 @@ class CandidatoController
                     $candidate->setAge(NULL);
                     $candidate->setId_gender(NULL);
                     $candidate->setId_state(NULL);
-                    $candidate->setEmail($email);
+                    // $candidate->setEmail($email);
 
                     $candidate->setId_civil_status(NULL);
                     $candidate->setJob_title('');
@@ -1935,5 +1939,45 @@ class CandidatoController
         echo json_encode(
             SSP::simple($_POST, $sql_details,  $tabla, $primaryKey, $columns, $botones, $extrawhere)
         );
+    }
+
+
+    //gabo 12 oct
+
+
+    public function save_contact()
+    {
+        if (Utils::isValid($_POST)) {
+
+            $id_vacancy = isset($_POST['id_vacancy']) ? trim(Encryption::decode($_POST['id_vacancy'])) : FALSE;
+            $first_name = isset($_POST['first_name']) ? Utils::sanitizeString(($_POST['first_name'])) : FALSE;
+            $surname = isset($_POST['surname']) ? Utils::sanitizeString(($_POST['surname'])) : FALSE;
+            $last_name = isset($_POST['last_name']) ? Utils::sanitizeString(($_POST['last_name'])) : FALSE;
+            $telephone = isset($_POST['telephone']) ? Utils::sanitizeString(($_POST['telephone'])) : FALSE;
+
+            if ($id_vacancy && $first_name &&  $surname &&  $last_name &&  $telephone) {
+
+                //    ===[gabo 21 mayo operativa]===
+                $experience = new CandidateContact();
+                $experience->setFirst_name($first_name);
+                $experience->setSurname($surname);
+                $experience->setLast_name($last_name);
+                $experience->setTelephone($telephone);
+                $experience->setId_vacancy($id_vacancy);
+                $experience->setStatus(1);
+
+                $save = $experience->save();
+
+                if ($save) {
+                    echo json_encode(array('status' => 1));
+                } else {
+                    echo json_encode(array('status' => 2));
+                }
+            } else {
+                echo json_encode(array('status' => 0));
+            }
+        } else {
+            echo json_encode(array('status' => 0));
+        }
     }
 }

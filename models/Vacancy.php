@@ -60,8 +60,8 @@ class Vacancy
     private $experience_type;
     private $recruitment_service_cost;
     private $db;
-	private $telephone;
-	private $notes;
+    private $telephone;
+    private $notes;
 
     public function __construct()
     {
@@ -628,8 +628,8 @@ class Vacancy
     {
         $this->recruitment_service_cost = $recruitment_service_cost;
     }
-	
-	  public function getTelephone()
+
+    public function getTelephone()
     {
         return $this->telephone;
     }
@@ -638,7 +638,7 @@ class Vacancy
     {
         $this->telephone = $telephone;
     }
-	 public function getNotes()
+    public function getNotes()
     {
         return $this->notes;
     }
@@ -670,14 +670,14 @@ class Vacancy
 
     public function getVacanciesInProcess()
     {
-		$stmt = $this->db->prepare("SELECT v.id, CONCAT(u.first_name, ' ', u.last_name) AS recruiter, v.id_recruiter, v.request_date, c.customer, v.vacancy, s.abbreviation, ct.city, cc.cost_center, v.salary_min, v.salary_max, ISNULL(cbn.business_name, 'Pendiente') AS business_name, v.id_area, a.area, sa.subarea, v.send_date, CASE WHEN v.send_date IS NULL AND v.id_status < 5 THEN CONCAT(dbo.count_days(v.request_date, GETDATE()),'d ', (DATEDIFF(MINUTE, v.request_date, GETDATE()))%1440/60, 'h ') WHEN v.send_date IS NULL AND (v.id_status >= 5 AND v.id_status <> 8) THEN CONCAT(dbo.count_days(v.request_date, v.end_date),'d ', (DATEDIFF(MINUTE, v.request_date, v.end_date))%1440/60, 'h ') WHEN v.standby_date IS NOT NULL AND v.id_status = 8 AND v.send_date IS NULL THEN CONCAT(dbo.count_days(v.request_date, v.standby_date),'d ', (DATEDIFF(MINUTE, v.request_date, v.standby_date))%1440/60, 'h ') ELSE CONCAT(dbo.count_days(v.request_date, v.send_date),'d ', (DATEDIFF(MINUTE,v.request_date, v.send_date))%1440/60, 'h ') END AS number_days, CASE WHEN v.send_date IS NULL AND v.id_status < 5 THEN dbo.count_days(v.request_date, GETDATE()) WHEN v.send_date IS NULL AND (v.id_status >= 5 AND v.id_status <> 8) THEN dbo.count_days(v.request_date, v.end_date) WHEN v.standby_date IS NOT NULL AND v.id_status = 8 AND v.send_date IS NULL THEN dbo.count_days(v.request_date, v.standby_date) ELSE dbo.count_days(v.request_date, v.send_date) END AS n_days, vs.status, v.id_status, v.end_date, v.functions, COUNT(va.id) AS n_applicants, COUNT(CASE WHEN va.id_vacancy=v.id AND cdn.created_by IS NULL THEN 1 ELSE NULL END) AS real_n_applicants, COUNT(CASE WHEN va.id_vacancy=v.id AND cdn.created_by IS NULL AND va.id_status=1 THEN 1 ELSE NULL END) AS new_n_applicants, SUM(CASE WHEN va.id_status >= 2 AND va.id_status <= 4 THEN 1 ELSE 0 END) AS n_sent, SUM(CASE WHEN va.id_status >= 3 AND va.id_status <= 4  OR va.id_status=7  THEN 1 ELSE 0 END) AS n_selected, SUM(CASE WHEN va.id_status = 4 THEN 1 ELSE 0 END) AS n_chosen, v.position_number, v.time, v.type, v.warranty_time, v.authorization_date, v.commitment_date FROM vacancies v LEFT JOIN users u ON v.id_recruiter=u.id INNER JOIN customers c ON v.id_customer=c.id LEFT JOIN customer_business_name cbn ON v.id_business_name=cbn.id INNER JOIN cost_centers cc ON c.id_cost_center=cc.id INNER JOIN states s ON v.id_state=s.id INNER JOIN cities ct ON v.id_city=ct.id INNER JOIN vacancy_status vs ON v.id_status=vs.id LEFT JOIN vacancy_applicants va ON v.id=va.id_vacancy LEFT JOIN candidates cdn ON va.id_candidate=cdn.id INNER JOIN areas a ON v.id_area=a.id INNER JOIN subareas sa ON v.id_subarea=sa.id WHERE v.id_status <= 4 GROUP BY v.id, u.first_name, u.last_name, v.id_recruiter, v.request_date, c.customer, v.vacancy, s.abbreviation, ct.city, cc.cost_center, v.salary_min, v.salary_max, v.send_date, v.standby_date, v.id_area, v.end_date, vs.status, v.id_status, v.functions, a.area, sa.subarea, cbn.business_name, v.position_number, v.time, v.type, v.warranty_time, v.authorization_date, v.commitment_date ORDER BY CASE WHEN v.id_status=8 THEN 5 WHEN v.id_status=5 THEN 6 WHEN v.id_status=6 THEN 7 WHEN v.id_status=7 THEN 8 ELSE v.id_status END ASC, v.request_date DESC");
+        $stmt = $this->db->prepare("SELECT v.id, CONCAT(u.first_name, ' ', u.last_name) AS recruiter, v.id_recruiter, v.request_date, c.customer, v.vacancy, s.abbreviation, ct.city, cc.cost_center, v.salary_min, v.salary_max, ISNULL(cbn.business_name, 'Pendiente') AS business_name, v.id_area, a.area, sa.subarea, v.send_date, CASE WHEN v.send_date IS NULL AND v.id_status < 5 THEN CONCAT(dbo.count_days(v.request_date, GETDATE()),'d ', (DATEDIFF(MINUTE, v.request_date, GETDATE()))%1440/60, 'h ') WHEN v.send_date IS NULL AND (v.id_status >= 5 AND v.id_status <> 8) THEN CONCAT(dbo.count_days(v.request_date, v.end_date),'d ', (DATEDIFF(MINUTE, v.request_date, v.end_date))%1440/60, 'h ') WHEN v.standby_date IS NOT NULL AND v.id_status = 8 AND v.send_date IS NULL THEN CONCAT(dbo.count_days(v.request_date, v.standby_date),'d ', (DATEDIFF(MINUTE, v.request_date, v.standby_date))%1440/60, 'h ') ELSE CONCAT(dbo.count_days(v.request_date, v.send_date),'d ', (DATEDIFF(MINUTE,v.request_date, v.send_date))%1440/60, 'h ') END AS number_days, CASE WHEN v.send_date IS NULL AND v.id_status < 5 THEN dbo.count_days(v.request_date, GETDATE()) WHEN v.send_date IS NULL AND (v.id_status >= 5 AND v.id_status <> 8) THEN dbo.count_days(v.request_date, v.end_date) WHEN v.standby_date IS NOT NULL AND v.id_status = 8 AND v.send_date IS NULL THEN dbo.count_days(v.request_date, v.standby_date) ELSE dbo.count_days(v.request_date, v.send_date) END AS n_days, vs.status, v.id_status, v.end_date, v.functions, COUNT(va.id) AS n_applicants, COUNT(CASE WHEN va.id_vacancy=v.id AND cdn.created_by IS NULL THEN 1 ELSE NULL END) AS real_n_applicants, COUNT(CASE WHEN va.id_vacancy=v.id AND cdn.created_by IS NULL AND va.id_status=1 THEN 1 ELSE NULL END) AS new_n_applicants, SUM(CASE WHEN va.id_status >= 2 AND va.id_status <= 4 THEN 1 ELSE 0 END) AS n_sent, SUM(CASE WHEN va.id_status >= 3 AND va.id_status <= 4  OR va.id_status=7  THEN 1 ELSE 0 END) AS n_selected, SUM(CASE WHEN va.id_status = 4 THEN 1 ELSE 0 END) AS n_chosen, v.position_number, v.time, v.type, v.warranty_time, v.authorization_date, v.commitment_date FROM vacancies v LEFT JOIN users u ON v.id_recruiter=u.id INNER JOIN customers c ON v.id_customer=c.id LEFT JOIN customer_business_name cbn ON v.id_business_name=cbn.id INNER JOIN cost_centers cc ON c.id_cost_center=cc.id INNER JOIN states s ON v.id_state=s.id INNER JOIN cities ct ON v.id_city=ct.id INNER JOIN vacancy_status vs ON v.id_status=vs.id LEFT JOIN vacancy_applicants va ON v.id=va.id_vacancy LEFT JOIN candidates cdn ON va.id_candidate=cdn.id INNER JOIN areas a ON v.id_area=a.id INNER JOIN subareas sa ON v.id_subarea=sa.id WHERE v.id_status <= 4 GROUP BY v.id, u.first_name, u.last_name, v.id_recruiter, v.request_date, c.customer, v.vacancy, s.abbreviation, ct.city, cc.cost_center, v.salary_min, v.salary_max, v.send_date, v.standby_date, v.id_area, v.end_date, vs.status, v.id_status, v.functions, a.area, sa.subarea, cbn.business_name, v.position_number, v.time, v.type, v.warranty_time, v.authorization_date, v.commitment_date ORDER BY CASE WHEN v.id_status=8 THEN 5 WHEN v.id_status=5 THEN 6 WHEN v.id_status=6 THEN 7 WHEN v.id_status=7 THEN 8 ELSE v.id_status END ASC, v.request_date DESC");
         //$stmt = $this->db->prepare("SELECT v.id, CONCAT(u.first_name, ' ', u.last_name) AS recruiter, v.id_recruiter, v.request_date, c.customer, v.vacancy, s.abbreviation, ct.city, cc.cost_center, v.salary_min, v.salary_max, ISNULL(cbn.business_name, 'Pendiente') AS business_name, v.id_area, a.area, sa.subarea, v.send_date, CASE WHEN v.send_date IS NULL AND v.id_status < 5 THEN CONCAT(dbo.count_days(v.request_date, GETDATE()),'d ', (DATEDIFF(MINUTE, v.request_date, GETDATE()))%1440/60, 'h ') WHEN v.send_date IS NULL AND (v.id_status >= 5 AND v.id_status <> 8) THEN CONCAT(dbo.count_days(v.request_date, v.end_date),'d ', (DATEDIFF(MINUTE, v.request_date, v.end_date))%1440/60, 'h ') WHEN v.standby_date IS NOT NULL AND v.id_status = 8 AND v.send_date IS NULL THEN CONCAT(dbo.count_days(v.request_date, v.standby_date),'d ', (DATEDIFF(MINUTE, v.request_date, v.standby_date))%1440/60, 'h ') ELSE CONCAT(dbo.count_days(v.request_date, v.send_date),'d ', (DATEDIFF(MINUTE,v.request_date, v.send_date))%1440/60, 'h ') END AS number_days, CASE WHEN v.send_date IS NULL AND v.id_status < 5 THEN dbo.count_days(v.request_date, GETDATE()) WHEN v.send_date IS NULL AND (v.id_status >= 5 AND v.id_status <> 8) THEN dbo.count_days(v.request_date, v.end_date) WHEN v.standby_date IS NOT NULL AND v.id_status = 8 AND v.send_date IS NULL THEN dbo.count_days(v.request_date, v.standby_date) ELSE dbo.count_days(v.request_date, v.send_date) END AS n_days, vs.status, v.id_status, v.end_date, v.functions, COUNT(va.id) AS n_applicants, COUNT(CASE WHEN va.id_vacancy=v.id AND cdn.created_by IS NULL THEN 1 ELSE NULL END) AS real_n_applicants, COUNT(CASE WHEN va.id_vacancy=v.id AND cdn.created_by IS NULL AND va.id_status=1 THEN 1 ELSE NULL END) AS new_n_applicants, SUM(CASE WHEN va.id_status >= 2 AND va.id_status <= 4 THEN 1 ELSE 0 END) AS n_sent, SUM(CASE WHEN va.id_status >= 3 AND va.id_status <= 4 OR va.id_status=7  THEN 1 ELSE 0 END) AS n_selected, SUM(CASE WHEN va.id_status = 4 THEN 1 ELSE 0 END) AS n_chosen, v.position_number, v.time, v.type, v.warranty_time, v.authorization_date, v.commitment_date FROM vacancies v LEFT JOIN users u ON v.id_recruiter=u.id INNER JOIN customers c ON v.id_customer=c.id LEFT JOIN customer_business_name cbn ON v.id_business_name=cbn.id INNER JOIN cost_centers cc ON c.id_cost_center=cc.id INNER JOIN states s ON v.id_state=s.id INNER JOIN cities ct ON v.id_city=ct.id INNER JOIN vacancy_status vs ON v.id_status=vs.id LEFT JOIN vacancy_applicants va ON v.id=va.id_vacancy LEFT JOIN candidates cdn ON va.id_candidate=cdn.id INNER JOIN areas a ON v.id_area=a.id INNER JOIN subareas sa ON v.id_subarea=sa.id WHERE v.vacancy like '%ulises%' GROUP BY v.id, u.first_name, u.last_name, v.id_recruiter, v.request_date, c.customer, v.vacancy, s.abbreviation, ct.city, cc.cost_center, v.salary_min, v.salary_max, v.send_date, v.standby_date, v.id_area, v.end_date, vs.status, v.id_status, v.functions, a.area, sa.subarea, cbn.business_name, v.position_number, v.time, v.type, v.warranty_time, v.authorization_date, v.commitment_date ORDER BY CASE WHEN v.id_status=8 THEN 5 WHEN v.id_status=5 THEN 6 WHEN v.id_status=6 THEN 7 WHEN v.id_status=7 THEN 8 ELSE v.id_status END ASC, v.request_date DESC");
         $stmt->execute();
         $vacancies = $stmt->fetchAll();
         return $vacancies;
     }
     // ===[gabo 5 abril modal vacantes perdon:( )]===
-     public function getVacanciesInProcessByIdRecruiter()
+    public function getVacanciesInProcessByIdRecruiter()
     {
         $id = $this->getId_recruiter();
         $stmt = $this->db->prepare("SELECT v.id, CONCAT(u.first_name, ' ', u.last_name) AS recruiter, v.id_recruiter, v.request_date, c.customer, v.vacancy, s.abbreviation, ct.city, cc.cost_center, v.salary_min, v.salary_max, ISNULL(cbn.business_name, 'Pendiente') AS business_name, v.id_area, a.area, sa.subarea, v.send_date, CASE WHEN v.send_date IS NULL AND v.id_status < 5 THEN CONCAT(dbo.count_days(v.request_date, GETDATE()),'d ', (DATEDIFF(MINUTE, v.request_date, GETDATE()))%1440/60, 'h ') WHEN v.send_date IS NULL AND (v.id_status >= 5 AND v.id_status <> 8) THEN CONCAT(dbo.count_days(v.request_date, v.end_date),'d ', (DATEDIFF(MINUTE, v.request_date, v.end_date))%1440/60, 'h ') WHEN v.standby_date IS NOT NULL AND v.id_status = 8 AND v.send_date IS NULL THEN CONCAT(dbo.count_days(v.request_date, v.standby_date),'d ', (DATEDIFF(MINUTE, v.request_date, v.standby_date))%1440/60, 'h ') ELSE CONCAT(dbo.count_days(v.request_date, v.send_date),'d ', (DATEDIFF(MINUTE,v.request_date, v.send_date))%1440/60, 'h ') END AS number_days, CASE WHEN v.send_date IS NULL AND v.id_status < 5 THEN dbo.count_days(v.request_date, GETDATE()) WHEN v.send_date IS NULL AND (v.id_status >= 5 AND v.id_status <> 8) THEN dbo.count_days(v.request_date, v.end_date) WHEN v.standby_date IS NOT NULL AND v.id_status = 8 AND v.send_date IS NULL THEN dbo.count_days(v.request_date, v.standby_date) ELSE dbo.count_days(v.request_date, v.send_date) END AS n_days, vs.status, v.id_status, v.end_date, v.functions, COUNT(va.id) AS n_applicants, COUNT(CASE WHEN va.id_vacancy=v.id AND cdn.created_by IS NULL THEN 1 ELSE NULL END) AS real_n_applicants, COUNT(CASE WHEN va.id_vacancy=v.id AND cdn.created_by IS NULL AND va.id_status=1 THEN 1 ELSE NULL END) AS new_n_applicants, SUM(CASE WHEN va.id_status >= 2 AND va.id_status <= 4 THEN 1 ELSE 0 END) AS n_sent, SUM(CASE WHEN va.id_status >= 3 AND va.id_status <= 4 OR va.id_status=7  THEN 1 ELSE 0 END) AS n_selected, SUM(CASE WHEN va.id_status = 4 THEN 1 ELSE 0 END) AS n_chosen, v.position_number, v.time, v.type, v.warranty_time, v.authorization_date, v.commitment_date FROM vacancies v LEFT JOIN users u ON v.id_recruiter=u.id INNER JOIN customers c ON v.id_customer=c.id LEFT JOIN customer_business_name cbn ON v.id_business_name=cbn.id INNER JOIN cost_centers cc ON c.id_cost_center=cc.id INNER JOIN states s ON v.id_state=s.id INNER JOIN cities ct ON v.id_city=ct.id INNER JOIN vacancy_status vs ON v.id_status=vs.id LEFT JOIN vacancy_applicants va ON v.id=va.id_vacancy LEFT JOIN candidates cdn ON va.id_candidate=cdn.id INNER JOIN areas a ON v.id_area=a.id INNER JOIN subareas sa ON v.id_subarea=sa.id WHERE v.id_status <= 4 and v.id_recruiter=:id GROUP BY v.id, u.first_name, u.last_name, v.id_recruiter, v.request_date, c.customer, v.vacancy, s.abbreviation, ct.city, cc.cost_center, v.salary_min, v.salary_max, v.send_date, v.standby_date, v.id_area, v.end_date, vs.status, v.id_status, v.functions, a.area, sa.subarea, cbn.business_name, v.position_number, v.time, v.type, v.warranty_time, v.authorization_date, v.commitment_date ORDER BY CASE WHEN v.id_status=8 THEN 5 WHEN v.id_status=5 THEN 6 WHEN v.id_status=6 THEN 7 WHEN v.id_status=7 THEN 8 ELSE v.id_status END ASC, v.request_date DESC");
@@ -1022,9 +1022,9 @@ class Vacancy
         $payment_amount = $this->getPayment_amount();
         $experience_type = $this->getExperience_type();
         $recruitment_service_cost = $this->getRecruitment_service_cost();
-		
+
         $telephone = $this->getTelephone();
-		//$notes = $this->getNotes();
+        //$notes = $this->getNotes();
 
         $stmt = $this->db->prepare("INSERT INTO vacancies (id_customer, id_customer_contact, request_date, id_business_name, id_recruiter, vacancy, department, report_to, personal_in_charge, id_education_level, position_number, experience_years, experience, age_min, age_max, id_gender, id_civil_status, id_language, id_language_level, salary_min, salary_max, benefits, workdays, schedule, requirements, functions, skills, technical_knowledge, id_state, id_city, created_by, id_status, created_at, modified_at, end_date, id_area, id_subarea, comments, type, warranty_time, amount_to_invoice, authorization_date, commitment_date,working_day,send_date_candidate,advance_payment,payment_amount,experience_type,recruitment_service_cost,telephone) VALUES(:id_customer, :id_customer_contact, :request_date, :id_business_name, :recruiter, :vacancy, :department, :report_to, :personal_in_charge, :id_education_level, :position_number, :experience_years, :experience, :age_min, :age_max, :id_gender, :id_civil_status, :id_language, :id_language_level, :salary_min, :salary_max, :benefits, :workdays, :schedule, :requirements, :functions, :skills, :technical_knowledge, :id_state, :id_city, :created_by, :id_status, GETDATE(), GETDATE(), NULL, :id_area, :id_subarea, :comments, :type, :warranty_time, :amount_to_invoice, :authorization_date, :commitment_date,:working_day,:send_date_candidate,:advance_payment,:payment_amount,:experience_type,:recruitment_service_cost,:telephone)");
         $stmt->bindParam(":id_customer", $customer, PDO::PARAM_INT);
@@ -1074,7 +1074,7 @@ class Vacancy
         $stmt->bindParam(":experience_type", $experience_type, PDO::PARAM_STR);
         $stmt->bindParam(":recruitment_service_cost", $recruitment_service_cost, PDO::PARAM_STR);
         $stmt->bindParam(":telephone", $telephone, PDO::PARAM_INT);
-		//$stmt->bindParam(":notes", $notes, PDO::PARAM_INT);
+        //$stmt->bindParam(":notes", $notes, PDO::PARAM_INT);
 
         $flag = $stmt->execute();
 
@@ -1134,8 +1134,8 @@ class Vacancy
         $payment_amount = $this->getPayment_amount();
         $experience_type = $this->getExperience_type();
         $recruitment_service_cost = $this->getRecruitment_service_cost();
-		$telephone = $this->getTelephone();
-		//$notes = $this->getNotes();
+        $telephone = $this->getTelephone();
+        //$notes = $this->getNotes();
 
 
         //$created_by = $this->getCreated_by();
@@ -1187,8 +1187,8 @@ class Vacancy
         $stmt->bindParam(":payment_amount", $payment_amount, PDO::PARAM_STR);
         $stmt->bindParam(":experience_type", $experience_type, PDO::PARAM_STR);
         $stmt->bindParam(":recruitment_service_cost", $recruitment_service_cost, PDO::PARAM_STR);
-		$stmt->bindParam(":telephone", $telephone, PDO::PARAM_INT);
-		//$stmt->bindParam(":notes", $notes, PDO::PARAM_INT);
+        $stmt->bindParam(":telephone", $telephone, PDO::PARAM_INT);
+        //$stmt->bindParam(":notes", $notes, PDO::PARAM_INT);
 
 
         //$stmt->bindParam(":created_by", $created_by, PDO::PARAM_INT);
@@ -1491,7 +1491,7 @@ class Vacancy
     }
 
     //===========FIN GABO=============
-	//gabo 29
+    //gabo 29
     public function update_notes()
     {
         $result = false;
@@ -1509,5 +1509,16 @@ class Vacancy
             $result = true;
         }
         return $result;
+    }
+
+    public function existsVacancy()
+    {
+        $id = $this->getId();
+        $stmt = $this->db->prepare("SELECT * from vacancies WHERE id=:id");
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $fetch = $stmt->fetchObject();
+        return $fetch;
     }
 }

@@ -578,7 +578,7 @@ class CandidatoDirectorioController
 
 
 
-    public function save_candidato()
+    public function save_candidatopasadoo()
     {
 
         if (Utils::isValid($_POST)) {
@@ -1206,6 +1206,638 @@ class CandidatoDirectorioController
     }
 
 
+
+
+
+    public function save_candidato()
+    {
+
+        if (Utils::isValid($_POST)) {
+
+            $first_name = isset($_POST['first_name']) ? trim($_POST['first_name']) : FALSE;
+            $surname = isset($_POST['surname']) ? trim($_POST['surname']) : FALSE;
+            $last_name = isset($_POST['last_name']) ? trim($_POST['last_name']) : FALSE;
+            $date_birth = isset($_POST['date_birth']) && !empty($_POST['date_birth']) ? trim($_POST['date_birth']) : NULL;
+            $age = isset($_POST['age']) && !empty($_POST['age']) ? trim($_POST['age']) : NULL;
+            $id_gender = isset($_POST['id_gender']) ? trim($_POST['id_gender']) : NULL;
+            $id_civil_status = isset($_POST['id_civil_status']) && !empty($_POST['id_civil_status']) ? trim($_POST['id_civil_status']) : NULL;
+            $id_level = isset($_POST['id_level']) && $_POST['id_level'] != '' ? Utils::sanitizeNumber($_POST['id_level']) : FALSE;
+            $job_title = isset($_POST['job_title']) ? trim($_POST['job_title']) : FALSE;
+            $description = isset($_POST['description']) ? trim($_POST['description']) : '';
+            $telephone = isset($_POST['telephone']) ? trim($_POST['telephone']) : NULL;
+            $cellphone = isset($_POST['cellphone']) ? trim($_POST['cellphone']) : NULL;
+            $email = isset($_POST['email']) ? trim($_POST['email']) : FALSE;
+            $id_state = isset($_POST['id_state']) ? trim($_POST['id_state']) : FALSE;
+            $id_city = isset($_POST['id_city']) ? trim($_POST['id_city']) : FALSE;
+            $id_area = isset($_POST['id_area']) ? trim($_POST['id_area']) : FALSE;
+            $id_subarea = isset($_POST['id_subarea']) ? trim($_POST['id_subarea']) : FALSE;
+            $resume = isset($_FILES['resume']) && $_FILES['resume']['name'] != '' ? $_FILES['resume'] : FALSE;
+            $id_vacancy = isset($_POST['id_vacancy']) && !empty($_POST['id_vacancy']) ? $_POST['id_vacancy'] : FALSE;
+            $id_contacto = isset($_POST['contact']) ? Encryption::decode($_POST['contact']) : NULL; //id del contacto del directorio
+            $start_date = isset($_POST['start_date']) ?  $_POST['start_date'] : null;
+            $end_date = isset($_POST['end_date']) ?  $_POST['end_date'] : null;
+            $enterpise_experience = isset($_POST['enterprise_experience']) ?  $_POST['enterprise_experience'] : null;
+            $review_experience = isset($_POST['review_experience']) ?  $_POST['review_experience'] : null;
+            $tipo = isset($_POST['tipo']) ?  $_POST['tipo'] : null;
+            $url = isset($_POST['url']) ?  $_POST['url'] : null;
+            $comment = isset($_POST['comment']) ?  $_POST['comment'] : null;
+            $status = isset($_POST['status']) ?  $_POST['status'] : null;
+            $cellphone = isset($_POST['cellphone']) ?  $_POST['cellphone'] : null;
+
+            $flag = isset($_POST['flag']) ?  $_POST['flag'] : null;
+            //id_gender , id_state ,id_vacancy     
+            $id_candidate_directory = isset($_POST['id_candidate_directory']) ? Encryption::decode(($_POST['id_candidate_directory'])) : FALSE;
+
+
+
+
+            if ($date_birth < '1950-01-01') {
+                echo json_encode(array('status' => 5));
+                die();
+            }
+
+
+            $vacancy = new Vacancy();
+            $vacancy->setId($id_vacancy);
+            $vacante = $vacancy->getOne();
+
+
+
+            if (($first_name && $surname && $last_name && $age && $date_birth   && $id_level && $job_title  && $status && $id_vacancy  && $id_state && $id_city && $id_area && $id_subarea)) {
+
+
+                if ($resume) {
+                    $allowed_formats = array("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/pdf");
+                    $limit_kb = 6000;
+                    if (!in_array($_FILES["resume"]["type"], $allowed_formats) || $_FILES["resume"]["size"] > $limit_kb * 1024) {
+                        echo 4;
+                        die();
+                    }
+                }
+
+
+                if (($vacante->type == 1 || $vacante->type == 4)) {
+
+
+                    // if ($tipo == 'directory') {
+                    $candidateDirectoryObj = new CandidateDirectory();
+                    $candidateDirectoryObj->setFirst_name($first_name);
+                    $candidateDirectoryObj->setSurname($surname);
+                    $candidateDirectoryObj->setLast_name($last_name);
+                    $candidateDirectoryObj->setTelephone($telephone);
+                    $candidateDirectoryObj->setAge($age);
+                    $candidateDirectoryObj->setExperience($job_title);
+                    $candidateDirectoryObj->setId_vacancy($id_vacancy);
+                    $candidateDirectoryObj->setId_state($id_state);
+                    $candidateDirectoryObj->setId_city($id_city);
+                    //$candidateDirectoryObj->setEmail($email);
+                    $candidateDirectoryObj->setUrl($url);
+                    $candidateDirectoryObj->setComment($comment);
+                    $candidateDirectoryObj->setStatus($status);
+                    $candidateDirectoryObj->setCreated_at(getDate());
+                    $candidateDirectoryObj->setCreated_by($_SESSION['identity']->id);
+                    $candidateDirectoryObj->setModified_at(getDate());
+                    $candidateDirectoryObj->setDate_birth($date_birth);
+                    //$candidateDirectoryObj->setId_gender($id_gender);
+                    //$candidateDirectoryObj->setId_civil_status($id_civil_status);
+                    $candidateDirectoryObj->setJob_title($job_title);
+                    $candidateDirectoryObj->setDescription($description);
+                    $candidateDirectoryObj->setCellphone($cellphone);
+                    $candidateDirectoryObj->setId_area($id_area);
+                    $candidateDirectoryObj->setId_subarea($id_subarea);
+                    //$candidateDirectoryObj->setId_user($id_user);
+
+                    if ($flag == 'create') {
+                        $candidateDirectoryObj->save_candidate();
+                        $id_candidate_directory = $candidateDirectoryObj->getId();
+                    }
+
+                    $studies = new CandidateEducationDirectory();
+                    $studies->setId_directory($id_candidate_directory);
+                    // $studies->setTitle(NULL);
+                    // $studies->setInstitution(NULL);
+                    // $studies->setStart_date(NULL);
+                    // $studies->setEnd_date(NULL);
+                    // $studies->setStill_studies(NULL);
+                    $studies->setId_level($id_level);
+
+                    if ($flag == 'create') {
+                        $save =  $studies->save();
+                    } else {
+                        $save =   $studies->update();
+                    }
+
+
+
+                    if (isset($_POST['enterprise_experience'])) {
+                        $experience = new CandidateExperienceDirectory;
+                        $experience->setId_directory($id_candidate_directory);
+                        $experience->delete_experiences();
+
+                        $experience->setId_area(1);
+                        $experience->setId_subarea(1);
+                        $experience->setId_state(1);
+                        $experience->setId_city(1);
+                        $experience->setType('operativa');
+                        // $experience->setStart_date(NULL);
+
+                        $tamanio = count($enterpise_experience);
+                        for ($i = 0; $i < $tamanio; $i++) {
+                            $enterpise_experience[$i] =  trim($enterpise_experience[$i]);
+                            $review_experience[$i] =  trim($review_experience[$i]);
+
+                            if ($enterpise_experience[$i] != '' and  $review_experience[$i] != '') {
+
+                                $experience->setEnterprise($enterpise_experience[$i]);
+                                $experience->setPosition($enterpise_experience[$i]);
+                                $experience->setReview($review_experience[$i]);
+                                $result = $experience->save();
+                            }
+                        }
+                    }
+
+
+
+
+                    // if ($resume) {
+                    //     if (file_exists('uploads/resume_directory/' . $id_candidate_directory . '.pdf')) {
+                    //         unlink('uploads/resume_directory/' . $id_candidate_directory . '.pdf');
+                    //     }
+
+                    //     $route2 = 'uploads/resume_directory/';
+                    //     $resume2 = $route2 . $id_candidate_directory . '.pdf';
+
+                    //     if (!file_exists($resume2)) {
+                    //         $result = @move_uploaded_file($_FILES["resume"]["tmp_name"], $resume2);
+                    //         $routeDocu = base_url . $resume2;
+                    //     }
+                    // }
+
+
+
+                    // } else 
+                    if ($tipo == 'postulate') {
+
+
+
+                        $candidate = new Candidate();
+                        $candidate->setFirst_name($first_name);
+                        $candidate->setSurname($surname);
+                        $candidate->setLast_name($last_name);
+                        $candidate->setDate_birth($date_birth);
+                        $candidate->setAge($age);
+                        //$candidate->setId_gender($id_gender);
+                        //$candidate->setId_civil_status($id_civil_status);
+                        $candidate->setJob_title($job_title);
+                        $candidate->setDescription($description);
+                        $candidate->setTelephone($telephone);
+                        //$candidate->setCellphone($cellphone);
+                        $candidate->setEmail($email);
+                        $candidate->setId_state($id_state);
+                        $candidate->setId_city($id_city);
+                        $candidate->setId_area($id_area);
+                        $candidate->setId_subarea($id_subarea);;
+                        $candidate->setId_user(NULL);
+                        $candidate->setCreated_by($_SESSION['identity']->id);
+                        $save = $candidate->save();
+                        $id_candidate = $candidate->getId();
+
+                        if ($save) {
+                            //vincular candidato con el directorio
+                            $candidateDirectoryObj = new CandidateDirectory();
+                            $candidateDirectoryObj->setId($id_candidate_directory);
+                            $candidateDirectoryObj->setStatus(6);
+                            $candidateDirectoryObj->setId_candidate($id_candidate);
+                            $candidateDirectoryObj->updateSatusCandidate();
+
+
+                            $studies = new CandidateEducation();
+                            $studies->setId_candidate($id_candidate);
+                            $studies->setTitle(NULL);
+                            $studies->setInstitution(NULL);
+                            $studies->setStart_date(NULL);
+                            $studies->setEnd_date(NULL);
+                            $studies->setStill_studies(NULL);
+                            $studies->setId_level($id_level);
+                            $save = $studies->save();
+
+
+                            $experience = new CandidateExperience;
+                            $experience->setId_candidate($id_candidate);
+                            if (isset($_POST['enterprise_experience'])) {
+                                $experience->setId_area(1);
+                                $experience->setId_subarea(1);
+                                $experience->setId_state(1);
+                                $experience->setId_city(1);
+                                $experience->setType('operativa');
+                                $experience->setStart_date(NULL);
+
+                                $tamanio = count($enterpise_experience);
+                                for ($i = 0; $i < $tamanio; $i++) {
+                                    $enterpise_experience[$i] =  trim($enterpise_experience[$i]);
+                                    $review_experience[$i] =  trim($review_experience[$i]);
+
+                                    if ($enterpise_experience[$i] != '' and  $review_experience[$i] != '') {
+                                        $experience->setEnterprise($enterpise_experience[$i]);
+                                        $experience->setPosition($enterpise_experience[$i]);
+                                        $experience->setReview($review_experience[$i]);
+                                        $result = $experience->save();
+                                    }
+                                }
+                            }
+
+                            //===[gabo 15 junio experiencia candidato fin ]===
+
+                            if ($id_vacancy && is_numeric($id_vacancy)) {
+                                $vacancy = new Vacancy();
+                                $vacancy->setId($id_vacancy);
+                                $vacante = $vacancy->getOne();
+                                if ($vacante) {
+                                    $applicant = new VacancyApplicant();
+                                    $applicant->setId_vacancy($id_vacancy);
+                                    $applicant->setId_candidate($id_candidate);
+                                    $save = $applicant->create();
+                                    $applicant->setId_status(3);
+                                    $applicant->setCustomer_date(true);
+                                    $applicant->updateStatus();
+                                }
+                            }
+                        }
+                    } else  if ($tipo == 'candidate') {
+
+                        $candidate = new Candidate();
+                        $candidate->setFirst_name($first_name);
+                        $candidate->setSurname($surname);
+                        $candidate->setLast_name($last_name);
+                        $candidate->setDate_birth($date_birth);
+                        $candidate->setAge($age);
+                        //$candidate->setId_gender($id_gender);
+                        //$candidate->setId_civil_status($id_civil_status);
+                        $candidate->setJob_title($job_title);
+                        $candidate->setDescription($description);
+                        $candidate->setTelephone($telephone);
+                        $candidate->setCellphone($cellphone);
+                        $candidate->setEmail($email);
+                        $candidate->setId_state($id_state);
+                        $candidate->setId_city($id_city);
+                        $candidate->setId_area($id_area);
+                        $candidate->setId_subarea($id_subarea);;
+                        $candidate->setId_user(NULL);
+                        $candidate->setCreated_by($_SESSION['identity']->id);
+                        $save = $candidate->save();
+                        $id_candidate = $candidate->getId();
+
+                        if ($save) {
+                            //vincular candidato con el directorio
+                            $candidateDirectoryObj = new CandidateDirectory();
+                            $candidateDirectoryObj->setId($id_candidate_directory);
+                            $candidateDirectoryObj->setStatus(6);
+                            $candidateDirectoryObj->setId_candidate($id_candidate);
+                            $candidateDirectoryObj->updateSatusCandidate();
+
+
+                            $studies = new CandidateEducation();
+                            $studies->setId_candidate($id_candidate);
+                            $studies->setTitle(NULL);
+                            $studies->setInstitution(NULL);
+                            $studies->setStart_date(NULL);
+                            $studies->setEnd_date(NULL);
+                            $studies->setStill_studies(NULL);
+                            $studies->setId_level($id_level);
+
+                            $save = $studies->save();
+
+                            if ($id_candidate) {
+                                $experience = new CandidateExperience;
+                                $experience->setId_candidate($id_candidate);
+                                if (isset($_POST['enterprise_experience'])) {
+                                    $experience->setId_area(1);
+                                    $experience->setId_subarea(1);
+                                    $experience->setId_state(1);
+                                    $experience->setId_city(1);
+                                    $experience->setType('operativa');
+                                    $experience->setStart_date(NULL);
+
+                                    $tamanio = count($enterpise_experience);
+                                    for ($i = 0; $i < $tamanio; $i++) {
+                                        $enterpise_experience[$i] =  trim($enterpise_experience[$i]);
+                                        $review_experience[$i] =  trim($review_experience[$i]);
+
+                                        if ($enterpise_experience[$i] != '' and  $review_experience[$i] != '') {
+                                            $experience->setEnterprise($enterpise_experience[$i]);
+                                            $experience->setPosition($enterpise_experience[$i]);
+                                            $experience->setReview($review_experience[$i]);
+                                            $result = $experience->save();
+                                        }
+                                    }
+                                }
+                            }
+                            //===[gabo 15 junio experiencia candidato fin ]===
+
+                        }
+                    }
+
+                    ///fin metodo
+                    $candidatesDirector = $this->candidatesDirectory();
+
+                    if ($save) {
+                        echo json_encode(
+                            array(
+                                'status' => 1,
+                                'candidatesDirector' => $candidatesDirector
+                            )
+                        );
+                    } else {
+                        echo json_encode(array('status' => 2));
+                    }
+                } else {
+                    //valida los datos restantes 
+
+                    if ($id_gender && $id_civil_status && $email && $cellphone) {
+
+                        //  if ($tipo == 'directory') {
+
+                        $candidateDirectoryObj = new CandidateDirectory();
+                        $candidateDirectoryObj->setId($id_candidate_directory);
+                        $candidateDirectoryObj->setFirst_name($first_name);
+                        $candidateDirectoryObj->setSurname($surname);
+                        $candidateDirectoryObj->setLast_name($last_name);
+                        $candidateDirectoryObj->setTelephone($telephone);
+                        $candidateDirectoryObj->setAge($age);
+                        $candidateDirectoryObj->setExperience($job_title);
+                        $candidateDirectoryObj->setId_vacancy($id_vacancy);
+                        $candidateDirectoryObj->setId_state($id_state);
+                        $candidateDirectoryObj->setId_city($id_city);
+                        $candidateDirectoryObj->setEmail($email);
+                        $candidateDirectoryObj->setUrl($url);
+                        $candidateDirectoryObj->setComment($comment);
+                        $candidateDirectoryObj->setStatus($status);
+                        $candidateDirectoryObj->setCreated_at(getDate());
+                        $candidateDirectoryObj->setCreated_by($_SESSION['identity']->id);
+                        $candidateDirectoryObj->setModified_at(getDate());
+                        $candidateDirectoryObj->setDate_birth($date_birth);
+                        $candidateDirectoryObj->setId_gender($id_gender);
+                        $candidateDirectoryObj->setId_civil_status($id_civil_status);
+                        $candidateDirectoryObj->setJob_title($job_title);
+                        $candidateDirectoryObj->setDescription($description);
+                        $candidateDirectoryObj->setCellphone($cellphone);
+                        $candidateDirectoryObj->setId_area($id_area);
+                        $candidateDirectoryObj->setId_subarea($id_subarea);
+
+
+                        // if ($flag == 'create') {
+                        if ($flag == 'create') {
+                            $save = $candidateDirectoryObj->save_candidate();
+                            $id_candidate_directory = $candidateDirectoryObj->getId();
+                        } else {
+                            $save = $candidateDirectoryObj->update_candidate();
+                        }
+
+
+                        // if ($save) {
+                        $studies = new CandidateEducationDirectory();
+                        $studies->setId_directory($id_candidate_directory);
+                        $studies->setId_level($id_level);
+                        $flag == 'create' ? $save = $studies->save() : $save = $studies->update();
+
+                        // } else {
+
+                        //     $save = $candidateDirectoryObj->save_candidate();
+                        //     $id_candidate_directory = $candidateDirectoryObj->getId();
+
+                        //     if ($save) {
+                        //         $studies = new CandidateEducationDirectory();
+                        //         $studies->setId_directory($id_candidate_directory);
+                        //         $studies->setId_level($id_level);
+                        //         $studies->update();
+                        //     }
+
+                        //     //update;
+                        // }
+
+                        //////////////////
+
+
+
+                        ////////////////////////7
+
+
+                        if ($resume) {
+
+                            if (file_exists('uploads/resume_directory/' . $id_candidate_directory . '.pdf')) {
+                                unlink('uploads/resume_directory/' . $id_candidate_directory . '.pdf');
+                            }
+
+                            $route2 = 'uploads/resume_directory/';
+                            $resume2 = $route2 . $id_candidate_directory . '.pdf';
+
+                            if (!file_exists($resume2)) {
+                                $result = @move_uploaded_file($_FILES["resume"]["tmp_name"], $resume2);
+                                $routeDocu = base_url . $resume2;
+                            }
+                        }
+
+                        // }
+
+
+
+                        //  } else 
+                        if ($tipo == 'postulate') {
+
+                            $candidate = new Candidate();
+                            $candidate->setFirst_name($first_name);
+                            $candidate->setSurname($surname);
+                            $candidate->setLast_name($last_name);
+                            $candidate->setDate_birth($date_birth);
+                            $candidate->setAge($age);
+                            $candidate->setId_gender($id_gender);
+                            $candidate->setId_civil_status($id_civil_status);
+                            $candidate->setJob_title($job_title);
+                            $candidate->setDescription($description);
+                            $candidate->setTelephone($telephone);
+                            $candidate->setCellphone($cellphone);
+                            $candidate->setEmail($email);
+                            $candidate->setId_state($id_state);
+                            $candidate->setId_city($id_city);
+                            $candidate->setId_area($id_area);
+                            $candidate->setId_subarea($id_subarea);;
+                            $candidate->setId_user(NULL);
+                            $candidate->setCreated_by($_SESSION['identity']->id);
+                            $save = $candidate->save();
+                            $id_candidate = $candidate->getId();
+
+                            if ($save) {
+                                //vincular candidato con el directorio
+                                $candidateDirectoryObj = new CandidateDirectory();
+                                $candidateDirectoryObj->setId($id_candidate_directory);
+                                $candidateDirectoryObj->setStatus(6);
+                                $candidateDirectoryObj->setId_candidate($id_candidate);
+                                $candidateDirectoryObj->updateSatusCandidate();
+
+
+
+                                $studies = new CandidateEducation();
+                                $studies->setId_candidate($id_candidate);
+                                $studies->setTitle(NULL);
+                                $studies->setInstitution(NULL);
+                                $studies->setStart_date(NULL);
+                                $studies->setEnd_date(NULL);
+                                $studies->setStill_studies(NULL);
+                                $studies->setId_level($id_level);
+                                $save = $studies->save();
+
+
+                                if ($id_vacancy && is_numeric($id_vacancy)) {
+                                    $vacancy = new Vacancy();
+                                    $vacancy->setId($id_vacancy);
+                                    $vacante = $vacancy->getOne();
+                                    if ($vacante) {
+                                        $applicant = new VacancyApplicant();
+                                        $applicant->setId_vacancy($id_vacancy);
+                                        $applicant->setId_candidate($id_candidate);
+                                        $save = $applicant->create();
+                                        $applicant->setId_status(3);
+                                        $applicant->setCustomer_date(true);
+                                        $applicant->updateStatus();
+                                    }
+                                }
+
+                                if (file_exists('uploads/resume_directory/' . $id_candidate_directory . '.pdf')) {
+                                    $route = 'uploads/resume/' . $id_candidate . '/';
+                                    if (!file_exists($route)) {
+                                        mkdir($route);
+                                    }
+                                    // if (!file_exists($resume)) {
+                                    // $result = @move_uploaded_file($_FILES["resume"]["tmp_name"], $resume);
+                                    rename('uploads/resume_directory/' . $id_candidate_directory . '.pdf', "uploads/resume/" . $id_candidate . "/" . $id_candidate . ".pdf");
+                                    // }
+                                }
+                            }
+                        } else  if ($tipo == 'candidate') {
+
+                            $candidate = new Candidate();
+                            $candidate->setFirst_name($first_name);
+                            $candidate->setSurname($surname);
+                            $candidate->setLast_name($last_name);
+                            $candidate->setDate_birth($date_birth);
+                            $candidate->setAge($age);
+                            $candidate->setId_gender($id_gender);
+                            $candidate->setId_civil_status($id_civil_status);
+                            $candidate->setJob_title($job_title);
+                            $candidate->setDescription($description);
+                            $candidate->setTelephone($telephone);
+                            $candidate->setCellphone($cellphone);
+                            $candidate->setEmail($email);
+                            $candidate->setId_state($id_state);
+                            $candidate->setId_city($id_city);
+                            $candidate->setId_area($id_area);
+                            $candidate->setId_subarea($id_subarea);
+                            $candidate->setId_user(NULL);
+                            $candidate->setCreated_by($_SESSION['identity']->id);
+                            $save = $candidate->save();
+                            $id_candidate = $candidate->getId();
+
+                            if ($save) {
+
+                                //vincular candidato con el directorio
+                                $candidateDirectoryObj = new CandidateDirectory();
+                                $candidateDirectoryObj->setId($id_candidate_directory);
+                                $candidateDirectoryObj->setStatus(6);
+                                $candidateDirectoryObj->setId_candidate($id_candidate);
+                                $status = $candidateDirectoryObj->updateSatusCandidate();
+
+                                $studies = new CandidateEducation();
+                                $studies->setId_candidate($id_candidate);
+                                $studies->setTitle(NULL);
+                                $studies->setInstitution(NULL);
+                                $studies->setStart_date(NULL);
+                                $studies->setEnd_date(NULL);
+                                $studies->setStill_studies(NULL);
+                                $studies->setId_level($id_level);
+
+                                $save = $studies->save();
+
+
+                                // if ($resume) {
+
+
+                                //     if (file_exists('uploads/resume/' . $id_candidate)) {
+                                //         Utils::deleteDir('uploads/resume/' . $id_candidate);
+                                //     }
+
+                                //     $route = 'uploads/resume/' . $id_candidate . '/';
+                                //     $resume = $route . $id_candidate . '.pdf';
+
+                                //     if (!file_exists($route)) {
+                                //         mkdir($route);
+                                //     }
+
+
+                                //     // if (!file_exists($resume)) {
+                                //     $result = @move_uploaded_file($_FILES["resume"]["tmp_name"], $resume);
+                                //     // }
+                                //     var_dump($resume);
+                                //     die();
+                                // } else {
+
+
+
+
+
+                                if (file_exists('uploads/resume_directory/' . $id_candidate_directory . '.pdf')) {
+
+
+                                    $route = 'uploads/resume/' . $id_candidate . '/';
+                                    if (!file_exists($route)) {
+                                        mkdir($route);
+                                    }
+                                    // if (!file_exists($resume)) {
+                                    // $result = @move_uploaded_file($_FILES["resume"]["tmp_name"], $resume);
+                                    rename('uploads/resume_directory/' . $id_candidate_directory . '.pdf', "uploads/resume/" . $id_candidate . "/" . $id_candidate . ".pdf");
+                                    // }
+                                }
+
+                                //traer del que ya esta
+                                //  }
+                                //}
+                            }
+                        }
+
+                        ///fin metodo
+                        $candidatesDirector = $this->candidatesDirectory();
+
+                        if ($save) {
+                            echo json_encode(
+                                array(
+                                    'status' => 1,
+                                    'candidatesDirector' => $candidatesDirector
+                                )
+                            );
+                        } else {
+                            echo json_encode(array('status' => 2));
+                        }
+                    } else {
+                        //valida los datyos restantes
+                        echo json_encode(array('status' => 0));
+                    }
+
+                    //fin else
+
+
+                }
+            } else {
+
+                echo json_encode(array('status' => 0));
+            }
+
+
+            //fin de todo
+
+
+        } else {
+            echo json_encode(array('status' => 0));
+        }
+    }
     //6 oct
 
     function fill_modal()

@@ -1318,4 +1318,86 @@ class Candidate {
 
 
 
+
+
+
+
+	save_contact() {
+
+		var form = document.querySelector("#candidate-contact-form");
+		form.querySelector("#submit").disabled = true;
+		var formData = new FormData(form);
+
+		fetch('../Candidato/save_contact', {
+			method: 'POST',
+			body: formData
+		})
+
+			.then(response => {
+				//console.log(response.json());
+				if (response.ok) {
+					return response.text();
+				} else {
+					throw new Error('Network response was not ok.');
+				}
+			})
+			.then(r => {
+
+				try {
+					const json_app = JSON.parse(r);
+					if (json_app.status == 0) {
+
+						Swal.fire({
+							title: 'Por favor llene todos los campos',
+							icon: 'warning',
+							focusConfirm: false,
+							confirmButtonText:
+								'Entendido!   <i class="fa fa-thumbs-up"></i>',
+							confirmButtonColor: 'success',
+
+						})
+
+						form.querySelector("#submit").disabled = false;
+					} else if (json_app.status == 1) {
+						form.reset();
+						Swal.fire({
+							title: 'Datos enviados correctamente',
+							text: "Si su perfil cumple con los requisitos de la vacante será contactado",
+							icon: 'success',
+							focusConfirm: false,
+							confirmButtonText:
+								'Entendido!',
+							confirmButtonColor: 'success',
+
+						}).then((result) => {
+							console.log(result);
+							if (result.value == true) {
+								setTimeout(() => {
+									window.location.href = "http://rrhh-ingenia.com.mx/"
+								}, 1500);
+							}
+						})
+
+
+					} else if (json_app.status == 2) {
+						utils.showToast(' No se pudo guardar la informacion', 'error');
+						form.querySelector("#submit").disabled = false;
+					}
+				} catch (error) {
+					utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+					form.querySelector("#submit").disabled = false;
+				}
+			})
+			.catch(error => {
+				utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+				form.querySelector("#submit").disabled = false;
+			});
+	}
+
+
+
+
+
+
+
 }

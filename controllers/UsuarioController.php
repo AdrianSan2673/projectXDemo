@@ -19,13 +19,32 @@ require_once 'models/RH/UsuariosRH.php';
 class UsuarioController
 {
 
+
+
+
     public function index()
     {
-        if (isset($_SESSION['user_rh'])) {
-            unset($_SESSION['identity']);
-            unset($_SESSION);
-            session_destroy();
+        if (isset($_GET['vacante']) and $_GET['vacante'] != '') {
+            $id_vacancy = Encryption::decode($_GET['vacante']);
+            $vacancy = new Vacancy();
+            $vacancy->setId($id_vacancy);
+            $vacancy = $vacancy->existsVacancy();
+
+            if ($vacancy) {
+                $page_title = 'Iniciar sesión | RRHH Ingenia';
+                require_once 'views/user/header.php';
+                require_once 'views/user/form-candidate-contact.php';
+                require_once 'views/user/footer.php';
+                die();
+            }
         }
+        //  else {
+        //     $page_title = 'Iniciar sesión | RRHH Ingenia';
+        //     require_once 'views/user/header.php';
+        //     require_once 'views/user/login.php';
+        //     require_once 'views/user/footer.php';
+        // }
+
         if (isset($_SESSION['identity']) && !empty($_SESSION['identity'])) {
             Utils::showProfilePicture();
             if (Utils::isCandidate()) {
@@ -34,15 +53,16 @@ class UsuarioController
                 $candidato = $candidate->getCandidateByUsername();
                 if (!$candidato) {
                     header('location:' . base_url . 'candidato/crear_curriculum');
-                } 
-                // else {
-                //     if ($candidato->job_title == NUll || $candidato->description == NULL || $candidato->id_state == NULL || $candidato->id_city == NULL || $candidato->id_civil_status == NULL || $candidato->id_area == NULL || ($candidato->telephone == NULL && $candidato->cellphone == NULL)) {
-                //         header('location:' . base_url . 'candidato/editar');
-                //     }
-                //     if (isset($_GET['vacante'])) {
-                //         header('location:' . base_url . 'postulaciones/postulate&id_candidate=' . Encryption::encode($_SESSION['identity']->id) . '&id_vacancy=' . $_GET['vacante']);
-                //     }
-                // }
+                }
+
+                /*else {
+                    if ($candidato->job_title == NUll || $candidato->description == NULL || $candidato->id_state == NULL || $candidato->id_city == NULL || $candidato->id_civil_status == NULL || $candidato->id_area == NULL || ($candidato->telephone == NULL && $candidato->cellphone == NULL)) {
+                        header('location:' . base_url . 'candidato/editar');
+                    }
+                    if (isset($_GET['vacante'])) {
+                        header('location:' . base_url . 'postulaciones/postulate&id_candidate=' . Encryption::encode($_SESSION['identity']->id) . '&id_vacancy=' . $_GET['vacante']);
+                    }
+                }*/
             }
 
             if (Utils::isCustomer()) {
@@ -186,13 +206,17 @@ class UsuarioController
             //require_once 'views/layout/modal-encuesta.php';
             require_once 'views/layout/footer.php';
         } else {
-
+           
             $page_title = 'Iniciar sesión | RRHH Ingenia';
             require_once 'views/user/header.php';
             require_once 'views/user/login.php';
             require_once 'views/user/footer.php';
+            //  var_dump("GOOGLE");
+            // die();
         }
     }
+
+
 
     public function opciones()
     {
@@ -1140,11 +1164,11 @@ class UsuarioController
 
     public function salma_fest()
     {
-        if ($_SESSION['identity']->username == 'salmaperez') {
-            require_once 'birthday/index.php';
-            $_SESSION['salma_fest'] = 0;
-        } else
-            header('location:' . base_url . 'usuario/index');
+        // if ($_SESSION['identity']->username == 'salmaperez') {
+        require_once 'birthday/index.php';
+        //     $_SESSION['salma_fest'] = 0;
+        // } else
+        //     header('location:' . base_url . 'usuario/index');
     }
 
     public function getOne()
