@@ -25,7 +25,8 @@
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="Correo">Dirección de correo electrónico</label>
-                        <input type="text" class="form-control" name="Correo" maxlength="60" required>
+                        <input type="text" class="form-control" name="Correo" id="email" maxlength="60" required>
+                        <div id="email_exists" style="display:none"></div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col">
@@ -65,13 +66,27 @@
                             </div>
                         </div>
                     </div>
+                    <?php if ($_GET['controller'] == 'empresa_SA' && $_GET['action'] == 'ver') :  ?>
+                    <?php endif;  ?>
+                    <div class="form-group" id="select_tipo">
+                        <label for="customer" class="col-form-label">Tipo Usuario</label>
+                        <select name="tipo_usuario" id="tipo_usuario" class="form-control" required>
+                            <option disabled selected="selected">Seleccione un tipo</option>
+                            <?php $tipos = Utils::getVentasContactoTipo(); ?>
+                            <?php foreach ($tipos as $tipo) : ?>
+                                <option value="<?= $tipo['id'] ?>"><?= $tipo['nombre_tipo'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+
                     <div class="form-group">
                         <label class="col-form-label">Usuario</label>
-                        <input type="text" name="Usuario" id="Usuario" class="form-control" maxlength="40" required  >
+                        <input type="text" name="Usuario" id="username" class="form-control" maxlength="40" required>
+                        <div id="user_exists" style="display: none"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-form-label">Contraseña</label>
-                        <input type="text" name="Password" class="form-control" required>
+                        <input type="text" name="Password" id="password" class="form-control" required>
                     </div>
                     <input type="hidden" name="Empresa" value="<?= $_GET['controller'] == 'cliente_SA' ? $cliente->Empresa : Encryption::decode($_GET['id']) ?>">
                     <input type="hidden" name="ID_Cliente" value="<?= $_GET['controller'] == 'cliente_SA' ? $_GET['id'] : 0 ?>">
@@ -79,18 +94,20 @@
                     <!-- id 82 -->
                     <!-- id contacto 1077 -->
 
-                    <!-- <?php // if (Utils::isSales()||Utils::isAdmin()) : ?>     -->
-                        <div class="form-group" id="select_empresa">  
-                            <label for="customer" class="col-form-label">Empresa</label>
-                            <?php $customers = Utils::showCustomers(); ?>
-                            <select name="cliente_asignado" id="cliente_asignado" class="form-control select2" >
-                                <option disabled selected="selected"></option>
-                                <?php foreach ($customers as $customer) : ?>
-                                    <option value="<?= $customer['id'] ?>"><?= $customer['customer'] ?></option>
-                                <?php endforeach ?>
-                            </select>
-                        </div>
-                    <!-- <?php // endif; ?> -->
+                    <!-- <?php // if (Utils::isSales()||Utils::isAdmin()) : 
+                            ?>     -->
+                    <div class="form-group" id="select_empresa">
+                        <label for="customer" class="col-form-label">Empresa</label>
+                        <?php $customers = Utils::showCustomers(); ?>
+                        <select name="cliente_asignado" id="cliente_asignado" class="form-control select2">
+                            <option disabled selected="selected"></option>
+                            <?php foreach ($customers as $customer) : ?>
+                                <option value="<?= $customer['id'] ?>"><?= $customer['customer'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                    <!-- <?php // endif; 
+                            ?> -->
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -126,14 +143,74 @@
         </div>
     </div>
 </div>
+<!-- gabo 2 oct -->
+<div class="modal fade" id="modal_send_email">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post">
+                <div class="modal-header">
+                    <h4 class="modal-title">Enviar Correo</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="display:flex">
+                    <input type="hidden" name="Usuario" id="Usuario">
+                    <p id="texto"> </p>
+                    <img id="imagen" hidden src="<?= base_url ?>dist/img/sending.gif" style="max-width: 200px; max-height: 200px;margin:auto" border="0">
+
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <input type="button" name="btn_send_email" id="btn_send_email" class="btn btn-orange" value="Enviar">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 
 
 
 <script>
+    //gabo 2 oct
 
-     document.querySelector('#btn-duplicar-contacto').addEventListener('click', e => {   //gabo duplicar
+
+    document.querySelector('#btn_send_email').addEventListener('click', e => { //gabo duplicar
+        e.preventDefault();
+
+        document.getElementById("btn_send_email").disabled = true;
+        document.getElementById("btn_send_email").value = 'Enviando';
+        document.getElementById("texto").hidden = true;
+        document.getElementById("imagen").hidden = false;
+        let user = new User();
+        var respuesta = user.Send_Email();
+
+
+    })
+
+
+
+
+
+    //gsbo 2 oct
+    document.querySelector('#btn-duplicar-contacto').addEventListener('click', e => { //gabo duplicar
         e.preventDefault();
         let cliente = new Cliente();
         cliente.duplicate_contact();
     })
+
+    const checkusername = () => {
+        let user = new User();
+        user.checkUsernameWithInfo();
+
+    };
+
+    const checkEmail = () => {
+        let user = new User();
+        user.checkEmailWithInfo();
+
+    };
 </script>

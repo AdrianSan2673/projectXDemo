@@ -80,7 +80,7 @@
                       <input type="email" name="email" id="email" class="form-control" value="<?=isset($psycho) && is_object($psycho) ? $psycho->email : ''; ?>">
                     </div>
                   </div>
-                  <div class="form-row">
+                <!--  <div class="form-row">
                     <div class="form-group col">
                       <div class="form-check">
                         <input type="checkbox" name="behavior" value="1" class="form-check-input" <?=isset($psycho) && is_object($psycho) && $psycho->behavior == 1 ? 'checked' : ''; ?>>
@@ -113,7 +113,7 @@
                         <label class="form-check-label">Liderazgo</label>
                       </div>
                     </div>
-                  </div>
+                  </div>-->
                   <div class="form-group">
                     <label for="customer" class="col-form-label">Cliente:</label>
                     <?php $customers = Utils::showCustomers(); ?>
@@ -150,6 +150,21 @@
                         <?php endif ?>
                       </select>
                   </div>
+					
+					  <div class="form-group">
+                                        <label for="recruiter" class="col-form-label">Reclutador</label>
+                                        <?php $recruiters = Utils::showRecruiters(); ?>
+                                        <select name="id_recruiter" id="id_recruiter" class="form-control select2"
+                                            required>
+                                            <option disabled selected="selected">Selecciona Ejecutivo</option>
+                                            <?php foreach ($recruiters as $recruiter) : ?>
+                                            <option value="<?= $recruiter['id'] ?>"
+                                                <?= isset($psycho) && is_object($psycho) && $recruiter['id'] == $psycho->id_recruiter ? 'selected' : ''; ?>>
+                                                <?= $recruiter['first_name'] . ' ' . $recruiter['last_name'] ?></option>
+                                            <?php endforeach ?>
+                                        </select>
+                                    </div>
+					
                   <?php if (isset($edit) && isset($psycho) && is_object($psycho)): ?>
                     <div class="form-group">
                       <label for="end_date" class="col-form-label">Fecha de entrega</label>

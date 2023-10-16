@@ -20,6 +20,7 @@
                                     <option value="1">Personal</option>
                                     <option value="2">Vecinal</option>
                                     <option value="3">Familiar</option>
+									<option value="4">Último arrendador</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -54,7 +55,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label" for="Tiene_Hijos">¿Sabe si tiene hijos?</label>
-                                <input type="text" name="Tiene_Hijos" class="form-control" maxlength="100" required>
+                                <input type="text" name="Tiene_Hijos" class="form-control" maxlength="100" >
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label" for="Dedicacion">¿Sabe a qué se dedica?</label>
@@ -62,7 +63,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label" for="Estado_Civil">¿Sabe sobre su estado civil?</label>
-                                <input type="text" name="Estado_Civil" class="form-control" maxlength="50" required>
+                                <input type="text" name="Estado_Civil" class="form-control" maxlength="50" >
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label" for="Comentarios">Comentarios</label>

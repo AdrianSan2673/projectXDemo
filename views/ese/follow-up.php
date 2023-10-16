@@ -249,13 +249,13 @@
                         </div>
                     </div>
                     <div class="col-md-4 col-6">
-                        <a href="<?=base_url?>ServicioApoyo/ver&candidato=<?=$_GET['candidato']?>" target="_blank" style="text-decoration: none;">
+                       
                             <div class="text-center ml-5 mr-5 mb-3">
                                 <img src="<?=$perfil[0]?>" class="img-fluid img-circle user-image mt-3">      
                             </div>
                             <h3 class="profile-username text-center"><b><?=$candidato_datos->Nombres?></b><p><?=$candidato_datos->Apellido_Paterno.' '.$candidato_datos->Apellido_Materno?></p></h3>
                             <h6 class="text-muted text-center"><?=$candidato_datos->Puesto?></h6>
-                        </a>
+                         <a href="<?=base_url?>ServicioApoyo/ver&candidato=<?=$_GET['candidato']?>" target="_blank" style="text-decoration: none;"></a>
                             
                     </div>
                 </div>

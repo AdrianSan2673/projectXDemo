@@ -9,6 +9,9 @@ class GroupEvaluation
     private $end_date;
     private $id_contact;
     private $modified_at;
+    //===[gabo 6 junio evaluaciones]===
+    private $ID_Cliente;
+    //===[gabo 6 junio evaluaciones fin]===
     private $db;
 
     public function __construct()
@@ -85,21 +88,46 @@ class GroupEvaluation
     }
 
 
-
-
-    public function getAllGroupsEvaluationBIdBoss()
+    //===[gabo 6 junio evaluaciones]===
+    public function getID_Cliente()
     {
-        $id_contact = $this->getId_contact();
+        return $this->ID_Cliente;
+    }
 
+    public function setID_Cliente($ID_Cliente)
+    {
+        $this->ID_Cliente = $ID_Cliente;
+    }
+
+
+    public function getAllGroupsEvaluationBIdCliente($condicion)
+    {
         $stmt = $this->db->prepare("SELECT ge.id_group, ge.group_name as name, ge.created_at, ee.id_evaluation, ge.id_boss, ge.start_date, ge.end_date,ev.level,CONCAT(e.first_name,' ',e.surname,' ',e.last_name) fullNameBoss,p.title FROM  root.groups_evaluation ge  LEFT JOIN root.evaluation_employee ee ON ge.id_group=ee.id_group_evaluation INNER JOIN root.evaluations ev  ON ev.id=ee.id_evaluation  INNER JOIN root.employees e ON ge.id_boss=e.id   INNER JOIN root.positions p ON e.id_position=p.id
-        WHERE ge.id_contact in  (select ID_Contacto from rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos where ID_Cliente in (SELECT ID_Cliente from rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos where id_contact=:id_contact))
-        GROUP BY ge.group_name,ge.created_at, ge.id_boss, ee.id_evaluation,e.first_name, e.surname, e.last_name, ev.name, ge.start_date, ge.end_date,ev.level,ge.id_group,p.title ORDER BY ge.created_at DESC, ev.name");
+        WHERE " . $condicion . "
+        GROUP BY ge.ID_Cliente, ge.group_name,ge.created_at, ge.id_boss, ee.id_evaluation,e.first_name, e.surname, e.last_name, ev.name, ge.start_date, ge.end_date,ev.level,ge.id_group,p.title ORDER BY ge.created_at DESC, ev.name");
 
-        $stmt->bindParam(":id_contact", $id_contact, PDO::PARAM_INT);
         $stmt->execute();
         $fetch =  $stmt->fetchAll();
         return $fetch;
     }
+
+    //===[gabo 6 junio evaluaciones fin]===
+
+   //===[gabo 9 junio excel evaluaciones]===
+   public function getAllGroupsEvaluationBIdBoss()
+   {
+       $id_contact = $this->getId_contact();
+
+       $stmt = $this->db->prepare("SELECT ge.id_group, ge.group_name as name, ge.created_at, ee.id_evaluation, ge.id_boss, ge.start_date, ge.end_date,ev.level,CONCAT(e.first_name,' ',e.surname,' ',e.last_name) fullNameBoss,p.title FROM  root.groups_evaluation ge  LEFT JOIN root.evaluation_employee ee ON ge.id_group=ee.id_group_evaluation INNER JOIN root.evaluations ev  ON ev.id=ee.id_evaluation  INNER JOIN root.employees e ON ge.id_boss=e.id   INNER JOIN root.positions p ON e.id_position=p.id
+       WHERE ge.ID_Cliente in  (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:id_contact)
+       GROUP BY ge.group_name,ge.created_at, ge.id_boss, ee.id_evaluation,e.first_name, e.surname, e.last_name, ev.name, ge.start_date, ge.end_date,ev.level,ge.id_group,p.title ORDER BY ge.created_at DESC, ev.name");
+
+       $stmt->bindParam(":id_contact", $id_contact, PDO::PARAM_INT);
+       $stmt->execute();
+       $fetch =  $stmt->fetchAll();
+       return $fetch;
+   }
+   //===[gabo 9 junio excel evaluaciones fin]===
 
     public function getOne()
     {
@@ -112,7 +140,7 @@ class GroupEvaluation
     }
 
 
-
+    //===[gabo 6 junio evaluaciones]===
     public function save()
     {
         $result = false;
@@ -122,15 +150,15 @@ class GroupEvaluation
         $id_boss = $this->getId_boss();
         $group_name = $this->getGroup_name();
         $id_contact = $this->getId_contact();
-        $stmt = $this->db->prepare("INSERT INTO root.groups_evaluation (group_name, start_date,end_date,id_boss,id_contact) VALUES (:group_name,:start_date,:end_date,:id_boss,:id_contact)");
+        $id_cliente = $this->getID_Cliente();
+        $stmt = $this->db->prepare("INSERT INTO root.groups_evaluation (group_name, start_date,end_date,id_boss,id_contact,ID_Cliente) VALUES (:group_name,:start_date,:end_date,:id_boss,:id_contact,:id_cliente)");
 
         $stmt->bindParam(":start_date", $start_date, PDO::PARAM_STR);
         $stmt->bindParam(":end_date", $end_date, PDO::PARAM_STR);
         $stmt->bindParam(":id_boss", $id_boss, PDO::PARAM_STR);
         $stmt->bindParam(":group_name", $group_name, PDO::PARAM_STR);
         $stmt->bindParam(":id_contact", $id_contact, PDO::PARAM_STR);
-
-
+        $stmt->bindParam(":id_cliente", $id_cliente, PDO::PARAM_STR);
 
         $flag = $stmt->execute();
 
@@ -141,6 +169,8 @@ class GroupEvaluation
 
         return $result;
     }
+    //===[gabo 6 junio evaluaciones fin]===
+
 
 
 
@@ -164,6 +194,31 @@ class GroupEvaluation
         WHERE ee.id_group_evaluation=:id_group  ORDER BY ee.created_at, ev.name");
 
         $stmt->bindParam(":id_group", $id_group, PDO::PARAM_INT);
+        $stmt->execute();
+        $fetch =  $stmt->fetchAll();
+        return $fetch;
+    }
+
+
+
+    // ===[gabo 23 de mayo agrupar]===
+    public function obtieneGruposPorFecha()
+    {
+        $stmt = $this->db->prepare(" SELECT start_date,end_date from  root.evaluation_employee   group by start_date,end_date ");
+        $stmt->execute();
+        $fetch =  $stmt->fetchAll();
+        return $fetch;
+    }
+    // ===[gabo 23 de mayo fin agrupar]===
+	    public function getAllGroupsEvaluationByID_Cliente()
+    {
+        $ID_Cliente = $this->getID_Cliente();
+
+        $stmt = $this->db->prepare("SELECT ge.id_group, ge.group_name as name, ge.created_at, ee.id_evaluation, ge.id_boss, ge.start_date, ge.end_date,ev.level,CONCAT(e.first_name,' ',e.surname,' ',e.last_name) fullNameBoss,p.title FROM  root.groups_evaluation ge  LEFT JOIN root.evaluation_employee ee ON ge.id_group=ee.id_group_evaluation INNER JOIN root.evaluations ev  ON ev.id=ee.id_evaluation  INNER JOIN root.employees e ON ge.id_boss=e.id   INNER JOIN root.positions p ON e.id_position=p.id
+          WHERE ge.ID_Cliente =:ID_Cliente
+          GROUP BY ge.group_name,ge.created_at, ge.id_boss, ee.id_evaluation,e.first_name, e.surname, e.last_name, ev.name, ge.start_date, ge.end_date,ev.level,ge.id_group,p.title ORDER BY ge.created_at DESC, ev.name");
+
+        $stmt->bindParam(":ID_Cliente", $ID_Cliente, PDO::PARAM_INT);
         $stmt->execute();
         $fetch =  $stmt->fetchAll();
         return $fetch;

@@ -8,6 +8,8 @@ class ClientesNotas{
     private $ID_Cliente_Reclu;
     private $Fecha;
     private $Usuario;
+	private $ID_Empresa;
+    private $db;
 
     public function __construct() {
         $this->db = Connection::connect();
@@ -60,6 +62,16 @@ class ClientesNotas{
 	public function setUsuario($Usuario){
 		$this->Usuario = $Usuario;
 	}
+	   public function getID_Empresa()
+    {
+        return $this->ID_Empresa;
+    }
+
+    public function setID_Empresa($ID_Empresa)
+    {
+        $this->ID_Empresa = $ID_Empresa;
+    }
+
 
     public function getNotasPorCliente(){
         $ID_Cliente = $this->getID_Cliente();
@@ -103,4 +115,5 @@ class ClientesNotas{
         }
         return $result;
     }
+	
 }

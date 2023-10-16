@@ -10,9 +10,9 @@ class EncuestaClienteController{
             $ID_Cliente = Utils::sanitizeNumber($_POST['ID_Cliente']);
             $ID_Cliente_Reclu = Utils::sanitizeNumber($_POST['ID_Cliente_Reclu']);
             $Experiencia = Utils::sanitizeNumber($_POST['Experiencia']);
-            $Objetivos = Utils::sanitizeNumber($_POST['Objetivos']);
+            /* $Objetivos = Utils::sanitizeNumber($_POST['Objetivos']);
             $Asesoria = Utils::sanitizeNumber($_POST['Asesoria']);
-            $Resolucion = Utils::sanitizeNumber($_POST['Resolucion']);
+            $Resolucion = Utils::sanitizeNumber($_POST['Resolucion']); */
             
             $Comentarios = Utils::sanitizeStringBlank($_POST['Comentarios']);
             $Usuario = $_SESSION['identity']->username;
@@ -22,9 +22,9 @@ class EncuestaClienteController{
                 $encuesta->setID_Cliente($ID_Cliente);
                 $encuesta->setid_Cliente_Reclu($ID_Cliente_Reclu);
                 $encuesta->setExperiencia($Experiencia);
-                $encuesta->setObjetivos($Objetivos);
-                $encuesta->setAsesoria($Asesoria);
-                $encuesta->setResolucion($Resolucion);
+                $encuesta->setObjetivos(0);
+                $encuesta->setAsesoria(0);
+                $encuesta->setResolucion(0);
                 $encuesta->setComentarios($Comentarios);
                 $encuesta->setUsuario($Usuario);
                 $save = $encuesta->create();

@@ -15,6 +15,19 @@
                         <input type="text" name="department" class="form-control" value="" required>
                     </div>
 
+                    <!-- ===[gabo 9 junio excel evaluaciones]=== -->
+                    <div class="form-group">
+                        <label for="gender" class="col-form-label">Sucursal*</label>
+                        <?php $contactos = Utils::getEmpresaByContacto(); ?>
+                        <select name="id_cliente_create" class="form-control" required>
+                            <option disabled selected value="">Selecciona una sucursal</option>
+                            <?php foreach ($contactos as $contacto) : ?>
+                                <option value="<?= $contacto['Cliente'] ?>"><?= $contacto['Nombre_Cliente'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                    <!-- ===[gabo 9 junio excel evaluaciones fin]=== -->
+
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>

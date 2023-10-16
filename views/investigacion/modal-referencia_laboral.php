@@ -83,17 +83,21 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label" for="Recontratable_PorQue">Justifique la respuesta anterior</label>
-                                <textarea name="Recontratable_PorQue" rows="3" class="form-control" maxlength="100"></textarea>
+                                <textarea name="Recontratable_PorQue" rows="3" class="form-control" maxlength="180"></textarea>
                             </div>
                             <div class="form-group">
-                                <label class="col-form-label" for="Informante">Nombre y puesto de quién proporciona la información</label>
+                                <label class="col-form-label" for="Informante">Nombre de quién proporciona la información</label>
                                 <input type="text" name="Informante" class="form-control" maxlength="80"   >
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label" for="Puesto_Informante">Puesto de quién proporciona la información</label>
+                                <input type="text" name="Puesto_Informante" class="form-control" maxlength="50">
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group">
                                 <label class="col-form-label" for="Comentarios">Comentarios</label>
-                                <textarea name="Comentarios" class="form-control" rows="29" maxlength="4000"  ></textarea>
+                                <textarea name="Comentarios" class="form-control" rows="33" maxlength="4000"  ></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label" for="Calif">¿Cuenta con la calificación del candidato?</label>

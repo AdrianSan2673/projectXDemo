@@ -30,12 +30,14 @@
                         <label class="col-form-label">Edad</label>
                         <div class="row">
                             <div class="col">
-                                <input type="number" class="form-control" name="Edad" min="0" max="99" required>
+                                <input type="number" class="form-control" name="Edad" min="0" max="120" required>
                             </div>
                             <div class="col">
                                 <select class="form-control" name="Edad_2">
                                     <option value="Años">Años</option>
                                     <option value="Meses">Meses</option>
+									<option value="Semanas">Semanas</option>
+									<option value="Días">Días</option>
                                 </select>
                             </div>
                         </div>

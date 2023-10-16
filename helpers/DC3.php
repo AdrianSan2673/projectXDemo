@@ -472,10 +472,10 @@ class DC3 extends FPDF
 		$this->MultiCell(170, 13, utf8_encode($data->instructor), 0, 'C', false);
 
 		$this->setXY(230, $y);
-		$this->MultiCell(170, 13, utf8_encode('EDGAR IVAN OLVERA BETANZOS'), 0, 'C', false);
+		$this->MultiCell(170, 13, strtoupper(utf8_encode(Utils::removeAccents($data->Representante_Legal))), 0, 'C', false);
 
 		$this->setXY(420, $y);
-		$this->MultiCell(170, 13, utf8_encode('ACELA FABIOLA ESPINOSA ZAVALA'), 0, 'C', false);
+		$this->MultiCell(170, 13, strtoupper(utf8_encode(Utils::removeAccents($data->Representante_Trabajadores))), 0, 'C', false);
 	}
 
 	public function setInstrucciones(){

@@ -58,8 +58,8 @@
                             <select name="type_of_foul" class="form-control">
                                 <option disabled selected value="">Selecciona tipo de falta</option>
                                 <option value="Falta injustificada">Falta injustificada</option>
-                                <option value="Falta con gose de sueldo">Falta con gose de sueldo</option>
-                                <option value="Falta sin gose de sueldo">Falta sin gose de sueldo</option>
+                                <option value="Falta con goce de sueldo">Falta con goce de sueldo</option>
+                                <option value="Falta sin goce de sueldo">Falta sin goce de sueldo</option>
                             </select>
                         </div>
 
@@ -85,8 +85,8 @@
                             <label class="col-form-label" for="">Tipo de permiso</label>
                             <select name="permission" class="form-control">
                                 <option disabled selected value="">Selecciona tipo de permiso</option>
-                                <option value="Permiso con gose de sueldo">Permiso con gose de sueldo</option>
-                                <option value="Permiso sin gose de sueldo">Permiso sin gose de sueldo</option>
+                                <option value="Permiso con goce de sueldo">Permiso con goce de sueldo</option>
+                                <option value="Permiso sin goce de sueldo">Permiso sin goce de sueldo</option>
                                 <option value="Paternidad ">Paternidad</option>
                                 <option value="Por defunsion">Por defunsion</option>
                                 <option value="Matrimonio">Matrimonio</option>

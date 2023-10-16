@@ -32,4 +32,14 @@ class LanguageLevel{
         $levels = $stmt->fetchAll();
         return $levels;
     }
+
+    public function getOne() {
+        $id = $this->getId();
+        $stmt = $this->db->prepare("SELECT * FROM language_levels WHERE id=:id");
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        if ($stmt->execute())
+            return $stmt->fetchObject();
+        else
+            return false;
+    }
 }

@@ -29,6 +29,33 @@ class Account{
         }
     }
 
+	    //===[gabo 7 julio  user_rh]===
+    login_rh() {
+        this.username = document.querySelector('#login_rh-form #username').value;
+        this.password = document.querySelector('#login_rh-form #password').value;
+        //let login_url = window.location.href.substr(window.location.href.length - 13) === 'usuario/index' ? './login' : 'usuario/login';
+        let login_url = './login_rh';
+        if (this.username.length > 0 && this.password.length > 0) {
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', login_url);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.send(`username=${this.username}&password=${this.password}`);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    let login = xhr.responseText;
+
+                    console.log(login);
+                    if (login == 0) {
+                        $('#modal-login').modal('show');
+                    } else {
+                           window.location.reload();
+                    }
+                }
+            }
+        }
+    }
+    //===[gabo 26 junio  user_rh fin]===
+	
     logout(){
         window.location='./logout';
     }
@@ -382,37 +409,42 @@ function getNotifications() {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             try {
                 var notifications = JSON.parse(this.responseText);
-                if (notifications.new > 0) {
-                    document.querySelector('#notifications-content span').textContent = notifications.new;
-                    document.querySelector('#notifications-content .dropdown-header').textContent = notifications.new + ' notificaciones';
-                }else{
-                    document.querySelector('#notifications-content span').textContent = '';
-                    document.querySelector('#notifications-content .dropdown-header').textContent = 'Sin notificaciones';
-                }
-                    
-                if (notifications.notifications.length > 0) {
-                    let notificaciones = '';
-                    for (let i in notifications.notifications){
-                        notificaciones += 
-                        `<a href="${notifications.notifications[i].url}" data-id="${notifications.notifications[i].id}" class="dropdown-item" style="white-space: normal !important; ${notifications.notifications[i].status <= 3 ? 'background: rgb(112 181 249 / 20%);' : ''}">
-                            <div class="media">
-                                <img src="../dist/img/isotipo-colores.png" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                                <i class="${notifications.notifications[i].icon} position-absolute top-0 end-0"></i>
-                                <div class="media-body">
-                                <p>${notifications.notifications[i].message}</p>
-                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> ${notifications.notifications[i].time_ago}</p>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>`
-                        if (notifications.notifications[i].status == 1) {
-                            var notification = new Notification(notifications.notifications[i].description, {
-                                body: notifications.notifications[i].message,
-                                icon: "../dist/img/isotipo-colores.png"
-                            });
+                if (notifications) {
+                    if (notifications.activation == 1) {
+                        if (notifications.new > 0) {
+                            document.querySelector('#notifications-content span').textContent = notifications.new;
+                            document.querySelector('#notifications-content .dropdown-header').textContent = notifications.new + ' notificaciones';
+                        }else{
+                            document.querySelector('#notifications-content span').textContent = '';
+                            document.querySelector('#notifications-content .dropdown-header').textContent = 'Sin notificaciones';
                         }
-                    }
-                    document.querySelector('#notifications-content .dropdown-menu .notifications-list').innerHTML = notificaciones;
+                            
+                        if (notifications.notifications.length > 0) {
+                            let notificaciones = '';
+                            for (let i in notifications.notifications){
+                                notificaciones += 
+                                `<a href="${notifications.notifications[i].url}" data-id="${notifications.notifications[i].id}" class="dropdown-item" style="white-space: normal !important; ${notifications.notifications[i].status <= 3 ? 'background: rgb(112 181 249 / 20%);' : ''}">
+                                    <div class="media">
+                                        <img src="../dist/img/isotipo-colores.png" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                                        <i class="${notifications.notifications[i].icon} position-absolute top-0 end-0"></i>
+                                        <div class="media-body">
+                                        <p>${notifications.notifications[i].message}</p>
+                                        <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> ${notifications.notifications[i].time_ago}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="dropdown-divider"></div>`
+                                if (notifications.notifications[i].status == 1) {
+                                    var notification = new Notification(notifications.notifications[i].description, {
+                                        body: notifications.notifications[i].message,
+                                        icon: "../dist/img/isotipo-colores.png"
+                                    });
+                                }
+                            }
+                            document.querySelector('#notifications-content .dropdown-menu .notifications-list').innerHTML = notificaciones;
+                        }
+                    }else
+                        window.location.reload();     
                 }
             } catch (error) {
                 
@@ -526,34 +558,36 @@ Notification.requestPermission().then(function(permission) {
 });
 document.addEventListener('DOMContentLoaded', e =>{
     getNotifications();
-    document.querySelector('.notifications-list').addEventListener('click', e => {
-        e.preventDefault();
-        console.log(e.target)
-        if (e.target.classList.contains('dropdown-item') || e.target.parentElement.classList.contains('dropdown-item') || e.target.parentElement.parentElement.classList.contains('dropdown-item') || e.target.parentElement.parentElement.parentElement.classList.contains('dropdown-item') || e.target.parentElement.parentElement.parentElement.parentElement.classList.contains('dropdown-item')) {
-            let id;
-            let url;
-            if (e.target.classList.contains('dropdown-item')){
-                id = e.target.dataset.id;
-                url = e.target.href;
-            }else if (e.target.parentElement.classList.contains('dropdown-item')){
-                id = e.target.parentElement.dataset.id;
-                url = e.target.parentElement.href;
-            }
-            else if (e.target.parentElement.parentElement.classList.contains('dropdown-item')){
-                id = e.target.parentElement.parentElement.dataset.id;
-                url = e.target.parentElement.parentElement.href;
-            }
-            else if (e.target.parentElement.parentElement.parentElement.classList.contains('dropdown-item')){
-                id = e.target.parentElement.parentElement.parentElement.dataset.id;
-                url = e.target.parentElement.parentElement.parentElement.href;
-            }
-            else {
-                id = e.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
-                url = e.target.parentElement.parentElement.parentElement.parentElement.href;
-            }
-            clickedNotification(id);
-            window.location.href = url;
-        }
-    })
+	if (!!document.querySelector('.notifications-list')) {
+		document.querySelector('.notifications-list').addEventListener('click', e => {
+			e.preventDefault();
+			console.log(e.target)
+			if (e.target.classList.contains('dropdown-item') || e.target.parentElement.classList.contains('dropdown-item') || e.target.parentElement.parentElement.classList.contains('dropdown-item') || e.target.parentElement.parentElement.parentElement.classList.contains('dropdown-item') || e.target.parentElement.parentElement.parentElement.parentElement.classList.contains('dropdown-item')) {
+				let id;
+				let url;
+				if (e.target.classList.contains('dropdown-item')){
+					id = e.target.dataset.id;
+					url = e.target.href;
+				}else if (e.target.parentElement.classList.contains('dropdown-item')){
+					id = e.target.parentElement.dataset.id;
+					url = e.target.parentElement.href;
+				}
+				else if (e.target.parentElement.parentElement.classList.contains('dropdown-item')){
+					id = e.target.parentElement.parentElement.dataset.id;
+					url = e.target.parentElement.parentElement.href;
+				}
+				else if (e.target.parentElement.parentElement.parentElement.classList.contains('dropdown-item')){
+					id = e.target.parentElement.parentElement.parentElement.dataset.id;
+					url = e.target.parentElement.parentElement.parentElement.href;
+				}
+				else {
+					id = e.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
+					url = e.target.parentElement.parentElement.parentElement.parentElement.href;
+				}
+				clickedNotification(id);
+				window.location.href = url;
+			}
+		})
+	}
 })
 setInterval(getNotifications, 10000);

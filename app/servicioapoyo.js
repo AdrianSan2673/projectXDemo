@@ -193,6 +193,7 @@ class ServicioApoyo{
                         form.querySelectorAll('input')[2].value = json_app.candidato_datos.Apellido_Paterno;
                         form.querySelectorAll('input')[3].value = json_app.candidato_datos.Apellido_Materno;
                         form.querySelectorAll('input')[4].value = json_app.candidato_datos.Puesto;
+						form.querySelectorAll('input')[5].value = json_app.candidato_datos.CC_Cliente;
 
                     }else {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
@@ -342,8 +343,8 @@ class ServicioApoyo{
                         utils.showToast('El candidato fue registrado exitosamente', 'success');
                         form.reset();
                         form.querySelectorAll('.btn')[0].disabled = false;
-                        if (json_app.ral == 1) 
-                            setTimeout(() => { window.location.href = json_app.redireccion;}, 3000);
+                        //if (json_app.ral == 1) 
+                            setTimeout(() => { window.location.href = json_app.redireccion;}, 1800);
                     }else if (json_app.status == 2){
                         form.querySelectorAll('.btn')[0].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');

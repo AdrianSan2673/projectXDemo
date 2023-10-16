@@ -26,6 +26,16 @@ class EducationLevel{
         $this->level = $level;
     }
 
+    public function getOne() {
+       $id = $this->getId();
+       $stmt = $this->db->prepare("SELECT * FROM education_levels WHERE id=:id");
+       $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+       if ($stmt->execute())
+           return $stmt->fetchObject();
+       else
+           return false;
+   }
+
     public function getAll(){
 		$stmt = $this->db->prepare("SELECT * FROM education_levels;");
         $stmt->execute();

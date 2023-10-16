@@ -45,7 +45,7 @@
                       <th class="align-middle text-right">CC RHI</th>
                       <th class="align-middle">Ciudad</th>
                       <th class="align-middle">Estado</th>
-                      <th class="align-middle">Viabilidad</th>
+                      <th class="align-middle">Accion</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,7 +90,9 @@
                         <td class="text-right align-middle"><?=$order['CC_RHI']?></td>
                         <td><?=$order['Ciudad']?></td>
                         <td><?=$order['Edo']?></td>
-                        <td><?=$order['Viabilidad']?></td>
+                        <td>  <a href="<?=base_url?>ServicioApoyo/ver&candidato=<?=Encryption::encode($order['Folio'])?>" target="_blank" class="btn btn-success btn-sm">
+                                    <i class="fas fa-eye"></i> Ver
+                                </a></td>
                     </tr>
                 <?php endforeach; ?>
                     
@@ -115,7 +117,7 @@
                       <th class="align-middle text-right">CC RHI</th>
                       <th class="align-middle">Ciudad</th>
                       <th class="align-middle">Estado</th>
-                      <th class="align-middle">Viabilidad</th>
+                      <th class="align-middle">Accion</th>
                     </tr>
                 </tfoot>
               </table>

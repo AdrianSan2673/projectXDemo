@@ -103,6 +103,7 @@ class CandidateLanguage{
 		
         if ($flag) {
             $result = true;
+            $this->setId($this->db->lastInsertId());
         }
         return $result;
 	}

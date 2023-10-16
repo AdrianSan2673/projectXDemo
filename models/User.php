@@ -556,4 +556,61 @@ class User {
         $fetch = $stmt->execute();
         return $fetch;
     }
+
+        public function getEmployeesInactive()
+    {
+        $stmt = $this->db->prepare("SELECT u.id, username, first_name, last_name, password, email, last_session , user_type FROM users u INNER JOIN user_types t ON u.id_user_type=t.id WHERE id_user_type <> 6 AND id_user_type <> 7 AND id_user_type <> 1 AND activation = 0 ORDER BY username ASC");
+        $stmt->execute();
+        $users = $stmt->fetchAll();
+        return $users;
+    }
+	
+	  public function showUsuariosByVentas()
+    {
+        $stmt = $this->db->prepare("SELECT u.id, username, first_name, last_name, password, email, last_session , user_type FROM users u INNER JOIN user_types t ON u.id_user_type=t.id WHERE id_user_type =5 OR id_user_type=8 AND activation = 1 ORDER BY username ASC");
+        $stmt->execute();
+        $users = $stmt->fetchAll();
+        return $users;
+    }
+	 public function getOneByUsername()
+    {
+        $username = $this->getUsername();
+        $stmt = $this->db->prepare("SELECT TOP 1 * FROM users WHERE username = :username");
+        $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+        $stmt->execute();
+        $fetch = $stmt->fetchObject();
+        return $fetch;
+    }
+
+    public function getOneByEmail()
+    {
+        $result = FALSE;
+        $email = $this->getEmail();
+        $stmt = $this->db->prepare("SELECT TOP 1 * FROM users WHERE email = :email");
+        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        $stmt->execute();
+        $fetch = $stmt->fetchObject();
+        return $fetch;
+    }
+
+ 
+    public function getAllUserIngenia()
+    {
+        $stmt = $this->db->prepare("SELECT * from users where (id_user_type<>1 AND  id_user_type<>6 AND id_user_type<>7 AND id_user_type<>16 AND  id_user_type<>15 ) AND activation=1");
+        $stmt->execute();
+        $users = $stmt->fetchAll();
+        return $users;
+    }
+
+
+    public function updatePasword()
+    {
+        $id = $this->getId();
+        $password = $this->getPassword();
+        $stmt = $this->db->prepare("UPDATE top(1) users set password=:password WHERE id=:id");
+        $stmt->bindParam(":id", $id, PDO::PARAM_STR);
+        $stmt->bindParam(":password", $password, PDO::PARAM_STR);
+        $fetch = $stmt->execute();
+        return $fetch;
+    }
 }

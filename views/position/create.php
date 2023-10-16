@@ -45,7 +45,8 @@
                       <select name="id_department" id="id_department" class="form-control" required>
                         <option disabled selected value="">Selecciona departamento</option>
                         <?php foreach ($deparment as $dep) : ?>
-                          <option value=" <?= Encryption::encode($dep['id']) ?>"><?= $dep['department']  ?></option>
+                          <option value=" <?= Encryption::encode($dep['id']) ?>">
+                            <?= $dep['department']  ?></option>
                         <?php endforeach; ?>
                       </select>
 
@@ -63,17 +64,20 @@
                         <option value="<?= Encryption::encode(1)  ?>">Gerencia</option>
                         <option value="<?= Encryption::encode(2)  ?>">Subgerencia</option>
                         <option value="<?= Encryption::encode(3)  ?>">Administrativo</option>
-                        <option value="<?= Encryption::encode(4)  ?>">Supervisorios / Coordinacion</option>
+                        <option value="<?= Encryption::encode(4)  ?>">Supervisorios /
+                          Coordinacion</option>
                         <option value="<?= Encryption::encode(5)  ?>">Operativo</option>
                       </select>
                     </div>
 
                     <div class="form-group col">
-                      <label class="col-form-label" for="id_boss_position">Puesto al que reporta</label>
+                      <label class="col-form-label" for="id_boss_position">Puesto al que
+                        reporta</label>
                       <select name="id_boss_position" id="id_boss_position" class="form-control">
                         <option selected value="">Selecciona el puesto</option>
                         <?php foreach ($position as $post) : ?>
-                          <option value=" <?= Encryption::encode($post['id']) ?>"><?= $post['title']  ?></option>
+                          <option value=" <?= Encryption::encode($post['id']) ?>">
+                            <?= $post['title']  ?></option>
                         <?php endforeach; ?>
                       </select>
                     </div>
@@ -82,7 +86,8 @@
                       <label class="col-form-label" for="">Puesto(s) que supervisa</label>
                       <select name="supervising[]" id="supervising" multiple="multiple" class="form-control select2bs4">
                         <?php foreach ($position as $post) : ?>
-                          <option value=" <?= Encryption::encode($post['id']) ?>"><?= $post['title']  ?></option>
+                          <option value=" <?= Encryption::encode($post['id']) ?>">
+                            <?= $post['title']  ?></option>
                         <?php endforeach; ?>
                       </select>
                     </div>
@@ -91,17 +96,34 @@
 
                   <div class="form-row">
 
-                    <div class="form-group col">
+                    <div class="form-group col-6">
                       <label class="col-form-label" for="">Catálogo de ocupación*</label>
                       <?php $catalogo = Utils::getCatalogoOcupaciones(); ?>
                       <select name="clave_ocupacion" class="form-control select2" required>
                         <option disabled selected value="">Selecciona la ocupacion</option>
                         <?php foreach ($catalogo as $cat) : ?>
-                          <option value=" <?= Encryption::encode($cat['clave']) ?>"><?= $cat['descripcion']  ?></option>
+                          <option value=" <?= Encryption::encode($cat['clave']) ?>">
+                            <?= $cat['descripcion']  ?></option>
                         <?php endforeach; ?>
                       </select>
                     </div>
-
+                    <!-- ===[gabo 6 junio puestos]=== -->
+                    <div class="form-group col-6">
+                      <div class="form-group">
+                        <label for="id_Cliente" class="col-form-label">Sucursal*</label>
+                        <?php $contactos = Utils::getEmpresaByContacto(); ?>
+                        <!-- //===[gabo 6 junio puestos]=== -->
+                        <select name="id_cliente_position" id="id_cliente_position" class="form-control" required>
+                          <!-- //===[gabo 6 junio puestos fin]=== -->
+                          <option disabled selected value="">Selecciona comercio</option>
+                          <?php foreach ($contactos as $contacto) : ?>
+                            <option value="<?= $contacto['Cliente'] ?>">
+                              <?= $contacto['Nombre_Cliente'] ?></option>
+                          <?php endforeach ?>
+                        </select>
+                      </div>
+                    </div>
+                    <!-- ===[gabo 6 junio puestos fin]=== -->
                   </div>
                 </div>
                 <!-- /.card-body    -->
@@ -152,11 +174,13 @@
 
                   <div class="form-row">
                     <div class="form-group col">
-                      <label class="col-form-label" for="additional_studies">Estudios adicionales</label>
+                      <label class="col-form-label" for="additional_studies">Estudios
+                        adicionales</label>
                       <input type="text" name="additional_studies" class="form-control" maxlength="400" value="">
                     </div>
                     <div class="form-group col">
-                      <label class="col-form-label" for="experience_years">Años de eperiencia</label>
+                      <label class="col-form-label" for="experience_years">Años de
+                        eperiencia</label>
                       <input type="text" name="experience_years" class="form-control" value="">
                     </div>
                   </div>

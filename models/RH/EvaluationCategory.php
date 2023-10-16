@@ -95,14 +95,15 @@ class EvaluationCategory
         $fetch =  $stmt->fetchObject();
         return $fetch;
     }
-
+//   === [gabo 24 de mayo table]===
     public function getAllByIdEvaluation()
     {
         $id_evaluation = $this->getId_evaluation();
         $status = $this->getStatus();
 
-        $stmt = $this->db->prepare("SELECT ec.* FROM root.evaluation_category ec
-        WHERE  ec.id_evaluation=:id_evaluation AND status=:status");
+        $stmt = $this->db->prepare("SELECT
+        ec.* FROM root.evaluation_category ec
+        WHERE  ec.id_evaluation=:id_evaluation AND status=:status order by id");
 
         $stmt->bindParam(":id_evaluation", $id_evaluation, PDO::PARAM_INT);
         $stmt->bindParam(":status", $status, PDO::PARAM_INT);
@@ -110,6 +111,7 @@ class EvaluationCategory
         $fetch =  $stmt->fetchAll();
         return $fetch;
     }
+    //   === [gabo 24 de mayo table fin]===
 
     public function getAllQuestionsByIdEvalaution()
     {
@@ -119,7 +121,7 @@ class EvaluationCategory
 
         $stmt = $this->db->prepare("SELECT q.question,q.id id_question, ec.category, ec.id id_category
         FROM root.evaluations e,root.evaluation_category ec,root.category_criterion cc, root.questions q 
-        WHERE e.id=:id_evaluation AND  ec.id_evaluation=e.id AND cc.id_category=ec.id AND q.id_criterion=cc.id AND ec.status=:status AND q.status=1
+        WHERE e.id=:id_evaluation AND  ec.id_evaluation=e.id AND cc.id_category=ec.id AND q.id_criterion=cc.id AND ec.status=:status AND q.status=1 order by id_category
         ");
 
          $stmt->bindParam(":id_evaluation", $id_evaluation, PDO::PARAM_INT);

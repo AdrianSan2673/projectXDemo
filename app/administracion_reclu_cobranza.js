@@ -37,12 +37,8 @@ class administracion_reclu_cobranza {   //gabo
                             }
                         });
 
-                        var sel = document.getElementById("status");
-                        for (var i = 0; i < sel.length; i++) {
-                            if(sel[i].value==json_app.factura_datos.status){
-		                       $('#status option[value="'+sel[i].value+'"]').attr("selected", "selected");
-	                        }
-                        }
+                       $("#modal_editar_factura [name='status']").val(json_app.factura_datos.status);
+                        $('#status').trigger('change');
                  
                         document.querySelector('#modal_editar_factura [name="amount"]').value = json_app.factura_datos.total;  
 
@@ -110,12 +106,10 @@ class administracion_reclu_cobranza {   //gabo
                             }
                         });
                         
-                        var sel = document.getElementById("status");
-                        for (var i = 0; i < sel.length; i++) {
-                            if(sel[i].value==json_app.factura.status){
-		                       $('#Estado option[value="'+sel[i].value+'"]').attr("selected", "selected");
-	                        }
-                        }
+                         $("#modal_gestionar_factura [name='status']").val(json_app.factura.status);
+                        $('#status').trigger('change');
+						
+						
 					}else if (json_app.status == 2){
 						utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
 						document.querySelector("#bill-gestion-form #submit").disabled = false;

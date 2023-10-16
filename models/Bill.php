@@ -13,7 +13,10 @@ class Bill{
 	private $id_business_name;
     private $created_at;
     private $modified_at;
-
+    private $cancellation_date;
+	private $comments;
+	private $start_date;
+	private $end_date;
     private $db;
 
     public function __construct(){
@@ -115,6 +118,47 @@ class Bill{
 	public function setModified_at($modified_at){
 		$this->modified_at = $modified_at;
     }
+	
+	public function getCancellation_date()
+	{
+		return $this->cancellation_date;
+	}
+
+	public function setCancellation_date($cancellation_date)
+	{
+		$this->cancellation_date = $cancellation_date;
+	}
+
+	public function getComments()
+	{
+		return $this->comments;
+	}
+
+	public function setComments($comments)
+	{
+		$this->comments = $comments;
+	}
+
+
+	public function getStart_date()
+	{
+		return $this->start_date;
+	}
+
+	public function setStart_date($start_date)
+	{
+		$this->start_date = $start_date;
+	}
+
+	public function getEnd_date()
+	{
+		return $this->end_date;
+	}
+
+	public function setEnd_date($end_date)
+	{
+		$this->end_date = $end_date;
+	}
     
     public function billExists(){
         $result = FALSE;
@@ -130,15 +174,16 @@ class Bill{
         return $result;
 	}
 
-	public function getOne(){
-        $result = FALSE;
-        $id = $this->getId();
-		$stmt = $this->db->prepare("SELECT TOP 1 b.id, b.folio, b.emit_date, b.status, b.id_customer, c.customer, b.id_business_name, b.payment_promise_date, CONVERT(date,b.payment_date) AS payment_date, ISNULL(po.folio, '') AS purchase_order_folio, (SELECT SUM(va.amount) FROM vacancy_applicants va WHERE va.id_bill=b.id) AS total, b.iva FROM bills b INNER JOIN customers c ON b.id_customer=c.id LEFT JOIN purchase_orders po ON b.id_purchase_order=po.id WHERE b.id = :id");
+	public function getOne()
+	{
+		$result = FALSE;
+		$id = $this->getId();
+		$stmt = $this->db->prepare("SELECT TOP 1   b.cancellation_date,b.comments, b.id, b.folio, b.emit_date, b.status, b.id_customer, c.customer, b.id_business_name, b.payment_promise_date, CONVERT(date,b.payment_date) AS payment_date, ISNULL(po.folio, '') AS purchase_order_folio, (SELECT SUM(va.amount) FROM vacancy_applicants va WHERE va.id_bill=b.id) AS total, b.iva FROM bills b INNER JOIN customers c ON b.id_customer=c.id LEFT JOIN purchase_orders po ON b.id_purchase_order=po.id WHERE b.id = :id");
 		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $fetch = $stmt->fetchObject();
-        
-        return $fetch;
+		$stmt->execute();
+		$fetch = $stmt->fetchObject();
+
+		return $fetch;
 	}
 
 	public function save() {
@@ -162,7 +207,8 @@ class Bill{
         return $result;
 	}
 
-	public function update() {
+	public function update()
+	{
 		$result = false;
 
 		$id = $this->getId();
@@ -174,7 +220,10 @@ class Bill{
 		$payment_date = $this->getPayment_date();
 		$iva = $this->getIva();
 
-		$stmt = $this->db->prepare("UPDATE bills SET folio=:folio, emit_date=:emit_date, id_business_name=:id_business_name, status=:status, payment_promise_date=:payment_promise_date, payment_date=:payment_date, iva=:iva, modified_at=GETDATE() WHERE id=:id");
+		$cancellation_date = $this->getCancellation_date();
+
+
+		$stmt = $this->db->prepare("UPDATE bills SET folio=:folio, emit_date=:emit_date, id_business_name=:id_business_name, status=:status, payment_promise_date=:payment_promise_date, payment_date=:payment_date, iva=:iva, modified_at=GETDATE(),cancellation_date=:cancellation_date WHERE id=:id");
 		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
 		$stmt->bindParam(":folio", $folio, PDO::PARAM_STR);
 		$stmt->bindParam(":emit_date", $emit_date, PDO::PARAM_STR);
@@ -183,13 +232,14 @@ class Bill{
 		$stmt->bindParam(":payment_promise_date", $payment_promise_date, PDO::PARAM_STR);
 		$stmt->bindParam(":payment_date", $payment_date, PDO::PARAM_STR);
 		$stmt->bindParam(":iva", $iva, PDO::PARAM_STR);
-		
-        $flag = $stmt->execute();
-        if ($flag) {
-            $result = true;
-            $this->setId($this->db->lastInsertId());
-        }
-        return $result;
+		$stmt->bindParam(":cancellation_date", $cancellation_date, PDO::PARAM_STR);
+
+		$flag = $stmt->execute();
+		if ($flag) {
+			$result = true;
+			$this->setId($this->db->lastInsertId());
+		}
+		return $result;
 	}
 
 	public function updateFolio() {
@@ -210,13 +260,14 @@ class Bill{
         return $result;
 	}
 
-	public function getBillsByStatus(){
-        $status = $this->getStatus();
-        $stmt = $this->db->prepare("SELECT b.id, b.folio, b.emit_date, customer, c.credit_days, (CASE WHEN payment_date IS NULL THEN DATEDIFF(DAY, b.emit_date, CONVERT(DATE, GETDATE())) ELSE DATEDIFF(DAY, b.emit_date, CONVERT(DATE, GETDATE())) END) AS days_elapsed, ISNULL(business_name, 'Pendiente') AS business_name, b.payment_date, b.payment_promise_date, (SELECT COUNT(va.id) FROM vacancy_applicants va WHERE va.id_bill=b.id) + (SELECT ISNULL(COUNT(p.amount), 0) FROM psychometrics p WHERE p.id_bill=b.id) AS no_services , (SELECT ISNULL(SUM(va.amount), 0) FROM vacancy_applicants va WHERE va.id_bill=b.id) + (SELECT ISNULL(SUM(p.amount), 0) FROM psychometrics p WHERE p.id_bill=b.id) AS total, (SELECT ISNULL(SUM(va.amount) * b.iva, 0) FROM vacancy_applicants va WHERE va.id_bill=b.id) + (SELECT ISNULL(SUM(p.amount) * b.iva, 0) FROM psychometrics p WHERE p.id_bill=b.id) AS total_IVA, status, CASE WHEN status=1 THEN 'Pendiente de pago' WHEN status=2 THEN 'Pagada'END AS estado, (SELECT TOP 1 contact_date FROM bill_follow_ups bf WHERE bf.id_bill=b.id ORDER BY contact_date DESC) AS last_follow_up_date, (SELECT TOP 1 comments FROM bill_follow_ups bf WHERE bf.id_bill=b.id ORDER BY contact_date DESC) AS last_follow_up_comments FROM bills b INNER JOIN customers c ON b.id_customer=c.id LEFT JOIN customer_business_name cbn ON b.id_business_name=cbn.id WHERE b.status=:status ORDER BY b.emit_date DESC");
-        $stmt->bindParam(":status", $status, PDO::PARAM_INT);
-        $stmt->execute();
-        $bills = $stmt->fetchAll();
-        return $bills;
+	public function getBillsByStatus()
+	{
+		$status = $this->getStatus();
+		$stmt = $this->db->prepare("SELECT b.cancellation_date,b.comments,b.id, b.folio, b.emit_date, customer, c.credit_days, (CASE WHEN payment_date IS NULL THEN DATEDIFF(DAY, b.emit_date, CONVERT(DATE, GETDATE())) ELSE DATEDIFF(DAY, b.emit_date, CONVERT(DATE, GETDATE())) END) AS days_elapsed, ISNULL(business_name, 'Pendiente') AS business_name, b.payment_date, b.payment_promise_date, (SELECT COUNT(va.id) FROM vacancy_applicants va WHERE va.id_bill=b.id) + (SELECT ISNULL(COUNT(p.amount), 0) FROM psychometrics p WHERE p.id_bill=b.id) AS no_services , (SELECT ISNULL(SUM(va.amount), 0) FROM vacancy_applicants va WHERE va.id_bill=b.id) + (SELECT ISNULL(SUM(p.amount), 0) FROM psychometrics p WHERE p.id_bill=b.id) AS total, (SELECT ISNULL(SUM(va.amount) * b.iva, 0) FROM vacancy_applicants va WHERE va.id_bill=b.id) + (SELECT ISNULL(SUM(p.amount) * b.iva, 0) FROM psychometrics p WHERE p.id_bill=b.id) AS total_IVA, status, CASE WHEN status=1 THEN 'Pendiente de pago' WHEN status=2 THEN 'Pagada' WHEN status=3 THEN 'Cancelada' END AS estado, (SELECT TOP 1 contact_date FROM bill_follow_ups bf WHERE bf.id_bill=b.id ORDER BY contact_date DESC) AS last_follow_up_date, (SELECT TOP 1 comments FROM bill_follow_ups bf WHERE bf.id_bill=b.id ORDER BY contact_date DESC) AS last_follow_up_comments FROM bills b INNER JOIN customers c ON b.id_customer=c.id LEFT JOIN customer_business_name cbn ON b.id_business_name=cbn.id WHERE b.status=:status ORDER BY b.emit_date DESC");
+		$stmt->bindParam(":status", $status, PDO::PARAM_INT);
+		$stmt->execute();
+		$bills = $stmt->fetchAll();
+		return $bills;
 	}
 	
 	public function getApplicantsByBill(){
@@ -237,16 +288,17 @@ class Bill{
         return $psychometrics;
 	}
 
-	public function getTalentAttractionsByBill(){
+	public function getTalentAttractionsByBill()
+	{
 		$id = $this->getId();
-        $stmt = $this->db->prepare(
-        "SELECT ta.id, ta.job_title, ta.request_date, ta.end_date, ta.id_state, ta.id_city, s.state, s.abbreviation, ct.city, ta.salary, ta.id_customer, c.customer, ta.id_business_name, bn.business_name, ta.status, ta.id_bill, ta.id_purchase_order, created_by, CONCAT(u.first_name, ' ', u.last_name) AS creator, CASE WHEN ta.status = 1 THEN 'En proceso' WHEN ta.status = 2 THEN 'Finalizado' WHEN ta.status = 3 THEN 'Facturado' ELSE '-' END AS estatus, CASE WHEN ta.id_bill IS NULL AND ta.id_purchase_order IS NULL THEN NULL WHEN ta.id_bill IS NULL AND ta.id_purchase_order IS NOT NULL THEN po.folio ELSE b.folio END AS folio FROM talent_attraction ta INNER JOIN customers c ON ta.id_customer=c.id INNER JOIN states s ON ta.id_state=s.id INNER JOIN cities ct ON ta.id_city=ct.id INNER JOIN users u ON ta.created_by=u.id LEFT JOIN customer_business_name bn ON ta.id_business_name=bn.id LEFT JOIN bills b ON ta.id_bill=b.id LEFT JOIN purchase_orders po ON ta.id_purchase_order=po.id WHERE b.id=:id ORDER BY ta.request_date DESC"
-        );
+		$stmt = $this->db->prepare(
+			"SELECT ta.id, ta.job_title, ta.request_date, ta.end_date, ta.id_state, ta.id_city, s.state, s.abbreviation, ct.city, ta.salary, ta.id_customer, c.customer, ta.id_business_name, bn.business_name, ta.status, ta.id_bill, ta.id_purchase_order, ta.created_by, CONCAT(u.first_name, ' ', u.last_name) AS creator, CASE WHEN ta.status = 1 THEN 'En proceso' WHEN ta.status = 2 THEN 'Finalizado' WHEN ta.status = 3 THEN 'Facturado' ELSE '-' END AS estatus, CASE WHEN ta.id_bill IS NULL AND ta.id_purchase_order IS NULL THEN NULL WHEN ta.id_bill IS NULL AND ta.id_purchase_order IS NOT NULL THEN po.folio ELSE b.folio END AS folio FROM talent_attraction ta INNER JOIN customers c ON ta.id_customer=c.id INNER JOIN states s ON ta.id_state=s.id INNER JOIN cities ct ON ta.id_city=ct.id INNER JOIN users u ON ta.created_by=u.id LEFT JOIN customer_business_name bn ON ta.id_business_name=bn.id LEFT JOIN bills b ON ta.id_bill=b.id LEFT JOIN purchase_orders po ON ta.id_purchase_order=po.id WHERE b.id=:id ORDER BY ta.request_date DESC"
+		);
 		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $attractions = $stmt->fetchAll();
-        return $attractions;
-    }
+		$stmt->execute();
+		$attractions = $stmt->fetchAll();
+		return $attractions;
+	}
 	
 	public function getFollowUpsByBill(){
         $id = $this->getId();
@@ -257,31 +309,34 @@ class Bill{
         return $follow_ups;
 	}
 
-	public function updatePayment_promise_date_and_status(){
+	public function updatePayment_promise_date_and_status()
+	{
 		$result = false;
 		$id = $this->getId();
 		$payment_promise_date = $this->getPayment_promise_date();
 		$status = $this->getStatus();
+		$cancellation_date = $this->getCancellation_date();
 
 		if ($status == 2) {
 			$stmt = $this->db->prepare("UPDATE bills SET payment_promise_date=:payment_promise_date, payment_date=GETDATE(), status=:status, modified_at=GETDATE() WHERE id=:id");
-		}else{
-			$stmt = $this->db->prepare("UPDATE bills SET payment_promise_date=:payment_promise_date, status=:status, modified_at=GETDATE() WHERE id=:id");
+		} else {
+			$stmt = $this->db->prepare("UPDATE bills SET payment_promise_date=:payment_promise_date, status=:status, modified_at=GETDATE(),cancellation_date=:cancellation_date WHERE id=:id");
 		}
 
 		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
 		$stmt->bindParam(":payment_promise_date", $payment_promise_date, PDO::PARAM_STR);
 		$stmt->bindParam(":status", $status, PDO::PARAM_INT);
-           
-        $flag = $stmt->execute();
-        if ($flag) {
-            $result = true;
-        }
-        
-        return $result;
+		$stmt->bindParam(":cancellation_date", $cancellation_date, PDO::PARAM_STR);
+
+		$flag = $stmt->execute();
+		if ($flag) {
+			$result = true;
+		}
+
+		return $result;
 	}
 //=========================================[gabo 20/02/2022]===================================================================
-	public function update_bill()
+public function update_bill()
 	{  //gabo
 
 		$result = false;
@@ -303,13 +358,30 @@ class Bill{
 		$stmt->bindParam(":payment_promise_date", $payment_promise_date, PDO::PARAM_STR);
 		$stmt->bindParam(":payment_date", $payment_date, PDO::PARAM_STR);
 		$stmt->bindParam(":iva", $iva, PDO::PARAM_STR);
+	
+		$flag = $stmt->execute();
+		if ($flag) {
+			$result = true;
+			$this->setId($this->db->lastInsertId());
+		}
 
-		// $flag = $stmt->execute();
-		// if ($flag) {
-		//     $result = true;
-		//     $this->setId($this->db->lastInsertId());
-		// }
-		$result = true;
+		return $result;
+	}
+		public function updateInfoCancelled()
+	{
+		$result = false;
+		$id = $this->getId();
+		$comments = $this->getComments();
+		$cancellation_date = $this->getCancellation_date();
+
+		$stmt = $this->db->prepare("UPDATE bills SET  comments=:comments,cancellation_date=:cancellation_date WHERE id=:id");
+		$stmt->bindParam(":id", $id, PDO::PARAM_STR);
+		$stmt->bindParam(":comments", $comments, PDO::PARAM_STR);
+		$stmt->bindParam(":cancellation_date", $cancellation_date, PDO::PARAM_STR);
+		$flag = $stmt->execute();
+		if ($flag) {
+			$result = true;
+		}
 		return $result;
 	}
 	//=======================================================================================================================

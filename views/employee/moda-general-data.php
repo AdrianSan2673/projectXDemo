@@ -53,11 +53,19 @@
                     </div>
 
                     <div class="row">
-                        <div class="form-group col-12">
-                            <label class="col-form-label">Titulo profesional</label>
-                            <input type="text" name="scholarship" value="<?= isset($employee->scholarship) ? $employee->scholarship : ''  ?>" class="form-control">
+                        <!-- //gabo 7 sep -->
+                        <div class="form-group col-6">
+                            <label class="col-form-label">Correo</label>
+                            <input type="email" name="email"
+                                value="<?= isset($employee->email) ? $employee->email : ''  ?>" class="form-control">
                         </div>
-
+                        <div class="form-group col-6">
+                            <label class="col-form-label">Titulo profesional</label>
+                            <input type="text" name="scholarship"
+                                value="<?= isset($employee->scholarship) ? $employee->scholarship : ''  ?>"
+                                class="form-control">
+                        </div>
+                        <!-- //gabo 7 sep -->
                     </div>
 
 
@@ -102,8 +110,8 @@
                     <div class="row">
 
                         <div class="form-group col-6">
-                            <label class="col-form-label">Empresa contratante</label>
-                            <?php $contactos = Utils::getEmpresaByContacto(); ?>
+                            <label class="col-form-label">Contacto</label>
+                            <?php $contactos = Utils::getEmpresaByContactoRH(); ?>
                             <select name="cliente" id="Cliente" class="form-control" required>
                                 <option disabled value="">Selecciona comercio</option>
                                 <?php foreach ($contactos as $contacto) : ?>

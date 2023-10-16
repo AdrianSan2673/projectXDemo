@@ -58,7 +58,7 @@ class EmpleadoContratoController
                 for ($i = 0; $i < count($employeeContractAll); $i++) {
                     $employeeContractAll[$i]['id'] = Encryption::encode($employeeContractAll[$i]['id']);
                     $employeeContractAll[$i]['contract_start'] = Utils::getDate($employeeContractAll[$i]['contract_start']);
-                    $employeeContractAll[$i]['contract_end'] = isset($employeeContractAll[$i]['contract_end']) ? Utils::getDate($employeeContractAll[$i]['contract_end']) : 'Sin finalizacin';
+                    $employeeContractAll[$i]['contract_end'] = isset($employeeContractAll[$i]['contract_end']) ? Utils::getDate($employeeContractAll[$i]['contract_end']) : 'Sin finalizacion';
                 }
 
 
@@ -78,7 +78,6 @@ class EmpleadoContratoController
 
     public function delete()
     {
-
         if (Utils::isAdmin() || Utils::isCustomerSA()) {
             $id_contract = Encryption::decode($_POST['id']);
 
@@ -89,16 +88,19 @@ class EmpleadoContratoController
 
                 $flag = $employeeContractObj->delete();
 
-                if ($flag) {
+                $employeeContractAll = $employeeContractObj->getAllByIdEmployee();
+
+                if ($flag && count($employeeContractAll)>0) {
                     $oneContractEmployee=$employeeContractObj->getOneByIdEmployee();
                     $oneContractEmployee->created_at=Utils::getDate($oneContractEmployee->created_at);
                     $oneContractEmployee->contract_start=Utils::getDate($oneContractEmployee->contract_start);
                     $oneContractEmployee->contract_end=isset($oneContractEmployee->contract_end) ? Utils::getDate($oneContractEmployee->contract_end) : 'Sin finalizacion';
-                    $employeeContractAll = $employeeContractObj->getAllByIdEmployee();
+
+
                     for ($i = 0; $i < count($employeeContractAll); $i++) {
                         $employeeContractAll[$i]['id'] = Encryption::encode($employeeContractAll[$i]['id']);
                         $employeeContractAll[$i]['contract_start'] = Utils::getDate($employeeContractAll[$i]['contract_start']);
-                        $employeeContractAll[$i]['contract_end'] = isset($employeeContractAll[$i]['contract_end']) ? Utils::getDate($employeeContractAll[$i]['contract_end']) : 'Sin finalizacin';
+                        $employeeContractAll[$i]['contract_end'] = isset($employeeContractAll[$i]['contract_end']) ? Utils::getDate($employeeContractAll[$i]['contract_end']) : 'Sin finalizacion';
                     }
 
                     echo json_encode(
@@ -109,10 +111,11 @@ class EmpleadoContratoController
                         )
                     );
                 } else
-                    echo json_encode(array('status' => 3));
+                    echo json_encode(array('status' => 2));
             } else
-                echo json_encode(array('status' => 3));
+                echo json_encode(array('status' => 0));
         } else
             echo json_encode(array('status' => 0));
     }
 }
+

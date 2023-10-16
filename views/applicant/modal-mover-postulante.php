@@ -15,9 +15,9 @@
                         <?php $vacantes = Utils::getVacantesEnProceso(); ?>
                         <select type="reset" name="id_vacancy" id="id_vacancy" class="form-control select2">
                             <option value="" hidden selected></option>
-                            <!-- // ===[20 mayo gabo operativa ]=== -->
+                              <!-- // ===[20 mayo gabo operativa ]=== -->
                             <?php foreach ($vacantes as $vacant) : ?>
-                                <option value="<?= $vacant['id'] ?>"><?= $vacant['customer'] . " / " . $vacant['vacancy'] . " / " . $vacant['city'] ?></option>
+<option value="<?= $vacant['id'] ?>"><?= $vacant['customer'] . " / " . $vacant['vacancy'] . " / " . $vacant['city'] ?></option>
                                 <!-- // ===[20 mayo gabo   operativa fin]=== -->
                             <?php endforeach ?>
                         </select>
@@ -31,7 +31,6 @@
         </div>
     </div>
 </div>
-<script src="<?= base_url ?>app/vacancy.js?v=<?= rand() ?>"></script>
 <script>
     document.querySelector('#mover-postulante-form').addEventListener('submit', e => {
         e.preventDefault();

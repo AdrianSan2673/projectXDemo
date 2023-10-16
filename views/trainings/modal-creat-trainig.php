@@ -51,10 +51,10 @@
                         <label for="instructor" class="col-form-label">Instructor o tutor</label>
                         <input type="text" class="form-control" name="instructor" id="instructor">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" hidden><!-- Esto ya no se usa porque el id lo saca de la sesion -->
                         <label for="gender" class="col-form-label">Empresa</label>
                         <?php $contactos = Utils::getEmpresaByContacto(); ?>
-                        <select name="cliente" id="Cliente" class="form-control" required>
+                        <select name="cliente" id="Cliente" class="form-control" >
                             <option disabled selected value="">Selecciona comercio</option>
                             <?php foreach ($contactos as $contacto) : ?>
                                 <option value="<?= $contacto['Cliente'] ?>"><?= $contacto['Nombre_Cliente'] ?></option>

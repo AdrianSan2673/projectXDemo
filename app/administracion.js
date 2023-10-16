@@ -279,6 +279,10 @@ class Administracion {
 							form.querySelectorAll('input[type=radio]')[0].checked = true;
 						} else {
 							form.querySelectorAll('input[type=radio]')[1].checked = true;
+						}if (json_app.factura_datos.Tipo == null || json_app.factura_datos.Tipo == 0) {
+							form.querySelectorAll('input[type=radio]')[3].checked = true;
+						} else {
+							form.querySelectorAll('input[type=radio]')[2].checked = true;
 						}
 						form.querySelectorAll('input')[7].value = json_app.factura_datos.Fecha_de_Pago;
 
@@ -291,6 +295,64 @@ class Administracion {
 
 			}
 		}
+	}
+	
+	static tabla_formato(facturas, tabla) {
+
+		let statusclass;
+		let class_color_days;
+
+		let factu = '';
+		facturas.forEach(Factura => {
+
+			if (tabla == 'tb_unpaid_bills') {
+				(parseInt(Factura.Dias_Transcurridos) > parseInt(Factura.Plazo_Credito)) ? class_color_days = ' bg-danger' : class_color_days = '';
+			}
+			(Factura.Estado == 'Pagada') ? statusclass = 'bg-success' : (Factura.Estado == 'Pendiente de pago') ? statusclass = 'bg-orange' : (Factura.Estado == 'Cancelada') ? statusclass = 'bg-danger' : statusclass = '';
+
+			factu += `
+				<tr id='factura${Factura.Folio_Factura}'>
+					<td class="text-center align-middle"><b>${Factura.Folio_Factura}</b></td>
+					<td class="text-center align-middle">${Factura.Fecha_Emision}</td>
+					<td class="text-center align-middle">${Factura.Plazo_Credito}</td>
+					<td class="text-center align-middle ${class_color_days}">${Factura.Dias_Transcurridos}</td>
+					<td class="text-center align-middle">${Factura.Nombre_Empresa}</td>
+					<td class="text-center align-middle">${Factura.Cliente}</td>
+					<td class="text-center align-middle">${Factura.Razon_Social}</td>
+					<td class="text-center align-middle">$ ${Factura.Monto}</td>
+					<td class="text-center align-middle">$ ${Factura.Monto_IVA}</td>
+					<td class="text-center align-middle">${Factura.Fecha_de_Pago}</td>
+					<td class="text-center align-middle ${statusclass}">${Factura.Estado}</td>`;
+
+			if (tabla == 'tb_paid_bills_canhcel') {
+
+				factu += `<td class="text-center align-middle">${Factura.fecha_cancelacion}</td>
+					<td class="text-center align-middle">${Factura.comentarios}</td>`;
+			} else {
+				factu += `<td class="text-center align-middle">${Factura.Fecha_Ultima_Gestion}</td>
+				<td class="text-center align-middle">${Factura.Proxima_Gestion}</td>
+				<td class="text-center align-middle">${Factura.Promesa_Pago}</td>
+				<td class="text-center align-middle">${Factura.Ultima_Gestion}</td>`;
+			}
+
+			factu += `<td class="text-center py-0 align-middle">
+			           <div class="btn-group btn-group-sm">`;
+			if (tabla == 'tb_paid_bills_canhcel') {
+				factu += ` <a href="editar_factura&folio=${Factura.Folio_Factura_Encrypytado}" class="btn btn-success btn-sm mr-1"> <i class="fas fa-eye"></i> </a>
+				          <button class="btn btn-info btn-sm mr-1" data-id="${Factura.Folio_Factura_Encrypytado}"><i class="fas fa-pencil-alt"></i></button>`;
+			} else {
+				factu += `<a href="editar_factura&folio=${Factura.Folio_Factura_Encrypytado}" class="btn btn-success btn-sm mr-1"><i class="fas fa-eye"></i></a>
+	                  <button class="btn btn-info btn-sm mr-1" data-id="${Factura.Folio_Factura}"><i class="fas fa-pencil-alt"></i> </button>
+	                 <button class="btn btn-secondary btn-sm mr-1" data-id="${Factura.Folio_Factura}"> <i class="fas fa-cog"></i></button>`;
+			}
+			factu += `</div>
+			           </td>
+				</tr>
+			`;
+		});
+
+		return factu;
+
 	}
 
 	update_factura() {
@@ -311,26 +373,11 @@ class Administracion {
 						utils.showToast('Omitiste algún dato', 'error');
 						form.querySelectorAll('.btn')[1].disabled = false;
 					} else if (json_app.status == 1) {
-						let trfactura = document.querySelector('#factura' + factura);
-						trfactura.children[0].querySelector('b').textContent = json_app.Factura.Folio_Factura;
-						trfactura.children[1].textContent = json_app.Factura.Fecha_Emision;
-						trfactura.children[6].textContent = json_app.Factura.Razon_Social;
-						trfactura.children[7].textContent = '$ ' + Number.parseFloat(json_app.Factura.Monto).toFixed(2);
-						trfactura.children[8].textContent = '$ ' + Number.parseFloat(json_app.Factura.Monto_IVA).toFixed(2);
-						trfactura.children[9].textContent = json_app.Factura.Fecha_de_Pago;
-						trfactura.children[10].textContent = json_app.Factura.Estado;
-						trfactura.children[12].textContent = json_app.Factura.Proxima_Gestion;
-						trfactura.children[13].textContent = json_app.Factura.Promesa_Pago;
-
-						trfactura.classList.add('table-warning');
-
-						let statusclass = "text-center align-middle ";
-						if (json_app.Factura.Estado == 'Pagada')
-							trfactura.children[10].className = statusclass + 'bg-success';
-						else if (json_app.Factura.Estado == 'Pendiente de pago')
-							trfactura.children[10].className = statusclass + 'bg-orange';
-						else
-							trfactura.children[10].className = statusclass + '';
+						
+						utils.destruir_datatable('#tb_unpaid_bills', '#tb_unpaid_bills tbody', Administracion.tabla_formato(json_app.facturas_pendientes, 'tb_unpaid_bills'));
+                                                utils.destruir_datatable('#tb_paid_bills', '#tb_paid_bills tbody', Administracion.tabla_formato(json_app.facturas_pagadas, 'tb_paid_bills'));
+                                                utils.destruir_datatable('#tb_paid_bills_canhcel', '#tb_paid_bills_canhcel tbody', Administracion.tabla_formato(json_app.facturas_canceladas, 'tb_paid_bills_canhcel'));
+						utils.destruir_datatable('#tb_paid_bills_incobrables', '#tb_paid_bills_incobrables tbody', Administracion.tabla_formato(json_app.facturas_incobrables, 'facturas_incobrables'));
 
 						utils.showToast('Factura actualizada exitosamente', 'success');
 
@@ -418,24 +465,12 @@ class Administracion {
 						utils.showToast('Omitiste algún dato', 'error');
 						form.querySelectorAll(".btn")[1].disabled = false;
 					} else if (json_app.status == 1) {
-						let trfactura = document.querySelector('#factura' + factura);
-						trfactura.children[0].querySelector('b').textContent = json_app.Factura.Folio_Factura;
-						trfactura.children[9].textContent = json_app.Factura.Fecha_de_Pago;
-						trfactura.children[10].textContent = json_app.Factura.Estado;
-						trfactura.children[11].textContent = json_app.Factura.Fecha_Ultima_Gestion;
-						trfactura.children[12].textContent = json_app.Factura.Proxima_Gestion;
-						trfactura.children[13].textContent = json_app.Factura.Promesa_Pago;
-						trfactura.children[14].textContent = json_app.Factura.Ultima_Gestion;
-
-						trfactura.classList.add('table-warning');
-
-						let statusclass = "text-center align-middle ";
-						if (json_app.Factura.Estado == 'Pagada')
-							trfactura.children[10].className = statusclass + 'bg-success';
-						else if (json_app.Factura.Estado == 'Pendiente de pago')
-							trfactura.children[10].className = statusclass + 'bg-orange';
-						else
-							trfactura.children[10].className = statusclass + '';
+						
+						   utils.destruir_datatable('#tb_unpaid_bills', '#tb_unpaid_bills tbody', Administracion.tabla_formato(json_app.facturas_pendientes, 'tb_unpaid_bills'));
+                                               
+                                        utils.destruir_datatable('#tb_paid_bills', '#tb_paid_bills tbody', Administracion.tabla_formato(json_app.facturas_pagadas, 'tb_paid_bills'));
+                                                      
+                                        utils.destruir_datatable('#tb_paid_bills_canhcel', '#tb_paid_bills_canhcel tbody', Administracion.tabla_formato(json_app.facturas_canceladas, 'tb_paid_bills_canhcel'));
 
 						utils.showToast('Factura gestionada exitosamente', 'success');
 						$('#modal_factura_gestion').modal('hide');
@@ -1012,5 +1047,137 @@ class Administracion {
 		}
 	}
 	//==============================================================================================
+getInfoCancel(factura) {
 
+		const data = new FormData();
+		data.append('factura', factura);
+
+		fetch('../administracion_SA/getInfoCancel', {
+			method: 'POST',
+			body: data
+		})
+			.then(response => {
+				//  console.log(response.json());
+				if (response.ok) {
+					return response.text();
+				} else {
+					throw new Error('Network response was not ok.');
+				}
+			})
+			.then(r => {
+				console.log(r);
+				try {
+					const json_app = JSON.parse(r);
+					if (json_app.status == 1) {
+						console.log(json_app)
+						document.querySelector('#modal_info_cancelados [name="factura"]').value = json_app.factura.Folio_Factura_encryptado
+						document.querySelector('#modal_info_cancelados [name="fecha_cancelacion"]').value = json_app.factura.fecha_cancelacion
+						document.querySelector('#modal_info_cancelados [name="comentarios"]').innerHTML = json_app.factura.comentarios;
+						document.querySelector('#titulo').innerHTML = json_app.factura.Folio_Factura;
+
+					} else if (json_app.status == 0) {
+						utils.showToast('No se pudo consultar la informacion dentro', 'error');
+
+					}
+				} catch (error) {
+					utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+				}
+			})
+			.catch(error => {
+				utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+			});
+	}
+
+	updateInfoCancelados() {
+		var form = document.querySelector("#form-info-cancelados");
+		var formData = new FormData(form);
+		document.querySelector('#form-info-cancelados [name="submit"]').disabled = true;
+
+		fetch('../administracion_SA/updateInfoCancelados', {
+			method: 'POST',
+			body: formData
+		})
+			.then(response => {
+				//console.log(response.json());
+				if (response.ok) {
+					return response.text();
+				} else {
+					throw new Error('Network response was not ok.');
+				}
+			})
+			.then(r => {
+				console.log(r);
+				try {
+					const json_app = JSON.parse(r);
+					if (json_app.status == 1) {
+						document.querySelector("#form-info-cancelados").reset();
+						utils.destruir_datatable('#tb_paid_bills_canhcel', '#tb_paid_bills_canhcel tbody', Administracion.tabla_formato(json_app.facturas_canceladas, 'tb_paid_bills_canhcel'));
+						utils.showToast('Información guardada correctamente', 'success');
+						document.querySelector('#form-info-cancelados [name="submit"]').disabled = false;
+						$('#modal_info_cancelados').modal('hide');
+					} else if (json_app.status == 0) {
+						utils.showToast('No se pudo consultar la informacion dentro', 'error');
+						document.querySelector('#form-info-cancelados [name="submit"]').disabled = false;
+
+					}
+				} catch (error) {
+					utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+					document.querySelector('#form-info-cancelados [name="submit"]').disabled = false;
+				}
+			})
+			.catch(error => {
+				utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+				document.querySelector('#form-info-cancelados [name="submit"]').disabled = false;
+
+			});
+	}
+
+	
+	
+	chagueCliente(cliente) {
+		const formData = new FormData();
+		formData.append('Cliente', cliente);
+		fetch('../administracion_SA/chagueCliente', {
+				method: 'POST',
+				body: formData
+			})
+			.then(response => {
+				//console.log(response.json());
+				if (response.ok) {
+					return response.text();
+				} else {
+					throw new Error('Network response was not ok.');
+				}
+			})
+			.then(r => {
+				console.log(r);
+				try {
+					const json_app = JSON.parse(r);
+					if (json_app.status == 1) {
+						let form = document.querySelector('#modal_edit form');
+
+						let razones = '';
+						json_app.razones.forEach(razon => {
+							razones +=
+								`
+							<option value="${razon.Razon.trim()}">${razon.Razon}</option>
+							`;
+						});
+						razones += '<option value="Pendiente">Pendiente</option>';
+						form.querySelectorAll('select')[0].innerHTML = razones;
+						form.querySelector('[name="ID_Cliente"]').value = json_app.cliente.Cliente;
+						form.querySelector('[name="Cliente"]').value = json_app.cliente.Nombre_Cliente;
+					} else if (json_app.status == 0) {
+						utils.showToast('No se pudo consultar la informacion dentro', 'error');
+					}
+				} catch (error) {
+					utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+				}
+			})
+			.catch(error => {
+				utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+
+			});
+	}
+	
 }

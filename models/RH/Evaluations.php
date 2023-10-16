@@ -12,6 +12,9 @@ class Evaluations
     private $modified_at;
     private $type;
     private $db;
+    //===[gabo 11 junio excel evaluaciones pt2]===
+    private $ID_Cliente;
+    //===[gabo 11 junio excel evaluaciones fin pt2]===
 
     public function __construct()
     {
@@ -108,6 +111,23 @@ class Evaluations
         $this->type = $type;
     }
 
+
+
+    //===[gabo 11 junio excel evaluaciones pt2]===
+    public function getID_Cliente()
+    {
+        return $this->ID_Cliente;
+    }
+
+    public function setID_Cliente($ID_Cliente)
+    {
+        $this->ID_Cliente = $ID_Cliente;
+    }
+
+    //===[gabo 11 junio excel evaluaciones fin pt2]===
+
+
+
     public function getOne()
     {
         $id = $this->getId();
@@ -117,23 +137,24 @@ class Evaluations
         $fetch =  $stmt->fetchObject();
         return $fetch;
     }
+    //===[gabo 12 junio excel evaluaciones pt2]===
 
-    public function getAll()
+
+    public function getAll($ID_Contacto)
     {
         $status = $this->getStatus();
-        $ID_Empresa = $this->getID_Empresa();
-
         $stmt = $this->db->prepare("SELECT *,CASE  WHEN eva.level=1 THEN 'Operativo' WHEN  eva.level=2 THEN 'Administrativo' END levelFormat
-        FROM root.evaluations eva 
-        WHERE eva.status=:status aND eva.ID_Empresa=:ID_Empresa 
-        ");
-        $stmt->bindParam(":status", $status, PDO::PARAM_INT);
-        $stmt->bindParam(":ID_Empresa", $ID_Empresa, PDO::PARAM_INT);
+        FROM root.evaluations eva WHERE  ID_Cliente IN  (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto)AND eva.status=:status");
+        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+        $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
         $stmt->execute();
         $fetch =  $stmt->fetchAll();
         return $fetch;
     }
 
+
+
+    //===[gabo 12 junio excel evaluaciones fin pt2]===
 
     public function save()
     {
@@ -145,8 +166,10 @@ class Evaluations
         $ID_Empresa = $this->getID_Empresa();
         $created_by = $this->getCreated_by();
         $type = $this->getType();
+        $id_cliente = $this->getID_Cliente();
 
-        $stmt = $this->db->prepare("INSERT INTO root.evaluations (name, level,status,ID_Empresa,created_by,created_at, modified_at,type) VALUES (:name,:level,:status,:ID_Empresa,:created_by, GETDATE(), GETDATE(),:type)");
+
+        $stmt = $this->db->prepare("INSERT INTO root.evaluations (name, level,status,ID_Empresa,created_by,created_at, modified_at,type,ID_Cliente) VALUES (:name,:level,:status,:ID_Empresa,:created_by, GETDATE(), GETDATE(),:type,:id_cliente)");
 
         $stmt->bindParam(":name", $name, PDO::PARAM_STR);
         $stmt->bindParam(":level", $level, PDO::PARAM_STR);
@@ -154,6 +177,7 @@ class Evaluations
         $stmt->bindParam(":ID_Empresa", $ID_Empresa, PDO::PARAM_STR);
         $stmt->bindParam(":created_by", $created_by, PDO::PARAM_STR);
         $stmt->bindParam(":type", $type, PDO::PARAM_STR);
+        $stmt->bindParam(":id_cliente", $id_cliente, PDO::PARAM_STR);
 
 
         $flag = $stmt->execute();
@@ -228,6 +252,76 @@ class Evaluations
         $stmt = $this->db->prepare("DELETE root.evaluations WHERE id=:id");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $fetch = $stmt->execute();
+        return $fetch;
+    }
+
+
+
+
+
+    //===[gabo 11 junio excel evaluaciones pt2]===
+    public function getALLEvaluationsByID_contact($ID_Contacto)
+    {
+
+        $status = $this->getStatus();
+
+        $stmt = $this->db->prepare("SELECT * from  root.evaluations where ID_Cliente IN (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) AND status =:status");
+        $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
+        $stmt->bindParam(":status", $status, PDO::PARAM_INT);
+        $fetch = $stmt->execute();
+        $fetch = $stmt->fetchAll();
+        return $fetch;
+    }
+    //===[gabo 11 junio excel evaluaciones fin pt2]===
+
+//===[gabo 11 junio excel evaluaciones pt2]===
+    public function getAllAvaiableEvaluations($ID_Contacto)
+    {
+
+        $stmt = $this->db->prepare("SELECT *,CASE  WHEN eva.level=1 THEN 'Operativo' WHEN  eva.level=2 THEN 'Administrativo' END levelFormat
+        FROM root.evaluations eva WHERE  ID_Cliente IN  (SELECT ID_Cliente FROM rrhhinge_Candidatos.dbo.rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:ID_Contacto) AND eva.id IN(SELECT id_evaluation from root.evaluation_employee)
+        ");
+        $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
+        $stmt->execute();
+        $fetch =  $stmt->fetchAll();
+        return $fetch;
+    }
+    //===[gabo 11 junio excel evaluaciones fin pt2]===
+ public function getAllByID_Cliente()
+    {
+        $status = $this->getStatus();
+        $ID_Cliente = $this->getID_Cliente();
+        $stmt = $this->db->prepare("SELECT *,CASE  WHEN eva.level=1 THEN 'Operativo' WHEN  eva.level=2 THEN 'Administrativo' END levelFormat
+        FROM root.evaluations eva WHERE  ID_Cliente=:ID_Cliente AND eva.status=:status");
+        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+        $stmt->bindParam(":ID_Cliente", $ID_Cliente, PDO::PARAM_INT);
+        $stmt->execute();
+        $fetch =  $stmt->fetchAll();
+        return $fetch;
+    }
+
+
+    public function getALLEvaluationsByID_Cliente()
+    {
+        $ID_Cliente = $this->getID_Cliente();
+        $status = $this->getStatus();
+        $stmt = $this->db->prepare("SELECT * from  root.evaluations where ID_Cliente=:ID_Cliente AND status =:status");
+        $stmt->bindParam(":ID_Cliente", $ID_Cliente, PDO::PARAM_INT);
+        $stmt->bindParam(":status", $status, PDO::PARAM_INT);
+        $fetch = $stmt->execute();
+        $fetch = $stmt->fetchAll();
+        return $fetch;
+    }
+
+    public function getAllAvaiableEvaluationsByID_Cliente()
+    {
+        $ID_Cliente = $this->getID_Cliente();
+        $stmt = $this->db->prepare("SELECT *,CASE  WHEN eva.level=1 THEN 'Operativo' WHEN  eva.level=2 THEN 'Administrativo' END levelFormat
+        FROM root.evaluations eva WHERE  ID_Cliente=:ID_Cliente AND eva.id IN(SELECT id_evaluation from root.evaluation_employee)
+        ");
+        $stmt->bindParam(":ID_Cliente", $ID_Cliente, PDO::PARAM_INT);
+        $stmt->execute();
+        $fetch =  $stmt->fetchAll();
         return $fetch;
     }
 }

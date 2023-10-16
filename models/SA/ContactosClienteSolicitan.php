@@ -80,6 +80,16 @@ class ContactosClienteSolicitan{
         $fetch = $stmt->fetchObject();
         return $fetch;
     }
+	
+		public function getAllContactoPorUsuario(){
+		$Usuario = $this->getUsuario();
+
+        $stmt = $this->db->prepare("SELECT * FROM rh_Candidatos_Personas_Solicitan WHERE Usuario=:Usuario");
+		$stmt->bindParam(":Usuario", $Usuario, PDO::PARAM_STR);
+        $stmt->execute();
+        $fetch = $stmt->fetchAll();
+        return $fetch;
+    }
 
 	public function getOne(){
 		$Usuario = $this->getUsuario();

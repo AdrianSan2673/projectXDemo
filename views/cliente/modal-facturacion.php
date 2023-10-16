@@ -99,6 +99,8 @@
                             <option value="TAM">TAM</option>
                             <option value="SLP">SLP</option>
                             <option value="MTY">MTY</option>
+						    <option value="CDMX">CDMX</option>
+
                         </select>
                     </div>
                 </div>

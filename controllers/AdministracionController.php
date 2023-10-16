@@ -129,6 +129,9 @@ class AdministracionController{
 
                 $bill->setStatus(2);
                 $paid_bills = $bill->getBillsByStatus(); 
+				
+				$bill->setStatus(3);
+                $cancelled_bills = $bill->getBillsByStatus();
             }
 
 			$page_title = 'Cobranza | RRHH Ingenia';
@@ -136,6 +139,7 @@ class AdministracionController{
             require_once 'views/layout/sidebar.php';
              require_once 'views/management/modal-gestionar-factura.php';
             require_once 'views/management/collection.php';
+			require_once 'views/management/modal-info-cancelled.php';
             require_once 'views/management/modal-editar-factura.php';
             require_once 'views/layout/footer.php';
 		} else {
@@ -250,6 +254,7 @@ class AdministracionController{
                     $bill->setId($id);
                     $bill->setPayment_promise_date($payment_promise_date);
                     $bill->setStatus($status);
+					($status == '3') ? $bill->setCancellation_date(date('Y-m-d')) : $bill->setCancellation_date(NULL);
                     $update = $bill->updatePayment_promise_date_and_status();
                     if ($update) {
                         echo 1;
@@ -546,6 +551,8 @@ class AdministracionController{
 
             if ($id && $folio) {
                 if (substr($folio, 0, 2) == 'F-') {
+                    $folio = str_replace(' ', '', $folio);
+
                     $bill = new Bill();
                     $bill->setFolio($folio);
                     $id_bill = $bill->billExists();
@@ -623,6 +630,8 @@ class AdministracionController{
 
             if ($id && $folio) {
                 if (substr($folio, 0, 2) == 'F-') {
+                    $folio = str_replace(' ', '', $folio);
+
                     $bill = new Bill();
                     $bill->setFolio($folio);
                     $id_bill = $bill->billExists();
@@ -700,6 +709,8 @@ class AdministracionController{
 
             if ($id && $folio) {
                 if (substr($folio, 0, 2) == 'F-') {
+                    $folio = str_replace(' ', '', $folio);
+
                     $bill = new Bill();
                     $bill->setFolio($folio);
                     $id_bill = $bill->billExists();
@@ -802,7 +813,7 @@ class AdministracionController{
     }
 
 
-    public function update_bill_modal()
+   public function update_bill_modal()
     {  //gabo 20/02/2022
         if (Utils::isAdmin() || Utils::isManager() && Utils::isValid($_POST)) {
             $id = isset($_POST['id']) ? $_POST['id'] : FALSE;
@@ -825,46 +836,29 @@ class AdministracionController{
                 $bill->setPayment_promise_date($payment_promise_date);
                 $bill->setPayment_date($payment_date);
                 $bill->setIva($iva);
+                ($status == '3') ? $bill->setCancellation_date(date('Y-m-d')) : $bill->setCancellation_date(NULL);
+
                 $update = $bill->update();
 
                 if ($update) {
-                    $status = 1;
                     $bills = new Bill();
-                    $bills->setStatus($status);
-                    $bills = $bills->getBillsByStatus();
-                    for ($i = 0; $i < count($bills); $i++) {
-                        $bills[$i]['folio'] = $bills[$i]['folio'];
-                        $bills[$i]['idE'] = Encryption::encode($bills[$i]['id']);
-                        $bills[$i]['emit_date'] = Utils::getShortDate($bills[$i]['emit_date']);
-                        $bills[$i]['total'] = number_format($bills[$i]['total'], 2);
-                        $bills[$i]['total_IVA'] = number_format($bills[$i]['total_IVA'], 2);
-                        $bills[$i]['payment_date'] = $bills[$i]['payment_date'] == null ? '' : Utils::getShortDate($bills[$i]['payment_date']);
-                        $bills[$i]['payment_promise_date'] = $bills[$i]['payment_promise_date'] == null ? '' :  Utils::getShortDate($bills[$i]['payment_promise_date']);
-                        $bills[$i]['last_follow_up_date'] =  $bills[$i]['last_follow_up_date'] == null ? '' :  Utils::getShortDate($bills[$i]['last_follow_up_date']);
-                        $bills[$i]['url_editar_factura'] =  base_url . 'administracion/editar_factura&id=' . $bills[$i]['idE'];
-                        $bills[$i]['url_gestion_factura'] =  base_url . 'administracion/gestion_factura&id=' . $bills[$i]['idE'];
-                    }
+                    $bills->setStatus(1);
+                    $unpaid_bills = $bills->getBillsByStatus();
+                    $unpaid_bills = AdministracionController::format($unpaid_bills);
 
-                    $status = 2;
-                    $bills_paid = new Bill();
-                    $bills_paid->setStatus($status);
-                    $bills_paid = $bills_paid->getBillsByStatus();
-                    for ($i = 0; $i < count($bills_paid); $i++) {
-                        $bills_paid[$i]['folio'] = $bills_paid[$i]['folio'];
-                        $bills_paid[$i]['idE'] = Encryption::encode($bills_paid[$i]['id']);
-                        $bills_paid[$i]['emit_date'] = Utils::getShortDate($bills_paid[$i]['emit_date']);
-                        $bills_paid[$i]['total'] = number_format($bills_paid[$i]['total'], 2);
-                        $bills_paid[$i]['total_IVA'] = number_format($bills_paid[$i]['total_IVA'], 2);
-                        $bills_paid[$i]['payment_date'] = $bills_paid[$i]['payment_date'] == null ? '' : Utils::getShortDate($bills_paid[$i]['payment_date']);
-                        $bills_paid[$i]['payment_promise_date'] = $bills_paid[$i]['payment_promise_date'] == null ? '' :  Utils::getShortDate($bills_paid[$i]['payment_promise_date']);
-                        $bills_paid[$i]['last_follow_up_date'] =  $bills_paid[$i]['last_follow_up_date'] == null ? '' :  Utils::getShortDate($bills_paid[$i]['last_follow_up_date']);
-                        $bills_paid[$i]['url_editar_factura'] =  base_url . 'administracion/editar_factura&id=' . $bills_paid[$i]['idE'];
-                        $bills_paid[$i]['url_gestion_factura'] =  base_url . 'administracion/gestion_factura&id=' . $bills_paid[$i]['idE'];
-                    }
+                    $bills->setStatus(2);
+                    $paid_bills = $bills->getBillsByStatus();
+                    $paid_bills = AdministracionController::format($paid_bills);
+
+                    $bill->setStatus(3);
+                    $cancelled_bills = $bill->getBillsByStatus();
+                    $cancelled_bills = AdministracionController::format($cancelled_bills);
+
 
                     echo json_encode(array(
-                        'bills' => $bills,
-                        'bills_paid' => $bills_paid,
+                        'unpaid_bills' => $unpaid_bills,
+                        'paid_bills' => $paid_bills,
+                        'cancelled_bills' => $cancelled_bills,
                         'status' => 1
                     ));
                 }
@@ -911,8 +905,8 @@ class AdministracionController{
         }
     }
 
-    public function bill_follow_up_modal()
-    { //gabo  20/02/2022
+     public function bill_follow_up_modal()
+    {
         if (Utils::isAdmin() || Utils::isManager() && Utils::isValid($_POST)) {
             $id = isset($_POST['id']) ? $_POST['id'] : FALSE;
             $status = isset($_POST['status']) ? trim($_POST['status']) : FALSE;
@@ -935,23 +929,114 @@ class AdministracionController{
                     $bill->setId($id);
                     $bill->setPayment_promise_date($payment_promise_date);
                     $bill->setStatus($status);
+                    //===[gabo 16 agosto]===
+                    ($status == '3') ? $bill->setCancellation_date(date('Y-m-d')) : $bill->setCancellation_date(NULL);
+                    //===[gabo 16 agosto]===
                     $update = $bill->updatePayment_promise_date_and_status();
                     $update = true;
                     if ($update) {
-                        echo 1;
+
+                        $bills = new Bill();
+                        $bills->setStatus(1);
+                        $unpaid_bills = $bills->getBillsByStatus();
+                        $unpaid_bills = AdministracionController::format($unpaid_bills);
+
+
+                        $bills->setStatus(2);
+                        $paid_bills = $bills->getBillsByStatus();
+                        $paid_bills = AdministracionController::format($paid_bills);
+
+                        $bill->setStatus(3);
+                        $cancelled_bills = $bill->getBillsByStatus();
+                        $cancelled_bills = AdministracionController::format($cancelled_bills);
+
+
+                        echo json_encode(array(
+                            'unpaid_bills' => $unpaid_bills,
+                            'paid_bills' => $paid_bills,
+                            'cancelled_bills' => $cancelled_bills,
+                            'status' => 1
+                        ));
                     } else {
-                        echo 2;
+                        echo json_encode(array('status' => 2));
                     }
                 } else {
-                    echo 2;
+                    echo json_encode(array('status' => 2));
                 }
             } else {
-                echo 0;
+                echo json_encode(array('status' => 0));
             }
         } else {
             header("location:" . base_url);
         }
     }
+	
+	    public function getInfoCancel()
+    {
+        if (Utils::isValid($_SESSION['identity']) && isset($_POST)) {
+            $id = isset($_POST['id'])  ? Encryption::decode($_POST['id']) : Null;
 
+            if ($id) {
+                $bill = new Bill;
+                $bill->setId($id);
+                $bill = $bill->getOne();
+                $bill->id_encrypted = Encryption::encode($bill->id);
+            }
+
+            echo json_encode(array('status' => 1, 'bill' => $bill));
+        } else {
+            echo json_encode(array('status' => 0));
+        }
+    }
+	  public function updateInfoCancelled()
+    {
+        if (Utils::isValid($_SESSION['identity']) && isset($_POST)) {
+
+            $id = isset($_POST['id'])  ? Encryption::decode($_POST['id']) : Null;
+            $comments = isset($_POST['comments'])  ? Utils::sanitizeString($_POST['comments']) : Null;
+            $cancellation_date = isset($_POST['cancellation_date'])  ? Utils::sanitizeString($_POST['cancellation_date']) : Null;
+
+            if ($id) {
+                $bill = new Bill;
+                $bill->setId($id);
+                $bill->setComments($comments);
+                $bill->setCancellation_date($cancellation_date);
+                $update = $bill->updateInfoCancelled();
+
+                $bill->setStatus(3);
+                $cancelled_bills = $bill->getBillsByStatus();
+
+                $cancelled_bills = AdministracionController::format($cancelled_bills);
+
+                echo json_encode(array('status' => 1, 'cancelled_bills' => $cancelled_bills));
+            } else {
+                echo json_encode(array('status' => 0));
+            }
+        } else {
+            echo json_encode(array('status' => 0));
+        }
+    }
+
+
+    public static function format($bills)
+    {
+
+        foreach ($bills as &$bill) {
+            $bill['emit_date'] =   Utils::getShortDate($bill['emit_date']);
+            $bill['total'] = number_format($bill['total']);
+            $bill['total_IVA'] = number_format($bill['total_IVA'], 2);
+            $bill['payment_date'] = (!is_null($bill['payment_date'])) ? Utils::getShortDate($bill['payment_date']) : '';
+            $bill['cancellation_date'] = (!is_null($bill['cancellation_date'])) ? Utils::getShortDate($bill['cancellation_date']) : '';
+            $bill['comments'] = (!is_null($bill['comments'])) ? $bill['comments'] : '';
+            $bill['id_encrypted'] = Encryption::encode($bill['id']);
+            $bill['payment_promise_date'] = $bill['payment_promise_date'] == null ? '' :  Utils::getShortDate($bill['payment_promise_date']);
+            $bill['last_follow_up_date'] =  $bill['last_follow_up_date'] == null ? '' :  Utils::getShortDate($bill['last_follow_up_date']);
+            $bill['last_follow_up_comments'] =  $bill['last_follow_up_comments'] == null ? '' :  $bill['last_follow_up_comments'];
+            $bill['url_editar_factura'] =  base_url . 'administracion/editar_factura&id=' . $bill['id_encrypted'];
+            $bill['url_gestion_factura'] =  base_url . 'administracion/gestion_factura&id=' . $bill['id_encrypted'];
+            $bill['name_vacancy'] = Utils::nameVacancy($bill['id']);
+        }
+        return $bills;
+    }
     //=====================================================================================================================================
 }

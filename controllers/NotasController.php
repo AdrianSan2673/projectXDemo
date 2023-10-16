@@ -24,7 +24,7 @@ class NotasController{
     }
 
     public function save(){
-        if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior() || Utils::isSalesManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount())) {
+        if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior() || Utils::isSalesManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isLogistics()   || Utils::isAccount())) {
 
             $Id = Utils::sanitizeNumber(($_POST['Id']));
             $Folio = Utils::sanitizeNumber(($_POST['Folio']));

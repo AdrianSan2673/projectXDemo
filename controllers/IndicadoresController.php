@@ -77,7 +77,7 @@ class IndicadoresController
 
                 echo json_encode(array(
                     'indications' => $effectivenessIndicatiors,
-                    'id_position' => $id_position,
+                    'id_position' => Encryption::encode($id_position),
                     'status' => 1
                 ));
             } else  echo json_encode(array('status' => 0));

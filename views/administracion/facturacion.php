@@ -171,7 +171,6 @@
                         <th class="filterhead"></th>
                         <th></th>
                         <th hidden></th>
-                        <th hidden></th>
                       </tr>
                       <tr>
                         <th class="align-middle">Solicitud</th>
@@ -189,15 +188,14 @@
                         <th class="align-middle">Factura</th>
                         <th>Accion</th>
                         <th hidden></th>
-                        <th hidden></th>
                       </tr>
                   </thead>
                   <tbody>
                   <?php foreach($servicios as $servicio): ?>
                       <tr> 
                         <?php 
-                        if ($servicio['Solicitud_De'] > 0)
-                          $Color_Solicitud_De = 'bg-orange';
+                        if ($servicio['Repetidos'] > 1)
+                          $Color_Solicitud_De = 'bg-danger';
                         else
                           $Color_Solicitud_De = '';
                          
@@ -239,7 +237,11 @@
                         ?>
                           <td><?=Utils::getShortDate($servicio['Solicitud']);?></td>
                           <td class="font-weight-bold"><?=$servicio['Empresa']?></td>
-                          <td c lass="font-weight-bold"><?=$servicio['Cliente']?></td>
+                          <td c lass="font-weight-bold">
+							  
+							  <?=$servicio['Cliente'] //Utils::isManager()|| Utils::isAdmin()? '<a href="'.base_url.'cliente_SA/ver&id='.Encryption::encode($servicio['ID_Cliente']).'" target="_blank">'.$servicio['Cliente'].'</a>':$servicio['Cliente']?>
+						  
+						  </td>
                           <td id="razon<?=$servicio['Folio']?>"><?=$servicio['Razon']?></td>
                           <td><?=$servicio['CC_Cliente']?></td>
                           <td class="<?=$Color_Solicitud_De?>"><?=$servicio['Nombre_Candidato']?></td>
@@ -265,7 +267,6 @@
                     </div>
                   </td>
                           <td hidden><?=$servicio['Folio']?></td>
-                          <td hidden><?=$servicio['ID_Cliente']?></td>
                       </tr>
                   <?php endforeach; ?>
                   </tbody>
@@ -285,7 +286,6 @@
                         <th class="align-middle">% avance ESE</th>
                         <th class="align-middle text-center">Factura</th>
                         <th>Accion</th>
-                        <th hidden></th>
                         <th hidden></th>
                       </tr>
                   </tfoot>
@@ -333,6 +333,17 @@
                         <label for="Razon_Social" class="col-form-label">Razón social:</label>
                         <select name="Razon_Social" class="form-control"></select>
                     </div>
+					
+					        <div class="form-group">
+            <label class="col-form-label" for="Cliente">Nombre comercial</label>
+            <select class="form-control select2" name="chagueCliente" id="chagueCliente">
+              <?php $clientes =  Utils::showClientes()  ?>
+              <option value="" hidden selected>Selecciona el nombre comercial</option>
+              <?php foreach ($clientes as $cliente) : ?>
+                <option value="<?= $cliente['Cliente'] ?>"><?= $cliente['Nombre_Cliente'] ?></option>
+              <?php endforeach ?>
+            </select>
+          </div>
 
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -345,6 +356,13 @@
 </div>
 <script src="<?=base_url?>app/administracion.js?v=<?=rand()?>"></script>
 <script>
+	 $('#chagueCliente').on('select2:select', function(e) {
+    var data = e.params.data;
+    let administracion = new Administracion();
+    administracion.chagueCliente(data.id);
+  });
+
+	
   $(document).ready(function(){
     utils.applyEdit('tb_facturacion', [12]);
     let table = document.querySelector('#tb_facturacion');

@@ -37,13 +37,6 @@
                       <th class="align-middle text-center">Candidato</th>
                       <th class="align-middle text-center">Cliente</th>
                       <th class="align-middle text-center">Razón social</th>
-                      <th class="align-middle text-center">Comportamiento</th>
-                      <th class="align-middle text-center">Inteligencia</th>
-                      <th class="align-middle text-center">Competencias laborales</th>
-                      <th class="align-middle text-center">Honestidad</th>
-                      <th class="align-middle text-center">Personalidad</th>
-                      <th class="align-middle text-center">Habilidades de ventas</th>
-                      <th class="align-middle text-center">Liderazgo</th>
                       <th class="align-middle text-center">Estado</th>
                       <th class="align-middle text-center">Fecha de entrega</th>
                       <th></th>
@@ -58,31 +51,39 @@
                             case 3: $class_color = 'bg-info';break;
                             default: $class_color = '';break;
                           }
+						  
+						   if (file_exists('uploads/psychometrics/' . $psycho['id'] . '.pdf')) {
+                                    $routeDocu = base_url . 'uploads/psychometrics/' . $psycho['id'] . '.pdf';
+                                } else {
+                                    $routeDocu = false;
+                                }
+						  
                           ?>
                           <td class="text-center align-middle"><?=Utils::getShortDate($psycho['request_date'])?></td>
                           <td class="text-center align-middle"><?=$psycho['first_name'].' '.$psycho['surname'].' '.$psycho['last_name']?></td>
                           <td class="text-center align-middle"><?=$psycho['customer']?></td>
                           <td class="text-center align-middle"><?=$psycho['business_name']?></td>
-                          <td class="text-center align-middle"><?=$psycho['behavior'] == 1 ? '<i class="fas fa-check"></i>' : ''?></td>
-                          <td class="text-center align-middle"><?=$psycho['intelligence'] == 1 ? '<i class="fas fa-check"></i>' : ''?></td>
-                          <td class="text-center align-middle"><?=$psycho['labor_competencies'] == 1 ? '<i class="fas fa-check"></i>' : ''?></td>
-                          <td class="text-center align-middle"><?=$psycho['honesty_ethics_values'] == 1 ? '<i class="fas fa-check"></i>' : ''?></td>
-                          <td class="text-center align-middle"><?=$psycho['personality'] == 1 ? '<i class="fas fa-check"></i>' : ''?></td>
-                          <td class="text-center align-middle"><?=$psycho['sales_skills'] == 1 ? '<i class="fas fa-check"></i>' : ''?></td>
-                          <td class="text-center align-middle"><?=$psycho['leadership'] == 1 ? '<i class="fas fa-check"></i>' : ''?></td>
                           <td class="text-center align-middle <?=$class_color?>"><?=$psycho['estado']?></td>
                           <td class="text-center align-middle"><?=!is_null($psycho['end_date']) && !empty($psycho['end_date']) ? $psycho['end_date'] : ''?></td>
                           <td class="text-center py-0 align-middle">
                             <div class="btn-group btn-group-sm">
                               <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior()): ?>
-                                <a href="<?=base_url?>psicometria/ver&id=<?=Encryption::encode($psycho['id'])?>" class="btn btn-success">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="<?=base_url?>psicometria/editar&id=<?=Encryption::encode($psycho['id'])?>" class="btn btn-info">
-                                  <i class="fas fa-pencil-alt"></i>
-                                </a>
-                              <?php endif ?>
-                            </div>
+                               <a href="<?= base_url ?>psicometria/editar&id=<?= Encryption::encode($psycho['id']) ?>" class="btn btn-info" target="blank_">
+                        <i class="fas fa-pencil-alt"></i>
+                      </a>
+                    <?php endif ?>
+                    <!-- gabo22 -->
+                    <?php if ($routeDocu != false) : ?>
+                      <a href="<?= $routeDocu ?>" class="btn btn-success" target="blank_" title="Ver Psicometria">
+                        <i class="fas fa-file-pdf"></i>
+                      </a>
+
+                    <?php endif;  ?>
+
+                    <a href="<?= base_url ?>psicometria/ver&id=<?= Encryption::encode($psycho['id']) ?>" class="btn btn-success" target="blank_">
+                      <i class="fas fa-eye"></i>
+                    </a>
+                  </div>
                               
                           </td>
                       </tr>
@@ -94,13 +95,6 @@
                       <th class="align-middle text-center">Candidato</th>
                       <th class="align-middle text-center">Cliente</th>
                       <th class="align-middle text-center">Razón social</th>
-                      <th class="align-middle text-center">Comportamiento</th>
-                      <th class="align-middle text-center">Inteligencia</th>
-                      <th class="align-middle text-center">Competencias laborales</th>
-                      <th class="align-middle text-center">Honestidad</th>
-                      <th class="align-middle text-center">Personalidad</th>
-                      <th class="align-middle text-center">Habilidades de ventas</th>
-                      <th class="align-middle text-center">Liderazgo</th>
                       <th class="align-middle text-center">Estado</th>
                       <th class="align-middle text-center">Fecha de entrega</th>
                       <th></th>

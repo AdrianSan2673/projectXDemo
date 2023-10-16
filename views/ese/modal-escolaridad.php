@@ -13,7 +13,7 @@
                     <input type="hidden" name="Folio">
                     <input type="hidden" name="flag">
                     <div class="form-group">
-                        <label class="col-form-label" for="Grado">Grado escolar</label>
+                        <label class="col-form-label" for="Grado" required>Grado escolar</label>
                         <select name="Grado" class="form-control">
                             <option value="" hidden selected>Selecciona el grado escolar</option>
                             <?php $grados = Utils::showEscolaridades() ?>

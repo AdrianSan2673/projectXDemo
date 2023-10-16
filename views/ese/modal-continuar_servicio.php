@@ -148,9 +148,9 @@
 		
 		
     })
-	document.querySelector('#CURP').addEventListener('blur', e => {
+	/* document.querySelector('#CURP').addEventListener('blur', e => {
       e.preventDefault();
       let servicio = new ServicioApoyo();
       servicio.checkCURP(e.target.value);
-    })
+    }) */
 </script>

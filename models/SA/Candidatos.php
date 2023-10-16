@@ -49,8 +49,12 @@ class Candidatos
     // ===[19 de mayo 2023 estudios]===
     private $replicado;
     // ===[19 de mayo 2023 estudios fin ]===
-
+    // ===[27 jULIO 2023 REPLICADO fin ]===
+    private $Ejecutivo_modificacion;
+    private $Gestor_modificacion;
+    // ===[27 jULIO 2023 REPLICADO fin ]===
     private $db;
+	private $empresa;
 
     public function __construct()
     {
@@ -509,6 +513,35 @@ class Candidatos
     }
     // ===[19 de mayo 2023 estudios fin ]===
 
+    public function getEjecutivo_modificacion()
+    {
+        return $this->Ejecutivo_modificacion;
+    }
+
+    public function setEjecutivo_modificacion($Ejecutivo_modificacion)
+    {
+        $this->Ejecutivo_modificacion = $Ejecutivo_modificacion;
+    }
+
+    public function getGestor_modificacion()
+    {
+        return $this->Gestor_modificacion;
+    }
+
+    public function setGestor_modificacion($Gestor_modificacion)
+    {
+        $this->Gestor_modificacion = $Gestor_modificacion;
+    }
+	  public function setEmpresa($empresa)
+    {
+        $this->empresa = $empresa;
+    }
+
+    public function getEmpresa()
+    {
+        return $this->empresa;
+    }
+
 
     public function getMax()
     {
@@ -519,6 +552,7 @@ class Candidatos
         $fetch = $stmt->fetchObject();
         return $fetch->Candidato;
     }
+
     public function create()
     {
         $result = false;
@@ -567,7 +601,6 @@ class Candidatos
         }
         return $result;
     }
-
 
     public function getServiciosDeHoy()
     {
@@ -677,9 +710,9 @@ class Candidatos
         ,[Ejecutivo] = UPPER(RC.Ejecutivo)
         ,[HO] = RC.Gestor
         ,[Dias] = CASE WHEN RC.Fecha_Entregado IS NULL AND RC.Estado <> 258 THEN dbo.count_days(RC.Fecha, GETDATE()) WHEN RC.Estado <> 258 THEN dbo.count_days(RC.Fecha, RC.Fecha_Entregado) ELSE '-1' END
-        ,[Tiempo_IL] = CASE WHEN RC.Fecha_Entregado_INV IS NULL AND RC.Fecha <= GETDATE() AND (RC.Estado<>258 AND RC.Estado<>249) THEN dbo.count_days_with_decimal(RC.Fecha, GETDATE()) WHEN RC.Fecha_Entregado_INV IS NULL AND RC.Fecha > GETDATE() AND (RC.Estado<>258 AND RC.Estado<>249) THEN '0.0' WHEN RC.Fecha_Entregado_INV IS NOT NULL AND RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, RC.Fecha_Entregado_INV) ELSE '0' END
-        ,[Tiempo_ESE] = CASE WHEN RC.Fecha_Entregado_ESE IS NULL AND RC.Fecha <= GETDATE() AND (RC.Estado<>258 AND RC.Estado<>249) THEN dbo.count_days_with_decimal(RC.Fecha, GETDATE()) WHEN RC.Fecha_Entregado_ESE IS NULL AND RC.Fecha > GETDATE() AND (RC.Estado<>258 AND RC.Estado<>249) THEN '0.0' WHEN RC.Fecha_Entregado_ESE IS NOT NULL AND RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, RC.Fecha_Entregado_ESE) ELSE '0' END
-        ,[Tiempo] = CASE WHEN RC.Fecha_Entregado IS NULL AND RC.Fecha <= GETDATE() AND RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, GETDATE()) WHEN RC.Fecha_Entregado IS NULL AND RC.Fecha > GETDATE() AND RC.Estado<>258 THEN '0.0' WHEN RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, RC.Fecha_Entregado) ELSE '0' END
+       ,[Tiempo_IL] = CASE WHEN RC.Fecha_Entregado_INV IS NULL AND RC.Fecha <= GETDATE() AND RC.Estado<>258 THEN CONCAT(dbo.count_days(RC.Fecha, GETDATE()),'.', CONVERT(INT, (DATEDIFF(MINUTE, RC.Fecha, GETDATE()))%1440/14.4)) WHEN RC.Fecha_Entregado_INV IS NULL AND RC.Fecha > GETDATE() AND RC.Estado<>258 THEN '0.0' WHEN RC.Estado<>258 THEN CONCAT(dbo.count_days(RC.Fecha, RC.Fecha_Entregado_INV),'.', CONVERT(INT, (DATEDIFF(MINUTE, RC.Fecha, RC.Fecha_Entregado_INV))%1440/14.4)) ELSE '' END
+        ,[Tiempo_ESE] = CASE WHEN RC.Fecha_Entregado_ESE IS NULL AND RC.Fecha <= GETDATE() AND RC.Estado<>258 THEN CONCAT(dbo.count_days(RC.Fecha, GETDATE()),'.', CONVERT(INT, (DATEDIFF(MINUTE, RC.Fecha, GETDATE()))%1440/14.4)) WHEN RC.Fecha_Entregado_ESE IS NULL AND RC.Fecha > GETDATE() AND RC.Estado<>258 THEN '0.0' WHEN RC.Estado<>258 THEN CONCAT(dbo.count_days(RC.Fecha, RC.Fecha_Entregado_ESE),'.', CONVERT(INT, (DATEDIFF(MINUTE, RC.Fecha, RC.Fecha_Entregado_ESE))%1440/14.4)) ELSE '' END  ,[Tiempo] = CASE WHEN RC.Fecha_Entregado IS NULL AND RC.Fecha <= GETDATE() AND RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, GETDATE()) WHEN RC.Fecha_Entregado IS NULL AND RC.Fecha > GETDATE() AND RC.Estado<>258 THEN '0.0' WHEN RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, RC.Fecha_Entregado) ELSE '0' END
+      ,[Tiempo] = CASE WHEN RC.Fecha_Entregado IS NULL AND RC.Fecha <= GETDATE() AND RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, GETDATE()) WHEN RC.Fecha_Entregado IS NULL AND RC.Fecha > GETDATE() AND RC.Estado<>258 THEN '0.0' WHEN RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, RC.Fecha_Entregado) ELSE '0' END
         ,[Viatico] = RC.Viatico
         ,[Solicitud_De] = RC.Solicitud_De
         ,[Progreso] = (SELECT (Datos_Generales+Datos_Adicionales+Documentos+salud+Sociales+Ubicacion+Estructura+Ref_Vecinal+Obs_Generales) as Total from Progreso_Gestor WHERE Candidato=RC.Candidato)
@@ -836,9 +869,18 @@ class Candidatos
         $date1 = $this->getFecha_solicitud();
         $date2 = $this->getFecha_entregado();
 
-        $stmt = $this->db->prepare("SELECT Creado, Folio=RC.Candidato
+        $stmt = $this->db->prepare("
+		WITH CandidatosLimpios AS (
+			SELECT
+				Candidato,
+				UPPER(TRANSLATE(LTRIM(Nombres) + ' ' + LTRIM(Apellido_Paterno) + ' ' + LTRIM(Apellido_Materno), 'ÁÉÍÓÚÑ', 'AEIOUN')) AS Nombre_Completo
+			FROM rh_Candidatos_Datos
+		)
+		SELECT va.Cliente id_cliente,Creado, Folio=RC.Candidato
         ,[Solicitud]=RC.Fecha
         ,RC.Estado
+		,RC.replicado
+		,va.Empresa id_empresa
         ,[Estatus] = CASE WHEN RC.Servicio=298 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Ral en Proceso' WHEN (RC.Servicio=299 OR RC.Servicio=231) AND (RC.Estado=250 OR RC.Estado=251) THEN 'Investigación en Proceso' WHEN (RC.Servicio=300 OR RC.Servicio=230) AND (RC.Estado=250 OR RC.Estado=251) THEN 'Visita en Proceso' WHEN RC.Servicio=310 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Validación de Licencia en Proceso' WHEN RC.Servicio=324 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Visita Presencial en Proceso' WHEN RC.Servicio=328 AND RC.Estado=250 OR RC.Estado=251 THEN 'Análisis de RAL en Proceso' WHEN RC.Estado=252 THEN 'Finalizado' WHEN RC.Estado=254 THEN 'Facturado' WHEN RC.Estado=258 THEN 'Cancelado' WHEN RC.Estado=249 THEN 'Pausado' WHEN RC.Servicio=291 AND RC.Estado=250 OR RC.Estado=251 THEN 'RAL Consultado' ELSE '' END
         ,VLF = (SELECT TOP 1 CASE WHEN Candidato IS NOT NULL THEN 'VLF + ' ELSE '' END FROM Validacion_Licencia_Federal lic WHERE lic.Candidato=RC.Candidato)
         ,[Empresa] = (SELECT Nombre_Empresa FROM rh_Ventas_Empresas WHERE Empresa=(SELECT Empresa FROM rh_Ventas_Alta WHERE Cliente=RC.Cliente))
@@ -847,7 +889,7 @@ class Candidatos
         ,Fase = CASE WHEN RC.Servicio>0 THEN(SELECT UPPER(TS.Descripcion) FROM sys_Campos TS WHERE TS.Campo=RC.Servicio)ELSE' -sin asignar-'END
 		,A_RAL = CASE WHEN A_RAL>0 THEN 'ARAL' ELSE '' END
         ,RC.Servicio
-        ,Nombre_Candidato=TRANSLATE(UPPER(CD.Nombres +' '+ cd.Apellido_Paterno +' '+ cd.Apellido_Materno), 'ÁÉÍÓÚÑ', 'AEIOUN')
+    	,Nombre_Candidato=TRANSLATE(UPPER(CD.Nombres +' '+ cd.Apellido_Paterno +' '+ cd.Apellido_Materno), 'ÁÉÍÓÚÑ', 'AEIOUN')
 		,Puesto
         ,[Aplicacion] = RC.Fecha_Aplicacion
         ,[Fecha_Entregado]=RC.Fecha_Entregado
@@ -863,7 +905,7 @@ class Candidatos
         ,[Servicio_Solicitado] =UPPER((SELECT ES.Descripcion FROM sys_Campos ES WHERE ES.Campo= RC.Servicio_Solicitado))
         ,[Ciudad]=(SELECT Municipio FROM rh_Candidatos_Ubicacion WHERE Candidato=RC.Candidato)
         ,[Estado_MX]=(SELECT Descripcion FROM General_Estados WHERE Estado=(SELECT Estado FROM rh_Candidatos_Ubicacion WHERE Candidato=RC.Candidato))
-                 ,[Repetidos] = (SELECT COUNT(rh_Candidatos_Datos.Candidato) FROM rh_Candidatos_Datos left join rh_Candidatos on rh_Candidatos_Datos.Candidato = rh_Candidatos.Candidato WHERE ((rh_Candidatos_Datos.Nombres COLLATE Latin1_general_CI_AI =CD.Nombres COLLATE Latin1_general_CI_AI and rh_Candidatos_Datos.Apellido_Paterno COLLATE Latin1_general_CI_AI =CD.Apellido_Paterno COLLATE Latin1_general_CI_AI and rh_Candidatos_Datos.Apellido_Materno COLLATE Latin1_general_CI_AI =CD.Apellido_Materno COLLATE Latin1_general_CI_AI)) and rh_Candidatos.Ejecutivo<>'MIGUELCASANOVA') 
+        ,COUNT(*) OVER (PARTITION BY CL.Nombre_Completo) - 1 AS Repetidos
         ,RC.Factura
         ,Enlace_Drive
         ,[Centro_C] = (SELECT Centro_Costos FROM rh_Ventas_Alta WHERE Cliente=RC.Cliente)
@@ -879,7 +921,9 @@ class Candidatos
 		,RC.Factura
     FROM rh_Candidatos RC
         INNER JOIN [rh_Candidatos_Datos] CD on CD.Candidato=RC.Candidato 
-        LEFT JOIN rh_Candidatos_Obs_Generales ob ON RC.Candidato=ob.Candidato 
+        LEFT JOIN rh_Candidatos_Obs_Generales ob ON RC.Candidato=ob.Candidato
+		INNER JOIN CandidatosLimpios CL ON CL.Candidato = RC.Candidato
+		INNER JOiN rh_Ventas_Alta va on va.Cliente=RC.Cliente
          WHERE rc.Ejecutivo<>'miguelcasanova' AND CONVERT(DATE,Fecha) BETWEEN :date1 AND :date2
         ORDER BY RC.Fecha DESC");
         $stmt->bindParam(":date1", $date1, PDO::PARAM_STR);
@@ -1101,6 +1145,7 @@ class Candidatos
         ,[Progreso] = (SELECT (Datos_Generales+Datos_Adicionales+Documentos+salud+Sociales+Ubicacion+Estructura+Ref_Vecinal+Obs_Generales) as Total from Progreso_Gestor WHERE Candidato=RC.Candidato)
         ,[Servicio_Solicitado] =UPPER((SELECT ES.Descripcion FROM sys_Campos ES WHERE ES.Campo= RC.Servicio_Solicitado))
         ,[Repetidos] = (SELECT COUNT(rh_Candidatos_Datos.Candidato) FROM rh_Candidatos_Datos left join rh_Candidatos on rh_Candidatos_Datos.Candidato = rh_Candidatos.Candidato WHERE ((rh_Candidatos_Datos.Nombres=CD.Nombres and rh_Candidatos_Datos.Apellido_Paterno=CD.Apellido_Paterno and rh_Candidatos_Datos.Apellido_Materno=CD.Apellido_Materno)) and rh_Candidatos.Ejecutivo<>'MIGUELCASANOVA')
+		 ,RC.replicado
         ,[Solicita]= (SELECT Nombre FROM rh_Candidatos_Personas_Solicitan WHERE ID=RC.Nombre_Cliente)
         ,RC.Factura
         ,Enlace_Drive
@@ -1110,19 +1155,69 @@ class Candidatos
         ,RC.ID_Busqueda_RAL
         ,RC.Fecha_Entregado_INV
         ,RC.Fecha_Entregado_ESE
-        ,RC.replicado
 		,[Cliente_Activo] = (SELECT Activo FROM rh_Ventas_Alta WHERE Cliente=RC.Cliente)
     FROM rh_Candidatos RC
         INNER JOIN [rh_Candidatos_Datos] CD on CD.Candidato=RC.Candidato
         LEFT JOIN rh_Candidatos_Obs_Generales ob ON RC.Candidato=ob.Candidato
 		LEFT JOIN rh_Candidatos_RAL cral ON RC.Candidato=cral.Candidato
-         WHERE RC.Cliente IN (SELECT ID_Cliente FROM rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:Contacto)
+         WHERE RC.Cliente IN (SELECT ID_Cliente FROM rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:Contacto) AND  rc.Ejecutivo<>'miguelcasanova'
         ORDER BY RC.Fecha DESC");
         $stmt->bindParam(":Contacto", $Contacto, PDO::PARAM_STR);
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
+	
+	public function getServiciosPorContactoYViabilidad()
+    {
+        $Contacto = $this->getContacto();
+        $stmt = $this->db->prepare("SELECT TOP(7200) Folio=RC.Candidato,RC.Cliente ID_Ciente,va.Empresa id_empresa
+        ,[Solicitud]=RC.Fecha
+        ,RC.Estado
+        ,[Estatus] = CASE WHEN RC.Servicio=298 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Ral en Proceso' WHEN (RC.Servicio=299 OR RC.Servicio=231) AND (RC.Estado=250 OR RC.Estado=251) THEN 'Investigación en Proceso' WHEN (RC.Servicio=300 OR RC.Servicio=230) AND (RC.Estado=250 OR RC.Estado=251) THEN 'Visita en Proceso' WHEN RC.Servicio=310 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Validación de Licencia en Proceso' WHEN RC.Servicio=324 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Visita Presencial en Proceso' WHEN RC.Servicio=328 AND RC.Estado=250 OR RC.Estado=251 THEN 'Análisis de RAL en Proceso' WHEN RC.Estado=252 THEN 'Finalizado' WHEN RC.Estado=254 THEN 'Facturado' WHEN RC.Estado=258 THEN 'Cancelado' WHEN RC.Estado=249 THEN 'Pausado' WHEN RC.Servicio=291 AND RC.Estado=250 OR RC.Estado=251 THEN 'RAL Consultado' ELSE '' END
+        ,VLF = (SELECT TOP 1 CASE WHEN Candidato IS NOT NULL THEN 'VLF + ' ELSE '' END FROM Validacion_Licencia_Federal lic WHERE lic.Candidato=RC.Candidato)
+        ,Cliente= CASE WHEN RC.Cliente=0 THEN (SELECT AE.Alias FROM [adm_Empresas] AE WHERE AE.Empresa=RC.Empresa) ELSE (SELECT AE.Nombre_Cliente FROM [rh_Ventas_Alta] AE WHERE AE.Cliente=RC.Cliente) END
+        ,Fase = CASE WHEN RC.Servicio>0 THEN(SELECT UPPER(TS.Descripcion) FROM sys_Campos TS WHERE TS.Campo=RC.Servicio)ELSE' -sin asignar-'END
+		,A_RAL = CASE WHEN A_RAL>0 THEN 'ARAL' ELSE '' END
+        ,RC.Servicio
+        ,Nombre_Candidato=TRANSLATE(UPPER(CD.Nombres +' '+ cd.Apellido_Paterno +' '+ cd.Apellido_Materno), 'ÁÉÍÓÚÑ', 'AEIOUN')
+        ,[Aplicacion] = RC.Fecha_Aplicacion
+        ,[Fecha_Entregado]=RC.Fecha_Entregado
+        ,[Ejecutivo] = UPPER(RC.Ejecutivo)
+        ,[HO] = RC.Gestor
+        ,[Dias] = CASE WHEN RC.Fecha_Entregado IS NULL AND RC.Estado <> 258 THEN dbo.count_days(RC.Fecha, GETDATE()) WHEN RC.Estado <> 258 THEN dbo.count_days(RC.Fecha, RC.Fecha_Entregado) ELSE '-1' END
+        ,[Tiempo_IL] = CASE WHEN RC.Fecha_Entregado_INV IS NULL AND RC.Fecha <= GETDATE() AND RC.Estado<>258 THEN CONCAT(dbo.count_days(RC.Fecha, GETDATE()),'.', CONVERT(INT, (DATEDIFF(MINUTE, RC.Fecha, GETDATE()))%1440/14.4)) WHEN RC.Fecha_Entregado_INV IS NULL AND RC.Fecha > GETDATE() AND RC.Estado<>258 THEN '0.0' WHEN RC.Estado<>258 THEN CONCAT(dbo.count_days(RC.Fecha, RC.Fecha_Entregado_INV),'.', CONVERT(INT, (DATEDIFF(MINUTE, RC.Fecha, RC.Fecha_Entregado_INV))%1440/14.4)) ELSE '' END
+        ,[Tiempo_ESE] = CASE WHEN RC.Fecha_Entregado_ESE IS NULL AND RC.Fecha <= GETDATE() AND RC.Estado<>258 THEN CONCAT(dbo.count_days(RC.Fecha, GETDATE()),'.', CONVERT(INT, (DATEDIFF(MINUTE, RC.Fecha, GETDATE()))%1440/14.4)) WHEN RC.Fecha_Entregado_ESE IS NULL AND RC.Fecha > GETDATE() AND RC.Estado<>258 THEN '0.0' WHEN RC.Estado<>258 THEN CONCAT(dbo.count_days(RC.Fecha, RC.Fecha_Entregado_ESE),'.', CONVERT(INT, (DATEDIFF(MINUTE, RC.Fecha, RC.Fecha_Entregado_ESE))%1440/14.4)) ELSE '' END
+        ,[Tiempo] = CASE WHEN RC.Fecha_Entregado IS NULL AND RC.Fecha <= GETDATE() AND RC.Estado<>258 THEN CONCAT(dbo.count_days(RC.Fecha, GETDATE()),'.', CONVERT(INT, (DATEDIFF(MINUTE, RC.Fecha, GETDATE()))%1440/14.4)) WHEN RC.Fecha_Entregado IS NULL AND RC.Fecha > GETDATE() AND RC.Estado<>258 THEN '0.0' WHEN RC.Estado<>258 THEN CONCAT(dbo.count_days(RC.Fecha, RC.Fecha_Entregado),'.', CONVERT(INT, (DATEDIFF(MINUTE, RC.Fecha, RC.Fecha_Entregado))%1440/14.4)) ELSE '' END
+        ,[Viatico] = RC.Viatico
+        ,[Solicitud_De] = RC.Solicitud_De
+        ,[Progreso] = (SELECT (Datos_Generales+Datos_Adicionales+Documentos+salud+Sociales+Ubicacion+Estructura+Ref_Vecinal+Obs_Generales) as Total from Progreso_Gestor WHERE Candidato=RC.Candidato)
+        ,[Servicio_Solicitado] =UPPER((SELECT ES.Descripcion FROM sys_Campos ES WHERE ES.Campo= RC.Servicio_Solicitado))
+        ,[Repetidos] = (SELECT COUNT(rh_Candidatos_Datos.Candidato) FROM rh_Candidatos_Datos left join rh_Candidatos on rh_Candidatos_Datos.Candidato = rh_Candidatos.Candidato WHERE ((rh_Candidatos_Datos.Nombres=CD.Nombres and rh_Candidatos_Datos.Apellido_Paterno=CD.Apellido_Paterno and rh_Candidatos_Datos.Apellido_Materno=CD.Apellido_Materno)) and rh_Candidatos.Ejecutivo<>'MIGUELCASANOVA')
+		 ,RC.replicado
+        ,[Solicita]= (SELECT Nombre FROM rh_Candidatos_Personas_Solicitan WHERE ID=RC.Nombre_Cliente)
+        ,RC.Factura
+        ,Enlace_Drive
+        ,RC.CC_Cliente
+        ,ob.Viable
+		,RAL = cral.Candidato
+        ,RC.ID_Busqueda_RAL
+        ,RC.Fecha_Entregado_INV
+        ,RC.Fecha_Entregado_ESE
+		,[Cliente_Activo] = (SELECT Activo FROM rh_Ventas_Alta WHERE Cliente=RC.Cliente)
+    FROM rh_Candidatos RC
+        INNER JOIN [rh_Candidatos_Datos] CD on CD.Candidato=RC.Candidato
+        LEFT JOIN rh_Candidatos_Obs_Generales ob ON RC.Candidato=ob.Candidato
+		LEFT JOIN rh_Candidatos_RAL cral ON RC.Candidato=cral.Candidato
+        INNER JOiN rh_Ventas_Alta va on va.Cliente=RC.Cliente
+        WHERE RC.Cliente IN (SELECT ID_Cliente FROM rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:Contacto) AND  rc.Ejecutivo<>'miguelcasanova' AND (ob.Viable=1 OR ob.Viable=2 OR ob.Viable=5 )
+        ORDER BY RC.Fecha DESC");
+        $stmt->bindParam(":Contacto", $Contacto, PDO::PARAM_STR);
+        $stmt->execute();
+        $servicios = $stmt->fetchAll();
+        return $servicios;
+    }
+	
 
     public function getServiciosPorContactoTranspais()
     {
@@ -1164,7 +1259,7 @@ class Candidatos
         INNER JOIN [rh_Candidatos_Datos] CD on CD.Candidato=RC.Candidato
         LEFT JOIN rh_Candidatos_Obs_Generales ob ON RC.Candidato=ob.Candidato
 		LEFT JOIN rh_Candidatos_RAL cral ON RC.Candidato=cral.Candidato
-         WHERE RC.Cliente IN (SELECT ID_Cliente FROM rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:Contacto) AND YEAR(RC.Fecha)>=2022 
+         WHERE RC.Cliente IN (SELECT ID_Cliente FROM rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:Contacto) AND  rc.Ejecutivo<>'miguelcasanova' AND RC.Fecha>='2023-01-01' 
         ORDER BY RC.Fecha DESC");
         $stmt->bindParam(":Contacto", $Contacto, PDO::PARAM_STR);
         $stmt->execute();
@@ -1452,13 +1547,15 @@ class Candidatos
         $Contacto = $this->getContacto();
         $Razon = $this->getRazon();
         $Puesto = $this->getPuesto();
+		$cc_cliente = $this->getCC_Cliente();
 
-        $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Cliente=:Cliente, Nombre_Cliente=:Contacto, Razon=:Razon, Puesto=:Puesto, Modificado=GETDATE() WHERE Candidato=:Candidato");
+        $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Cliente=:Cliente, Nombre_Cliente=:Contacto, Razon=:Razon, Puesto=:Puesto, Modificado=GETDATE(),CC_Cliente=:cc_cliente WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
         $stmt->bindParam(":Contacto", $Contacto, PDO::PARAM_INT);
         $stmt->bindParam(":Razon", $Razon, PDO::PARAM_STR);
         $stmt->bindParam(":Puesto", $Puesto, PDO::PARAM_STR);
+		$stmt->bindParam(":cc_cliente", $cc_cliente, PDO::PARAM_STR);
 
         $flag = $stmt->execute();
         if ($flag) {
@@ -2023,7 +2120,7 @@ class Candidatos
     {
         $Fecha = $this->getFecha_solicitud();
         /* $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)"); */
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 AND ESE IS NULL AND IL IS NULL");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 AND ESE IS NULL AND IL IS NULL and (replicado<>2 OR replicado is null)");
         $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
         $stmt->execute();
         $fetch = $stmt->fetchObject();
@@ -2033,7 +2130,7 @@ class Candidatos
     public function getTotalRALESPorDia()
     {
         $Fecha = $this->getFecha_solicitud();
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=298 OR Servicio_Solicitado=291 OR Servicio_Solicitado=328) AND ESE IS NULL AND IL IS NULL");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=298 OR Servicio_Solicitado=291 OR Servicio_Solicitado=328) AND ESE IS NULL AND IL IS NULL and (replicado<>2 OR replicado is null)");
         $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
         $stmt->execute();
         $fetch = $stmt->fetchObject();
@@ -2043,7 +2140,7 @@ class Candidatos
     public function getTotalInvPorDia()
     {
         $Fecha = $this->getFecha_solicitud();
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=231");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=231 and (replicado<>2 OR replicado is null)");
         $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
         $stmt->execute();
         $fetch = $stmt->fetchObject();
@@ -2053,7 +2150,7 @@ class Candidatos
     public function getTotalESESPorDia()
     {
         $Fecha = $this->getFecha_solicitud();
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=230 AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=230) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230  AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
         $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
         $stmt->execute();
         $fetch = $stmt->fetchObject();
@@ -2061,13 +2158,31 @@ class Candidatos
     }
 
 
+    public function getTotalESESOIPorDia()
+    {
+        $Fecha = $this->getFecha_solicitud();
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=340) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=340 AND Servicio=340 AND Estado<252) and (replicado<>2 OR replicado is null)");
+        $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
+        $stmt->execute();
+        $fetch = $stmt->fetchObject();
+        return $fetch->total;
+    }
+    public function getTotalESESMARTPorDia()
+    {
+        $Fecha = $this->getFecha_solicitud();
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=341) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=341  AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
+        $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
+        $stmt->execute();
+        $fetch = $stmt->fetchObject();
+        return $fetch->total;
+    }
 
 
     public function getTotalServiciosPorDiaYEjecutivo()
     {
         $Fecha = $this->getFecha_solicitud();
         $Ejecutivo = $this->getEjecutivo();
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
         $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
         $stmt->execute();
@@ -2098,12 +2213,11 @@ class Candidatos
         $fetch = $stmt->fetchObject();
         return $fetch->total;
     }
-
     public function getTotalESESPorDiaYEjecutivo()
     {
         $Fecha = $this->getFecha_solicitud();
         $Ejecutivo = $this->getEjecutivo();
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND Servicio_Solicitado=230 AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND (Servicio_Solicitado=230 ) AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND(Servicio_Solicitado=230) AND Servicio=230 AND Estado<252)");
         $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
         $stmt->execute();
@@ -2112,11 +2226,32 @@ class Candidatos
     }
 
 
+    public function getTotalESESOIPorDiaYEjecutivo()
+    {
+        $Fecha = $this->getFecha_solicitud();
+        $Ejecutivo = $this->getEjecutivo();
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND (Servicio_Solicitado=340 ) AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND(Servicio_Solicitado=340) AND Servicio=340 AND Estado<252)");
+        $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
+        $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
+        $stmt->execute();
+        $fetch = $stmt->fetchObject();
+        return $fetch->total;
+    }
 
-
+    public function getTotalESESMARTPorDiaYEjecutivo()
+    {
+        $Fecha = $this->getFecha_solicitud();
+        $Ejecutivo = $this->getEjecutivo();
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE CONVERT(date, Fecha)=CONVERT(date, :Fecha) AND (Servicio_Solicitado=341) AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND(Servicio_Solicitado=341) AND Servicio=341    AND Estado<252)");
+        $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
+        $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
+        $stmt->execute();
+        $fetch = $stmt->fetchObject();
+        return $fetch->total;
+    }
     public function getTotalServiciosEnProceso()
     {
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Estado < 252 AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Estado < 252 AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
         $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
@@ -2124,7 +2259,7 @@ class Candidatos
 
     public function getTotalRALESEnProceso()
     {
-        $stmt = $this->db->prepare("SELECT COUNT(c.Candidato) AS total FROM rh_Candidatos c INNER JOIN rh_Candidatos_Datos d ON c.Candidato=d.Candidato WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=298 AND Estado < 252");
+        $stmt = $this->db->prepare("SELECT COUNT(c.Candidato) AS total FROM rh_Candidatos c INNER JOIN rh_Candidatos_Datos d ON c.Candidato=d.Candidato WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=298 AND Estado < 252 and (replicado<>2 OR replicado is null)");
         $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
@@ -2132,19 +2267,21 @@ class Candidatos
 
     public function getTotalInvEnProceso()
     {
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=231 AND Estado < 252");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=231 AND Estado < 252 and (replicado<>2 OR replicado is null)");
         $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
     }
 
+
     public function getTotalESESEnProceso()
     {
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=230 AND Estado < 252 AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Estado < 252 AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341)  AND Estado<252) and (replicado<>2 OR replicado is null)");
         $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
     }
+
 
 
 
@@ -2182,7 +2319,7 @@ class Candidatos
     public function getTotalESESEnProcesoEjecutivo()
     {
         $Ejecutivo = $this->getEjecutivo();
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Servicio_Solicitado=230 AND Estado < 252 AND Ejecutivo=:Ejecutivo AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Estado < 252 AND Ejecutivo=:Ejecutivo AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Servicio=230 AND Estado<252)");
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
         $stmt->execute();
         $fetch = $stmt->fetchObject();
@@ -2192,7 +2329,7 @@ class Candidatos
 
     public function getTotalServiciosSemana()
     {
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
         $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
@@ -2200,7 +2337,7 @@ class Candidatos
 
     public function getTotalRALESSemana()
     {
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=298 AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE())");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=298 AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) and (replicado<>2 OR replicado is null)");
         $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
@@ -2208,7 +2345,7 @@ class Candidatos
 
     public function getTotalInvSemana()
     {
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=231 AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE())");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=231 AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) and (replicado<>2 OR replicado is null)");
         $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
@@ -2216,14 +2353,11 @@ class Candidatos
 
     public function getTotalESESSemana()
     {
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=230 AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
         $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
     }
-
-
-
 
     public function getTotalServiciosSemanaEjecutivo()
     {
@@ -2255,20 +2389,20 @@ class Candidatos
         return $fetch->total;
     }
 
+
     public function getTotalESESSemanaEjecutivo()
     {
         $Ejecutivo = $this->getEjecutivo();
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Servicio_Solicitado=230 AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Servicio=230 AND Estado<252)");
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
         $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
     }
 
-
     public function getTotalServiciosMes()
     {
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
         $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
@@ -2276,7 +2410,7 @@ class Candidatos
 
     public function getTotalRALESMes()
     {
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=298 AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE())");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=298 AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE()) and (replicado<>2 OR replicado is null)");
         $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
@@ -2284,20 +2418,20 @@ class Candidatos
 
     public function getTotalInvMes()
     {
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=231 AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE())");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=231 AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE()) and (replicado<>2 OR replicado is null)");
         $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
     }
+
 
     public function getTotalESESMes()
     {
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND Servicio_Solicitado=230 AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Ejecutivo<>'miguelcasanova' AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341)AND Estado<>257 AND Estado<>258 AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341)AND Servicio=230 AND Estado<252) and (replicado<>2 OR replicado is null)");
         $stmt->execute();
         $fetch = $stmt->fetchObject();
         return $fetch->total;
     }
-
 
 
 
@@ -2334,7 +2468,7 @@ class Candidatos
     public function getTotalESESMesEjecutivo()
     {
         $Ejecutivo = $this->getEjecutivo();
-        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE Servicio_Solicitado=230 AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)");
+        $stmt = $this->db->prepare("SELECT COUNT(Candidato) AS total FROM rh_Candidatos WHERE (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Estado<>257 AND Estado<>258 AND Ejecutivo=:Ejecutivo AND YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha)=MONTH(GETDATE()) AND Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND (Servicio_Solicitado=230 or Servicio_Solicitado=340 or Servicio_Solicitado=341) AND Servicio=230 AND Estado<252)");
         $stmt->bindParam(":Ejecutivo", $Ejecutivo, PDO::PARAM_STR);
         $stmt->execute();
         $fetch = $stmt->fetchObject();
@@ -2343,7 +2477,13 @@ class Candidatos
 
     public function getServiciosSolicitadosPorClientesHoy()
     {
-        $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE CONVERT(date, Fecha)=CONVERT(date, GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 GROUP BY RVA.Nombre_Cliente ORDER BY No_Servicios DESC");
+        $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, 
+        SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291  Or RC.Servicio_Solicitado = 328  then 1 else 0 end) AS No_RAL, 
+        SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, 
+        SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 Or RC.Servicio_Solicitado = 340 Or RC.Servicio_Solicitado = 341 then 1 else 0 end) AS No_ESE, 
+        COUNT(DISTINCT(Candidato)) AS No_Servicios 
+        FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente 
+        WHERE CONVERT(date, Fecha)=CONVERT(date, GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 GROUP BY RVA.Nombre_Cliente ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
@@ -2381,7 +2521,7 @@ class Candidatos
 
     public function getServiciosSolicitadosPorClientesSemana()
     {
-        $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 GROUP BY RVA.Nombre_Cliente ORDER BY No_Servicios DESC");
+        $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE YEAR(Fecha)=YEAR(GETDATE()) AND  DATEPART(WEEK, Fecha) = DATEPART(WEEK, GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258  and (replicado<>2 OR replicado is null) GROUP BY RVA.Nombre_Cliente ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
@@ -2400,7 +2540,7 @@ class Candidatos
 
     public function getServiciosSolicitadosPorClientesMes()
     {
-        $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha) = MONTH(GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 GROUP BY RVA.Nombre_Cliente ORDER BY No_Servicios DESC");
+        $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE YEAR(Fecha)=YEAR(GETDATE()) AND MONTH(Fecha) = MONTH(GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258  and (replicado<>2 OR replicado is null) GROUP BY RVA.Nombre_Cliente ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
@@ -2418,11 +2558,13 @@ class Candidatos
     }
 
 
-
-
     public function getServiciosSolicitadosPorCCHoy()
     {
-        $stmt = $this->db->prepare("SELECT RVA.Centro_Costos, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE CONVERT(date, Fecha)=CONVERT(date, GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 GROUP BY RVA.Centro_Costos ORDER BY No_Servicios DESC");
+        $stmt = $this->db->prepare("SELECT RVA.Centro_Costos, 
+        SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 Or RC.Servicio_Solicitado = 328 then 1 else 0 end) AS No_RAL, 
+        SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, 
+        SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 Or RC.Servicio_Solicitado = 340 Or RC.Servicio_Solicitado = 341 then 1 else 0 end) AS No_ESE, 
+        COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE CONVERT(date, Fecha)=CONVERT(date, GETDATE()) AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258  and (replicado<>2 OR replicado is null) GROUP BY RVA.Centro_Costos ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
@@ -2441,7 +2583,7 @@ class Candidatos
 
     public function getServiciosSolicitadosPorCCEnProceso()
     {
-        $stmt = $this->db->prepare("SELECT RVA.Centro_Costos, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE Ejecutivo<>'miguelcasanova' AND Estado < 252 GROUP BY RVA.Centro_Costos ORDER BY No_Servicios DESC");
+        $stmt = $this->db->prepare("SELECT RVA.Centro_Costos, SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL, SUM(case when RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231 then 1 else 0 end) AS No_INV, SUM(case when RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230 then 1 else 0 end) AS No_ESE, COUNT(DISTINCT(Candidato)) AS No_Servicios FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE Ejecutivo<>'miguelcasanova' AND Estado < 252  and (replicado<>2 OR replicado is null) GROUP BY RVA.Centro_Costos ORDER BY No_Servicios DESC");
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
@@ -2590,7 +2732,7 @@ class Candidatos
         $date1 = $this->getFecha_solicitud();
         $date2 = $this->getFecha_entregado();
 
-        $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254) then 1 else 0 end) AS No_ESE_FIN FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Gestor=U.username WHERE CONVERT(DATE,Fecha) BETWEEN :date1 AND :date2 AND Ejecutivo<>'miguelcasanova' AND Fecha_Aplicacion IS NOT NULL AND Estado<>257 AND Estado<>258 GROUP BY U.first_name, U.last_name ORDER BY No_ESE_FIN DESC");
+        $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324) and (RC.Estado = 252 OR Estado = 254 ) then 1 else 0 end) AS No_ESE_FIN FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Gestor=U.username WHERE CONVERT(DATE,Fecha) BETWEEN :date1 AND :date2 AND Ejecutivo<>'miguelcasanova' AND Fecha_Aplicacion IS NOT NULL AND Estado<>257 AND Estado<>258 GROUP BY U.first_name, U.last_name ORDER BY No_ESE_FIN DESC");
         $stmt->bindParam(":date1", $date1, PDO::PARAM_STR);
         $stmt->bindParam(":date2", $date2, PDO::PARAM_STR);
         $stmt->execute();
@@ -2692,8 +2834,23 @@ class Candidatos
         return $servicios;
     }
 
+    public function inhabilitarRALExcesoTiempo()
+    {
+        $result = false;
+
+        $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=252, Fecha_Entregado=GETDATE(), Fecha_Entregado_RAL=GETDATE(), Comentario_Finalizado=CONCAT('Este servicio fue finalizado automáticamente, ya que tenía ', dbo.count_days_with_decimal(Fecha, GETDATE()), ' días activo.') WHERE Servicio=291 AND Estado<252 AND Ejecutivo<>'miguelcasanova' AND Cliente<>6 AND dbo.count_days_with_decimal(Fecha, GETDATE()) >= 7");
+
+        $flag = $stmt->execute();
+        if ($flag)
+            $result = true;
+        return $result;
+    }
+
+
     public function getDetallePorAnio()
     {
+
+        //Servicios =324
         $Anio = $this->getFecha_solicitud();
         $stmt = $this->db->prepare(
             "SELECT 
@@ -2702,102 +2859,104 @@ class Candidatos
 			v.Investigacion_L,
 			v.ESE,
 			v.Centro_Costos,
-			SUM(case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=1 then 1 else 0 end) AS No_RAL_Brutos_Ene, 
-			SUM(case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=1 then 1 else 0 end) AS No_RAL_Avanzados_Ene,
-			SUM(case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=1 then 1 else 0 end) AS No_RAL_Netos_Ene,
-			SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=1 then 1 else 0 end) AS No_INV_FIN_Ene,
-			SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) AND MONTH(RC.Fecha)=1 then 1 else 0 end) AS No_ESE_FIN_Ene,
-			SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=1 then 1 else 0 end) AS No_FIN_Ene,
+			v.Empresa,
+			v.Cliente,	
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=1 then 1 else 0 end end) AS No_RAL_Brutos_Ene, 
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=1 then 1 else 0 end end) AS No_RAL_Avanzados_Ene,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=1 then 1 else 0 end end) AS No_RAL_Netos_Ene,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=1 then 1 else 0 end end) AS No_INV_FIN_Ene,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324) AND MONTH(RC.Fecha)=1 then 1 else 0 end end) AS No_ESE_FIN_Ene,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=1 then 1 else 0 end end) AS No_FIN_Ene,
 		
-			SUM(case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=2 then 1 else 0 end) AS No_RAL_Brutos_Feb,
-			SUM(case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=2 then 1 else 0 end) AS No_RAL_Avanzados_Feb,
-			SUM(case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=2 then 1 else 0 end) AS No_RAL_Netos_Feb, 
-			SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=2 then 1 else 0 end) AS No_INV_FIN_Feb,
-			SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) AND MONTH(RC.Fecha)=2 then 1 else 0 end) AS No_ESE_FIN_Feb,
-            SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=2 then 1 else 0 end) AS No_FIN_Feb,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=2 then 1 else 0 end end) AS No_RAL_Brutos_Feb,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=2 then 1 else 0 end end) AS No_RAL_Avanzados_Feb,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=2 then 1 else 0 end end) AS No_RAL_Netos_Feb, 
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=2 then 1 else 0 end end) AS No_INV_FIN_Feb,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324) AND MONTH(RC.Fecha)=2 then 1 else 0 end end) AS No_ESE_FIN_Feb,
+            SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=2 then 1 else 0 end end) AS No_FIN_Feb,
 		
-			SUM(case when ((RC.Servicio = 298 Or RC.Servicio = 291) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=3 then 1 else 0 end) AS No_RAL_Brutos_Mar, 
-			SUM(case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=3 then 1 else 0 end) AS No_RAL_Avanzados_Mar,
-			SUM(case when (RC.Servicio = 298 Or RC.Servicio = 291) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=3 then 1 else 0 end) AS No_RAL_Netos_Mar,
-			SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=3 then 1 else 0 end) AS No_INV_FIN_Mar,
-			SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) AND MONTH(RC.Fecha)=3 then 1 else 0 end) AS No_ESE_FIN_Mar,
-            SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291) AND MONTH(RC.Fecha)=3 then 1 else 0 end) AS No_FIN_Mar,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when ((RC.Servicio = 298 Or RC.Servicio = 291) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=3 then 1 else 0 end end) AS No_RAL_Brutos_Mar, 
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=3 then 1 else 0 end end) AS No_RAL_Avanzados_Mar,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 298 Or RC.Servicio = 291) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=3 then 1 else 0 end end) AS No_RAL_Netos_Mar,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=3 then 1 else 0 end end) AS No_INV_FIN_Mar,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324) AND MONTH(RC.Fecha)=3 then 1 else 0 end end) AS No_ESE_FIN_Mar,
+            SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291) AND MONTH(RC.Fecha)=3 then 1 else 0 end end) AS No_FIN_Mar,
 		
-			SUM(case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=4 then 1 else 0 end) AS No_RAL_Brutos_Abr, 
-			SUM(case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=4 then 1 else 0 end) AS No_RAL_Avanzados_Abr,
-			SUM(case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=4 then 1 else 0 end) AS No_RAL_Netos_Abr,
-			SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=4 then 1 else 0 end) AS No_INV_FIN_Abr,
-			SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) AND MONTH(RC.Fecha)=4 then 1 else 0 end) AS No_ESE_FIN_Abr,
-            SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=4 then 1 else 0 end) AS No_FIN_Abr,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=4 then 1 else 0 end end) AS No_RAL_Brutos_Abr, 
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=4 then 1 else 0 end end) AS No_RAL_Avanzados_Abr,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=4 then 1 else 0 end end) AS No_RAL_Netos_Abr,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=4 then 1 else 0 end end) AS No_INV_FIN_Abr,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324) AND MONTH(RC.Fecha)=4 then 1 else 0 end end) AS No_ESE_FIN_Abr,
+            SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=4 then 1 else 0 end end) AS No_FIN_Abr,
 		
-			SUM(case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=5 then 1 else 0 end) AS No_RAL_Brutos_May, 
-			SUM(case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=5 then 1 else 0 end) AS No_RAL_Avanzados_May,
-			SUM(case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=5 then 1 else 0 end) AS No_RAL_Netos_May,
-			SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=5 then 1 else 0 end) AS No_INV_FIN_May,
-			SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) AND MONTH(RC.Fecha)=5 then 1 else 0 end) AS No_ESE_FIN_May,
-            SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=5 then 1 else 0 end) AS No_FIN_May,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=5 then 1 else 0 end end) AS No_RAL_Brutos_May, 
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=5 then 1 else 0 end end) AS No_RAL_Avanzados_May,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=5 then 1 else 0 end end) AS No_RAL_Netos_May,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=5 then 1 else 0 end end) AS No_INV_FIN_May,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324) AND MONTH(RC.Fecha)=5 then 1 else 0 end end) AS No_ESE_FIN_May,
+            SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=5 then 1 else 0 end end) AS No_FIN_May,
 		
-			SUM(case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=6 then 1 else 0 end) AS No_RAL_Brutos_Jun, 
-			SUM(case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=6 then 1 else 0 end) AS No_RAL_Avanzados_Jun,
-			SUM(case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=6 then 1 else 0 end) AS No_RAL_Netos_Jun,
-			SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=6 then 1 else 0 end) AS No_INV_FIN_Jun,
-			SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) AND MONTH(RC.Fecha)=6 then 1 else 0 end) AS No_ESE_FIN_Jun,
-            SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=6 then 1 else 0 end) AS No_FIN_Jun,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=6 then 1 else 0 end end) AS No_RAL_Brutos_Jun, 
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=6 then 1 else 0 end end) AS No_RAL_Avanzados_Jun,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=6 then 1 else 0 end end) AS No_RAL_Netos_Jun,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=6 then 1 else 0 end end) AS No_INV_FIN_Jun,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324) AND MONTH(RC.Fecha)=6 then 1 else 0 end end) AS No_ESE_FIN_Jun,
+            SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=6 then 1 else 0 end end) AS No_FIN_Jun,
 		
-			SUM(case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=7 then 1 else 0 end) AS No_RAL_Brutos_Jul, 
-			SUM(case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=7 then 1 else 0 end) AS No_RAL_Avanzados_Jul,
-			SUM(case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=7 then 1 else 0 end) AS No_RAL_Netos_Jul,
-			SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=7 then 1 else 0 end) AS No_INV_FIN_Jul,
-			SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) AND MONTH(RC.Fecha)=7 then 1 else 0 end) AS No_ESE_FIN_Jul,
-            SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=7 then 1 else 0 end) AS No_FIN_Jul,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=7 then 1 else 0 end end) AS No_RAL_Brutos_Jul, 
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=7 then 1 else 0 end end) AS No_RAL_Avanzados_Jul,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=7 then 1 else 0 end end) AS No_RAL_Netos_Jul,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=7 then 1 else 0 end end) AS No_INV_FIN_Jul,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324) AND MONTH(RC.Fecha)=7 then 1 else 0 end end) AS No_ESE_FIN_Jul,
+            SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=7 then 1 else 0 end end) AS No_FIN_Jul,
 		
-			SUM(case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=8 then 1 else 0 end) AS No_RAL_Brutos_Ago, 
-			SUM(case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=8 then 1 else 0 end) AS No_RAL_Avanzados_Ago,
-			SUM(case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=8 then 1 else 0 end) AS No_RAL_Netos_Ago,
-			SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=8 then 1 else 0 end) AS No_INV_FIN_Ago,
-			SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) AND MONTH(RC.Fecha)=8 then 1 else 0 end) AS No_ESE_FIN_Ago,
-            SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=8 then 1 else 0 end) AS No_FIN_Ago,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=8 then 1 else 0 end end) AS No_RAL_Brutos_Ago, 
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=8 then 1 else 0 end end) AS No_RAL_Avanzados_Ago,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=8 then 1 else 0 end end) AS No_RAL_Netos_Ago,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=8 then 1 else 0 end end) AS No_INV_FIN_Ago,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324) AND MONTH(RC.Fecha)=8 then 1 else 0 end end) AS No_ESE_FIN_Ago,
+            SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=8 then 1 else 0 end end) AS No_FIN_Ago,
 		
-			SUM(case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=9 then 1 else 0 end) AS No_RAL_Brutos_Sep, 
-			SUM(case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=9 then 1 else 0 end) AS No_RAL_Avanzados_Sep,
-			SUM(case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=9 then 1 else 0 end) AS No_RAL_Netos_Sep,
-			SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=9 then 1 else 0 end) AS No_INV_FIN_Sep,
-			SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) AND MONTH(RC.Fecha)=9 then 1 else 0 end) AS No_ESE_FIN_Sep,
-            SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=9 then 1 else 0 end) AS No_FIN_Sep,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=9 then 1 else 0 end end) AS No_RAL_Brutos_Sep, 
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=9 then 1 else 0 end end) AS No_RAL_Avanzados_Sep,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=9 then 1 else 0 end end) AS No_RAL_Netos_Sep,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=9 then 1 else 0 end end) AS No_INV_FIN_Sep,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324) AND MONTH(RC.Fecha)=9 then 1 else 0 end end) AS No_ESE_FIN_Sep,
+            SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=9 then 1 else 0 end end) AS No_FIN_Sep,
 		
-			SUM(case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=10 then 1 else 0 end) AS No_RAL_Brutos_Oct, 
-			SUM(case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=10 then 1 else 0 end) AS No_RAL_Avanzados_Oct,
-			SUM(case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=10 then 1 else 0 end) AS No_RAL_Netos_Oct,
-			SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=10 then 1 else 0 end) AS No_INV_FIN_Oct,
-			SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) AND MONTH(RC.Fecha)=10 then 1 else 0 end) AS No_ESE_FIN_Oct,
-            SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=10 then 1 else 0 end) AS No_FIN_Oct,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=10 then 1 else 0 end end) AS No_RAL_Brutos_Oct, 
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=10 then 1 else 0 end end) AS No_RAL_Avanzados_Oct,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=10 then 1 else 0 end end) AS No_RAL_Netos_Oct,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=10 then 1 else 0 end end) AS No_INV_FIN_Oct,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324) AND MONTH(RC.Fecha)=10 then 1 else 0 end end) AS No_ESE_FIN_Oct,
+            SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=10 then 1 else 0 end end) AS No_FIN_Oct,
 		
-			SUM(case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=11 then 1 else 0 end) AS No_RAL_Brutos_Nov, 
-			SUM(case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=11 then 1 else 0 end) AS No_RAL_Avanzados_Nov,
-			SUM(case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=11 then 1 else 0 end) AS No_RAL_Netos_Nov,
-			SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=11 then 1 else 0 end) AS No_INV_FIN_Nov,
-			SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) AND MONTH(RC.Fecha)=11 then 1 else 0 end) AS No_ESE_FIN_Nov,
-            SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=11 then 1 else 0 end) AS No_FIN_Nov,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=11 then 1 else 0 end end) AS No_RAL_Brutos_Nov, 
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=11 then 1 else 0 end end) AS No_RAL_Avanzados_Nov,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=11 then 1 else 0 end end) AS No_RAL_Netos_Nov,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=11 then 1 else 0 end end) AS No_INV_FIN_Nov,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324) AND MONTH(RC.Fecha)=11 then 1 else 0 end end) AS No_ESE_FIN_Nov,
+            SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=11 then 1 else 0 end end) AS No_FIN_Nov,
 		
-			SUM(case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=12 then 1 else 0 end) AS No_RAL_Brutos_Dic, 
-			SUM(case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=12 then 1 else 0 end) AS No_RAL_Avanzados_Dic,
-			SUM(case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=12 then 1 else 0 end) AS No_RAL_Netos_Dic,
-			SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=12 then 1 else 0 end) AS No_INV_FIN_Dic,
-			SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) AND MONTH(RC.Fecha)=12 then 1 else 0 end) AS No_ESE_FIN_Dic,
-            SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=12 then 1 else 0 end) AS No_FIN_Dic,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) AND MONTH(RC.Fecha)=12 then 1 else 0 end end) AS No_RAL_Brutos_Dic, 
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) AND MONTH(RC.Fecha)=12 then 1 else 0 end end) AS No_RAL_Avanzados_Dic,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL AND MONTH(RC.Fecha)=12 then 1 else 0 end end) AS No_RAL_Netos_Dic,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 299 Or RC.Servicio = 231) AND MONTH(RC.Fecha)=12 then 1 else 0 end end) AS No_INV_FIN_Dic,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324) AND MONTH(RC.Fecha)=12 then 1 else 0 end end) AS No_ESE_FIN_Dic,
+            SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND MONTH(RC.Fecha)=12 then 1 else 0 end end) AS No_FIN_Dic,
 		
-			SUM(case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) then 1 else 0 end) AS No_RAL_Brutos, 
-			SUM(case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) then 1 else 0 end) AS No_RAL_Avanzados,
-			SUM(case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL then 1 else 0 end) AS No_RAL_Netos,
-			SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) then 1 else 0 end) AS No_INV_FIN,
-			SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) then 1 else 0 end) AS No_ESE_FIN,
-            SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) then 1 else 0 end) AS No_FIN
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when ((RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) OR (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL)) then 1 else 0 end end) AS No_RAL_Brutos, 
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) then 1 else 0 end end) AS No_RAL_Avanzados,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL then 1 else 0 end end) AS No_RAL_Netos,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 299 Or RC.Servicio = 231) then 1 else 0 end end) AS No_INV_FIN,
+			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324) then 1 else 0 end end) AS No_ESE_FIN,
+            SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) then 1 else 0 end end) AS No_FIN
 		FROM rh_Candidatos RC
 			INNER JOIN rh_Ventas_Alta v 
 				ON RC.Cliente=v.Cliente 
 			WHERE YEAR(Fecha)=:Anio
 				AND Ejecutivo<>'miguelcasanova' AND (Estado=249 OR Estado=250 OR Estado=251 OR Estado=252 OR Estado=254 OR Estado=257 OR Estado=258) AND v.Cliente <> 132 AND v.Cliente <> 250 AND (v.RAL<>0  or v.Investigacion_L<>0 OR v.ESE<>0)
-			GROUP BY v.Nombre_Cliente, v.RAL, v.Investigacion_L, v.ESE, v.Centro_Costos
+			GROUP BY v.Nombre_Cliente, v.RAL, v.Investigacion_L, v.ESE, v.Centro_Costos,v.Empresa,v.Cliente
 			ORDER BY No_ESE_FIN DESC"
         );
         $stmt->bindParam(":Anio", $Anio, PDO::PARAM_INT);
@@ -2930,7 +3089,7 @@ class Candidatos
         $date1 = $this->getFecha_solicitud();
         $date2 = $this->getFecha_entregado();
 
-        $stmt = $this->db->prepare("SELECT Creado, Folio=RC.Candidato
+        $stmt = $this->db->prepare("SELECT va.Cliente id_cliente,Creado, Folio=RC.Candidato
         ,[Solicitud]=RC.Fecha
         ,RC.Estado
         ,[Estatus] = CASE WHEN RC.Servicio=298 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Ral en Proceso' WHEN (RC.Servicio=299 OR RC.Servicio=231) AND (RC.Estado=250 OR RC.Estado=251) THEN 'Investigación en Proceso' WHEN (RC.Servicio=300 OR RC.Servicio=230) AND (RC.Estado=250 OR RC.Estado=251) THEN 'Visita en Proceso' WHEN RC.Servicio=310 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Validación de Licencia en Proceso' WHEN RC.Servicio=324 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Visita Presencial en Proceso' WHEN RC.Servicio=328 AND RC.Estado=250 OR RC.Estado=251 THEN 'Análisis de RAL en Proceso' WHEN RC.Estado=252 THEN 'Finalizado' WHEN RC.Estado=254 THEN 'Facturado' WHEN RC.Estado=258 THEN 'Cancelado' WHEN RC.Estado=249 THEN 'Pausado' WHEN RC.Servicio=291 AND RC.Estado=250 OR RC.Estado=251 THEN 'RAL Consultado' ELSE '' END
@@ -3217,8 +3376,6 @@ class Candidatos
     }
 
     // ===[19 de mayo 2023 estudios]===
-
-
     public function GetOnePorCurp($cliente, $curp)
     {
         $curp = $curp;
@@ -3238,25 +3395,22 @@ class Candidatos
     public function updateReplicado()
     {
         $Candidato = $this->getCandidato();
-        $Replicado=$this->getReplicado();
+        $Replicado = $this->getReplicado();
         $stmt = $this->db->prepare("UPDATE TOP(1) rh_Candidatos SET replicado=:Replicado WHERE Candidato=:Candidato ");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
         $stmt->bindParam(":Replicado", $Replicado, PDO::PARAM_INT);
         $stmt->execute();
 
         $fetch = $stmt->execute();
-        var_dump($fetch);die();
+
         return $fetch;
     }
 
-
     // ===[19 de mayo 2023 estudios fin]===
-
-
-    //CIOSAA
-    public function getServiciosPorContactoCIOSA()
+     public function getServiciosPorUsuario()
     {
         $Contacto = $this->getContacto();
+        $Cliente = $this->getCliente();
         $stmt = $this->db->prepare("SELECT TOP(7200) Folio=RC.Candidato,RC.Cliente ID_Ciente
         ,[Solicitud]=RC.Fecha
         ,RC.Estado
@@ -3295,11 +3449,119 @@ class Candidatos
         INNER JOIN [rh_Candidatos_Datos] CD on CD.Candidato=RC.Candidato
         LEFT JOIN rh_Candidatos_Obs_Generales ob ON RC.Candidato=ob.Candidato
 		LEFT JOIN rh_Candidatos_RAL cral ON RC.Candidato=cral.Candidato
-         WHERE RC.Cliente IN (SELECT ID_Cliente FROM rh_Ventas_Cliente_Contactos WHERE ID_Contacto=:Contacto) AND RC.Nombre_Cliente='3533'
+        INNER JOIN rh_Candidatos_Personas_Solicitan cp ON rc.Nombre_Cliente=cp.ID
+        WHERE RC.Nombre_Cliente = (SELECT ID FROM rh_Candidatos_Personas_Solicitan WHERE Usuario=:Contacto AND Cliente=:Cliente) AND  rc.Ejecutivo<>'miguelcasanova'
         ORDER BY RC.Fecha DESC");
         $stmt->bindParam(":Contacto", $Contacto, PDO::PARAM_STR);
+        $stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_STR);
         $stmt->execute();
         $servicios = $stmt->fetchAll();
         return $servicios;
+    }
+	
+
+    public function getModificacionEjecutivoGestor()
+    {
+        $Candidato = $this->getCandidato();
+        $stmt = $this->db->prepare("SELECT Ejecutivo_modificacion,Gestor_modificacion FROM rh_candidatos WHERE Candidato=:Candidato ");
+        $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->execute();
+        $fetch = $stmt->fetchObject();
+
+        return $fetch;
+    }
+
+    public function updateModificacionEjecutivo()
+    {
+        $Candidato = $this->getCandidato();
+        $stmt = $this->db->prepare("UPDATE TOP(1) rh_candidatos SET Ejecutivo_modificacion=(SELECT (CASE WHEN Ejecutivo_modificacion IS NULL THEN 0  ELSE Ejecutivo_modificacion END) +1 FROM rh_candidatos WHERE Candidato=:Candidato1) WHERE Candidato=:Candidato");
+        $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
+        $stmt->bindParam(":Candidato1", $Candidato, PDO::PARAM_INT);
+        $fetch = $stmt->execute();
+        return $fetch;
+    }
+    public function updateModificacionGestor()
+    {
+        $Candidato = $this->getCandidato();
+        $stmt = $this->db->prepare("UPDATE TOP(1) rh_candidatos SET Gestor_modificacion=(SELECT (CASE WHEN Gestor_modificacion IS NULL THEN 0  ELSE Gestor_modificacion END) +1 FROM rh_candidatos WHERE Candidato=:Candidato1) WHERE Candidato=:Candidato");
+        $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
+        $stmt->bindParam(":Candidato1", $Candidato, PDO::PARAM_INT);
+        $fetch = $stmt->execute();
+        return $fetch;
+    }
+
+    public function getServiciosSOI(){
+
+        $stmt = $this->db->prepare("SELECT Creado, Folio=RC.Candidato
+        ,[Solicitud]=RC.Fecha
+        ,RC.Estado
+        ,[Estatus] = CASE WHEN RC.Servicio=298 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Ral en Proceso' WHEN (RC.Servicio=299 OR RC.Servicio=231) AND (RC.Estado=250 OR RC.Estado=251) THEN 'Investigación en Proceso' WHEN (RC.Servicio=300 OR RC.Servicio=230) AND (RC.Estado=250 OR RC.Estado=251) THEN 'Visita en Proceso' WHEN RC.Servicio=310 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Validación de Licencia en Proceso' WHEN RC.Servicio=324 AND (RC.Estado=250 OR RC.Estado=251) THEN 'Visita Presencial en Proceso' WHEN RC.Servicio=328 AND RC.Estado=250 OR RC.Estado=251 THEN 'Análisis de RAL en Proceso' WHEN RC.Estado=252 THEN 'Finalizado' WHEN RC.Estado=254 THEN 'Facturado' WHEN RC.Estado=258 THEN 'Cancelado' WHEN RC.Estado=249 THEN 'Pausado' WHEN RC.Servicio=291 AND RC.Estado=250 OR RC.Estado=251 THEN 'RAL Consultado' ELSE '' END
+        ,VLF = (SELECT TOP(1) CASE WHEN Candidato IS NOT NULL THEN 'VLF + ' ELSE '' END FROM Validacion_Licencia_Federal lic WHERE lic.Candidato=RC.Candidato)
+        ,[Empresa] = (SELECT Nombre_Empresa FROM rh_Ventas_Empresas WHERE Empresa=(SELECT Empresa FROM rh_Ventas_Alta WHERE Cliente=RC.Cliente))
+        ,Cliente= CASE WHEN RC.Cliente=0 THEN (SELECT AE.Alias FROM [adm_Empresas] AE WHERE AE.Empresa=RC.Empresa) ELSE (SELECT AE.Nombre_Cliente FROM [rh_Ventas_Alta] AE WHERE AE.Cliente=RC.Cliente) END
+        ,Plaza_Cliente
+        ,Fase = CASE WHEN RC.Servicio>0 THEN(SELECT UPPER(TS.Descripcion) FROM sys_Campos TS WHERE TS.Campo=RC.Servicio)ELSE' -sin asignar-'END
+        ,A_RAL = CASE WHEN A_RAL=0 THEN '' ELSE 'ARAL' END
+        ,RC.Servicio
+        ,Nombre_Candidato=TRANSLATE(UPPER(CD.Nombres +' '+ cd.Apellido_Paterno +' '+ cd.Apellido_Materno), 'ÁÉÍÓÚÑ', 'AEIOUN')
+        ,[Puesto] = RC.Puesto
+        ,[Aplicacion] = RC.Fecha_Aplicacion
+        ,[Fecha_Entregado]=RC.Fecha_Entregado
+        ,[Ejecutivo] = UPPER(RC.Ejecutivo)
+        ,[HO] = RC.Gestor
+        ,[Dias] = CASE WHEN RC.Fecha_Entregado IS NULL AND RC.Estado <> 258 THEN dbo.count_days(RC.Fecha, GETDATE()) WHEN RC.Estado <> 258 THEN dbo.count_days(RC.Fecha, RC.Fecha_Entregado) ELSE '-1' END
+        ,[Tiempo_IL] = CASE WHEN RC.Fecha_Entregado_INV IS NULL AND RC.Fecha <= GETDATE() AND (RC.Estado<>258 AND RC.Estado<>249) THEN dbo.count_days_with_decimal(RC.Fecha, GETDATE()) WHEN RC.Fecha_Entregado_INV IS NULL AND RC.Fecha > GETDATE() AND (RC.Estado<>258 AND RC.Estado<>249) THEN '0.0' WHEN RC.Fecha_Entregado_INV IS NOT NULL AND RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, RC.Fecha_Entregado_INV) ELSE '0' END
+        ,[Tiempo_ESE] = CASE WHEN RC.Fecha_Entregado_ESE IS NULL AND RC.Fecha <= GETDATE() AND (RC.Estado<>258 AND RC.Estado<>249) THEN dbo.count_days_with_decimal(RC.Fecha, GETDATE()) WHEN RC.Fecha_Entregado_ESE IS NULL AND RC.Fecha > GETDATE() AND (RC.Estado<>258 AND RC.Estado<>249) THEN '0.0' WHEN RC.Fecha_Entregado_ESE IS NOT NULL AND RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, RC.Fecha_Entregado_ESE) ELSE '0' END
+        ,[Tiempo] = CASE WHEN RC.Fecha_Entregado IS NULL AND RC.Fecha <= GETDATE() AND RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, GETDATE()) WHEN RC.Fecha_Entregado IS NULL AND RC.Fecha > GETDATE() AND RC.Estado<>258 THEN '0.0' WHEN RC.Estado<>258 THEN dbo.count_days_with_decimal(RC.Fecha, RC.Fecha_Entregado) ELSE '0' END
+        ,[Viatico] = RC.Viatico
+        ,[Solicitud_De] = RC.Solicitud_De
+        ,[Progreso] = (SELECT (Datos_Generales+Datos_Adicionales+Documentos+salud+Sociales+Ubicacion+Estructura+Ref_Vecinal+Obs_Generales) as Total from Progreso_Gestor WHERE Candidato=RC.Candidato)
+        ,[Servicio_Solicitado] =UPPER((SELECT ES.Descripcion FROM sys_Campos ES WHERE ES.Campo= RC.Servicio_Solicitado))
+        ,[Ciudad]=(SELECT Municipio FROM rh_Candidatos_Ubicacion WHERE Candidato=RC.Candidato)
+        ,[Estado_MX]=(SELECT Descripcion FROM General_Estados WHERE Estado=(SELECT Estado FROM rh_Candidatos_Ubicacion WHERE Candidato=RC.Candidato))
+        ,[Repetidos] = (SELECT COUNT(rh_Candidatos_Datos.Candidato) FROM rh_Candidatos_Datos left join rh_Candidatos on rh_Candidatos_Datos.Candidato = rh_Candidatos.Candidato WHERE ((rh_Candidatos_Datos.Nombres=CD.Nombres and rh_Candidatos_Datos.Apellido_Paterno=CD.Apellido_Paterno and rh_Candidatos_Datos.Apellido_Materno=CD.Apellido_Materno)) and rh_Candidatos.Ejecutivo<>'MIGUELCASANOVA')
+        ,RC.Factura
+        ,Enlace_Drive
+        ,[Centro_C] = (SELECT Centro_Costos FROM rh_Ventas_Alta WHERE Cliente=RC.Cliente)
+        ,RC.Razon
+        ,[Solicita] = (SELECT Nombre FROM rh_Candidatos_Personas_Solicitan WHERE ID=RC.Nombre_Cliente)
+        ,CC_Cliente
+        ,Comentario_Cliente
+        ,Comentario_Cancelado
+        ,ISNULL(Comentario_Finalizado, '') AS Comentario_Finalizado
+        ,ob.Viable
+        ,RC.IL
+        ,RC.ESE
+    FROM rh_Candidatos RC
+        INNER JOIN [rh_Candidatos_Datos] CD on CD.Candidato=RC.Candidato
+        LEFT JOIN rh_Candidatos_Obs_Generales ob ON RC.Candidato=ob.Candidato
+        INNER JOIN SOI ON RC.Candidato=SOI.Candidato 
+         WHERE rc.Ejecutivo<>'miguelcasanova' and RC.Cliente<>0 
+        ORDER BY RC.Fecha DESC");
+        $stmt->execute();
+        $servicios = $stmt->fetchAll();
+        return $servicios;
+    }
+	
+	    public function countCandidatosPorCliente()
+    {
+        $Cliente = $this->getCliente();
+        $stmt = $this->db->prepare("SELECT count(*) as Total FROM rh_Candidatos WHERE Cliente=:Cliente");
+        $stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
+        $fetch = $stmt->execute();
+        $fetch = $stmt->fetchObject();
+
+        return $fetch;
+    }
+	   public function countCandidatosPorEmpresa()
+    {
+        $empresa = $this->getEmpresa();
+        $stmt = $this->db->prepare("SELECT count(*) as Total FROM rh_Candidatos rc INNER JOIN rh_Ventas_Alta rva ON rc.Cliente=rva.Cliente WHERE rva.empresa=:empresa");
+        $stmt->bindParam(":empresa", $empresa, PDO::PARAM_INT);
+        $fetch = $stmt->execute();
+        $fetch = $stmt->fetchObject();
+
+        return $fetch;
     }
 }

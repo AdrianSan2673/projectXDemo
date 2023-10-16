@@ -4,8 +4,8 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-12">
-          <div class="alert <?= $_SESSION['identity']->username == 'salmaperez' ? 'alert-maroon' : 'alert-success' ?>">
-            <h1>¡Hola, <?= $_SESSION['identity']->first_name ?>! <?= $_SESSION['identity']->username == 'salmaperez' ? ', Auxiliar de RRHH, Ingeniera Burbuja' : '' ?></h1>
+          <div class="alert <?= $_SESSION['identity']->username == 'salmaperez1' ? 'alert-maroon' : 'alert-success' ?>">
+            <h1>¡Hola, <?= $_SESSION['identity']->first_name ?>!</h1>
           </div>
         </div>
       </div>
@@ -16,115 +16,115 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-			
-            <?php if (Utils::isCustomerSA()) : ?>
-			 <section class="content-header">
+
+          <?php if (Utils::isCustomerSA()) : ?>
+            <section class="content-header">
               <div class="row">
                 <div class="col-sm-3 ml-auto" hidden>
                   <a class="btn btn-orange btn-block float-right" href="<?= base_url ?>ServicioApoyo/crear">Nuevo candidato</a>
                 </div>
-				  
-				     <div class="col-sm-2 ml-auto">
-					               <a class="btn btn-primary float-right" href="<?=base_url?>ServicioApoyo/carga_masiva">Cargar candidatos</a>
 
-					                 </div>
-				  
-				     <div class="col-sm-2 ml-auto">
-            <a class="btn btn-orange float-right" <?=$_SESSION['identity']->username == 'salmaperez' ? "style='background: #cd5c5c !important'" : ''?> href="<?=base_url?>ServicioApoyo/crear">Nuevo candidato</a>
-          </div>
-				  
-				
+                <div class="col-sm-2 ml-auto">
+                  <a class="btn btn-primary float-right" href="<?= base_url ?>ServicioApoyo/carga_masiva">Cargar candidatos</a>
+
+                </div>
+
+                <div class="col-sm-2 ml-auto">
+                  <a class="btn btn-orange float-right" <?= $_SESSION['identity']->username == 'salmaperez1' ? "style='background: #cd5c5c !important'" : '' ?> href="<?= base_url ?>ServicioApoyo/crear">Nuevo candidato</a>
+                </div>
+
+
 
               </div>
             </section>
-			            <?php endif;  ?>
+          <?php endif;  ?>
 
-						
-			    <?php $avisos = Utils::avisoClientes(); ?>
-            <?php if (isset($avisos) && (Utils::isCustomerSA() || Utils::isCustomer()) && $_SESSION['identity']->username != 'salmaperez') : ?>
-              <div class="card">
-                <div class="card bg-transparent">
-                  <div class="card-header bg-yellow">
-                    <h3 class="card-title">Mural de actualizaciones </h3>
-                    <div class="card-tools">
-                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                        <i class="fas fa-minus"></i>
-                      </button>
 
-                    </div>
+          <?php $avisos = Utils::avisoClientes(); ?>
+          <?php if (isset($avisos) && (Utils::isCustomerSA() || Utils::isCustomer())) : ?>
+            <div class="card">
+              <div class="card bg-transparent">
+                <div class="card-header bg-yellow">
+                  <h3 class="card-title">Mural de actualizaciones </h3>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+
                   </div>
+                </div>
 
-                  <div class="card-body">
-                    <div id="accordion">
-                      <?php $avisos = Utils::avisoClientes();
-                      $aux = 0;//este solo es para hacer chico la pestaña
-                      foreach ($avisos as $aviso) : ?>
-                    
-                        <div class="card" >
-                          <div class="card-header">
-                            <h4 class="card-title w-100">
-                              <a class="d-block w-100" data-toggle="collapse" href="#collapse<?= $aviso['id']  ?>" aria-expanded="true">
-                                <?= $aviso['titulo']  ?>
-                              </a>
-                            </h4>
-                          </div>
+                <div class="card-body">
+                  <div id="accordion">
+                    <?php $avisos = Utils::avisoClientes();
+                    $aux = 0; //este solo es para hacer chico la pestaña
+                    foreach ($avisos as $aviso) : ?>
 
-                          <div id="collapse<?= $aviso['id']  ?>" class="collapse <?= $aux == 0 ? 'show' : '' ?>" data-parent="#accordion">
-                            <div class="card-body">
-                              <div class="row">
-                                <div class="col-8">
-                                  <div class="embed-responsive embed-responsive-16by9">
-                                    <iframe width="560" height="315" src="<?= $aviso['url']  ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                                  </div>
+                      <div class="card">
+                        <div class="card-header">
+                          <h4 class="card-title w-100">
+                            <a class="d-block w-100" data-toggle="collapse" href="#collapse<?= $aviso['id']  ?>" aria-expanded="true">
+                              <?= $aviso['titulo']  ?>
+                            </a>
+                          </h4>
+                        </div>
+
+                        <div id="collapse<?= $aviso['id']  ?>" class="collapse <?= $aux == 0 ? 'show' : '' ?>" data-parent="#accordion">
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-8">
+                                <div class="embed-responsive embed-responsive-16by9">
+                                  <iframe width="560" height="315" src="<?= $aviso['url']  ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                                 </div>
-                                <div class="col-4">
-                                  <div class="card">
-                                    <div class="card-body">
+                              </div>
+                              <div class="col-4">
+                                <div class="card">
+                                  <div class="card-body">
 
-                                      <div class="row">
-                                        <div class="col-md-12">
-                                          <h5 class="card-title"><?= $aviso['subtitulo']  ?></h5>
+                                    <div class="row">
+                                      <div class="col-md-12">
+                                        <h5 class="card-title"><?= $aviso['subtitulo']  ?></h5>
 
-                                        </div>
-                                        <div class="col-md-12">
-                                          <p class="mt-3">Fecha de publicacion: <span class="text-bold"> <?= Utils::getDate($aviso['fecha_creacion']) ?></span></p>
-
-                                        </div>
-                                        <div class="col-md-12">
-                                          <p class="card-text text-justify"><?= $aviso['descripcion']  ?></p>
-                                        </div>
                                       </div>
+                                      <div class="col-md-12">
+                                        <p class="mt-3">Fecha de publicacion: <span class="text-bold"> <?= Utils::getDate($aviso['fecha_creacion']) ?></span></p>
 
+                                      </div>
+                                      <div class="col-md-12">
+                                        <p class="card-text text-justify"><?= $aviso['descripcion']  ?></p>
+                                      </div>
                                     </div>
-                                  </div>
 
+                                  </div>
                                 </div>
 
                               </div>
-                            </div>
-                          </div><!--  -->
-                        </div>
 
-                      <?php $aux++;
-                      endforeach; ?>
-                    </div>
+                            </div>
+                          </div>
+                        </div><!--  -->
+                      </div>
+
+                    <?php $aux++;
+                    endforeach; ?>
                   </div>
                 </div>
               </div>
+            </div>
 
-            <?php endif;  ?>
+          <?php endif;  ?>
 
-    
+
 
           <?php if (Utils::isCustomerSA()) : ?>
-           
+
 
             <?php if (Utils::isCustomer()) : ?>
               <div class="row">
                 <div class="col-lg-4 col-12">
                   <div class="small-box bg-navy">
                     <div class="inner">
-                      <h4><?= isset($contacto->id_customer)? Statistics::getVacancyCountByCustomer($contacto->id_customer):'0' ?></h4>
+                      <h4><?= isset($contacto->id_customer) ? Statistics::getVacancyCountByCustomer($contacto->id_customer) : '0' ?></h4>
                       <p>Vacantes solicitadas</p>
                     </div>
                     <div class="icon">
@@ -139,7 +139,7 @@
                 <div class="col-lg-4 col-6">
                   <div class="small-box bg-info">
                     <div class="inner">
-             <h4><?= isset($contacto->id_customer)? Statistics::getVacancyInProcessCountByCustomer($contacto->id_customer):'0' ?></h4>
+                      <h4><?= isset($contacto->id_customer) ? Statistics::getVacancyInProcessCountByCustomer($contacto->id_customer) : '0' ?></h4>
                       <p>Vacantes en proceso</p>
                     </div>
                     <div class="icon">
@@ -154,7 +154,7 @@
                 <div class="col-lg-4 col-6">
                   <div class="small-box bg-danger">
                     <div class="inner">
-                 <h4><?= isset($contacto->id_customer)? Statistics::getVacancyClosedCountByCustomer($contacto->id_customer):'0' ?></h4>
+                      <h4><?= isset($contacto->id_customer) ? Statistics::getVacancyClosedCountByCustomer($contacto->id_customer) : '0' ?></h4>
                       <p>Vacantes cerradas</p>
                     </div>
                     <div class="icon">
@@ -168,8 +168,8 @@
                 </div>
               </div>
             <?php endif ?>
-            
-            <?php if (($employeeContract)) : ?>
+
+            <?php if (isset($employeeContract) && $employeeContract != null) : ?>
               <section class="content">
                 <div class="card bg-transparent">
                   <div class="card-header bg-danger">
@@ -220,7 +220,7 @@
                 </div>
               </section>
             <?php endif; ?>
-            <?php if ($employeeBirthday || $employeeBirthdayNextMonth) : ?>
+            <?php if (isset($employeeBirthday) || isset($employeeBirthdayNextMonth) && ($employeeBirthday != null || $employeeBirthdayNextMonth != null)) : ?>
               <section class="content">
                 <div class="card">
                   <div class="card-header">
@@ -239,7 +239,7 @@
                               <div class="card bg-white card-widget widget-user col-md-6">
                                 <!-- Add the bg color to the header using any of the bg-* classes -->
                                 <div class="widget-user-header <?= $eb['id_gender'] == 2 ? 'bg-maroon' : 'bg-navy' ?>">
-                                  <h5 class="widget-user-username" style="font-size: 16px;"><?= $eb['fullName'] ?></h5>
+                                  <h5 class="widget-user-username" style="font-size: 16px;"> <a href="<?= base_url . 'empleado/ver&id=' . Encryption::encode($eb['id_employee']) ?>" target="_blank" class="text-bold text-white"> <?= $eb['fullName'] ?></a></h5>
                                   <h6 class="widget-user-desc" style="font-size: 14px;"><b><?= $eb['department'] ?></b></h6>
                                 </div>
                                 <div class="widget-user-image">
@@ -288,7 +288,7 @@
                               <div class="card bg-white card-widget widget-user col-md-6">
                                 <!-- Add the bg color to the header using any of the bg-* classes -->
                                 <div class="widget-user-header <?= $eb['id_gender'] == 2 ? 'bg-maroon' : 'bg-navy' ?>">
-                                  <h5 class="widget-user-username" style="font-size: 16px;"><?= $eb['fullName'] ?></h5>
+                                  <h5 class="widget-user-username" style="font-size: 16px;"> <a href="<?= base_url . 'empleado/ver&id=' . Encryption::encode($eb['id_employee']) ?>" target="_blank" class="text-bold text-white"> <?= $eb['fullName'] ?></a></h5>
                                   <h6 class="widget-user-desc" style="font-size: 14px;"><b><?= $eb['department'] ?></b></h6>
                                 </div>
                                 <div class="widget-user-image">
@@ -334,8 +334,7 @@
                 </div>
               </section>
             <?php endif ?>
-            <?php $evaluations = Statistics::getEvaluationByID_ContactoAndStatus() ?>
-            <?php if ($evaluations) : ?>
+            <?php if (isset($evaluations) && $evaluations != null) : ?>
               <div class="card">
                 <div class="card-header">
                   <h4 class="card-title">Evaluaciones pendientes</h4>
@@ -383,6 +382,12 @@
                 </div>
               </div>
               <script type="text/javascript">
+                document.addEventListener('DOMContentLoaded', e => {
+                  let table = document.querySelector('#table_evaluations');
+                  table.style.display = "table";
+                  utils.dtTable(table, true);
+                });
+
                 document.querySelector('#table_evaluations').addEventListener('click', e => {
                   if (e.target.classList.contains('btn-primary') || e.target.parentElement.classList.contains('btn-primary')) {
                     let id;
@@ -430,9 +435,9 @@
             <?php endif ?>
           <?php endif; ?>
 
-    
-    
-            <?php if (Utils::isAdmin() || Utils::isSenior() || Utils::isJunior() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isRecruitmentManager()) : ?>
+
+
+          <?php if (Utils::isAdmin() || Utils::isSenior() || Utils::isJunior() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isRecruitmentManager()) : ?>
 
             <?php //$fecha = date('Y-m-d H:i:s');
             //$fechaComoEntero = strtotime($fecha);
@@ -1082,7 +1087,7 @@
               </div>   -->
           <?php endif ?>
 
-		
+
 
           <?php if (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager()) : ?>
             <div class="card card-info card-tabs">
@@ -1109,9 +1114,7 @@
                       <div class="col-lg-3 col-6">
                         <div class="small-box bg-success">
                           <div class="inner">
-                            <!--                             <h4><?= !Utils::isAccount() ? Statistics::getTotalServiciosApoyoHoy() : Statistics::getTotalServiciosApoyoHoyPorEjecutivo() //Este es el que estaba antes pero aun no se porque hace mal el conteo 
-                                                                  ?></h4> -->
-                            <h4><?= !Utils::isAccount() ? Statistics::getTotalInvHoy() + Statistics::getTotalESESHoy() + Statistics::getTotalRALESHoy() : Statistics::getTotalServiciosApoyoHoyPorEjecutivo() ?>
+                            <h4><?= !Utils::isAccount() ? Statistics::getTotalInvHoy() + Statistics::getTotalESESHoy() + Statistics::getTotalRALESHoy() + Statistics::getTotalESESOIHoy() + Statistics::getTotalESESMARTHoy() : Statistics::getTotalServiciosApoyoHoyPorEjecutivo() ?>
                               <p>Servicios solicitados hoy</p>
                           </div>
                           <div class="icon">
@@ -1138,11 +1141,14 @@
                           </a>
                         </div>
                       </div>
-                      <div class="col-lg-3 col-6">
+
+
+                      <div class="col-lg-1 col-2">
                         <div class="small-box bg-info">
                           <div class="inner">
-                            <h4><?= !Utils::isAccount() ? Statistics::getTotalESESHoy() : Statistics::getTotalESESHoyPorEjecutivo() ?></h4>
-                            <p>ESE solicitados hoy</p>
+                            <h4><?= !Utils::isAccount() ? Statistics::getTotalESESHoy() : Statistics::getTotalESESHoyPorEjecutivo() ?>
+                            </h4>
+                            <p>ESE </p>
                           </div>
                           <div class="icon">
                             <i class="fas fa-file-invoice-dollar"></i>
@@ -1153,6 +1159,42 @@
                           </a>
                         </div>
                       </div>
+                      <!--   ===[gabo 15 agosto estadisticas]=== -->
+                      <div class="col-lg-1 col-2">
+                        <div class="small-box bg-info">
+                          <div class="inner">
+                            <h4><?= !Utils::isAccount() ? Statistics::getTotalESESOIHoy() : Statistics::getTotalESESOIHoyPorEjecutivo() ?>
+                            </h4>
+                            <p>SOI </p>
+                          </div>
+                          <div class="icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                          </div>
+                          <a href="#" class="small-box-footer">
+                            Ver
+                            <i class="fas fa-arrow-circle-right"></i>
+                          </a>
+                        </div>
+                      </div>
+                      <div class="col-lg-1 col-2">
+                        <div class="small-box bg-info">
+                          <div class="inner">
+                            <h4><?= !Utils::isAccount() ? Statistics::getTotalESESMARTHoy() : Statistics::getTotalESESMARTHoyPorEjecutivo() ?>
+                            </h4>
+                            <p>
+                              <font size="2">SMART</font>
+                            </p>
+                          </div>
+                          <div class="icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                          </div>
+                          <a href="#" class="small-box-footer">
+                            Ver
+                            <i class="fas fa-arrow-circle-right"></i>
+                          </a>
+                        </div>
+                      </div>
+
                       <div class="col-lg-3 col-6">
                         <div class="small-box bg-maroon">
                           <div class="inner">
@@ -1895,15 +1937,3 @@
   </section>
   <!-- /.content -->
 </div>
-	
-	
-	
-<!-- ===[gabo 15 de mayo  inicio]=== -->
-<script>
-  document.addEventListener('DOMContentLoaded', e => {
-    let table = document.querySelector('#table_evaluations');
-    table.style.display = "table";
-    utils.dtTable(table, true);
-  });
-</script>
-<!-- ===[gabo 15 de mayo  inicio fin]=== -->

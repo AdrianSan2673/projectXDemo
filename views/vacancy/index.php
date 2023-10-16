@@ -92,8 +92,8 @@
               </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body table-responsive p-0">
-              <table id="tb_vacancies" class="table <?= Utils::isManager() ? 'table-head-fixed text-nowrap' : '' ?> table-striped table-sm" style="display: none; <?= Utils::isManager() ? 'height: 400px;' : '' ?>">
+            <div class="card-body ">
+              <table id="tb_vacancies" class="table <?= Utils::isManager() ? 'table-head-fixed text-nowrap' : '' ?> table-striped table-sm table-responsive" style="display: none; <?= Utils::isManager() ? 'height: 400px;' : '' ?>">
                 <thead>
                     <tr>
                       <th></th>
@@ -253,35 +253,31 @@
                           $selected_color = 'btn-warning';
                         }
 
-                        if ($vacancy['id_recruiter'] == 26 || $vacancy['id_recruiter'] == 2098 || $vacancy['id_recruiter'] == 4020|| $vacancy['id_recruiter'] == 6113) {
+                        if ($vacancy['id_recruiter'] == 6113) {//michell
                           $recruiter_color = 'bg-navy';
-                        }elseif ($vacancy['id_recruiter'] == 27) {
+                        }elseif ($vacancy['id_recruiter'] == 1550) {//miros
                           $recruiter_color = 'bg-maroon';
-                        }elseif($vacancy['id_recruiter'] == 24){
+                        }elseif($vacancy['id_recruiter'] == 24){//cindy
                           $recruiter_color = 'bg-info';
-                        }elseif($vacancy['id_recruiter'] == 333){
+                        }elseif($vacancy['id_recruiter'] == 333){//vero
                           $recruiter_color = 'bg-warning';
-                        }elseif($vacancy['id_recruiter'] == 25 || $vacancy['id_recruiter'] == 2276){
+                        }elseif( $vacancy['id_recruiter'] == 2276){//gisel
                           $recruiter_color = 'bg-success';
-                        }elseif($vacancy['id_recruiter'] == 41 || $vacancy['id_recruiter'] == 1466){
-                          $recruiter_color = 'bg-orange';
-                        }elseif($vacancy['id_recruiter'] == 42){
+                        }elseif($vacancy['id_recruiter'] == 42){//ivan
                           $recruiter_color = 'bg-gray';
-                        }elseif($vacancy['id_recruiter'] == 1515){
-                          $recruiter_color = 'bg-danger';
-                        }elseif($vacancy['id_recruiter'] == 2785 || $vacancy['id_recruiter'] == 4441){
+                        }elseif( $vacancy['id_recruiter'] == 4441){//cinthiapaez
                           $recruiter_color = 'bg-fuchsia';
-                        }elseif($vacancy['id_recruiter'] == 4094){
+                        }elseif($vacancy['id_recruiter'] == 4094){//melissabarron
                           $recruiter_color = 'bg-orange';
-                        }elseif($vacancy['id_recruiter'] == 1462 || $vacancy['id_recruiter'] == 2119 || $vacancy['id_recruiter'] == 7312)
+                        }elseif($vacancy['id_recruiter'] == 3908)//aglay
                           $recruiter_color = 'bg-purple';
-                        elseif($vacancy['id_recruiter'] == 2096)
+                        elseif($vacancy['id_recruiter'] == 2096)//Sin ejecutivo
                           $recruiter_color = 'table-maroon';
                         else{
                           $recruiter_color = 'bg-danger';
                         }
                         ?>
-                        <td class="align-middle"><?=$vacancy['id']?></td>
+                        <td class="align-middle h6"><?=$vacancy['id']?></td>
                         <td class="align-middle <?=$recruiter_color?>">
 							<?=$vacancy['recruiter']!=' '?$vacancy['recruiter'] :'Sin asignar'?>
 						</td>
@@ -290,7 +286,7 @@
                           <td class="align-middle"><?=$vacancy['customer']?></td>
                         <?php endif ?>
                         <td class="align-middle"><?=$vacancy['vacancy']?></td>
-                        <td class="align-middle"><?=$vacancy['type'] == 1 ? 'Operativa' : ($vacancy['type'] == 2 ? 'Orden común' : ($vacancy['type'] == 3 ? 'Head Hunting' : ''))?></td>
+                        <td class="align-middle"><?= $vacancy['type'] == 1 ? 'Operativa' : ($vacancy['type'] == 2 ? 'Orden común' : ($vacancy['type'] == 3 ? 'Head Hunting' : ($vacancy['type'] == 4 ? 'Iguala' : ''))) ?></td>
                         <td class="align-middle"><?=$vacancy['city'].', '.$vacancy['abbreviation']?></td>
                         <?php if (!Utils::isCustomer()): ?>
                           <td class="align-middle text-center"><?=$vacancy['cost_center']?></td>
@@ -329,7 +325,7 @@
                           <!-- <td class="align-middle text-center"><?=$vacancy['position_number']?></td> -->
                           <td class="align-middle text-center"><?=$vacancy['id_status'] < 5 || $vacancy['id_status'] == 8 ? $vacancy['position_number'] - $vacancy['n_chosen'] : 0?></td>
                           <td class="align-middle text-center"><?= $vacancy['authorization_date'] ? Utils::getFullDate($vacancy['authorization_date']) : ''?></td>
-                          <td class="align-middle text-center"><?=$vacancy['commitment_date']?></td>
+                          <td class="align-middle text-center"><?=$vacancy['commitment_date']==''?'':Utils::getDate($vacancy['commitment_date'])?></td>
                         <?php endif ?>
                         <td class="align-middle"><?=$send_date = $vacancy['send_date'] != NULL ? Utils::getFullDate($vacancy['send_date']) : ''?></td>
                         <?php if (!Utils::isCustomer()): ?>
@@ -343,7 +339,7 @@
                               <a href="<?=base_url?>vacante/ver&id=<?=Encryption::encode($vacancy['id'])?>" class="btn btn-success">
                                     <i class="fas fa-eye"></i> Ver
                                 </a>
-                              <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSenior() || Utils::isSales() || Utils::isSalesManager()): ?>
+                              <?php if (Utils::isAdmin() || Utils::isSales() || Utils::isSalesManager()): ?>
                                 <a href="<?=base_url?>vacante/editar&id=<?=Encryption::encode($vacancy['id'])?>" class="btn btn-info">
                                   <i class="fas fa-pencil-alt"></i> Editar
                                 </a>

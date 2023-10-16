@@ -25,11 +25,24 @@
                         </select>
                     </div>
 
+                    <!-- ===[gabo 11 junio evaluaciones pt2]=== -->
                     <div class="form-group">
-                        <input type="checkbox" name="type"   value="<?= Encryption::encode(1) ?>">
+                        <label for="id_cliente" class="col-form-label">Sucursal*</label>
+                        <?php $contactos = Utils::getEmpresaByContacto(); ?>
+                        <select name="id_cliente_plantilla" id="id_cliente_plantilla" class="form-control" required>
+                            <option disabled selected value="">Selecciona sucursal</option>
+                            <?php foreach ($contactos as $contacto) : ?>
+                                <option value="<?= $contacto['Cliente'] ?>"><?= $contacto['Nombre_Cliente'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                    <!-- ===[gabo 11 junio evaluaciones fin pt2]=== -->
+
+                    <div class="form-group">
+                        <input type="checkbox" name="type" value="<?= Encryption::encode(1) ?>">
                         <label for="level" class="col-form-label">Retroalimentacion</label>
                     </div>
-                    
+
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>

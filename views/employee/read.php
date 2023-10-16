@@ -35,8 +35,12 @@
                                         <div class="btn-group btn-group-sm mt-2">
                                             <?php if ($avatar->image[2]) : ?>
                                                 <button class="btn btn-success btn-watch-photo" data-id=<?= $avatar->id ?>><i class="fas fa-eye"></i></button>
-                                                <button class="btn btn-info btn-edit-photo" data-id="<?= $avatar->id ?>"><i class="fas fa-pencil-alt mr-1"></i></button>
-                                                <button class="btn btn-danger btn-delete-photo" data-id="<?= $avatar->id ?>"><i class="fas fa-times mr-1"></i></button>
+                                                <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                    <button class="btn btn-info btn-edit-photo" data-id="<?= $avatar->id ?>"><i class="fas fa-pencil-alt mr-1"></i></button>
+                                                <?php endif ?>
+                                                <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
+                                                    <button class="btn btn-danger btn-delete-photo" data-id="<?= $avatar->id ?>"><i class="fas fa-times mr-1"></i></button>
+                                                <?php endif ?>
                                             <?php endif ?>
                                             <label class="btn btn-orange ml-2">
                                                 <input type="file" class="d-none btn-upload-photo" accept="image/x-png,image/gif,image/jpeg"><i class="fas fa-upload"></i>
@@ -107,13 +111,14 @@
                                         <div class="col-5 col-sm-3">
                                             <div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" role="tablist" aria-orientation="vertical">
                                                 <a class="nav-link active" id="vert-tabs-datos-generales-tab" data-toggle="pill" href="#vert-tabs-datos-generales" role="tab" aria-controls="vert-tabs-datos-generales" aria-selected="false">Datos del empleado</a>
-                                                <a class="nav-link" id="vert-tabs-historial-puestos-tab" data-toggle="pill" href="#vert-tabs-historial-puestos" role="tab" aria-controls="vert-tabs-historial-puestos" aria-selected="false">Historial de puestos</a>
-                                                <a class="nav-link" id="vert-tabs-contratacion-tab" data-toggle="pill" href="#vert-tabs-contratacion" role="tab" aria-controls="vert-tabs-contratacion" aria-selected="false">Contratacion</a>
+                                                <a class="nav-link" id="vert-tabs-historial-puestos-tab" data-toggle="pill" href="#vert-tabs-historial-puestos" role="tab" aria-controls="vert-tabs-historial-puestos" aria-selected="false">Movimientos de personal</a>
+                                                <a class="nav-link" id="vert-tabs-contratacion-tab" data-toggle="pill" href="#vert-tabs-contratacion" role="tab" aria-controls="vert-tabs-contratacion" aria-selected="false">Historial de contratos</a>
                                                 <a class="nav-link" id="vert-tabs-circulo-familiar-tab" data-toggle="pill" href="#vert-tabs-circulo-familiar" role="tab" aria-controls="vert-tabs-circulo-familiar" aria-selected="false">Circulo familiar</a>
                                                 <a class="nav-link" id="vert-tabs-nomina-tab" data-toggle="pill" href="#vert-tabs-nomina" role="tab" aria-controls="vert-tabs-nomina" aria-selected="false">Datos para Nomina</a>
                                                 <a class="nav-link" id="vert-tabs-incidencias-tab" data-toggle="pill" href="#vert-tabs-incidencias" role="tab" aria-controls="vert-tabs-incidencias" aria-selected="false">Incidencias</a>
                                                 <a class="nav-link" id="vert-tabs-capacitacion-tab" data-toggle="pill" href="#vert-tabs-capacitacion" role="tab" aria-controls="vert-tabs-capacitacion" aria-selected="false">Capacitacion</a>
                                                 <a class="nav-link" id="vert-tabs-documentos-tab" data-toggle="pill" href="#vert-tabs-documentos" role="tab" aria-controls="vert-tabs-documentos" aria-selected="false">Documentos</a>
+                                                <a class="nav-link" id="vert-tabs-documentacion-tab" data-toggle="pill" href="#vert-tabs-documentacion" role="tab" aria-controls="vert-tabs-documentacion" aria-selected="false">Documentación</a>
                                             </div>
                                         </div>
                                         <div class="col-7 col-sm-9">
@@ -168,19 +173,33 @@
                                                                         </div>
                                                                     </div>
 
-
+																	
+																	
+																	   <!-- 7 SEP -->
                                                                     <div class="row">
+                                                                        <div class="col-sm-12 text-center">
+                                                                            <b>Corrreo</b>
+                                                                            <p><?= !isset($employee->email) || $employee->email == '' ? 'Sin definir' : $employee->email  ?>
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- 7 SEP -->
+
+
+                                                                   <div class="row">
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>Fecha de creación</b>
-                                                                            <p><?= Utils::getDate($employee->created_at) ?></p>
+                                                                            <p><?= Utils::getDate($employee->date_birth) ?>
                                                                         </div>
+
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>Fecha de nacimiento</b>
-                                                                            <p><?= Utils::getDate($employee->date_birth) ?></p>
+                                                                            <p><?= Utils::getDate($employee->date_birth) ?>
                                                                         </div>
+
                                                                         <div class="col-sm-4 text-center">
                                                                             <b>Fecha de contratacion</b>
-                                                                            <p><?= Utils::getDate($employee->start_date) ?></p>
+                                                                            <p><?= Utils::getDate($employee->start_date) ?>
                                                                         </div>
                                                                     </div>
 
@@ -245,9 +264,11 @@
 
                                                                 </div>
                                                                 <?php if (Utils::isAdmin() || Utils::isCustomerSA()) : ?>
-                                                                    <div class="text-center">
-                                                                        <button class="btn btn-info" id="btn-editar-empleado">Editar</button>
-                                                                    </div>
+                                                                    <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                                        <div class="text-center">
+                                                                            <button class="btn btn-info" id="btn-editar-empleado">Editar</button>
+                                                                        </div>
+                                                                    <?php endif ?>
                                                                 <?php endif ?>
                                                             </div>
                                                         </div>
@@ -290,9 +311,11 @@
 
                                                                 </div>
                                                                 <?php if (Utils::isAdmin() || Utils::isCustomerSA()) : ?>
-                                                                    <div class="text-center">
-                                                                        <button class="btn btn-info" id="btn-editar-contacto">Editar</button>
-                                                                    </div>
+                                                                    <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                                        <div class="text-center">
+                                                                            <button class="btn btn-info" id="btn-editar-contacto">Editar</button>
+                                                                        </div>
+                                                                    <?php endif ?>
                                                                 <?php endif ?>
                                                             </div>
 
@@ -361,16 +384,67 @@
 
 
                                                                 <?php if (Utils::isAdmin() || Utils::isCustomerSA()) : ?>
-                                                                    <div class="text-center">
-                                                                        <button class="btn btn-info" id="btn-editar-emergency">Editar</button>
-                                                                    </div>
+                                                                    <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                                        <div class="text-center">
+                                                                            <button class="btn btn-info" id="btn-editar-emergency">Editar</button>
+                                                                        </div>
+                                                                    <?php endif ?>
                                                                 <?php endif ?>
                                                             </div>
 
-
-
                                                         </div>
 
+														 <?php if ($usuario_rh) : ?>
+                                                        <div class="card col-md-12 collapsed-card collapsed-card mt-3">
+                                                            <div class="card-header">
+                                                                <h3 class="card-title">Datos de Acceso</h3>
+                                                                <div class="card-tools">
+                                                                    <button type="button" class="btn btn-tool"
+                                                                        data-card-widget="collapse" title="Collapse">
+                                                                        <i class="fas fa-plus text-primary"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="card-body" style="display: none;">
+                                                                <div id="datos_Contacto">
+
+                                                                    <div class="row">
+                                                                        <div class="col-sm-6 text-center">
+                                                                            <b>Usuario</b>
+                                                                            <p id="usernamep">
+                                                                                <?= $usuario_rh->username ?>
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="col-sm-6 text-center">
+                                                                            <b>Contraseña</b>
+                                                                            <p id="passwordp">
+                                                                                <?= Encryption::decode($usuario_rh->password) ?>
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12 text-center">
+                                                                            <b>Status</b>
+                                                                            <p id="statusp">
+                                                                                <?= $usuario_rh->status == 1 ? 'Activo' : 'Inactivo'  ?>
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                                <?php if (Utils::isAdmin() || Utils::isCustomerSA()) : ?>
+                                                                    <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                                        <div class="text-center">
+                                                                            <button class="btn btn-info"
+                                                                                id="btn-editar-acceso">Editar</button>
+                                                                        </div>
+                                                                    <?php endif ?>
+                                                                <?php endif ?>
+                                                            </div>
+                                                        </div>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
 
@@ -398,8 +472,12 @@
                                                                     <td class=" align-middle "><?= $hp['department']  ?></td>
                                                                     <td class=" align-middle "><?= Utils::getDate($hp['start_date'])  ?></td>
                                                                     <td class=" text-center ">
-                                                                        <button class="btn btn-danger text-bold" value="<?= Encryption::encode($hp['id'])   ?>">X</button>
-                                                                        <button class="btn btn-info" value="<?= Encryption::encode($hp['id'])    ?>"><i class="fas fa-edit"></i></button>
+                                                                        <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                                            <button class="btn btn-info" value="<?= Encryption::encode($hp['id'])    ?>"><i class="fas fa-edit"></i></button>
+                                                                        <?php endif ?>
+                                                                        <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
+                                                                            <button class="btn btn-danger text-bold" value="<?= Encryption::encode($hp['id'])   ?>">X</button>
+                                                                        <?php endif ?>
                                                                     </td>
                                                                 </tr>
                                                             <?php endforeach; ?>
@@ -453,7 +531,9 @@
                                                                                 <td class=" align-middle "><?= isset($emplContrac['contract_end']) ? Utils::getDate($emplContrac['contract_end']) : 'Sin finalizacion'  ?></td>
                                                                                 <td class=" align-middle "><?= $emplContrac['type']  ?></td>
                                                                                 <td class=" text-center ">
-                                                                                    <button class="btn btn-danger text-bold" value="<?= Encryption::encode($emplContrac['id'])   ?>">X</button>
+                                                                                    <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
+                                                                                        <button class="btn btn-danger text-bold" value="<?= Encryption::encode($emplContrac['id'])   ?>">X</button>
+                                                                                    <?php endif ?>
                                                                                 </td>
                                                                             </tr>
                                                                         <?php endforeach; ?>
@@ -494,8 +574,12 @@
                                                                             <td class="text-center align-middle"><?= isset($empfam['age']) ? $empfam['age'] . ' Años' : 'Sin definir'  ?> </td>
                                                                             <td class="text-center align-middle"><?= Utils::getFullDate($empfam['created_at'])  ?></td>
                                                                             <td class="text-center align-middle">
-                                                                                <button class="btn btn-danger text-bold" value="<?= Encryption::encode($empfam['id']) ?>">X</button>
-                                                                                <button class="btn btn-info" value="<?= Encryption::encode($empfam['id']) ?>"><i class="fas fa-edit"></i></button>
+                                                                                <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                                                    <button class="btn btn-info" value="<?= Encryption::encode($empfam['id']) ?>"><i class="fas fa-edit"></i></button>
+                                                                                <?php endif ?>
+                                                                                <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
+                                                                                    <button class="btn btn-danger text-bold" value="<?= Encryption::encode($empfam['id']) ?>">X</button>
+                                                                                <?php endif ?>
                                                                             </td>
                                                                         </tr>
                                                                     <?php endforeach;
@@ -570,7 +654,9 @@
                                                                             <td class="text-center align-middle"><?= $employeePayro['CLABE'] ?></td>
                                                                             <td class="text-center align-middle"><?= Utils::getDate($employeePayro['created_at']) ?></td>
                                                                             <td class=" text-center ">
-                                                                                <button class="btn btn-danger text-bold" value="<?= Encryption::encode($employeePayro['id'])   ?>">X</button>
+                                                                                <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
+                                                                                    <button class="btn btn-danger text-bold" value="<?= Encryption::encode($employeePayro['id'])   ?>">X</button>
+                                                                                <?php endif ?>
                                                                             </td>
                                                                         </tr>
                                                                     <?php endforeach;
@@ -582,8 +668,12 @@
 
                                                     <?php if (Utils::isAdmin() || Utils::isCustomerSA()) : ?>
                                                         <div class="text-center ">
-                                                            <button class="btn btn-info" id="btn-editar-payroll">Editar</button>
-                                                            <button class="btn btn-success" id="btn-history-payroll">Ver historial de cambios</button>
+                                                            <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                                <button class="btn btn-info" id="btn-editar-payroll">Editar</button>
+                                                            <?php endif ?>
+                                                            <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
+                                                                <button class="btn btn-success" id="btn-history-payroll">Ver historial de cambios</button>
+                                                            <?php endif ?>
                                                         </div>
                                                     <?php endif ?>
                                                 </div>
@@ -635,7 +725,9 @@
                                                                             <td class="text-center align-middle"><?= Utils::getDate($inc['created_at'])  ?></td>
                                                                             <td class="text-center align-middle"><?= Utils::getDate($inc['end_date'])  ?></td>
                                                                             <td class="text-center align-middle">
-                                                                                <button class="btn btn-danger text-bold" value="<?= Encryption::encode($inc['id_incident'])  ?>">X</button>
+                                                                                <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
+                                                                                    <button class="btn btn-danger text-bold" value="<?= Encryption::encode($inc['id_incident'])  ?>">X</button>
+                                                                                <?php endif ?>
                                                                             </td>
                                                                         </tr>
                                                                     <?php endforeach;
@@ -685,7 +777,9 @@
                                                                             <td class=" align-middle "><?= Utils::getDate($tra['end_date'])  ?></td>
                                                                             <td class=" align-middle "><?= Utils::getFullDate($tra['modified_at'])  ?></td>
                                                                             <td class=" align-middle ">
-                                                                                <button class="btn btn-danger text-bold" value="<?= Encryption::encode($tra['id_employee_training']) . ',' . Encryption::encode($tra['id_employee'])  ?>">X</button>
+                                                                                <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
+                                                                                    <button class="btn btn-danger text-bold" value="<?= Encryption::encode($tra['id_employee_training']) . ',' . Encryption::encode($tra['id_employee'])  ?>">X</button>
+                                                                                <?php endif ?>
                                                                             </td>
                                                                         </tr>
                                                                     <?php endforeach; ?>
@@ -743,6 +837,47 @@
 
 
                                                 </div>
+                                                <div class="tab-pane fade" id="vert-tabs-documentacion" role="tabpanel" aria-labelledby="vert-tabs-documentacion-tab">
+                                                    <div class="form-group mb-3">
+                                                        <label class="col-form-label">Agregar documento</label>
+                                                        <input type="file" class="btn btn-success" accept="image/x-png,image/gif,image/jpeg" style="display: block;">
+                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-sm text-nowrap">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Documento</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody class="content-documentos">
+                                                                <?php foreach ($documents as $document): ?>
+                                                                <tr>
+                                                                    <td><?=$document['Descripcion']?></td>
+                                                                    <td class="text-right py-0 align-middle">
+                                                                        <div class="btn-group btn-group-sm">
+                                                                            <button class="btn btn-success" data-id="<?=$document['id']?>">
+                                                                                <i class="fas fa-eye"></i>
+                                                                            </button>
+                                                                            <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
+                                                                                <button class="btn btn-info" data-id="<?=$document['id']?>">
+                                                                                    <i class="fas fa-pencil-alt"></i>
+                                                                                </button>
+                                                                            <?php endif ?>
+                                                                            <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
+                                                                                <button class="btn btn-danger" data-id="<?=$document['id']?>">
+                                                                                    <i class="fas fa-times"></i>
+                                                                                </button>
+                                                                            <?php endif ?>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr> 
+                                                                <?php endforeach ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
 
                                             </div>
                                         </div>
@@ -756,13 +891,13 @@
                         </div>
                     </div><!-- /.container-fluid -->
             </section>
-
+            <?php if (Utils::permission($_GET['controller'], 'update')) : ?>    
             <div class="row">
                 <div class="col-sm-6 p-3">
                     <button class="btn btn-<?= $employee->status == 1 ? 'danger' : 'success' ?>" id="btn-debaja-empleado" value="<?= $_GET['id']  ?>">Dar de <?= $employee->status == 1 ? 'baja' : 'alta' ?></button>
                 </div>
             </div>
-
+            <?php endif ?>
         </div>
 
     </div>
@@ -772,6 +907,7 @@
 <script type="text/javascript" src="<?= base_url ?>app/RH/incidence.js?v=<?= rand() ?>"></script>
 <script type="text/javascript" src="<?= base_url ?>app/RH/training.js?v=<?= rand() ?>"></script>
 <script type="text/javascript" src="<?= base_url ?>app/RH/contract.js?v=<?= rand() ?>"></script>
+<script type="text/javascript" src="<?= base_url ?>app/RH/employee_RH.js?v=<?= rand() ?>"></script>
 
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', e => {
@@ -976,6 +1112,20 @@
             e.preventDefault();
             employee.updateRe_entry_date();
         });
+		
+		  document.querySelector('#modal-acceso form').addEventListener('submit', e => {
+        e.preventDefault();
+        usuario_rh = new Employee_RH();
+        usuario_rh.Update_UserRH();
+    });
+
+    document.querySelector('#btn-editar-acceso').addEventListener('click', e => {
+        e.preventDefault();
+        $('#modal-acceso').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    })
 
 
 
@@ -1429,7 +1579,7 @@
         document.addEventListener('click', e => {
             if (e.target.classList.contains('btn-watch-photo') || e.target.parentElement.classList.contains('btn-watch-photo')) {
                 let id;
-                if (e.target.classList.contains('btn-edit-photo'))
+                if (e.target.classList.contains('btn-watch-photo'))
                     id = e.target.dataset.id;
                 else
                     id = e.target.parentElement.dataset.id;
@@ -1545,6 +1695,297 @@
 
             if (e.target.classList.contains('btn-delete-photo') || e.target.parentElement.classList.contains('btn-delete-photo')) {
 
+            }
+            e.stopPropagation();
+        })
+		
+		
+        <?php if ($employee->status == 0) : ?>
+            var botones = document.querySelectorAll("button");
+            botones.forEach(function(boton) {
+                if (boton.classList.contains('btn-info') || boton.classList.contains('btn-danger') || boton.classList.contains('btn-orange')) {
+                    boton.remove();
+                }
+            });
+        <?php endif; ?>
+		
+		let cropperr;
+        let optionsDocs = {
+            autoCropArea: 1,
+            //preview:'.previeww',
+            checkOrientation: true,
+            responsive: true
+        };
+
+        $('#modal_documento').on('shown.bs.modal', function() {
+            cropperr = new Cropper(document.querySelector('#modal_documento img'), optionsDocs);
+        }).on('hidden.bs.modal', function(){
+            cropperr.destroy();
+            cropperr = null;
+        });
+
+        document.querySelector('#modal_documento .docs-buttons').onclick = function (event) {
+            var e = event || window.event;
+            var target = e.target || e.srcElement;
+            var cropped;
+            var result;
+            var input;
+            var data;
+        
+            if (!cropperr) {
+            return;
+            }
+        
+            while (target !== this) {
+            if (target.getAttribute('data-method')) {
+                break;
+            }
+        
+            target = target.parentNode;
+            }
+        
+            if (target === this || target.disabled || target.className.indexOf('disabled') > -1) {
+            return;
+            }
+        
+            data = {
+            method: target.getAttribute('data-method'),
+            target: target.getAttribute('data-target'),
+            option: target.getAttribute('data-option') || undefined,
+            secondOption: target.getAttribute('data-second-option') || undefined
+            };
+        
+            cropped = cropperr.cropped;
+        
+            if (data.method) {
+            if (typeof data.target !== 'undefined') {
+                input = document.querySelector(data.target);
+        
+                if (!target.hasAttribute('data-option') && data.target && input) {
+                try {
+                    data.option = JSON.parse(input.value);
+                } catch (e) {
+                    console.log(e.message);
+                }
+                }
+            }
+        
+            switch (data.method) {
+                case 'rotate':
+                if (cropped && optionsDocs.viewMode > 0) {
+                    cropperr.clear();
+                }
+        
+                break;
+            }
+        
+            result = cropperr[data.method](data.option, data.secondOption);
+        
+            switch (data.method) {
+                case 'rotate':
+                if (cropped && optionsDocs.viewMode > 0) {
+                    cropperr.crop();
+                }
+        
+                break;
+        
+                case 'scaleX':
+                case 'scaleY':
+                target.setAttribute('data-option', -data.option);
+                break;
+            }
+        
+            if (typeof result === 'object' && result !== cropperr && input) {
+                try {
+                input.value = JSON.stringify(result);
+                } catch (e) {
+                console.log(e.message);
+                }
+            }
+            }
+        };
+
+        document.querySelectorAll('.content-documentos')[0].parentElement.parentElement.parentElement.children[0].children[1].addEventListener('change', e => {
+            var files = e.target.files;
+            let data = `id_employee=${document.querySelectorAll('#modal_documento form input')[1].value}`;
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '../EmpleadoDocumento/getDocumentosPorCompletar');
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.send(data);
+            xhr.clase = this;
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    let r = this.responseText;
+                    console.log(r);
+                    try {
+                        let json_app = JSON.parse(r);
+                        let data = '';
+                        json_app.forEach(element => {
+                            data += `<option value="${element.Campo}">${element.Descripcion}</option>`;
+                        });
+                        document.querySelector('#modal_documento select').innerHTML = data;
+                    } catch (error) {
+                        utils.showToast('Algo salió mal. Inténtalo de nuevo'+error, 'error');
+                        //form.querySelectorAll('.btn')[1].disabled = false;
+                    }
+                }
+            }
+            
+            var done = function(url){
+                
+                document.querySelector('#modal_documento img').src = url;
+
+                var form = document.querySelector("#modal_documento form");
+                //var formData = new FormData(form);
+                form.querySelectorAll('input')[0].value = 0;
+                form.querySelectorAll('input')[2].value = files[0].name;
+                form.querySelectorAll('input')[4].value = 0;
+
+                form.querySelectorAll('.btn')[3].disabled = false;
+                $('#modal_documento').modal({backdrop: 'static', keyboard: false});
+            };
+
+            if(files && files.length > 0)
+            {
+                reader = new FileReader();
+                reader.onload = function(e)
+                {
+                    done(reader.result);
+                };
+                reader.readAsDataURL(files[0]);
+            }
+        })
+
+        document.querySelectorAll('.content-documentos')[0].addEventListener('click', e => {
+
+            if (e.target.classList.contains('btn-success') || e.target.offsetParent.classList.contains('btn-success')) {
+                let id;
+                if (e.target.classList.contains('btn-success'))
+                    id = e.target.dataset.id;
+                else
+                    id = e.target.offsetParent.dataset.id;
+        
+                let xhr = new XMLHttpRequest();
+                let data = `id=${id}`;
+                let image = document.querySelector('#modal_ver_imagen img');
+                image.style.display = "none";
+                image.src = "";
+                let link = document.querySelector('#modal_ver_imagen a');
+                link.href = "";
+                xhr.open('POST', "../EmpleadoDocumento/getOne");
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        let r = xhr.responseText;
+                        let json_app = JSON.parse(r);
+                        try {
+                            if (json_app.status == 1) {
+                                console.log(json_app);
+                                image.src = json_app.data.image[0];
+                                image.style.display = "block";
+                                link.href = json_app.data.image[0];
+                                link.download = json_app.data.file_name;
+                                $('#modal_ver_imagen').modal('show');
+                            }
+
+                        } catch (error) {
+                            utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                        }
+                    }
+                }
+            }
+
+            if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains('btn-info')) {
+                let id;
+                if (e.target.classList.contains('btn-info'))
+                    id = e.target.dataset.id;
+                else
+                    id = e.target.offsetParent.dataset.id;
+        
+                let xhr = new XMLHttpRequest();
+                let data = `id=${id}`;
+                let form = document.querySelector('#modal_imagen form');
+                form.querySelectorAll('.btn')[3].disabled = false;
+                //let content_imagen = form.querySelector('.imagen');
+                let image = form.querySelector('img');
+                image.style.display = "none";
+                image.src = "";
+                xhr.open('POST', "../EmpleadoDocumento/getOne");
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        let r = xhr.responseText;
+                        try {
+                            let json_app = JSON.parse(r);
+                            if (json_app.status == 1) {
+                                form.querySelectorAll('input')[0].value = json_app.data.id;
+                                form.querySelectorAll('input')[1].value = json_app.data.id_employee;
+                                form.querySelectorAll('input')[2].value = json_app.data.file_name;
+                                form.querySelectorAll('input')[3].value = 1;
+                                /*let image = document.createElement('img');
+                                image.setAttribute('src', json_app);
+                                content_imagen.appendChild(image);*/
+                                image.src = json_app.image[0];
+                                image.style.display = "block";
+                                $('#modal_imagen').modal({
+                                    backdrop: 'static',
+                                    keyboard: false
+                                });
+                                if (image.src == json_app.image[0]) {
+                                    let cropper;
+                                    $('#modal_imagen').on('shown.bs.modal', function() {
+                                        cropper = null;
+                                        cropper = new Cropper(image, {
+                                            movable: true,
+                                            zoomable: true,
+                                            scalable: true,
+                                            viewMode: 0,
+                                            rotatable: true,
+                                            preview: '.preview',
+                                            ready: function(e) {
+                                                document.querySelectorAll('#modal_imagen .btn-primary')[0].addEventListener('click', e => {
+                                                    cropper.rotate(-45);
+                                                })
+
+                                                document.querySelectorAll('#modal_imagen .btn-primary')[1].addEventListener('click', e => {
+                                                    cropper.rotate(45);
+                                                })
+                                            }
+                                        });
+
+                                    }).on('hidden.bs.modal', function() {
+                                        cropper.destroy();
+                                        cropper = null;
+                                    });
+                                }
+
+                            } else {
+                                form.querySelectorAll('input')[0].value = 0;
+                                form.querySelectorAll('input')[1].value = 0;
+                            }
+
+                        } catch (error) {
+                            utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                            console.log(error);
+                        }
+                    }
+                }
+            }
+
+            if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains('btn-danger')) {
+                $('#modal_delete_imagen').modal({backdrop: 'static', keyboard: false});
+                let imagen;
+                if (e.target.classList.contains('btn-danger')){
+                    imagen = e.target.dataset.id;
+                    nombre = e.target.parentElement.parentElement.parentElement.children[0].innerText;
+                }else{
+                    imagen = e.target.offsetParent.dataset.id;
+                    nombre = e.target.parentElement.parentElement.parentElement.parentElement.children[0].innerText;
+                }
+                document.querySelectorAll('#modal_delete_imagen form input[type=hidden]')[0].value = imagen;
+                document.querySelector('#modal_delete_imagen form p').textContent = `¿Estás seguro(a) de que deseas eliminar la imagen ${nombre}?  `;
             }
             e.stopPropagation();
         })

@@ -100,7 +100,7 @@
                           <label for="customer_contact" class="col-form-label">Contacto</label>
                           <select name="customer_contact" id="customer_contact" class="form-control">
                             <?php if (isset($vacante) && is_object($vacante) && !empty($vacante->id_customer)) : ?>
-                              <?= $contacts = Utils::showContactsByCustomer($vacante->id_customer); ?>
+                              <?php $contacts = Utils::showContactsByCustomer($vacante->id_customer); ?>
                               <?php foreach ($contacts as $contact) : ?>
                                 <option value="<?= $contact['id'] ?>" <?= isset($vacante) && is_object($vacante) && $contact['id'] == $vacante->id_customer_contact ? 'selected' : ''; ?>><?= $contact['first_name'] . ' ' . $contact['last_name'] ?></option>
                               <?php endforeach ?>
@@ -117,7 +117,7 @@
                           <label for="business_name" class="col-form-label">Razón social</label>
                           <select name="business_name" id="business_name" class="form-control">
                             <?php if (isset($vacante) && is_object($vacante) && !empty($vacante->id_customer)) : ?>
-                              <?= $BNs = Utils::showBNByCustomer($vacante->id_customer); ?>
+                              <?php $BNs = Utils::showBNByCustomer($vacante->id_customer); ?>
                               <?php foreach ($BNs as $bn) : ?>
                                 <option value="<?= $bn['id'] ?>" <?= isset($vacante) && is_object($vacante) && $bn['id'] == $vacante->id_business_name ? 'selected' : ''; ?>><?= $bn['business_name'] ?></option>
                               <?php endforeach ?>
@@ -166,11 +166,13 @@
                     <div class="col-md-4"  style="<?= Utils::isSalesManager() || Utils::isSales() ? 'display:none'  : '' ?>"><!-- gabo 17 abril quitar a ventas -->
                       <div class="form-group">
                         <label for="type" class="col-form-label">Tipo de vacante</label>
-                        <select name="type" id="type" class="form-control"  style="<?= Utils::isSalesManager()|| Utils::isSales()  ? ''  : 'required' ?>">
+                        <select name="type" id="type" class="form-control"  style="<?= Utils::isSalesManager()|| Utils::isSales()  ? 'required'  : 'required' ?>" required>
                           <option disabled selected>Selecciona el tipo</option>
                           <option value="1" <?= isset($vacante) && is_object($vacante) && $vacante->type == 1 ? 'selected' : ''; ?>>Operativa</option>
                           <option value="2" <?= isset($vacante) && is_object($vacante) && $vacante->type == 2 ? 'selected' : ''; ?>>Orden Común</option>
                           <option value="3" <?= isset($vacante) && is_object($vacante) && $vacante->type == 3 ? 'selected' : '' ?>>Head Hunting</option>
+							                            
+
                         </select>
                       </div>
                     </div>
@@ -211,7 +213,7 @@
                         <label for="subarea" class="col-form-label">Subarea</label>
                         <select name="subarea" id="subarea" class="form-control select2" required>
                           <?php if (isset($vacante) && is_object($vacante) && !empty($vacante->id_area)) : ?>
-                            <?= $subareas = Utils::showSubareasByArea($vacante->id_area); ?>
+                            <?php $subareas = Utils::showSubareasByArea($vacante->id_area); ?>
                             <?php foreach ($subareas as $subarea) : ?>
                               <option value="<?= $subarea['id'] ?>" <?= isset($vacante) && is_object($vacante) && $subarea['id'] == $vacante->id_subarea ? 'selected' : ''; ?>><?= $subarea['subarea'] ?></option>
                             <?php endforeach ?>
@@ -275,7 +277,7 @@
                         <label for="city" class="col-form-label">Ciudad</label>
                         <select name="city" id="city" class="form-control select2" required>
                           <?php if (isset($vacante) && is_object($vacante) && !empty($vacante->id_state)) : ?>
-                            <?= $cities = Utils::showCitiesByState($vacante->id_state); ?>
+                            <?php $cities = Utils::showCitiesByState($vacante->id_state); ?>
                             <?php foreach ($cities as $city) : ?>
                               <option value="<?= $city['id'] ?>" <?= isset($vacante) && is_object($vacante) && $city['id'] == $vacante->id_city ? 'selected' : ''; ?>><?= $city['city'] ?></option>
                             <?php endforeach ?>
@@ -303,12 +305,21 @@
                       <div class="form-group">
                         <label for="salary" class="col-form-label">Sueldo base mensual:</label>
                         <div class="row">
-                          <div class="col-md-6">
+                          <div class="col-md-4">
                             <input type="number" name="salary_min" id="salary_min" class="form-control" placeholder="Mínimo" min="0" value="<?= isset($vacante) && is_object($vacante) ? round($vacante->salary_min) : ''; ?>">
                           </div>
-                          <div class="col-md-6">
+                          <div class="col-md-4">
                             <input type="number" name="salary_max" id="salary_max" class="form-control" placeholder="Máximo" min="0" value="<?= isset($vacante) && is_object($vacante) ? round($vacante->salary_max) : ''; ?>">
                           </div>
+							 <div class="col-md-4">
+                            <div class="row" style=" margin:0 auto;width:50%">
+                              <input type="checkbox" name="telephone" style="width:35%" id="telephone" class="form-control " <?= isset($vacante) && is_object($vacante) && $vacante->telephoneCheck == 1 ? '' : 'checked'; ?>>
+                              <label for="working_day" style="left:-2rem" class="col-form-label">Sin
+                                teléfono</label>
+
+                            </div>
+                          </div>
+
                         </div>
                       </div>
                     </div>
@@ -565,11 +576,34 @@
                 </div>
               </div>
 				<?php endif;  ?>
+ <!-- gabo 29 sept -->
+                            <?php if (Utils::isAdmin()) :  ?>
+                            <div class="card card-red">
+                                <div class="card-header">
+                                    <h4 class="card-title">
+                                        Notas
+                                    </h4>
+                                </div>
 
+                                <input type="hidden" name='id_vacancy' id="id_vacancy" value='<?= $_GET['id'] ?>'>
+                                <div class="card-body">
+                                    <!-- <div class="row " style="margin-bottom:0.6rem; border:1px solid #98AE98 ; border-radius:15px;padding:1rem"> -->
+                                    <div class="row " style="margin-bottom:0.6rem;padding:1rem">
+                                        <div class="col-md-12">
+                                            <textarea class="form-control" name="notes" id="notes" rows="15"
+                                                style="width: 100%;"><?= $vacante->notes ?></textarea>
+                                        </div>
+                                    </div>
+                                        <div class="text-right">
+                                        <button id="save_notes" class="btn btn-success">Guardar Notas</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endif;  ?>
 				
                 <div class="card-footer">
                 <div class="row">
-                  <div class="col-4">
+                  <div class="col-2">
                     <a class="btn btn-secondary float-left" href="<?= base_url ?>vacante/index">Regresar</a>
                   </div>
                   <div class="col-4 text-center">
@@ -577,7 +611,14 @@
                       <a href="<?= base_url ?>vacante/vacantePDF&id=<?= $_GET['id'] ?>" target="_blank" class="btn btn-orange text-bold">Descargar propuesta</a>
                     <?php endif; ?>
                   </div>
-                  <div class="col-4">
+					
+					<div class="col-4 text-center">
+                    <?php if ((!Utils::isCustomer() || !Utils::isCustomerSA()) && isset($_GET['id'])) : ?>
+                      <a href="<?= base_url ?>vacante/entregableVacante&id=<?= $_GET['id'] ?>" target="_blank" class="btn btn-success text-bold">Descargar Entregable</a>
+                    <?php endif; ?>
+                  </div>
+					
+                  <div class="col-2">
                     <?php if (isset($_GET['id']) && isset($vacante) && is_object($vacante)) : ?>
                       <button type="submit" class="btn btn-info float-right" id="editSubmit">Editar vacante</button>
                     <?php else : ?>
@@ -600,6 +641,18 @@
 <script src="<?= base_url ?>app/vacancy.js?v=<?= rand() ?>"></script>
 <script src="<?= base_url ?>app/recruitercustomers.js?v=<?= rand() ?>"></script>
 <script>
+
+	//gabo 29sept
+document.querySelector("#save_notes").addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector("#save_notes").disabled = true;
+ 
+    let vacancy = new Vacancy();
+    vacancy.save_notes();
+
+});
+	
+	
   document.querySelector('#customer').onchange = function() {
     let contact = new CustomerContact();
     contact.getContacts();

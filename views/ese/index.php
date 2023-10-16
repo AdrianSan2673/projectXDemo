@@ -48,7 +48,7 @@
       </div>
     </section>
     <?php endif ?>
-    <?php if (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isManager() || Utils::isAccount()||Utils::isAccount() ): ?>
+    <?php if (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isManager() || Utils::isAccount()||$_SESSION['identity']->username == 'usuarioingenia' ): ?>
       <section class="content-header">
         <div class="row">
           <div class="col-sm-2 ml-auto">

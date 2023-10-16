@@ -11,6 +11,7 @@
       </div>
     </div><!-- /.container-fluid -->
   </section>
+  <?php if (Utils::permission($_GET['controller'], 'create')) : ?>
   <section class="content-header">
     <div class="row">
       <div class="col-sm-2 ml-auto">
@@ -18,13 +19,14 @@
       </div>
     </div>
   </section>
+  <?php endif ?>
   <section class="content">
-  
-  <div class="row mt-3 " id="all_departments">
+
+    <div class="row mt-3 " id="all_departments">
       <?php foreach ($departamentos as $department) : ?>
         <div class="col-md-4 ">
           <div class="small-box bg-info">
-              <button class="btn text-white btn-delete" value="<?= Encryption::encode($department['id'])?>" <?= $department['no_employees']==0 || $department['no_positions']==0?'':'hidden' ?>>X</button>
+            <button class="btn text-white btn-delete" value="<?= Encryption::encode($department['id']) ?>">X</button>
             <div class="inner">
               <h4><?= $department['department'] ?></h4>
               <div class="row">
@@ -36,10 +38,12 @@
                 </div>
               </div>
             </div>
+            <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
             <a class="small-box-footer" href="<?= base_url ?>departamento/ver&id=<?= Encryption::encode($department['id']) ?>">
               Ver
               <i class="fas fa-arrow-circle-right"></i>
             </a>
+            <?php endif ?>
           </div>
         </div>
       <?php endforeach ?>
@@ -53,9 +57,25 @@
 
 <script>
   document.querySelector('#all_departments').addEventListener('click', function(e) {
-    let departamento = new Department();
+
     if (e.target.classList.contains('btn-delete')) {
-      departamento.delet(e.target.value);
+      Swal.fire({
+        title: '¿Quieres eliminar este departamento?',
+        text: "Si se elimina el departamento, los puestos que fueron asignados a este departamento aún se veran con su departamento asignado.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Eliminar'
+      }).then((result) => {
+        if (result.value == true) {
+          let departamento = new Department();
+          departamento.delet(e.target.value);
+        }
+      })
     }
+
+
   })
 </script>

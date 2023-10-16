@@ -1,3 +1,22 @@
+<style>
+    .emoji-radio {
+        display: inline-block;
+    }
+
+    .emoji-radio input[type="radio"] {
+        display: none;
+    }
+
+    .emoji-radio label {
+        font-size: 80px;
+        cursor: pointer;
+        padding: 70px;
+    }
+
+    .emoji-radio input[type="radio"]:checked+label {
+        background-color: #ffeeba;
+    }
+</style>
 <div class="modal fade" id="modal_encuesta">
     <div class="modal-dialog modal-lg" style="max-width: 800px;">
         <div class="modal-content">
@@ -9,11 +28,25 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="ID_Empresa" value="<?=isset($_SESSION['Encuesta']) ? $_SESSION['Encuesta']->ID_Empresa : NULL?>">
-                    <input type="hidden" name="ID_Cliente" value="<?=isset($_SESSION['Encuesta']) ? $_SESSION['Encuesta']->ID_Cliente : NULL?>">
-                    <input type="hidden" name="ID_Cliente_Reclu" value="<?=isset($_SESSION['Encuesta']) ? $_SESSION['Encuesta']->ID_Cliente_Reclu : NULL?>">
-                    <input type="hidden" name="Usuario" value="<?=isset($_SESSION['Encuesta']) ? $_SESSION['Encuesta']->Usuario : NULL?>">
-                    <div class="form-group">
+                    <input type="hidden" name="ID_Empresa" value="<?= isset($_SESSION['Encuesta']) ? $_SESSION['Encuesta']->ID_Empresa : NULL ?>">
+                    <input type="hidden" name="ID_Cliente" value="<?= isset($_SESSION['Encuesta']) ? $_SESSION['Encuesta']->ID_Cliente : NULL ?>">
+                    <input type="hidden" name="ID_Cliente_Reclu" value="<?= isset($_SESSION['Encuesta']) ? $_SESSION['Encuesta']->ID_Cliente_Reclu : NULL ?>">
+                    <input type="hidden" name="Usuario" value="<?= isset($_SESSION['Encuesta']) ? $_SESSION['Encuesta']->Usuario : NULL ?>">
+                    <div class="form-group text-center">
+                        <label class="col-form-label" style="font-size: 0.8rem;">¿Cómo te has sentido con nuestro servicio?</label>
+                        <br>
+                        <div class="emoji-radio">
+                            <input type="radio" id="Experiencia1" name="Experiencia" value="1" required>
+                            <label for="Experiencia1">&#128542;</label>
+
+                            <input type="radio" id="Experiencia2" name="Experiencia" value="2">
+                            <label for="Experiencia2">&#128528;</label>
+
+                            <input type="radio" id="Experiencia3" name="Experiencia" value="3">
+                            <label for="Experiencia3">&#129321;</label>
+                        </div>
+                    </div>
+                    <!--<div class="form-group">
                         <label class="col-form-label" style="font-size: 0.8rem;">¿Qué tan agradable es tu experiencia con nosotros?</label>
                         <div class="cc-selector-2">
                             <input id="experiencia1" type="radio" name="Experiencia" value="1" required />
@@ -72,11 +105,12 @@
                             <input id="resolucion5" type="radio" name="Resolucion" value="5" />
                             <label class="drinkcard-cc tacuerdo" for="resolucion5"></label>  
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label" style="font-size: 0.8rem;">¿Qué nos sugieres mejorar de nuestro servicio en general?</label>
+                    </div> -->
+                    <div class="form-group text-center">
+                        <label class="col-form-label" style="font-size: 0.8rem;">Escríbenos tus comentarios</label>
+                        <!-- <label class="col-form-label" style="font-size: 0.8rem;">¿Qué nos sugieres mejorar de nuestro servicio en general?</label> -->
                         <textarea class="form-control" name="Comentarios" rows="5"></textarea>
-                    </div>        
+                    </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -84,20 +118,24 @@
                 </div>
             </form>
         </div>
-    </div>              
+    </div>
 </div>
-<?php if ($_GET['controller'] != 'ServicioApoyo' && $_GET['action'] != 'crear'): ?>
-    <script type="text/javascript" src="<?=base_url?>app/cliente.js?v=<?=rand()?>"></script>
+<?php if ($_GET['controller'] != 'ServicioApoyo' && $_GET['action'] != 'crear') : ?>
+    <script type="text/javascript" src="<?= base_url ?>app/cliente.js?v=<?= rand() ?>"></script>
 <?php endif ?>
-<?php if (isset($_SESSION['Encuesta'])): ?>
+<?php if (isset($_SESSION['Encuesta']) && $_SESSION['Encuesta']->status == 1) : ?>
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', e => {
-            $('#modal_encuesta').modal({backdrop: 'static', keyboard: false});
-            document.querySelector('#modal_encuesta form').onsubmit = function(e){
+            $('#modal_encuesta').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            document.querySelector('#modal_encuesta form').onsubmit = function(e) {
                 e.preventDefault();
                 let cliente = new Cliente();
                 cliente.save_encuesta();
             }
         })
     </script>
+    <?php $_SESSION['Encuesta']->status = 0 ?>
 <?php endif ?>

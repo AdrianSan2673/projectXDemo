@@ -21,7 +21,7 @@ class Resume extends FPDF
 		$this->setTextColor(38, 48, 76);
 
 		$this->ClippingCircle(147, 138, 63, false);
-		$this->Image($route, 84, 75, 126, 126);
+		$this->Image($route, 84, 75, 126, 126, 'png');
 		$this->UnsetClipping();
 
 		$y = 220;
@@ -34,7 +34,7 @@ class Resume extends FPDF
 		$y = $this->GetY() + 8;
 		$this->setXY(48, $y);
 		$this->MultiCell(192, 12, utf8_encode(strtoupper($candidato->job_title)), 0, 'C');
-		if (!is_null($candidato->description) && !empty($candidato->description)) {
+		if (isset($candidato->description) && !is_null($candidato->description) && !empty($candidato->description)) {
 			$this->setTextColor(150, 150, 150);
 			$this->setFont('SinkinSans', 'BU', 11);
 			$y = $this->GetY() + 20;
@@ -60,28 +60,28 @@ class Resume extends FPDF
 			$this->setTextColor(38, 48, 76);
 			$this->setFont('SinkinSans', '', 7);
 			
-			if (!is_null($candidato->telephone) && !empty($candidato->telephone)) {
+			if (isset($candidato->telephone) && !is_null($candidato->telephone) && !empty($candidato->telephone)) {
 				$y = $this->GetY() + 10;
 				$this->setXY(71, $y);
 				$this->Image('dist/img/resume-icons/phone.png', 58, $y, 8);
 				$this->Cell(80, 10, utf8_encode($candidato->telephone), 0, 1, 'L');
 			}
 			
-			if (!is_null($candidato->email) && !empty($candidato->email)) {
+			if (isset($candidato->email) && !is_null($candidato->email) && !empty($candidato->email)) {
 				$y += 15;
 				$this->setXY(71, $y);
 				$this->Image('dist/img/resume-icons/mail.png', 58, $y, 8);
 				$this->MultiCell(140, 10, utf8_encode($candidato->email), 0, 'L');
 			}
 
-			if (!is_null($candidato->state) && !empty($candidato->state)) {
+			if (isset($candidato->state) && !is_null($candidato->state) && !empty($candidato->state)) {
 				$y = $this->GetY() + 8;
 				$this->setXY(71, $y);
 				$this->Image('dist/img/resume-icons/location.png', 58, $y, 8);
 				$this->Cell(80, 10, ($candidato->city.', '.$candidato->state), 0, 1, 'L');	
 			}
 
-			if (!is_null($candidato->linkedinn) && !empty($candidato->linkedinn)) {
+			if (isset($candidato->linkedinn) && !is_null($candidato->linkedinn) && !empty($candidato->linkedinn)) {
 				$y += 15;
 				$this->setXY(71, $y);
 				$this->Image('dist/img/resume-icons/linkedin.png', 58, $y, 8);
@@ -89,7 +89,7 @@ class Resume extends FPDF
 				$this->MultiCell(140, 10, utf8_encode($candidato->linkedinn), 0, 'L');
 			}
 
-			if (!is_null($candidato->facebook) && !empty($candidato->facebook)) {
+			if (isset($candidato->facebook) && !is_null($candidato->facebook) && !empty($candidato->facebook)) {
 				$y = $this->GetY() + 8;
 				$this->setXY(71, $y);
 				$this->Image('dist/img/resume-icons/facebook.png', 58, $y, 8);
@@ -97,7 +97,7 @@ class Resume extends FPDF
 				$this->MultiCell(140, 10, utf8_encode($candidato->facebook), 0, 'L');
 			}
 
-			if (!is_null($candidato->instagram) && !empty($candidato->instagram)) {
+			if (isset($candidato->instagram) && !is_null($candidato->instagram) && !empty($candidato->instagram)) {
 				$y = $this->GetY() + 8;
 				$this->setXY(71, $y);
 				$this->Image('dist/img/resume-icons/instagram.png', 58, $y, 8);

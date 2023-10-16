@@ -1,30 +1,44 @@
 <?php
 
 require_once 'models/SA/Investigacion_Laboral.php';
+require_once 'models/SA/CandidatosDatos.php';
 
-class InvestigacionLaboralController{
+class InvestigacionLaboralController
+{
 
-    public function getOne(){
+    public function getOne()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics()) {
             $Folio = Utils::sanitizeNumber($_POST['Folio']);
 
             if ($Folio) {
+                $candidato = new CandidatosDatos();
+                $candidato->setCandidato($Folio);
+                $candidato_datos = $candidato->getOne();
+
                 $inv = new Investigacion_Laboral();
                 $inv->setCandidato($Folio);
                 $data = $inv->getOne();
 
                 if ($data) {
                     header('Content-Type: text/html; charset=utf-8');
-                    echo json_encode($data, \JSON_UNESCAPED_UNICODE);
-                } else echo 0;
-                
-            }else 
+                    echo json_encode(array(
+                        'data' => $data,
+                        'candidato_datos' => $candidato_datos,
+                        'status' => 1
+                    ), \JSON_UNESCAPED_UNICODE);
+                } else echo json_encode(array(
+                    'candidato_datos' => $candidato_datos,
+                    'status' => 2
+                ), \JSON_UNESCAPED_UNICODE);
+            } else
                 echo 0;
         } else
-            header('location:'.base_url);
+            header('location:' . base_url);
     }
 
-    public function save(){
+    public function save()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics()) {
             $Candidato = Utils::sanitizeNumber($_POST['Folio']);
             $Circunstancias_Laborales = Utils::sanitizeString($_POST['Circunstancias_Laborales']);
@@ -40,14 +54,19 @@ class InvestigacionLaboralController{
             $Puesto_Sindical = Utils::sanitizeStringBlank($_POST['Puesto_Sindical']);
             $Funciones_Sindicato = Utils::sanitizeStringBlank($_POST['Funciones_Sindicato']);
             $Tiempo_Sindicato = Utils::sanitizeStringBlank($_POST['Tiempo_Sindicato']);
-           $Trabajo_Ternium = Utils::sanitizeString($_POST['Trabajo_Ternium']);
-            $Alta_Ternium =  $Trabajo_Ternium=='No'? 'No aplica':Utils::sanitizeString($_POST['Alta_Ternium']);
-            $Veto_Ternium =  $Trabajo_Ternium=='No'? 'No aplica':Utils::sanitizeString($_POST['Veto_Ternium']);
+            $Trabajo_Ternium = Utils::sanitizeString($_POST['Trabajo_Ternium']);
+            $Alta_Ternium =  $Trabajo_Ternium == 'No' ? 'No aplica' : Utils::sanitizeString($_POST['Alta_Ternium']);
+            $Veto_Ternium =  $Trabajo_Ternium == 'No' ? 'No aplica' : Utils::sanitizeString($_POST['Veto_Ternium']);
 
-            $Positivo_Antidoping = Utils::sanitizeString($_POST['Positivo_Antidoping']);
-            $Sustancia_Antidoping = Utils::sanitizeString($_POST['Sustancia_Antidoping']);
-            $Accidentes_Empresa = Utils::sanitizeString($_POST['Accidentes_Empresa']);
-            $Abandono_Unidad = Utils::sanitizeString($_POST['Abandono_Unidad']); 
+            $Positivo_Antidoping =  isset($_POST['Positivo_Antidoping'])? Utils::sanitizeString($_POST['Positivo_Antidoping']):null;
+            $Sustancia_Antidoping = isset($_POST['Sustancia_Antidoping'])? Utils::sanitizeString($_POST['Sustancia_Antidoping']):null;
+            $Accidentes_Empresa =isset($_POST['Accidentes_Empresa'])? Utils::sanitizeString($_POST['Accidentes_Empresa']):null;
+            $Abandono_Unidad = isset($_POST['Abandono_Unidad'])?Utils::sanitizeString($_POST['Abandono_Unidad']):null;
+            
+            $Familiar_Empresa =isset($_POST['Familiar_Empresa'])? Utils::sanitizeString($_POST['Familiar_Empresa']):null;
+
+            $Reingreso =isset($_POST['Reingreso'])? Utils::sanitizeString($_POST['Reingreso']):null;
+
             $flag = $_POST['flag'];
 
             if ($Candidato) {
@@ -75,23 +94,23 @@ class InvestigacionLaboralController{
                 $investigacion->setSustancia_Antidoping($Sustancia_Antidoping);
                 $investigacion->setAccidentes_Empresa($Accidentes_Empresa);
                 $investigacion->setAbandono_Unidad($Abandono_Unidad);
-				
+                $investigacion->setFamiliar_Empresa($Familiar_Empresa);
+                $investigacion->setReingreso($Reingreso);
+
                 if ($flag == 1)
                     $save = $investigacion->update();
                 else
                     $save = $investigacion->create();
-                    
+
                 if ($save) {
                     $investigacion = $investigacion->getOne();
                     $investigacion->status = 1;
                     $investigacion->display = Utils::getDisplayBotones();
                     echo json_encode($investigacion);
-                }
-                else echo json_encode(array('status' => 2));
-
-            }else
+                } else echo json_encode(array('status' => 2));
+            } else
                 echo json_encode(array('status' => 0));
         } else
-            header('location:'.base_url);
+            header('location:' . base_url);
     }
 }

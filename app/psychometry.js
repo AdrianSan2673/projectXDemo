@@ -158,4 +158,139 @@ class Psychometry{
             }
         }
     }
+	
+	
+
+
+
+    //gabo psycho
+    save_interpretation() {
+
+        var form = document.querySelector("#interpretation-form");
+        var formData = new FormData(form);
+
+
+        fetch('../psicometria/update_interpretation', {
+            method: 'POST',
+            body: formData
+        })
+
+            .then(response => {
+                //   console.log(response.json());
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('Network response was not ok.');
+                }
+            })
+            .then(r => {
+
+                try {
+                    const json_app = JSON.parse(r);
+                    if (json_app.status == 0) {
+                        utils.showToast('Llena todos los campos requeridos por favor', 'error');
+                        document.querySelector("#guardar_interpretacion").disabled = false;
+
+                    } else if (json_app.status == 1) {
+                        utils.showToast('La información se ha actualizado correctamente', 'success');
+                        document.querySelector("#guardar_interpretacion").disabled = false;
+
+                    } else if (json_app.status == 2) {
+                        utils.showToast(' No se pudo guardar la informacion', 'error');
+                        document.querySelector("#guardar_interpretacion").disabled = false;
+
+
+                    }
+                } catch (error) {
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                    document.querySelector("#guardar_interpretacion").disabled = false;
+
+
+                }
+            })
+            .catch(error => {
+                utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                document.querySelector("#guardar_interpretacion").disabled = false;
+
+            });
+    }
+
+
+    upload_file() {
+
+        var form = document.querySelector("#form-document");
+        var formData = new FormData(form);
+
+
+        fetch('../psicometria/upload_file', {
+            method: 'POST',
+            body: formData
+        })
+
+            .then(response => {
+                //  console.log(response.json());
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('Network response was not ok.');
+                }
+            })
+            .then(r => {
+
+                try {
+
+                    let json_app = JSON.parse(r);
+                    console.log(json_app);
+                    if (json_app.status == 0) {
+                        utils.showToast('Omitiste algún dato', 'error');
+                    } else if (json_app.status == 1) {
+
+
+                        var div = `
+                  <div class="col-8">
+                  <label for="psycho" class="col-form-label">Documento Cargado:</label>
+                  <a class="btn-success btn" href="${json_app.routeDocu}" target="_blank">Ver
+                      psicometria</a>
+                 </div>
+                 <br>
+                  
+                  `;
+
+                        document.querySelector('#documento_cargado').innerHTML = div;
+
+                        utils.showToast('Archivo  agregado.', 'success');
+
+                    } else if (json_app.status == 2) {
+                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                    } else {
+                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                    }
+
+
+
+
+
+
+
+
+                } catch (error) {
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                    document.querySelector("#guardar_interpretacion").disabled = false;
+
+
+                }
+            })
+            .catch(error => {
+                utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                document.querySelector("#guardar_interpretacion").disabled = false;
+
+            });
+    }
+	
+	
+	
+	
+	
+	
+	
 }

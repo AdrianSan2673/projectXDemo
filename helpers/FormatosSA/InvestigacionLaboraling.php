@@ -32,15 +32,21 @@ class InvestigacionLaboraling extends ESEINGE
 		$this->setTextColor(51, 54, 79);
 		$y = $this->GetY() + 70;
 		$this->SetXY($x, $y);
-		$this->Write(15, 'PARA:');
+		$this->Write(15, 'FOR:');
 
 		$x1 = $this->GetX() + 20;
 		$this->SetX($x1);
-		$this->MultiCell(200, 20, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' ? $candidato->Nombre_Cliente : ($candidato->ID_Empresa == 315 ? $candidato->Nombre_Cliente : $candidato->Empresa)))), 1, 'L');
+if ($this->id_cliente == 662 || $this->id_cliente == 668 || $this->id_cliente == 599) { //Formato RADEC
+			$this->MultiCell(180, 20, utf8_encode($candidato->Nombre_Cliente), 1, 'L');
+		} else if ($candidato->Cliente == 366 || $this->id_cliente == 673) {
+			$this->MultiCell(200, 20, utf8_encode($candidato->Nombre_Cliente), 1, 'L');
+		} else {
+			$this->MultiCell(200, 20, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' || $candidato->Empresa == 'DUCTOS DEL ALTIPLANO SA DE CV' ? $candidato->Nombre_Cliente : ($candidato->ID_Empresa == 315 ? $candidato->Nombre_Cliente : $candidato->Empresa)))), 1, 'L');
+		}
 
 		$x1 = 306;
 		$this->SetXY($x1, $y);
-		$this->Write(15, 'DE:');
+		$this->Write(15, 'OF:');
 
 		$x1 = $this->GetX() + 20;
 		$this->SetX($x1);
@@ -160,12 +166,17 @@ class InvestigacionLaboraling extends ESEINGE
 		$this->setTextColor(160, 160, 160);
 		$y = $this->GetY() + 5;
 		$this->SetXY($x, $y);
-		$this->MultiCell(46, 15, 'Empresa', 0, 'L', false);
+		$this->MultiCell(46, 15, 'Company', 0, 'L', false);
 
 		$this->setFont('SinkinSans', '', 6.5);
 		$this->setTextColor(0, 0, 0);
 		$this->setXY(75, $y);
-		$this->MultiCell(410, 18, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' ? $candidato->Nombre_Cliente : ($candidato->ID_Empresa == 315 ? $candidato->Nombre_Cliente : $candidato->Empresa)))), 0, 'C', true);
+	if($candidato->Cliente ==366||$candidato->Cliente ==626  || $candidato->Cliente ==668  || $this->id_cliente == 673|| $this->id_cliente == 599){
+
+			$this->MultiCell(410, 18, utf8_encode( $candidato->Nombre_Cliente), 0, 'C', true);
+		}else{
+			$this->MultiCell(410, 18, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' || $candidato->Empresa == 'DUCTOS DEL ALTIPLANO SA DE CV' ? $candidato->Nombre_Cliente : ($candidato->ID_Empresa == 315 ? $candidato->Nombre_Cliente : $candidato->Empresa)))), 0, 'C', true);
+		}
 
 
 		$this->setFont('SinkinSans', 'B', 6.5);

@@ -5,14 +5,14 @@
 // Sidebar Color
 @mixin sidebar-color($color) {
   .nav-sidebar > .nav-item {
-    > .nav-link.active {
+    & > .nav-link.active {
       background-color: $color;
       color: color-yiq($color);
     }
   }
 
   .nav-sidebar.nav-legacy > .nav-item {
-    > .nav-link.active {
+    & > .nav-link.active {
       border-color: $color;
     }
   }
@@ -54,24 +54,18 @@
     .nav-sidebar .nav-link p,
     .brand-text {
       margin-left: -10px;
-      animation-name: fadeOut;
-      animation-duration: $transition-speed;
-      animation-fill-mode: both;
+      opacity: 0;
       visibility: hidden;
     }
 
     .logo-xl {
-      animation-name: fadeOut;
-      animation-duration: $transition-speed;
-      animation-fill-mode: both;
+      opacity: 0;
       visibility: hidden;
     }
 
     .logo-xs {
       display: inline-block;
-      animation-name: fadeIn;
-      animation-duration: $transition-speed;
-      animation-fill-mode: both;
+      opacity: 1;
       visibility: visible;
     }
 
@@ -114,16 +108,12 @@
         .logo-xl {
           display: inline-block;
           margin-left: 0;
-          animation-name: fadeIn;
-          animation-duration: $transition-speed;
-          animation-fill-mode: both;
+          opacity: 1;
           visibility: visible;
         }
 
         .logo-xs {
-          animation-name: fadeOut;
-          animation-duration: $transition-speed;
-          animation-fill-mode: both;
+          opacity: 0;
           visibility: hidden;
         }
 
@@ -136,7 +126,7 @@
         .sidebar-form,
         .user-panel > .info {
           display: block !important;
-          transform: translateZ(0);
+          -webkit-transform: translateZ(0);
         }
 
         .nav-sidebar > .nav-item > .nav-link > span {
