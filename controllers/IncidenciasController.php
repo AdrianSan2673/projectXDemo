@@ -1,3 +1,4 @@
+
 <?php
 require_once 'models/User.php';
 require_once 'models/SA/ContactosEmpresa.php';
@@ -27,15 +28,11 @@ class IncidenciasController
                 $ID_Contacto = $contactoEmpresa->getContactoPorUsuario()->ID;
 
                 $employeeObj = new Employees();
-                $employeeObj->setCliente($_SESSION['id_cliente']);
                 $employeeObj->setID_Contacto($ID_Contacto);
                 $employeeObj->setStatus(1);
-                $employees = $employeeObj->getAllEmployeesByCliente();
-                $incidens = $employeeObj->getAllEmployeesIncidenceByCliente();
-
-   
+                $incidens = $employeeObj->getAllEmployeesIncidenceByIDcontacto();
+                $employees = $employeeObj->getAllEmployeesByIDcontacto();
             }
-
 
             $page_title = 'Incidencias | RRHH Ingenia';
             require_once 'views/layout/header.php';
@@ -123,6 +120,7 @@ class IncidenciasController
     public function save_index()
     {
         if (Utils::isAdmin() || Utils::isCustomerSA()) {
+          
             if (isset($_POST['created_at']) && isset($_POST['end_date'])) {
                 if ($_POST['created_at'] > $_POST['end_date']) {
                     $aux = $_POST['created_at'];
@@ -164,10 +162,10 @@ class IncidenciasController
                 $contactoEmpresa->setUsuario($_SESSION['identity']->username);
                 $ID_Contacto = $contactoEmpresa->getContactoPorUsuario()->ID;
                 $employeeObj = new Employees();
-                $employeeObj->setCliente($_SESSION['id_cliente']);
+                $employeeObj->setID_Contacto($ID_Contacto);
                 $employeeObj->setStatus(1);
 
-                $employeeIncidence = $employeeObj->getAllEmployeesIncidenceByIDCliente();
+                $employeeIncidence = $employeeObj->getAllEmployeesIncidenceByIDcontacto();
 
                 for ($i = 0; $i < count($employeeIncidence); $i++) {
                     $employeeIncidence[$i]['id_employe'] = base_url . 'empleado/ver&id=' . Encryption::encode($employeeIncidence[$i]['id_employe']);
@@ -184,12 +182,9 @@ class IncidenciasController
                         $employeeIncidence[$i]['type_incident'] = $employeeIncidence[$i]['type_of_incapacity'];
                     } else if ($employeeIncidence[$i]['type'] == 'Bonos') {
                         $employeeIncidence[$i]['type_incident'] = '$' . number_format($employeeIncidence[$i]['amount'], 2);
-                    }
-                    //===[gabo 8 junio incidencias]===
-                    else if ($employeeIncidence[$i]['type'] == 'Permiso') {
+                    } else if ($employeeIncidence[$i]['type'] == 'Permiso') {
                         $employeeIncidence[$i]['type_incident'] = $employeeIncidence[$i]['permission'];
                     }
-                    //===[gabo 8 junio incidencias]===
                 }
 
                 echo json_encode(array(
@@ -236,7 +231,7 @@ class IncidenciasController
             $ID_Contacto = $contactoEmpresa->getContactoPorUsuario()->ID;
 
             $employeeObj = new Employees();
-            $employeeObj->setCliente($_SESSION['id_cliente']);
+            $employeeObj->setID_Contacto($ID_Contacto);
             $employeeObj->setStatus(1);
 
             $id = Encryption::decode($_POST['id']);
@@ -247,7 +242,7 @@ class IncidenciasController
                 $employeeIncidenceObj->setId($id);
                 if ($flag == 1) {
                     $employeeIncidenceObj->delete();
-                    $employeeIncidence = $employeeObj->getAllEmployeesIncidenceByCliente();
+                    $employeeIncidence = $employeeObj->getAllEmployeesIncidenceByIDcontacto();
 
                     for ($i = 0; $i < count($employeeIncidence); $i++) {
                         $employeeIncidence[$i]['id_employe'] = base_url . 'empleado/ver&id=' . Encryption::encode($employeeIncidence[$i]['id_employe']);

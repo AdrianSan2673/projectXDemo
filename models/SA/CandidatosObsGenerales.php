@@ -24,16 +24,6 @@ class CandidatosObsGenerales{
 	private $Referencias_Vecinales;
 	private $Viabilidad;
 
-	private $Puntualidad;
-	private $Naturalidad;
-	private $Respuestas_Claras;
-
-	private $Proporciona_Contacto;
-    private $Informacion_Congruente;
-    private $Factor_Riesgo;
-    private $Cual_Factor_Riesgo;
-    private $Estabilidad_Laboral;
-
     public function __construct() {
         $this->db = Connection::connectSA();
     }
@@ -197,70 +187,6 @@ class CandidatosObsGenerales{
 	public function setViabilidad($Viabilidad){
 		$this->Viabilidad = $Viabilidad;
 	}
-
-	public function getPuntualidad(){
-		return $this->Puntualidad;
-	}
-
-	public function setPuntualidad($Puntualidad){
-		$this->Puntualidad = $Puntualidad;
-	}
-
-	public function getNaturalidad(){
-		return $this->Naturalidad;
-	}
-
-	public function setNaturalidad($Naturalidad){
-		$this->Naturalidad = $Naturalidad;
-	}
-
-	public function getRespuestas_Claras(){
-		return $this->Respuestas_Claras;
-	}
-
-	public function setRespuestas_Claras($Respuestas_Claras){
-		$this->Respuestas_Claras = $Respuestas_Claras;
-	}
-
-	public function getProporciona_Contacto(){
-		return $this->Proporciona_Contacto;
-	}
-
-	public function setProporciona_Contacto($Proporciona_Contacto){
-		$this->Proporciona_Contacto = $Proporciona_Contacto;
-	}
-
-	public function getInformacion_Congruente(){
-		return $this->Informacion_Congruente;
-	}
-
-	public function setInformacion_Congruente($Informacion_Congruente){
-		$this->Informacion_Congruente = $Informacion_Congruente;
-	}
-
-	public function getFactor_Riesgo(){
-		return $this->Factor_Riesgo;
-	}
-
-	public function setFactor_Riesgo($Factor_Riesgo){
-		$this->Factor_Riesgo = $Factor_Riesgo;
-	}
-
-	public function getCual_Factor_Riesgo(){
-		return $this->Cual_Factor_Riesgo;
-	}
-
-	public function setCual_Factor_Riesgo($Cual_Factor_Riesgo){
-		$this->Cual_Factor_Riesgo = $Cual_Factor_Riesgo;
-	}
-
-	public function getEstabilidad_Laboral(){
-		return $this->Estabilidad_Laboral;
-	}
-
-	public function setEstabilidad_Laboral($Estabilidad_Laboral){
-		$this->Estabilidad_Laboral = $Estabilidad_Laboral;
-	}
     
     public function getObservacionesPorCandidato(){
         $Candidato=$this->getCandidato();
@@ -341,8 +267,8 @@ class CandidatosObsGenerales{
         }
         return $result;
     }
-	
-		public function createComentariosGeneralesInv(){
+
+	public function createComentariosGeneralesInv(){
 		$result = false;
 
 		$Candidato = $this->getCandidato();
@@ -351,31 +277,15 @@ class CandidatosObsGenerales{
 		$Info_Confiable = $this->getInfo_Confiable();
         $Comentario_General_il = $this->getComentario_General_il();
         $Viable = $this->getViable();
-        $Proporciona_Contacto = $this->getProporciona_Contacto();
-        $Informacion_Congruente = $this->getInformacion_Congruente();
-        $Factor_Riesgo = $this->getFactor_Riesgo();
-        $Cual_Factor_Riesgo = $this->getFactor_Riesgo();
-        $Estabilidad_Laboral = $this->getEstabilidad_Laboral();
 		
         $stmt = $this->db->prepare("INSERT INTO rh_Candidatos_Obs_Generales(Candidato, Info_Proporcionada_Candidato, Referencias_Laborales, Info_Confiable,
-		Comentario_General_il, Viable, 
-		Proporciona_Contacto, Informacion_Congruente, 
-		Factor_Riesgo, Cual_Factor_Riesgo, 
-		Estabilidad_Laboral)
-	VALUES (:Candidato, :Info_Proporcionada_Candidato, :Referencias_Laborales, :Info_Confiable, :Comentario_General_il, :Viable, 
-		:Proporciona_Contacto, :Informacion_Congruente, 
-		:Factor_Riesgo, :Cual_Factor_Riesgo, 
-		:Estabilidad_Laboral)");
+		Comentario_General_il, Viable)
+	VALUES (:Candidato, :Info_Proporcionada_Candidato, :Referencias_Laborales, :Info_Confiable, :Comentario_General_il, :Viable)");
 		$stmt->bindParam(":Info_Proporcionada_Candidato", $Info_Proporcionada, PDO::PARAM_INT);
 		$stmt->bindParam(":Referencias_Laborales", $Referencias_Laborales, PDO::PARAM_INT);
 		$stmt->bindParam(":Info_Confiable", $Info_Confiable, PDO::PARAM_INT);
         $stmt->bindParam(":Comentario_General_il", $Comentario_General_il, PDO::PARAM_STR);
         $stmt->bindParam(":Viable", $Viable, PDO::PARAM_INT);
-        $stmt->bindParam(":Proporciona_Contacto", $Proporciona_Contacto, PDO::PARAM_INT);
-        $stmt->bindParam(":Informacion_Congruente", $Informacion_Congruente, PDO::PARAM_INT);
-        $stmt->bindParam(":Factor_Riesgo", $Factor_Riesgo, PDO::PARAM_INT);
-        $stmt->bindParam(":Cual_Factor_Riesgo", $Cual_Factor_Riesgo, PDO::PARAM_STR);
-        $stmt->bindParam(":Estabilidad_Laboral", $Estabilidad_Laboral, PDO::PARAM_INT);
 		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
 
         $flag = $stmt->execute();
@@ -395,31 +305,16 @@ class CandidatosObsGenerales{
 		$Info_Confiable = $this->getInfo_Confiable();
         $Comentario_General_il = $this->getComentario_General_il();
         $Viable = $this->getViable();
-        $Proporciona_Contacto = $this->getProporciona_Contacto();
-        $Informacion_Congruente = $this->getInformacion_Congruente();
-        $Factor_Riesgo = $this->getFactor_Riesgo();
-        $Cual_Factor_Riesgo = $this->getFactor_Riesgo();
-        $Estabilidad_Laboral = $this->getEstabilidad_Laboral();
 
         $stmt = $this->db->prepare("UPDATE rh_Candidatos_Obs_Generales
 		SET Info_Proporcionada_Candidato=:Info_Proporcionada_Candidato, Referencias_Laborales=:Referencias_Laborales, Info_Confiable=:Info_Confiable,  Comentario_General_il=:Comentario_General_il
-			,Viable=:Viable,
-			Proporciona_Contacto=:Proporciona_Contacto
-			,Informacion_Congruente=:Informacion_Congruente
-			,Factor_Riesgo=:Factor_Riesgo
-			,Cual_Factor_Riesgo=:Cual_Factor_Riesgo
-			,Estabilidad_Laboral=:Estabilidad_Laboral
+			,Viable=:Viable
 		WHERE Candidato=:Candidato");
 		$stmt->bindParam(":Info_Proporcionada_Candidato", $Info_Proporcionada, PDO::PARAM_INT);
 		$stmt->bindParam(":Referencias_Laborales", $Referencias_Laborales, PDO::PARAM_INT);
 		$stmt->bindParam(":Info_Confiable", $Info_Confiable, PDO::PARAM_INT);
         $stmt->bindParam(":Comentario_General_il", $Comentario_General_il, PDO::PARAM_STR);
         $stmt->bindParam(":Viable", $Viable, PDO::PARAM_INT);
-        $stmt->bindParam(":Proporciona_Contacto", $Proporciona_Contacto, PDO::PARAM_INT);
-        $stmt->bindParam(":Informacion_Congruente", $Informacion_Congruente, PDO::PARAM_INT);
-        $stmt->bindParam(":Factor_Riesgo", $Factor_Riesgo, PDO::PARAM_INT);
-        $stmt->bindParam(":Cual_Factor_Riesgo", $Cual_Factor_Riesgo, PDO::PARAM_STR);
-        $stmt->bindParam(":Estabilidad_Laboral", $Estabilidad_Laboral, PDO::PARAM_INT);
 		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
 
         $flag = $stmt->execute();
@@ -430,109 +325,18 @@ class CandidatosObsGenerales{
         return $result;
     }
 
-	public function createComentariosGeneralesInv1(){
-		$result = false;
-
-		$Candidato = $this->getCandidato();
-		$Info_Proporcionada = $this->getInfo_Proporcionada();
-		$Referencias_Laborales = $this->getReferencias_Laborales();
-		$Info_Confiable = $this->getInfo_Confiable();
-        $Comentario_General_il = $this->getComentario_General_il();
-        $Viable = $this->getViable();
-        $Proporciona_Contacto = $this->getProporciona_Contacto();
-        $Informacion_Congruente = $this->getInformacion_Congruente();
-        $Factor_Riesgo = $this->getFactor_Riesgo();
-        $Cual_Factor_Riesgo = $this->getFactor_Riesgo();
-        $Estabilidad_Laboral = $this->getEstabilidad_Laboral();
-		
-        $stmt = $this->db->prepare("INSERT INTO rh_Candidatos_Obs_Generales(Candidato, Info_Proporcionada_Candidato, Referencias_Laborales, Info_Confiable,
-		Comentario_General_il, Viable)
-	VALUES (:Candidato, :Info_Proporcionada_Candidato, :Referencias_Laborales, :Info_Confiable, :Comentario_General_il, :Viable)");
-		$stmt->bindParam(":Info_Proporcionada_Candidato", $Info_Proporcionada, PDO::PARAM_INT);
-		$stmt->bindParam(":Referencias_Laborales", $Referencias_Laborales, PDO::PARAM_INT);
-		$stmt->bindParam(":Info_Confiable", $Info_Confiable, PDO::PARAM_INT);
-        $stmt->bindParam(":Comentario_General_il", $Comentario_General_il, PDO::PARAM_STR);
-        $stmt->bindParam(":Viable", $Viable, PDO::PARAM_INT);
-        $stmt->bindParam(":Proporciona_Contacto", $Proporciona_Contacto, PDO::PARAM_INT);
-        $stmt->bindParam(":Informacion_Congruente", $Informacion_Congruente, PDO::PARAM_INT);
-        $stmt->bindParam(":Factor_Riesgo", $Factor_Riesgo, PDO::PARAM_INT);
-        $stmt->bindParam(":Cual_Factor_Riesgo", $Cual_Factor_Riesgo, PDO::PARAM_STR);
-        $stmt->bindParam(":Estabilidad_Laboral", $Estabilidad_Laboral, PDO::PARAM_INT);
-		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
-
-        $flag = $stmt->execute();
-		
-        if ($flag) {
-            $result = true;
-        }
-        return $result;
-    }
-
-	public function updateComentariosGeneralesInv1(){
-        $result = false;
-
-        $Candidato = $this->getCandidato();
-		$Info_Proporcionada = $this->getInfo_Proporcionada();
-		$Referencias_Laborales = $this->getReferencias_Laborales();
-		$Info_Confiable = $this->getInfo_Confiable();
-        $Comentario_General_il = $this->getComentario_General_il();
-        $Viable = $this->getViable();
-        $Proporciona_Contacto = $this->getProporciona_Contacto();
-        $Informacion_Congruente = $this->getInformacion_Congruente();
-        $Factor_Riesgo = $this->getFactor_Riesgo();
-        $Cual_Factor_Riesgo = $this->getFactor_Riesgo();
-        $Estabilidad_Laboral = $this->getEstabilidad_Laboral();
-
-        $stmt = $this->db->prepare("UPDATE rh_Candidatos_Obs_Generales
-		SET Info_Proporcionada_Candidato=:Info_Proporcionada_Candidato, Referencias_Laborales=:Referencias_Laborales, Info_Confiable=:Info_Confiable,  Comentario_General_il=:Comentario_General_il
-			,Viable=:Viable,
-			Proporciona_Contacto=:Proporciona_Contacto
-			,Informacion_Congruente=:Informacion_Congruente
-			,Factor_Riesgo=:Factor_Riesgo
-			,Cual_Factor_Riesgo=:Cual_Factor_Riesgo
-			,Estabilidad_Laboral=:Estabilidad_Laboral
-		WHERE Candidato=:Candidato");
-		$stmt->bindParam(":Info_Proporcionada_Candidato", $Info_Proporcionada, PDO::PARAM_INT);
-		$stmt->bindParam(":Referencias_Laborales", $Referencias_Laborales, PDO::PARAM_INT);
-		$stmt->bindParam(":Info_Confiable", $Info_Confiable, PDO::PARAM_INT);
-        $stmt->bindParam(":Comentario_General_il", $Comentario_General_il, PDO::PARAM_STR);
-        $stmt->bindParam(":Viable", $Viable, PDO::PARAM_INT);
-        $stmt->bindParam(":Proporciona_Contacto", $Proporciona_Contacto, PDO::PARAM_INT);
-        $stmt->bindParam(":Informacion_Congruente", $Informacion_Congruente, PDO::PARAM_INT);
-        $stmt->bindParam(":Factor_Riesgo", $Factor_Riesgo, PDO::PARAM_INT);
-        $stmt->bindParam(":Cual_Factor_Riesgo", $Cual_Factor_Riesgo, PDO::PARAM_STR);
-        $stmt->bindParam(":Estabilidad_Laboral", $Estabilidad_Laboral, PDO::PARAM_INT);
-		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
-
-        $flag = $stmt->execute();
-
-        if ($flag) {
-            $result = true;
-        }
-        return $result;
-    }
-	
-	
 	public function createComentariosGenerales(){
 		$result = false;
 
 		$Candidato = $this->getCandidato();
         $Comentarios_Generales = $this->getComentarios_Generales();
         $Califica_como = $this->getCalifica_como();
-		$Puntualidad = $this->getPuntualidad();
-		$Documentacion = $this->getDocumentacion();
-		$Naturalidad = $this->getNaturalidad();
-		$Respuestas_Claras = $this->getRespuestas_Claras();
 		
         $stmt = $this->db->prepare("INSERT INTO rh_Candidatos_Obs_Generales(Candidato, 
-		Comentarios_Generales, Califica_como, Puntualidad, Documentacion, Naturalidad, Respuestas_Claras)
-	VALUES (:Candidato, :Comentarios_Generales, :Califica_como, :Puntualidad, :Documentacion, :Naturalidad, :Respuestas_Claras)");
+		Comentarios_Generales, Califica_como)
+	VALUES (:Candidato, :Comentarios_Generales, :Califica_como)");
         $stmt->bindParam(":Comentarios_Generales", $Comentarios_Generales, PDO::PARAM_STR);
         $stmt->bindParam(":Califica_como", $Califica_como, PDO::PARAM_STR);
-		$stmt->bindParam(":Puntualidad", $Puntualidad, PDO::PARAM_INT);
-		$stmt->bindParam(":Documentacion", $Documentacion, PDO::PARAM_INT);
-		$stmt->bindParam(":Naturalidad", $Naturalidad, PDO::PARAM_INT);
-		$stmt->bindParam(":Respuestas_Claras", $Respuestas_Claras, PDO::PARAM_INT);
 		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
 
         $flag = $stmt->execute();
@@ -550,87 +354,14 @@ class CandidatosObsGenerales{
         $Comentarios_Generales = $this->getComentarios_Generales();
         $Califica_como = $this->getCalifica_como();
 		$Viabilidad = $this->getViabilidad();
-		$Puntualidad = $this->getPuntualidad();
-		$Documentacion = $this->getDocumentacion();
-		$Naturalidad = $this->getNaturalidad();
-		$Respuestas_Claras = $this->getRespuestas_Claras();
 
         $stmt = $this->db->prepare("UPDATE rh_Candidatos_Obs_Generales
 		SET Comentarios_Generales=:Comentarios_Generales
-			,Califica_como=:Califica_como, Viabilidad=:Viabilidad, Puntualidad=:Puntualidad,
-			Documentacion=:Documentacion, Naturalidad=:Naturalidad, Respuestas_Claras=:Respuestas_Claras
+			,Califica_como=:Califica_como, Viabilidad=:Viabilidad
 		WHERE Candidato=:Candidato");
         $stmt->bindParam(":Comentarios_Generales", $Comentarios_Generales, PDO::PARAM_STR);
         $stmt->bindParam(":Califica_como", $Califica_como, PDO::PARAM_STR);
 		$stmt->bindParam(":Viabilidad", $Viabilidad, PDO::PARAM_INT);
-		$stmt->bindParam(":Puntualidad", $Puntualidad, PDO::PARAM_INT);
-		$stmt->bindParam(":Documentacion", $Documentacion, PDO::PARAM_INT);
-		$stmt->bindParam(":Naturalidad", $Naturalidad, PDO::PARAM_INT);
-		$stmt->bindParam(":Respuestas_Claras", $Respuestas_Claras, PDO::PARAM_INT);
-		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
-
-        $flag = $stmt->execute();
-
-        if ($flag) {
-            $result = true;
-        }
-        return $result;
-    }
-
-	public function createComentariosGenerales1(){
-		$result = false;
-
-		$Candidato = $this->getCandidato();
-        $Comentarios_Generales = $this->getComentarios_Generales();
-        $Califica_como = $this->getCalifica_como();
-		$Puntualidad = $this->getPuntualidad();
-		$Documentacion = $this->getDocumentacion();
-		$Naturalidad = $this->getNaturalidad();
-		$Respuestas_Claras = $this->getRespuestas_Claras();
-		
-        $stmt = $this->db->prepare("INSERT INTO rh_Candidatos_Obs_Generales(Candidato, 
-		Comentarios_Generales, Califica_como, Puntualidad, Documentacion, Naturalidad, Respuestas_Claras)
-	VALUES (:Candidato, :Comentarios_Generales, :Califica_como, :Puntualidad, :Documentacion, :Naturalidad, :Respuestas_Claras)");
-        $stmt->bindParam(":Comentarios_Generales", $Comentarios_Generales, PDO::PARAM_STR);
-        $stmt->bindParam(":Califica_como", $Califica_como, PDO::PARAM_STR);
-		$stmt->bindParam(":Puntualidad", $Puntualidad, PDO::PARAM_INT);
-		$stmt->bindParam(":Documentacion", $Documentacion, PDO::PARAM_INT);
-		$stmt->bindParam(":Naturalidad", $Naturalidad, PDO::PARAM_INT);
-		$stmt->bindParam(":Respuestas_Claras", $Respuestas_Claras, PDO::PARAM_INT);
-		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
-
-        $flag = $stmt->execute();
-		
-        if ($flag) {
-            $result = true;
-        }
-        return $result;
-    }
-
-	public function updateComentariosGenerales1(){
-        $result = false;
-
-        $Candidato = $this->getCandidato();
-        $Comentarios_Generales = $this->getComentarios_Generales();
-        $Califica_como = $this->getCalifica_como();
-		$Viabilidad = $this->getViabilidad();
-		$Puntualidad = $this->getPuntualidad();
-		$Documentacion = $this->getDocumentacion();
-		$Naturalidad = $this->getNaturalidad();
-		$Respuestas_Claras = $this->getRespuestas_Claras();
-
-        $stmt = $this->db->prepare("UPDATE rh_Candidatos_Obs_Generales
-		SET Comentarios_Generales=:Comentarios_Generales
-			,Califica_como=:Califica_como, Viabilidad=:Viabilidad, Puntualidad=:Puntualidad,
-			Naturalidad=:Naturalidad, Respuestas_Claras=:Respuestas_Claras
-		WHERE Candidato=:Candidato");
-        $stmt->bindParam(":Comentarios_Generales", $Comentarios_Generales, PDO::PARAM_STR);
-        $stmt->bindParam(":Califica_como", $Califica_como, PDO::PARAM_STR);
-		$stmt->bindParam(":Viabilidad", $Viabilidad, PDO::PARAM_INT);
-		$stmt->bindParam(":Puntualidad", $Puntualidad, PDO::PARAM_INT);
-		$stmt->bindParam(":Documentacion", $Documentacion, PDO::PARAM_INT);
-		$stmt->bindParam(":Naturalidad", $Naturalidad, PDO::PARAM_INT);
-		$stmt->bindParam(":Respuestas_Claras", $Respuestas_Claras, PDO::PARAM_INT);
 		$stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
 
         $flag = $stmt->execute();

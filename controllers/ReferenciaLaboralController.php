@@ -2,42 +2,25 @@
 
 require_once 'models/SA/CandidatosLaborales.php';
 require_once 'models/SA/CandidatosLaboraleConceptos.php';
-require_once 'models/SA/CandidatosDatos.php';
 
 class ReferenciaLaboralController{
-	
-	
 
     public function getOne(){
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics()) {
             $Renglon = Utils::sanitizeNumber($_POST['Renglon']);
             $Candidato = Utils::sanitizeNumber($_POST['Folio']);
 
-            if ($Candidato) {
-                $candidato = new CandidatosDatos();
-                $candidato->setCandidato($Candidato);
-                $candidato_datos = $candidato->getOne();
+            if ($Renglon && $Candidato) {
+                $laboral = new CandidatosLaborales();
+                $laboral->setRenglon($Renglon);
+                $laboral->setCandidato($Candidato);
+                $data = $laboral->getOne();
 
-                if ($Renglon) {
-                    $laboral = new CandidatosLaborales();
-                    $laboral->setRenglon($Renglon);
-                    $laboral->setCandidato($Candidato);
-                    $data = $laboral->getOne();
-
-                    if ($data) {
-                        header('Content-Type: text/html; charset=utf-8');
-                        echo json_encode(array(
-                            'data' => $data,
-                            'candidato_datos' => $candidato_datos,
-                            'status' => 1
-                        ), \JSON_UNESCAPED_UNICODE);
-                    }else echo json_encode(array('status' => 2, 'candidato_datos' => $candidato_datos));
-                }else {
-                    echo json_encode(array(
-                        'candidato_datos' => $candidato_datos,
-                        'status' => 3
-                    ), \JSON_UNESCAPED_UNICODE);
-                }
+                if ($data) {
+                    header('Content-Type: text/html; charset=utf-8');
+                    echo $json_cohabitante = json_encode($data, \JSON_UNESCAPED_UNICODE);
+                } else echo 0;
+                
             }else echo 0;
         } else
             header('location:'.base_url);
@@ -48,13 +31,13 @@ class ReferenciaLaboralController{
             $Renglon = Utils::sanitizeNumber($_POST['Renglon']);
             $Candidato = Utils::sanitizeNumber($_POST['Folio']);
             $Empresa = Utils::sanitizeStringBlank($_POST['Empresa']);
-            $Giro = @Utils::sanitizeStringBlank($_POST['Giro']);
+            $Giro = Utils::sanitizeStringBlank($_POST['Giro']);
             $Domicilio = Utils::sanitizeStringBlank($_POST['Domicilio']);
             $Telefono = Utils::sanitizeStringBlank($_POST['Telefono']);
             $Fecha_Ingreso = Utils::sanitizeStringBlank($_POST['Fecha_Ingreso']);
             $Fecha_Baja = Utils::sanitizeStringBlank($_POST['Fecha_Baja']);
             $Puesto_Inicial = Utils::sanitizeStringBlank($_POST['Puesto_Inicial']);
-            $Puesto_Final = @Utils::sanitizeStringBlank($_POST['Puesto_Final']);
+            $Puesto_Final = Utils::sanitizeStringBlank($_POST['Puesto_Final']);
             $Jefe = Utils::sanitizeStringBlank($_POST['Jefe']);
             $Puesto_Jefe = Utils::sanitizeStringBlank($_POST['Puesto_Jefe']);
             $Motivo_Separacion = Utils::sanitizeStringBlank($_POST['Motivo_Separacion']);
@@ -86,10 +69,6 @@ class ReferenciaLaboralController{
             $Presentaba_Faltantes = Utils::sanitizeNumber($_POST['Presentaba_Faltantes']);
             $Problemas_Diesel = Utils::sanitizeNumber($_POST['Problemas_Diesel']); */
 
-            $Sitio_Web = @Utils::sanitizeStringBlank($_POST['Sitio_Web']);
-            $Correo = @Utils::sanitizeStringBlank($_POST['Correo']);
-            $Puesto_Informante = @Utils::sanitizeStringBlank($_POST['Puesto_Informante']);
-            $Razon_Social = @Utils::sanitizeStringBlank($_POST['Razon_Social']);
 
             $flag = $_POST['flag'];
 
@@ -121,11 +100,6 @@ class ReferenciaLaboralController{
                 $laboral->setPuesto_Sindical($Puesto_Sindical);
                 $laboral->setFunciones_Sindicato($Funciones_Sindicato);
                 $laboral->setTiempo_Sindicato($Tiempo_Sindicato);
-
-                $laboral->setSitio_Web($Sitio_Web);
-                $laboral->setCorreo($Correo);
-                $laboral->setPuesto_Informante($Puesto_Informante);
-                $laboral->setRazon_Social($Razon_Social);
 
                 $concepto = new CandidatosLaboralesConceptos();
                 $concepto->setCandidato($Candidato);

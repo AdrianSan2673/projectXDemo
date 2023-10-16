@@ -373,7 +373,7 @@ class Position {
                         utils.showToast('Omitiste algún dato', 'error');
                         $('#modal_indicators').modal('hide');
                     } else if (json_app.status == 1) {
-                        utils.showToast('Indicador guardado.', 'success');
+                        utils.showToast('Responsabilidad guardada.', 'success');
                         let indications = '';
                         json_app.indications.forEach(element => {
                             indications += `
@@ -584,7 +584,7 @@ class Position {
     }
 
 
-    deleteConocimientos(ID, id_position) {
+    deleteConocimientos(ID,id_position) {
         let xhr = new XMLHttpRequest();
         let data = `id=${ID}&id_position=${id_position}`;
         xhr.open('POST', '../ConocimientosRequeridos/delete');
@@ -618,8 +618,7 @@ class Position {
                                 </div>
                             </div>
                         </div>
-                            `
-                        });
+                            `});
 
 
                         document.querySelector('#content_conocimiento').innerHTML = conocimientos;
@@ -669,9 +668,8 @@ class Position {
                                     </div>
                                 </div>
                             </div>
-                        </div> `
-                        });
-
+                        </div> `});
+                        
                         form.reset();
                         document.querySelector('#content_habilidades').innerHTML = habilidades;
                         $('#modal_skills').modal('hide');
@@ -721,10 +719,10 @@ class Position {
 
 
 
-    deleteHabilidades(ID, id_position) {
+    deleteHabilidades(ID,id_position) {
         let xhr = new XMLHttpRequest();
         let data = `id=${ID}&id_position=${id_position}`;
-
+       
         xhr.open('POST', '../Habilidades/delete');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
@@ -877,11 +875,12 @@ class Position {
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
+                    console.log(json_app);
                     if (json_app.status == 0) {
                         utils.showToast('Omitiste algún dato', 'error');
                     } else if (json_app.status == 1) {
                         utils.showToast('Guardado exitosamente', 'success');
-                        let title_position = document.querySelectorAll('.title-puesto')
+                        let title_position= document.querySelectorAll('.title-puesto')
 
                         for (let i = 0; i < title_position.length; i++) {
                             document.querySelectorAll('.title-puesto')[i].innerHTML = json_app.title
@@ -889,7 +888,7 @@ class Position {
                         document.querySelector('#type_position').innerHTML = json_app.type_position
                         document.querySelector('.deparamento-title').innerHTML = json_app.department
                         document.querySelector('#boss_position-title').innerHTML = json_app.boss_position
-                        document.querySelector('#Nombre_Cliente').innerHTML = json_app.Nombre_Cliente
+
 
                         $('#modal_general').modal('hide');
                         form.querySelectorAll('.btn')[1].disabled = false;
@@ -985,12 +984,12 @@ class Position {
     }
 
 
-
+    
     updateSatusPosition(id) {
         let xhr = new XMLHttpRequest();
         xhr.open('POST', '../Puesto/updateSatusPosition');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.send('id=' + id);
+        xhr.send('id='+id);
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
@@ -1002,11 +1001,11 @@ class Position {
                     if (json_app.status == 0) {
                         utils.showToast('Ocurrio un error', 'error');
                     } else if (json_app.status == 1) {
-                        let icon = json_app.estado == 1 ? 'fa-trash-alt' : 'fa-power-off'
-                        let color = json_app.estado == 1 ? 'btn-danger' : 'btn-success'
+                        let icon= json_app.estado==1? 'fa-trash-alt':'fa-power-off'
+                        let color= json_app.estado==1?'btn-danger':'btn-success' 
                         document.querySelector('#divEliminarPuesto').innerHTML =
-                            `
-                        <button class="btn ${color}" value="${json_app.id_position}" data-estatus="${json_app.estado}"> ${json_app.estado==0?'Reactivar':' Eliminar'} puesto</button>
+                        `
+                        <button class="btn ${color}" value="${json_app.id_position}"><i class="fas ${icon}"></i></button>
                         `
                         utils.showToast('Estado del puesto actualizado.', 'success');
                     } else if (json_app.status == 2) {

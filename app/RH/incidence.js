@@ -56,7 +56,7 @@ class Incidence {
             }
         }
     }
-
+    
     save_index() {
         var form = document.querySelector("#modal_create_incidencias form");
         var formData = new FormData(form);
@@ -76,8 +76,6 @@ class Incidence {
                         utils.showToast('Omitiste algún dato', 'error');
                     } else if (json_app.status == 1) {
                         utils.showToast('Guardado con exito.', 'success');
-
-
                         let incidentes = '';
                         json_app.employeeIncidence.forEach(element => {
                             incidentes += `
@@ -94,17 +92,13 @@ class Incidence {
                                 <a href="${element.id_employe}" class="btn btn-success"><i class="fas fa-eye"></i> Ver</a>
                                 <button class="btn btn-danger text-bold" value="${element.id_incident}">X</button>
                             </td>
-                        </tr>`
-                        });
+                        </tr>`});
 
+                        document.querySelector('#tboodyInciden').innerHTML = incidentes;
 
-                        utils.destruir_datatable('#tb_employees', '#tboodyInciden', incidentes);
-
-                        $('#modal_create_incidencias form [name="id_employees[]"]').val(null).trigger('change');
                         form.reset();
                         form.querySelectorAll('.btn')[1].disabled = false;
-                        $('#modal_create_incidencias').modal('hide');
-
+                        $('#modal_create_incidencias').modal('hide'); 
                     } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
@@ -167,6 +161,7 @@ class Incidence {
                     if (json_app.status == 0) {
                         utils.showToast('Omitiste algún dato', 'error');
                     } else if (json_app.status == 1) {
+                        utils.showToast('Eliminado exitosamente.', 'success');
                         let incidentes = '';
                         if (json_app.flag == 2) {
                             let incidentes = '';
@@ -188,8 +183,8 @@ class Incidence {
                           </tr>
                             `
                             });
-                            utils.destruir_datatable('#tb_employees', '#tboodyInciden', incidentes);
 
+                            document.querySelector('#tboodyInciden').innerHTML = incidentes;
 
                         } else {
                             let incidentes = '';
@@ -208,10 +203,8 @@ class Incidence {
                             `
                             });
 
-                            utils.destruir_datatable('#tb_employees', '#tboodyInciden', incidentes);
-
+                            document.querySelector('#tboodyInciden').innerHTML = incidentes;
                         }
-                        utils.showToast('Eliminado exitosamente.', 'success');
 
 
                     } else {

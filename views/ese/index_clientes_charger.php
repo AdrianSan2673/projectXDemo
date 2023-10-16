@@ -186,14 +186,14 @@
                     <div class="btn-group btn-group-sm">
 
                       <?php if ($id_empresa == 413 && $estudio['replicado'] == 2) : ?>
-                        <a href="<?= base_url ?>formatoing/ral&candidato=<?= Encryption::encode($estudio['Folio']) ?>"  target="_blank" class="btn btn-maroon btn-sm" style="display: <?= (($estudio['Servicio'] == 298 || $estudio['Servicio'] == 291) && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254 || $estudio['Estado'] == 250) && $estudio['Folio'] == $estudio['RAL']) || (($estudio['Servicio'] == 299 || $estudio['Servicio'] == 300 || $estudio['Servicio'] == 324 || $estudio['Servicio'] == 231) && $estudio['Folio'] == $estudio['RAL'])  || (($estudio['Servicio'] == 300 || $estudio['Servicio'] == 324) && $estudio['Folio'] == $estudio['RAL']) ? 'block' : 'none' ?>;">
+                        <a href="<?= base_url ?>formato/ral_ing&candidato=<?= Encryption::encode($estudio['Folio']) ?>"  target="_blank" class="btn btn-maroon btn-sm" style="display: <?= (($estudio['Servicio'] == 298 || $estudio['Servicio'] == 291) && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254 || $estudio['Estado'] == 250) && $estudio['Folio'] == $estudio['RAL']) || (($estudio['Servicio'] == 299 || $estudio['Servicio'] == 300 || $estudio['Servicio'] == 324 || $estudio['Servicio'] == 231) && $estudio['Folio'] == $estudio['RAL'])  || (($estudio['Servicio'] == 300 || $estudio['Servicio'] == 324) && $estudio['Folio'] == $estudio['RAL']) ? 'block' : 'none' ?>;">
                           RAL
                         </a>
 
-                        <a href="<?= base_url ?>formatoing/investigacion_laboral&candidato=<?= Encryption::encode($estudio['Folio']) ?>" target="_blank" class="btn btn-orange btn-sm" style="display: <?= ((($estudio['Servicio'] == 231 || $estudio['Servicio'] == 299) || ($estudio['Servicio'] == 230)) && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254)) || ($estudio['Servicio'] == 300 || $estudio['Servicio'] == 324) || $estudio['Fecha_Entregado_INV'] != NULL ? 'block' : 'none' ?>;">
+                        <a href="<?= base_url ?>formato/investigacion_laboral_ing&candidato=<?= Encryption::encode($estudio['Folio']) ?>" target="_blank" class="btn btn-orange btn-sm" style="display: <?= ((($estudio['Servicio'] == 231 || $estudio['Servicio'] == 299) || ($estudio['Servicio'] == 230)) && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254)) || ($estudio['Servicio'] == 300 || $estudio['Servicio'] == 324) || $estudio['Fecha_Entregado_INV'] != NULL ? 'block' : 'none' ?>;">
                           Descargar INV version ingles
                         </a>
-                        <a href="<?= base_url ?>formatoing/ese&candidato=<?= Encryption::encode($estudio['Folio']) ?>" target="_blank" class="btn btn-danger  btn-sm ml-2" style="display: <?= ($estudio['Servicio'] == 230 || $estudio['Servicio'] == 300 || $estudio['Servicio'] == 324) && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254) || $estudio['Fecha_Entregado_ESE'] != NULL ? 'block' : 'none' ?>;">
+                        <a href="<?= base_url ?>formato/ese_ing&candidato=<?= Encryption::encode($estudio['Folio']) ?>" target="_blank" class="btn btn-danger  btn-sm ml-2" style="display: <?= ($estudio['Servicio'] == 230 || $estudio['Servicio'] == 300 || $estudio['Servicio'] == 324) && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254) || $estudio['Fecha_Entregado_ESE'] != NULL ? 'block' : 'none' ?>;">
                           Descargar ESE version ingles
                         </a>
 

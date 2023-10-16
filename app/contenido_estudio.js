@@ -16,7 +16,6 @@ class ContenidoEstudio{
         this.content_referencias_laborales = document.getElementById('content-referencias_laborales');
         this.content_documentos = document.getElementsByClassName('content-documentos');
         this.content_investigacion = document.getElementById('content-investigacion');
-        this.content_google_search = document.getElementById('content-google-search');
         this.content_comentarios_generales_inv = document.getElementById('content-comentarios_generales_inv');
         this.content_conociendo_candidato = document.getElementById('content-conociendo_candidato');
         this.content_escolaridad = document.getElementsByClassName('content-escolaridad');
@@ -70,7 +69,6 @@ class ContenidoEstudio{
         this.template_referencia_laboral = document.getElementById('template-referencia_laboral').content;
         this.template_documento = document.getElementById('template-documento').content;
         this.template_investigacion = document.getElementById('template-investigacion').content;
-        this.template_google_search = document.getElementById('template-google_search').content;
         this.template_comentarios_generales_inv = document.getElementById('template-comentarios_generales_inv').content;
         this.template_conociendo_candidato = document.getElementById('template-conociendo_candidato').content;
         this.template_escolaridad = document.getElementById('template-escolaridad').content;
@@ -128,7 +126,6 @@ class ContenidoEstudio{
         this.fragment_documento = this.fragments_documento;
 
         this.fragment_investigacion = document.createDocumentFragment();
-        this.fragment_google_search = document.createDocumentFragment();
         this.fragment_comentarios_generales_inv = document.createDocumentFragment();
 
         this.fragment_conociendo_candidato = document.createDocumentFragment();
@@ -169,7 +166,7 @@ class ContenidoEstudio{
     }
     
 
-    cargarInfoServicio(data, perfil, display, cv_ruta=0, soi=0, historial_candidato=false) {
+    cargarInfoServicio(data, perfil, display, cv_ruta=0, soi=0) {
         this.template_botones_estatus.querySelectorAll('.btn-group')[0].style.display = 'none';
         this.template_botones_estatus.querySelectorAll('.btn-group')[1].style.display = 'none';
         this.template_botones_estatus.querySelectorAll('.btn-group')[2].style.display = 'none';
@@ -241,10 +238,10 @@ class ContenidoEstudio{
 		console.log(display.Account)
         if (display.Account == 'block') {
             //if (data.Nuevo_Procedimiento == 1 && (data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'INV. LABORAL') && data.Servicio == 298 && (data.Estado == 250 || data.Estado == 251)) {
-            if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'INV. LABORAL' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') && data.Servicio == 298 && (data.Estado == 250 || data.Estado == 251)) {
+            if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'INV. LABORAL' || data.Servicio_Solicitado == 'ESE + VISITA') && data.Servicio == 298 && (data.Estado == 250 || data.Estado == 251)) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[0].style.display = 'block';
             //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'ESE' && data.Servicio == 299 && (data.Estado == 250 || data.Estado == 251)) {
-            }else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') && data.Servicio == 299 && (data.Estado == 250 || data.Estado == 251)) {
+            }else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA') && data.Servicio == 299 && (data.Estado == 250 || data.Estado == 251)) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[1].style.display = 'block';
             //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'ESE' && data.Servicio == 300 && (data.Estado == 250 || data.Estado == 251)) {
             }else if (data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 299 && (data.Estado == 250 || data.Estado == 251)) {
@@ -257,12 +254,12 @@ class ContenidoEstudio{
            
             else if (data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 231 && (data.Estado == 250 || data.Estado == 251)) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[5].style.display = 'block';
-            }else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') && data.Servicio == 230 && (data.Estado == 250 || data.Estado == 251) && data.Fecha_Entregado_INV == null) {
+            }else if (data.Servicio_Solicitado == 'ESE' && data.Servicio == 230 && (data.Estado == 250 || data.Estado == 251) && data.Fecha_Entregado_INV == null) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[6].style.display = 'block';
                 this.template_botones_estatus.querySelectorAll('.btn-group')[6].querySelectorAll('.btn')[2].style.display = 'none';
             }
 			
-			else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') && data.Servicio == 231 && (data.Estado == 252 || data.Estado == 254) || data.Fecha_Entregado_INV != null) {
+			else if (data.Servicio_Solicitado == 'ESE' && data.Servicio == 231 && (data.Estado == 252 || data.Estado == 254) || data.Fecha_Entregado_INV != null) {
                 document.querySelectorAll('#content_botones a')[2].style.display = "block";
             }
 			
@@ -273,13 +270,13 @@ class ContenidoEstudio{
             }
 
             //if (data.Nuevo_Procedimiento == 1 && (data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'INV. LABORAL') && (data.Servicio == 298 || data.Servicio == 311)) {
-            if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'INV. LABORAL' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') && (data.Servicio == 298 || data.Servicio == 311 || data.Servicio == 328)) {
+            if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'INV. LABORAL' || data.Servicio_Solicitado == 'ESE + VISITA') && (data.Servicio == 298 || data.Servicio == 311 || data.Servicio == 328)) {
                 document.querySelectorAll('#content_botones a')[1].style.display = "block";
             //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'ESE' && data.Servicio == 299) {
-            }else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') && data.Servicio == 299) {
+            }else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA') && data.Servicio == 299) {
                 document.querySelectorAll('#content_botones a')[2].style.display = "block";
             //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'ESE' && data.Servicio == 300) {
-            }else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') && data.Servicio == 300) {
+            }else if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA') && data.Servicio == 300) {
                 //this.template_botones_estatus.querySelectorAll('.btn-group')[2].style.display = 'block';
                 document.querySelectorAll('#content_botones a')[2].style.display = "block";
                 document.querySelectorAll('#content_botones a')[3].style.display = "block";
@@ -289,7 +286,7 @@ class ContenidoEstudio{
             //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 299) {
             }else if (data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 299) {
                 document.querySelectorAll('#content_botones a')[2].style.display = "block";
-            }else if ((data.Servicio_Solicitado == 'RAL'||data.Servicio_Solicitado == 'ANÁLISIS DE RAL') && (data.Servicio == 298 || data.Servicio == 311 || data.Servicio == 328)) {
+            }else if (data.Servicio_Solicitado == 'RAL' && (data.Servicio == 298 || data.Servicio == 311 || data.Servicio == 328)) {
                 document.querySelectorAll('#content_botones a')[1].style.display = "block";
             }else if (data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 231) {
                 document.querySelectorAll('#content_botones a')[2].style.display = "block";
@@ -300,10 +297,6 @@ class ContenidoEstudio{
                     document.querySelectorAll('#content_botones a')[4].style.display = "block";
                 }
             }
-			if ((data.Servicio_Solicitado == 'ESE SMART') && (data.Servicio == 299 || data.Servicio == 300) && data.Fecha_Entregado_ESE == null && (data.Estado == 250 || data.Estado == 251)) {
-                this.template_botones_estatus.querySelectorAll('.btn-group')[2].style.display = 'block';
-                document.querySelectorAll('#content_botones a')[1].style.display = "block";
-            }
 
 			if (data.Estado == 250 || data.Estado == 251) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[10].style.display = 'block';
@@ -313,37 +306,24 @@ class ContenidoEstudio{
                 this.template_botones_estatus.querySelectorAll('.btn-group')[11].style.display = 'block';
         }
 		
-			if (display.AccountCustomerSA == 'block') {
-        
-            if (((data.Servicio == 298 || data.Servicio == 291 || data.Servicio == 328) && (data.Estado == 252 || data.Estado == 254 || data.Fecha_Entregado_RAL != null)) || ((data.Servicio == 299 || data.Servicio == 300 || data.Servicio == 324))  || ((data.Servicio == 300 || data.Servicio == 324 || data.Servicio == 231))){
+		if (display.AccountCustomerSA == 'block') {
+            if (((data.Servicio == 298 || data.Servicio == 291 || data.Servicio == 328) && (data.Estado == 252 || data.Estado == 254 || data.Fecha_Entregado_RAL != null)) || ((data.Servicio == 299 || data.Servicio == 300 || data.Servicio == 324))  || ((data.Servicio == 300 || data.Servicio == 324 || data.Servicio == 231)))
                 document.querySelectorAll('#content_botones a')[1].style.display = "block";
-			}
-            if ((((data.Servicio == 231 || data.Servicio == 299) || (data.Servicio == 230)) && (data.Estado == 252 || data.Estado == 254)) || (data.Servicio == 300 || data.Servicio == 324)){
-                if(data.ID_Empresa==353 && (data.Fecha_Entregado_ESE==null || data.Fecha_Entregado_INV==null) && data.Servicio_Solicitado=='ESE'){//Auto partes calderon no debe aparecer la IV si no esta el ESE
-                    document.querySelectorAll('#content_botones a')[2].style.display = "none";
-                }else{
-                    document.querySelectorAll('#content_botones a')[2].style.display = "block";
-                    
-                }
-            }
-            if ((data.Servicio == 230 || data.Servicio == 300 || data.Servicio == 324) && (data.Estado == 252 || data.Estado == 254)){
+            if ((((data.Servicio == 231 || data.Servicio == 299) || (data.Servicio == 230)) && (data.Estado == 252 || data.Estado == 254)) || (data.Servicio == 300 || data.Servicio == 324))
+                document.querySelectorAll('#content_botones a')[2].style.display = "block";
+            if ((data.Servicio == 230 || data.Servicio == 300 || data.Servicio == 324) && (data.Estado == 252 || data.Estado == 254))
                 document.querySelectorAll('#content_botones a')[3].style.display = "block";
-			}
-			if ((data.Estado == 249 || data.Estado == 250 || data.Estado == 251) && data.Servicio_Solicitado == 'RAL' && display.SA == 'none'){
+			
+			if ((data.Estado == 249 || data.Estado == 250 || data.Estado == 251) && data.Servicio_Solicitado == 'RAL' && display.SA == 'none')
 				document.querySelectorAll('.botones_pausar_finalizar button')[0].style.display = 'inline-block';
-			}
-			if ((data.Estado == 250 || data.Estado == 251) && data.Servicio_Solicitado == 'RAL' && display.SA == 'none'){
+
+			if ((data.Estado == 250 || data.Estado == 251) && data.Servicio_Solicitado == 'RAL' && display.SA == 'none')
 				document.querySelectorAll('.botones_pausar_finalizar button')[1].style.display = 'inline-block';
-			}
-				
-				   if (data.Servicio_Solicitado == 'RAL' && data.Servicio == 291 && (data.Estado == 250 || data.Estado == 251|| data.Estado == 252) && data.ID_Empresa == 45) {
-                document.querySelectorAll('.botones_continuar button')[2].style.display = "block";
-            }
         }
 		
 
         if (display.Logistics == 'block') {
-            if ((data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') && (data.Servicio == 299 || data.Servicio == 300) && data.Fecha_Entregado_ESE == null && (data.Estado == 250 || data.Estado == 251)) {
+            if (data.Servicio_Solicitado == 'ESE' && (data.Servicio == 299 || data.Servicio == 300) && data.Fecha_Entregado_ESE == null && (data.Estado == 250 || data.Estado == 251)) {
                 this.template_botones_estatus.querySelectorAll('.btn-group')[2].style.display = 'block';
                 document.querySelectorAll('#content_botones a')[1].style.display = "block";
             //}else if (data.Nuevo_Procedimiento == 1 && data.Servicio_Solicitado == 'INV. LABORAL' && data.Servicio == 299 && (data.Estado == 250 || data.Estado == 251)) {
@@ -355,13 +335,11 @@ class ContenidoEstudio{
             }
 
             
-            if (data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART'){
+            if (data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA'){
                 document.querySelectorAll('#content_botones a')[3].style.display = "block";
 			
 				 if (data.ID_Empresa == 413) { //Btn estudio ESE en ingles para Charger logistics
                     document.querySelectorAll('#content_botones a')[4].style.display = "block";
-					document.querySelectorAll('#content_botones a')[5].style.display = "block";
-
                 }
 			}
         }    
@@ -378,11 +356,6 @@ class ContenidoEstudio{
         
         this.template_videollamada.querySelector('button').style.display = display.Logistics;
 
-		 if (data.Servicio_Solicitado == 'ESE SMART') {
-            this.template_videollamada.querySelector('button').style.display = display.SA;
-			this.template_schedule.querySelector('button').style.display = display.SA;
-        }
-		
         if (data.Enlace_Drive) {
             if (data.Enlace_Drive.length > 10) {
                 this.template_videollamada.querySelector('div').style.display = 'block';
@@ -410,8 +383,8 @@ class ContenidoEstudio{
             else
                 this.template_reactivar_eliminar.querySelectorAll('button')[1].style.display = 'none';
         }
-
-		if (display.SA == 'block' && historial_candidato) {
+		
+		/*if (display.SA == 'block') {
             historial_candidato.forEach(historial => {
                 this.template_historial_candidato.querySelector('h6').textContent = `${historial.Nombres} ${historial.Apellido_Paterno} ${historial.Apellido_Materno}`;
                 this.template_historial_candidato.querySelector('a').href = `./ver&candidato=${historial.Candidato}`;
@@ -429,7 +402,7 @@ class ContenidoEstudio{
                 const clone_historial_candidato = this.template_historial_candidato.cloneNode(true);
                 this.fragment_historial_candidato.appendChild(clone_historial_candidato);
             });
-        }
+        }*/
 
         if (cv_ruta != 0) {
             this.template_reactivar_eliminar.querySelector('a').href = cv_ruta;
@@ -439,15 +412,8 @@ class ContenidoEstudio{
 		if (soi != 0){
            document.querySelector('#soi-card').style.display = 'block';
            document.querySelector('#soi-card img').src = soi; 
-           document.querySelector('#soi-card a').href = soi; 
-           document.querySelector('#soi-card a').download = 'SOI '+data.Nombres+' '+data.Apellido_Paterno+' '+data.Apellido_Materno; 
         }
-		
-		
-        //document.querySelectorAll('#update-form .form-group')[2].hidden = data.Ejecutivo_modificacion == 1 ? true : false;
-        //document.querySelectorAll('#modal_schedule .form-group')[2].hidden = data.Gestor_modificacion == 1 ? true : false;
 
-		
         const clone_perfil = this.template_perfil.cloneNode(true);
         const clone_candidato_contactado = this.template_candidato_contactado.cloneNode(true);
         const clone_datos_empresa = this.template_datos_empresa.cloneNode(true);
@@ -468,19 +434,14 @@ class ContenidoEstudio{
         this.fragment_info_servicio.appendChild(clone_botones_estatus);
         this.fragment_info_servicio.appendChild(clone_config);
         
-        if (data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA' || data.Servicio_Solicitado == 'SOI' || data.Servicio_Solicitado == 'ESE SMART') {
+        if (data.Servicio_Solicitado == 'ESE' || data.Servicio_Solicitado == 'ESE + VISITA') {
             this.fragment_info_servicio.appendChild(clone_schedule);
             this.fragment_info_servicio.appendChild(clone_videollamada);
         }
         
   	     if (data.Especificaciones != '' && data.Especificaciones != null) {
-             document.querySelector('#especificaciones_Empresa .card-body').innerHTML = data.Especificaciones;
+             document.querySelector('#especificaciones_Empresa h6').textContent = data.Especificaciones;
              document.querySelector('#especificaciones_Empresa').style.display = display.SA;
-         }
-		
-		     if (data.Especificacion_cliente != '' && data.Especificacion_cliente != null) {
-             document.querySelector('#especificaciones_Cliente .card-body').innerHTML = data.Especificacion_cliente;
-             document.querySelector('#especificaciones_Cliente').style.display = display.SA;
          }
 		
         if (data.Comentario_Cancelado != '' || data.Comentario_Cliente != '') {
@@ -497,8 +458,8 @@ class ContenidoEstudio{
         }
 
         this.fragment_info_servicio.appendChild(clone_reactivar_eliminar);
-		if (display.SA == 'block')
-            this.fragment_info_servicio.appendChild(this.fragment_historial_candidato);
+		/*if (display.SA == 'block')
+            this.fragment_info_servicio.appendChild(this.fragment_historial_candidato);*/
         this.info_servicio.innerHTML = '';
         this.info_servicio.appendChild(this.fragment_info_servicio);
 
@@ -525,6 +486,7 @@ class ContenidoEstudio{
 
         this.content_ral.innerHTML = '';
         this.content_ral.appendChild(this.fragment_ral);
+        console.log(data && display.Account);
 
         //document.querySelectorAll('#content_botones a')[1].style.display = data && (display.Account == 'block')? 'block' : 'none';
     }
@@ -835,7 +797,7 @@ class ContenidoEstudio{
         this.template_datos_generales.querySelectorAll('p')[10].textContent = data.IMSS;
         this.template_datos_generales.querySelectorAll('p')[11].textContent = data.RFC;
 		
- 	  if (data.ID_Empresa==413|| data.ID_Empresa==480) {
+ 	  if (data.ID_Empresa==413) {
             this.template_datos_generales.querySelectorAll('b')[12].style.display='block'
             this.template_datos_generales.querySelectorAll('p')[12].textContent = data.Numero_Licencia;
         }
@@ -879,7 +841,7 @@ class ContenidoEstudio{
         
     }
 
-    cargarReferenciasLaborales(data, display, Empresa, candidato=false){
+    cargarReferenciasLaborales(data, display, Empresa, Cliente){
         data.forEach(element => {
 			this.template_referencia_laboral.querySelectorAll('div')[0].setAttribute('renglon',element.Renglon);
             this.template_referencia_laboral.querySelectorAll('p')[0].textContent = element.Empresa;
@@ -897,8 +859,7 @@ class ContenidoEstudio{
             this.template_referencia_laboral.querySelectorAll('p')[12].textContent = element.Recontratable == 1 ? 'Sí' : 'No';
             this.template_referencia_laboral.querySelectorAll('p')[13].textContent = element.Recontratable_PorQue;
             this.template_referencia_laboral.querySelectorAll('p')[14].textContent = element.Informante;
-			this.template_referencia_laboral.querySelectorAll('p')[15].textContent = element.Puesto_Informante;
-            this.template_referencia_laboral.querySelectorAll('p')[16].innerText = element.Comentarios;
+            this.template_referencia_laboral.querySelectorAll('p')[15].innerText = element.Comentarios;
             this.template_referencia_laboral.querySelector('.btn-info').dataset.id = element.Renglon;
             this.template_referencia_laboral.querySelector('.btn-danger').dataset.id = element.Renglon;
             this.template_referencia_laboral.querySelector('.btn-info').style.display = display.Account;
@@ -1042,20 +1003,8 @@ class ContenidoEstudio{
 
             }
 
-            if (candidato) {
-                if (candidato.Cliente == 314) {
-                    this.template_referencia_laboral.querySelectorAll('.col-sm-6')[11].style.display = 'block';
-                }
-
-                if (candidato.Servicio_Solicitado == 'ESE SMART') {
-                    this.template_referencia_laboral.querySelectorAll('b')[1].textContent = 'Sitio Web';
-                    this.template_referencia_laboral.querySelectorAll('p')[1].textContent = element.Sitio_Web;
-                    this.template_referencia_laboral.querySelectorAll('b')[2].textContent = 'Razon Social';
-                    this.template_referencia_laboral.querySelectorAll('p')[2].textContent = element.Razon_Social;
-                    this.template_referencia_laboral.querySelectorAll('p')[6].textContent = 'Puesto';
-                    this.template_referencia_laboral.querySelectorAll('p')[7].textContent = 'Correo del Contacto';
-                    this.template_referencia_laboral.querySelectorAll('b')[16].style.display = 'none';
-                }    
+            if (Cliente == 314) {
+                this.template_referencia_laboral.querySelectorAll('.col-sm-6')[11].style.display = 'block';
             }
 
             //if (element.Sindicalizado && Empresa == 190)
@@ -1067,12 +1016,12 @@ class ContenidoEstudio{
                 document.querySelector('#modal_referencia_laboral .sindicato-cementin').style.display = 'block';
             }
 
-            this.template_referencia_laboral.querySelectorAll('p')[17].textContent = element.Sindicalizado == 1 ? 'Sí' : ( element.Sindicalizado == 0 ? 'No' : '');
-            this.template_referencia_laboral.querySelectorAll('p')[18].textContent = element.Sindicato;
-            this.template_referencia_laboral.querySelectorAll('p')[19].textContent = element.Comite_Sindical == 1 ? 'Sí' : ( element.Comite_Sindical == 0 ? 'No' : '');
-            this.template_referencia_laboral.querySelectorAll('p')[20].textContent = element.Puesto_Sindical;
-            this.template_referencia_laboral.querySelectorAll('p')[21].textContent = element.Funciones_Sindicato;
-            this.template_referencia_laboral.querySelectorAll('p')[22].textContent = element.Tiempo_Sindicato;
+            this.template_referencia_laboral.querySelectorAll('p')[16].textContent = element.Sindicalizado == 1 ? 'Sí' : ( element.Sindicalizado == 0 ? 'No' : '');
+            this.template_referencia_laboral.querySelectorAll('p')[17].textContent = element.Sindicato;
+            this.template_referencia_laboral.querySelectorAll('p')[18].textContent = element.Comite_Sindical == 1 ? 'Sí' : ( element.Comite_Sindical == 0 ? 'No' : '');
+            this.template_referencia_laboral.querySelectorAll('p')[19].textContent = element.Puesto_Sindical;
+            this.template_referencia_laboral.querySelectorAll('p')[20].textContent = element.Funciones_Sindicato;
+            this.template_referencia_laboral.querySelectorAll('p')[21].textContent = element.Tiempo_Sindicato;
 
             const clone = this.template_referencia_laboral.cloneNode(true);
             this.fragment_referencia_laboral.appendChild(clone);
@@ -1139,18 +1088,6 @@ class ContenidoEstudio{
             document.querySelector('#modal_investigacion .preguntas-operador').style.display = 'block';
         }
 
-		  if (Empresa == 523||Empresa == 561||Empresa == 573) {//Dalton,Actinver
-            this.template_investigacion.querySelector('.trabajo-dalton').style.display = 'block';
-            document.querySelector('#modal_investigacion .trabajo-dalton').style.display = 'block';
-            document.querySelector('#modal_investigacion [name="Familiar_Empresa"]').required=true
-        }
-		
-		  if (Empresa == 573) {//Actinver
-            this.template_investigacion.querySelector('.reingreso').style.display = 'block';
-            document.querySelector('#modal_investigacion .reingreso').style.display = 'block';
-            document.querySelector('#modal_investigacion [name="Reingreso"]').required=true
-        }
-		
         this.template_investigacion.querySelectorAll('p')[6].textContent = data.Sindicalizado == 1 ? 'Sí' : ( data.Sindicalizado == 0 ? 'No' : '');
         this.template_investigacion.querySelectorAll('p')[7].textContent = data.Sindicato;
         this.template_investigacion.querySelectorAll('p')[8].textContent = data.Comite_Sindical == 1 ? 'Sí' : ( data.Comite_Sindical == 0 ? 'No' : '');
@@ -1165,29 +1102,14 @@ class ContenidoEstudio{
         this.template_investigacion.querySelectorAll('p')[16].textContent = data.Sustancia_Antidoping;
         this.template_investigacion.querySelectorAll('p')[17].textContent = data.Accidentes_Empresa;
         this.template_investigacion.querySelectorAll('p')[18].textContent = data.Abandono_Unidad;
-		this.template_investigacion.querySelectorAll('p')[19].textContent = data.Familiar_Empresa;
-	this.template_investigacion.querySelectorAll('p')[20].textContent = data.Reingreso;
-
         const clone_investigacion = this.template_investigacion.cloneNode(true);
         this.fragment_investigacion.appendChild(clone_investigacion);
 
         this.content_investigacion.innerHTML = '';
         this.content_investigacion.appendChild(this.fragment_investigacion);
     }
-	
-	cargarBusquedaGoogle(pdf = 0) {
-		this.content_google_search.innerHTML = '';
-        if (pdf != 0) {
-            //const fileURL = URL.createObjectURL(pdf);
-            //console.log(this.template_google_search.querySelector('embed').setAttribute('src', pdf));
-			
-            const clone_google_search = this.template_google_search.cloneNode(true);
-            this.fragment_google_search.appendChild(clone_google_search);
-            this.content_google_search.appendChild(this.fragment_google_search);
-        }
-    }
 
-    cargarComentariosGeneralesInv(observaciones, display, candidato){
+    cargarComentariosGeneralesInv(observaciones){
         if (observaciones.Info_Proporcionada_Candidato == 242){
             this.template_comentarios_generales_inv.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
             this.template_comentarios_generales_inv.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = '';
@@ -1232,46 +1154,6 @@ class ContenidoEstudio{
 
         this.template_comentarios_generales_inv.querySelectorAll('p')[0].innerText = observaciones.Comentario_General_il;
         this.template_comentarios_generales_inv.querySelectorAll('p')[1].innerText = observaciones.Viable == 0 ? 'Viable' : (observaciones.Viable == 1 ? 'No viable' : (observaciones.Viable == 2 ? 'Viable con reservas' : (observaciones.Viable == 4 ? 'Sin viabilidad' : (observaciones.Viable == 5 ? 'Viable con observaciones' : ''))));
-		
-		if (candidato.Servicio_Solicitado == 'ESE SMART') {
-			  if (observaciones.Comentario_General_il== '' ) {    
-                this.template_comentarios_generales_inv.querySelectorAll('p')[0].style.display = 'none';
-                this.template_comentarios_generales_inv.querySelectorAll('b')[0].style.display = 'none';
-            }
-			let tabla = this.template_comentarios_generales_inv.querySelectorAll('table')[1];
-            tabla.style.display = '';
-			if (observaciones.Proporciona_Contacto == 1){
-				tabla.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
-				tabla.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = '';
-			}else if (observaciones.Proporciona_Contacto == 2){
-				tabla.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = '';
-				tabla.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-danger'></i>";
-			}
-			if (observaciones.Informacion_Congruente == 1){
-				tabla.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
-				tabla.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = '';
-			}else if (observaciones.Informacion_Congruente == 2){
-				tabla.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = '';
-				tabla.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-danger'></i>";
-			}
-			if (observaciones.Factor_Riesgo == 1){
-				tabla.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
-				tabla.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = '';
-			}else if (observaciones.Factor_Riesgo == 2){
-				tabla.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = '';
-				tabla.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-danger'></i>";
-			}
-			if (observaciones.Estabilidad_Laboral == 1){
-				tabla.querySelectorAll('tr')[4].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
-				tabla.querySelectorAll('tr')[4].querySelectorAll('td')[1].innerHTML = '';
-			}else if (observaciones.Estabilidad_Laboral == 2){
-				tabla.querySelectorAll('tr')[4].querySelectorAll('td')[0].innerHTML = '';
-				tabla.querySelectorAll('tr')[4].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-danger'></i>";
-			}
-			
-        }else {
-            this.template_comentarios_generales_inv.querySelectorAll('table')[1].style.display = 'none';
-        }
 
         const clone_comentarios_generales_inv = this.template_comentarios_generales_inv.cloneNode(true);
         this.fragment_comentarios_generales_inv.appendChild(clone_comentarios_generales_inv);
@@ -1304,42 +1186,7 @@ class ContenidoEstudio{
         this.content_conociendo_candidato.appendChild(this.fragment_conociendo_candidato);
     };
 
-	
-    cargarEscolaridad(data, candidato) {
-        var clones_escolaridad = new Array();
-        data.forEach(escolaridad => {
-            this.template_escolaridad.querySelectorAll('p')[0].textContent = escolaridad.Grado;
-            this.template_escolaridad.querySelectorAll('p')[1].textContent = escolaridad.Institucion;
-            this.template_escolaridad.querySelectorAll('p')[2].textContent = escolaridad.Localidad;
-            this.template_escolaridad.querySelectorAll('p')[3].textContent = escolaridad.Periodo;
-            this.template_escolaridad.querySelectorAll('p')[4].textContent = escolaridad.Documento;
-            this.template_escolaridad.querySelectorAll('p')[5].textContent = escolaridad.Folio;
-
-            for (let i = 0; i < this.content_escolaridad.length; i++) {
-                this.content_escolaridad[i].parentElement.children[0].dataset.id = escolaridad.Renglon;
-                clones_escolaridad[i] = this.template_escolaridad.cloneNode(true);
-                this.fragment_escolaridad[i].appendChild(clones_escolaridad[i]);
-            }
-
-        });
-        for (let i = 0; i < this.content_escolaridad.length; i++) {
-            this.content_escolaridad[i].innerHTML = "";
-            this.content_escolaridad[i].appendChild(this.fragment_escolaridad[i]);
-
-			if (candidato.Servicio_Solicitado != 'ESE SMART') {
-				const b = document.createElement('b');
-				b.textContent = 'Comentarios';
-				const p = document.createElement('p');
-				p.innerText = candidato.Comentario_Escolaridad;
-				this.content_escolaridad[i].appendChild(b);
-				this.content_escolaridad[i].appendChild(p);
-			}
-        }
-
-    }
-	
-  
-      cargarEscolaridad1(data, candidato) {
+    cargarEscolaridad(data, comentario) {
         var clones_escolaridad = new Array();
         data.forEach(escolaridad => {
             this.template_escolaridad.querySelectorAll('p')[0].textContent = escolaridad.Grado;
@@ -1360,24 +1207,22 @@ class ContenidoEstudio{
             this.content_escolaridad[i].innerHTML = "";
             this.content_escolaridad[i].appendChild(this.fragment_escolaridad[i]);
             
-            if (candidato.Servicio_Solicitado != 'ESE SMART') {
-                const b = document.createElement('b');
-                b.textContent = 'Comentarios';
-                const p = document.createElement('p');
-                p.innerText = data.Comentario_Escolaridad;
-                this.content_escolaridad[i].appendChild(b);
-                this.content_escolaridad[i].appendChild(p);
-            }
+            const b = document.createElement('b');
+            b.textContent = 'Comentarios';
+            const p = document.createElement('p');
+            p.innerText = comentario;
+            this.content_escolaridad[i].appendChild(b);
+            this.content_escolaridad[i].appendChild(p);
         }
         
     }
 
-    cargarCohabitantes(data, display, comentario = false, candidato){
+    cargarCohabitantes(data, display, comentario = false){
         var clones_cohabitantes = new Array();
         data.forEach(element => {
             this.template_cohabitante.querySelectorAll('td')[0].textContent = element.Nombre;
             this.template_cohabitante.querySelectorAll('td')[1].textContent = element.Parentesco;
-            this.template_cohabitante.querySelectorAll('td')[2].textContent = candidato.Servicio_Solicitado == 'ESE SMART' ? (element.Es_Mayor_Edad == 1 ? 'Sí' : 'No') : `${element.Edad} ${element.Edad_2}`;
+            this.template_cohabitante.querySelectorAll('td')[2].textContent = `${element.Edad} ${element.Edad_2}`;
             this.template_cohabitante.querySelectorAll('td')[3].textContent = element.Estado_Civil;
             this.template_cohabitante.querySelectorAll('td')[4].textContent = element.Ocupacion;
             this.template_cohabitante.querySelectorAll('td')[5].textContent = element.Empresa;
@@ -1400,22 +1245,9 @@ class ContenidoEstudio{
             this.content_cohabitantes[i].innerHTML = "";
             this.content_cohabitantes[i].appendChild(this.fragment_cohabitante[i]);
             
-            if (candidato.Servicio_Solicitado == 'ESE SMART') {
-                this.content_cohabitantes[i].parentElement.children[0].children[0].children[2].innerText = '¿Es mayor de edad?';
-                this.content_cohabitantes[i].parentElement.children[0].children[0].children[6].style.display = 'none';
-                this.content_cohabitantes[i].parentElement.children[0].children[0].children[7].style.display = '';
-				
-				this.content_cohabitantes[i].parentElement.parentElement.parentElement.children[3].style.display = 'none';
-				this.content_cohabitantes[i].parentElement.parentElement.parentElement.children[4].style.display = 'none';
-				this.content_cohabitantes[i].parentElement.parentElement.parentElement.children[5].style.display = 'none';
-            }
-            
 
             if (comentario) {
                 this.content_cohabitantes[i].parentElement.parentElement.parentElement.children[5].textContent = comentario
-            }
-            if (candidato.Servicio_Solicitado == 'ESE SMART') {
-                this.content_cohabitantes[i].parentElement.parentElement.parentElement.children[5].style.display = 'none';
             }
         }
     }
@@ -1494,7 +1326,7 @@ class ContenidoEstudio{
         }
     }
 
-    cargarUbicacion(ubicacion, vivienda, candidato) {
+    cargarUbicacion(ubicacion, vivienda, comentario) {
         this.template_ubicacion.querySelectorAll('p')[0].textContent = vivienda.Tiempo_Viviendo;
         this.template_ubicacion.querySelectorAll('p')[1].textContent = ubicacion.Calle;
         this.template_ubicacion.querySelectorAll('p')[2].textContent = ubicacion.Exterior;
@@ -1517,19 +1349,8 @@ class ContenidoEstudio{
         this.template_ubicacion.querySelectorAll('p')[19].textContent = vivienda.Contrato_Arrendamiento;
         this.template_ubicacion.querySelectorAll('p')[20].textContent = vivienda.Tiempo_Contrato;
 
-        this.template_ubicacion.querySelectorAll('p')[21].textContent = candidato.Comentario_Vivienda;
+        this.template_ubicacion.querySelectorAll('p')[21].textContent = comentario.Comentario_Vivienda;
         this.template_ubicacion.querySelectorAll('p')[22].textContent = ubicacion.Maps;
-		
-		if (candidato.Servicio_Solicitado == 'ESE SMART') {
-            this.template_ubicacion.querySelectorAll('b')[12].style.display = 'none';
-            this.template_ubicacion.querySelectorAll('p')[12].style.display = 'none';
-            this.template_ubicacion.querySelectorAll('b')[13].style.display = 'none';
-            this.template_ubicacion.querySelectorAll('p')[13].style.display = 'none';
-            this.template_ubicacion.querySelectorAll('b')[14].style.display = 'none';
-            this.template_ubicacion.querySelectorAll('p')[14].style.display = 'none';
-            this.template_ubicacion.querySelectorAll('b')[21].style.display = 'none';
-            this.template_ubicacion.querySelectorAll('p')[21].style.display = 'none';
-        }
 
         const clone_ubicacion = this.template_ubicacion.cloneNode(true);
         this.fragment_ubicacion.appendChild(clone_ubicacion);
@@ -1785,16 +1606,10 @@ class ContenidoEstudio{
         this.content_vehiculos.appendChild(this.fragment_vehiculo);
     }
 
-    cargarConclusiones(observaciones, display, candidato) {
-		if (candidato.Servicio_Solicitado != 'ESE SMART') {
-			this.template_conclusiones.querySelectorAll('p')[0].textContent = observaciones.Sobre_Candidato;
-			this.template_conclusiones.querySelectorAll('p')[1].textContent = observaciones.Sobre_Casa;
-			this.template_conclusiones.querySelectorAll('p')[2].textContent = observaciones.Conclusiones_Entrevistador;
-		} else {
-            this.template_conclusiones.querySelectorAll('b')[0].style.display = 'none';
-            this.template_conclusiones.querySelectorAll('b')[1].style.display = 'none';
-            this.template_conclusiones.querySelectorAll('b')[2].style.display = 'none';
-        }
+    cargarConclusiones(observaciones) {
+        this.template_conclusiones.querySelectorAll('p')[0].textContent = observaciones.Sobre_Candidato;
+        this.template_conclusiones.querySelectorAll('p')[1].textContent = observaciones.Sobre_Casa;
+        this.template_conclusiones.querySelectorAll('p')[2].textContent = observaciones.Conclusiones_Entrevistador;
         if (observaciones.Participacion_Candidato == 243 || observaciones.Participacion_Candidato == 242) {
             this.template_conclusiones.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
             this.template_conclusiones.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = "";
@@ -1844,48 +1659,11 @@ class ContenidoEstudio{
         this.content_conclusiones.appendChild(this.fragment_conclusiones);
     }
 
-    cargarComentariosGenerales(observaciones, display, candidato){
-		if (candidato.Servicio_Solicitado != 'ESE SMART') {
-        	this.template_comentarios_generales.querySelectorAll('p')[0].innerText = observaciones.Comentarios_Generales;
-			this.template_comentarios_generales.querySelector('table').style.display = 'none';
-		}else {
-            this.template_comentarios_generales.querySelectorAll('b')[0].style.display = 'none';
-            if (observaciones.Puntualidad == 1) {
-                this.template_comentarios_generales.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
-                this.template_comentarios_generales.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = "";
-            }else if (observaciones.Puntualidad == 2){
-                this.template_comentarios_generales.querySelectorAll('tr')[1].querySelectorAll('td')[0].innerHTML = "";
-                this.template_comentarios_generales.querySelectorAll('tr')[1].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-danger'></i>";
-            }
-    
-            if (observaciones.Documentacion == 1) {
-                this.template_comentarios_generales.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
-                this.template_comentarios_generales.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = "";
-            }else if (observaciones.Documentacion == 2){
-                this.template_comentarios_generales.querySelectorAll('tr')[2].querySelectorAll('td')[0].innerHTML = "";
-                this.template_comentarios_generales.querySelectorAll('tr')[2].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-danger'></i>";
-            }
-
-            if (observaciones.Naturalidad == 1) {
-                this.template_comentarios_generales.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
-                this.template_comentarios_generales.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = "";
-            }else if (observaciones.Naturalidad == 2){
-                this.template_comentarios_generales.querySelectorAll('tr')[3].querySelectorAll('td')[0].innerHTML = "";
-                this.template_comentarios_generales.querySelectorAll('tr')[3].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-danger'></i>";
-            }
-
-            if (observaciones.Respuestas_Claras == 1) {
-                this.template_comentarios_generales.querySelectorAll('tr')[4].querySelectorAll('td')[0].innerHTML = "<i class='fas fa-circle text-success'></i>";
-                this.template_comentarios_generales.querySelectorAll('tr')[4].querySelectorAll('td')[1].innerHTML = "";
-            }else if (observaciones.Respuestas_Claras == 2){
-                this.template_comentarios_generales.querySelectorAll('tr')[4].querySelectorAll('td')[0].innerHTML = "";
-                this.template_comentarios_generales.querySelectorAll('tr')[4].querySelectorAll('td')[1].innerHTML = "<i class='fas fa-circle text-danger'></i>";
-            }
-        }
+    cargarComentariosGenerales(observaciones){
+        this.template_comentarios_generales.querySelectorAll('p')[0].innerText = observaciones.Comentarios_Generales;
         //this.template_comentarios_generales.querySelectorAll('p')[1].innerText = observaciones.Califica_como;
-       // this.template_comentarios_generales.querySelectorAll('p')[1].innerText = observaciones.Viabilidad == '0' ? 'Viable para su contratación' : (observaciones.Viabilidad == 1 ? 'No viable para su contratación' : (observaciones.Viabilidad == 2 ? 'Viable con reservas' :
-       //  (observaciones.Viabilidad == 4 ? 'Sin viabilidad' : (observaciones.Viabilidad == 5 ? 'Viable con observaciones' : ''))));
-        this.template_comentarios_generales.querySelectorAll('p')[1].innerText = observaciones.Viabilidad;
+        this.template_comentarios_generales.querySelectorAll('p')[1].innerText = observaciones.Viabilidad == '0' ? 'Viable para su contratación' : (observaciones.Viabilidad == 1 ? 'No viable para su contratación' : (observaciones.Viabilidad == 2 ? 'Viable con reservas' :
+         (observaciones.Viabilidad == 4 ? 'Sin viabilidad' : (observaciones.Viabilidad == 5 ? 'Viable con observaciones' : ''))));
 
         const clone_comentarios_generales = this.template_comentarios_generales.cloneNode(true);
         this.fragment_comentarios_generales.appendChild(clone_comentarios_generales);

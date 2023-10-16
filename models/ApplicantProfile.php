@@ -26,9 +26,7 @@ class ApplicantProfile
     private $functions_comments;
     private $status_functions;
     private $general_comments;
-    //===[gabo 27 junio perfil]==
-    private $tiempo;
-    //===[gabo 27 junio perfil]==
+
 
 
 
@@ -219,6 +217,8 @@ class ApplicantProfile
         $this->modified_at = $modified_at;
     }
 
+
+
     // gabo mod
 
     public function getGeneral_comments()
@@ -265,18 +265,10 @@ class ApplicantProfile
         $this->experiencia_comments = $experiencia_comments;
     }
 
-    //===[gabo 27 junio perfil]==
 
-    public function getTiempo()
-    {
-        return $this->tiempo;
-    }
 
-    public function setTiempo($tiempo)
-    {
-        $this->tiempo = $tiempo;
-    }
-    //===[gabo 27 junio perfil]==
+
+
 
     public function getALL()
     {
@@ -301,9 +293,9 @@ class ApplicantProfile
     }
 
 
-    // ===[gabo 27 junio perfil]==
     public function save()
     {
+
         $result = false;
 
         $gender = $this->getGender();
@@ -321,17 +313,18 @@ class ApplicantProfile
         $experience_years = $this->getExperience_years();
         $functions = $this->getFunctions();
         $status_experience_years = $this->getStatus_experience_years();
+
+
+
         // gabo mod
         $general_comments = $this->getGeneral_comments();
         $status_functions = $this->getStatus_functions();
         $functions_comments = $this->getFunctions_comments();
         $experiencia_comments = $this->getExperiencia_comments();
 
-        $tiempo = $this->getTiempo();
-
         //gabo maod
-        $stmt = $this->db->prepare("INSERT INTO root.vacancy_applicant_profile ( gender, status_gender,age,status_age,civil_status,status_civil_status, level,status_level,language,status_language,language_level,status_language_level,functions,experience_years,status_experience_years,general_comments,status_functions ,functions_comments,experiencia_comments,created_at,tiempo) 
-    VALUES (:gender, :status_gender, :age, :status_age, :civil_status, :status_civil_status, :level, :status_level, :language, :status_language, :language_level, :status_language_level, :functions, :experience_years, :status_experience_years,  :general_comments, :status_functions ,:functions_comments,:experiencia_comments   , GETDATE(), :tiempo)");
+        $stmt = $this->db->prepare("INSERT INTO root.vacancy_applicant_profile ( gender, status_gender,age,status_age,civil_status,status_civil_status, level,status_level,language,status_language,language_level,status_language_level,functions,experience_years,status_experience_years,general_comments,status_functions ,functions_comments,experiencia_comments,created_at) 
+    VALUES (:gender, :status_gender, :age, :status_age, :civil_status, :status_civil_status, :level, :status_level, :language, :status_language, :language_level, :status_language_level, :functions, :experience_years, :status_experience_years,  :general_comments, :status_functions ,:functions_comments,:experiencia_comments   , GETDATE())");
         $stmt->bindParam(":gender", $gender, PDO::PARAM_STR);
         $stmt->bindParam(":status_gender", $status_gender, PDO::PARAM_STR);
         $stmt->bindParam(":age", $age, PDO::PARAM_INT);
@@ -347,15 +340,15 @@ class ApplicantProfile
         //$stmt->bindParam(":requirements", $requirements, PDO::PARAM_STR);
         $stmt->bindParam(":experience_years", $experience_years, PDO::PARAM_INT);
         $stmt->bindParam(":functions", $functions, PDO::PARAM_STR);
-        $stmt->bindParam(":experience_years", $experience_years, PDO::PARAM_STR);
         $stmt->bindParam(":status_experience_years", $status_experience_years, PDO::PARAM_STR);
-        $stmt->bindParam(":experiencia_comments", $experiencia_comments, PDO::PARAM_STR);
+        $stmt->bindParam(":status_experience_years", $status_experience_years, PDO::PARAM_STR);
+
         // gabo mod
         $stmt->bindParam(":general_comments", $general_comments, PDO::PARAM_STR);
         $stmt->bindParam(":status_functions", $status_functions, PDO::PARAM_STR);
         $stmt->bindParam(":functions_comments", $functions_comments, PDO::PARAM_STR);
+        $stmt->bindParam(":experiencia_comments", $experiencia_comments, PDO::PARAM_STR);
 
-        $stmt->bindParam(":tiempo", $tiempo, PDO::PARAM_STR);
 
 
         $flag = $stmt->execute();
@@ -366,13 +359,7 @@ class ApplicantProfile
 
         return $result;
     }
-    // ===[gabo 27 junio perfil fin]==
 
-
-
-
-
-    // ===[gabo 26 junio perfil]==
     public function update_profile()
     {
 
@@ -396,16 +383,19 @@ class ApplicantProfile
         $functions = $this->getFunctions();
         $status_experience_years = $this->getStatus_experience_years();
 
+
         // gabo mod
         $general_comments = $this->getGeneral_comments();
         $status_functions = $this->getStatus_functions();
         $functions_comments = $this->getFunctions_comments();
         $experiencia_comments = $this->getExperiencia_comments();
-        $tiempo = $this->getTiempo();
+
+
+
 
         //gabomod
         $stmt = $this->db->prepare("UPDATE TOP(1) root.vacancy_applicant_profile SET  gender=:gender, status_gender=:status_gender,age=:age,status_age=:status_age,civil_status=:civil_status,status_civil_status=:status_civil_status, level=:level,status_level=:status_level    
-        ,language=:language,status_language=:status_language ,language_level=:language_level , status_language_level=:status_language_level,experience_years=:experience_years,functions=:functions,status_experience_years=:status_experience_years , general_comments= :general_comments, status_functions= :status_functions , functions_comments=:functions_comments, experiencia_comments=:experiencia_comments   ,modified_at=GETDATE(), tiempo=:tiempo  WHERE id=:id ");
+        ,language=:language,status_language=:status_language ,language_level=:language_level , status_language_level=:status_language_level,experience_years=:experience_years,functions=:functions,status_experience_years=:status_experience_years , general_comments= :general_comments, status_functions= :status_functions , functions_comments=:functions_comments, experiencia_comments=:experiencia_comments   ,modified_at=GETDATE()  WHERE id=:id ");
         $stmt->bindParam(":id", $id, PDO::PARAM_STR);
         $stmt->bindParam(":gender", $gender, PDO::PARAM_STR);
         $stmt->bindParam(":status_gender", $status_gender, PDO::PARAM_STR);
@@ -429,7 +419,6 @@ class ApplicantProfile
         $stmt->bindParam(":status_functions", $status_functions, PDO::PARAM_STR);
         $stmt->bindParam(":functions_comments", $functions_comments, PDO::PARAM_STR);
         $stmt->bindParam(":experiencia_comments", $experiencia_comments, PDO::PARAM_STR);
-        $stmt->bindParam(":tiempo", $tiempo, PDO::PARAM_STR);
 
 
         $flag = $stmt->execute();
@@ -440,9 +429,9 @@ class ApplicantProfile
 
         return $result;
     }
-    // ===[gabo 26 junio perfil]==
-
-
+	
+	
+	
     public function delete()
     {
         $result = false;
@@ -458,22 +447,5 @@ class ApplicantProfile
         return $result;
     }
 	
-	 //gabo 26 sept
-
-    public function duplicateProfile()
-    {
-
-        $id = $this->getId();
-        $stmt = $this->db->prepare(" INSERT INTO root.vacancy_applicant_profile ( gender, status_gender,age,status_age,civil_status,status_civil_status, level,status_level,language,status_language,language_level,status_language_level,functions,experience_years,status_experience_years,general_comments,status_functions ,functions_comments,experiencia_comments,created_at,tiempo)   SELECT gender, status_gender,age,status_age,civil_status,status_civil_status, level,status_level,language,status_language,language_level,status_language_level,functions,experience_years,status_experience_years,general_comments,status_functions ,functions_comments,experiencia_comments,created_at,tiempo from root.vacancy_applicant_profile WHERE id=:id");
-
-        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-
-        $flag = $stmt->execute();
-        if ($flag) {
-            $result = true;
-            $this->setId($this->db->lastInsertId());
-        }
-
-        return $flag;
-    }
+	
 }

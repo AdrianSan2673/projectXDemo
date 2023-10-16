@@ -19,15 +19,14 @@ class CapacitacionesController
                 $Empresa = $contactoEmpresa->getContactoPorUsuario()->Empresa;
 
                 $employee = new Employees();
-                $employee->setCliente($_SESSION['id_cliente']);
+                $employee->setID_Contacto($id_contacto);
                 $employee->setStatus(1);
-                $employees = $employee->getAllEmployeesByCliente();
+                $employees = $employee->getAllEmployeesByIDcontacto();
 
                 $trainingsObj = new Trainings();
-                $trainingsObj->setCliente($_SESSION['id_cliente']);
                 $trainingsObj->setID_Contacto($id_contacto);
                 $trainingsObj->setStatus(1);
-                $trainings = $trainingsObj->getAllByIdCliente();
+                $trainings = $trainingsObj->getAllByIdContacto();
             } else {
                 $employee = new Employees();
                 $employees = $employee->getAll();
@@ -51,17 +50,17 @@ class CapacitacionesController
             $description = isset($_POST['description']) ? Utils::sanitizeString($_POST['description']) : '';
             $hours = isset($_POST['hours']) ? Utils::sanitizeNumber($_POST['hours']) : null;
             $start_date = Utils::sanitizeString($_POST['start_date']);
-            $end_date = isset($_POST['end_date'])? Utils::sanitizeString($_POST['end_date']):null;
+            $end_date = Utils::sanitizeString($_POST['end_date']);
             $clave_area_tematica = isset($_POST['clave_area_tematica']) ? Utils::sanitizeStringBlank($_POST['clave_area_tematica']) : null;
             $training_agent = Utils::sanitizeStringBlank($_POST['training_agent']);
             $instructor = Utils::sanitizeStringBlank($_POST['instructor']);
 
-            $cliente = $_SESSION['id_cliente'];
+            $cliente = $_POST['cliente'];
             $employeesArray = $_POST['employees'];
             $flag = $_POST['flag'];
             $id_training = Encryption::decode($_POST['id']);
 
-            if ($title && $hours && $cliente && $start_date && $end_date && $employeesArray && $flag) {
+            if ($title && $hours && $cliente && $start_date && $end_date && $employeesArray&&$flag) {
                 $contactoEmpresa = new ContactosEmpresa();
                 $contactoEmpresa->setUsuario($_SESSION['identity']->username);
                 $id_contacto = $contactoEmpresa->getContactoPorUsuario()->ID;
@@ -112,9 +111,8 @@ class CapacitacionesController
                         die();
                     }
 
-                    $trainingsObj->setCliente($_SESSION['id_cliente']);
                     $trainingsObj->setStatus(1);
-                    $trainings = $trainingsObj->getAllByIdCliente();
+                    $trainings = $trainingsObj->getAllByIdContacto();
                     for ($i = 0; $i < count($trainings); $i++) {
                         $trainings[$i]['start_date'] = Utils::getDate($trainings[$i]['start_date']);
                         $trainings[$i]['end_date'] = Utils::getDate($trainings[$i]['end_date']);
@@ -122,7 +120,6 @@ class CapacitacionesController
                         $trainings[$i]['id'] = Encryption::encode($trainings[$i]['id']);
                         $trainings[$i]['clave_area_tematica'] = Utils::showAreasTematicas($trainings[$i]['clave_area_tematica']);
                         $trainings[$i]['description'] = isset($trainings[$i]['description']) && $trainings[$i]['description'] != null ? $trainings[$i]['description'] : '';
-                        $trainings[$i]['url'] = base_url.'capacitaciones/ver&id='. $trainings[$i]['id'];
                     }
                     echo json_encode(array('status' => 1, 'trainings' => $trainings));
                 } else
@@ -150,13 +147,14 @@ class CapacitacionesController
                 $contactoEmpresa->setUsuario($_SESSION['identity']->username);
                 $id_contacto = $contactoEmpresa->getContactoPorUsuario()->ID;
                 $Empresa = $contactoEmpresa->getContactoPorUsuario()->Empresa;
-
-                $page_title = $training->title . ' | RRHH Ingenia';
+               
+                $page_title = $training->title.' | RRHH Ingenia';
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
                 require_once 'views/trainings/read.php';
                 require_once 'views/layout/footer.php';
             }
+
         } else {
             header("location:" . base_url);
         }
@@ -170,9 +168,9 @@ class CapacitacionesController
             $id_contacto = $contactoEmpresa->getContactoPorUsuario()->ID;
 
             $employee = new Employees();
-            $employee->setCliente($_SESSION['id_cliente']);
+            $employee->setID_Contacto($id_contacto);
             $employee->setStatus(1);
-            $employees = $employee->getAllEmployeesByCliente();
+            $employees = $employee->getAllEmployeesByIDcontacto();
 
             $id = Encryption::decode($_POST['id']);
             $trainingsObj = new Trainings();
@@ -214,9 +212,9 @@ class CapacitacionesController
                 $trainingObj->setStatus(0);
                 $trainingObj->updateDelete();
 
-                $trainingObj->setCliente($_SESSION['id_cliente']);
+                $trainingObj->setID_Contacto($id_contacto);
                 $trainingObj->setStatus(1);
-                $trainings = $trainingObj->getAllByIdCliente();
+                $trainings = $trainingObj->getAllByIdContacto();
 
 
                 for ($i = 0; $i < count($trainings); $i++) {
@@ -226,7 +224,6 @@ class CapacitacionesController
                     $trainings[$i]['id'] = Encryption::encode($trainings[$i]['id']);
                     $trainings[$i]['clave_area_tematica'] = Utils::showAreasTematicas($trainings[$i]['clave_area_tematica']);
                     $trainings[$i]['description'] = isset($trainings[$i]['description']) && $trainings[$i]['description'] != null ? $trainings[$i]['description'] : '';
-                    $trainings[$i]['url'] = base_url.'capacitaciones/ver&id='. $trainings[$i]['id'];
                 }
 
                 echo json_encode(array(

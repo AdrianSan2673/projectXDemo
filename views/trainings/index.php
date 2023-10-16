@@ -12,7 +12,7 @@
     </div><!-- /.container-fluid -->
   </section>
   <br>
-
+ 
   <!-- Main content -->
   <section class="content">
     <div class="card bg-transparent">
@@ -38,6 +38,7 @@
               <th class="align-middle text-center">Empresa contratante</th>
               <th class="align-middle text-center">Fecha de inicio</th>
               <th class="align-middle text-center">Fecha final</th>
+              <th class="align-middle text-center">Fecha de modificacion</th>
               <th class="align-middle text-center">Accion</th>
             </tr>
           </thead>
@@ -52,26 +53,13 @@
                 <td class=" align-middle text-center"><?= $tra['nombre_cliente']  ?></td>
                 <td class=" align-middle text-center"><?= Utils::getDate($tra['start_date'])  ?></td>
                 <td class=" align-middle text-center"><?= Utils::getDate($tra['end_date'])  ?></td>
+                <td class=" align-middle text-center"><?= Utils::getFullDate($tra['modified_at'])  ?></td>
                 <td class=" align-middle text-center">
-                  <div class="row">
-                    <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
-                      <div class="col-4">
-                        <a href="<?= base_url ?>capacitaciones/ver&id=<?= Encryption::encode($tra['id']) ?>" target="_blank" class="btn btn-success">
-                          <i class="fas fa-eye"></i>
-                        </a>
-                      </div>
-                    <?php endif ?>
-                    <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
-                      <div class="col-4">
-                        <button class="btn btn-info" value="<?= Encryption::encode($tra['id'])  ?>"><i class="fas fa-edit"></i></button>
-                      </div>
-                    <?php endif ?>
-                    <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
-                      <div class="col-4">
-                        <button class="btn btn-danger text-bold" value="<?= Encryption::encode($tra['id'])  ?>">X</button>
-                      </div>
-                    <?php endif ?>
-                  </div>
+                  <a href="<?= base_url ?>capacitaciones/ver&id=<?= Encryption::encode($tra['id']) ?>" target="_blank" class="btn btn-success">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <button class="btn btn-info" value="<?= Encryption::encode($tra['id'])  ?>"><i class="fas fa-edit"></i></button>
+                  <button class="btn btn-danger text-bold" value="<?= Encryption::encode($tra['id'])  ?>">X</button>
                 </td>
               </tr>
             <?php endforeach; ?>

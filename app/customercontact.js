@@ -1,6 +1,6 @@
-class CustomerContact {
+class CustomerContact{
 
-    constructor() {
+    constructor(){
         this.id_customer = null;
         this.first_name = '';
         this.last_name = '';
@@ -13,7 +13,7 @@ class CustomerContact {
         this.password = '';
     }
 
-    getContacts() {
+    getContacts(){
         this.id_customer = document.querySelector('#customer').value;
         let xhr = new XMLHttpRequest();
         let data = `customer=${this.id_customer}`;
@@ -21,13 +21,13 @@ class CustomerContact {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
 
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
-                if (r != 0) {
+                if (r != 0){
                     let json_contacts = JSON.parse(this.responseText);
                     let contacts = '';
-                    for (let i in json_contacts) {
+                    for (let i in json_contacts){
                         contacts += `<option value="${json_contacts[i].id}">${json_contacts[i].first_name} ${json_contacts[i].last_name}</option>`
                     }
                     document.querySelector("#customer_contact").innerHTML = contacts;
@@ -36,7 +36,7 @@ class CustomerContact {
         }
     }
 
-    getTbContacts() {
+    getTbContacts(){
         this.id_customer = document.querySelector('#id').value;
         let xhr = new XMLHttpRequest();
         let data = `customer=${this.id_customer}`;
@@ -44,13 +44,13 @@ class CustomerContact {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
 
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
-                if (r != 0) {
+                if (r != 0){
                     let json_contacts = JSON.parse(this.responseText);
                     let contacts = '';
-                    for (let i in json_contacts) {
+                    for (let i in json_contacts){
                         contacts += `<tr>
                                         <td>${json_contacts[i].first_name} ${json_contacts[i].last_name}</td>
                                         <td>${json_contacts[i].position}</td>
@@ -75,7 +75,7 @@ class CustomerContact {
         }
     }
 
-    save() {
+    save(){
         this.first_name = document.querySelector('#customer-contact-form #first_name').value;
         this.last_name = document.querySelector('#customer-contact-form #last_name').value;
         this.position = document.querySelector('#customer-contact-form #position').value;
@@ -86,7 +86,7 @@ class CustomerContact {
         this.id_customer = document.querySelector('#customer-contact-form #id_customer').value;
 
         if (this.first_name.length > 0 && this.last_name.length > 0 && this.email.length > 0 && this.id_customer.length > 0) {
-
+            
             /*let data = `first_name=${this.first_name}&last_name=${this.last_name}&position=${this.position}&email=${this.email}&telephone=${this.telephone}&extension=${this.extension}&cellphone=${this.cellphone}&id_customer=${this.id_customer}`;
             if (document.querySelector('#add_user').value == 1) {
                 this.username = document.querySelector('#customer-contact-form #username').value;
@@ -104,33 +104,30 @@ class CustomerContact {
             //xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.send(formData);
 
-            xhr.onreadystatechange = function () {
+            xhr.onreadystatechange = function(){
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     let r = xhr.responseText;
                     console.log(r);
-                    if (r == 0) {
-                        utils.showToast('Omitiste algún dato', 'error');
-                    } else if (r == 1) {
+                    if(r == 0){
+                        utils.showToast('Omitiste algún dato','error');
+                    } else if(r == 1){
                         utils.showToast('El contacto fue registrado exitosamente', 'success');
-
+                        
                         document.querySelector('#customer-contact-form').reset();
 
-                    } else if (r == 2) {
+                    }else if (r == 2){
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-
-                    } else if (r == 3) {
-                        utils.showToast('El correo o el usuario ya existe', 'error');
-
+                        
                     }
                 }
             }
-
-        } else {
+            
+        }else {
             utils.showToast('Completa todos los campos', 'warning');
         }
     }
 
-    update() {
+    update(){
         this.id = document.querySelector('#customer-contact-form #id').value;
         this.first_name = document.querySelector('#customer-contact-form #first_name').value;
         this.last_name = document.querySelector('#customer-contact-form #last_name').value;
@@ -147,38 +144,38 @@ class CustomerContact {
         formData.append('id', this.id);
         formData.append('id_customer', this.id_customer);
         formData.append('id_user', this.id_user);
-
+    
         let xhr = new XMLHttpRequest();
         xhr.open('POST', './update');
         xhr.send(formData);
         xhr.id_customer = this.id_customer;
 
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
-                if (r == 0) {
-                    utils.showToast('Omitiste algún dato', 'error');
+                if(r == 0){
+                    utils.showToast('Omitiste algún dato','error');
 
-                } else if (r == 1) {
+                } else if(r == 1){
                     utils.showToast('El contacto fue actualizado exitosamente', 'success');
                     setTimeout(() => {
                         window.location.href = `../cliente/ver&id=${xhr.id_customer}`;
                     }, 3000);
-                } else if (r == 2) {
+                }else if (r == 2){
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                } else if (r == 3) {
+                }else if(r == 3){
                     utils.showToast('El usuario o la dirección de correo electrónico ya existe.', 'error');
-                } else if (r == 4) {
+                }else if (r == 4){
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-
+                    
                 }
             }
         }
-
-    }
-
-
+            
+    }  
+    
+	
 
     ///////////////////////////////////////// INICIO GABOOO[MARZO 4]  ///////////////////////////////////////////////////////
     getContacto(ID) { //gabo
@@ -255,7 +252,7 @@ class CustomerContact {
 
 
 
-
+   
 
 
     save_modal() { //gabo 23 feb
@@ -338,7 +335,7 @@ class CustomerContact {
     }
 
 
-    update_modal() { //gabo 2 oct/
+    update_modal() { //gabo 24/feb
         var form = document.querySelector("#contacto-reclu-form");
         var formData = new FormData(form);
         form.querySelector('[name="submit"]').disabled = true;
@@ -373,11 +370,6 @@ class CustomerContact {
                             <td> ${element.username}</td>
                             <td class="text-center py-0 align-middle">
                             <div class="btn-group btn-group-sm">
-
-                            <button class="btn btn-warning" data-id="${element.username}" data-nombre="${element.first_name} ${element.last_name}">
-                            <i class="fas fa-envelope"></i>
-                        </button>
-
                             <button class="btn btn-info btn-modal" data-id="${element.idE}">
                             <i class="fas fa-pencil-alt"></i>
                             </button> 
@@ -414,7 +406,7 @@ class CustomerContact {
     }
 
 
-    delete_contacto_modal() { //gabo 2 oct
+    delete_contacto_modal() { //gabo 27/feb
         var form = document.querySelector("#modal_delete_contacto2 form");
         var formData = new FormData(form);
         form.querySelectorAll('.btn')[1].disabled = true;
@@ -448,12 +440,6 @@ class CustomerContact {
                                 <td> ${element.username}</td>
                                 <td class="text-center py-0 align-middle">
                                 <div class="btn-group btn-group-sm">
-
-
-                                <button class="btn btn-warning" data-id="${element.username}" data-nombre="${element.first_name} ${element.last_name}">
-                                <i class="fas fa-envelope"></i>
-                            </button>
-
                                 <button class="btn btn-info btn-modal" data-id="${element.idE}">
                                 <i class="fas fa-pencil-alt"></i>
                                 </button> 
@@ -463,7 +449,7 @@ class CustomerContact {
                                  </div>
                                 </td>
                             </tr>`
-                        });
+                            });
 
                         document.querySelector('#tb_contacts tbody').innerHTML = contactos;
                         utils.showToast('El contacto fue eliminado exitosamente', 'success');

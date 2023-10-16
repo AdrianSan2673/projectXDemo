@@ -52,14 +52,14 @@
                 <td class="align-middle text-center"><?= $evaluation['department'] ?></td>
                 <td class="align-middle text-center"><?= $evaluation['title'] ?></td>
                 <td class="align-middle"><?= $evaluation['first_name_boss'] . ' ' . $evaluation['surname_boss'] . ' ' . $evaluation['last_name_boss'] ?></td>
-                <td class="align-middle text-center"><?= Utils::getDate($evaluation['start_date']) . ' - ' . Utils::getDate($evaluation['end_date']) ?></td>
+                <td class="align-middle text-center"><?= $evaluation['start_date'] . ' - ' . $evaluation['end_date'] ?></td>
                 <td class="align-middle text-center"><?= $evaluation['status'] == 1 ? 'Enviada' : ($evaluation['status'] == 2 ? 'Contestada' : ($evaluation['status'] == 3 ? 'Retroalimentada' : 'Firmada')) ?></td>
-                <td class="align-middle text-center"><?= $evaluation['date_of_realization']!=null ||$evaluation['date_of_realization']!=''?  Utils::getDate( $evaluation['date_of_realization']) :'-'?></td>
+                <td class="align-middle text-center"><?= Utils::getFullDate( $evaluation['date_of_realization']) ?></td>
                 <td class="align-middle">
                   <div class="btn-group btn-group-sm">
 
                     <?php if (Utils::isCustomerSA()) :  ?>
-                      <a href="<?= base_url ?>evaluacionempleado/ver2&id=<?= Encryption::encode($evaluation['id']) ?>" class="btn btn-primary mr-2">
+                      <a href="<?= base_url ?>evaluacionempleado/ver2&id=<?= Encryption::encode($evaluation['id']) ?>" class="btn btn-primary">
                         <i class="far fa-check-circle"></i> Evaluar
                       </a>
                       <btn class="btn btn-danger" onclick="delete_evaluation('<?= Encryption::encode($evaluation['id']) ?>')">

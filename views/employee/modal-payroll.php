@@ -19,14 +19,14 @@
                     </div> -->
                     <div class="form-group ">
                         <label class="col-form-label">Salario actual </label>
-                        <input type="number" name="gross_pay"  class="form-control" value="<?= isset($employeePayroll->gross_pay) ?str_replace(",", "",  number_format($employeePayroll->gross_pay,2) ): '' ?>"   required>
+                        <input type="number" name="gross_pay"  class="form-control" step="0.01" placeholder="" value="<?= isset($employeePayroll->gross_pay) ? number_format($employeePayroll->gross_pay,2) : '' ?>"   required>
                     </div>
                     <div class="form-group ">
                         <label class="col-form-label">Banco</label>
                         <input type="text" name="bank"  class="form-control" placeholder="Identidad bancaria"  maxlength="150" value="<?= isset($employeePayroll->bank) ? $employeePayroll->bank : '' ?>"  required>
                     </div>
                     <div class="form-group ">
-                        <label class="col-form-label">Cuenta bancaria</label>
+                        <label class="col-form-label">Cuenta</label>
                         <input type="number" name="account_number"   class="form-control" placeholder=""  maxlength="20" value="<?= isset($employeePayroll->account_number) ? $employeePayroll->account_number : '' ?>" >
                     </div>
                     <div class="form-group ">

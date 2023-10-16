@@ -24,9 +24,8 @@ class Evaluations {
                             utils.showToast('Se creo con exito', 'success');
                             $('#modal_create_evaluation').modal('hide');
 
-                            //window.location.href = json_app.url;
                             setTimeout(function () {
-                                window.location.reload()
+                                window.location.href = json_app.url;
                             }, 1200);
                             form.querySelectorAll('.btn')[1].disabled = false;
 
@@ -77,7 +76,7 @@ class Evaluations {
         }
     }
 
-    delete(id) {
+    delet(id) {
         let xhr = new XMLHttpRequest();
         let data = `id=${id}`;
         xhr.open('POST', '../evaluaciones/delete');
@@ -112,7 +111,7 @@ class Evaluations {
                                       </div>
                                 </div>
                               </div>
-                              <a class="small-box-footer" href="${json_app.url}evaluaciones/ver&id=${element.id}">
+                              <a class="small-box-footer" href="<?= base_url ?>evaluaciones/ver&id=${element.id}">
                                 Ver
                                 <i class="fas fa-arrow-circle-right"></i>
                               </a>
@@ -153,9 +152,6 @@ class Evaluations {
                         document.querySelector('#modal_create_evaluation [name="name"]').value = json_app.evaluations.name
                         document.querySelector('#modal_create_evaluation [name="level"]').value = json_app.evaluations.level
                         document.querySelector('#modal_create_evaluation [name="type"]').checked = json_app.evaluations.type != 0 ? true : false
-                        //===[gabo 12 junio excel evaluaciones pt2]===
-                        document.getElementById("id_cliente_plantilla").value = json_app.evaluations.ID_Cliente;
-                        //===[gabo 12 junio excel evaluaciones fin pt2]===
 
                     } else {
                         form.querySelectorAll('.btn')[0].disabled = false;
@@ -275,3 +271,12 @@ class Evaluations {
 
 
 }
+
+
+
+
+
+
+
+
+

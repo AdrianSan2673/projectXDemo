@@ -1,3 +1,4 @@
+
 <?php
 class EvaluationOpenQuestionsEmployee
 {
@@ -75,16 +76,6 @@ class EvaluationOpenQuestionsEmployee
         $stmt = $this->db->prepare("SELECT eop.id, op.question, eop.answer FROM root.evaluation_open_questions_employee eop INNER JOIN root.open_questions op ON eop.id_open_question=op.id WHERE eop.id_evaluation_employee=:id_evaluation_employee AND op.status=:status");
         $stmt->bindParam(":id_evaluation_employee", $id_evaluation_employee, PDO::PARAM_INT);
         $stmt->bindParam(":status", $status, PDO::PARAM_INT);
-        $stmt->execute();
-        $fetch =  $stmt->fetchAll();
-        return $fetch;
-    }
-
-    public function getAllByIdEvvalautionEmployee()
-    {
-        $id_evaluation_employee = $this->getId_evaluation_employee();
-        $stmt = $this->db->prepare("SELECT * FROM root.evaluation_open_questions_employee WHERE id_evaluation_employee=:id_evaluation_employee ");
-        $stmt->bindParam(":id_evaluation_employee", $id_evaluation_employee, PDO::PARAM_INT);
         $stmt->execute();
         $fetch =  $stmt->fetchAll();
         return $fetch;

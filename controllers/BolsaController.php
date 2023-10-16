@@ -17,12 +17,11 @@ class BolsaController{
             $candidato = $candidate->getCandidateByUsername();
             if (!$candidato) {
                 header('location:'.base_url.'candidato/crear');
+            }else{
+                if ($candidato->job_title == NUll || $candidato->description == NULL || $candidato->id_state == NULL || $candidato->id_city == NULL || $candidato->id_civil_status == NULL || $candidato->id_area == NULL || ($candidato->telephone == NULL && $candidato->cellphone == NULL)) {
+                    header('location:'.base_url.'candidato/editar');
+                }
             }
-            // else{
-            //     if ($candidato->job_title == NUll || $candidato->description == NULL || $candidato->id_state == NULL || $candidato->id_city == NULL || $candidato->id_civil_status == NULL || $candidato->id_area == NULL || ($candidato->telephone == NULL && $candidato->cellphone == NULL)) {
-            //         header('location:'.base_url.'candidato/editar');
-            //     }
-            // }
         }
 
         if (isset($_GET['area'])) {

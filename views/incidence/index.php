@@ -12,7 +12,7 @@
     </div><!-- /.container-fluid -->
   </section>
   <br>
-
+ 
   <!-- Main content -->
   <section class="content">
     <div class="card bg-transparent">
@@ -20,54 +20,13 @@
         <h3 class="card-title">Listado de incidentes</h3>
       </div>
       <div class="card-body">
-        <?php if (Utils::permission($_GET['controller'], 'create')) : ?>
-          <div class="row">
-            <div class="col-sm-2 ml-auto">
-              <div class="btn-group mr-3 text-center">
-                <button class="btn btn-orange" id="btn-nuevo-incidencia">Nuevo incidente</button>
-              </div>
-            </div>
-          </div>
-        <?php endif ?>
-        <!-- //===[gabo 7 junio incidencias]=== -->
-
-        <section class="content-header">
-
-          <form method="POST" action="<?= base_url . "Reporte/incidentes" ?>" target="_blank">
-
-            <div class="d-flex flex-row justify-content-center alig-items-center">
-              <div class="row" style="width:70%;">
-
-                <div class="col">
-                  <div class="form-group">
-                    <label for="start_date" class="col-form-label">Fecha Inicio</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control" value="<?= date('Y-m-d', strtotime('-30 days'));  ?>" required>
-
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="form-group">
-                    <label for="end_date" class="col-form-label">Fecha Fin</label>
-                    <input type="date" name="end_date" id="end_date" class="form-control" value="<?= date('Y-m-d');  ?>" required onchange="comprobar()" required>
-
-                  </div>
-                </div>
-                <div class="col-2" style="margin-top:9px;">
-                  <div class="form-group">
-                    <label for="edad1" class="col-form-label"></label>
-                    <button type="submit" name="search" id="search" class="form-control btn-success" style="background-color: #17a2b8; "><i class="fas fa-file-excel "></i>
-                      Excel</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </form>
-
-        </section>
-
-
-
-        <!-- //===[gabo 7 junio incidencias fin]=== -->
+      <div class="row">
+      <div class="col-sm-2 ml-auto">
+        <div class="btn-group mr-3 text-center">
+          <button class="btn btn-orange" id="btn-nuevo-incidencia">Nuevo incidente</button>
+        </div>
+      </div>
+    </div>
         <table id="tb_employees" class="table table-responsive table-striped table-sm" style="display: none;">
           <thead>
             <tr>
@@ -97,11 +56,7 @@
                     echo $inc['type_of_incapacity'];
                   } else if ($inc['type'] == 'Bonos') {
                     echo '$' . number_format($inc['amount'], 2);
-                    //===[gabo 7 junio incidencias]=== 
-                  } else if ($inc['type'] == 'Permiso') {
-                    echo $inc['permission'];
                   }
-                  //===[gabo 7 junio incidencias fin]=== 
                   ?>
                 </td>
                 <td class="text-center align-middle"><?= $inc['comments']  ?></td>
@@ -111,12 +66,8 @@
                 <td class="text-center align-middle"><?= Utils::getDate($inc['created_at'])  ?></td>
                 <td class="text-center align-middle"><?= Utils::getDate($inc['end_date'])  ?></td>
                 <td class="text-center align-middle">
-                  <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
-                    <a href="<?= base_url ?>empleado/ver&id=<?= Encryption::encode($inc['id_employe']) ?>" class="btn btn-success"><i class="fas fa-eye"></i> Ver</a>
-                  <?php endif ?>
-                  <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
-                    <button class="btn btn-danger text-bold" value="<?= Encryption::encode($inc['id_incident'])  ?>">X</button>
-                  <?php endif ?>
+                  <a href="<?= base_url ?>empleado/ver&id=<?= Encryption::encode($inc['id_employe']) ?>" class="btn btn-success"><i class="fas fa-eye"></i> Ver</a>
+                  <button class="btn btn-danger text-bold" value="<?= Encryption::encode($inc['id_incident'])  ?>">X</button>
                 </td>
               </tr>
             <?php endforeach;
@@ -135,19 +86,6 @@
 <script type="text/javascript" src="<?= base_url ?>app/RH/incidence.js?v=<?= rand() ?>"></script>
 
 <script>
-  function comprobar() {
-    inicio = document.getElementById("start_date").value;
-    var fin = document.getElementById("end_date").value;
-
-    console.log(inicio);
-    console.log(fin);
-
-    if (fin < inicio) {
-      Swal.fire('La fecha final no puede ser menor a la fecha inicial');
-      document.getElementById("end_date").value = "";
-    }
-  }
-
   document.addEventListener('DOMContentLoaded', e => {
     let table = document.querySelector('#tb_employees');
     table.style.display = "table";
@@ -171,8 +109,7 @@
 
 
     document.querySelector('#tboodyInciden').addEventListener('click', function(e) {
-      if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains(
-          'btn-info')) {
+      if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains('btn-info')) {
         if (e.target.offsetParent.classList.contains('btn-info')) {
           incidente.getIncident(e.target.offsetParent.value)
         } else {
@@ -185,10 +122,9 @@
         });
       }
 
-      if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains(
-          'btn-denger')) {
+      if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains('btn-denger')) {
         Swal.fire({
-          title: '¿Quieres eliminar esta incidencia?',
+          title: '¿Quieres eliminar esta incidente?',
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#d33',
@@ -203,6 +139,10 @@
         })
       }
     })
+
+
+
+
 
   })
 </script>

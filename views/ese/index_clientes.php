@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-12">
-          <div class="alert  <?= $_SESSION['identity']->username == 'salmaperez1' ? 'alert-maroon' : 'alert-success' ?>">
+          <div class="alert  <?= $_SESSION['identity']->username == 'salmaperez' ? 'alert-maroon' : 'alert-success' ?>">
             <h3>Estudios SocioEconómicos</h3>
           </div>
         </div>
@@ -58,7 +58,7 @@
               <th class="align-middle">Solicitud</th>
               <th class="align-middle">Nombre Comercial</th>
               <th class="align-middle text-center">Solicita</th>
-              <th class="align-middle"><?= $id_empresa == 525?'Folio prudential':' Centro de Costos' ?> </th>
+              <th class="align-middle">Centro de Costos</th>
               <th class="align-middle">Candidato</th>
               <th class="align-middle text-center">Servicio solicitado</th>
               <th class="align-middle">Fase</th>
@@ -183,15 +183,13 @@
                 <?php else : ?>
                   <td class="text-right py-0 align-middle">
                     <div class="btn-group btn-group-sm">
-                      <?php if (($estudio['Servicio'] == 291 && $estudio['RAL'] != NULL) || (($estudio['Servicio'] == 298 || $estudio['Servicio'] == 291) && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254 || $estudio['Estado'] == 250) && $estudio['Folio'] == $estudio['RAL']) || (($estudio['Servicio'] == 299 || $estudio['Servicio'] == 300 || $estudio['Servicio'] == 324 || $estudio['Servicio'] == 231|| $estudio['Servicio'] == 328) && $estudio['Folio'] == $estudio['RAL'])  || (($estudio['Servicio'] == 300 || $estudio['Servicio'] == 324) && $estudio['Folio'] == $estudio['RAL'])) : ?>
-
-
-                        <a href="<?= base_url ?>formato/ral&candidato=<?= Encryption::encode($estudio['Folio']) ?>" target="_blank" class="btn btn-maroon btn-sm" style="display: <?= (($estudio['Servicio'] == 298 || $estudio['Servicio'] == 291|| $estudio['Servicio'] == 328) && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254 || $estudio['Estado'] == 250) && $estudio['Folio'] == $estudio['RAL']) || (($estudio['Servicio'] == 299 || $estudio['Servicio'] == 300 || $estudio['Servicio'] == 230 || $estudio['Servicio'] == 299  || $estudio['Servicio'] == 328  || $estudio['Servicio'] == 324 || $estudio['Servicio'] == 231) && $estudio['Folio'] == $estudio['RAL'])  || (($estudio['Servicio'] == 300 || $estudio['Servicio'] == 324) && $estudio['Folio'] == $estudio['RAL']) ? 'block' : 'none' ?>;">
+                      <?php if (($estudio['Servicio'] == 291 && $estudio['RAL'] != NULL) || (($estudio['Servicio'] == 298 || $estudio['Servicio'] == 291) && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254 || $estudio['Estado'] == 250) && $estudio['Folio'] == $estudio['RAL']) || (($estudio['Servicio'] == 299 || $estudio['Servicio'] == 300 || $estudio['Servicio'] == 324 || $estudio['Servicio'] == 231) && $estudio['Folio'] == $estudio['RAL'])  || (($estudio['Servicio'] == 300 || $estudio['Servicio'] == 324) && $estudio['Folio'] == $estudio['RAL'])) : ?>
+                        <a href="<?= base_url ?>formato/ral&candidato=<?= Encryption::encode($estudio['Folio']) ?>" target="_blank" class="btn btn-maroon btn-sm" style="display: <?= (($estudio['Servicio'] == 298 || $estudio['Servicio'] == 291) && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254 || $estudio['Estado'] == 250) && $estudio['Folio'] == $estudio['RAL']) || (($estudio['Servicio'] == 299 || $estudio['Servicio'] == 300 || $estudio['Servicio'] == 324 || $estudio['Servicio'] == 231) && $estudio['Folio'] == $estudio['RAL'])  || (($estudio['Servicio'] == 300 || $estudio['Servicio'] == 324) && $estudio['Folio'] == $estudio['RAL']) ? 'block' : 'none' ?>;">
                           <i class="fas fa-gavel"></i>
                         </a>
 
                       <?php else : ?>
-                        <a href="<?= base_url ?>formato/resumen_resultado_RAL&busqueda=<?= Encryption::encode($estudio['ID_Busqueda_RAL']) ?>" target="_blank" class="btn btn-maroon btn-sm" style="display: <?= (($estudio['Servicio'] == 291|| $estudio['Servicio'] == 328) && $estudio['RAL'] == NULL) ? 'block' : 'none' ?>;">
+                        <a href="<?= base_url ?>formato/resumen_resultado_RAL&busqueda=<?= Encryption::encode($estudio['ID_Busqueda_RAL']) ?>" target="_blank" class="btn btn-maroon btn-sm" style="display: <?= ($estudio['Servicio'] == 291 && $estudio['RAL'] == NULL) ? 'block' : 'none' ?>;">
                           <i class="fas fa-gavel"></i>
                         </a>
 
@@ -202,7 +200,7 @@
 
                   <td class="text-right py-0 align-middle">
                     <div class="btn-group btn-group-sm">
-                      <a href="<?= base_url ?>formato/investigacion_laboral&candidato=<?= Encryption::encode($estudio['Folio']) ?>" target="_blank" class="btn btn-orange btn-sm" style="display: <?= ((($estudio['Servicio'] == 231 || $estudio['Servicio'] == 299) || ($estudio['Servicio'] == 230)) && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254)) || ($estudio['Servicio'] == 300 || $estudio['Servicio'] == 324) || $estudio['Fecha_Entregado_INV'] != NULL ? ($id_empresa == 353 && $estudio['Servicio_Solicitado'] == 'ESE' && ($estudio['Fecha_Entregado_INV'] == NULL || $estudio['Fecha_Entregado_ESE'] == NULL)? 'none' : 'block') : 'none' ?>;">
+                      <a href="<?= base_url ?>formato/investigacion_laboral&candidato=<?= Encryption::encode($estudio['Folio']) ?>" target="_blank" class="btn btn-orange btn-sm" style="display: <?= ((($estudio['Servicio'] == 231 || $estudio['Servicio'] == 299) || ($estudio['Servicio'] == 230)) && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254)) || ($estudio['Servicio'] == 300 || $estudio['Servicio'] == 324) || $estudio['Fecha_Entregado_INV'] != NULL ? 'block' : 'none' ?>;">
                         <i class="far fa-id-badge"></i>
                       </a>
                     </div>
@@ -215,7 +213,7 @@
                           <i class="fas fa-file-invoice-dollar"></i>
                         </a>
                       <?php else : ?>
-                        <a href="<?= base_url ?>formato/ese&candidato=<?= Encryption::encode($estudio['Folio']) ?>" target="_blank" class="btn btn-info btn-sm" style="display: <?= ($estudio['Servicio'] == 230 || $estudio['Servicio'] == 300 || $estudio['Servicio'] == 324) && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254) || $estudio['Fecha_Entregado_ESE'] != NULL ? ($id_empresa == 353 && $estudio['Servicio_Solicitado'] == 'ESE' && ($estudio['Fecha_Entregado_INV'] == NULL || $estudio['Fecha_Entregado_ESE'] == NULL)? 'none' : 'block')  : 'none' ?>;">
+                        <a href="<?= base_url ?>formato/ese&candidato=<?= Encryption::encode($estudio['Folio']) ?>" target="_blank" class="btn btn-info btn-sm" style="display: <?= ($estudio['Servicio'] == 230 || $estudio['Servicio'] == 300 || $estudio['Servicio'] == 324) && ($estudio['Estado'] == 252 || $estudio['Estado'] == 254) || $estudio['Fecha_Entregado_ESE'] != NULL ? 'block' : 'none' ?>;">
                           <i class="fas fa-file-invoice-dollar"></i>
                         </a>
                       <?php endif; ?>
@@ -251,7 +249,7 @@
               <th class="align-middle">Solicitud</th>
               <th class="align-middle">Nombre Comercial</th>
               <th class="align-middle">Solicita</th>
-              <th class="align-middle"><?= $id_empresa == 525?'Folio prudential':' Centro de Costos' ?> </th>
+              <th class="align-middle">Centro de costos</th>
               <th class="align-middle">Candidato</th>
               <th class="align-middle text-center">Servicio solicitado</th>
               <th class="align-middle">Fase</th>

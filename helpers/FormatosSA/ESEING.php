@@ -9,10 +9,6 @@ class ESEINGE extends FPDF
 	public $headerDocumento = true;
 	public $headerEconomia = true;
 	public $nombre;
-	
-	public $id_empresa;
-	public $id_cliente;
-
 
 	public function setPortada($candidato, $viabilidad)
 	{
@@ -45,20 +41,10 @@ class ESEINGE extends FPDF
 		$y = $this->GetY() + 70;
 		$this->SetXY($x, $y);
 		$this->Write(15, 'FOR:');
-		
-		
 
 		$x1 = $this->GetX() + 20;
 		$this->SetX($x1);
-		if ($this->id_cliente == 662 || $this->id_cliente == 668 || $this->id_cliente == 599) { //Formato RADEC
-			$this->MultiCell(180, 20, utf8_encode($candidato->Nombre_Cliente), 1, 'L');
-		} else if ($candidato->Cliente == 366 || $this->id_cliente == 673  || $this->id_cliente == 593 || $this->id_cliente == 599) {
-			$this->MultiCell(200, 20, utf8_encode($candidato->Nombre_Cliente), 1, 'L');
-		}else  if($candidato->ID_Empresa == 480|| $candidato->ID_Empresa == 413){
-			$this->MultiCell(200, 20, utf8_encode('TS Trucking'), 1, 'L');
-		} else {
-			$this->MultiCell(200, 20, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' || $candidato->Empresa == 'DUCTOS DEL ALTIPLANO SA DE CV' ? $candidato->Nombre_Cliente : ($candidato->ID_Empresa == 315 ? $candidato->Nombre_Cliente : $candidato->Empresa)))), 1, 'L');
-		}
+		$this->MultiCell(200, 20, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' || $candidato->Empresa == 'DUCTOS DEL ALTIPLANO SA DE CV' ? $candidato->Nombre_Cliente : $candidato->Empresa))), 1, 'L');
 
 		$x1 = 306;
 		$this->SetXY($x1, $y);
@@ -192,13 +178,8 @@ class ESEINGE extends FPDF
 		$this->setFont('SinkinSans', '', 6.5);
 		$this->setTextColor(0, 0, 0);
 		$this->setXY(75, $y);
-	if($candidato->Cliente ==366||$candidato->Cliente ==626  || $candidato->Cliente ==668  || $this->id_cliente == 673 ||$this->id_cliente == 593 || $this->id_cliente == 599){
-			$this->MultiCell(410, 18, utf8_encode( $candidato->Nombre_Cliente), 0, 'C', true);
-		}else  if($candidato->ID_Empresa == 480|| $candidato->ID_Empresa == 413){
-			$this->MultiCell(410, 18, utf8_encode('TS Trucking'),  0, 'C', true);
-		} else{
-			$this->MultiCell(410, 18, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' || $candidato->Empresa == 'DUCTOS DEL ALTIPLANO SA DE CV' ? $candidato->Nombre_Cliente : ($candidato->ID_Empresa == 315 ? $candidato->Nombre_Cliente : $candidato->Empresa)))), 0, 'C', true);
-		}
+		$this->MultiCell(410, 18, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' || $candidato->Empresa == 'DUCTOS DEL ALTIPLANO SA DE CV' ? $candidato->Nombre_Cliente : $candidato->Empresa))), 0, 'C', true);
+
 
 		$this->setFont('SinkinSans', 'B', 6.5);
 		$this->setTextColor(160, 160, 160);
@@ -468,7 +449,7 @@ class ESEINGE extends FPDF
 			$this->setFont('SinkinSans', '', 6.5);
 			$this->setTextColor(0, 0, 0);
 			$this->setXY(360, $y);
-			$this->MultiCell(230, 18, utf8_encode($candidato->Celular) , '33', 0, 'C', true);
+			$this->MultiCell(230, 18, utf8_encode($candidato->Celular) . '33', 0, 'C', true);
 		}
 
 		$y = $this->GetY() + 5;
@@ -2372,7 +2353,7 @@ class ESEINGE extends FPDF
 				$this->setFont('SinkinSans', '', 6.5);
 				$this->setTextColor(0, 0, 0);
 				$this->setXY(158, $y);
-				$this->MultiCell(148, 15, utf8_encode($vivienda->Contrato_Arrendamiento=='Si'?'Yes':'No'), 0, 'L', true);
+				$this->MultiCell(148, 15, utf8_encode($vivienda->Contrato_Arrendamiento), 0, 'L', true);
 
 				$this->setFont('SinkinSans', 'B', 6.5);
 				$this->setTextColor(140, 140, 140);
@@ -3256,7 +3237,7 @@ class ESEINGE extends FPDF
 			$this->setFont('SinkinSans', '', 6.5);
 			$this->setTextColor(0, 0, 0);
 			$this->setXY(308, $y);
-			$this->MultiCell(292, 18, utf8_encode($INFONAVIT == 1 ? 'Yes' : ($INFONAVIT == 2 ? 'No' : '')), 0, 'L', true);
+			$this->MultiCell(292, 18, utf8_encode($INFONAVIT == 1 ? 'Sí' : ($INFONAVIT == 2 ? 'No' : '')), 0, 'L', true);
 
 			$y = $this->GetY() + 10;
 		}
@@ -3441,7 +3422,7 @@ class ESEINGE extends FPDF
 				$this->setXY(248, $y);
 				$this->MultiCell(117, 16, utf8_encode($inmueble['Valor']), 0, 'C', true);
 				$this->setXY(367, $y);
-				$this->MultiCell(117, 16, utf8_encode($inmueble['Pagado'] == 1 ? 'Yes' : 'No'), 0, 'C', true);
+				$this->MultiCell(117, 16, utf8_encode($inmueble['Pagado'] == 1 ? 'Sí' : 'No'), 0, 'C', true);
 				$this->setXY(486, $y);
 				$this->MultiCell(114, 16, utf8_encode($inmueble['Abono_Mensual']), 0, 'C', true);
 
@@ -4652,8 +4633,8 @@ class ESEINGE extends FPDF
 		$this->SetTextColor(255, 255, 255);
 		$y += 6;
 
-	 $this->setXY(100, $y);
-		$this->Write(10, utf8_encode('GENERAL COMMENTS ON THE WORKPLACE RESEARCH'));
+		/* $this->setXY(100, $y);
+		$this->Write(10, utf8_encode('COMENTARIOS GENERALES DE LA INVESTIGACIÓN LABORAL'));
 
 		$this->setFont('SinkinSans', 'B', 6.5);
 		$this->setTextColor(140, 140, 140);
@@ -4670,7 +4651,7 @@ class ESEINGE extends FPDF
 			$y = $this->GetY();
 			$this->SetXY($x, $y);
 			$this->setFont('SinkinSans', 'B', 7);
-			$this->MultiCell(562, 25, (utf8_encode('The candidate qualifies as' . $observaciones->Califica_como)), 0, 'L', true);
+			$this->MultiCell(562, 25, (utf8_encode('El candidato califica como ' . $observaciones->Califica_como)), 0, 'L', true);
 		}
 
 		if ($observaciones->Viable != NULL) {
@@ -4678,10 +4659,10 @@ class ESEINGE extends FPDF
 			$this->SetXY($x, $y);
 			$this->setFont('SinkinSans', 'B', 7);
 			if ($Empresa != 16)
-				$this->MultiCell(562, 25, (utf8_encode('The candidate qualifies as' . $observaciones->Viable == '0' ? 'Viable for hiring' : ($observaciones->Viable == 1 ? 'Not viable for hiring' : ($observaciones->Viable == 2 ? 'Viable con reservas' : ($observaciones->Viable == 4 ? 'Viable with reservations' : ($observaciones->Viable == 5 ? 'Viable with observations' : '')))))), 0, 'L', true);
+				$this->MultiCell(562, 25, (utf8_encode('El candidato califica como ' . $observaciones->Viable == '0' ? 'Viable para su contratación' : ($observaciones->Viable == 1 ? 'No viable para su contratación' : ($observaciones->Viable == 2 ? 'Viable con reservas' : ($observaciones->Viable == 4 ? 'Sin viabilidad' : ($observaciones->Viable == 5 ? 'Viable con observaciones' : '')))))), 0, 'L', true);
 			else
 				$this->MultiCell(562, 25, (utf8_encode('El candidato ' . $observaciones->Viable == '0' ? 'Cubre perfil para su contratación' : ($observaciones->Viable == 1 ? 'No Cubre Perfil para su contratación' : ($observaciones->Viable == 2 ? 'califica como A reserva del perfil para su contratación' : ($observaciones->Viable == 4 ? 'Sin viabilidad' : ($observaciones->Viable == 5 ? 'Viable con observaciones' : '')))))), 0, 'L', true);
-		} 
+		} */
 	}
 
 	public function setNotasLegales($ral)
@@ -5719,7 +5700,7 @@ class ESEINGE extends FPDF
 			$this->SetTextColor(255, 255, 255);
 			$y += 6;
 			$this->setXY(180, $y);
-			$this->Write(10, utf8_encode('PHOTO OF THE ID(IN-PERSON VISIT)'));
+			$this->Write(10, utf8_encode('FOTOS DEL INE (VISITA PRESENCIAL)'));
 
 			$y = $this->GetY() + 30;
 			$this->SetXY(25, $y);

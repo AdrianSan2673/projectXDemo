@@ -43,11 +43,9 @@
                                         <p class="title-departament"><?= $departamento->department ?></p>
                                     </div>
                                 </div>
-                                <?php if (Utils::permission($_GET['controller'], 'update')) : ?>
-                                    <div class="text-center">
-                                        <button class="btn btn-info" id="btn-editar-departamento">Editar</button>
-                                    </div>
-                                <?php endif ?>
+                                <div class="text-center">
+                                    <button class="btn btn-info" id="btn-editar-departamento">Editar</button>
+                                </div>
                             </div>
                         </div>
 
@@ -58,22 +56,22 @@
                             </div>
                             <div class="card-body">
                                 <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior()) : ?>
-                                    <?php if (Utils::permission($_GET['controller'], 'create')) : ?>
-                                        <div class="text-right">
-                                            <button class="btn btn-success" id="btn-nuevo-contacto">Nuevo Empleado</button>
-                                        </div>
-                                    <?php endif ?>
+                                    <div class="text-right">
+                                        <button class="btn btn-success" id="btn-nuevo-contacto">Nuevo Empleado</button>
+                                    </div>
                                 <?php endif ?>
 
                                 <div class="table-responsive">
                                     <table id="tb_employees" class="table table-responsive table-striped table-sm" style="display: none;">
                                         <thead>
+
                                             <tr>
-                                                <th class="text-center align-middle">Nombre</th>
-                                                <th class="text-center align-middle">Puesto</th>
-                                                <th class="text-center align-middle">Edad</th>
-                                                <th class="text-center align-middle">Fecha de inicio</th>
-                                                <th class="text-center align-middle">Accion</th>
+                                                <th class="align-middle">Nombre</th>
+                                                <th class="align-middle">Puesto</th>
+                                                <th class="align-middle">Edad</th>
+                                                <th class="align-middle">Fecha de inicio</th>
+                                                <th class="align-middle">Fecha de modificacion</th>
+                                                <th class="align-middle">Accion</th>
                                             </tr>
                                         </thead>
 
@@ -84,26 +82,15 @@
                                                     <td class="text-center align-middle"><?= $employee['title'] ?></td>
                                                     <td class="text-center align-middle"><?= $employee['date_birth']  ?> Años</td>
                                                     <td class="text-center align-middle"><?= Utils::getDate($employee['start_date']) ?></td>
+                                                    <td class="text-center align-middle"><?= Utils::getFullDate($employee['modified_at']) ?></td>
                                                     <td class="text-center align-middle">
-                                                        <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
-                                                            <a href="<?= base_url ?>empleado/ver&id=<?= Encryption::encode($employee['id_employe']) ?>" class="btn btn-success">
-                                                                <i class="fas fa-eye"></i> Ver
-                                                            </a>
-                                                        <?php endif ?>
+                                                        <a href="<?= base_url ?>empleado/ver&id=<?= Encryption::encode($employee['id_employe']) ?>" class="btn btn-success">
+                                                            <i class="fas fa-eye"></i> Ver
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
                                         </tbody>
-
-                                        <tfoot>
-                                            <tr>
-                                                <th class="text-center align-middle">Nombre</th>
-                                                <th class="text-center align-middle">Puesto</th>
-                                                <th class="text-center align-middle">Edad</th>
-                                                <th class="text-center align-middle">Fecha de inicio</th>
-                                                <th class="text-center align-middle">Accion</th>
-                                            </tr>
-                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -124,10 +111,11 @@
                                     <table id="tb_position" class="table  table-striped table-sm">
                                         <thead>
                                             <tr>
-                                                <th class="text-center align-middle">Puesto</th>
-                                                <th class="text-center align-middle">Objetivos</th>
-                                                <th class="text-center align-middle">Creado</th>
-                                                <th class="text-center align-middle">Accion</th>
+                                                <th class="align-middle">Puesto</th>
+                                                <th class="align-middle">Objetivos</th>
+                                                <th class="align-middle">Creado</th>
+                                                <th class="align-middle">Modificado</th>
+                                                <th class="align-middle">Accion</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -136,12 +124,11 @@
                                                     <td class="text-center align-middle"><?= $position['title'] ?></td>
                                                     <td class="text-center align-middle"><?= isset($position['objective']) ? $position['objective'] : 'Sin objetivos' ?></td>
                                                     <td class="text-center align-middle"><?= Utils::getDate($position['created_at']) ?></td>
+                                                    <td class="text-center align-middle"><?= Utils::getDate($position['modified_at']) ?></td>
                                                     <td class="text-center align-middle">
-                                                        <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
-                                                            <a href="<?= base_url ?>puesto/ver&id=<?= Encryption::encode($position['id']) ?>" class="btn btn-success">
-                                                                <i class="fas fa-eye"></i> Ver
-                                                            </a>
-                                                        <?php endif ?>
+                                                        <a href="<?= base_url ?>puesto/ver&id=<?= Encryption::encode($position['id']) ?>" class="btn btn-success">
+                                                            <i class="fas fa-eye"></i> Ver
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             <?php endforeach;
@@ -149,10 +136,12 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th class=text-center align-middle">Puesto</th>
-                                                <th class=text-center align-middle">Objetivos</th>
-                                                <th class=text-center align-middle">Creado</th>
-                                                <th class=text-center align-middle">Accion</th>
+                                                <th class="align-middle">Puesto</th>
+
+                                                <th class="align-middle">Objetivos</th>
+                                                <th class="align-middle">Creado</th>
+                                                <th class="align-middle">Modificado</th>
+                                                <th class="align-middle">Accion</th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -195,6 +184,8 @@
                 keyboard: false
             });
         })
+
+
 
     }
 </script>

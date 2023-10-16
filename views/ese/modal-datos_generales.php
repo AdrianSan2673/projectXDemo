@@ -28,7 +28,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-form-label " for="Cliente">Cliente</label>
-                        <select class="form-control " name="Cliente">
+                        <select class="form-control" name="Cliente">
                             <option value="0">No asignado</option>
                             <?php $clientes = Utils::showClientes() ?>
                             <?php foreach ($clientes as $cliente): ?>
@@ -43,10 +43,6 @@
                     <div class="form-group">
                         <label class="col-form-label" for="Razon">Razón social</label>
                         <select class="form-control" name="Razon"></select>
-                    </div>
-					<div class="form-group">
-                        <label class="col-form-label" for="centro">Centro de Costos</label>
-                        <input type="text" name="centro_costos" class="form-control" maxlength="50">
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">

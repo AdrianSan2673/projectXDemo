@@ -155,10 +155,10 @@ class Applicant {
 
 
     // ===[gabo 2 mayo  modal vacantes]===
-    getVacanciesByCandidato(id_candidato) {
+    getVacanciesByCandidato(id_candidato, id_recruiter) {
 
         let xhr = new XMLHttpRequest();
-        let data = `id_candidato=${id_candidato}`;
+        let data = `id_candidato=${id_candidato}&id_recruiter=${id_recruiter}`;
         xhr.open('POST', '../postulaciones/getVacanciesByCandidato');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
@@ -177,7 +177,7 @@ class Applicant {
                         let cities = '';
                         cities += `<option value=""></option>`
                         for (let i in json_app.vacantes) {
-                            cities += `<option value="${json_app.vacantes[i].id}">${json_app.vacantes[i].id} - ${json_app.vacantes[i].vacancy}-${json_app.vacantes[i].customer}-${json_app.vacantes[i].status}</option>`
+                            cities += `<option value="${json_app.vacantes[i].id}">${json_app.vacantes[i].id} - ${json_app.vacantes[i].vacancy}</option>`
                         }
                         document.getElementById("id_vacancy_v").innerHTML = cities;
 
@@ -197,61 +197,6 @@ class Applicant {
     }
 
     // ===[gabo 2 mayo  modal vacantes fin]===
-
-    //side server
-    postulate_one(id_candidate, id_vacancy) {
-        var formData = new FormData();
-        formData.append('id_candidate', id_candidate);
-        formData.append('id_vacancy', id_vacancy);
-
-        fetch('../postulaciones/postulate_one', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => {
-                //   console.log(response.json());
-                if (response.ok) {
-                    return response.text();
-                } else {
-                    throw new Error('Network response was not ok.');
-                }
-            })
-            .then(r => {
-                console.log(r);
-                try {
-                    const json_app = JSON.parse(r);
-                    if (json_app.status == 1) {
-
-
-                        Swal.fire(
-                            'Postulado!',
-                            'Candidato postulado correctamente.',
-                            'success'
-                        )
-
-                        let candidate = new Candidate();
-                        candidate.LoadTablePostulate();
-
-                    } else if (json_app.status == 0) {
-                        utils.showToast('No se pudo consultar la informacion dentro', 'error');
-                        document.querySelector('#agregar-area-form [name="guardar"]').disabled = false;
-                    } else if (json_app.status == 2) {
-                        utils.showToast('No se pudo consultar la informacion fuera', 'error');
-                        document.querySelector('#agregar-area-form [name="guardar"]').disabled = false;
-                    } else {
-                        utils.showToast('Esa area ya esta registrada ', 'error');
-                        document.querySelector('#agregar-area-form [name="guardar"]').disabled = false;
-                    }
-                } catch (error) {
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
-                    document.querySelector('#agregar-area-form [name="guardar"]').disabled = false;
-                }
-            })
-            .catch(error => {
-                utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
-                document.querySelector('#agregar-area-form [name="guardar"]').disabled = false;
-            });
-    }
 
 
 }

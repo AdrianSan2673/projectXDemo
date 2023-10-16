@@ -27,7 +27,7 @@ class SOI extends FPDF{
         $y = 230;
         $this->setFont('AmsterdamOne', '', 40);
 		$this->setXY($x, $y);
-		$this->MultiCell(400, 60, (utf8_encode(ucwords(mb_strtolower($this->candidato->Nombres.' '.$this->candidato->Apellido_Paterno.' '.$this->candidato->Apellido_Materno)))), 0, 'C', false);
+		$this->MultiCell(400, 60, ucwords(strtolower(utf8_encode(utf8_encode($this->candidato->Nombres.' '.$this->candidato->Apellido_Paterno.' '.$this->candidato->Apellido_Materno)))), 0, 'C', false);
 
         $x = 96;
         $y = 388;
@@ -65,13 +65,11 @@ class SOI extends FPDF{
         $this->SetXY($x, $y);
         $this->MultiCell(170, 20, utf8_encode($this->candidato->CURP), 0, 'L', false);
 
-        if ($this->vl) {
-            $this->SetXY($x, $y + 20);
-            $this->MultiCell(170, 20, utf8_encode($this->vl->Numero_Licencia), 0, 'L', false);
+        $this->SetXY($x, $y + 20);
+        $this->MultiCell(170, 20, utf8_encode($this->vl->Numero_Licencia), 0, 'L', false);
 
-            $this->SetXY($x, $y + 40);
-            $this->MultiCell(170, 20, utf8_encode($this->vl->Licencia_Vigente_Del.' - '.$this->vl->Licencia_Vigente_Hasta), 0, 'L', false);    
-        }
+        $this->SetXY($x, $y + 40);
+        $this->MultiCell(170, 20, utf8_encode($this->vl->Licencia_Vigente_Del.' - '.$this->vl->Licencia_Vigente_Hasta), 0, 'L', false);
 
         $x = 418;
         $y = 616;
@@ -91,6 +89,6 @@ class SOI extends FPDF{
         $this->SetXY($x, $y + 20);
         $this->MultiCell(298, 20, utf8_encode('Gerente de Operaciones'), 0, 'C', false);
 
-        $this->Image('dist/img/soi/firma_juanita.png', 170, 660, 110, 0);
+        $this->Image('dist/img/soi/f.png', 170, 685, 110, 0);
     }
 }

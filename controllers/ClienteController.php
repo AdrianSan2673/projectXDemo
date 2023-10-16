@@ -6,22 +6,13 @@ require_once 'models/BusinessName.php';
 require_once 'models/CustomerEvaluation.php';
 require_once 'models/SA/ClientesNotas.php';
 require_once 'models/SA/Prospecto.php';
-require_once 'models/CustomerContactsCollection.php';
 
-class ClienteController
-{
+class ClienteController{
 
-    public function index()
-    {
+    public function index(){
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior() || Utils::isJunior() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount())) {
             $customer = new Customer();
-              if ($_SESSION['identity']->id == 9396) {
-                $customer->setCreated_by($_SESSION['identity']->username);
-                $customers = $customer->getAllByCreate();
-            } else {
-                $customers = $customer->getAll();
-            }
-
+            $customers = $customer->getAll();
 
             $page_title = 'Nuestros clientes | RRHH Ingenia';
             require_once 'views/layout/header.php';
@@ -29,15 +20,14 @@ class ClienteController
             require_once 'views/customer/index.php';
             require_once 'views/layout/footer.php';
         } else {
-            header('location:' . base_url);
+            header('location:'.base_url);
         }
     }
 
-    public function crear()
-    {
+    public function crear(){
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior())) {
-
-            if (isset($_GET['prospecto'])) {
+			
+			if (isset($_GET['prospecto'])) {
                 $id = Encryption::decode($_GET['prospecto']);
                 $prospecto = new Prospecto();
                 $prospecto->setID($id);
@@ -50,43 +40,33 @@ class ClienteController
             require_once 'views/customer/create.php';
             require_once 'views/layout/footer.php';
         } else {
-            header('location:' . base_url);
+            header('location:'.base_url);
         }
     }
 
-    public function create()
-    {
+    public function create(){
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior())) {
             $customer = (isset($_POST['customer'])) ? trim($_POST['customer']) : FALSE;
             $alias = (isset($_POST['alias'])) ? trim($_POST['alias']) : FALSE;
             $id_cost_center = (isset($_POST['id_cost_center'])) ? trim($_POST['id_cost_center']) : FALSE;
-
-
             if ($customer && $alias && $id_cost_center) {
                 $cliente = new Customer();
                 $cliente->setCustomer($customer);
                 $cliente->setAlias($alias);
                 $cliente->setId_cost_center($id_cost_center);
 
-                $cliente->setCreated_by($_SESSION['identity']->username);
-
                 $save = $cliente->create();
-                $id_customer = Encryption::encode($cliente->getId());
-
-                if ($save) {
-                    echo json_encode(array('status' => 1, 'id_customer' => $id_customer));
-                } else {
-                    echo json_encode(array('status' => 2));
-                }
-            } else {
-                echo json_encode(array('status' => 0));
+                if ($save) {echo 1;}
+                else {echo 2;}
+            }else{
+                echo 0;
             }
-        } else {
-            header('location:' . base_url);
+        }else{
+            header('location:'.base_url);
         }
     }
-    public function ver()
-    {
+
+    public function ver(){
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior() || Utils::isJunior() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount())) {
             if (isset($_GET['id'])) {
                 $edit = true;
@@ -99,24 +79,20 @@ class ClienteController
                 $customerContact->setId_Customer($id);
                 $contacts = $customerContact->getContactsByCustomer();
 
-                $customerContactObj = new CustomerContactsCollection();
-                $customerContactObj->setId_Customer($id);
-                $CustomerContactsCollection = $customerContactObj->getALLById_cliente();
-
                 $business = new BusinessName();
                 $business->setId_Customer($id);
                 $business_names = $business->getBNByCustomer();
 
-                for ($i = 0; $i < count($business_names); $i++) {
-                    $path = 'uploads/fiscalsituations/' . $business_names[$i]['id_customer'] . '/' . $business_names[$i]['RFC'];
+                for ($i=0; $i < count($business_names); $i++) { 
+                    $path = 'uploads/fiscalsituations/'.$business_names[$i]['id_customer'].'/'.$business_names[$i]['RFC'];
                     if (file_exists($path)) {
                         $directory = opendir($path);
                         while ($file = readdir($directory)) {
                             if (!is_dir($file)) {
-                                $route = $path . '/' . $file;
+                                $route = $path.'/'.$file;
                             }
                         }
-                        $business_names[$i]['file'] = base_url . $route;
+                        $business_names[$i]['file'] = base_url.$route;
                     }
                 }
 
@@ -128,34 +104,34 @@ class ClienteController
                 $nota->setID_Cliente_Reclu($id);
                 $notas = $nota->getNotasPorClienteReclu();
 
-                for ($i = 0; $i < count($notas); $i++) {
-                    $path = 'uploads/avatar/' . $notas[$i]['id_user'];
+                for($i=0; $i < count($notas); $i++){
+                    $path = 'uploads/avatar/'.$notas[$i]['id_user'];
                     if (file_exists($path)) {
                         $directory = opendir($path);
-
-                        while ($file = readdir($directory)) {
+            
+                        while ($file = readdir($directory))
+                        {
                             if (!is_dir($file))
-                                $route = $path . '/' . $file;
+                                $route = $path.'/'.$file;
                         }
-                    } else
+                    }else
                         $route = "dist/img/user-icon.png";
-
-                    $notas[$i]['avatar'] = base_url . $route;
+                        
+                    $notas[$i]['avatar'] = base_url.$route;
                 }
 
-                $page_title = $cliente->alias . ' | RRHH Ingenia';
+                $page_title = $cliente->alias.' | RRHH Ingenia';
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
                 require_once 'views/customer/read.php';
                 require_once 'views/cliente/modal-nota.php';
-                require_once 'views/customer/modal-contacto.php';
-                require_once 'views/customer/modal-collection.php';
+				require_once 'views/customer/modal-contacto.php';
                 require_once 'views/layout/footer.php';
-            } else {
-                header('location:' . base_url . 'cliente/index');
+            }else {
+                header('location:'.base_url.'cliente/index');
             }
-        } else {
-            header('location:' . base_url);
+        }else {
+            header('location:'.base_url);
         }
     }
 
@@ -180,9 +156,8 @@ class ClienteController
             header('location:'.base_url);
         }
     } */
-
-    public function editar()
-    {
+    
+    public function editar(){
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior())) {
             if (isset($_GET['id'])) {
                 $edit = true;
@@ -191,29 +166,25 @@ class ClienteController
                 $customer->setId($id);
                 $cliente = $customer->getOne();
 
-                $page_title = $cliente->alias . ' | RRHH Ingenia';
+                $page_title = $cliente->alias.' | RRHH Ingenia';
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
                 require_once 'views/customer/create.php';
                 require_once 'views/layout/footer.php';
-            } else {
-                header('location:' . base_url . 'cliente/index');
+            }else {
+                header('location:'.base_url.'cliente/index');
             }
-        } else {
-            header('location:' . base_url);
+        }else {
+            header('location:'.base_url);
         }
     }
 
-    public function update()
-    {
+    public function update(){
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior())) {
             $id = (isset($_POST['id'])) ? Encryption::decode($_POST['id']) : FALSE;
             $customer = (isset($_POST['customer'])) ? trim($_POST['customer']) : FALSE;
             $alias = (isset($_POST['alias'])) ? trim($_POST['alias']) : FALSE;
             $id_cost_center = (isset($_POST['id_cost_center'])) ? trim($_POST['id_cost_center']) : FALSE;
-            //===[gabo 7 agosto creado por ]===
-            $created_by = isset($_POST['created_by']) ? Utils::sanitizeStringBlank($_POST['created_by']) : false;
-            //===[gabo 7 agosto creado por fin===
 
             if ($id && $customer && $alias && $id_cost_center) {
                 $cliente = new Customer();
@@ -221,26 +192,20 @@ class ClienteController
                 $cliente->setCustomer($customer);
                 $cliente->setAlias($alias);
                 $cliente->setId_cost_center($id_cost_center);
-                //===[gabo 7 agosto creado por ]===
-                $cliente->setCreated_by($created_by);
-                //===[gabo 7 agosto creado por fin===
 
                 $update = $cliente->update();
-                if ($update) {
-                    echo 1;
-                } else {
-                    echo 2;
-                }
-            } else {
+                if ($update) {echo 1;}
+                else {echo 2;}
+
+            }else{
                 echo 0;
             }
         } else {
-            header('location:' . base_url);
+            header('location:'.base_url);
         }
     }
 
-    public function evaluar()
-    {
+    public function evaluar(){
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior())) {
             if (isset($_GET['id'])) {
                 $edit = true;
@@ -249,21 +214,20 @@ class ClienteController
                 $customer->setId($id);
                 $cliente = $customer->getOne();
 
-                $page_title = $cliente->alias . ' | RRHH Ingenia';
+                $page_title = $cliente->alias.' | RRHH Ingenia';
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
                 require_once 'views/customer/evaluate.php';
                 require_once 'views/layout/footer.php';
-            } else {
-                header('location:' . base_url . 'cliente/index');
+            }else {
+                header('location:'.base_url.'cliente/index');
             }
-        } else {
-            header('location:' . base_url);
+        }else {
+            header('location:'.base_url);
         }
     }
 
-    public function create_evaluation()
-    {
+    public function create_evaluation(){
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior())) {
             $id_customer = (isset($_POST['id_customer'])) ? Encryption::decode($_POST['id_customer']) : FALSE;
             $response_time = isset($_POST['response_time']) && !empty($_POST['response_time']) ? Utils::evaluationValues($_POST['response_time']) : NULL;
@@ -272,7 +236,7 @@ class ClienteController
             $executive_friendliness = isset($_POST['executive_friendliness']) && !empty($_POST['executive_friendliness']) ? Utils::evaluationValues($_POST['executive_friendliness']) : FALSE;
             $quality_of_candidates = isset($_POST['quality_of_candidates']) && !empty($_POST['quality_of_candidates']) ? Utils::evaluationValues($_POST['quality_of_candidates']) : FALSE;
             $comments = isset($_POST['comments']) && !empty($_POST['comments']) ? trim($_POST['comments']) : FALSE;
-
+            
 
             if ($id_customer && $reception_time && $communication_with_executive && $executive_friendliness && $quality_of_candidates && $comments) {
                 $cliente = new CustomerEvaluation();
@@ -286,21 +250,18 @@ class ClienteController
                 $cliente->setCreated_by($_SESSION['identity']->id);
 
                 $save = $cliente->create();
-                if ($save) {
-                    echo 1;
-                } else {
-                    echo 2;
-                }
-            } else {
+                if ($save) {echo 1;}
+                else {echo 2;}
+
+            }else{
                 echo 0;
             }
         } else {
-            header('location:' . base_url);
+            header('location:'.base_url);
         }
     }
 
-    public function evaluaciones()
-    {
+    public function evaluaciones(){
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior() || Utils::isJunior())) {
             $customer = new Customer();
             $customers = $customer->getEvaluations();
@@ -312,12 +273,11 @@ class ClienteController
             require_once 'views/customer/evaluations.php';
             require_once 'views/layout/footer.php';
         } else {
-            header('location:' . base_url);
+            header('location:'.base_url);
         }
     }
 
-    public function condiciones()
-    {
+    public function condiciones(){
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior())) {
             if (isset($_GET['id'])) {
                 $edit = true;
@@ -327,21 +287,20 @@ class ClienteController
                 $cliente = $customer->getOne();
                 //var_dump($cliente);die();
 
-                $page_title = $cliente->alias . ' | RRHH Ingenia';
+                $page_title = $cliente->alias.' | RRHH Ingenia';
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
                 require_once 'views/customer/conditions.php';
                 require_once 'views/layout/footer.php';
-            } else {
-                header('location:' . base_url . 'cliente/index');
+            }else {
+                header('location:'.base_url.'cliente/index');
             }
-        } else {
-            header('location:' . base_url);
+        }else {
+            header('location:'.base_url);
         }
     }
 
-    public function update_conditions()
-    {
+    public function update_conditions(){
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior())) {
             $id = (isset($_POST['id'])) ? Encryption::decode($_POST['id']) : FALSE;
             $recruitment_fee = (isset($_POST['recruitment_fee'])) ? trim($_POST['recruitment_fee']) : FALSE;
@@ -357,24 +316,21 @@ class ClienteController
                 $cliente->setPrice_for_psychometrics($price_for_psychometrics);
                 $cliente->setPrice_for_talent_attraction($price_for_talent_attraction);
                 $cliente->setCredit_days($credit_days);
-                $cliente->setBox_cut($box_cut);
+				$cliente->setBox_cut($box_cut);
 
                 $update = $cliente->updateConditions();
-                if ($update) {
-                    echo 1;
-                } else {
-                    echo 2;
-                }
-            } else {
+                if ($update) {echo 1;}
+                else {echo 2;}
+
+            }else{
                 echo 0;
             }
         } else {
-            header('location:' . base_url);
+            header('location:'.base_url);
         }
     }
 
-    public function detallado()
-    {
+    public function detallado(){
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager())) {
             $cliente = new Customer();
             $clientes = $cliente->getYearlyReport();
@@ -386,6 +342,6 @@ class ClienteController
             require_once 'views/customer/detail.php';
             require_once 'views/layout/footer.php';
         } else
-            header('location:' . base_url);
+            header('location:'.base_url);
     }
 }

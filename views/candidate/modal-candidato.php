@@ -152,7 +152,7 @@
                                                                 <label for="id_subarea" class="col-form-label">Subarea</label>
                                                                 <select name="id_subarea" id="id_subarea" class="form-control" required>
                                                                     <?php if (isset($candidato) && is_object($candidato) && !empty($candidato->id_area)) : ?>
-                                                                        <?php $subareas = Utils::showSubareasByArea($candidato->id_area); ?>
+                                                                        <?= $subareas = Utils::showSubareasByArea($candidato->id_area); ?>
                                                                         <?php foreach ($subareas as $subarea) : ?>
                                                                             <option value="<?= $subarea['id'] ?>" <?= isset($candidato) && is_object($candidato) && $subarea['id'] == $candidato->id_subarea ? 'selected' : ''; ?>><?= $subarea['subarea'] ?></option>
                                                                         <?php endforeach ?>
@@ -225,7 +225,7 @@
                                                                 <label for="id_city" class="col-form-label">Ciudad</label>
                                                                 <select name="id_city" id="id_city" class="form-control select2bs4" style="width: 100%;" required>
                                                                     <?php if (isset($candidato) && is_object($candidato) && !empty($candidato->id_state)) : ?>
-                                                                        <?php $cities = Utils::showCitiesByState($candidato->id_state); ?>
+                                                                        <?= $cities = Utils::showCitiesByState($candidato->id_state); ?>
                                                                         <?php foreach ($cities as $city) : ?>
                                                                             <option value="<?= $city['id'] ?>" <?= isset($candidato) && is_object($candidato) && $city['id'] == $candidato->id_city ? 'selected' : ''; ?>><?= $city['city'] ?></option>
                                                                         <?php endforeach ?>

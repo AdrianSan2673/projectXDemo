@@ -27,9 +27,9 @@
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          <form id="employee-form" name="employee-form" method="POST">
-            <div class="col-md-12">
-              <!-- form start -->
+          <div class="col-md-12">
+            <!-- form start -->
+            <form id="employee-form" name="employee-form" method="POST">
               <input type="hidden" name="flag" value="<?= Encryption::encode(2) ?>">
 
               <!-- general form elements -->
@@ -104,17 +104,6 @@
 
 
                   <div class="row">
-					  
-					  
-					   <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="email" class="col-form-label">Correo*</label>
-                                                <input type="email" name="email" id="email" class="form-control"
-                                                    required>
-                                            </div>
-                                        </div>
-					  
-					  
                     <div class="col-md-4">
                       <div class="form-group">
                         <label for="contract" class="col-form-label">Tipo de contratacion*</label>
@@ -148,6 +137,7 @@
                       </div>
                     </div>
 
+
                     <div class="col-md-4">
                       <div class="form-group">
                         <label for="contract" class="col-form-label">Numero de empleado</label>
@@ -160,8 +150,8 @@
                   <div class="row">
                     <div class="col-md-4">
                       <div class="form-group">
-                        <label for="curp" class="col-form-label">CURP*</label>
-                        <input type="text" name="curp" id="CURP" class="form-control" maxlength="18" required>
+                        <label for="curp" class="col-form-label">CURP</label>
+                        <input type="text" name="curp" id="CURP" class="form-control" maxlength="18">
                       </div>
                     </div>
 
@@ -190,8 +180,8 @@
 
                     <div class="col-md-4">
                       <div class="form-group">
-                        <label for="gender" class="col-form-label">Sucursal*</label>
-                        <?php $contactos = Utils::getEmpresaByContactoRH(); ?>
+                        <label for="gender" class="col-form-label">Empresa contratante*</label>
+                        <?php $contactos = Utils::getEmpresaByContacto(); ?>
                         <select name="cliente" id="Cliente" class="form-control" required>
                           <option disabled selected value="">Selecciona comercio</option>
                           <?php foreach ($contactos as $contacto) : ?>
@@ -265,11 +255,11 @@
                     </div>
                   </div>
 
-                  <div class="row" <?= count($type_positions) == 0 ? 'hidden' : '' ?>>
+                  <div class="row">
                     <div class="col-6">
                       <div class="form-group">
-                        <label for="contract" class="col-form-label">A quien reporta </label>
-                        <select class="form-control " name="id_boss">
+                        <label for="contract" class="col-form-label">A quien reporta*</label>
+                        <select class="form-control select2" name="id_boss">
                           <option selected value="0">Selecciona a quien reporta</option>
                           <?php foreach ($type_positions as $type_pos) : ?>
                             <option value="<?= Encryption::encode($type_pos['id_employee']) ?>"> <?= $type_pos['employePosition'] ?></option>
@@ -287,13 +277,15 @@
                 <button class="btn btn-lg btn-orange float-right">Registrar Empleado</button>
               </div>
 
-            </div>
+          </div>
           </form>
         </div>
       </div>
-
-    </section>
+      <!-- /.row -->
   </div>
+  <!-- /.container-fluid -->
+  </section>
+</div>
 </div>
 
 <script src="<?= base_url ?>app/RH/employee.js?v=<?= rand() ?>"></script>

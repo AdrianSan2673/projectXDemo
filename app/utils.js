@@ -344,13 +344,5 @@ var utils = {
 		td.style.paddingTop = padTop;
 		td.style.paddingBottom = padBottom;
 		td.style.backgroundColor = oldColor;
-	},
-	destruir_datatable: function (id_table, tbody, cuerpo) {
-		$(id_table).DataTable().destroy();
-		document.querySelector(tbody).innerHTML = cuerpo;
-
-		let table = document.querySelector(id_table);
-		table.style.display = "table";
-		utils.dtTable(table, true);
 	}
 }

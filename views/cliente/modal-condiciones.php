@@ -51,17 +51,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="SMART" class="col-form-label">Costo del Estudio Socioeconómico(SMART)</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                            </div>
-                            <input type="number" min="0" name="SMART" class="form-control" step="0.01" value="0">
-                        </div>
-                    </div>
-
                     <div class="form-group">
                         <label for="Paquetes" class="col-form-label">Costos especiales (paquetes)</label>
                         <input type="text" name="Paquetes" class="form-control">
@@ -74,9 +63,7 @@
                         <label for="Dias_Credito" class="col-form-label">Dias de crédito</label>
                         <select class="form-control" name="Dias_Credito">
                             <option value="3">3 días</option>
-							<option value="5">5 días</option>
                             <option value="7">7 días</option>
-							<option value="10">10 días</option>
                             <option value="15">15 días</option>
                             <option value="20">20 días</option>
                             <option value="30">30 días</option>
@@ -91,5 +78,5 @@
                 </div>
             </form>
         </div>
-    </div>
+    </div>              
 </div>

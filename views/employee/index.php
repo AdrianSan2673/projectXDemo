@@ -15,16 +15,11 @@
  
 	 <section class="content-header">
     <div class="row">
-      <div class="col-3  ml-auto">
+      <div class="col-6  ml-auto">
         <a href="<?= base_url ?>reporte/employeesinformation&status=<?= $_GET['flag'] ?>" class="btn btn-success ">Excel de empleados <br><i class="fas fa-file-excel display-4"></i></a>
       </div>
-		  <div class="col-3  ml-auto">
-                <a href="<?= base_url ?>reporte/ExcelPAsswords" class="btn btn-primary ">Excel Contraseñas usuarios
-                    <br><i class="fas fa-file-excel display-4"></i></a>
-            </div>
 
-      <div class="col-2 ml-auto"  <?= Encryption::decode($_GET['flag']) == 1 ? '' : 'hidden'  ?>>
-        <?php if (Utils::permission($_GET['controller'], 'create')) : ?>
+      <div class="col-2 ml-auto">
         <div class="btn-group mr-3 text-center">
           <button class="btn btn-orange dropdown-toggle dropdown-icon" data-toggle="dropdown">Nuevo empleado </button>
           <div class="dropdown-menu">
@@ -32,7 +27,6 @@
             <!-- <button class="dropdown-item">Añadir a candidato existente</button> -->
           </div>
         </div>
-        <?php endif ?>
       </div>
     </div>
   </section>
@@ -68,15 +62,12 @@
                 <td class="text-center align-middle"><?= Utils::getDate($employee['start_date']) ?></td>
                 <td class="text-center align-middle"><?= Utils::getFullDate($employee['modified_at']) ?></td>
                 <td class="text-center align-middle">
-                  <?php if (Utils::permission($_GET['controller'], 'read')) : ?>
-                    <a href="<?= base_url ?>empleado/ver&id=<?= Encryption::encode($employee['id_employee']) ?>" target="_blank" class="btn btn-success">
-                      <i class="fas fa-eye"></i> Ver
-                    </a>
-                  <?php endif ?>
+                  <a href="<?= base_url ?>empleado/ver&id=<?= Encryption::encode($employee['id_employee']) ?>" target="_blank" class="btn btn-success">
+                    <i class="fas fa-eye"></i> Ver
+                  </a>
+
                   <?php if (Encryption::decode($_GET['flag']) != 1 && $Empresa==82) : ?>
-                    <?php if (Utils::permission($_GET['controller'], 'delete')) : ?>
-                      <button class="btn btn-danger" value="<?=Encryption::encode( $employee['id_employee'])?>" name="<?= $employee['first_name'] . ' ' . $employee['surname'] . ' ' . $employee['last_name'] ?>">Borrar</button>
-                    <?php endif ?>
+                    <button class="btn btn-danger" value="<?=Encryption::encode( $employee['id_employee'])?>" name="<?= $employee['first_name'] . ' ' . $employee['surname'] . ' ' . $employee['last_name'] ?>">Borrar</button>
                   <?php endif; ?>
 
                 </td>

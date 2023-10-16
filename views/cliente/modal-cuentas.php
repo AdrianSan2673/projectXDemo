@@ -8,28 +8,25 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                
                 <div class="modal-body">
-                    <input type="hidden" name="Cliente" value="<?= Encryption::encode( $cliente->Cliente )?>">
+                    <input type="hidden" name="Cliente">
                     <input type="hidden" name="flag" value="1">
-                    <input type="hidden" name="id" value="">
-
                     <div class="form-group">
                         <label class="col-form-label" for="Cuentas_Contacto">Contacto</label>
-                        <input type="text" name="Cuentas_Contacto" class="form-control" maxlength="100" required>
+                        <input type="text" name="Cuentas_Contacto" class="form-control" maxlength="50">
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="Cuentas_Correo">Correo electrónico</label>
-                        <input type="email" name="Cuentas_Correo" class="form-control" maxlength="50">
+                        <input type="text" name="Cuentas_Correo" class="form-control" maxlength="50">
                     </div>
                     <div class="form-row">
                         <div class="form-group col-sm-8">
                             <label class="col-form-label" for="Cuentas_Telefono">Teléfono</label>
-                            <input type="number" name="Cuentas_Telefono" class="form-control" maxlength="50">
+                            <input type="text" name="Cuentas_Telefono" class="form-control" maxlength="50">
                         </div>
                         <div class="form-group col-sm-4">
                             <label class="col-form-label" for="Cuentas_Extension">Extensión</label>
-                            <input type="number" name="Cuentas_Extension" class="form-control" maxlength="50">
+                            <input type="text" name="Cuentas_Extension" class="form-control" maxlength="50">
                         </div>
                     </div>
                 </div>

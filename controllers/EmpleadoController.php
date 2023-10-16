@@ -18,8 +18,6 @@ require_once 'models/RH/HistoryPositions.php';
 require_once 'models/RH/EmployeeContract.php';
 require_once 'models/RH/EmployeeAvatar.php';
 require_once 'models/RH/EmployeeFamily.php';
-require_once 'models/RH/EmployeeDocument.php';
-require_once 'models/RH/UsuariosRH.php';
 
 class EmpleadoController
 {
@@ -35,9 +33,9 @@ class EmpleadoController
                     $Empresa = $contactoEmpresa->getContactoPorUsuario()->Empresa;
 
                     $employee = new Employees();
-                    $employee->setCliente($_SESSION['id_cliente']);
+                    $employee->setID_Contacto($id_contacto);
                     $employee->setStatus($status);
-                    $employees = $employee->getAllEmployeesByCliente();
+                    $employees = $employee->getAllEmployeesByIDcontacto();
                 } else
                     header("location:" . base_url);
             } else {
@@ -71,8 +69,7 @@ class EmpleadoController
                 $positionObj2->setStatus(1);
                 $positionObj2->setType_position(5);
                 $positionObj = $positionObj2->getPositionsByContacto();
-				$positionObj2->setID_Cliente($_SESSION['id_cliente']);
-                $type_positions = $positionObj2->getAllPositionByTypePositionAndCliente();
+                $type_positions = $positionObj2->getAllPositionByTypePosition();
 
                 $deparment = new Department();
                 $deparment->setEmpresa($Empresa);
@@ -95,7 +92,6 @@ class EmpleadoController
     public function ver()
     {
         if (Utils::isAdmin() || Utils::isCustomerSA()) {
-
             $id = Encryption::decode($_GET['id']);
 
             $contactoEmpresa = new ContactosEmpresa();
@@ -106,16 +102,11 @@ class EmpleadoController
             $employeeObj = new Employees();
             $employeeObj->setId($id);
             $employee = $employeeObj->getOne();
-			
-			$usuario_rh = new UsuariosRH();
-            $usuario_rh->setId($employee->usuario_rh);
-            $usuario_rh =  $usuario_rh->getOne();
 
             $employeeObj->setStatus(1);
-            $employeeObj->setCliente($_SESSION['id_cliente']);
-            //$employeeObj->setID_Contacto($id_contacto);
+            $employeeObj->setID_Contacto($id_contacto);
             $incidens = $employeeObj->getAllEmployeesIncidenceByIdEmployee();
-            $employees = $employeeObj->getAllEmployeesByCliente();
+            $employees = $employeeObj->getAllEmployeesByIDcontacto();
 
             $employeeFamilyObj = new EmployeeFamily();
             $employeeFamilyObj->setId_employee($id);
@@ -129,14 +120,14 @@ class EmpleadoController
             $positionObj = new Positions();
             $positionObj->setId($employee->id_position);
             $positionObj->setStatus(1);
-            $positionObj->setID_Cliente($_SESSION['id_cliente']);
+            $positionObj->setID_Contacto($id_contacto);
             $positionObj->setType_position(5);
             $position = $positionObj->getOne();
-            $type_positions = $positionObj->getAllPositionByTypePositionAndCliente();
+            $type_positions = $positionObj->getAllPositionByTypePosition();
 
-            $positionObj->setID_Cliente($_SESSION['id_cliente']);
+            $positionObj->setID_Contacto($id_contacto);
             $positionObj->setStatus(1);
-            $positionContac = $positionObj->getPositionsByCliente();
+            $positionContac = $positionObj->getPositionsByContacto();
 
             $deparment = new Department();
             $deparment->setId($position->id_department);
@@ -158,10 +149,6 @@ class EmpleadoController
             $avatar = new EmployeeAvatar();
             $avatar->setId_employee($id);
             $avatar = $avatar->getOneByIdEmployee();
-
-            $document = new EmployeeDocument();
-            $document->setId_employee($id);
-            $documents = $document->getDocumentsByIdEmployee();
 
             if (!$avatar) {
                 $avatar = new stdClass();
@@ -231,6 +218,7 @@ class EmpleadoController
             } else
                 $routeDocuCFDI = false;
 
+
             $lbl_executives = "";
             $page_title = $employee->first_name . ' ' . $employee->surname . ' | RRHH Ingenia';
 
@@ -247,14 +235,12 @@ class EmpleadoController
             require_once 'views/employee/modal-incidence.php';
             require_once 'views/employee/modal-payroll.php';
             require_once 'views/employee/modal-imagen.php';
-			require_once 'views/employee/modal-acceso.php';
             require_once 'views/employee/read.php';
             require_once 'views/layout/footer.php';
         } else
             header("location:" . base_url);
     }
 
-   
     public function save()
     {
         if (Utils::isAdmin() || Utils::isCustomerSA()) {
@@ -284,9 +270,6 @@ class EmpleadoController
             $civil_status =  isset($_POST['civil_status']) ?  Utils::sanitizeString($_POST['civil_status']) : null;
             $id_razon = Utils::sanitizeNumber($_POST['id_razon']);
             $id_boss =  Encryption::decode($_POST['id_boss']) ?  Encryption::decode($_POST['id_boss']) : null;
-			//gabo 6 sep
-            $email =  isset($_POST['email']) ?  Utils::sanitizeString($_POST['email']) : null;
-            //gabo 6 sep
 
             if (isset($_POST['contract'])) {
                 $contract = Encryption::decode($_POST['contract']);
@@ -305,9 +288,6 @@ class EmpleadoController
                     $deparment->setDepartment($new_deparment);
                     $deparment->setID_Contacto($ID_Contacto);
                     $deparment->setEmpresa($Empresa);
-                    //===[gabo 9 junio excel evaluaciones]===
-                    $deparment->setID_Cliente($Cliente);
-                    //===[gabo 9 junio excel evaluaciones fin]===
                     $deparment2 = $deparment->save();
 
                     if ($deparment2) {
@@ -330,9 +310,6 @@ class EmpleadoController
                     $position->setId_created_by($_SESSION['identity']->id);
                     $position->setEmpresa($Empresa);
                     $position->setID_Contacto($ID_Contacto);
-                    //===[gabo 9 junio excel evaluaciones]===
-                    $deparment->setID_Cliente($Cliente);
-                    //===[gabo 9 junio excel evaluaciones fin]===
                     $position2 = $position->save2();
                     if ($position2) {
                         $id_position = $position->getId();
@@ -379,27 +356,11 @@ class EmpleadoController
                 $employee->setCivil_status($civil_status);
                 $employee->setId_razon($id_razon);
                 $employee->setId_boss($id_boss);
-				//gabo 6 sep
-                $employee->setEmail($email);
-                //gabo 6 sep
 
                 if ($flag == 1) {
-
-                    //===[gabo 11 julio validar curp]===
-                    //validar que no exista el curp con ese cliente
-                    $validado = $employee->Validate_Curp();
-                    if ($validado) {
-                        $id_encontrado = $validado->id;
-                        if ($id_encontrado != $id) {
-                            echo json_encode(array('status' => 3));
-                            die();
-                        }
-                    }
-
-                    //===[gabo 11 julio validar curp fin]===
-
                     $candidato = $employee->getOne();
                     $id_Candidato = $candidato->ID_Candidato;
+
                     if (isset($id_Candidato)) {
                         $candidatosDatosObj = new CandidatosDatos();
                         $candidatosDatosObj->setCandidato($id_Candidato);
@@ -419,37 +380,10 @@ class EmpleadoController
                         $historyPositionsObj->save();
                     }
 
-
-                    
                     $save = $employee->update();
                 } else {
-
-                    //===[gabo 11 julio validar curp]===
-                    //validar que no exista el curp con ese cliente
-                    $validado = $employee->Validate_Curp();
-                    if ($validado) {
-                        echo json_encode(array('status' => 3));
-                        die();
-                    }
-                    //===[gabo 11 julio validar curp fin]===
-
                     $save = $employee->save();
                     $id = $employee->getId();
-
-                    //===[gabo 7 julio rh_empleado]===
-                    $user_rh = new UsuariosRH();
-                    $user_rh->setUsername($curp);
-                    $user_rh->setId_cliente($Cliente);
-                    $password = random_int(111111, 999999);
-                    $user_rh->setPassword( Encryption::encode($password));
-                    $usuario_saved = $user_rh->save();
-                    //actualizar su  id_user_rh
-                    if ($usuario_saved) {
-                        $employee->setId($id);
-                        $employee->setId_Usuario_Rh($user_rh->getId());
-                        $employee->Update_Id_userRH();
-                    }
-                    //===[gabo 7 julio rh_empleado]===
 
                     $historyPositionsObj = new HistoryPositions();
                     $historyPositionsObj->setId_employee($id);
@@ -732,7 +666,6 @@ class EmpleadoController
                 $employeePayrollObj->setAccount_number($account_number);
                 $employeePayrollObj->setCLABE($CLABE);
                 $employeePayrollObj->setCreated_at($created_at);
-
                 $employeePayrollObj->save();
 
                 $id = $employeePayrollObj->getId();
@@ -776,8 +709,6 @@ class EmpleadoController
             $rfc = isset($_FILES['rfc']) && $_FILES['rfc']['name'] != '' ? $_FILES['rfc'] : FALSE;
             $cfdi = isset($_FILES['cfdi']) && $_FILES['cfdi']['name'] != '' ? $_FILES['cfdi'] : FALSE;
             $id_employee = Encryption::decode($_POST['id_employee']);
-
-
 
             if (($cv || $rfc || $cfdi) && $id_employee) {
                 $employeeObj = new Employees();
@@ -901,9 +832,9 @@ class EmpleadoController
                 $Empresa = $contactoEmpresa->getContactoPorUsuario()->Empresa;
 
                 $employee = new Employees();
-                $employee->setCliente($_SESSION['id_cliente']);
+                $employee->setID_Contacto($id_contacto);
                 $employee->setStatus(0);
-                $employee = $employee->getAllEmployeesByCliente();
+                $employee = $employee->getAllEmployeesByIDcontacto();
 
                 for ($i = 0; $i <  count($employee); $i++) {
                     $employee[$i]['id_employee'] = Encryption::encode($employee[$i]['id_employee']);
@@ -932,13 +863,13 @@ class EmpleadoController
                 $Empresa = $contactoEmpresa->getContactoPorUsuario()->Empresa;
 
                 $employeetObj = new Employees();
-                $employeetObj->setCliente($_SESSION['id_cliente']);
-                $employeetObj->setStatus(0);
+                $employeetObj->setID_Contacto($id_contacto);
+                $employeetObj->setStatus(0);                
                 $employeetObj->setStatus(1);
                 $employeetObj->setId_boss($id_boss);
                 $employeesBoss =  $employeetObj->getAllEmployeeByIdBoss();
-                $employees = $employeetObj->getAllEmployeesByCliente();
-
+                $employees = $employeetObj->getAllEmployeesByIDcontacto();
+                
 
                 echo json_encode(array(
                     'status' => 1,
@@ -949,28 +880,5 @@ class EmpleadoController
                 echo json_encode(array('status' => 0));
         } else
             echo json_encode(array('status' => 0));
-    }
-	 public function Traspasarcorreos()
-    {
-
-
-        $employee = new Employees();
-        $employee->setCliente(132);
-        $employee->setStatus(1);
-        $empleados = $employee->getAllEmployeesByCliente();
-
-        $contactos = new EmployeeContact();
-
-        foreach ($empleados as $empleado) {
-
-
-            $contactos->setId_employee($empleado['id_employee']);
-            $contacto = $contactos->getOne();
-            if ($contacto) {
-                $employee->setEmail($contacto->institutional_email);
-                $employee->setId($contacto->id_employee);
-                $employee->updateEmail();
-            }
-        }
     }
 }

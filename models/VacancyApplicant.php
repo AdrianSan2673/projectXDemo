@@ -220,12 +220,11 @@ class VacancyApplicant
 		return $fetch;
 	}
 
-	//GABO 11 OCT
 	public function getApplicantsByCandidate()
 	{
 		$id_candidate = $this->getId_candidate();
 
-		$stmt = $this->db->prepare("SELECT v.id, CONCAT(u.first_name, ' ', u.last_name) AS recruiter, v.request_date, v.vacancy, s.abbreviation, ct.city, c.customer, cc.cost_center, v.salary_min, v.salary_max, v.send_date, CASE WHEN v.end_date IS NULL THEN CONCAT(dbo.count_days(v.request_date, GETDATE()),'d ', (DATEDIFF(MINUTE, v.request_date, GETDATE()))%1440/60, 'h ')ELSE CONCAT(dbo.count_days(v.request_date, v.end_date),'d ', (DATEDIFF(MINUTE,v.request_date, v.end_date))%1440/60, 'h ') END AS number_days, CASE WHEN v.end_date IS NULL THEN dbo.count_days(v.request_date, GETDATE()) ELSE dbo.count_days(v.request_date, v.end_date) END AS n_days, vs.status, v.id_status, v.end_date, v.functions, va.applicant_date, vas.status AS applicant_status, va.about, va.interview_comments, va.interview_date FROM vacancies v LEFT JOIN users u ON v.id_recruiter=u.id LEFT JOIN customers c ON v.id_customer=c.id LEFT JOIN cost_centers cc ON c.id_cost_center=cc.id LEFT JOIN states s ON v.id_state=s.id LEFT JOIN cities ct ON v.id_city=ct.id LEFT JOIN vacancy_status vs ON v.id_status=vs.id LEFT JOIN vacancy_applicants va ON va.id_vacancy=v.id LEFT JOIN vacancy_applicant_status vas ON va.id_status=vas.id WHERE va.id_candidate=:id_candidate AND v.id_status < 6 ORDER BY applicant_date DESC");
+		$stmt = $this->db->prepare("SELECT v.id, CONCAT(u.first_name, ' ', u.last_name) AS recruiter, v.request_date, v.vacancy, s.abbreviation, ct.city, c.customer, cc.cost_center, v.salary_min, v.salary_max, v.send_date, CASE WHEN v.end_date IS NULL THEN CONCAT(dbo.count_days(v.request_date, GETDATE()),'d ', (DATEDIFF(MINUTE, v.request_date, GETDATE()))%1440/60, 'h ')ELSE CONCAT(dbo.count_days(v.request_date, v.end_date),'d ', (DATEDIFF(MINUTE,v.request_date, v.end_date))%1440/60, 'h ') END AS number_days, CASE WHEN v.end_date IS NULL THEN dbo.count_days(v.request_date, GETDATE()) ELSE dbo.count_days(v.request_date, v.end_date) END AS n_days, vs.status, v.id_status, v.end_date, v.functions, va.applicant_date, vas.status AS applicant_status, va.about, va.interview_comments, va.interview_date FROM vacancies v INNER JOIN users u ON v.id_recruiter=u.id INNER JOIN customers c ON v.id_customer=c.id INNER JOIN cost_centers cc ON c.id_cost_center=cc.id INNER JOIN states s ON v.id_state=s.id INNER JOIN cities ct ON v.id_city=ct.id INNER JOIN vacancy_status vs ON v.id_status=vs.id INNER JOIN vacancy_applicants va ON va.id_vacancy=v.id INNER JOIN vacancy_applicant_status vas ON va.id_status=vas.id WHERE va.id_candidate=:id_candidate AND v.id_status < 6 ORDER BY applicant_date DESC");
 		$stmt->bindParam(":id_candidate", $id_candidate, PDO::PARAM_INT);
 		$stmt->execute();
 		$vacancies = $stmt->fetchAll();
@@ -488,7 +487,7 @@ class VacancyApplicant
 		$id_vacancy = $this->getId_vacancy();
 		$id_candidate = $this->getId_candidate();
 
-		$stmt = $this->db->prepare("INSERT INTO vacancy_applicants(applicant_date,customer_date, id_vacancy, id_candidate, id_status) VALUES (GETDATE(),GETDATE(), :id_vacancy, :id_candidate, 3)");
+		$stmt = $this->db->prepare("INSERT INTO vacancy_applicants(applicant_date, id_vacancy, id_candidate, id_status) VALUES (GETDATE(), :id_vacancy, :id_candidate, 3)");
 		$stmt->bindParam(":id_vacancy", $id_vacancy, PDO::PARAM_INT);
 		$stmt->bindParam(":id_candidate", $id_candidate, PDO::PARAM_INT);
 
@@ -565,45 +564,5 @@ class VacancyApplicant
 			$result = true;
 		}
 		return $result;
-	}
-	//gabo 26
-	public function getOneByCandidate()
-	{
-
-		$id_candidate = $this->getId_candidate();
-		$stmt = $this->db->prepare("SELECT  TOP (1) *  from vacancy_applicants WHERE id_candidate=:id_candidate AND id_profile is not null order by applicant_date  DESC ");
-
-		$stmt->bindParam(":id_candidate", $id_candidate, PDO::PARAM_INT);
-		$stmt->execute();
-
-		$fetch = $stmt->fetchObject();
-		return $fetch;
-	}
-	//gabo 27
-	public function getVacanciesTypeOperativaByCandidate()
-	{
-
-		$id_candidate = $this->getId_candidate();
-		$stmt = $this->db->prepare("select * from candidates c INNER JOIN vacancy_applicants va ON va.id_candidate=c.id INNER JOIN vacancies 
-		v ON va.id_vacancy=v.id where v.type=1 and va.id_candidate=:id_candidate");
-
-		$stmt->bindParam(":id_candidate", $id_candidate, PDO::PARAM_INT);
-		$stmt->execute();
-
-		$fetch = $stmt->fetchObject();
-		return $fetch;
-	}
-
-	//gabo 10 oct
-
-	public function getOneByIdCandidate()
-	{
-		$id_candidate = $this->getId_candidate();
-
-		$stmt = $this->db->prepare("SELECT * FROM vacancy_applicants WHERE id_candidate=:id_candidate");
-		$stmt->bindParam(":id_candidate", $id_candidate, PDO::PARAM_INT);
-		$stmt->execute();
-		$fetch = $stmt->fetchObject();
-		return $fetch;
 	}
 }

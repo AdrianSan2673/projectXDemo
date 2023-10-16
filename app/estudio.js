@@ -242,7 +242,7 @@ class Estudio extends ContenidoEstudio{
                         form.querySelectorAll('input')[9].value = json_app.IMSS;
                         form.querySelectorAll('input')[10].value = json_app.RFC;
    
-                        if (json_app.ID_Empresa==413||json_app.ID_Empresa==480) {
+                        if (json_app.ID_Empresa==413) {
                             form.querySelector('.num_licen').style.display = "block";
                             form.querySelector('[name="Numero_Licencia"]').value = json_app.Numero_Licencia
 							form.querySelector('[name="Numero_Licencia"]').required=true
@@ -250,11 +250,6 @@ class Estudio extends ContenidoEstudio{
 						
                         if (json_app.Estado_Civil != 102) {
                             form.querySelector('.matrimonio').style.display = "none";
-                        }
-
-                        if (json_app.Servicio_Solicitado == 'ESE SMART') {
-                            form.querySelectorAll('input')[4].parentElement.style.display = 'none';
-                            form.querySelectorAll('input')[7].parentElement.style.display = 'none';
                         }
                     }else {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
@@ -451,45 +446,36 @@ class Estudio extends ContenidoEstudio{
         xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
-                let json_app = JSON.parse(r);
                 console.log(r);
                 try {
-                    if (json_app.status == 1){
-                        form.querySelectorAll('input')[0].value = json_app.data.Candidato;
+                    if (r != 0){
+                        let json_app = JSON.parse(r);
+                        form.querySelectorAll('input')[0].value = json_app.Candidato;
                         form.querySelectorAll('input')[1].value = 1;
-                        form.querySelectorAll('select')[0].value = json_app.data.Circunstancias_Laborales;
-                        form.querySelectorAll('select')[1].value = json_app.data.Proporciono_Datos_Empleos;
-                        form.querySelectorAll('input')[2].value = json_app.data.Motivo_No_Proporciono_Datos;
-                        form.querySelectorAll('select')[2].value = json_app.data.Demanda_Laboral;
-                        form.querySelectorAll('input')[3].value = json_app.data.Motivo_Demanda;
-                        form.querySelectorAll('input')[4].value = json_app.data.No_Empleos;
+                        form.querySelectorAll('select')[0].value = json_app.Circunstancias_Laborales;
+                        form.querySelectorAll('select')[1].value = json_app.Proporciono_Datos_Empleos;
+                        form.querySelectorAll('input')[2].value = json_app.Motivo_No_Proporciono_Datos;
+                        form.querySelectorAll('select')[2].value = json_app.Demanda_Laboral;
+                        form.querySelectorAll('input')[3].value = json_app.Motivo_Demanda;
+                        form.querySelectorAll('input')[4].value = json_app.No_Empleos;
 
-                        form.querySelectorAll('select')[3].value = json_app.data.Sindicalizado;
-                        form.querySelectorAll('input')[5].value = json_app.data.Sindicato;
-                        form.querySelectorAll('select')[4].value = json_app.data.Comite_Sindical;
-                        form.querySelectorAll('input')[6].value = json_app.data.Puesto_Sindical;
-                        form.querySelectorAll('input')[7].value = json_app.data.Funciones_Sindicato;
-                        form.querySelectorAll('input')[8].value = json_app.data.Tiempo_Sindicato;
-                        form.querySelectorAll('select')[5].value = json_app.data.Trabajo_Ternium;
-						form.querySelectorAll('input')[9].value = json_app.data.Alta_Ternium;
-                        form.querySelectorAll('input')[10].value = json_app.data.Veto_Ternium;
+                        form.querySelectorAll('select')[3].value = json_app.Sindicalizado;
+                        form.querySelectorAll('input')[5].value = json_app.Sindicato;
+                        form.querySelectorAll('select')[4].value = json_app.Comite_Sindical;
+                        form.querySelectorAll('input')[6].value = json_app.Puesto_Sindical;
+                        form.querySelectorAll('input')[7].value = json_app.Funciones_Sindicato;
+                        form.querySelectorAll('input')[8].value = json_app.Tiempo_Sindicato;
+                        form.querySelectorAll('select')[5].value = json_app.Trabajo_Ternium;
+						form.querySelectorAll('input')[9].value = json_app.Alta_Ternium;
+                        form.querySelectorAll('input')[10].value = json_app.Veto_Ternium;
 
-                        form.querySelectorAll('select')[6].value = json_app.data.Positivo_Antidoping;
-                        form.querySelectorAll('input')[11].value = json_app.data.Sustancia_Antidoping;
-                        form.querySelectorAll('select')[7].value = json_app.data.Accidentes_Empresa;
-                        form.querySelectorAll('select')[8].value = json_app.data.Abandono_Unidad;
-						form.querySelectorAll('select')[9].value = json_app.data.Familiar_Empresa;
-						form.querySelectorAll('select')[10].value = json_app.data.Reingreso;
-
-						if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                            form.querySelectorAll('input')[2].parentElement.style.display = 'none';
-                        }
-                    }else if(json_app.status == 2){
+                        form.querySelectorAll('select')[6].value = json_app.Positivo_Antidoping;
+                        form.querySelectorAll('input')[11].value = json_app.Sustancia_Antidoping;
+                        form.querySelectorAll('select')[7].value = json_app.Accidentes_Empresa;
+                        form.querySelectorAll('select')[8].value = json_app.Abandono_Unidad;
+                    }else {
                         form.querySelectorAll('input')[0].value = folio;
                         form.querySelectorAll('input')[1].value = 0;
-                        if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                            form.querySelectorAll('input')[2].parentElement.style.display = 'none';
-                        }
                     }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo '+error, 'error');
@@ -810,34 +796,24 @@ class Estudio extends ContenidoEstudio{
         xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
-                let json_app = JSON.parse(r);
                 console.log(r);
                 try {
-                    if (json_app.status == 1){
-                        form.querySelectorAll('input')[0].value = json_app.data.Renglon;
-                        form.querySelectorAll('input')[1].value = json_app.data.Candidato;
+                    if (r != 0){
+                        let json_app = JSON.parse(r);
+                        form.querySelectorAll('input')[0].value = json_app.Renglon;
+                        form.querySelectorAll('input')[1].value = json_app.Candidato;
                         form.querySelectorAll('input')[2].value = 1;
-                        form.querySelectorAll('select')[0].value = json_app.data.Grado;
-                        form.querySelectorAll('input')[3].value = json_app.data.Institucion;
-                        form.querySelectorAll('input')[4].value = json_app.data.Localidad;
-                        form.querySelectorAll('input')[5].value = json_app.data.Periodo;
-                        form.querySelectorAll('select')[1].value = json_app.data.Documento;
-                        form.querySelectorAll('input')[6].value = json_app.data.Folio;
-                        form.querySelector('textarea').value = json_app.candidato_datos.Comentario_Escolaridad;
-
-                        if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                            form.querySelector('textarea').parentElement.style.display = 'none';
-                        }
+                        form.querySelectorAll('select')[0].value = json_app.Grado;
+                        form.querySelectorAll('input')[3].value = json_app.Institucion;
+                        form.querySelectorAll('input')[4].value = json_app.Localidad;
+                        form.querySelectorAll('input')[5].value = json_app.Periodo;
+                        form.querySelectorAll('select')[1].value = json_app.Documento;
+                        form.querySelectorAll('input')[6].value = json_app.Folio;
+                        form.querySelector('textarea').value = json_app.Comentario_Escolaridad;
                     }else {
                         form.querySelectorAll('input')[0].value = 0;
                         form.querySelectorAll('input')[1].value = folio;
                         form.querySelectorAll('input')[2].value = 0;
-
-                        if (json_app.status == 2) {
-							if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                            	form.querySelector('textarea').parentElement.style.display = 'none';
-							}
-                        }
                     }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
@@ -846,8 +822,7 @@ class Estudio extends ContenidoEstudio{
 			}
         }
     }
-	
-	
+
     save_escolaridad(){
         var form = document.querySelector("#modal_escolaridad form");
 		var formData = new FormData(form);
@@ -889,50 +864,8 @@ class Estudio extends ContenidoEstudio{
 		}
 	}
 
-    save_escolaridad1(){
-        var form = document.querySelector("#modal_escolaridad form");
-		var formData = new FormData(form);
-        form.querySelectorAll('.btn')[1].disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../Escolaridad/save');
-		xhr.send(formData);
-        xhr.clase = this;
-		xhr.onreadystatechange = function(){
-			if (xhr.readyState == 4 && xhr.status == 200) {
-                let r = this.responseText;
-                console.log(r);
-                try {
-                    let json_app = JSON.parse(r);
-                    if(json_app[json_app.length - 1].status == 0){
-                        utils.showToast('Omitiste algún dato','error');
-                        form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app[json_app.length - 1].status == 1){
-                        let comentario = json_app[json_app.length -2].Comentario_Escolaridad;
-                        json_app.splice(json_app.length -1, 1);
-                        json_app.splice(json_app.length -1, 1);
-                        xhr.clase.cargarEscolaridad(json_app,json_app.data.Comentario_Escolaridad );
-                        
-                        utils.showToast('Escolaridad actualizada exitosamente', 'success');
-                        $('#modal_escolaridad').modal('hide');
-                    }else if(json_app[json_app.length - 1].status == 2){
-                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                        form.querySelectorAll('.btn')[1].disabled = false;
-                    }else{
-                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                        form.querySelectorAll('.btn')[1].disabled = false;
-                    }
-                } catch (error) {
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo'+error, 'error');
-                    form.querySelectorAll('.btn')[1].disabled = false;
-                }
-			}
-		}
-	}
-
     getReferenciaLaboral(renglon){
         this.renglon = renglon;
-        let form = document.querySelector('#modal_referencia_laboral');
         let xhr = new XMLHttpRequest();
         let data = `Renglon=${this.renglon}&Folio=${folio}`;
         document.querySelectorAll('#modal_referencia_laboral form .btn')[1].disabled = false;
@@ -943,79 +876,54 @@ class Estudio extends ContenidoEstudio{
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
-                let json_app = JSON.parse(r);
                 try {
-                    if (json_app.status == 1){
-                        form.querySelectorAll('input')[0].value = json_app.data.Renglon;
-                        form.querySelectorAll('input')[1].value = json_app.data.Candidato;
+                    if (r != 0){
+                        let json_app = JSON.parse(r);
+                        let form = document.querySelector('#modal_referencia_laboral');
+                        form.querySelectorAll('input')[0].value = json_app.Renglon;
+                        form.querySelectorAll('input')[1].value = json_app.Candidato;
                         form.querySelectorAll('input')[2].value = 1;
-                        form.querySelectorAll('input')[3].value = json_app.data.Empresa;
-                        form.querySelectorAll('input')[4].value = json_app.data.Giro;
-                        form.querySelectorAll('input')[5].value = json_app.data.Domicilio;
-                        form.querySelectorAll('input')[6].value = json_app.data.Telefono;
-                        form.querySelectorAll('input')[7].value = json_app.data.Fecha_Ingreso;
-                        form.querySelectorAll('input')[8].value = json_app.data.Fecha_Baja;
-                        form.querySelectorAll('input')[9].value = json_app.data.Puesto_Inicial;
-                        form.querySelectorAll('input')[10].value = json_app.data.Puesto_Final;
-                        form.querySelectorAll('input')[11].value = json_app.data.Jefe;
-                        form.querySelectorAll('input')[12].value = json_app.data.Puesto_Jefe;
-                        form.querySelectorAll('input')[13].value = json_app.data.Motivo_Separacion;
-                        form.querySelectorAll('select')[0].value = json_app.data.Dopaje;
-                        form.querySelectorAll('select')[1].value = json_app.data.Recontratable;
-                        form.querySelectorAll('textarea')[0].value = json_app.data.Recontratable_PorQue;
-                        form.querySelectorAll('input')[14].value = json_app.data.Informante;
-						form.querySelectorAll('input')[15].value = json_app.data.Puesto_Informante;
-                        form.querySelectorAll('textarea')[1].value = json_app.data.Comentarios;
-                        form.querySelectorAll('select')[2].value = json_app.data.Calif;
-                        form.querySelectorAll('select')[3].value = json_app.data.Desempeno;
-                        form.querySelectorAll('select')[4].value = json_app.data.Honradez;
-                        form.querySelectorAll('select')[5].value = json_app.data.Puntualidad;
-                        form.querySelectorAll('select')[6].value = json_app.data.Relacion;
-                        form.querySelectorAll('select')[7].value = json_app.data.Responsabilidad;
-                        form.querySelectorAll('select')[8].value = json_app.data.Adaptacion;
+                        form.querySelectorAll('input')[3].value = json_app.Empresa;
+                        form.querySelectorAll('input')[4].value = json_app.Giro;
+                        form.querySelectorAll('input')[5].value = json_app.Domicilio;
+                        form.querySelectorAll('input')[6].value = json_app.Telefono;
+                        form.querySelectorAll('input')[7].value = json_app.Fecha_Ingreso;
+                        form.querySelectorAll('input')[8].value = json_app.Fecha_Baja;
+                        form.querySelectorAll('input')[9].value = json_app.Puesto_Inicial;
+                        form.querySelectorAll('input')[10].value = json_app.Puesto_Final;
+                        form.querySelectorAll('input')[11].value = json_app.Jefe;
+                        form.querySelectorAll('input')[12].value = json_app.Puesto_Jefe;
+                        form.querySelectorAll('input')[13].value = json_app.Motivo_Separacion;
+                        form.querySelectorAll('select')[0].value = json_app.Dopaje;
+                        form.querySelectorAll('select')[1].value = json_app.Recontratable;
+                        form.querySelectorAll('textarea')[0].value = json_app.Recontratable_PorQue;
+                        form.querySelectorAll('input')[14].value = json_app.Informante;
+                        form.querySelectorAll('textarea')[1].value = json_app.Comentarios;
+                        form.querySelectorAll('select')[2].value = json_app.Calif;
+                        form.querySelectorAll('select')[3].value = json_app.Desempeno;
+                        form.querySelectorAll('select')[4].value = json_app.Honradez;
+                        form.querySelectorAll('select')[5].value = json_app.Puntualidad;
+                        form.querySelectorAll('select')[6].value = json_app.Relacion;
+                        form.querySelectorAll('select')[7].value = json_app.Responsabilidad;
+                        form.querySelectorAll('select')[8].value = json_app.Adaptacion;
                         
-                        form.querySelectorAll('select')[9].value = json_app.data.Sindicalizado;
-                        form.querySelectorAll('input')[16].value = json_app.data.Sindicato;
-                        form.querySelectorAll('select')[10].value = json_app.data.Comite_Sindical;
-                        form.querySelectorAll('input')[17].value = json_app.data.Puesto_Sindical;
-                        form.querySelectorAll('input')[18].value = json_app.data.Funciones_Sindicato;
-                        form.querySelectorAll('input')[19].value = json_app.data.Tiempo_Sindicato;
+                        form.querySelectorAll('select')[9].value = json_app.Sindicalizado;
+                        form.querySelectorAll('input')[15].value = json_app.Sindicato;
+                        form.querySelectorAll('select')[10].value = json_app.Comite_Sindical;
+                        form.querySelectorAll('input')[16].value = json_app.Puesto_Sindical;
+                        form.querySelectorAll('input')[17].value = json_app.Funciones_Sindicato;
+                        form.querySelectorAll('input')[18].value = json_app.Tiempo_Sindicato;
 
                         if (json_app.Calif == 1)
                             form.querySelector('.calif').style.display = "none";
-
-                        if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                            form.querySelectorAll('input')[4].name = 'Sitio_Web';
-							form.querySelectorAll('input')[4].value = json_app.data.Sitio_Web;
-                            form.querySelectorAll('input')[4].parentElement.children[0].textContent = 'Sitio Web';
-                            form.querySelectorAll('input')[5].name = 'Razon_Social';
-							form.querySelectorAll('input')[5].value = json_app.data.Razon_Social;
-                            form.querySelectorAll('input')[5].parentElement.children[0].textContent = 'Razon Social';
-                            form.querySelectorAll('input')[9].parentElement.children[0].textContent = 'Puesto';
-                            form.querySelectorAll('input')[10].name = 'Correo';
-							form.querySelectorAll('input')[10].value = json_app.data.Correo;
-                            form.querySelectorAll('input')[10].parentElement.children[0].textContent = 'Correo del Contacto';
-                            form.querySelectorAll('textarea')[1].parentElement.style.display = 'none';
-                        }  
                         
-                    }else  {
+                    }else {
                         form.querySelectorAll('input')[0].value = 0;
                         form.querySelectorAll('input')[1].value = folio;
                         form.querySelectorAll('input')[2].value = 0;
-                    
-                        if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                            form.querySelectorAll('input')[4].name = 'Sitio_Web';
-                            form.querySelectorAll('input')[4].parentElement.children[0].textContent = 'Sitio Web';
-                            form.querySelectorAll('input')[5].name = 'Razon_Social';
-                            form.querySelectorAll('input')[5].parentElement.children[0].textContent = 'Razon Social';
-                            form.querySelectorAll('input')[9].parentElement.children[0].textContent = 'Puesto';
-                            form.querySelectorAll('input')[10].name = 'Correo';
-                            form.querySelectorAll('input')[10].parentElement.children[0].textContent = 'Correo del Contacto';
-                            form.querySelectorAll('textarea')[1].parentElement.style.display = 'none';
-                        }
                     }
                 } catch (error) {
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo '+error, 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
                     
 			}
@@ -1195,74 +1103,20 @@ class Estudio extends ContenidoEstudio{
        xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
-                let json_app = JSON.parse(r);
                 console.log(r);
                 try {
-					if (json_app.status == 1) {
-                        form.querySelectorAll('input')[0].value = folio
+                    if (r != 0) {
+                        let json_app = JSON.parse(r);
+                        form.querySelectorAll('input')[0].value = folio;
                         form.querySelectorAll('input')[1].value = 1;
-                        form.querySelectorAll('select')[0].value = json_app.data.Info_Proporcionada_Candidato;
-                        form.querySelectorAll('select')[1].value = json_app.data.Referencias_Laborales;
-                        form.querySelectorAll('select')[2].value = json_app.data.Info_Confiable;
-                        form.querySelector('textarea').value = json_app.data.Comentario_General_il;
-                        form.querySelectorAll('select')[3].value = `${json_app.data.Viable}`;
-						
-						if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                            //form.querySelector('textarea').parentElement.style.display = 'none';
-							if (json_app.data.Proporciona_Contacto == 1) {
-								document.getElementsByName('Proporciona_Contacto')[0].checked = true;
-								document.getElementsByName('Proporciona_Contacto')[1].checked = false;
-							}else if (json_app.data.Proporciona_Contacto == 2) {
-								document.getElementsByName('Proporciona_Contacto')[0].checked = false;
-								document.getElementsByName('Proporciona_Contacto')[1].checked = true;
-							}
-							if (json_app.data.Informacion_Congruente == 1) {
-								document.getElementsByName('Informacion_Congruente')[0].checked = true;
-								document.getElementsByName('Informacion_Congruente')[1].checked = false;
-							}else if (json_app.data.Informacion_Congruente == 2) {
-								document.getElementsByName('Informacion_Congruente')[0].checked = false;
-								document.getElementsByName('Informacion_Congruente')[1].checked = true;
-							}
-							if (json_app.data.Factor_Riesgo == 1) {
-								document.getElementsByName('Factor_Riesgo')[0].checked = true;
-								document.getElementsByName('Factor_Riesgo')[1].checked = false;
-							}else if (json_app.data.Factor_Riesgo == 2) {
-								document.getElementsByName('Factor_Riesgo')[0].checked = false;
-								document.getElementsByName('Factor_Riesgo')[1].checked = true;
-							}
-							if (json_app.data.Factor_Riesgo == 1) {
-								document.getElementsByName('Factor_Riesgo')[0].checked = true;
-								document.getElementsByName('Factor_Riesgo')[1].checked = false;
-							}else if (json_app.data.Factor_Riesgo == 2) {
-								document.getElementsByName('Factor_Riesgo')[0].checked = false;
-								document.getElementsByName('Factor_Riesgo')[1].checked = true;
-							}
-							if (json_app.data.Estabilidad_Laboral == 1) {
-								document.getElementsByName('Estabilidad_Laboral')[0].checked = true;
-								document.getElementsByName('Estabilidad_Laboral')[1].checked = false;
-							}else if (json_app.data.Estabilidad_Laboral == 2) {
-								document.getElementsByName('Estabilidad_Laboral')[0].checked = false;
-								document.getElementsByName('Estabilidad_Laboral')[1].checked = true;
-							}
-                        }else {
-							form.querySelectorAll('.form-group')[5].style.display = 'none';
-							form.querySelectorAll('.form-group')[6].style.display = 'none';
-							form.querySelectorAll('.form-group')[7].style.display = 'none';
-							form.querySelectorAll('.form-group')[8].style.display = 'none';
-							form.querySelectorAll('.form-group')[9].style.display = 'none';
-						}
-                    }else if (json_app.status == 2) {
+                        form.querySelectorAll('select')[0].value = json_app.Info_Proporcionada_Candidato;
+                        form.querySelectorAll('select')[1].value = json_app.Referencias_Laborales;
+                        form.querySelectorAll('select')[2].value = json_app.Info_Confiable;
+                        form.querySelector('textarea').value = json_app.Comentario_General_il;
+                        form.querySelectorAll('select')[3].value = `${json_app.Viable}`;
+                    }else{
                         form.querySelectorAll('input')[0].value = folio;
                         form.querySelectorAll('input')[1].value = 0;
-						if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                            form.querySelector('textarea').parentElement.style.display = 'none';
-                        }else {
-							form.querySelectorAll('.form-group')[5].style.display = 'none';
-							form.querySelectorAll('.form-group')[6].style.display = 'none';
-							form.querySelectorAll('.form-group')[7].style.display = 'none';
-							form.querySelectorAll('.form-group')[8].style.display = 'none';
-							form.querySelectorAll('.form-group')[9].style.display = 'none';
-						}
                     }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo '+error, 'error');
@@ -1290,47 +1144,10 @@ class Estudio extends ContenidoEstudio{
                         utils.showToast('Omitiste algún dato','error');
                         form.querySelectorAll('.btn')[1].disabled = false;
                     }else if (json_app.status == 1){
-                        xhr.clase.cargarComentariosGeneralesInv(json_app.data, json_app.display, json_app.candidato_datos);
-                        xhr.clase.cargarComentariosGenerales(json_app.data, json_app.display, json_app.candidato_datos);
+                        xhr.clase.cargarComentariosGeneralesInv(json_app, json_app.display);
+                        xhr.clase.cargarComentariosGenerales(json_app, json_app.display);
                         utils.showToast('Comentarios generales de la investigación actualizados exitosamente', 'success');
                         $('#modal_comentarios_generales_inv').modal('hide');
-                    }else if(json_app.status == 2){
-                        utils.showToast('Algo salió mal. Inténtalo de nuevo 333', 'error');
-                        form.querySelectorAll('.btn')[1].disabled = false;
-                    }else{
-                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                        form.querySelectorAll('.btn')[1].disabled = false;
-                    }
-                } catch (error) {
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo'+error, 'error ');
-                    form.querySelectorAll('.btn')[1].disabled = false;
-                }
-			}
-		}
-	}
-	
-	save_comentarios_generales(){
-        var form = document.querySelector("#modal_comentarios_generales form");
-		var formData = new FormData(form);
-        form.querySelectorAll('.btn')[1].disabled = true;
-		
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../ObservacionesGenerales/save_comentarios_generales');
-		xhr.send(formData);
-        xhr.clase = this;
-		xhr.onreadystatechange = function(){
-			if (xhr.readyState == 4 && xhr.status == 200) {
-                let r = this.responseText;
-                console.log(r);
-                try {
-                    let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
-                        utils.showToast('Omitiste algún dato','error');
-                        form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app.status == 1){
-                        xhr.clase.cargarComentariosGenerales(json_app.data, json_app.display, json_app.candidato_datos);
-                        utils.showToast('Comentarios generales de la verificación actualizados exitosamente', 'success');
-                        $('#modal_comentarios_generales').modal('hide');
                     }else if(json_app.status == 2){
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                         form.querySelectorAll('.btn')[1].disabled = false;
@@ -1341,7 +1158,7 @@ class Estudio extends ContenidoEstudio{
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo'+error, 'error');
                     form.querySelectorAll('.btn')[1].disabled = false;
-                }
+                }
 			}
 		}
 	}
@@ -1439,67 +1256,40 @@ class Estudio extends ContenidoEstudio{
         let xhr = new XMLHttpRequest();
         let data = `Renglon=${this.renglon}&Folio=${folio}`;
         document.querySelectorAll('#cohabitante-form .btn')[1].disabled = false;
-        let form = document.querySelector('#modal_cohabitante');
         xhr.open('POST', '../Cohabitante/getOne');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(data);
         xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
-                let json_app = JSON.parse(r);
                 console.log(r);
                 try {
-                    if (json_app.status == 1){
-                        form.querySelectorAll('input')[0].value = json_app.data.Renglon;
-                        form.querySelectorAll('input')[1].value = json_app.data.Candidato;
+                    if (r != 0){
+                        let json_app = JSON.parse(r);
+                        let form = document.querySelector('#modal_cohabitante');
+                        form.querySelectorAll('input')[0].value = json_app.Renglon;
+                        form.querySelectorAll('input')[1].value = json_app.Candidato;
                         form.querySelectorAll('input')[2].value = 1;
-                        form.querySelectorAll('input')[3].value = json_app.data.Nombre;
-                        form.querySelectorAll('select')[0].value = json_app.data.Parentesco;
-                        form.querySelectorAll('input')[4].value = json_app.data.Edad;
-                        form.querySelectorAll('select')[1].value = json_app.data.Edad_2;
-                        form.querySelectorAll('select')[2].value = json_app.data.Estado_Civil;
-                        form.querySelectorAll('input')[5].value = json_app.data.Ocupacion;
-                        form.querySelectorAll('input')[6].value = json_app.data.Empresa;
+                        form.querySelectorAll('input')[3].value = json_app.Nombre;
+                        form.querySelectorAll('select')[0].value = json_app.Parentesco;
+                        form.querySelectorAll('input')[4].value = json_app.Edad;
+                        form.querySelectorAll('select')[1].value = json_app.Edad_2;
+                        form.querySelectorAll('select')[2].value = json_app.Estado_Civil;
+                        form.querySelectorAll('input')[5].value = json_app.Ocupacion;
+                        form.querySelectorAll('input')[6].value = json_app.Empresa;
 
-                        if (json_app.data.Dependiente == 0)
+                        if (json_app.Dependiente == 0)
                             form.querySelectorAll('input[type=radio]')[1].checked = true;
                         else
                             form.querySelectorAll('input[type=radio]')[0].checked = true;
-                        form.querySelectorAll('input')[9].value = json_app.data.Telefono;
-
-                        if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                            form.querySelectorAll('input')[4].parentElement.parentElement.parentElement.style.display = 'none';
-                            form.querySelectorAll('input')[9].parentElement.style.display = '';
-                            form.querySelectorAll('input[type=radio]')[0].parentElement.parentElement.children[0].textContent = '¿Es mayor de edad?';
-                            form.querySelectorAll('input[type=radio]')[0].name = 'Es_Mayor_Edad';
-                            form.querySelectorAll('input[type=radio]')[1].name = 'Es_Mayor_Edad';
-							form.querySelectorAll('input')[4].required = false;
-							form.querySelectorAll('select')[1].required = false;
-
-                            if (json_app.data.Es_Mayor_Edad == 0)
-                            	form.querySelectorAll('input[type=radio]')[1].checked = true;
-                            else
-                                form.querySelectorAll('input[type=radio]')[0].checked = true;
-                        }
+                        form.querySelectorAll('input')[9].value = json_app.Telefono;
                     }else {
                         form.querySelectorAll('input')[0].value = 0;
                         form.querySelectorAll('input')[1].value = folio;
                         form.querySelectorAll('input')[2].value = 0;
-
-                        if (json_app.status == 2) {
-                            if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                                form.querySelectorAll('input')[4].parentElement.parentElement.parentElement.style.display = 'none';
-                                form.querySelectorAll('input')[9].parentElement.style.display = '';
-                                form.querySelectorAll('input[type=radio]')[0].parentElement.parentElement.children[0].textContent = '¿Es mayor de edad?';
-                                form.querySelectorAll('input[type=radio]')[0].name = 'Es_Mayor_Edad';
-                                form.querySelectorAll('input[type=radio]')[1].name = 'Es_Mayor_Edad';
-								form.querySelectorAll('input')[4].required = false;
-								form.querySelectorAll('select')[1].required = false;
-                            }
-                        }
                     }
                 } catch (error) {
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo '+error, 'error');
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
                     
 			}
@@ -1521,20 +1311,20 @@ class Estudio extends ContenidoEstudio{
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
+                    if(json_app[json_app.length - 1].status == 0){
                         utils.showToast('Omitiste algún dato','error');
                         form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app.status == 1){/* 
+                    }else if (json_app[json_app.length - 1].status == 1){
                         let display = json_app[json_app.length - 2].display;
                         let comentario = json_app[json_app.length -3].Comentario_Cohabitan;
                         json_app.splice(json_app.length -1, 1);
                         json_app.splice(json_app.length -1, 1);
-                        json_app.splice(json_app.length -1, 1); */
-                        xhr.clase.cargarCohabitantes(json_app.data, json_app.display, false,json_app.candidato_datos);
+                        json_app.splice(json_app.length -1, 1);
+                        xhr.clase.cargarCohabitantes(json_app, display, comentario);
                         
                         utils.showToast('Cohabitante actualizado exitosamente', 'success');
                         $('#modal_cohabitante').modal('hide');
-                    }else if(json_app.status == 2){
+                    }else if(json_app[json_app.length - 1].status == 2){
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                         form.querySelectorAll('.btn')[1].disabled = false;
                     }else{
@@ -1565,17 +1355,17 @@ class Estudio extends ContenidoEstudio{
                 console.log(r);
                 try {
                     let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
+                    if(json_app[json_app.length - 1].status == 0){
                         utils.showToast('Omitiste algún dato','error');
                         form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app.status == 1){
-                        /* let display = json_app[json_app.length - 2].display;
+                    }else if (json_app[json_app.length - 1].status == 1){
+                        let display = json_app[json_app.length - 2].display;
                         json_app.splice(json_app.length -1, 1);
-                        json_app.splice(json_app.length -1, 1); */
- 						xhr.clase.cargarCohabitantes(json_app.data, json_app.display, false,json_app.candidato_datos);
+                        json_app.splice(json_app.length -1, 1);
+                        xhr.clase.cargarCohabitantes(json_app, display);
                         utils.showToast('Se eliminó al cohabitante exitosamente', 'success');
                         $('#modal_delete_cohabitante').modal('hide');
-                    }else if(json_app.status == 2){
+                    }else if(json_app[json_app.length - 1].status == 2){
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                         form.querySelectorAll('.btn')[1].disabled = false;
                     }else{
@@ -1633,13 +1423,12 @@ class Estudio extends ContenidoEstudio{
                         utils.showToast('Omitiste algún dato','error');
                         form.querySelectorAll('.btn')[1].disabled = false;
                     }else if (json_app[json_app.length - 1].status == 1){
-                        /* let display = json_app[json_app.length - 2].display;
+                        let display = json_app[json_app.length - 2].display;
                         let comentario = json_app[json_app.length - 3].Comentario_Cohabitan;
                         json_app.splice(json_app.length -1, 1);
-                        json_app.splice(json_app. length -1, 1);*/
                         json_app.splice(json_app.length -1, 1);
-                        xhr.clase.cargarCohabitantes(json_app.data, json_app.display, json_app.candidato_datos);
-						
+                        json_app.splice(json_app.length -1, 1);
+                        xhr.clase.cargarCohabitantes(json_app, display, comentario);
                         utils.showToast('Comentarios actualizados exitosamente', 'success');
                         $('#modal_comentario_cohabitan').modal('hide');
                     }else if(json_app[json_app.length - 1].status == 2){
@@ -1998,13 +1787,6 @@ class Estudio extends ContenidoEstudio{
                     }
 					
 					form.querySelectorAll('textarea')[0].value = json_app.comentario.Comentario_Vivienda;
-					
-					if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                        form.querySelectorAll('input')[13].parentElement.style.display = 'none';
-                        form.querySelectorAll('input')[14].parentElement.style.display = 'none';
-                        form.querySelectorAll('input')[15].parentElement.style.display = 'none';
-                        form.querySelectorAll('textarea')[0].parentElement.style.display = 'none';
-                    }
                         
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo '+error, 'error');
@@ -3118,33 +2900,21 @@ class Estudio extends ContenidoEstudio{
        xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
-                let json_app = JSON.parse(r);
                 console.log(r);
                 try {
-                    if (json_app.status == 1) {
+                    if (r != 0) {
+                        let json_app = JSON.parse(r);
                         form.querySelectorAll('input')[0].value = folio;
                         form.querySelectorAll('input')[1].value = 1;
-                        form.querySelectorAll('input')[2].value = json_app.data.Sobre_Candidato;
-                        form.querySelectorAll('input')[3].value = json_app.data.Sobre_Casa;
-                        form.querySelectorAll('input')[4].value = json_app.data.Conclusiones_Entrevistador;
-                        form.querySelectorAll('select')[0].value = json_app.data.Participacion_Candidato;
-                        form.querySelectorAll('select')[1].value = json_app.data.Entorno_Familiar;
-                        form.querySelectorAll('select')[2].value = json_app.data.Referencias_Vecinales;
-						
-                        if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                            form.querySelectorAll('input')[2].parentElement.style.display = 'none';
-                            form.querySelectorAll('input')[3].parentElement.style.display = 'none';
-                            form.querySelectorAll('input')[4].parentElement.style.display = 'none';
-                        }
-                    }else if (json_app.status == 2) {
+                        form.querySelectorAll('input')[2].value = json_app.Sobre_Candidato;
+                        form.querySelectorAll('input')[3].value = json_app.Sobre_Casa;
+                        form.querySelectorAll('input')[4].value = json_app.Conclusiones_Entrevistador;
+                        form.querySelectorAll('select')[0].value = json_app.Participacion_Candidato;
+                        form.querySelectorAll('select')[1].value = json_app.Entorno_Familiar;
+                        form.querySelectorAll('select')[2].value = json_app.Referencias_Vecinales;
+                    }else{
                         form.querySelectorAll('input')[0].value = folio;
                         form.querySelectorAll('input')[1].value = 0;
-						
-                        if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                            form.querySelectorAll('input')[2].parentElement.style.display = 'none';
-                            form.querySelectorAll('input')[3].parentElement.style.display = 'none';
-                            form.querySelectorAll('input')[4].parentElement.style.display = 'none';
-                        }
                     }
                         
                 } catch (error) {
@@ -3177,7 +2947,7 @@ class Estudio extends ContenidoEstudio{
                             form.querySelectorAll('.btn')[1].disabled = false;
                         } else if (json_app.status == 1) {
                             form.querySelectorAll('.btn')[1].disabled = true;
-                            xhr.clase.cargarConclusiones(json_app.data, json_app.display, json_app.candidato_datos);
+                            xhr.clase.cargarConclusiones(json_app, json_app.display);
                             utils.showToast('Conclusiones actualizadas exitosamente', 'success');
                             $('#modal_conclusiones').modal('hide');
                             form.querySelectorAll('.btn')[1].disabled = false;
@@ -3200,7 +2970,6 @@ class Estudio extends ContenidoEstudio{
         this.renglon = renglon;
         let xhr = new XMLHttpRequest();
         let data = `Renglon=${this.renglon}&Folio=${folio}`;
-        let form = document.querySelector('#modal_referencia');
         document.querySelectorAll('#modal_referencia form .btn')[1].disabled = false;
         xhr.open('POST', '../Referencia/getOne');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -3208,42 +2977,31 @@ class Estudio extends ContenidoEstudio{
         xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
-                let json_app = JSON.parse(r);
                 console.log(r);
                 try {
-                    if (json_app.status == 1){
-                        form.querySelectorAll('input')[0].value = json_app.data.Renglon;
-                        form.querySelectorAll('input')[1].value = json_app.data.Candidato;
+                    if (r != 0){
+                        let json_app = JSON.parse(r);
+                        let form = document.querySelector('#modal_referencia');
+                        form.querySelectorAll('input')[0].value = json_app.Renglon;
+                        form.querySelectorAll('input')[1].value = json_app.Candidato;
                         form.querySelectorAll('input')[2].value = 1;
-                        form.querySelectorAll('select')[0].value = json_app.data.Tipo;
-                        form.querySelectorAll('input')[3].value = json_app.data.Relacion;
-                        form.querySelectorAll('input')[4].value = json_app.data.Nombre;
-                        form.querySelectorAll('input')[5].value = json_app.data.Telefono;
-                        form.querySelectorAll('input')[6].value = json_app.data.Domicilio;
-                        form.querySelectorAll('input')[7].value = json_app.data.Domicilio_Candidato;
-                        form.querySelectorAll('input')[8].value = json_app.data.Tiempo_Viviendo;
-                        form.querySelectorAll('input')[9].value = json_app.data.Tiempo_Conocerlo;
-                        form.querySelectorAll('input')[10].value = json_app.data.Tiene_Hijos;
-                        form.querySelectorAll('input')[11].value = json_app.data.Dedicacion;
-                        form.querySelectorAll('input')[12].value = json_app.data.Estado_Civil;
-                        form.querySelector('textarea').value = json_app.data.Comentarios;
-
-                        if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                            form.querySelectorAll('input')[10].parentElement.style.display = 'none';
-                            form.querySelectorAll('input')[12].parentElement.style.display = 'none';
-							form.querySelector('textarea').parentElement.style.display = 'none';
-                        }
-                    }else if(json_app.status == 2) {
+                        form.querySelectorAll('select')[0].value = json_app.Tipo;
+                        form.querySelectorAll('input')[3].value = json_app.Relacion;
+                        form.querySelectorAll('input')[4].value = json_app.Nombre;
+                        form.querySelectorAll('input')[5].value = json_app.Telefono;
+                        form.querySelectorAll('input')[6].value = json_app.Domicilio;
+                        form.querySelectorAll('input')[7].value = json_app.Domicilio_Candidato;
+                        form.querySelectorAll('input')[8].value = json_app.Tiempo_Viviendo;
+                        form.querySelectorAll('input')[9].value = json_app.Tiempo_Conocerlo;
+                        form.querySelectorAll('input')[10].value = json_app.Tiene_Hijos;
+                        form.querySelectorAll('input')[11].value = json_app.Dedicacion;
+                        form.querySelectorAll('input')[12].value = json_app.Estado_Civil;
+                        form.querySelector('textarea').value = json_app.Comentarios;
+                    }else {
                         form.querySelectorAll('input')[0].value = 0;
                         form.querySelectorAll('input')[1].value = folio;
                         form.querySelectorAll('input')[2].value = 0;
-                    }else if (json_app.status == 3) {
-						if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                            form.querySelectorAll('input')[10].parentElement.style.display = 'none';
-                            form.querySelectorAll('input')[12].parentElement.style.display = 'none';
-							form.querySelector('textarea').parentElement.style.display = 'none';
-                        }
-					}
+                    }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                 }
@@ -3346,95 +3104,18 @@ class Estudio extends ContenidoEstudio{
        xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
-                let json_app = JSON.parse(r);
                 console.log(r);
                 try {
-					
-                    if (json_app.status == 1) {
+                    if (r != 0) {
+                        let json_app = JSON.parse(r);
                         form.querySelectorAll('input')[0].value = folio;
                         form.querySelectorAll('input')[1].value = 1;
-                        form.querySelector('textarea').value = json_app.data.Comentarios_Generales;
+                        form.querySelector('textarea').value = json_app.Comentarios_Generales;
                          //form.querySelectorAll('input')[2].value = json_app.Califica_como;
-                        form.querySelector('[name="Viabilidad"]').value = `${json_app.data.Viabilidad}`;
-						if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                            form.querySelectorAll('textarea')[0].parentElement.style.display = 'none';
-							form.querySelectorAll('textarea')[1].parentElement.style.display = 'none';
-							if (json_app.data.Puntualidad == 1) {
-								document.getElementsByName('Puntualidad')[0].checked = true;
-								document.getElementsByName('Puntualidad')[1].checked = false;
-							}else if (json_app.data.Puntualidad == 2) {
-								document.getElementsByName('Puntualidad')[0].checked = false;
-								document.getElementsByName('Puntualidad')[1].checked = true;
-							}
-							if (json_app.data.Documentacion == 1) {
-								document.getElementsByName('Documentacion')[0].checked = true;
-								document.getElementsByName('Documentacion')[1].checked = false;
-							}else if (json_app.data.Documentacion == 2) {
-								document.getElementsByName('Documentacion')[0].checked = false;
-								document.getElementsByName('Documentacion')[1].checked = true;
-							}
-							if (json_app.data.Naturalidad == 1) {
-								document.getElementsByName('Naturalidad')[0].checked = true;
-								document.getElementsByName('Naturalidad')[1].checked = false;
-							}else if (json_app.data.Naturalidad == 2) {
-								document.getElementsByName('Naturalidad')[0].checked = false;
-								document.getElementsByName('Naturalidad')[1].checked = true;
-							}
-							if (json_app.data.Respuestas_Claras == 1) {
-								document.getElementsByName('Respuestas_Claras')[0].checked = true;
-								document.getElementsByName('Respuestas_Claras')[1].checked = false;
-							}else if (json_app.data.Respuestas_Claras == 2) {
-								document.getElementsByName('Respuestas_Claras')[0].checked = false;
-								document.getElementsByName('Respuestas_Claras')[1].checked = true;
-							}
-                        }else {
-                            form.querySelectorAll('.form-group')[1].style.display = 'none';
-                            form.querySelectorAll('.form-group')[2].style.display = 'none';
-                            form.querySelectorAll('.form-group')[3].style.display = 'none';
-                            form.querySelectorAll('.form-group')[4].style.display = 'none';
-                        }
-                    }else if (json_app.status == 2) {
+                        form.querySelectorAll('select')[0].value = `${json_app.Viabilidad}`;
+                    }else{
                         form.querySelectorAll('input')[0].value = folio;
                         form.querySelectorAll('input')[1].value = 0;
-						if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                            form.querySelectorAll('textarea')[0].parentElement.style.display = 'none';
-							form.querySelectorAll('textarea')[1].parentElement.style.display = 'none';
-							if (json_app.data.Puntualidad == 1) {
-								document.getElementsByName('Puntualidad')[0].checked = true;
-								document.getElementsByName('Puntualidad')[1].checked = false;
-							}else if (json_app.data.Puntualidad == 2) {
-								document.getElementsByName('Puntualidad')[0].checked = false;
-								document.getElementsByName('Puntualidad')[1].checked = true;
-							}
-							if (json_app.data.Documentacion == 1) {
-								document.getElementsByName('Documentacion')[0].checked = true;
-								document.getElementsByName('Documentacion')[1].checked = false;
-							}else if (json_app.data.Documentacion == 2) {
-								document.getElementsByName('Documentacion')[0].checked = false;
-								document.getElementsByName('Documentacion')[1].checked = true;
-							}
-							if (json_app.data.Naturalidad == 1) {
-								document.getElementsByName('Naturalidad')[0].checked = true;
-								document.getElementsByName('Naturalidad')[1].checked = false;
-							}else if (json_app.data.Naturalidad == 2) {
-								document.getElementsByName('Naturalidad')[0].checked = false;
-								document.getElementsByName('Naturalidad')[1].checked = true;
-							}
-							if (json_app.data.Respuestas_Claras == 1) {
-								document.getElementsByName('Respuestas_Claras')[0].checked = true;
-								document.getElementsByName('Respuestas_Claras')[1].checked = false;
-							}else if (json_app.data.Respuestas_Claras == 2) {
-								document.getElementsByName('Respuestas_Claras')[0].checked = false;
-								document.getElementsByName('Respuestas_Claras')[1].checked = true;
-							}
-                        }else {
-                            form.querySelectorAll('.form-group')[1].style.display = 'none';
-                            form.querySelectorAll('.form-group')[2].style.display = 'none';
-                            form.querySelectorAll('.form-group')[3].style.display = 'none';
-                            form.querySelectorAll('.form-group')[4].style.display = 'none';
-							form.querySelectorAll('.form-group')[5].style.display = 'none';
-
-                        }
                     }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo '+error, 'error');
@@ -3443,48 +3124,42 @@ class Estudio extends ContenidoEstudio{
         }
     }
 
-  save_comentario_cohabitan(){
-	var form = document.querySelector("#modal_comentario_cohabitan form");
-	var formData = new FormData(form);
-	form.querySelectorAll('.btn')[1].disabled = true;
-	
-	let xhr = new XMLHttpRequest();
-	xhr.open('POST', '../Cohabitante/save_comentario');
-	xhr.send(formData);
-	xhr.clase = this;
-	xhr.onreadystatechange = function(){
-		if (xhr.readyState == 4 && xhr.status == 200) {
-			let r = this.responseText;
-			let json_app = JSON.parse(r);
-			console.log(r);
-			try {
-				if(json_app.status == 0){
-					utils.showToast('Omitiste algún dato','error');
-					form.querySelectorAll('.btn')[1].disabled = false;
-				}else if (json_app.status == 1){
-					/* let display = json_app[json_app.length - 2].display;
-					let comentario = json_app[json_app.length - 3].Comentario_Cohabitan;
-					json_app.splice(json_app.length -1, 1);
-					json_app.splice(json_app. length -1, 1);
-					json_app.splice(json_app.length -1, 1);*/
-					xhr.clase.cargarCohabitantes(json_app.data, json_app.display, json_app.candidato_datos.Comentario_Cohabitan,json_app.candidato_datos);
-					
-					utils.showToast('Comentarios actualizados exitosamente', 'success');
-					$('#modal_comentario_cohabitan').modal('hide');
-				}else if(json_app.status == 2){
-					utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-					form.querySelectorAll('.btn')[1].disabled = false;
-				}else{
-					utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-					form.querySelectorAll('.btn')[1].disabled = false;
-				}
-			} catch (error) {
-				utils.showToast('Algo salió mal. Inténtalo de nuevo'+error, 'error');
-				form.querySelectorAll('.btn')[1].disabled = false;
+    save_comentarios_generales(){
+        var form = document.querySelector("#modal_comentarios_generales form");
+		var formData = new FormData(form);
+        form.querySelectorAll('.btn')[1].disabled = true;
+		
+		let xhr = new XMLHttpRequest();
+		xhr.open('POST', '../ObservacionesGenerales/save_comentarios_generales');
+		xhr.send(formData);
+        xhr.clase = this;
+		xhr.onreadystatechange = function(){
+			if (xhr.readyState == 4 && xhr.status == 200) {
+                let r = this.responseText;
+                console.log(r);
+                try {
+                    let json_app = JSON.parse(r);
+                    if(json_app.status == 0){
+                        utils.showToast('Omitiste algún dato','error');
+                        form.querySelectorAll('.btn')[1].disabled = false;
+                    }else if (json_app.status == 1){
+                        xhr.clase.cargarComentariosGenerales(json_app, json_app.display);
+                        utils.showToast('Comentarios generales de la verificación actualizados exitosamente', 'success');
+                        $('#modal_comentarios_generales').modal('hide');
+                    }else if(json_app.status == 2){
+                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                        form.querySelectorAll('.btn')[1].disabled = false;
+                    }else{
+                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                        form.querySelectorAll('.btn')[1].disabled = false;
+                    }
+                } catch (error) {
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo'+error, 'error');
+                    form.querySelectorAll('.btn')[1].disabled = false;
+                }
 			}
 		}
 	}
-}
 
     set_tipo_investigacion(tipo){
         if(tipo == 0)
@@ -3610,39 +3285,19 @@ class Estudio extends ContenidoEstudio{
             document.querySelector('a[href="#estudio"]').style.display = 'none';
             document.querySelector('#estudio').style.display = 'none';
 
-			/*if (data.IL == null && (data.ID_Empresa == 544 || data.ID_Empresa == 105 || data.ID_Empresa == 536 || data.ID_Empresa == 533 || data.ID_Empresa == 496 || data.ID_Empresa == 349 || data.ID_Empresa == 528 || data.ID_Empresa == 409 || data.ID_Empresa == 527 || data.ID_Empresa == 22 || data.ID_Empresa == 519 || data.ID_Empresa == 517 || data.ID_Empresa == 513 || data.ID_Empresa == 497 || data.ID_Empresa == 512 || data.ID_Empresa == 511 || data.ID_Empresa == 510 || data.ID_Empresa == 460 || data.ID_Empresa == 483 || data.ID_Empresa == 487 || data.ID_Empresa == 501 || data.ID_Empresa == 498 || data.ID_Empresa == 500 || data.ID_Empresa == 201 || data.ID_Empresa == 490 || data.ID_Empresa == 465 || data.ID_Empresa == 461 || data.ID_Empresa == 490 || data.ID_Empresa == 453 || data.ID_Empresa == 485 || data.ID_Empresa == 468 || data.ID_Empresa == 472 || data.ID_Empresa == 480 || data.ID_Empresa == 470 || data.ID_Empresa == 422 || data.ID_Empresa == 231 || data.ID_Empresa == 417 || data.ID_Empresa == 86 || data.ID_Empresa == 175 || data.ID_Empresa == 361 || data.ID_Empresa == 457 || data.ID_Empresa == 462 || data.ID_Empresa == 452 || data.ID_Empresa == 214 || data.ID_Empresa == 232 || data.ID_Empresa == 220 || data.ID_Empresa == 248 || data.ID_Empresa == 143 || data.ID_Empresa == 302 || data.ID_Empresa == 284 || data.ID_Empresa == 162 || data.ID_Empresa == 139 || data.ID_Empresa == 112 || data.ID_Empresa == 58 || data.ID_Empresa == 410 || data.ID_Empresa == 127 || data.ID_Empresa == 126 || data.ID_Empresa == 107 || data.ID_Empresa == 93 || data.ID_Empresa == 77 || data.ID_Empresa == 335 || data.ID_Empresa == 213 || data.ID_Empresa == 142 || data.ID_Empresa == 110 || data.ID_Empresa == 7 || data.ID_Empresa == 432 || data.ID_Empresa == 430 || data.ID_Empresa == 418 || data.ID_Empresa == 322 || data.ID_Empresa == 227 || data.ID_Empresa == 161 || data.ID_Empresa == 6 || data.ID_Empresa == 296 || data.ID_Empresa == 235 || data.ID_Empresa == 154 || data.ID_Empresa == 85 || data.ID_Empresa == 24 || data.ID_Empresa == 328 || data.ID_Empresa == 242 || data.ID_Empresa == 163 || data.ID_Empresa == 114 || data.ID_Empresa == 100 || data.ID_Empresa == 359 || data.ID_Empresa == 320 || data.ID_Empresa == 212 || data.ID_Empresa == 108 || data.ID_Empresa == 32 || data.ID_Empresa == 325 || data.ID_Empresa == 263 || data.ID_Empresa == 223 || data.ID_Empresa == 200 || data.ID_Empresa == 157 || data.ID_Empresa == 140 || data.ID_Empresa == 341 || data.ID_Empresa == 81 || data.ID_Empresa == 183 || data.ID_Empresa == 79 || data.ID_Empresa == 25 || data.ID_Empresa == 415 || data.ID_Empresa == 416 || data.ID_Empresa == 353 || data.ID_Empresa == 252 || data.ID_Empresa == 407 || data.ID_Empresa == 399 || data.ID_Empresa == 372 || data.ID_Empresa == 405 || data.ID_Empresa == 184 || data.ID_Empresa == 336 || data.ID_Empresa == 27 || data.ID_Empresa == 25 || data.ID_Empresa == 197 || data.ID_Empresa == 109 || data.ID_Empresa == 76 || data.ID_Empresa == 222 || data.ID_Empresa == 17 || data.ID_Empresa == 31 || data.ID_Empresa == 30 || data.Cliente == 74 || data.Cliente == 475 || data.Cliente == 506 || data.ID_Empresa == 153 || data.ID_Empresa == 130 || data.ID_Empresa == 8 || data.ID_Empresa == 391 || data.ID_Empresa == 412 || data.ID_Empresa == 279 || data.ID_Empresa == 224 || data.Cliente == 453 ||data.ID_Empresa == 307 ||data.ID_Empresa == 389 || data.ID_Empresa == 103 || data.ID_Empresa == 180 || data.ID_Empresa == 87 || data.ID_Empresa == 388 || data.ID_Empresa == 292|| data.ID_Empresa == 365 || data.ID_Empresa == 195 || data.ID_Empresa == 274 || data.ID_Empresa == 369 || data.ID_Empresa == 339 || data.ID_Empresa == 382 || data.ID_Empresa == 356 || data.ID_Empresa == 381 || data.ID_Empresa == 45 || data.ID_Empresa == 61 || data.ID_Empresa == 35 || data.ID_Empresa == 179 || data.ID_Empresa == 33 || data.ID_Empresa == 193 || data.ID_Empresa == 168 || data.ID_Empresa == 215 || data.ID_Empresa == 190 || data.ID_Empresa == 144 || data.ID_Empresa == 257 || data.ID_Empresa == 268 || data.ID_Empresa == 39 || data.ID_Empresa == 301 || data.ID_Empresa == 9 || data.ID_Empresa == 314 || data.ID_Empresa == 52 || data.ID_Empresa == 147 || data.Cliente == 181 || data.Cliente == 42 || data.ID_Empresa == 115 || data.ID_Empresa == 277 || data.ID_Empresa == 368 || data.ID_Empresa == 351|| data.ID_Empresa == 165 || data.ID_Empresa == 18 || data.ID_Empresa == 82))
+			if (data.IL == null && (data.ID_Empresa == 452 || data.ID_Empresa == 214 || data.ID_Empresa == 232 || data.ID_Empresa == 220 || data.ID_Empresa == 248 || data.ID_Empresa == 143 || data.ID_Empresa == 302 || data.ID_Empresa == 284 || data.ID_Empresa == 162 || data.ID_Empresa == 139 || data.ID_Empresa == 112 || data.ID_Empresa == 58 || data.ID_Empresa == 410 || data.ID_Empresa == 127 || data.ID_Empresa == 126 || data.ID_Empresa == 107 || data.ID_Empresa == 93 || data.ID_Empresa == 77 || data.ID_Empresa == 335 || data.ID_Empresa == 213 || data.ID_Empresa == 142 || data.ID_Empresa == 110 || data.ID_Empresa == 7 || data.ID_Empresa == 432 || data.ID_Empresa == 430 || data.ID_Empresa == 418 || data.ID_Empresa == 322 || data.ID_Empresa == 227 || data.ID_Empresa == 161 || data.ID_Empresa == 6 || data.ID_Empresa == 296 || data.ID_Empresa == 235 || data.ID_Empresa == 154 || data.ID_Empresa == 85 || data.ID_Empresa == 24 || data.ID_Empresa == 328 || data.ID_Empresa == 242 || data.ID_Empresa == 163 || data.ID_Empresa == 114 || data.ID_Empresa == 100 || data.ID_Empresa == 359 || data.ID_Empresa == 320 || data.ID_Empresa == 212 || data.ID_Empresa == 108 || data.ID_Empresa == 32 || data.ID_Empresa == 325 || data.ID_Empresa == 263 || data.ID_Empresa == 223 || data.ID_Empresa == 200 || data.ID_Empresa == 157 || data.ID_Empresa == 140 || data.ID_Empresa == 341 || data.ID_Empresa == 81 || data.ID_Empresa == 183 || data.ID_Empresa == 79 || data.ID_Empresa == 25 || data.ID_Empresa == 415 || data.ID_Empresa == 416 || data.ID_Empresa == 353 || data.ID_Empresa == 252 || data.ID_Empresa == 407 || data.ID_Empresa == 399 || data.ID_Empresa == 372 || data.ID_Empresa == 405 || data.ID_Empresa == 184 || data.ID_Empresa == 336 || data.ID_Empresa == 27 || data.ID_Empresa == 25 || data.ID_Empresa == 197 || data.ID_Empresa == 109 || data.ID_Empresa == 413 || data.ID_Empresa == 76 || data.ID_Empresa == 222 || data.ID_Empresa == 17 || data.ID_Empresa == 31 || data.ID_Empresa == 30 || data.Cliente == 74 || data.Cliente == 475 || data.Cliente == 506 || data.ID_Empresa == 153 || data.ID_Empresa == 130 || data.ID_Empresa == 8 || data.ID_Empresa == 391 || data.ID_Empresa == 412 || data.ID_Empresa == 279 || data.ID_Empresa == 224 || data.Cliente == 453 ||data.ID_Empresa == 307 ||data.ID_Empresa == 389 || data.ID_Empresa == 103 || data.ID_Empresa == 180 || data.ID_Empresa == 87 || data.ID_Empresa == 388 || data.ID_Empresa == 292|| data.ID_Empresa == 365 || data.ID_Empresa == 195 || data.ID_Empresa == 274 || data.ID_Empresa == 369 || data.ID_Empresa == 339 || data.ID_Empresa == 382 || data.ID_Empresa == 356 || data.ID_Empresa == 381 || data.ID_Empresa == 45 || data.ID_Empresa == 61 || data.ID_Empresa == 35 || data.ID_Empresa == 179 || data.ID_Empresa == 33 || data.ID_Empresa == 193 || data.ID_Empresa == 168 || data.ID_Empresa == 215 || data.ID_Empresa == 190 || data.ID_Empresa == 144 || data.ID_Empresa == 257 || data.ID_Empresa == 268 || data.ID_Empresa == 39 || data.ID_Empresa == 301 || data.ID_Empresa == 9 || data.ID_Empresa == 314 || data.ID_Empresa == 52 || data.ID_Empresa == 147 || data.Cliente == 181 || data.Cliente == 42 || data.ID_Empresa == 115 || data.ID_Empresa == 277 || data.ID_Empresa == 368 || data.ID_Empresa == 351|| data.ID_Empresa == 165 || data.ID_Empresa == 18 || data.ID_Empresa == 82))
                 document.querySelectorAll('.botones_continuar button')[0].style.display = 'block';
-            if ((data.ESE == null && (data.ID_Empresa == 105 || data.ID_Empresa == 536 ||data.ID_Empresa == 533 || data.ID_Empresa == 496 || data.ID_Empresa == 349 || data.ID_Empresa == 528 || data.ID_Empresa == 409 ||data.ID_Empresa == 527 || data.ID_Empresa == 519 || data.ID_Empresa == 517 || data.ID_Empresa == 513 || data.ID_Empresa == 497 || data.ID_Empresa == 512 || data.ID_Empresa == 511 || data.ID_Empresa == 510 || data.ID_Empresa == 508 || data.ID_Empresa == 460 || data.ID_Empresa == 483 || data.ID_Empresa == 487 || data.ID_Empresa == 501 || data.ID_Empresa == 498 || data.ID_Empresa == 500 || data.ID_Empresa == 201 || data.ID_Empresa == 490 || data.ID_Empresa == 465 || data.ID_Empresa == 461 || data.ID_Empresa == 490 || data.ID_Empresa == 453 || data.ID_Empresa == 485 || data.ID_Empresa == 468 || data.ID_Empresa == 472 || data.ID_Empresa == 480 || data.ID_Empresa == 470 || data.ID_Empresa == 422 || data.ID_Empresa == 231 || data.ID_Empresa == 417 || data.ID_Empresa == 86 || data.ID_Empresa == 175 || data.ID_Empresa == 361 || data.ID_Empresa == 397 || data.ID_Empresa == 404 || data.ID_Empresa == 435 || data.ID_Empresa == 566 || data.ID_Empresa == 411 || data.ID_Empresa == 454 || data.ID_Empresa == 457 || data.ID_Empresa == 462 || data.ID_Empresa == 452 || data.ID_Empresa == 305 || data.ID_Empresa == 434 || data.ID_Empresa == 298 || data.ID_Empresa == 278 || data.ID_Empresa == 245 || data.ID_Empresa == 199 || data.ID_Empresa == 120 || data.ID_Empresa == 445 || data.ID_Empresa == 444 || data.ID_Empresa == 438 || data.ID_Empresa == 253 || data.ID_Empresa == 301 || data.ID_Empresa == 181 || data.ID_Empresa == 141 || data.ID_Empresa == 94 || data.ID_Empresa == 426 || data.ID_Empresa == 151 || data.ID_Empresa == 214 || data.ID_Empresa == 232 || data.ID_Empresa == 220 || data.ID_Empresa == 248 || data.ID_Empresa == 143 || data.ID_Empresa == 302 || data.ID_Empresa == 284 || data.ID_Empresa == 162 || data.ID_Empresa == 139 || data.ID_Empresa == 112 || data.ID_Empresa == 58 || data.ID_Empresa == 410 || data.ID_Empresa == 127 || data.ID_Empresa == 126 || data.ID_Empresa == 107 || data.ID_Empresa == 93 || data.ID_Empresa == 77 || data.ID_Empresa == 335 || data.ID_Empresa == 213 || data.ID_Empresa == 142 || data.ID_Empresa == 110 || data.ID_Empresa == 7 || data.ID_Empresa == 432 || data.ID_Empresa == 430 || data.ID_Empresa == 418 || data.ID_Empresa == 322 || data.ID_Empresa == 227 || data.ID_Empresa == 161 || data.ID_Empresa == 6 || data.ID_Empresa == 296 || data.ID_Empresa == 235 || data.ID_Empresa == 154 || data.ID_Empresa == 85 || data.ID_Empresa == 24 || data.ID_Empresa == 328 || data.ID_Empresa == 247 || data.ID_Empresa == 242 || data.ID_Empresa == 163 || data.ID_Empresa == 114 || data.ID_Empresa == 100 || data.ID_Empresa == 359 || data.ID_Empresa == 320 || data.ID_Empresa == 212 || data.ID_Empresa == 108 || data.ID_Empresa == 32 || data.ID_Empresa == 325 || data.ID_Empresa == 263 || data.ID_Empresa == 223 || data.ID_Empresa == 200 || data.ID_Empresa == 157 || data.ID_Empresa == 140 || data.ID_Empresa == 341 || data.ID_Empresa == 81 || data.ID_Empresa == 183 || data.ID_Empresa == 79 || data.ID_Empresa == 25 || data.ID_Empresa == 415 || data.ID_Empresa == 416 || data.ID_Empresa == 353 || data.ID_Empresa == 252 || data.ID_Empresa == 407 || data.ID_Empresa == 399 || data.ID_Empresa == 372 || data.ID_Empresa == 405 || data.ID_Empresa == 184 || data.ID_Empresa == 336 || data.ID_Empresa == 27 || data.ID_Empresa == 25 || data.ID_Empresa == 197 || data.ID_Empresa == 109 || data.ID_Empresa == 413 || data.ID_Empresa == 76 ||data.ID_Empresa == 222 || data.ID_Empresa == 56 ||  data.ID_Empresa == 17 || data.ID_Empresa == 31 || data.ID_Empresa == 30 || data.Cliente == 74 || data.Cliente == 475 || data.Cliente == 506 || data.ID_Empresa == 153 || data.ID_Empresa == 130 ||data.ID_Empresa == 8 || data.ID_Empresa == 391 || data.ID_Empresa == 412 || data.ID_Empresa == 279 || data.ID_Empresa == 224 || data.Cliente == 453 ||data.ID_Empresa == 307 ||data.ID_Empresa == 389 ||data.ID_Empresa == 103 ||data.ID_Empresa == 167 || data.ID_Empresa == 87 || data.ID_Empresa == 388 || data.ID_Empresa == 292 || data.ID_Empresa == 260 || data.ID_Empresa == 365 || data.ID_Empresa == 339 || data.ID_Empresa == 274 || data.ID_Empresa == 369 || data.ID_Empresa == 195 || data.ID_Empresa == 382 || data.ID_Empresa == 356 || data.ID_Empresa == 381 || data.ID_Empresa == 45 || data.ID_Empresa == 61 || data.ID_Empresa == 35 || data.ID_Empresa == 33 || data.ID_Empresa == 304 || data.ID_Empresa == 15 || data.ID_Empresa == 111 || data.ID_Empresa == 102 || data.ID_Empresa == 22 || data.ID_Empresa == 319 || data.ID_Empresa == 46 || data.ID_Empresa == 193 || data.ID_Empresa == 168 || data.ID_Empresa == 36 || data.ID_Empresa == 225 || data.ID_Empresa == 196 || data.ID_Empresa == 329 || data.ID_Empresa == 215 || data.ID_Empresa == 144 || data.ID_Empresa == 257 || data.ID_Empresa == 277 || data.ID_Empresa == 14 || data.ID_Empresa == 268 || data.ID_Empresa == 39 || data.ID_Empresa == 9 || data.ID_Empresa == 295 || data.ID_Empresa == 314 || data.ID_Empresa == 40 || data.ID_Empresa == 273 || data.ID_Empresa == 315 || data.ID_Empresa == 52 || data.ID_Empresa == 350 || data.ID_Empresa == 147 || data.ID_Empresa == 267 || data.Cliente == 181 || data.Cliente == 42 || data.Cliente == 513 || data.Cliente == 193 || data.Cliente == 475 || data.Cliente == 245 || data.ID_Empresa == 115 || data.ID_Empresa == 131 || data.ID_Empresa == 92 || data.ID_Empresa == 351 || data.ID_Empresa == 159 || data.ID_Empresa == 368 || data.Cliente == 531 || data.ID_Empresa == 375 || data.ID_Empresa == 502 || data.ID_Empresa == 165 || data.ID_Empresa == 18)) || (data.ESE == null && display.Operations))
-                document.querySelectorAll('.botones_continuar button')[1].style.display = 'block';*/
-			if (data.IL == null && data.Tiene_IL == 1)
-				document.querySelectorAll('.botones_continuar button')[0].style.display = 'block';
-			
-			if (data.ESE == null && data.Tiene_ESE == 1)
-				document.querySelectorAll('.botones_continuar button')[1].style.display = 'block';
-			
-			if (data.A_RAL == 0 && data.ID_Empresa == 45){
+            if ((data.ESE == null && (data.ID_Empresa == 452 || data.ID_Empresa == 305 || data.ID_Empresa == 434 || data.ID_Empresa == 298 || data.ID_Empresa == 278 || data.ID_Empresa == 245 || data.ID_Empresa == 199 || data.ID_Empresa == 120 || data.ID_Empresa == 445 || data.ID_Empresa == 444 || data.ID_Empresa == 438 || data.ID_Empresa == 253 || data.ID_Empresa == 301 || data.ID_Empresa == 181 || data.ID_Empresa == 141 || data.ID_Empresa == 94 || data.ID_Empresa == 426 || data.ID_Empresa == 151 || data.ID_Empresa == 214 || data.ID_Empresa == 232 || data.ID_Empresa == 220 || data.ID_Empresa == 248 || data.ID_Empresa == 143 || data.ID_Empresa == 302 || data.ID_Empresa == 284 || data.ID_Empresa == 162 || data.ID_Empresa == 139 || data.ID_Empresa == 112 || data.ID_Empresa == 58 || data.ID_Empresa == 410 || data.ID_Empresa == 127 || data.ID_Empresa == 126 || data.ID_Empresa == 107 || data.ID_Empresa == 93 || data.ID_Empresa == 77 || data.ID_Empresa == 335 || data.ID_Empresa == 213 || data.ID_Empresa == 142 || data.ID_Empresa == 110 || data.ID_Empresa == 7 || data.ID_Empresa == 432 || data.ID_Empresa == 430 || data.ID_Empresa == 418 || data.ID_Empresa == 322 || data.ID_Empresa == 227 || data.ID_Empresa == 161 || data.ID_Empresa == 6 || data.ID_Empresa == 296 || data.ID_Empresa == 235 || data.ID_Empresa == 154 || data.ID_Empresa == 85 || data.ID_Empresa == 24 || data.ID_Empresa == 328 || data.ID_Empresa == 247 || data.ID_Empresa == 242 || data.ID_Empresa == 163 || data.ID_Empresa == 114 || data.ID_Empresa == 100 || data.ID_Empresa == 359 || data.ID_Empresa == 320 || data.ID_Empresa == 212 || data.ID_Empresa == 108 || data.ID_Empresa == 32 || data.ID_Empresa == 325 || data.ID_Empresa == 263 || data.ID_Empresa == 223 || data.ID_Empresa == 200 || data.ID_Empresa == 157 || data.ID_Empresa == 140 || data.ID_Empresa == 341 || data.ID_Empresa == 81 || data.ID_Empresa == 183 || data.ID_Empresa == 79 || data.ID_Empresa == 25 || data.ID_Empresa == 415 || data.ID_Empresa == 416 || data.ID_Empresa == 353 || data.ID_Empresa == 252 || data.ID_Empresa == 407 || data.ID_Empresa == 399 || data.ID_Empresa == 372 || data.ID_Empresa == 405 || data.ID_Empresa == 184 || data.ID_Empresa == 336 || data.ID_Empresa == 27 || data.ID_Empresa == 25 || data.ID_Empresa == 197 || data.ID_Empresa == 109 || data.ID_Empresa == 413 || data.ID_Empresa == 76 ||data.ID_Empresa == 222 || data.ID_Empresa == 56 ||  data.ID_Empresa == 17 || data.ID_Empresa == 31 || data.ID_Empresa == 30 || data.Cliente == 74 || data.Cliente == 475 || data.Cliente == 506 || data.ID_Empresa == 153 || data.ID_Empresa == 130 ||data.ID_Empresa == 8 || data.ID_Empresa == 391 || data.ID_Empresa == 412 || data.ID_Empresa == 279 || data.ID_Empresa == 224 || data.Cliente == 453 ||data.ID_Empresa == 307 ||data.ID_Empresa == 389 ||data.ID_Empresa == 103 ||data.ID_Empresa == 167 || data.ID_Empresa == 87 || data.ID_Empresa == 388 || data.ID_Empresa == 292 || data.ID_Empresa == 260 || data.ID_Empresa == 365 || data.ID_Empresa == 339 || data.ID_Empresa == 274 || data.ID_Empresa == 369 || data.ID_Empresa == 195 || data.ID_Empresa == 382 || data.ID_Empresa == 356 || data.ID_Empresa == 381 || data.ID_Empresa == 45 || data.ID_Empresa == 61 || data.ID_Empresa == 35 || data.ID_Empresa == 33 || data.ID_Empresa == 304 || data.ID_Empresa == 15 || data.ID_Empresa == 111 || data.ID_Empresa == 102 || data.ID_Empresa == 22 || data.ID_Empresa == 319 || data.ID_Empresa == 46 || data.ID_Empresa == 193 || data.ID_Empresa == 168 || data.ID_Empresa == 36 || data.ID_Empresa == 225 || data.ID_Empresa == 196 || data.ID_Empresa == 329 || data.ID_Empresa == 215 || data.ID_Empresa == 144 || data.ID_Empresa == 257 || data.ID_Empresa == 277 || data.ID_Empresa == 14 || data.ID_Empresa == 268 || data.ID_Empresa == 39 || data.ID_Empresa == 9 || data.ID_Empresa == 295 || data.ID_Empresa == 314 || data.ID_Empresa == 40 || data.ID_Empresa == 273 || data.ID_Empresa == 315 || data.ID_Empresa == 52 || data.ID_Empresa == 350 || data.ID_Empresa == 147 || data.ID_Empresa == 267 || data.Cliente == 181 || data.Cliente == 42 || data.Cliente == 513 || data.Cliente == 193 || data.Cliente == 475 || data.Cliente == 245 || data.ID_Empresa == 115 || data.ID_Empresa == 131 || data.ID_Empresa == 92 || data.ID_Empresa == 351 || data.ID_Empresa == 159 || data.ID_Empresa == 368 || data.Cliente == 531 || data.ID_Empresa == 375 || data.ID_Empresa == 502 || data.ID_Empresa == 165 || data.ID_Empresa == 18)) || (data.ESE == null && display.Operations))
                 document.querySelectorAll('.botones_continuar button')[1].style.display = 'block';
-                //document.querySelectorAll('.botones_continuar button')[2].style.display = 'block';
-			}
+			if (data.A_RAL == 0 && data.ID_Empresa == 45)
+                document.querySelectorAll('.botones_continuar button')[2].style.display = 'block';
             //if (data.Transportista == 1)
-				if (data.ID_Empresa == 82 || data.Tiene_SOI == 1){
+			if (data.ID_Empresa == 82 || data.Transportista == 1)
                 document.querySelectorAll('.botones_continuar button')[3].style.display = 'inline-block';
-                document.querySelectorAll('.botones_continuar button')[1].style.display = 'none';
-            }
-			if (data.ID_Empresa == 82 || data.Tiene_SMART==1){
-               document.querySelectorAll('.botones_continuar button')[4].style.display = 'inline-block';
-                document.querySelectorAll('.botones_continuar button')[1].style.display = 'none';
-            }
-		
-       }
-		
-			if (data.ID_Empresa == 525){
-				document.querySelector('#vert-tabs-google-search-tab').style.display = '';
-
-			}
+        }
     }
 
-    setServicioSolicitado(Servicio_Solicitado, display=false){
+    setServicioSolicitado(Servicio_Solicitado){
         if(Servicio_Solicitado == 'RAL' || Servicio_Solicitado == 'ANÁLISIS DE RAL'){
             document.querySelector('.card-tabs').classList.add('card-orange');
         }else if (Servicio_Solicitado == 'INV. LABORAL'){
@@ -3655,16 +3310,6 @@ class Estudio extends ContenidoEstudio{
             document.querySelector('.card-tabs').classList.add('card-purple');
         else if (Servicio_Solicitado == 'SOI')
             document.querySelector('.card-tabs').classList.add('card-dark');
-		else if (Servicio_Solicitado == 'ESE SMART') {
-            document.querySelector('#vert-tabs-economia-tab').style.display = 'none';
-            document.querySelector('#vert-tabs-info_financiera-tab').style.display = 'none';
-            document.querySelector('#vert-tabs-info_patrimonial-tab').style.display = 'none';
-			if (display) {
-				document.querySelector('#content-ubicacion').parentElement.children[0].style.display = display.Account;
-				document.querySelector('#content-conclusiones').parentElement.children[0].style.display = display.Account;
-				document.querySelector('#content-comentarios_generales').parentElement.children[0].style.display = display.Account;
-			}
-        }
     }
 
     setDopajeLogimex(Cliente){
@@ -4667,66 +4312,6 @@ class Estudio extends ContenidoEstudio{
                     }
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                }
-                    
-			}
-		}
-	}
-	
-	
-
-    set_SOI(data, soiCer, display, soi) {
-		console.log(data, soiCer, display, soi);
-        if (data.Servicio_Solicitado == 'SOI' && (data.Estado == 252 || data.Estado == 254) && soiCer == false) {
-            document.querySelector('#soi-card').style.display = display.SAManagement;
-            document.querySelector('#soi-card .text-center').style.display = display.SAManagement;
-        }else {
-            document.querySelector('#soi-card .text-center').style.display = 'none';
-        }
-        if (soiCer && soiCer.Activo == 1) {
-            document.querySelector('#soi-card').style.display = 'block';
-            document.querySelector('#soi-card img').style.display = 'block';
-            document.querySelector('#soi-card img').src = soi; 
-            document.querySelector('#soi-card a').href = soi; 
-            document.querySelector('#soi-card a').download = 'SOI '+data.Nombres+' '+data.Apellido_Paterno+' '+data.Apellido_Materno; 
-			document.querySelectorAll('#content_botones a')[6].style.display = 'block';
-			document.querySelector('#soi-card .text-center').style.display = 'none';
-        }
-
-    }
-
-    soi(){
-        var form = document.querySelector("#modal_soi form");
-		var formData = new FormData(form);
-		form.querySelectorAll('.btn')[1].disabled = true;
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', '../ServicioApoyo/soi');
-		//xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-		xhr.send(formData);
-        xhr.clase = this;
-		xhr.onreadystatechange = function(){
-			if (xhr.readyState == 4 && xhr.status == 200) {
-                let r = xhr.responseText;
-                console.log(r);
-                try {
-                    let json_app = JSON.parse(r);
-                    if(json_app.status == 0){
-                        utils.showToast('Omitiste algún dato','error');
-						form.querySelectorAll('.btn')[1].disabled = false;
-                    }else if (json_app.status == 1){
-                        xhr.clase.set_SOI(json_app.candidato_datos, json_app.soiCer, json_app.display, json_app.soi);
-                        utils.showToast('Se certificó exitosamente', 'success');
-                        $('#modal_soi').modal('hide');
-                    }else if(json_app.status == 2){
-                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-						form.querySelectorAll('.btn')[1].disabled = false;
-                    }else{
-                        utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-						form.querySelectorAll('.btn')[1].disabled = false;
-                    }
-                } catch (error) {
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo '+error, 'error');
-					form.querySelectorAll('.btn')[1].disabled = false;
                 }
                     
 			}

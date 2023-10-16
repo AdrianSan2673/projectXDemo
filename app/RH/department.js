@@ -23,11 +23,10 @@ class Department {
               form.querySelectorAll('.btn')[1].disabled = true;
               let departamentos = '';
               json_app.departamentos.forEach(element => {
-
                 departamentos += `
                           <div class="col-md-4 ">
                             <div class="small-box bg-info">
-                              <button class="btn text-white btn-delete" value="${element.id}">X</button>
+                              <button class="btn text-white btn-delete" value="${element.id}" ${element.no_employees==0||element.no_positions==0?'':'hidden'}>X</button>
                               <div class="inner">
                                 <h4>${element.department}</h4>
                                 <div class="row">
@@ -39,7 +38,7 @@ class Department {
                                   </div>
                                 </div>
                               </div>
-                              <a class="small-box-footer" href="${element.url}">
+                              <a class="small-box-footer" href="${element.modified_at}">
                                 Ver
                                 <i class="fas fa-arrow-circle-right"></i>
                               </a>
@@ -65,7 +64,7 @@ class Department {
     }
   }
 
-  updateDepartamento() {
+   updateDepartamento() {
     var form = document.querySelector("#modal_edit form");
     var formData = new FormData(form);
 
@@ -73,36 +72,36 @@ class Department {
     xhr.open('POST', '../departamento/updateDepartamento');
     xhr.send(formData);
 
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        let r = xhr.responseText;
-        console.log(r);
-        try {
-          let json_app = JSON.parse(r);
-          if (json_app.status == 0) {
-            utils.showToast('Omitiste algún dato', 'error');
-          } else if (json_app.status == 1) {
-            let title = document.querySelectorAll('.title-departament')
-            for (let i = 0; i < title.length; i++) {
-              title[i].textContent = json_app.departments
-            }
-            utils.showToast('Fue actualizado', 'success');
-            $('#modal_edit').modal('hide');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            let r = xhr.responseText;
+            console.log(r);
+            try {
+                let json_app = JSON.parse(r);
+                if (json_app.status == 0) {
+                    utils.showToast('Omitiste algún dato', 'error');
+                } else if (json_app.status == 1) {
+                    let title = document.querySelectorAll('.title-departament')
+                    for (let i = 0; i < title.length; i++) {
+                        title[i].textContent = json_app.departments
+                    }
+                    utils.showToast('Fue actualizado', 'success');
+                    $('#modal_edit').modal('hide');
 
-          } else if (json_app.status == 2) {
-            form.querySelectorAll('.btn')[1].disabled = false;
-            utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-          } else {
-            form.querySelectorAll('.btn')[1].disabled = false;
-            utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-          }
-        } catch (error) {
-          // form.querySelectorAll('.btn')[1].disabled = false;
-          utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                } else if (json_app.status == 2) {
+                    form.querySelectorAll('.btn')[1].disabled = false;
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                } else {
+                    form.querySelectorAll('.btn')[1].disabled = false;
+                    utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                }
+            } catch (error) {
+                // form.querySelectorAll('.btn')[1].disabled = false;
+                utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+            }
         }
-      }
     }
-  }
+}
 
 
   delet(id) {
@@ -129,7 +128,7 @@ class Department {
                                        <div class="col-md-4 ">
                                       <div class="small-box bg-info">
 
-                                        <button class="btn text-white btn-delete" value="${element.id}"> X</button>
+                                        <button class="btn text-white btn-delete" value="${element.id}" ${element.no_employees==0||element.no_positions==0?'':'hidden'}> X</button>
 
                                         <div class="inner">
                                           <h4>${element.department}</h4>

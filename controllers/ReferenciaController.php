@@ -2,8 +2,6 @@
 
 require_once 'models/SA/CandidatosReferencias.php';
 require_once 'models/SA/Progreso.php';
-require_once 'models/SA/CandidatosDatos.php';
-
 
 class ReferenciaController{
 
@@ -12,27 +10,17 @@ class ReferenciaController{
             $Renglon = Utils::sanitizeNumber($_POST['Renglon']);
             $Candidato = Utils::sanitizeNumber($_POST['Folio']);
 
-            if ($Candidato) {
-				$candidato = new CandidatosDatos();
-                $candidato->setCandidato($Candidato);
-                $candidato_datos = $candidato->getOne();
-				
-				if ($Renglon){
-					$referencia = new CandidatosReferencias();
-					$referencia->setRenglon($Renglon);
-					$referencia->setCandidato($Candidato);
-					$data = $referencia->getOne();
+            if ($Renglon && $Candidato) {
+                $referencia = new CandidatosReferencias();
+                $referencia->setRenglon($Renglon);
+                $referencia->setCandidato($Candidato);
+                $data = $referencia->getOne();
 
-					if ($data) {
-						header('Content-Type: text/html; charset=utf-8');
-						echo json_encode(array('data' => $data, 'candidato_datos' => $candidato_datos, 'status' => 1), \JSON_UNESCAPED_UNICODE);
-					} else echo json_enconde(array('status' => 2));
-				}else {
-                    echo json_encode(array(
-                        'candidato_datos' => $candidato_datos,
-                        'status' => 3
-                    ), \JSON_UNESCAPED_UNICODE);
-                }
+                if ($data) {
+                    header('Content-Type: text/html; charset=utf-8');
+                    echo json_encode($data, \JSON_UNESCAPED_UNICODE);
+                } else echo 0;
+                
             }else echo 0;
         } else
             header('location:'.base_url);

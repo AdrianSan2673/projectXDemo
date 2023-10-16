@@ -94,7 +94,7 @@ class ClienteContactoController{
                 $username = isset($_POST['username']) && !empty($_POST['username']) ? trim($_POST['username']) : FALSE;
                 $password = isset($_POST['password']) && !empty($_POST['password']) ? trim($_POST['password']) : FALSE;
 
-                if ($username) {
+                if ($username && $password) {
                     $user = new User();
                     $user->setUsername($username);
                     $user->setPassword($password);
@@ -103,18 +103,6 @@ class ClienteContactoController{
                     $user->setEmail($email);
                     $user->setActivation(1);
                     $user->setId_user_type(6);
-					
-					
-					 if (!isset($_POST['Password'])) {
-                        //gabo 13 sept
-                        $pattern = "1234567890abcdefghijklmnopqrstuvwxyz#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                        $max = strlen($pattern) - 1;
-                        for ($i = 0; $i < 10; $i++) {
-                            $password .= substr($pattern, mt_rand(0, $max), 1);
-                        }
-                    }
-                    $user->setPassword($password);
-
 
                     
                     $userExists = $user->userExists();

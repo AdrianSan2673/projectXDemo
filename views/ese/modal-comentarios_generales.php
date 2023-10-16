@@ -16,84 +16,15 @@
                         <textarea name="Comentarios_Generales" class="form-control" rows="35"></textarea>
                     </div>
                     <div class="form-group">
-                        <label class="col-for-label">¿Atendió puntual y en fecha y hora acordada?</label>
-                        <div class="form-row">
-                            <div class="col-3">
-                                <div class="icheck-success form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Puntualidad" id="Puntualidad1" value="1">
-                                    <label class="form-check-label" for="Puntualidad1">Sí</label>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="icheck-success form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Puntualidad" id="Puntualidad2" value="2">
-                                    <label class="form-check-label" for="Puntualidad2">No</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-for-label">¿Presentó la documentación solicitada?</label>
-                        <div class="form-row">
-                            <div class="col-3">
-                                <div class="icheck-success form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Documentacion" id="Documentacion1" value="1">
-                                    <label class="form-check-label" for="Documentacion1">Sí</label>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="icheck-success form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Documentacion" id="Documentacion2" value="2">
-                                    <label class="form-check-label" for="Documentacion2">No</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-for-label">¿Se condujo con naturalidad y dominio?</label>
-                        <div class="form-row">
-                            <div class="col-3">
-                                <div class="icheck-success form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Naturalidad" id="Naturalidad1" value="1">
-                                    <label class="form-check-label" for="Naturalidad1">Sí</label>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="icheck-success form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Naturalidad" id="Naturalidad2" value="2">
-                                    <label class="form-check-label" for="Naturalidad2">No</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-for-label">¿Sus respuestas fueron claras y seguras?</label>
-                        <div class="form-row">
-                            <div class="col-3">
-                                <div class="icheck-success form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Respuestas_Claras" id="Respuestas_Claras1" value="1">
-                                    <label class="form-check-label" for="Respuestas_Claras1">Sí</label>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="icheck-success form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Respuestas_Claras" id="Respuestas_Claras2" value="2">
-                                    <label class="form-check-label" for="Respuestas_Claras2">No</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label" for="Califica_como">Análisis de Verificación</label>
+                        <label class="col-form-label" for="Califica_como">El candidato califica como</label>
                        <input type="hidden" name="Califica_como" class="form-control" maxlength="50">
-                         <textarea name="Viabilidad" class="form-control" rows="10"></textarea>
-                      <!--  <select name="Viabilidad" class="form-control">
+                       <select name="Viabilidad" class="form-control">
                             <option value="4">Sin viabilidad</option>
                             <option value="0">Viable</option>
                             <option value="1">No viable</option>
                             <option value="2">Viable con reservas</option>
                             <option value="5">Viable con observaciones (RADEC)</option>
-                        </select> -->
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">

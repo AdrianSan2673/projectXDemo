@@ -119,9 +119,8 @@ class CandidateAdditionalPreparation
 		$flag = $stmt->execute();
 
 		if ($flag) {
-            $result = true;
-            $this->setId($this->db->lastInsertId());
-        }
+			$result = true;
+		}
 		return $result;
 	}
 

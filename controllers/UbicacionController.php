@@ -4,7 +4,6 @@ require_once 'models/SA/CandidatosUbicacion.php';
 require_once 'models/SA/CandidatosVivienda.php';
 require_once 'models/SA/Progreso.php';
 require_once 'models/SA/Candidatos.php';
-require_once 'models/SA/CandidatosDatos.php';
 
 class UbicacionController{
 
@@ -24,10 +23,6 @@ class UbicacionController{
                 $cand = new Candidatos();
                 $cand->setCandidato($Candidato);
                 $data_comentarios = $cand->getComentarios();
-				
-				$candidato = new CandidatosDatos();
-				$candidato->setCandidato($Candidato);
-				$candidato_datos = $candidato->getOne();
 
                 /* $data_ubicacion = $data_ubicacion ? array_push($data_ubicacion, array('status' => 1)) : ['status' => 0];
                 $data_vivienda = $data_vivienda ? array_push($data_vivienda, array('status' => 1)) : ['status' => 0]; */
@@ -53,8 +48,7 @@ class UbicacionController{
                 $data = array(
                     'ubicacion' => $data_ubicacion,
                     'vivienda' => $data_vivienda,
-                    'comentario' => $data_comentarios,
-					'candidato_datos' => $candidato_datos
+                    'comentario' => $data_comentarios
                 );
 
                 header('Content-Type: text/html; charset=utf-8');

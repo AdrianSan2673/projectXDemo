@@ -247,21 +247,5 @@ class Trainings
     }
 
 
-    // <!-- //===[gabo 3 JULIO MODULO RH]=== -->
-
-	public function getAllByIdCliente()
-    {
-        $Cliente = $this->getCliente();
-        $status= $this->getStatus();
-		
-        $stmt = $this->db->prepare("SELECT *,(SELECT Nombre_Cliente FROM rh_Ventas_Alta WHERE Cliente=t.Cliente) nombre_cliente FROM root.trainings t WHERE Cliente=:Cliente and status=:status ORDER BY created_at");
-        $stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
-        $stmt->bindParam(":status", $status, PDO::PARAM_INT);
-        $stmt->execute();
-        $fetch = $stmt->fetchAll();
-        return $fetch;
-    }
-
-
 
 }

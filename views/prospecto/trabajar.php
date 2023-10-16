@@ -62,8 +62,6 @@
                                               <option value="Real" <?=isset($prospecto) && is_object($prospecto) && $prospecto->Tipo == 'Real' ? 'selected' : ''; ?>>Real</option>
                                               <option value="Potencial" <?=isset($prospecto) && is_object($prospecto) && $prospecto->Tipo == 'Potencial' ? 'selected' : ''; ?>>Potencial</option>
                                               <option value="BI" <?=isset($prospecto) && is_object($prospecto) && $prospecto->Tipo == 'BI' ? 'selected' : ''; ?>>BI</option>
- <option value="CDMX" <?=isset($prospecto) && is_object($prospecto) && $prospecto->Plaza == 'CDMX' ? 'selected' : ''; ?>>CDMX</option>
-
                                             </select>
                                         </div>
                                         <div class="form-group row">

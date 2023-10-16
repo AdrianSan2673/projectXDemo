@@ -243,26 +243,6 @@ class Statistics{
         return $candidate->getTotalESESPorDia();
     }
 
-    public static function getTotalESESOIHoy()
-    {
-        require_once 'models/SA/Candidatos.php';
-        $candidate = new Candidatos();
-        $candidate->setFecha_solicitud(date('Y-m-d'));
-        return $candidate->getTotalESESOIPorDia();
-    }
-    public static function getTotalESESMARTHoy()
-    {
-        require_once 'models/SA/Candidatos.php';
-        $candidate = new Candidatos();
-        $candidate->setFecha_solicitud(date('Y-m-d'));
-        return $candidate->getTotalESESMARTPorDia();
-    }
-
-
-
-
-
-
     //POR EJECUTIVO
     public static function getTotalServiciosApoyoHoyPorEjecutivo(){
         require_once 'models/SA/Candidatos.php';
@@ -294,25 +274,6 @@ class Statistics{
         $candidate->setFecha_solicitud(date('Y-m-d'));
         $candidate->setEjecutivo($_SESSION['identity']->username);
         return $candidate->getTotalESESPorDiaYEjecutivo();
-    }
-
-    public static function getTotalESESOIHoyPorEjecutivo()
-    {
-        require_once 'models/SA/Candidatos.php';
-        $candidate = new Candidatos();
-        $candidate->setFecha_solicitud(date('Y-m-d'));
-        $candidate->setEjecutivo($_SESSION['identity']->username);
-        return $candidate->getTotalESESOIPorDiaYEjecutivo();
-    }
-
-
-    public static function getTotalESESMARTHoyPorEjecutivo()
-    {
-        require_once 'models/SA/Candidatos.php';
-        $candidate = new Candidatos();
-        $candidate->setFecha_solicitud(date('Y-m-d'));
-        $candidate->setEjecutivo($_SESSION['identity']->username);
-        return $candidate->getTotalESESMARTPorDiaYEjecutivo();
     }
 
 
@@ -693,7 +654,7 @@ class Statistics{
         $id_contacto = $contactoEmpresa->getContactoPorUsuario()->ID;
 
         $evaluation_employee = new EvaluationEmployee();
-        $evaluation_employee->setID_Contacto($_SESSION['id_cliente']);
+        $evaluation_employee->setID_Contacto($id_contacto);
         $evaluation_employee->setStatus(2);
         $evaluation_employees = $evaluation_employee->getEvaluationByID_ContactoAndStatus();
 

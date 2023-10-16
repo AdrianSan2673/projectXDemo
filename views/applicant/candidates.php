@@ -227,7 +227,7 @@
                 </td>
 
                 <td><?= Utils::getShortDate($candidate['created_at']) ?></td>
-                <td class=""><?= $candidate['created_by'] ?></td>
+                <td class="<?= $recruiter_color ?>"><?= $candidate['created_by'] ?></td>
                 <td class="text-right py-0 align-middle">
                   <div class="btn-group btn-group-sm">
                     <a href="<?= base_url ?>candidato/ver&id=<?= Encryption::encode($candidate['id']) ?>&vacante=<?= $_GET['id'] ?>" class="btn btn-success">

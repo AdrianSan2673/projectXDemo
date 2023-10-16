@@ -17,7 +17,7 @@
                 <input type="hidden" id="id_status_eliminar" name="id_status_eliminar" >
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                    <input type="submit" name="submit" id="submit" class="btn btn-orange" value="eliminar" >
+                    <input type="submit" name="submit" id="submit" class="btn btn-orange" value="eliminar">
                 </div>
             </form>
         </div>

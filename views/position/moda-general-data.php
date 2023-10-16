@@ -57,20 +57,6 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
-
-                    <div class="form-group">
-                        <label class="col-form-label">Sucursal</label>
-
-                        <select name="ID_Cliente" id="" class="form-control" required>
-                        <?php $contactos = Utils::getEmpresaByContacto(); ?>
-                            <option value="" disabled selected>Selecciona sucursal</option>
-                            <?php foreach ($contactos as $contacto) : ?>
-                                <option value="<?= Encryption::encode( $contacto['Cliente']) ?>" <?= $contacto['Cliente']== $position->ID_Cliente?'selected':'' ?> ><?= $contacto['Nombre_Cliente'] ?></option>
-                            <?php endforeach ?>
-                        </select>
-                    </div>
-
-
                 </div>
 
                 <input type="hidden" name="id_position" value="<?= $_GET['id'] ?>">

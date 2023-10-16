@@ -32,19 +32,11 @@ class Employee {
                         form.reset();
 
                         document.querySelector('#select_razon_social').innerHTML = ''
-                        //===[gabo 9 junio excel evaluaciones]===
-                        $('#employee-form [name="id_boss"]').val("");
-                        $('#employee-form [name="id_boss"]').trigger('change');
-                        form.querySelectorAll('.btn')[0].disabled = false;
-                        //===[gabo 9 junio excel evaluaciones fin]===
 
                     } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[0].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    } else if (json_app.status == 3) {
-                        form.querySelectorAll('.btn')[0].disabled = false;
-                        utils.showToast('Ya existe un empleado con ese curp', 'error');
-                    }  else {
+                    } else {
                         form.querySelectorAll('.btn')[0].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
@@ -77,7 +69,7 @@ class Employee {
                     json_app.contactos.forEach(contacto => {
                         contactos +=
                             `
-                        <option value="${contacto.ID}">${contacto.Razon}</option>
+                        <option value="${contacto.ID}">${contacto.Nombre}</option>
                         `;
                     });
                     contactos += '<option value="0">No asignado</option>';
@@ -152,15 +144,7 @@ class Employee {
                                <p>${json_app.employee.rfc==''||json_app.employee.rfc==null?'Sin definir':json_app.employee.rfc}</p>
                            </div>
                         </div>
-						
-					
-						           <div class="row">
-                           <div class="col-sm-12 text-center">
-                               <b>Corrreo</b>
-                               <p>${json_app.employee.email == '' || json_app.employee.email == null ? 'Sin definir' : json_app.employee.email}</p>
-                           </div>
-                        </div>
-						
+
                         <div class="row">
                             <div class="col-sm-4 text-center">
                                 <b>Fecha de creación</b>
@@ -168,7 +152,7 @@ class Employee {
                             </div>
 
                             <div class="col-sm-4 text-center">
-                                <b>Fecha de nacimiento</b>
+                                <b>Fehca de nacimiento</b>
                                 <p>${json_app.employee.date_birth}</p>
                             </div>
 
@@ -319,7 +303,6 @@ class Employee {
                         document.querySelector('#btn-debaja-empleado').textContent = 'Dar de alta'
 
                         $('#modal-baja').modal('hide');
-                        setTimeout('document.location.reload()',2000);
 
                     } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
@@ -373,8 +356,7 @@ class Employee {
                         document.querySelector('#btn-debaja-empleado').classList.add("btn-danger");
                         document.querySelector('#btn-debaja-empleado').textContent = 'Dar de baja'
 
-           			    location.reload();
-                        setTimeout('document.location.reload()',1700);
+
                     } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
@@ -646,7 +628,6 @@ class Employee {
     }
 
 
-   
     deletePayroll(id) {
         let xhr = new XMLHttpRequest();
         xhr.open('POST', '../EmpleadoNomina/deletePayroll');
@@ -671,12 +652,12 @@ class Employee {
 
                             <div class="col-sm-4 text-center">
                                 <b>Salario actual o final</b>
-                                <p>$${json_app.employeePayroll!=''?json_app.employeePayroll.gross_pay:'Sin definir'}</p>
+                                <p>${json_app.employeePayroll!=''?json_app.employeePayroll.gross_pay:'Sin definir'}</p>
                             </div>
 
                             <div class="col-sm-4 text-center">
                                 <b>Salario inicial</b>
-                                <p>$${json_app.employeePayroll!=''?json_app.employeePayroll.start_pay:'Sin definir'}</p>
+                                <p>${json_app.employeePayroll!=''?json_app.employeePayroll.start_pay:'Sin definir'}</p>
                             </div>
                         </div>
 
@@ -719,10 +700,6 @@ class Employee {
 
                         document.querySelector('#divNomina').innerHTML = employee
                         document.querySelector('#tableRollPay').innerHTML = tableEmployee
- 
-                        if (json_app.employeePayroll=='') {
-                            document.querySelector("#modal-payroll form").reset()
-                        }
                     } else if (json_app.status == 2) {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     } else {
@@ -735,7 +712,6 @@ class Employee {
             }
         }
     }
-
 
 
 
@@ -1022,26 +998,26 @@ class Employee {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Omitiste algún dato', 'error');
                     } else if (json_app.status == 1) {
-
+                     
                         let json_app = JSON.parse(r);
                         let options = '<option value="">Escribir email</option>'
-
+    
                         if (json_app.email_Employee.email != '') {
                             options += `<option value="${json_app.email_Employee.email}" selected>${json_app.email_Employee.email}</option>`
                         }
-
+    
                         if (json_app.email_Employee.institutional_email != '') {
                             options += `<option value="${json_app.email_Employee.institutional_email}" selected>${json_app.email_Employee.institutional_email}</option>`
                         }
-
+    
                         document.querySelector('#email_input').required = false
                         document.querySelector('#email_input').hidden = true
-
+    
                         document.querySelector('#email_employee').required = true
                         document.querySelector('#email_employee').hidden = false
 
                         document.querySelector('#email_employee').innerHTML = options;
-
+    
                         document.querySelector('#email_input').value = ''
                     } else if (json_app.status == 2) {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
@@ -1049,9 +1025,9 @@ class Employee {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
                 } catch (error) {
-                    // utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
-                    let options = '<option value="">Escribir email</option>'
-                    document.querySelector('#email_employee').innerHTML = options;
+                   // utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                   let options = '<option value="">Escribir email</option>'
+                   document.querySelector('#email_employee').innerHTML = options;
 
                 }
 

@@ -320,9 +320,6 @@
  <script type="text/javascript">
      document.addEventListener('DOMContentLoaded', e => {
 
-    $(function () {
-                                $('[data-toggle="tooltip"]').tooltip()
-                            })
 
 
          document.querySelector('#form_open_questions').addEventListener('submit', e => {

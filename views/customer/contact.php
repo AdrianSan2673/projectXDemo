@@ -122,7 +122,7 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="password" class="col-form-label">Contraseña:</label>
-                        <input type="text" name="password" disabled id="password" class="form-control" value="<?=isset($contacto) && is_object($contacto) && !empty($contacto->password) ? Utils::decrypt($contacto->password) : ''; ?>">
+                        <input type="text" name="password" id="password" class="form-control" value="<?=isset($contacto) && is_object($contacto) && !empty($contacto->password) ? Utils::decrypt($contacto->password) : ''; ?>">
                       </div>
                     </div>
                   </div>
@@ -159,11 +159,11 @@ document.querySelector('#customer-contact-form').addEventListener('submit', e =>
 
 document.querySelector('#customer-contact-form #username').addEventListener('input', e => {
     let user = new User();
-    user.checkUsernameWithInfo();
+    user.checkUsername();
 });
 
 document.querySelector('#customer-contact-form #email').addEventListener('input', e => {
     let user = new User();
-    user.checkEmailWithInfo();
+    user.checkEmail();
 });
 </script>

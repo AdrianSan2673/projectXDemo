@@ -75,7 +75,7 @@
                       <div class="row">
                         <div class="col-5 col-sm-3 col-md-2 mt-3">
                           <div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" role="tablist" aria-orientation="vertical">
-                            <a class="nav-link <?=Utils::getDisplayBotones()['Account'] == 'block' ? 'active' : ''?>" id="vert-tabs-busqueda_ral-tab" data-toggle="pill" href="#vert-tabs-busqueda_ral" role="tab" aria-controls="vert-tabs-busqueda_ral" aria-selected="true" style="display: block">Búsqueda de RAL</a>
+                            <a class="nav-link <?=Utils::getDisplayBotones()['Account'] == 'block' ? 'active' : ''?>" id="vert-tabs-busqueda_ral-tab" data-toggle="pill" href="#vert-tabs-busqueda_ral" role="tab" aria-controls="vert-tabs-busqueda_ral" aria-selected="true" style="display: <?=Utils::getDisplayBotones()['Account']?>;">Búsqueda de RAL</a>
                             <a class="nav-link" id="vert-tabs-propio_ral-tab" data-toggle="pill" href="#vert-tabs-propio_ral" role="tab" aria-controls="vert-tabs-busqueda_ral" aria-selected="true" style="display: <?=Utils::getDisplayBotones()['Account']?>;">RAL Propio</a>
                             <a class="nav-link <?=Utils::getDisplayBotones()['Account'] != 'block' ? 'active' : ''?>" id="vert-tabs-acerca_ral-tab" data-toggle="pill" href="#vert-tabs-acerca_ral" role="tab" aria-controls="vert-tabs-acerca_ral" aria-selected="true">Acerca del RAL</a>
                             <a class="nav-link" id="vert-tabs-capturas_ral-tab" data-toggle="pill" href="#vert-tabs-capturas_ral" role="tab" aria-controls="vert-tabs-capturas_ral" aria-selected="false">Capturas del RAL</a>
@@ -158,7 +158,6 @@
                             <a class="nav-link" id="vert-tabs-profile-tab" data-toggle="pill" href="#vert-tabs-profile" role="tab" aria-controls="vert-tabs-profile" aria-selected="false">Referencias laborales</a>
                             <a class="nav-link" id="vert-tabs-messages-tab" data-toggle="pill" href="#vert-tabs-messages" role="tab" aria-controls="vert-tabs-messages" aria-selected="false">Documentos</a>
                             <a class="nav-link" id="vert-tabs-settings-tab" data-toggle="pill" href="#vert-tabs-settings" role="tab" aria-controls="vert-tabs-settings" aria-selected="false">Preguntas</a>
-                            <a class="nav-link" id="vert-tabs-google-search-tab" data-toggle="pill" href="#vert-tabs-google-search" role="tab" aria-controls="vert-tabs-google-search" aria-selected="false" style="display: none;">Búsqueda Google</a>
                             <a class="nav-link" id="vert-tabs-comentarios_generales_inv-tab" data-toggle="pill" href="#vert-tabs-comentarios_generales_inv" role="tab" aria-controls="vert-tabs-comentarios_generales_inv" aria-selected="false">Comentarios generales</a>
                           </div>
                         </div>
@@ -273,19 +272,6 @@
                             </div>
                             <div class="tab-pane fade" id="vert-tabs-settings" role="tabpanel" aria-labelledby="vert-tabs-settings-tab">
                               <div id="content-investigacion">
-                                <div class="d-flex justify-content-center mt-5 mb-5">
-                                  <div class="spinner-border" role="status">
-                                    <span class="sr-only">Loading...</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="tab-pane fade" id="vert-tabs-google-search" role="tabpanel" aria-labelledby="vert-tabs-google-search-tab">
-                              <div class="form-group mb-3">
-                                <label class="col-form-label">Agregar búsqueda de google</label>
-                                <input type="file" class="btn btn-success" id="btn-upload-google-search" style="display: <?=Utils::getDisplayBotones()['SA']?>" accept="application/pdf">
-                              </div>
-                              <div id="content-google-search">
                                 <div class="d-flex justify-content-center mt-5 mb-5">
                                   <div class="spinner-border" role="status">
                                     <span class="sr-only">Loading...</span>
@@ -696,38 +682,28 @@
                   <a href="<?=base_url?>formato/ese&candidato=<?=Encryption::encode($folio)?>" target="_blank" class="btn btn-navy" target="_blank" style="display: none;">Descargar Verificación Domiciliaria</a>
                 </div>   
 				  
-			  <div class="col-6 ">
-                <a href="<?= base_url ?>formatoing/investigacion_laboral&candidato=<?= Encryption::encode($folio) ?>" target="_blank" class="btn-lg btn-danger float-right h3 mt-4" target="_blank" style="display: none;">Download English Version INV</a>
+				   <div class="col-12 ">
+                <a href="<?= base_url ?>formato/ese_ing&candidato=<?= Encryption::encode($folio) ?>" target="_blank" class="btn-lg btn-warning float-right h3 mt-4" target="_blank" style="display: none;">Download English Version</a>
               </div>
-              <div class="col-6 ">
-                <a href="<?= base_url ?>formatoing/ese&candidato=<?= Encryption::encode($folio) ?>" target="_blank" class="btn-lg btn-warning float-right h3 mt-4" target="_blank" style="display: none;">Download English Version</a>
-              </div>   
-                <div class="col-sm-3">
-                  <a href="<?=base_url?>formato/soi&candidato=<?=Encryption::encode($folio)?>" target="_blank" class="btn bg-black" style="display: none;">Descargar Safe Operator By Ingenia</a>
-                </div>
                    
               </div>
             </div>
 			<div class="content botones_continuar mt-4">
-              <button class="btn btn-app bg-danger mb-5" style="display: none;">
+              <button class="btn btn-app bg-danger" style="display: none;">
                 <i class="fas fa-play"></i>
                 Continuar con investigación
               </button>
               <button class="btn btn-app bg-navy" style="display: none;">
                 <i class="fas fa-play"></i>
-                Continuar con estudio ESE(EG48)
+                Continuar con estudio
               </button>
-			  <button class="btn btn-app bg-maroon" style="display: none;" >
+			  <button class="btn btn-app bg-maroon" style="display: none;">
                 <i class="fas fa-play"></i>
                 Continuar con análisis de RAL
               </button>
               <button class="btn btn-app bg-black" style="display: none;">
                 <i class="fas fa-play"></i>
                 Continuar con SAFE OPERATOR
-              </button>
-              <button class="btn btn-app bg-success" style="display: none;">
-                <i class="fas fa-play"></i>
-                Continuar con ESE SMART
               </button>
             </div>
             <div class="content botones_pausar_finalizar mt-3 text-center">
@@ -744,22 +720,10 @@
             <div class="card-header">
               <h3 class="card-title">Especificaciones del proceso</h3>
             </div>
-            <div class="card-body h6">
+            <div class="card-body">
               <h6></h6>
             </div>
             </div>
-				
-				    <div class="card  card-orange" id="especificaciones_Cliente" style="display: none;">
-            <div class="card-header">
-              <h3 class="card-title">Especificaciones del cliente</h3>
-            </div>
-            <div class="card-body h6">
-            </div>
-          </div>
-
-
-				
-				
 			<div class="card" id="Comentarios_Cliente" style="display: none;">
               <div class="card-header">
                 <h3 class="card-title">Comentarios del cliente</h3>
@@ -773,13 +737,7 @@
                 <h3>Safe Operator By Ingenia</h3>
               </div>
               <div class="card-body">
-                <div class="text-center" style="display: none;">
-                  <button class="btn btn-warning">Certificar SOI</button>
-                  <button class="btn btn-danger">Denegar SOI</button>
-                </div>
-                <a href="#">
-                  <img src="" alt="SOI" class="img-fluid" style="display: none;">
-                </a>
+                <img src="" alt="SOI" class="img-fluid">
               </div>
             </div>
             <div class="card" style="display: none;">
@@ -788,8 +746,7 @@
               </div>
               <div class="card-body">
                 <div class="text-right">
-                                  <button class="btn btn-success mb-3" style="display: <?= Utils::getDisplayBotones()['Account']=='block'|| Utils::getDisplayBotones()['Logistics']=='block'?'block':'none' ?>;"><i class="fas fa-plus mr-1"></i> Nueva nota</button>
-
+                  <button class="btn btn-success mb-3" style="display: <?=Utils::getDisplayBotones()['Account']?>;"><i class="fas fa-plus mr-1"></i> Nueva nota</button>
                 </div>
               </div>
               <div class="card-footer card-comments" id="content-notas">
@@ -825,7 +782,7 @@
 </template>
 <template id="template-datos_empresa">
   <button class="btn btn-info btn-sm float-right btn-empresa"><i class="fas fa-pencil-alt"></i></button>
-  <b>Cliente</b>
+  <b>Empresa</b>
   <p class="text-muted"></p>
   <b>Razón social</b>
   <p></p>
@@ -967,7 +924,7 @@
 <template id="template-reactivar_eliminar">
   <div class="btn-group btn-group-sm text-center">
     <button class="btn btn-info btn-sm btn-reactivar">Reactivar</button>
-    <button class="btn btn-danger btn-sm btn-eliminar" >Eliminar servicio</button>
+    <button class="btn btn-danger btn-sm btn-eliminar">Eliminar servicio</button>
   </div>
   <hr>
   <div class="col-12 mt-4 text-center">
@@ -1316,9 +1273,7 @@
         <p></p>
       </div>
     </div>
-    <b>Nombre de quién proporciona la información</b>
-    <p></p>
-    <b>Puesto de quién proporciona la información</b>
+    <b>Nombre y puesto de quién proporciona la información</b>
     <p></p>
     <b>Comentarios</b>
     <p></p>
@@ -1504,20 +1459,6 @@
 	<b>¿Tuvo abandono de unidad?</b>
 	<p></p>
   </div>
-	
-  <div class="trabajo-dalton" style="display: none;">
-    <b>¿Cuentan con algún familiar dentro de la empresa?</b>
-    <p></p>
-  </div>
-	
-	  <div class="reingreso" style="display: none;">
-    <b>¿Es reingreso de la empresa?</b>
-    <p></p>
-  </div>
-	
-</template>
-<template id="template-google_search">
-  <embed src="" type="application/pdf" width="100%" height="500">
 </template>
 <template id="template-comentarios_generales_inv">
   <div class="table-responsive">
@@ -1555,37 +1496,6 @@
   <hr>
   <b>Comentarios generales de la investigación laboral</b>
   <p></p>
-  <table class="table table-sm text-nowrap">
-      <thead>
-        <tr>
-          <th></th>
-          <th class="text-center">Sí</th>
-          <th class="text-center">No</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>¿El candidato proporcionó los datos de contacto?</th>
-          <td class="text-center"></td>
-          <td class="text-center"></td>
-        </tr>
-        <tr>
-          <th>¿Es congruente la información con lo obtenido en información de IMSS?</th>
-          <td class="text-center"></td>
-          <td class="text-center"></td>
-        </tr>
-        <tr>
-          <th>¿Se detectó algún factor de riesgo?</th>
-          <td class="text-center"></td>
-          <td class="text-center"></td>
-        </tr>
-        <tr>
-          <th>¿Se observa estabilidad laboral</th>
-          <td class="text-center"></td>
-          <td class="text-center"></td>
-        </tr>
-      </tbody>
-  </table>
   <br>
   <b>Viabilidad</b>
   <p></p>
@@ -2229,39 +2139,8 @@
 <template id="template-comentarios_generales">
   <b>Comentarios generales de la verificación</b>
   <p></p>
-  <table class="table table-sm text-nowrap">
-      <thead>
-        <tr>
-          <th></th>
-          <th class="text-center">Sí</th>
-          <th class="text-center">No</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>¿Atendió puntual y en fecha y hora acordada?</th>
-          <td class="text-center"></td>
-          <td class="text-center"></td>
-        </tr>
-        <tr>
-          <th>¿Presentó la documentación solicitada?</th>
-          <td class="text-center"></td>
-          <td class="text-center"></td>
-        </tr>
-        <tr>
-          <th>¿Se condujo con naturalidad y dominio?</th>
-          <td class="text-center"></td>
-          <td class="text-center"></td>
-        </tr>
-        <tr>
-          <th>¿Sus respuestas fueron claras y seguras</th>
-          <td class="text-center"></td>
-          <td class="text-center"></td>
-        </tr>
-      </tbody>
-  </table>
   <br>
-  <b>Análisis de la Verificación</b>
+  <b>El candidato califica como</b>
   <p></p>
 </template>
 <template id="template-notas">

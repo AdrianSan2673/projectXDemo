@@ -29,14 +29,6 @@ class Clientes{
     private $Activo;
 	private $Validacion_Licencia;
 	private $ESE_Visita;
-	private $SMART;
-	private $Tiene_IL;
-	private $Tiene_ESE;
-	private $Tiene_SOI;
-	private $Tiene_SMART;
-	private $creado_por;
-	private $Eliminado_por;
-	private $Fecha_eliminado;
 
     public function __construct() {
         $this->db = Connection::connectSA();
@@ -257,80 +249,12 @@ class Clientes{
 	public function setESE_Visita($ESE_Visita){
 		$this->ESE_Visita = $ESE_Visita;
 	}
-	public function getSMART()
-	{
-		return $this->SMART;
-	}
 
-	public function setSMART($SMART)
-	{
-		$this->SMART = $SMART;
-	}
-	
-	public function getTiene_IL(){
-		return $this->Tiene_IL;
-	}
-
-	public function setTiene_IL($Tiene_IL){
-		$this->Tiene_IL = $Tiene_IL;
-	}
-
-	public function getTiene_ESE(){
-		return $this->Tiene_ESE;
-	}
-
-	public function setTiene_ESE($Tiene_ESE){
-		$this->Tiene_ESE = $Tiene_ESE;
-	}
-
-	public function getTiene_SOI(){
-		return $this->Tiene_SOI;
-	}
-
-	public function setTiene_SOI($Tiene_SOI){
-		$this->Tiene_SOI = $Tiene_SOI;
-	}
-
-	public function getTiene_SMART(){
-		return $this->Tiene_SMART;
-	}
-
-	public function setTiene_SMART($Tiene_SMART){
-		$this->Tiene_SMART = $Tiene_SMART;
-	}
-
-	public function getCreado_por()
-	{
-		return $this->creado_por;
-	}
-
-	public function setCreado_por($creado_por)
-	{
-		$this->creado_por = $creado_por;
-	}
-
-		public function getEliminado_por(){
-		return $this->Eliminado_por;
-	}
-
-	public function setEliminado_por($Eliminado_por){
-		$this->Eliminado_por = $Eliminado_por;
-	}
-
-	public function getFecha_eliminado(){
-		return $this->Fecha_eliminado;
-	}
-
-	public function setFecha_eliminado($Fecha_eliminado){
-		$this->Fecha_eliminado = $Fecha_eliminado;
-	}
-	
     public function getOne(){
         $Cliente=$this->getCliente();
-		$stmt = $this->db->prepare(
-			"SELECT *,c.creado_por as creadopor FROM rh_Ventas_Alta c INNER JOIN rh_Ventas_Empresas e ON c.Empresa=e.Empresa WHERE Cliente=:Cliente"
-		);
-		
+        $stmt = $this->db->prepare(
+            "SELECT * FROM rh_Ventas_Alta c INNER JOIN rh_Ventas_Empresas e ON c.Empresa=e.Empresa WHERE Cliente=:Cliente"
+        );
         $stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
         $stmt->execute();
         $fetch = $stmt->fetchObject();
@@ -338,25 +262,15 @@ class Clientes{
     }
 
     public function getAll(){
-        $stmt = $this->db->prepare("SELECT * FROM rh_Ventas_Alta WHERE Activo=1 ORDER BY Nombre_Cliente");
-        $stmt->execute();
-        $fetch = $stmt->fetchAll();
-        return $fetch;
-    }
-	
-	
-	public function getAllSuspender(){
-        $stmt = $this->db->prepare("SELECT * FROM rh_Ventas_Alta  ORDER BY Nombre_Cliente");
+        $stmt = $this->db->prepare("SELECT * FROM rh_Ventas_Alta ORDER BY Nombre_Cliente");
         $stmt->execute();
         $fetch = $stmt->fetchAll();
         return $fetch;
     }
 
-	public function getAllClientes()
-	{
-		$stmt = $this->db->prepare(
-			"SELECT
-			RVA.creado_por,
+    public function getAllClientes(){
+        $stmt = $this->db->prepare(
+        "SELECT
 			RVA.Fecha_Registro,
             RVE.Empresa AS ID_Empresa,
 			RVE.Nombre_Empresa AS Empresa,
@@ -378,52 +292,12 @@ class Clientes{
             RVA.Cliente=VCE.ID_Evaluacion
         LEFT JOIN rh_Ventas_Empresas RVE ON RVE.Empresa=RVA.Empresa
         ORDER BY 
-            RVA.Nombre_Cliente ASC"
-		);
-		$stmt->execute();
-		$fetch = $stmt->fetchAll();
-		return $fetch;
-	}
+            RVA.Nombre_Cliente ASC");
+        $stmt->execute();
+        $fetch = $stmt->fetchAll();
+        return $fetch;
+    }
 
-	public function getAllClientesCreadoPor()
-	{
-
-		$creado_por=$this->getCreado_por();
-		$stmt = $this->db->prepare(
-			"SELECT
-			RVA.creado_por,
-			RVA.Fecha_Registro,
-            RVE.Empresa AS ID_Empresa,
-			RVE.Nombre_Empresa AS Empresa,
-            RVA.Cliente,
-            Nombre_Cliente,
-            Centro_Costos,
-            (SELECT COUNT(Candidato) FROM rh_Candidatos RC WHERE MONTH(Fecha)=MONTH(GETDATE()) AND YEAR(Fecha) =YEAR(GETDATE()) AND RC.Cliente=RVA.Cliente AND RC.Ejecutivo<>'miguelcasanova'  AND RC.Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)) AS Servicios,
-            (SELECT ISNULL(SUM(Monto), '') FROM rh_Candidatos_Facturas CF WHERE MONTH(Fecha_Emision)=MONTH(GETDATE()) AND YEAR(Fecha_Emision) = YEAR(GETDATE()) AND CF.ID_Cliente=RVA.Cliente) AS Facturacion_Mes,
-            (SELECT COUNT(Cliente)/(MONTH(GETDATE())) FROM rh_Candidatos RC WHERE YEAR(Fecha) = YEAR(GETDATE()) AND RC.Cliente=RVA.Cliente AND RC.Ejecutivo<>'miguelcasanova' AND RC.Candidato NOT IN (SELECT Candidato FROM rh_Candidatos WHERE Cliente=139 AND Servicio_Solicitado=230 AND Servicio=230 AND Estado<252)) AS Prom_Mensual,
-            ROUND((SELECT ISNULL(SUM(Monto), '')/MONTH(GETDATE()) FROM rh_Candidatos_Facturas CF WHERE YEAR(Fecha_Emision) = YEAR(GETDATE()) AND CF.ID_Cliente=RVA.Cliente),2) AS Prom_Fact,
-            (SELECT ISNULL(SUM(Monto), '') FROM rh_Candidatos_Facturas CF WHERE YEAR(Fecha_Emision) = YEAR(GETDATE()) AND CF.ID_Cliente=RVA.Cliente) AS Anual_Fact,
-            Fecha_Ultima_Evaluacion,
-            ROUND((CAST((VCE.Tiempo + VCE.Informe + VCE.Calidad + VCE.Criterio + VCE.Sistema)AS float) /5), 2) AS Calificacion
-        FROM
-            rh_Ventas_Alta RVA
-        LEFT JOIN
-            rh_Ventas_Cliente_Evaluacion VCE
-        ON
-            RVA.Cliente=VCE.ID_Evaluacion
-        LEFT JOIN rh_Ventas_Empresas RVE ON RVE.Empresa=RVA.Empresa
-		WHERE RVA.creado_por=:creado_por
-        ORDER BY 
-            RVA.Nombre_Cliente ASC"
-		);
-
-		$stmt->bindParam(":creado_por", $creado_por, PDO::PARAM_INT);
-
-		$stmt->execute();
-		$fetch = $stmt->fetchAll();
-		return $fetch;
-	}
-	
 	public function getDetalle(){
         $stmt = $this->db->prepare("SELECT 
 		RVA.Nombre_Cliente, 
@@ -491,16 +365,15 @@ class Clientes{
         return $fetch;
     }
 
-	public function create()
-	{
+	public function create(){
 		$result = false;
 
-		$Empresa = $this->getEmpresa();
-		$Nombre_Cliente = $this->getNombre_Cliente();
-		$ESE = $this->getESE();
-		$RAL = $this->getRAL();
-		$Investigacion_L = $this->getInvestigacion_L();
-		$Paquetes = $this->getPaquetes();
+        $Empresa = $this->getEmpresa();
+        $Nombre_Cliente = $this->getNombre_Cliente();
+        $ESE = $this->getESE();
+        $RAL = $this->getRAL();
+        $Investigacion_L = $this->getInvestigacion_L();
+        $Paquetes = $this->getPaquetes();
 		$Plazo_Credito = $this->getPlazo_Credito();
 		$Corte_Servicio = $this->getCorte_Servicio();
 		$Fechas_Especificas = $this->getFechas_Especificas();
@@ -520,16 +393,14 @@ class Clientes{
 		$Validacion_Licencia = $this->getValidacion_Licencia();
 		$ESE_Visita = $this->getESE_Visita();
 
-		$creado_por = $this->getCreado_por();
-
-		$stmt = $this->db->prepare("INSERT INTO rh_Ventas_Alta (Empresa, Nombre_Cliente, ESE, RAL, Investigacion_L, Paquetes, Plazo_Credito,Corte_Servicio, Fechas_Especificas, OC_NP, Recepcion_Facturas, Uso_Portal, 
-		Portal_Direccion, Portal_Usuario, Portal_Contraseña, Centro_Costos, Cuentas_Contacto, Cuentas_Correo, Cuentas_Telefono, Cuentas_Extension, Comentario, Dias_Credito, Fecha_Registro, Activo, Reclutamiento, Psicometrico, Validacion_Licencia, ESE_Visita,creado_por) VALUES (:Empresa, :Nombre_Cliente, :ESE, :RAL, :Investigacion_L, :Paquetes, :Plazo_Credito, :Corte_Servicio, :Fechas_Especificas, :OC_NP, :Recepcion_Facturas, :Uso_Portal, :Portal_Direccion, :Portal_Usuario, :Portal_Contrasena, :Centro_Costos, :Cuentas_Contacto, :Cuentas_Correo, :Cuentas_Telefono, :Cuentas_Extension, :Comentario, :Dias_Credito, GETDATE(), 1, 0, 0, :Validacion_Licencia, :ESE_Visita, :creado_por)");
-		$stmt->bindParam(":Empresa", $Empresa, PDO::PARAM_INT);
-		$stmt->bindParam(":Nombre_Cliente", $Nombre_Cliente, PDO::PARAM_STR);
-		$stmt->bindParam(":ESE", $ESE, PDO::PARAM_STR);
-		$stmt->bindParam(":RAL", $RAL, PDO::PARAM_STR);
-		$stmt->bindParam(":Investigacion_L", $Investigacion_L, PDO::PARAM_STR);
-		$stmt->bindParam(":Paquetes", $Paquetes, PDO::PARAM_STR);
+        $stmt = $this->db->prepare("INSERT INTO rh_Ventas_Alta (Empresa, Nombre_Cliente, ESE, RAL, Investigacion_L, Paquetes, Plazo_Credito,Corte_Servicio, Fechas_Especificas, OC_NP, Recepcion_Facturas, Uso_Portal, 
+		Portal_Direccion, Portal_Usuario, Portal_Contraseña, Centro_Costos, Cuentas_Contacto, Cuentas_Correo, Cuentas_Telefono, Cuentas_Extension, Comentario, Dias_Credito, Fecha_Registro, Activo, Reclutamiento, Psicometrico, Validacion_Licencia, ESE_Visita) VALUES (:Empresa, :Nombre_Cliente, :ESE, :RAL, :Investigacion_L, :Paquetes, :Plazo_Credito, :Corte_Servicio, :Fechas_Especificas, :OC_NP, :Recepcion_Facturas, :Uso_Portal, :Portal_Direccion, :Portal_Usuario, :Portal_Contrasena, :Centro_Costos, :Cuentas_Contacto, :Cuentas_Correo, :Cuentas_Telefono, :Cuentas_Extension, :Comentario, :Dias_Credito, GETDATE(), 1, 0, 0, :Validacion_Licencia, :ESE_Visita)");
+        $stmt->bindParam(":Empresa", $Empresa, PDO::PARAM_INT);
+        $stmt->bindParam(":Nombre_Cliente", $Nombre_Cliente, PDO::PARAM_STR);
+        $stmt->bindParam(":ESE", $ESE, PDO::PARAM_STR);
+        $stmt->bindParam(":RAL", $RAL, PDO::PARAM_STR);
+        $stmt->bindParam(":Investigacion_L", $Investigacion_L, PDO::PARAM_STR);
+        $stmt->bindParam(":Paquetes", $Paquetes, PDO::PARAM_STR);
 		$stmt->bindParam(":Plazo_Credito", $Plazo_Credito, PDO::PARAM_STR);
 		$stmt->bindParam(":Corte_Servicio", $Corte_Servicio, PDO::PARAM_INT);
 		$stmt->bindParam(":Fechas_Especificas", $Fechas_Especificas, PDO::PARAM_STR);
@@ -548,53 +419,25 @@ class Clientes{
 		$stmt->bindParam(":Dias_Credito", $Dias_Credito, PDO::PARAM_INT);
 		$stmt->bindParam(":Validacion_Licencia", $Validacion_Licencia, PDO::PARAM_STR);
 		$stmt->bindParam(":ESE_Visita", $ESE_Visita, PDO::PARAM_STR);
+        $flag = $stmt->execute();
 
-		$stmt->bindParam(":creado_por", $creado_por, PDO::PARAM_STR);
-		$flag = $stmt->execute();
-
-		if ($flag) {
-			$result = true;
+        if ($flag) {
+            $result = true;
 			$this->setCliente($this->db->lastInsertId());
-		}
-		return $result;
-	}
-	
-	public function updateNombreCliente()
-	{
-		$result = false;
+        }
+        return $result;
+    }
+
+	public function updateNombreCliente(){
+        $result = false;
 
 		$Cliente = $this->getCliente();
 		$Empresa = $this->getEmpresa();
 		$Nombre_Cliente = $this->getNombre_Cliente();
-		$creado_por = $this->getCreado_por();
 
-		$stmt = $this->db->prepare("UPDATE rh_Ventas_Alta SET Empresa=:Empresa, Nombre_Cliente=:Nombre_Cliente,creado_por=:creado_por WHERE Cliente=:Cliente");
-		$stmt->bindParam(":Empresa", $Empresa, PDO::PARAM_INT);
-		$stmt->bindParam(":Nombre_Cliente", $Nombre_Cliente, PDO::PARAM_STR);
-		$stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
-		$stmt->bindParam(":creado_por", $creado_por, PDO::PARAM_STR);
-		$flag = $stmt->execute();
-
-		if ($flag) {
-			$result = true;
-		}
-		return $result;
-	}
-
-	public function updateServicios(){
-        $result = false;
-
-		$Cliente = $this->getCliente();
-		$Tiene_IL = $this->getTiene_IL();
-		$Tiene_ESE = $this->getTiene_ESE();
-		$Tiene_SOI = $this->getTiene_SOI();
-		$Tiene_SMART = $this->getTiene_SMART();
-
-        $stmt = $this->db->prepare("UPDATE rh_Ventas_Alta SET Tiene_IL=:Tiene_IL, Tiene_ESE=:Tiene_ESE, Tiene_SOI=:Tiene_SOI, Tiene_SMART=:Tiene_SMART WHERE Cliente=:Cliente");
-        $stmt->bindParam(":Tiene_IL", $Tiene_IL, PDO::PARAM_INT);
-        $stmt->bindParam(":Tiene_ESE", $Tiene_ESE, PDO::PARAM_INT);
-		$stmt->bindParam(":Tiene_SOI", $Tiene_SOI, PDO::PARAM_INT);
-		$stmt->bindParam(":Tiene_SMART", $Tiene_SMART, PDO::PARAM_INT);
+        $stmt = $this->db->prepare("UPDATE rh_Ventas_Alta SET Empresa=:Empresa, Nombre_Cliente=:Nombre_Cliente WHERE Cliente=:Cliente");
+        $stmt->bindParam(":Empresa", $Empresa, PDO::PARAM_INT);
+        $stmt->bindParam(":Nombre_Cliente", $Nombre_Cliente, PDO::PARAM_STR);
 		$stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
 
         $flag = $stmt->execute();
@@ -617,9 +460,8 @@ class Clientes{
 		$Paquetes = $this->getPaquetes();
 		$Plazo_Credito = $this->getPlazo_Credito();
 		$Dias_Credito = $this->getDias_Credito();
-		$SMART = $this->getSMART();
 
-        $stmt = $this->db->prepare("UPDATE rh_Ventas_Alta SET ESE=:ESE, RAL=:RAL, Investigacion_L=:Investigacion_L, Validacion_Licencia=:Validacion_Licencia, ESE_Visita=:ESE_Visita, Paquetes=:Paquetes, Plazo_Credito=:Plazo_Credito, Dias_Credito=:Dias_Credito,SMART=:SMART WHERE Cliente=:Cliente");
+        $stmt = $this->db->prepare("UPDATE rh_Ventas_Alta SET ESE=:ESE, RAL=:RAL, Investigacion_L=:Investigacion_L, Validacion_Licencia=:Validacion_Licencia, ESE_Visita=:ESE_Visita, Paquetes=:Paquetes, Plazo_Credito=:Plazo_Credito, Dias_Credito=:Dias_Credito WHERE Cliente=:Cliente");
         $stmt->bindParam(":ESE", $ESE, PDO::PARAM_STR);
         $stmt->bindParam(":RAL", $RAL, PDO::PARAM_STR);
 		$stmt->bindParam(":Investigacion_L", $Investigacion_L, PDO::PARAM_STR);
@@ -629,8 +471,6 @@ class Clientes{
 		$stmt->bindParam(":Plazo_Credito", $Plazo_Credito, PDO::PARAM_STR);
 		$stmt->bindParam(":Dias_Credito", $Dias_Credito, PDO::PARAM_INT);
 		$stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
-		$stmt->bindParam(":SMART", $SMART, PDO::PARAM_INT);
-
 
         $flag = $stmt->execute();
 
@@ -824,92 +664,4 @@ class Clientes{
 	
 	
 	//==========================================================================================
-	
-		//====================================[Ulises 20 Junio Modulo RH]======================================================
-	public function getAllClientesRH()
-	{
-		$stmt = $this->db->prepare(
-			"SELECT
-			RVA.Fecha_Registro,
-			RVE.Empresa AS ID_Empresa,
-			RVE.Nombre_Empresa AS Empresa,
-			RVA.Cliente,
-			Nombre_Cliente,
-			Centro_Costos,
-			RVA.Modulo_RH,
-			(SELECT count(*) FROM rh_module rm WHERE rm.id_cliente=RVA.Cliente) Servicios,
-			(SELECT TOP(1) p.name FROM rh_module rm INNER JOIN root.packages_RH p on rm.id_package=p.id WHERE rm.id_cliente=RVA.Cliente ORDER BY rm.id_package DESC)  Paquete,
-			(SELECT TOP(1) rm.cancellation_date FROM rh_module rm WHERE rm.id_cliente=RVA.Cliente ORDER BY rm.created_at DESC) Fecha_cancelacion 
-		FROM rh_Ventas_Alta RVA 
-		LEFT JOIN rh_Ventas_Cliente_Evaluacion VCE 
-		ON RVA.Cliente=VCE.ID_Evaluacion
-		LEFT JOIN rh_Ventas_Empresas RVE 
-		ON RVE.Empresa=RVA.Empresa
-		ORDER BY RVA.Nombre_Cliente ASC"
-		);
-		$stmt->execute();
-		$fetch = $stmt->fetchAll();
-		return $fetch;
-	}
-
-	public function updateClienteActivoRH()
-	{
-		$result = false;
-
-		$Cliente = $this->getCliente();
-		$Activo = $this->getActivo();
-
-		$stmt = $this->db->prepare("UPDATE top(1) rh_Ventas_Alta SET Modulo_RH=:Activo WHERE Cliente=:Cliente");
-		$stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
-		$stmt->bindParam(":Activo", $Activo, PDO::PARAM_STR);
-
-
-		$flag = $stmt->execute();
-
-		if ($flag) {
-			$result = true;
-		}
-		return $result;
-	}
-	//==========================================================================================
-	
-		public function saveClienteeliminado()
-	{
-		$Cliente = $this->getCliente();
-		$Usuario = $this->getEliminado_por();
-
-		$stmt = $this->db->prepare("INSERT INTO root.rh_Ventas_Alta_Eliminados (
-			Cliente, Empresa, Nombre_Cliente, Reclutamiento, ESE, RAL, Investigacion_L, Psicometrico, Paquetes,
-			Plazo_Credito, Corte_Servicio, Fechas_Especificas, OC_NP, Recepcion_Facturas, Uso_Portal, Portal_Direccion,
-			Portal_Usuario, Portal_Contraseña, Centro_Costos, Cuentas_Contacto, Cuentas_Correo, Cuentas_Telefono,
-			Cuentas_Extension, Comentario, Fecha_Registro, Dias_Credito, Activo, Validacion_Licencia, ESE_Visita,
-			Representante_Legal, Modulo_RH, SMART, creado_por, Tiene_IL, Tiene_ESE, Tiene_SOI, Tiene_SMART, Eliminado_por,
-			Fecha_eliminado
-		)  Select *,:Usuario,GETDATE() from rh_Ventas_Alta where Cliente=:Cliente");
-		$stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
-		$stmt->bindParam(":Usuario", $Usuario, PDO::PARAM_STR);
-		$flag = $stmt->execute();
-
-		return $flag;
-	}
-
-	public function eliminarCliente()
-	{
-		$Cliente = $this->getCliente();
-		$stmt = $this->db->prepare("DELETE TOP(1) rh_Ventas_Alta where Cliente=:Cliente");
-		$stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);
-		$flag = $stmt->execute();
-		return $flag;
-	}
-	    public function getNotasPorEmpresa()
-    {
-        $empresa = $this->getEmpresa();
-
-        $stmt = $this->db->prepare("SELECT *  FROM Clientes_Notas n  INNER JOIN rh_Ventas_Alta va ON va.Cliente= n.ID_Cliente WHERE va.empresa=:empresa ORDER BY Fecha DESC");
-        $stmt->bindParam(":empresa", $empresa, PDO::PARAM_INT);
-        $stmt->execute();
-        $fetch = $stmt->fetchAll();
-        return $fetch;
-    }
-
 }

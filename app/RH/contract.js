@@ -86,7 +86,9 @@ class Contract {
     }
   }
 
+
   delete(id) {
+
     let xhr = new XMLHttpRequest();
     let data = `id=${id}`;
 
@@ -103,7 +105,9 @@ class Contract {
           if (json_app.status == 0) {
             utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
           } else if (json_app.status == 1) {
-            let contract1 = `
+            
+            
+            let contract1= `
             <div class="col-sm-12 text-center">
                 <b class="h5">Última contratacion</b>
             </div>
@@ -120,7 +124,7 @@ class Contract {
                 <p>${json_app.oneContractEmployee.type}</p>
             </div>
             `
-            document.querySelectorAll('#datos_contrato .row')[1].innerHTML = contract1
+            document.querySelectorAll('#datos_contrato .row')[1].innerHTML=contract1
 
             let contract = '';
             json_app.employeeContract.forEach(element => {
@@ -140,29 +144,7 @@ class Contract {
 
             utils.showToast('Eliminado con exito', 'success');
           } else if (json_app.status == 2) {
-
-            let contract1 = `
-            <div class="col-sm-12 text-center">
-                <b class="h5">Última contratacion</b>
-            </div>
-            <div class="col-sm-4 text-center">
-               <b>Fecha de inicio</b>
-               <p>Sin definir</p>
-            </div>
-            <div class="col-sm-4 text-center">
-                <b>Fecha de finalizacion</b>
-                <p>Sin Finalizacion</p>
-            </div>
-            <div class="col-sm-4 text-center">
-                <b>Tipo de contrato</b>
-                <p>Sin definir</p>
-            </div>
-            `
-            document.querySelectorAll('#datos_contrato .row')[1].innerHTML = contract1
-            document.querySelector('#tboodycontract').innerHTML = '';
-
-            utils.showToast('Eliminado con exito', 'success');
-
+            utils.showToast('El departamento contiene empleados o puestos.', 'error');
           } else {
             utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
           }

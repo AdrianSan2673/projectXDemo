@@ -47,343 +47,227 @@
           <li class="nav-item">
             <a class="nav-link" href="#tab_2" data-toggle="tab">Facturas pagadas</a>
           </li>
-			<li class="nav-item">
-              <a class="nav-link" href="#tab_3" data-toggle="tab">Facturas Canceladas</a>
-            </li>
         </ul>
       </div>
       <!-- /.card-header -->
       <div class="card-body">
         <div class="tab-content">
-         <div class="tab-pane active" id="tab_1">
-                        <!-- // ===[gabo 16 agosto ]=== -->
-                        <table id="tb_unpaid_bills" class="table table-responsive table-striped table-sm">
-                            <thead>
-                                <tr>
-                                    <th class="filterhead"></th>
-                                    <th></th>
-                                    <th class="filterhead"></th>
-                                    <th></th>
-                                    <th class="filterhead"></th>
-                                    <th class="filterhead"></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th class="filterhead"></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                                <tr>
-                                    <th class="align-middle">Factura</th>
-                                    <th class="align-middle">Fecha</th>
-                                    <th class="align-middle">Días de crédito</th>
-                                    <th class="align-middle">Días transcurridos</th>
-                                    <th class="align-middle text-center">Cliente</th>
-                                    <th class="align-middle">Razón social</th>
-                                    <th class="align-middle text-right">Monto</th>
-                                    <th class="align-middle text-right">Monto + IVA</th>
-                                    <th class="align-middle text-center">Fecha de pago</th>
-                                    <th class="align-middle text-center">Estado</th>
-                                    <th class="align-middle text-center">Promesa de pago</th>
-                                    <th class="align-middle">Fecha última gestión</th>
-                                    <th>Última gestión</th>
-                                    <th>Vacante</th>
-                                    <th class="align-middle text-center">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tboodyFactura">
-                                <?php foreach ($bills as $bill) : ?>
-                                <tr>
-                                    <?php switch ($bill['status']) {
-                                            case 1:
-                                                $class_color = 'bg-orange';
-                                                break;
-                                            case 2:
-                                                $class_color = 'bg-success';
-                                                break;
-                                            default:
-                                                $class_color = '';
-                                                break;
-                                        }
-                                        ?>
-                                    <td class="text-center"><b><?= $bill['folio'] ?></b></td>
-                                    <td class="text-center"><?= Utils::getShortDate($bill['emit_date']); ?></td>
-                                    <td class="text-center"><?= $bill['credit_days'] ?></td>
-                                    <td
-                                        class="text-center <?= $bill['days_elapsed'] > $bill['credit_days'] ? 'bg-danger' : '' ?>">
-                                        <?= $bill['days_elapsed'] ?></td>
-                                    <td class="text-center"><?= $bill['customer'] ?></td>
-                                    <td class="text-center"><?= $bill['business_name'] ?></td>
-                                    <td class="text-center">$ <?= number_format($bill['total']) ?></td>
-                                    <td class="text-center">$ <?= number_format($bill['total_IVA'],2) ?></td>
-                                    <td class="text-center">
-                                        <?= !is_null($bill['payment_date']) ? Utils::getShortDate($bill['payment_date']) : '' ?>
-                                    </td>
-                                    <td class="text-center <?= $class_color ?>"><?= $bill['estado'] ?></td>
-                                    <td class="text-center">
-                                        <?= !is_null($bill['payment_promise_date']) ? Utils::getShortDate($bill['payment_promise_date']) : '' ?>
-                                    </td>
-                                    <td class="text-center">
-                                        <?= !is_null($bill['last_follow_up_date']) ? Utils::getShortDate($bill['last_follow_up_date']) : '' ?>
-                                    </td>
-                                    <td class="text-center"><?= $bill['last_follow_up_comments'] ?></td>
-                                    <td class="text-center"><?= Utils::nameVacancy($bill['id']) ?></td>
+          <div class="tab-pane active" id="tab_1">
+            <table id="tb_unpaid_bills" class="table table-responsive table-striped table-sm">
+              <thead>
+                <tr>
+                  <th class="filterhead"></th>
+                  <th></th>
+                  <th class="filterhead"></th>
+                  <th></th>
+                  <th class="filterhead"></th>
+                  <th class="filterhead"></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th class="filterhead"></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+                <tr>
+                  <th class="align-middle">Factura</th>
+                  <th class="align-middle">Fecha</th>
+                  <th class="align-middle">Días de crédito</th>
+                  <th class="align-middle">Días transcurridos</th>
+                  <th class="align-middle text-center">Cliente</th>
+                  <th class="align-middle">Razón social</th>
+                  <th class="align-middle text-right">Monto</th>
+                  <th class="align-middle text-right">Monto + IVA</th>
+                  <th class="align-middle text-center">Fecha de pago</th>
+                  <th class="align-middle text-center">Estado</th>
+                  <th class="align-middle text-center">Promesa de pago</th>
+                  <th class="align-middle">Fecha última gestión</th>
+                  <th>Última gestión</th>
+                  <th>Vacante</th>
+                  <th class="align-middle text-center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tboodyFactura">
+                <?php foreach ($bills as $bill) : ?>
+                  <tr>
+                    <?php switch ($bill['status']) {
+                      case 1:
+                        $class_color = 'bg-orange';
+                        break;
+                      case 2:
+                        $class_color = 'bg-success';
+                        break;
+                      default:
+                        $class_color = '';
+                        break;
+                    }
+                    ?>
+                    <td><b><?= $bill['folio'] ?></b></td>
+                    <td><?= Utils::getShortDate($bill['emit_date']); ?></td>
+                    <td class="text-center"><?= $bill['credit_days'] ?></td>
+                    <td class="text-center <?= $bill['days_elapsed'] > $bill['credit_days'] ? 'bg-danger' : '' ?>"><?= $bill['days_elapsed'] ?></td>
+                    <td class="text-center"><?= $bill['customer'] ?></td>
+                    <td><?= $bill['business_name'] ?></td>
+                    <td class="text-right">$ <?= number_format($bill['total']) ?></td>
+                    <td class="text-right">$ <?= number_format($bill['total_IVA']) ?></td>
+                    <td><?= !is_null($bill['payment_date']) ? Utils::getShortDate($bill['payment_date']) : '' ?></td>
+                    <td class="text-center <?= $class_color ?>"><?= $bill['estado'] ?></td>
+                    <td><?= !is_null($bill['payment_promise_date']) ? Utils::getShortDate($bill['payment_promise_date']) : '' ?></td>
+                    <td><?= !is_null($bill['last_follow_up_date']) ? Utils::getShortDate($bill['last_follow_up_date']) : '' ?></td>
+                    <td><?= $bill['last_follow_up_comments'] ?></td>
+                    <td><?= Utils::nameVacancy($bill['id']) ?></td>
 
-                                    <td class="text-center py-0">
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="<?= base_url ?>administracion/editar_factura&id=<?= Encryption::encode($bill['id']) ?>"
-                                                class="btn btn-success btn-sm mr-1">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
+                    <td class="text-center py-0">
+                      <div class="btn-group btn-group-sm">
+                        <a href="<?= base_url ?>administracion/editar_factura&id=<?= Encryption::encode($bill['id']) ?>" class="btn btn-success btn-sm mr-1">
+                          <i class="fas fa-eye"></i>
+                        </a>
 
-                                            <button class="btn btn-orange btn-fact mr-1" id="btn-editar-factura"
-                                                value="<?= Encryption::encode($bill['id'])  ?>">
-                                                <i class="fas fa-pencil-alt"></i>
-                                            </button>
+                        <button class="btn btn-orange btn-fact mr-1" id="btn-editar-factura" value="<?= Encryption::encode($bill['id'])  ?>">
+                          <i class="fas fa-pencil-alt"></i>
+                        </button>
 
-                                            <button class="btn btn-secondary btn-gestionar-fact mr-1"
-                                                id="btn-gestionar-factura"
-                                                value="<?= Encryption::encode($bill['id'])  ?>">
-                                                <i class="fas fa-cog"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
+                        <button class="btn btn-secondary btn-gestionar-fact mr-1" id="btn-gestionar-factura" value="<?= Encryption::encode($bill['id'])  ?>">
+                          <i class="fas fa-cog"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
 
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th class="filterhead"></th>
-                                    <th></th>
-                                    <th class="filterhead"></th>
-                                    <th class="filterhead"></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th class="filterhead"></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                                <tr>
-                                    <th class="align-middle">Factura</th>
-                                    <th class="align-middle">Fecha</th>
-                                    <th class="align-middle">Días de crédito</th>
-                                    <th class="align-middle">Días transcurridos</th>
-                                    <th class="align-middle text-center">Cliente</th>
-                                    <th class="align-middle">Razón social</th>
-                                    <th class="align-middle text-right">Monto</th>
-                                    <th class="align-middle text-right">Monto + IVA</th>
-                                    <th class="align-middle text-center">Fecha de pago</th>
-                                    <th class="align-middle text-center">Estado</th>
-                                    <th class="align-middle text-center">Promesa de pago</th>
-                                    <th class="align-middle">Fecha última gestión</th>
-                                    <th>Última gestión</th>
-                                    <th>Vacante</th>
-                                    <th class="align-middle text-center">Acciones</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-          <div class="tab-pane " id="tab_2">
-                        <table id="tb_paid_bills" class="table table-responsive table-striped table-sm">
-                            <thead>
-                                <tr>
-                                    <th class="align-middle">Factura</th>
-                                    <th class="align-middle">Fecha</th>
-                                    <th class="align-middle">Días de crédito</th>
-                                    <th class="align-middle">Días transcurridos</th>
-                                    <th class="align-middle text-center">Cliente</th>
-                                    <th class="align-middle">Razón social</th>
-                                    <th class="align-middle text-right">Monto</th>
-                                    <th class="align-middle text-right">Monto + IVA</th>
-                                    <th class="align-middle text-center">Fecha de pago</th>
-                                    <th class="align-middle text-center">Estado</th>
-                                    <th class="align-middle text-center">Promesa de pago</th>
-                                    <th class="align-middle">Fecha última gestión</th>
-                                    <th>Última gestión</th>
-                                    <th class="align-middle text-center">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tboodyFacturaPaid">
-                                <?php foreach ($paid_bills as $bill) : ?>
-                                <tr>
-                                    <?php switch ($bill['status']) {
-                                            case 1:
-                                                $class_color = 'bg-orange';
-                                                break;
-                                            case 2:
-                                                $class_color = 'bg-success';
-                                                break;
-                                            default:
-                                                $class_color = '';
-                                                break;
-                                        }
-                                        ?>
-                                    <td class="text-center align-middle"><b><?= $bill['folio'] ?></b></td>
-                                    <td class="text-center align-middle"><?= Utils::getShortDate($bill['emit_date']); ?>
-                                    </td>
-                                    <td class="text-center align-middle"><?= $bill['credit_days'] ?></td>
-                                    <td
-                                        class="text-center align-middle <?= $bill['days_elapsed'] > $bill['credit_days'] ? 'bg-danger' : '' ?>">
-                                        <?= $bill['days_elapsed'] ?></td>
-                                    <td class="text-center align-middle"><?= $bill['customer'] ?></td>
-                                    <td class="text-center align-middle"><?= $bill['business_name'] ?></td>
-                                    <td class="text-right align-middle">$ <?= number_format($bill['total']) ?></td>
-                                    <td class="text-right align-middle">$ <?= number_format($bill['total_IVA'],2) ?>
-                                    </td>
-                                    <td class="text-right align-middle">
-                                        <?= !is_null($bill['payment_date']) ? Utils::getShortDate($bill['payment_date']) : '' ?>
-                                    </td>
-                                    <td class="text-center align-middle <?= $class_color ?>"><?= $bill['estado'] ?></td>
-                                    <td class="text-center align-middle">
-                                        <?= !is_null($bill['payment_promise_date']) ? Utils::getShortDate($bill['payment_promise_date']) : '' ?>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <?= !is_null($bill['last_follow_up_date']) ? Utils::getShortDate($bill['last_follow_up_date']) : '' ?>
-                                    </td>
-                                    <td class="text-center align-middle"><?= $bill['last_follow_up_comments'] ?></td>
-                                    <td class="text-center py-0">
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="<?= base_url ?>administracion/editar_factura&id=<?= Encryption::encode($bill['id']) ?>"
-                                                class="btn btn-success btn-sm mr-1">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <button class="btn btn-orange btn-fact mr-1" id="btn-editar-factura"
-                                                value="<?= Encryption::encode($bill['id'])  ?>">
-                                                <i class="fas fa-pencil-alt"></i>
-                                            </button>
-                                            <button class="btn btn-secondary btn-gestionar-fact mr-1"
-                                                id="btn-gestionar-factura"
-                                                value="<?= Encryption::encode($bill['id'])  ?>">
-                                                <i class="fas fa-cog"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th class="filterhead"></th>
+                  <th></th>
+                  <th class="filterhead"></th>
+                  <th class="filterhead"></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th class="filterhead"></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+                <tr>
+                  <th class="align-middle">Factura</th>
+                  <th class="align-middle">Fecha</th>
+                  <th class="align-middle">Días de crédito</th>
+                  <th class="align-middle">Días transcurridos</th>
+                  <th class="align-middle text-center">Cliente</th>
+                  <th class="align-middle">Razón social</th>
+                  <th class="align-middle text-right">Monto</th>
+                  <th class="align-middle text-right">Monto + IVA</th>
+                  <th class="align-middle text-center">Fecha de pago</th>
+                  <th class="align-middle text-center">Estado</th>
+                  <th class="align-middle text-center">Promesa de pago</th>
+                  <th class="align-middle">Fecha última gestión</th>
+                  <th>Última gestión</th>
+                  <th>Vacante</th>
+                  <th class="align-middle text-center">Acciones</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
 
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th class="align-middle">Factura</th>
-                                    <th class="align-middle">Fecha</th>
-                                    <th class="align-middle">Días de crédito</th>
-                                    <th class="align-middle">Días transcurridos</th>
-                                    <th class="align-middle text-center">Cliente</th>
-                                    <th class="align-middle">Razón social</th>
-                                    <th class="align-middle text-right">Monto</th>
-                                    <th class="align-middle text-right">Monto + IVA</th>
-                                    <th class="align-middle text-center">Fecha de pago</th>
-                                    <th class="align-middle text-center">Estado</th>
-                                    <th class="align-middle text-center">Promesa de pago</th>
-                                    <th class="align-middle">Fecha última gestión</th>
-                                    <th>Última gestión</th>
-                                    <th class="align-middle text-center">Acciones</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-			<div class="tab-pane" id="tab_3">
-                        <table id="tb_cancelled_bills" class="table table-responsive table-striped table-sm">
-                            <thead>
-                                <tr>
-                                    <th class="align-middle">Factura</th>
-                                    <th class="align-middle">Fecha</th>
-                                    <th class="align-middle">Días de crédito</th>
-                                    <th class="align-middle">Días transcurridos</th>
-                                    <th class="align-middle text-center">Cliente</th>
-                                    <th class="align-middle">Razón social</th>
-                                    <th class="align-middle text-right">Monto</th>
-                                    <th class="align-middle text-right">Monto + IVA</th>
-                                    <th class="align-middle text-center">Fecha de pago</th>
-                                    <th class="align-middle text-center">Estado</th>
-                                    <th class="align-middle">Fecha de cancelación</th>
-                                    <th class="align-middle">Comentarios</th>
-                                    <th class="align-middle text-center">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tboodyFacturaCancelled">
-                                <?php foreach ($cancelled_bills as $bill) : ?>
-                                <tr>
-                                    <?php switch ($bill['status']) {
-                                            case 1:
-                                                $class_color = 'bg-orange';
-                                                break;
-                                            case 2:
-                                                $class_color = 'bg-success';
-                                                break;
-                                            case 3:
-                                                $class_color = 'bg-danger';
-                                                break;
-                                            default:
-                                                $class_color = '';
-                                                break;
-                                        }
-                                        ?>
-                                    <td><b><?= $bill['folio'] ?></b></td>
-                                    <td><?= Utils::getShortDate($bill['emit_date']); ?></td>
-                                    <td class="text-center"><?= $bill['credit_days'] ?></td>
-                                    <td
-                                        class="text-center <?= $bill['days_elapsed'] > $bill['credit_days'] ? 'bg-danger' : '' ?>">
-                                        <?= $bill['days_elapsed'] ?></td>
-                                    <td class="text-center"><?= $bill['customer'] ?></td>
-                                    <td class="text-center"><?= $bill['business_name'] ?></td>
-                                    <td class="text-right">$ <?= number_format($bill['total']) ?></td>
-                                    <td class="text-right">$ <?= number_format($bill['total_IVA'],2) ?></td>
-                                    <td><?= !is_null($bill['payment_date']) ? Utils::getShortDate($bill['payment_date']) : '' ?>
-                                    </td>
-                                    <td class="text-center <?= $class_color ?>"><?= $bill['estado'] ?></td>
-                                    <td class="text-center align-middle">
-                                        <?= !is_null($bill['cancellation_date']) ? Utils::getShortDate($bill['cancellation_date']) : '' ?>
-                                    </td>
-                                    <td class="text-center align-middle"><?= $bill['comments'] ?>
-                                    </td>
-                                    <td class="text-center py-0 align-middle">
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="<?= base_url ?>administracion/editar_factura&id=<?= Encryption::encode($bill['id']) ?>"
-                                                class="btn btn-success btn-sm mr-1">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <button class="btn btn-info btn-sm mr-1"
-                                                data-id="<?= Encryption::encode($bill['id']) ?>">
-                                                <i class="fas fa-pencil-alt"></i>
-                                            </button>
+          <div class="tab-pane" id="tab_2">
+            <table id="tb_paid_bills" class="table table-responsive table-striped table-sm">
+              <thead>
+                <tr>
+                  <th class="align-middle">Factura</th>
+                  <th class="align-middle">Fecha</th>
+                  <th class="align-middle">Días de crédito</th>
+                  <th class="align-middle">Días transcurridos</th>
+                  <th class="align-middle text-center">Cliente</th>
+                  <th class="align-middle">Razón social</th>
+                  <th class="align-middle text-right">Monto</th>
+                  <th class="align-middle text-right">Monto + IVA</th>
+                  <th class="align-middle text-center">Fecha de pago</th>
+                  <th class="align-middle text-center">Estado</th>
+                  <th class="align-middle text-center">Promesa de pago</th>
+                  <th class="align-middle">Fecha última gestión</th>
+                  <th>Última gestión</th>
+                  <th class="align-middle text-center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tboodyFacturaPaid">
+                <?php foreach ($paid_bills as $bill) : ?>
+                  <tr>
+                    <?php switch ($bill['status']) {
+                      case 1:
+                        $class_color = 'bg-orange';
+                        break;
+                      case 2:
+                        $class_color = 'bg-success';
+                        break;
+                      default:
+                        $class_color = '';
+                        break;
+                    }
+                    ?>
+                    <td><b><?= $bill['folio'] ?></b></td>
+                    <td><?= Utils::getShortDate($bill['emit_date']); ?></td>
+                    <td class="text-center"><?= $bill['credit_days'] ?></td>
+                    <td class="text-center <?= $bill['days_elapsed'] > $bill['credit_days'] ? 'bg-danger' : '' ?>"><?= $bill['days_elapsed'] ?></td>
+                    <td class="text-center"><?= $bill['customer'] ?></td>
+                    <td><?= $bill['business_name'] ?></td>
+                    <td class="text-right">$ <?= number_format($bill['total']) ?></td>
+                    <td class="text-right">$ <?= number_format($bill['total_IVA']) ?></td>
+                    <td><?= !is_null($bill['payment_date']) ? Utils::getShortDate($bill['payment_date']) : '' ?></td>
+                    <td class="text-center <?= $class_color ?>"><?= $bill['estado'] ?></td>
+                    <td><?= !is_null($bill['payment_promise_date']) ? Utils::getShortDate($bill['payment_promise_date']) : '' ?></td>
+                    <td><?= !is_null($bill['last_follow_up_date']) ? Utils::getShortDate($bill['last_follow_up_date']) : '' ?></td>
+                    <td><?= $bill['last_follow_up_comments'] ?></td>
+                    <td class="text-center py-0">
+                      <div class="btn-group btn-group-sm">
+                        <a href="<?= base_url ?>administracion/editar_factura&id=<?= Encryption::encode($bill['id']) ?>" class="btn btn-success btn-sm mr-1">
+                          <i class="fas fa-eye"></i>
+                        </a>
 
-                                        </div>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
+                        <button class="btn btn-orange btn-fact mr-1" id="btn-editar-factura" value="<?= Encryption::encode($bill['id'])  ?>">
+                          <i class="fas fa-pencil-alt"></i>
+                        </button>
 
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th class="align-middle">Factura</th>
-                                    <th class="align-middle">Fecha</th>
-                                    <th class="align-middle">Días de crédito</th>
-                                    <th class="align-middle">Días transcurridos</th>
-                                    <th class="align-middle text-center">Cliente</th>
-                                    <th class="align-middle">Razón social</th>
-                                    <th class="align-middle text-right">Monto</th>
-                                    <th class="align-middle text-right">Monto + IVA</th>
-                                    <th class="align-middle text-center">Fecha de pago</th>
-                                    <th class="align-middle text-center">Estado</th>
-                                    <th class="align-middle">Fecha de cancelación</th>
-                                    <th class="align-middle">Comentarios</th>
-                                    <th class="align-middle text-center">Acciones</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
+                        <button class="btn btn-secondary btn-gestionar-fact mr-1" id="btn-gestionar-factura" value="<?= Encryption::encode($bill['id'])  ?>">
+                          <i class="fas fa-cog"></i>
+                        </button>
+                      </div>
+                    </td>
+
+                
+                  </tr>
+                <?php endforeach; ?>
+
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th class="align-middle">Factura</th>
+                  <th class="align-middle">Fecha</th>
+                  <th class="align-middle">Días de crédito</th>
+                  <th class="align-middle">Días transcurridos</th>
+                  <th class="align-middle text-center">Cliente</th>
+                  <th class="align-middle">Razón social</th>
+                  <th class="align-middle text-right">Monto</th>
+                  <th class="align-middle text-right">Monto + IVA</th>
+                  <th class="align-middle text-center">Fecha de pago</th>
+                  <th class="align-middle text-center">Estado</th>
+                  <th class="align-middle text-center">Promesa de pago</th>
+                  <th class="align-middle">Fecha última gestión</th>
+                  <th>Última gestión</th>
+                  <th class="align-middle text-center">Acciones</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
+
       </div>
       <!-- /.card-body -->
     </div>
@@ -401,9 +285,6 @@
 
     let table2 = document.querySelector('#tb_paid_bills');
     utils.dtTable(table2, false, false);
-	  
-	     let table3 = document.querySelector('#tb_cancelled_bills');
-    utils.dtTable(table3, false, false);
 
     //=========================================[gabo 20/02/2022]============================================================================================
     document.querySelector('#tboodyFactura').addEventListener('click', function(e) { //gabo 20/02/2022
@@ -469,24 +350,4 @@
     //=========================================[gabo 20/02/2022]===============================================================
 
   });
-	
-	document.querySelector('#tboodyFacturaCancelled').addEventListener('click', function(e) {
-    if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains(
-            'btn-info')) {
-        $('#modal_info_cancelados').modal('show');
-        let id;
-        if (e.target.classList.contains('btn-info'))
-            id = e.target.dataset.id;
-        else
-            id = e.target.offsetParent.dataset.id;
-
-        let managementt = new Management();
-        managementt.getInfoCancel(id);
-
-        $('#modal_info_cancelled').modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-    }
-});
 </script>

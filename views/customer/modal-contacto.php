@@ -84,7 +84,7 @@
                     <div class="form-group" id="select_empresa">
                         <label for="customer" class="col-form-label">Empresa</label>
                         <?php $customers = Utils::showCustomers(); ?>
-                        <select name="cliente_asignado" id="cliente_asignado" class="form-control select2">
+                        <select name="cliente_asignado" id="cliente_asignado" class="form-control select2" >
                             <?php $clientes = !Utils::isCustomerSA() ? Utils::showClientes() : Utils::showClientesPorUsuario() ?>
                             <option value="" hidden selected></option>
                             <?php foreach ($clientes as $cliente) : ?>
@@ -132,59 +132,8 @@
     </div>
 </div>
 
-<!-- gabo 2 oct -->
-<div class="modal fade" id="modal_send_email">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form method="post">
-                <div class="modal-header">
-                    <h4 class="modal-title">Enviar Correo</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="display:flex">
-                    <input type="hidden" name="Usuario" id="Usuario">
-                    <p id="texto"> </p>
-                    <img id="imagen" hidden src="<?= base_url ?>dist/img/sending.gif" style="max-width: 200px; max-height: 200px;margin:auto" border="0">
-
-
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                    <input type="button" name="btn_send_email" id="btn_send_email" class="btn btn-orange" value="Enviar">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
 
 <script>
-    //gabo 2 oct
-
-
-    document.querySelector('#btn_send_email').addEventListener('click', e => { //gabo duplicar
-        e.preventDefault();
-
-        document.getElementById("btn_send_email").disabled = true;
-        document.getElementById("btn_send_email").value = 'Enviando';
-        document.getElementById("texto").hidden = true;
-        document.getElementById("imagen").hidden = false;
-        let user = new User();
-        var respuesta = user.Send_Email();
-
-
-    })
-
-
-
-
-
-
-
-
     document.querySelector('#modal_contacto_reclu').addEventListener('submit', e => {
         e.preventDefault();
         let contact = new CustomerContact();

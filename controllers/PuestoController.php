@@ -6,7 +6,6 @@ require_once 'libraries/fpdf/fpdf.php';
 
 require_once 'models/RH/Positions.php';
 require_once 'models/SA/ContactosEmpresa.php';
-require_once 'models/SA/Clientes.php';
 require_once 'models/RH/SpecificResponsabilities.php';
 require_once 'models/RH/EffectivenessIndicatiors.php';
 require_once 'models/RH/RequiredKnowledge.php';
@@ -31,13 +30,9 @@ class PuestoController
             $Empresa = $contactoEmpresa->getContactoPorUsuario()->Empresa;
 
             $position = new Positions();
-            $position->setID_Cliente($_SESSION['id_cliente']);
-
+            $position->setID_Contacto($id_contacto);
             $position->setStatus(1);
-            $positions = $position->getPositionsByIDContacto();
-          
-            $position->setStatus(0);
-            $positionsDesc = $position->getPositionsByIDContacto();
+            $positions = $position->getPositionsByContacto();
 
             $page_title = 'Puestos | RRHH Ingenia';
             require_once 'views/layout/header.php';
@@ -62,17 +57,13 @@ class PuestoController
                 $positionObj->setId($id_position);
                 $position = $positionObj->getOne();
 
-                $clienteObj = new Clientes();
-                $clienteObj->setCliente($position->ID_Cliente);
-                $position->Nombre_cliente = $clienteObj->getOne()->Nombre_Cliente;
-
                 $catalogoOcupaciones = new CatalogoOcupaciones();
                 $catalogoOcupaciones->setClave($position->clave_ocupacion);
                 $catalogoOcupaciones = $catalogoOcupaciones->getOne();
 
-                $positionObj->setID_Cliente($_SESSION['id_cliente']);
+                $positionObj->setID_Contacto($ID_Contacto);
                 $positionObj->setStatus(1);
-                $positionReport = $positionObj->getPositionsByCliente();
+                $positionReport = $positionObj->getPositionsByContacto();
                 $positionSupervising = $positionObj->getSupervisingPositionByIdPosition();
                 $arraySupervising = [];
 
@@ -90,9 +81,9 @@ class PuestoController
                 }
 
                 $positionBoss = new Positions();
-                $positionObj->setID_Cliente($_SESSION['id_cliente']);
+                $positionBoss->setID_Contacto($ID_Contacto);
                 $positionBoss->setStatus(1);
-                $positionBoss = $positionBoss->getPositionsByCliente();
+                $positionBoss = $positionBoss->getPositionsByContacto();
 
                 $responsabilityEspec = new SpecificResponsabilities();
                 $responsabilityEspec->setId_position($id_position);
@@ -121,10 +112,9 @@ class PuestoController
                 }
 
                 $employe = new Employees();
-                $employe->setCliente($_SESSION['id_cliente']);
+                $employe->setID_Contacto($ID_Contacto);
                 $employe->setStatus(1);
-                $employes = $employe->getAllEmployeesByCliente();
-
+                $employes = $employe->getAllEmployeesByIDcontacto();
 
                 $page_title = 'Ver Puesto';
                 require_once 'views/layout/header.php';
@@ -169,6 +159,7 @@ class PuestoController
         $positionName = isset($positionName->getOne()->title) ? $positionName->getOne()->title : 'Sin asignar';
 
         //Titulos a los puesto que supervisara
+        $positionObj->setID_Contacto($ID_Contacto);
         $positionSupervising = $positionObj->getSupervisingPositionByIdPosition();
 
         $supervisingText = '';
@@ -298,15 +289,14 @@ class PuestoController
 
             $position = new Positions();
             $position->setEmpresa($Empresa);
-            $position->setID_Cliente($_SESSION['id_cliente']);
-
+            $position->setID_Contacto($ID_Contacto);
             $position->setStatus(1);
-            $position = $position->getPositionsByCliente();
+            $position = $position->getPositionsByContacto();
 
 
             $deparment = new Department();
-            $deparment->setID_Cliente($_SESSION['id_cliente']);
-            $deparment = $deparment->getDepartmentsByCliente();
+            $deparment->setEmpresa($Empresa);
+            $deparment = $deparment->getDepartmentsByEmpresa();
 
             $page_title = 'Nuevo Puesto';
             require_once 'views/layout/header.php';
@@ -317,7 +307,6 @@ class PuestoController
         } else
             header('location:' . base_url);
     }
-
 
     public function save()
     {
@@ -344,9 +333,6 @@ class PuestoController
             $id_created_by = isset($_POST['id_created_by']) ? Utils::sanitizeNumber($_POST['id_created_by']) : NULL;
             $clave_ocupacion = isset($_POST['clave_ocupacion']) ? Encryption::decode($_POST['clave_ocupacion']) : NULL;
             $type_position = isset($_POST['type_position']) ? Encryption::decode($_POST['type_position']) : NULL;
-            //===[gabo 7 junio puestos]===
-            $id_cliente = isset($_POST['id_cliente_position']) ? Utils::sanitizeNumber($_POST['id_cliente_position']) : NULL;
-            //===[gabo 7 junio puestos fin]===
 
             $flag = isset($_POST['flag']) ? '1' : 2;
             if ($title && $objective && $authority && $scholarship && $experience && $id_department && $type_position) {
@@ -369,9 +355,6 @@ class PuestoController
                 $position->setID_Contacto($ID_Contacto);
                 $position->setClave_ocupacion($clave_ocupacion);
                 $position->setType_position($type_position);
-                //===[gabo 7 junio puestos]===
-                $position->setID_Cliente($id_cliente);
-                //===[gabo 7 junio puestos fin]===
 
                 if ($flag == 1) {
                     $save = $position->update();
@@ -480,6 +463,33 @@ class PuestoController
     }
 
 
+    public function imprimir()
+    {
+        //if (isset($_GET['busqueda']) && !empty($_GET['busqueda'])) {
+        require_once 'libraries/fpdf/fpdf.php';
+        require_once 'helpers/Psychometries.php';
+
+        $pdf = new Psychometries("P", "pt", "Letter");
+        require('./libraries/fpdf/makefont/makefont.php');
+        $pdf->AliasNbPages();
+        $pdf->AddFont('SinkinSansLight', '', 'SinkinSans-300Light.php');
+        $pdf->AddFont('SinkinSans', '', 'SinkinSans-400Regular.php');
+        $pdf->AddFont('SinkinSans', 'I', 'SinkinSans-400Italic.php');
+        $pdf->AddFont('SinkinSans', 'B', 'SinkinSans-700Bold.php');
+        $pdf->AddFont('SinkinSans', 'BI', 'SinkinSans-700BoldItalic.php');
+        $pdf->AddFont('SinkinSansBold', 'B', 'SinkinSans-800Black.php');
+        $pdf->SetTitle(utf8_encode(utf8_decode('Evaluación Psicométrica')), true);
+        $pdf->SetMargins(0, 55, 0, 0);
+        $pdf->tieneHeader = false;
+        $pdf->AddPage();
+        $pdf->nombre = 'ERNESTO RIVAS';
+        $pdf->setPortada();
+
+        $pdf->Output('I', (utf8_decode('Evaluación Psicométrica') . '.pdf'), true);
+        /*} else{
+			header("location:".base_url);
+		} */
+    }
 
 
     function updateDatosGenerales()
@@ -491,9 +501,8 @@ class PuestoController
             $id_boss_position = isset($_POST['id_boss_position']) ? Encryption::decode($_POST['id_boss_position']) : null;
             $clave_ocupacion = isset($_POST['clave_ocupacion']) ? Encryption::decode($_POST['clave_ocupacion']) : NULL;
             $type_position = isset($_POST['type_position']) ? Encryption::decode($_POST['type_position']) : NULL;
-            $ID_Cliente = isset($_POST['ID_Cliente']) ? Encryption::decode($_POST['ID_Cliente']) : NULL;
 
-            if ($title && $id_department && $id_position && $ID_Cliente) {
+            if ($title && $id_department && $id_position) {
                 $position = new Positions();
                 $position->setId($id_position);
                 $position->setTitle($title);
@@ -501,7 +510,6 @@ class PuestoController
                 $position->setId_boss_position($id_boss_position);
                 $position->setClave_ocupacion($clave_ocupacion);
                 $position->setType_position($type_position);
-                $position->setID_Cliente($ID_Cliente);
                 $update = $position->updateGeneral();
 
                 if ($update) {
@@ -510,6 +518,7 @@ class PuestoController
                     $deparment = $deparment->getOne();
 
                     if (isset($clave_ocupacion)) {
+
                         $catalogoOcupaciones = new CatalogoOcupaciones();
                         $catalogoOcupaciones->setClave($clave_ocupacion);
                         $catalogoOcupaciones = $catalogoOcupaciones->getOne();
@@ -520,15 +529,12 @@ class PuestoController
                         $positionName = new Positions();
                         $positionName->setId($id_boss_position);
                         $positionName = $positionName->getOne()->title;
-                    } else
+                    } else {
                         $positionName = 'Sin asignar';
+                    }
 
                     $type_position = Utils::getTypePosition($type_position);
 
-
-                    $clienteObj = new Clientes();
-                    $clienteObj->setCliente($ID_Cliente);
-                    $Nombre_Cliente = $clienteObj->getOne()->Nombre_Cliente;
 
                     echo json_encode(array(
                         'title' => $title,
@@ -536,7 +542,6 @@ class PuestoController
                         'boss_position' => $positionName,
                         'catalogoOcupaciones' => $catalogoOcupaciones,
                         'type_position' => $type_position,
-                        'Nombre_Cliente' => $Nombre_Cliente,
                         'status' => 1
                     ));
                 } else
@@ -617,7 +622,7 @@ class PuestoController
                 echo json_encode(array(
                     'status' => 1,
                     'estado' => $status,
-                    'id_position' => Encryption::encode($id_position)
+                    'id_position' => $_POST['id']
                 ));
             } else
                 echo json_encode(array('status' => 0));

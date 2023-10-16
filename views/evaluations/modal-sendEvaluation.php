@@ -3,7 +3,7 @@
         <div class="modal-content">
             <form method="post">
                 <div class="modal-header">
-                    <h4 class="modal-title">Enviar evaluaciones</h4>
+                    <h4 class="modal-title">Enviar evaluacione</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -18,8 +18,7 @@
                         <select class="form-control" name="id_boss" id="id_boss_select">
                             <option selected value="0">Selecciona a quien reporta</option>
                             <?php foreach ($type_positions as $type_pos) : ?>
-                                <option value="<?= Encryption::encode($type_pos['id_employee']) ?>">
-                                    <?= $type_pos['employePosition'] ?></option>
+                                <option value="<?= Encryption::encode($type_pos['id_employee']) ?>"> <?= $type_pos['employePosition'] ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -43,12 +42,12 @@
                         </select>
                     </div>
 
-                    <div class="row">
+                    <div class="row">                        
                         <div class="form-group col-6">
                             <label class="col-form-label">Fecha inicial</label>
                             <input type="date" name="start_date" class="form-control" value="" required>
                         </div>
-
+                    
                         <div class="form-group col-6">
                             <label class="col-form-label">Fecha final</label>
                             <input type="date" name="end_date" class="form-control" value="" required>
@@ -69,23 +68,6 @@
                         <label for="level" class="col-form-label">Cuerpo del correo</label>
                         <textarea name="cuerpo_email" class="form-control" rows="5" maxlength="200">Se adjunta la evaluación de desempeño de los siguientes colaboradores, quedando a su disposición ante cualquier duda que surja. Saludos cordiales.</textarea>
                     </div>
-                    <!-- ===[gabo 6 junio evaluaciones]=== -->
-
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="id_cliente" class="col-form-label">Sucursal*</label>
-                            <?php $contactos = Utils::getEmpresaByContacto(); ?>
-                            <!-- //===[gabo 6 junio evaluaciones]=== -->
-                            <select name="id_cliente_evalua" id="id_cliente_evalua" class="form-control" required>
-                                <!-- //===[gabo 6 junio evaluaciones fin]=== -->
-                                <option disabled selected value="">Selecciona comercio</option>
-                                <?php foreach ($contactos as $contacto) : ?>
-                                    <option value="<?= $contacto['Cliente'] ?>"><?= $contacto['Nombre_Cliente'] ?></option>
-                                <?php endforeach ?>
-                            </select>
-                        </div>
-                    </div>
-                    <!-- ===[gabo 6 junio evaluaciones fin]=== -->
 
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -115,7 +97,7 @@
             document.querySelector('#email_input').hidden = false
             document.querySelector('#email_employee').required = false
             document.querySelector('#email_employee').hidden = true
-        }
+        } 
 
     })
 </script>

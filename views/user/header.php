@@ -23,7 +23,7 @@
     <div class="login-box">
         <div class="login-logo">
             <a href="<?=base_url?>">
-                <img src="<?=base_url?>dist/img/imagotipo-blanco.PNG" class="img-fluid mb-2" alt="User Image">
+                <img src="<?=base_url?>dist/img/imagotipo-colores-2.PNG" class="img-fluid mb-2" alt="User Image">
             </a>
             
         </div>

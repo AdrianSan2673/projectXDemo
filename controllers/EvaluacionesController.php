@@ -9,8 +9,6 @@ require_once 'models/RH/Positions.php';
 require_once 'models/RH/Employees.php';
 require_once 'models/RH/EvaluationEmployee.php';
 require_once 'models/RH/OpenQuestions.php';
-require_once 'models/RH/EvaluationOpenQuestionsEmployee.php';
-
 //  ===[gabo 12 mayo evaluaciones]===
 require_once 'models/RH/GroupEvaluation.php';
 //  ===[gabo 12 mayo evaluaciones fin]===
@@ -21,30 +19,16 @@ class EvaluacionesController
 
     public function index()
     {
-        
         if (Utils::isAdmin() || Utils::isCustomerSA()) {
             $page_title = 'Evlauaciones | RRHH Ingenia';
             $contactoEmpresa = new ContactosEmpresa();
             $contactoEmpresa->setUsuario($_SESSION['identity']->username);
-
-            //===[gabo 12 junio excel evaluaciones pt2]===
-            $contacto =  $contactoEmpresa->getContactoPorUsuario();
-            $Empresa = $contacto->Empresa;
-            $ID_Contacto = $contacto->ID;
-            //===[gabo 12 junio excel evaluaciones fin pt2]===
+            $Empresa = $contactoEmpresa->getContactoPorUsuario()->Empresa;
 
             $evaluationsObj = new Evaluations();
             $evaluationsObj->setID_Empresa($Empresa);
             $evaluationsObj->setStatus(1);
-            //===[gabo 12 junio excel evaluaciones pt2]===
-
-
-            //===[gabo 19 julio cliente session]===
-            $evaluationsObj->setID_Cliente($_SESSION['id_cliente']);
-            $evaluationsIndex = $evaluationsObj->getAllByID_Cliente();
-            //===[gabo 19 julio cliente session fin]===
-
-            //===[gabo 12 junio excel evaluaciones fin pt2]=== 
+            $evaluationsIndex = $evaluationsObj->getAll();
 
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
@@ -110,9 +94,8 @@ class EvaluacionesController
             $evaluationsObj = new Evaluations();
             $evaluationsObj->setID_Empresa($Empresa);
             $evaluationsObj->setStatus(1);
-            //===[gabo 12 junio excel evaluaciones pt2]===
-            $evaluationsAll = $evaluationsObj->getAll($id_contacto);
-            //===[gabo 12 junio excel evaluaciones fin pt2]===
+            $evaluationsAll = $evaluationsObj->getAll();
+
 
             $evaluationEmployeeObj = new EvaluationEmployee();
             $evaluationEmployeeObj->setID_Contacto($id_contacto);
@@ -154,36 +137,30 @@ class EvaluacionesController
             $id_contacto = $contactoEmpresa->getContactoPorUsuario()->ID;
             $Empresa = $contactoEmpresa->getContactoPorUsuario()->Empresa;
 
-            //===[gabo 19 julio cliente session]===
             $employeeObj = new Employees();
-            $employeeObj->setCliente($_SESSION['id_cliente']);
+            $employeeObj->setID_Contacto($id_contacto);
             $employeeObj->setStatus(1);
-            $employees = $employeeObj->getAllEmployeesByIDCliente();
-            //===[gabo 19 julio cliente session fin]===
+            $employees = $employeeObj->getAllEmployeesByIDcontacto();
 
-
-            //   ===[gabo 11 junio excel evaluaciones pt2]===
             $evaluationsObj = new Evaluations();
+            $evaluationsObj->setID_Empresa($Empresa);
             $evaluationsObj->setStatus(1);
-            //  ===[gabo 11 junio excel evaluaciones fin pt2]===
-
-            //===[gabo 19 julio cliente session]===
-            $evaluationsObj->setID_Cliente($_SESSION['id_cliente']);
-            $evaluationsAll = $evaluationsObj->getALLEvaluationsByID_Cliente();
-
-            $evaluationsAllExcel = $evaluationsObj->getAllAvaiableEvaluationsByID_Cliente();
+            $evaluationsAll = $evaluationsObj->getAll();
 
 
+            $evaluationEmployeeObj = new EvaluationEmployee();
+            $evaluationEmployeeObj->setID_Contacto($id_contacto);
+            $evaluations_employees = $evaluationEmployeeObj->getEvaluationByIdBoss();
             $groups_evaluation = new GroupEvaluation;
-            $groups_evaluation->setID_Cliente($_SESSION['id_cliente']);
-            $groups = $groups_evaluation->getAllGroupsEvaluationByID_Cliente();
-
+         
+            $groups_evaluation->setId_contact($id_contacto);
+            $groups = $groups_evaluation->getAllGroupsEvaluationBIdBoss();
 
             $positionObj2 = new Positions();
-            $positionObj2->setID_Cliente($_SESSION['id_cliente']);
+            $positionObj2->setID_Contacto($id_contacto);
             $positionObj2->setStatus(1);
-            $type_positions = $positionObj2->getAllPositionByID_Cliente();
-            //===[gabo 19 julio cliente session fin]===
+            $positionObj2->setType_position(5);
+            $type_positions = $positionObj2->getAllPositionByTypePosition();
 
             $deparment = new Department();
             $deparment->setEmpresa($Empresa);
@@ -199,77 +176,37 @@ class EvaluacionesController
     }
 
     // ===[gabo 15 mayo evaluaciones fin]===
-
-    // ===[gabo 8 junio excel evaluaciones ]===
     public function creat()
     {
-
-
         if (Utils::isAdmin() || Utils::isCustomerSA()) {
             if (Utils::isCustomerSA()) {
 
                 $id = Encryption::decode($_POST['id']);
                 $name = isset($_POST['name']) ? Utils::sanitizeStringBlank($_POST['name']) : null;
-                $type = isset($_POST['type']) ? Encryption::decode($_POST['type']) : '0';
                 $level = isset($_POST['level']) ? Utils::sanitizeNumber($_POST['level']) : null;
                 $flag = $_POST['flag'];
-                //===[gabo 11 junio excel evaluaciones pt2]===
-                $id_cliente = isset($_POST['id_cliente_plantilla']) ? Utils::sanitizeNumber($_POST['id_cliente_plantilla']) : null;
-                //===[gabo 11 junio excel evaluaciones fin pt2]===
-
 
                 if ($flag && $name && $level && Utils::isValid($_SESSION['identity'])) {
 
                     $contactoEmpresa = new ContactosEmpresa();
                     $contactoEmpresa->setUsuario($_SESSION['identity']->username);
-                    //===[gabo 12 junio excel evaluaciones pt2]===
-                    $contacto =  $contactoEmpresa->getContactoPorUsuario();
-                    $Empresa = $contacto->Empresa;
-                    $ID_Contacto = $contacto->ID;
-                    //===[gabo 12 junio excel evaluaciones fin pt2]===
+                    $Empresa = $contactoEmpresa->getContactoPorUsuario()->Empresa;
 
                     $evaluationsObj = new Evaluations();
                     $evaluationsObj->setId($id);
                     $evaluationsObj->setName($name);
                     $evaluationsObj->setLevel($level);
                     $evaluationsObj->setStatus(1);
-                    $evaluationsObj->setType($type);
                     $evaluationsObj->setID_Empresa($Empresa);
-                    //===[gabo 11 junio excel evaluaciones pt2]===
-                    $evaluationsObj->setID_Cliente($id_cliente);
-                    //===[gabo 11 junio excel evaluaciones fin pt2]===
                     $evaluationsObj->setCreated_by($_SESSION['identity']->id);
 
                     if ($flag == 1) {
-
                         $save = $evaluationsObj->save();
-                        if ($type == 1 && $save) {
-                            $openQuestionsObj = new OpenQuestions();
-                            $openQuestionsObj->setId_evaluation($id);
-                            $openQuestionsObj->setQuestion('Compromisos y acuerdos con el colaborador.');
-                            $openQuestionsObj->setStatus(2);
-                            $save = $openQuestionsObj->save();
-                        }
+                        $id = $evaluationsObj->getId();
+                        echo json_encode(array('status' => 1, 'url' => base_url . 'evaluaciones/ver&id=' . Encryption::encode($id)));
                     } else if ($flag == 2) {
-                        $openQuestionsObj = new OpenQuestions();
-                        $openQuestionsObj->setId_evaluation($id);
-                        $openQuestionsObj->setStatus(2);
-                        $openQuestions = $openQuestionsObj->getAllByIdEvalaution();
-                        if (count($openQuestions) == 0) {
-                            $openQuestionsObj->setQuestion('Compromisos y acuerdos con el colaborador.');
-                            $openQuestionsObj->save();
-                        }
-
-
                         $save = $evaluationsObj->update();
-                    }
-
-                    if ($save) {
-
-                        //===[gabo 19 julio cliente session]===
-                        $evaluationsObj->setID_Cliente($_SESSION['id_cliente']);
-                        $evaluationsIndex = $evaluationsObj->getAllByID_Cliente();
-                        //===[gabo 19 julio cliente session fin]===
+                        $evaluationsIndex = $evaluationsObj->getAll();
 
                         for ($i = 0; $i < count($evaluationsIndex); $i++) {
                             $evaluationsIndex[$i]['modified_at'] = substr(Utils::getDate($evaluationsIndex[$i]['modified_at']), 5);
@@ -278,9 +215,8 @@ class EvaluacionesController
                         }
 
                         echo json_encode(array('status' => 2, 'evaluations' => $evaluationsIndex));
-                    } else {
+                    } else
                         echo json_encode(array('status' => 0));
-                    }
                 } else
                     echo json_encode(array('status' => 0));
             } else
@@ -288,7 +224,7 @@ class EvaluacionesController
         } else
             echo json_encode(array('status' => 0));
     }
-    // ===[gabo junio mayo excel evaluaciones fin ]===
+
     public function delete()
     {
         if (Utils::isAdmin() || Utils::isCustomerSA()) {
@@ -296,35 +232,25 @@ class EvaluacionesController
             if ($id) {
                 $contactoEmpresa = new ContactosEmpresa();
                 $contactoEmpresa->setUsuario($_SESSION['identity']->username);
-
-                //===[gabo 12 junio excel evaluaciones pt2]===
-                $contacto =  $contactoEmpresa->getContactoPorUsuario();
-                $Empresa = $contacto->Empresa;
-                $ID_Contacto = $contacto->ID;
-                //===[gabo 12 junio excel evaluaciones fin pt2]===
+                $Empresa = $contactoEmpresa->getContactoPorUsuario()->Empresa;
 
                 $evaluationsObj = new Evaluations();
                 $evaluationsObj->setId($id);
-                $evaluationsObj->setStatus(0);
+                $evaluationsObj->setStatus(1);
                 $evaluationsObj->setID_Empresa($Empresa);
                 $evaluationsObj->setCreated_by($_SESSION['identity']->id);
 
-                $flag = $evaluationsObj->updateDelete();
+                $flag = $evaluationsObj->delete();
 
                 if ($flag) {
-                    $evaluationsObj->setID_Empresa($Empresa);
-                    $evaluationsObj->setStatus(1);
-                    //===[gabo 19 julio cliente session]===
-                    $evaluationsObj->setID_Cliente($_SESSION['id_cliente']);
-                    $evaluationsIndex = $evaluationsObj->getAllByID_Cliente();
-                    //===[gabo 19 julio cliente session fin]===
+                    $evaluationsIndex = $evaluationsObj->getAll();
 
                     for ($i = 0; $i < count($evaluationsIndex); $i++) {
                         $evaluationsIndex[$i]['modified_at'] = substr(Utils::getDate($evaluationsIndex[$i]['modified_at']), 5);
                         $evaluationsIndex[$i]['id'] = Encryption::encode($evaluationsIndex[$i]['id']);
                     }
 
-                    echo json_encode(array('status' => 1, 'evaluations' => $evaluationsIndex, 'url' => base_url));
+                    echo json_encode(array('status' => 1, 'evaluations' => $evaluationsIndex));
                 } else
                     echo json_encode(array('status' => 0));
             } else
@@ -525,11 +451,6 @@ class EvaluacionesController
             $cuerpo_email = $_POST['cuerpo_email'];
             $employees = count($_POST['employees']) > 0 ? $_POST['employees'] : null;
 
-
-            //===[gabo 6 junio evaluaciones]===
-            $id_cliente = isset($_POST['id_cliente_evalua']) ? Utils::sanitizeNumber($_POST['id_cliente_evalua']) : null;
-            //===[gabo 6 junio evaluaciones fin]===
-
             if ($id_boss && $id_evaluation && $email && $cuerpo_email && $start_date && $end_date && $employees) {
                 $contactoEmpresa = new ContactosEmpresa();
                 $contactoEmpresa->setUsuario($_SESSION['identity']->username);
@@ -549,9 +470,6 @@ class EvaluacionesController
                 $group->setStart_date($start_date);
                 $group->setEnd_date($end_date);
                 $group->setId_contact($id_contacto);
-                //===[gabo 5 de junio evaluaciones]===
-                $group->setID_Cliente($id_cliente);
-                //===[gabo 5 de junio evaluaciones fin]===
                 $group->save();
                 $id_group_evaluation = $group->getId_group();
 
@@ -671,12 +589,8 @@ class EvaluacionesController
                 Utils::sendEmail($email, $name, $subject, $body);
 
 
-
-                //===[gabo 19 julio cliente session]===
-                $group->setID_Cliente($_SESSION['id_cliente']);
-                $groups = $group->getAllGroupsEvaluationByID_Cliente();
-                //===[gabo 19 julio cliente session fin]===
-
+                $group->setId_contact($id_contacto);
+                $groups = $group->getAllGroupsEvaluationBIdBoss();
 
                 for ($i = 0; $i < count($groups); $i++) {
                     $groups[$i]['id_group'] =   Encryption::encode($groups[$i]['id_group']);
@@ -691,70 +605,5 @@ class EvaluacionesController
                 echo json_encode(array('status' => 0));
         } else
             echo json_encode(array('status' => 0));
-    }
-
-    public function table()
-    {
-        $id_evaluation = ($_POST['id_evaluation'] ? Utils::sanitizeNumber($_POST['id_evaluation']) : 'false');
-        $id_group_evaluation = ($_POST['id_group_evaluation'] ? Utils::sanitizeNumber($_POST['id_group_evaluation']) : 'false');
-
-        if ($id_group_evaluation) {
-            $evaluationEmployeeObj = new EvaluationEmployee();
-            $evaluationEmployeeObj->setId_group_evaluation($id_group_evaluation);
-
-            $arryaEvaluationEmployee = $evaluationEmployeeObj->getValuequestionForEmployee();
-
-
-            $EvaluationOpenQuestionsEmployeeObj = new EvaluationOpenQuestionsEmployee();
-
-            $categoriesObj = new EvaluationCategory();
-            $categoriesObj->setId_evaluation($id_evaluation);
-            $categoriesObj->setStatus(1);
-            $categories =  $categoriesObj->getAllByIdEvaluation();
-            $total_categories = count($categories);
-            $total_por_category = 100 / $total_categories;
-            $questions =  $categoriesObj->getAllQuestionsByIdEvalaution();
-
-            $columnas_por_categoria = [];
-            foreach ($categories as $categorie) {
-                $conteo = 0;
-                foreach ($questions as $i => $pregunta) {
-                    if ($categorie["id"] == $pregunta['id_category']) {
-                        $conteo++;
-                    }
-                }
-                $columnas_por_categoria[] = $conteo;
-            }
-
-            $i = 0;
-
-            $openQuestionsObj = new OpenQuestions();
-            $openQuestionsObj->setId_evaluation($id_evaluation);
-            $openQuestionsObj->setStatus(1);
-            $openQuestions = $openQuestionsObj->getAllByIdEvalaution();
-            $total_questions = count($questions);
-            $total_openQuestions = count($openQuestions);
-
-
-            $openQuestionsObj = new OpenQuestions();
-            $openQuestionsObj->setId_evaluation($id_evaluation);
-            $openQuestionsObj->setStatus(2);
-            $feedback = $openQuestionsObj->getAllByIdEvalaution();
-            $total_feedback = count($feedback);
-            $total_open_questionsfeedback = $total_openQuestions + $total_feedback;
-
-
-            $group = new GroupEvaluation();
-            $group->setId_group($id_group_evaluation);
-            $grupo = $group->getOne();
-            $titulo = $grupo->group_name . "  (" . Utils::getDate($grupo->start_date) . " al " . Utils::getDate($grupo->end_date) . ")";
-
-            require_once 'views/layout/header.php';
-            require_once 'views/layout/sidebar.php';
-            require_once 'views/evaluations/table.php';
-            require_once 'views/layout/footer.php';
-        } else {
-            header("location:" . base_url);
-        }
     }
 }

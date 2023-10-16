@@ -36,7 +36,7 @@
                 <div class="card-body">
                     <div class="form-group">
                       <label for="Empresa" class="col-form-label">Nombre de la empresa</label>
-                      <select class="form-control select2" name="Empresa">
+                      <select class="form-control" name="Empresa">
                         <?php $empresas = Utils::showEmpresas(); $enterprise = Encryption::decode($_GET['empresa'])?>
                         <?php foreach ($empresas as $empresa): ?>
                           <option value="<?= $empresa['Empresa'] ?>" <?=isset($_GET['empresa']) && $enterprise == $empresa['Empresa'] ? 'selected' : ''; ?>><?= $empresa['Nombre_Empresa'] ?></option>
@@ -201,8 +201,6 @@
                       <option value="TAM" <?=isset($prospecto) && is_object($prospecto) && $prospecto->Plaza == 'TAM' ? 'selected' : ''; ?>>TAM</option>
                       <option value="SLP" <?=isset($prospecto) && is_object($prospecto) && $prospecto->Plaza == 'SLP' ? 'selected' : ''; ?>>SLP</option>
                       <option value="MTY" <?=isset($prospecto) && is_object($prospecto) && $prospecto->Plaza == 'MTY' ? 'selected' : ''; ?>>MTY</option>
-						                      <option value="CDMX" <?=isset($prospecto) && is_object($prospecto) && $prospecto->Plaza == 'CDMX' ? 'selected' : ''; ?>>CDMX</option>
-
                     </select>
                   </div>
                 </div>

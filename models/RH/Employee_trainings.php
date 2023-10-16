@@ -130,7 +130,7 @@ class Employee_trainings
 	public function getOne()
     {
         $id = $this->getId();
-        $stmt = $this->db->prepare("SELECT et.*, e.first_name, e.surname, e.last_name, e.curp, p.title, p.clave_ocupacion, co.descripcion, r.Razon, r.RFC, t.title as training, t.hours, t.start_date, t.end_date, t.training_agent, t.instructor, a.descripcion AS area_tematica, c.Representante_Legal, w.full_name AS Representante_Trabajadores FROM root.employee_trainings et INNER JOIN root.employees e ON et.id_employee=e.id INNER JOIN root.positions p ON e.id_position=p.id LEFT JOIN root.catalogo_ocupaciones co ON p.clave_ocupacion=co.clave INNER JOIN rh_Ventas_Alta_Razones r ON e.id_razon=r.ID INNER JOIN root.trainings t ON et.id_training=t.id INNER JOIN root.catalogo_areas_tematicas a ON t.clave_area_tematica=a.clave INNER JOIN rh_Ventas_Alta c ON e.Cliente=c.Cliente LEFT JOIN root.worker_representative w ON et.id_worker_representative=w.id WHERE et.id=:id");
+        $stmt = $this->db->prepare("SELECT et.*, e.first_name, e.surname, e.last_name, e.curp, p.title, p.clave_ocupacion, co.descripcion, r.Razon, r.RFC, t.title as training, t.hours, t.start_date, t.end_date, t.training_agent, t.instructor, a.descripcion AS area_tematica FROM root.employee_trainings et INNER JOIN root.employees e ON et.id_employee=e.id INNER JOIN root.positions p ON e.id_position=p.id LEFT JOIN root.catalogo_ocupaciones co ON p.clave_ocupacion=co.clave INNER JOIN rh_Ventas_Alta_Razones r ON e.id_razon=r.ID INNER JOIN root.trainings t ON et.id_training=t.id INNER JOIN root.catalogo_areas_tematicas a ON t.clave_area_tematica=a.clave WHERE et.id=:id");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
         $fetch =  $stmt->fetchObject();

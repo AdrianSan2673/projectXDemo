@@ -32,14 +32,4 @@ class CivilStatus{
         $status = $stmt->fetchAll();
         return $status;
 	}
-	
-		public function getOne()
-	{
-		$id = $this->getId();
-		$stmt = $this->db->prepare("SELECT * FROM civil_status where id=:id;");
-		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-		$stmt->execute();
-		$status = $stmt->fetchObject();
-		return $status;
-	}
 }

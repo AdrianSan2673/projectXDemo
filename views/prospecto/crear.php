@@ -46,7 +46,6 @@
                           <option value="TAM" <?=isset($prospecto) && is_object($prospecto) && $prospecto->Plaza == 'TAM' ? 'selected' : ''; ?>>TAM</option>
                           <option value="SLP" <?=isset($prospecto) && is_object($prospecto) && $prospecto->Plaza == 'SLP' ? 'selected' : ''; ?>>SLP</option>
                           <option value="MTY" <?=isset($prospecto) && is_object($prospecto) && $prospecto->Plaza == 'MTY' ? 'selected' : ''; ?>>MTY</option>
-					<option value="CDMX" <?=isset($prospecto) && is_object($prospecto) && $prospecto->Plaza == 'CDMX' ? 'selected' : ''; ?>>CDMX</option>
                         </select>
                     </div>
                     <div class="form-group row">

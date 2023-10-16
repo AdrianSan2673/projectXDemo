@@ -24,9 +24,6 @@ class Positions
 	private $status;
 	private $clave_ocupacion;
 	private $type_position;
-	//===[gabo 7 junio puestos]===
-	private $ID_Cliente;
-	//===[gabo 7 junio puestos fin]===
 	private $db;
 
 	public function __construct()
@@ -243,22 +240,11 @@ class Positions
 	{
 		$this->type_position = $type_position;
 	}
-	//===[gabo 7 junio puestos]===
-	public function getID_Cliente()
-	{
-		return $this->ID_Cliente;
-	}
 
-	public function setID_Cliente($ID_Cliente)
-	{
-		$this->ID_Cliente = $ID_Cliente;
-	}
-
-	//===[gabo 7 junio puestos fin]===
 	public function getOne()
 	{
 		$id = $this->getId();
-		$stmt = $this->db->prepare("SELECT p.status,p.id id_position, p.title,p.objective,p.authority,p.scholarship,p.experience,p.additional_studies,p.experience_years,p.language,CONVERT(DATE,p.created_at,103) created_at,d.department,p.id_department,p.id_boss_position,p.id_reviewed_by,p.id_approved_by,p.modified_at,p.clave_ocupacion,p.type_position,p.ID_Cliente
+		$stmt = $this->db->prepare("SELECT p.status,p.id id_position, p.title,p.objective,p.authority,p.scholarship,p.experience,p.additional_studies,p.experience_years,p.language,CONVERT(DATE,p.created_at,103) created_at,d.department,p.id_department,p.id_boss_position,p.id_reviewed_by,p.id_approved_by,p.modified_at,p.clave_ocupacion,p.type_position
 		FROM root.positions p, root.department d WHERE p.id=:id AND p.id_department=d.id");
 		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
 		$stmt->execute();
@@ -312,7 +298,7 @@ class Positions
 	public function getPositionByIdeDeparment()
 	{
 		$id_department = $this->getId_department();
-		$stmt = $this->db->prepare("SELECT p.id,p.title, p.objective, p.modified_at, p.created_at FROM root.positions p WHERE  p.id_department=:id_department and p.status=1");
+		$stmt = $this->db->prepare("SELECT p.id,p.title, p.objective, p.modified_at, p.created_at FROM root.positions p WHERE  p.id_department=:id_department");
 		$stmt->bindParam(":id_department", $id_department, PDO::PARAM_STR);
 		$stmt->execute();
 		$fetch = $stmt->fetchAll();
@@ -336,7 +322,6 @@ class Positions
 		return $fetch;
 	}
 
-	//===[gabo 7 junio puestos evaluaciones]===
 	public function save()
 	{
 		$result = false;
@@ -357,15 +342,12 @@ class Positions
 		$ID_Contacto = $this->getID_Contacto();
 		$clave_ocupacion = $this->getClave_ocupacion();
 		$type_position = $this->getType_position();
-		//===[gabo 6 puestos evaluaciones]===
-		$id_cliente = $this->getID_Cliente();
-		//===[gabo 6 puestos evaluaciones fin]===
 
 		/* $created_at = $this->getCreated_at();
-	$modified_at = $this->getModified_at(); */
+		$modified_at = $this->getModified_at(); */
 
-		$stmt = $this->db->prepare("INSERT INTO root.positions (title,objective,authority,scholarship,experience,additional_studies,experience_years,language,id_boss_position,id_reviewed_by,id_approved_by,id_created_by,id_department, Empresa, ID_Contacto, created_at,modified_at,clave_ocupacion,type_position,ID_Cliente) 
-	VALUES (:title,:objective,:authority,:scholarship,:experience,:additional_studies,:experience_years,:language,:id_boss_position,:id_reviewed_by,:id_approved_by,:id_created_by,:id_department, :Empresa, :ID_Contacto, GETDATE(),GETDATE(),:clave_ocupacion,:type_position,:id_cliente)");
+		$stmt = $this->db->prepare("INSERT INTO root.positions (title,objective,authority,scholarship,experience,additional_studies,experience_years,language,id_boss_position,id_reviewed_by,id_approved_by,id_created_by,id_department, Empresa, ID_Contacto, created_at,modified_at,clave_ocupacion,type_position) 
+        VALUES (:title,:objective,:authority,:scholarship,:experience,:additional_studies,:experience_years,:language,:id_boss_position,:id_reviewed_by,:id_approved_by,:id_created_by,:id_department, :Empresa, :ID_Contacto, GETDATE(),GETDATE(),:clave_ocupacion,:type_position)");
 
 		$stmt->bindParam(":title", $title, PDO::PARAM_STR);
 		$stmt->bindParam(":objective", $objective, PDO::PARAM_STR);
@@ -384,12 +366,8 @@ class Positions
 		$stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
 		$stmt->bindParam(":clave_ocupacion", $clave_ocupacion, PDO::PARAM_INT);
 		$stmt->bindParam(":type_position", $type_position, PDO::PARAM_INT);
-
-		$stmt->bindParam(":id_cliente", $id_cliente, PDO::PARAM_INT);
-
-
 		/* $stmt->bindParam(":created_at", $created_at, PDO::PARAM_STR);
-	$stmt->bindParam(":modified_at", $modified_at, PDO::PARAM_STR); */
+		$stmt->bindParam(":modified_at", $modified_at, PDO::PARAM_STR); */
 		$flag = $stmt->execute();
 
 		if ($flag) {
@@ -399,7 +377,7 @@ class Positions
 
 		return $result;
 	}
-	//===[gabo 9 junio excel evaluaciones]===
+
 	public function save2() //No sabia que nombre ponerle
 	{
 		$result = false;
@@ -408,18 +386,15 @@ class Positions
 		$id_department = $this->getId_department();
 		$Empresa = $this->getEmpresa();
 		$ID_Contacto = $this->getID_Contacto();
-		$ID_Cliente = $this->getID_Cliente();
 
-		$stmt = $this->db->prepare("INSERT INTO	root.positions (title, id_department, id_created_by,Empresa,ID_Contacto,created_at,modified_at,ID_Cliente) 
-		VALUES (:title,:id_department,:id_created_by,:Empresa,:ID_Contacto,GETDATE(),GETDATE(),:ID_Cliente)");
+		$stmt = $this->db->prepare("INSERT INTO	root.positions (title, id_department, id_created_by,Empresa,ID_Contacto,created_at,modified_at) 
+		VALUES (:title,:id_department,:id_created_by,:Empresa,:ID_Contacto,GETDATE(),GETDATE())");
 
 		$stmt->bindParam(":title", $title, PDO::PARAM_STR);
 		$stmt->bindParam(":id_created_by", $id_created_by, PDO::PARAM_INT);
 		$stmt->bindParam(":id_department", $id_department, PDO::PARAM_INT);
 		$stmt->bindParam(":Empresa", $Empresa, PDO::PARAM_INT);
 		$stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
-		$stmt->bindParam(":ID_Cliente", $ID_Cliente, PDO::PARAM_INT);
-
 
 		$flag = $stmt->execute();
 
@@ -430,7 +405,7 @@ class Positions
 
 		return $result;
 	}
-	//===[gabo 9 junio excel evaluaciones fin]===
+
 
 	public function update()
 	{
@@ -567,16 +542,9 @@ class Positions
 		$id_boss_position = $this->getId_boss_position();
 		$clave_ocupacion = $this->getClave_ocupacion();
 		$type_position = $this->getType_position();
-		$ID_Cliente = $this->getID_Cliente();
 
 		$stmt = $this->db->prepare("UPDATE root.positions 
-									SET title=:title,
-									id_department=:id_department,
-									id_boss_position=:id_boss_position, 
-									modified_at=GETDATE(),
-									clave_ocupacion=:clave_ocupacion,
-									ID_Cliente=:ID_Cliente,
-									type_position=:type_position
+									SET title=:title,id_department=:id_department,id_boss_position=:id_boss_position, modified_at=GETDATE(),clave_ocupacion=:clave_ocupacion,type_position=:type_position
 									WHERE id=:id");
 
 		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
@@ -585,7 +553,6 @@ class Positions
 		$stmt->bindParam(":id_boss_position", $id_boss_position, PDO::PARAM_STR);
 		$stmt->bindParam(":clave_ocupacion", $clave_ocupacion, PDO::PARAM_STR);
 		$stmt->bindParam(":type_position", $type_position, PDO::PARAM_STR);
-		$stmt->bindParam(":ID_Cliente", $ID_Cliente, PDO::PARAM_STR);
 
 		$flag = $stmt->execute();
 
@@ -656,78 +623,4 @@ class Positions
 		$fetch = $stmt->fetchAll();
 		return $fetch;
 	}
-
-	//===[gabo 7 junio puestos]===
-	public function getPositionsByIDContacto()
-	{
-		$ID_Cliente = $this->getID_Cliente();
-		$status = $this->getStatus();
-
-		$stmt = $this->db->prepare("SELECT rva.Nombre_Cliente,p.id,va.Nombre_Empresa, p.title,p.objective,p.authority,p.scholarship,p.experience,p.additional_studies,p.experience_years,p.language,CONVERT(DATE,p.created_at,103) created_at,d.department,p.id_department,p.id_boss_position,p.id_reviewed_by,p.id_approved_by,p.modified_at
-			FROM root.positions p, root.department d, rh_Ventas_Empresas va,rh_Ventas_Alta rva WHERE p.Empresa=va.Empresa AND p.status=:status AND p.id_department=d.id  AND p.ID_Cliente=rva.Cliente    AND p.ID_Cliente=:ID_Cliente  ORDER BY p.title");
-
-		$stmt->bindParam(":status", $status, PDO::PARAM_STR);
-		$stmt->bindParam(":ID_Cliente", $ID_Cliente, PDO::PARAM_STR);
-		$stmt->execute();
-		$fetch = $stmt->fetchAll();
-		return $fetch;
-	}
-	//===[gabo 7 junio puestos fin]===
-
-    // <!--===[gabo 3 JULIO MODULO RH]=== -->
-	public function getPositionsByCliente()
-	{
-		$ID_Cliente = $this->getID_Cliente();
-		$status = $this->getStatus();
-
-		$stmt = $this->db->prepare("SELECT p.id,va.Nombre_Empresa, p.title,p.objective,p.authority,p.scholarship,p.experience,p.additional_studies,p.experience_years,p.language,CONVERT(DATE,p.created_at,103) created_at,d.department,p.id_department,p.id_boss_position,p.id_reviewed_by,p.id_approved_by,p.modified_at
-		FROM root.positions p, root.department d, rh_Ventas_Empresas va WHERE p.Empresa=va.Empresa AND p.status=:status AND p.id_department=d.id AND p.ID_Cliente =:ID_Cliente ORDER BY p.title");
-		$stmt->bindParam(":ID_Cliente", $ID_Cliente, PDO::PARAM_STR);
-		$stmt->bindParam(":status", $status, PDO::PARAM_STR);
-		$stmt->execute();
-		$fetch = $stmt->fetchAll();
-		return $fetch;
-	}
-
-	
-	public function getAllPositionByTypePositionAndCliente()
-	{
-		$status = $this->getStatus();
-		//$type_position = $this->getType_position();
-		$ID_Cliente = $this->getID_Cliente();
-
-		$stmt = $this->db->prepare("SELECT  CONCAT(e.first_name,' ',e.surname,' ',e.last_name,' - ', p.title) employePosition,e.id id_employee,* FROM root.positions p, root.employees e  WHERE  e.id_position=p.id AND p.status=:status AND e.status=1 AND e.Cliente=:ID_Cliente ORDER BY p.type_position,p.title,e.first_name");
-
-		$stmt->bindParam(":status", $status, PDO::PARAM_STR);
-		//$stmt->bindParam(":type_position", $type_position, PDO::PARAM_STR);
-		$stmt->bindParam(":ID_Cliente", $ID_Cliente, PDO::PARAM_STR);
-
-		$stmt->execute();
-		$fetch = $stmt->fetchAll();
-		return $fetch;
-	}
-
-    // <!-- //===[gabo 3 JULIO MODULO RH]=== -->
-
-	//===[gabo 19 julio cliente session]===
-	public function getAllPositionByID_Cliente()
-	{
-		$status = $this->getStatus();
-		//$type_position = $this->getType_position();
-		$Cliente = $this->getID_Cliente();
-
-		$stmt = $this->db->prepare("SELECT  CONCAT(e.first_name,' ',e.surname,' ',e.last_name,' - ', p.title) employePosition,e.id id_employee,* FROM root.positions p, root.employees e  WHERE  e.id_position=p.id AND p.status=:status AND e.status=1 AND e.Cliente=:Cliente ORDER BY p.type_position,p.title,e.first_name");
-
-		$stmt->bindParam(":status", $status, PDO::PARAM_STR);
-		//$stmt->bindParam(":type_position", $type_position, PDO::PARAM_STR);
-		$stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_STR);
-
-		$stmt->execute();
-		$fetch = $stmt->fetchAll();
-		return $fetch;
-	}
-	//===[gabo 19 julio cliente session fin]===
-
-
-
 }

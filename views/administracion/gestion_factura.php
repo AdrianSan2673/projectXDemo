@@ -35,7 +35,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="Razon_Social" class="col-form-label">Razón social:</label>
-                                    <select name="Razon_Social" id="Razon_Social" class="form-control" >
+                                    <select name="Razon_Social" id="Razon_Social" class="form-control" readonly>
                                         <?php $razones = Utils::showRazonesSocialesPorCliente($factura->ID_Cliente);?>
                                         <option value="Pendiente">Pendiente</option>
                                         <?php foreach ($razones as $razon): ?>

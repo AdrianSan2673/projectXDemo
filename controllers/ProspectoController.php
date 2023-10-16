@@ -417,8 +417,7 @@ class ProspectoController{
         }
     }
 
-   public function propuesta_sa()
-    {
+    public function propuesta_sa(){
         if (isset($_SESSION['identity']) && !Utils::isCandidate() && !Utils::isCustomer() && isset($_POST['id_prospecto'])) {
             require_once 'libraries/fpdf/fpdf.php';
             require_once 'helpers/Propuestas/SA.php';
@@ -434,59 +433,26 @@ class ProspectoController{
             $pros->setPrecio_ESE($ese);
             $prospecto = $pros->getOne();
             if (!$prospecto) {
-                header("location:" . base_url . "prospecto/index");
+                header("location:".base_url."prospecto/index");
             }
 
             $pros->updatePrecios_SA();
 
-            $propuestas = array('Nuestro servicio inicia con la obtención de un reporte de antecedentes legales, un reporte de índole laboral, penal, civil y/o mercantil (demandas por deudas) y toda información del candidato que pueda servir para descartar que sea conflictivo o de riesgo si fuera contratado.', 'Hacer más completa la parte de investigación laboral, es decir validar empleadores anteriores, incluso si está trabajando solicitar un recibo de nómina reciente.', 'Asegurarnos que no sea una persona con conflictos laborales, malas notas o faltas de probidad en sus empleos anteriores.', 'Obtención de empleos no declarados por el candidato y realizar la investigación correspondiente cuando existan dichos empleos ocultos.', 'En caso de que no se pueda obtener referencias directamente con RH, solicitaremos las constancias correspondientes, mismas que deberán coincidir con las bases de datos de empleos o registros patronales. Así mismo y contando con lo anterior, podremos validar con el jefe inmediato su desempeño, siempre explicando por qué no fue posible que RH nos diera información.', 'Continuar con la programación de la verificación domiciliaria en caso de detectar que el candidato no es viable para contratación ya sea por registros legales o por referencias laborales, en ese momento se detiene el proceso y se ajusta la tarifa del servicio. Logrando no generar costos innecesarios para ustedes como clientes.');
-
-            $concepto = array("Revisión de antecedentes legales.\n
-Costo total único cuando  el cliente solo solicite el RAL, o el proceso se interrumpa en esta fase.
-", 'Investigación Laboral
-
-Costo total único, cuando  el cliente solicite hasta la  investigación laboral o el proceso se interrumpa en esta fase, este precio ya incluye el RAL.
-', 'Verificación domiciliaria
-
-Costo total y único si completa todo el proceso, este precio ya incluye el RAL y la Investigación laboral.
-');
-
-
-            $descripcion = array('-Se revisan los antecedentes legales del candidato y se comparten los resultados por medio de la plataforma.
-
--Tiempo de entrega, inmediata.
-', '-Investigación de referencias laborales del 2021 a la fecha.
-
--Aseguramos que no sea una persona inestable.
-
--Obtención de empleos no declarados por el candidato y realizar la investigación correspondiente.
-', '-Corroboramos aspectos relacionados con situación del inmueble, cuadro familiar, ingresos y egresos, cotejo de documentación (personal y laboral) y referencias (personales y vecinales).
-
--Fotografía del interior y exterior del domicilio.
-
--Fotografía del candidato.
-
--Ubicación por geolocalización del domicilio del candidato.
-
--Tiempo de entrega 72 horas.');
-
             $pdf = new SA("P", "pt", "Letter");
             require('./libraries/fpdf/makefont/makefont.php');
-            $pdf->AddFont('SinkinSansLight', '', 'SinkinSans-300Light.php');
-            $pdf->AddFont('SinkinSans', '', 'SinkinSans-400Regular.php');
-            $pdf->AddFont('SinkinSans', 'I', 'SinkinSans-400Italic.php');
-            $pdf->AddFont('SinkinSans', 'B', 'SinkinSans-700Bold.php');
-            $pdf->AddFont('SinkinSans', 'BI', 'SinkinSans-700BoldItalic.php');
+            $pdf->AddFont('SinkinSansLight','', 'SinkinSans-300Light.php');
+            $pdf->AddFont('SinkinSans','', 'SinkinSans-400Regular.php');
+            $pdf->AddFont('SinkinSans','I', 'SinkinSans-400Italic.php');
+            $pdf->AddFont('SinkinSans','B', 'SinkinSans-700Bold.php');
+            $pdf->AddFont('SinkinSans','BI', 'SinkinSans-700BoldItalic.php');
             $pdf->SetTitle("Propuesta SA", true);
             $pdf->SetFont('Times');
             $pdf->SetMargins(0, 55, 87, 0);
             $pdf->AddPage();
-
-
-            $pdf->setText($prospecto, $ral, $inv, $ese, $propuestas,   $concepto, $descripcion);
-            $pdf->Output('I', 'Propuesta SA ' . $prospecto->Prospecto . '.pdf', true);
-        } else {
-            header("location:" . base_url);
+            $pdf->setText($prospecto, $ral, $inv, $ese);
+            $pdf->Output('I', 'Propuesta SA '.$prospecto->Prospecto.'.pdf', true);
+        }else{
+            header("location:".base_url);
         }
     }
 }

@@ -168,14 +168,4 @@ class RazonesSociales{
         }
         return $result;
     }
-	
-	  public function getRazonesSocialesPorEmpresa()
-    {
-        $empresa = $this->getID_Empresa();
-        $stmt = $this->db->prepare("SELECT * FROM rh_Ventas_Cliente_Razones WHERE ID_Empresa=:empresa");
-        $stmt->bindParam(":empresa", $empresa, PDO::PARAM_INT);
-        $stmt->execute();
-        $result = $stmt->fetchAll();
-        return $result;
-    }
 }

@@ -30,28 +30,15 @@ class Training {
                             <td class=" align-middle text-center">${element.nombre_cliente}</td>
                             <td class=" align-middle text-center">${element.start_date}</td>
                             <td class=" align-middle text-center">${element.end_date}</td>
+                            <td class=" align-middle text-center">${element.modified_at}</td>
                             <td class=" align-middle text-center">
-                            <div class="row">
-                              <div class="col-4">
-                                <a href="${element.url}" target="_blank" class="btn btn-success">
-                                  <i class="fas fa-eye"></i>
-                                </a>
-                              </div>
-                              <div class="col-4">
-                              <button class="btn btn-info" value="${element.id}"><i class="fas fa-edit"></i></button>
-                              </div>
-                              <div class="col-4">
+                            <button class="btn btn-info" value="${element.id}"><i class="fas fa-edit"></i></button>
                               <button class="btn btn-danger text-bold" value="${element.id}">X</button>  
-                              </div>
-                            </div>
-                          </td>
+                            </td>
                         </tr>
                         `
                         });
-
-                        utils.destruir_datatable('#tb_employees', '#tboodyTraining', trining);
-
-
+                        document.querySelector('#tboodyTraining').innerHTML = trining;
                         $('#modal_create_training').modal('hide');
                         form.querySelectorAll('.btn')[1].disabled = false;
                         form.reset();
@@ -119,8 +106,8 @@ class Training {
                                 }
                             });
                         })
-
-
+                        
+                       
 
 
                     } else if (json_app.status == 2) {
@@ -142,6 +129,8 @@ class Training {
     }
 
 
+
+
     deleteTraing(id) {
         let xhr = new XMLHttpRequest();
         xhr.open('POST', '../Capacitaciones/deleteTraing');
@@ -158,9 +147,6 @@ class Training {
                         utils.showToast('Omitiste algún dato', 'error');
                     } else if (json_app.status == 1) {
                         utils.showToast('Eliminado con exito.', 'success');
-
-
-
                         let trining = ''
                         json_app.trainings.forEach(element => {
                             trining += `
@@ -172,27 +158,15 @@ class Training {
                             <td class=" align-middle ">${element.nombre_cliente}</td>
                             <td class=" align-middle ">${element.start_date}</td>
                             <td class=" align-middle ">${element.end_date}</td>
-                            <td class=" align-middle text-center">
-                            <div class="row">
-                              <div class="col-4">
-                                <a href="${element.url}" target="_blank" class="btn btn-success">
-                                  <i class="fas fa-eye"></i>
-                                </a>
-                              </div>
-                              <div class="col-4">
-                              <button class="btn btn-info" value="${element.id}"><i class="fas fa-edit"></i></button>
-                              </div>
-                              <div class="col-4">
+                            <td class=" align-middle ">${element.modified_at}</td>
+                            <td class=" align-middle ">
+                            <button class="btn btn-info" value="${element.id}"><i class="fas fa-edit"></i></button>
                               <button class="btn btn-danger text-bold" value="${element.id}">X</button>  
-                              </div>
-                            </div>
-                          </td>
+                            </td>
                         </tr>
                         `
                         });
-
-                        utils.destruir_datatable('#tb_employees', '#tboodyTraining', trining);
-
+                        document.querySelector('#tboodyTraining').innerHTML = trining;
 
                     } else if (json_app.status == 2) {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
@@ -240,6 +214,7 @@ class Training {
                         </tr>
                         `
                         });
+                        document.querySelector('#tboodyTraining').innerHTML = trining;
 
                     } else if (json_app.status == 2) {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');

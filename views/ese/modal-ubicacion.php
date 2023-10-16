@@ -48,15 +48,10 @@
                         <div class="form-group col">
                             <label class="col-form-label" for="Estado">Estado</label>
                             <select class="form-control" name="Estado" required>
-                                <?= $pais = ['', 'México', 'Guatemala'] ?>
-                          <?php for ($i = 1; $i < count($pais); $i++) : ?>
-                            <optgroup label="<?= $pais[$i] ?>">
-                              <?php $estados = Utils::showEstadosPorPais($i) ?>
-                              <?php foreach ($estados as $e) : ?>
-                                <option value="<?= $e['Estado'] ?>"><?= $e['Descripcion'] ?></option>
-                              <?php endforeach ?>
-                            </optgroup>
-                          <?php endfor; ?>
+                                <?php $estados = Utils::showEstadosMX() ?>
+                                <?php foreach ($estados as $e): ?>
+                                    <option value="<?=$e['Estado']?>"><?=$e['Descripcion']?></option>
+                                <?php endforeach ?>
                             </select>
                         </div>
                         <div class="form-group col">
@@ -175,15 +170,10 @@
                     <div class="form-group">
                         <label class="col-form-label" for="Estado">Estado</label>
                         <select class="form-control" name="Estado">
-                          <?= $pais = ['', 'México', 'Guatemala'] ?>
-                          <?php for ($i = 1; $i < count($pais); $i++) : ?>
-                            <optgroup label="<?= $pais[$i] ?>">
-                              <?php $estados = Utils::showEstadosPorPais($i) ?>
-                              <?php foreach ($estados as $e) : ?>
-                                <option value="<?= $e['Estado'] ?>"><?= $e['Descripcion'] ?></option>
-                              <?php endforeach ?>
-                            </optgroup>
-                          <?php endfor; ?>
+                            <?php $estados = Utils::showEstadosMX() ?>
+                            <?php foreach ($estados as $e): ?>
+                                <option value="<?=$e['Estado']?>"><?=$e['Descripcion']?></option>
+                            <?php endforeach ?>
                         </select>
                     </div>
                 </div>

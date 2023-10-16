@@ -17,14 +17,9 @@ class PsicometriaController{
                 $psychometry = new Psychometry();
                 $psychometry->setId_customer($contacto->id_customer);
                 $psychometrics = $psychometry->getPsychometricsByCustomer();
-            }else {
+            }else{
                 $psychometry = new Psychometry();
-                if (Utils::isAdmin()) {
-                    $psychometrics = $psychometry->getAll();
-                } else {
-                    $psychometry->setId_Recruiter($_SESSION['identity']->id);
-                    $psychometrics = $psychometry->getPsicometresByRecruiter();
-                }
+                $psychometrics = $psychometry->getAll();
             }
 
             $page_title = 'Psicometrías | RRHH Ingenia';
@@ -103,10 +98,8 @@ class PsicometriaController{
 
             $id_customer = (isset($_POST['customer'])) ? trim($_POST['customer']) : FALSE;
             $id_business_name = (isset($_POST['business_name'])) ? trim($_POST['business_name']) : FALSE;
-			
-			$id_recruiter = (isset($_POST['id_recruiter'])) ? trim($_POST['id_recruiter']) : FALSE;
             
-            if ($id_customer && $id_business_name && $id_recruiter) {
+            if ($id_customer && $id_business_name) {
                 $candidate = new Candidate();
                 $candidate->setFirst_name($first_name);
                 $candidate->setSurname($surname);
@@ -146,7 +139,6 @@ class PsicometriaController{
                 $psychometry->setPersonality($personality);
                 $psychometry->setSales_skills($sales_skills);
                 $psychometry->setLeadership($leadership);
-				$psychometry->setId_Recruiter($id_recruiter);
 
                 $save = $psychometry->create();
                 if ($save) {
@@ -266,15 +258,6 @@ class PsicometriaController{
                         $psychometrics[$i]['file'] = base_url.$route;
                     }
                 }
-				
-				
-                 if (file_exists('uploads/psychometrics/' . $id . '.pdf')) {
-                    $routeDocu = base_url . 'uploads/psychometrics/' . $id . '.pdf';
-                } else {
-                    $routeDocu = false;
-                }
-				
-				
                 
             }
 
@@ -332,10 +315,8 @@ class PsicometriaController{
             $id_business_name = (isset($_POST['business_name'])) && !empty($_POST['business_name']) ? trim($_POST['business_name']) : NULL;
             $end_date = isset($_POST['end_date']) && !empty($_POST['end_date']) ? $_POST['end_date'] : NULL;
             $status = isset($_POST['status']) ? $_POST['status'] : FALSE;
-			
-			  $id_recruiter = (isset($_POST['id_recruiter'])) ? trim($_POST['id_recruiter']) : FALSE;
 
-           if ($id && $request_date && $id_customer && $id_recruiter) {
+            if ($id && $request_date && $id_customer) {
                 $candidate = new Candidate();
                 $candidate->setFirst_name($first_name);
                 $candidate->setSurname($surname);
@@ -362,7 +343,6 @@ class PsicometriaController{
                 $psychometry->setId_business_name($id_business_name);
                 $psychometry->setEnd_date($end_date);
                 $psychometry->setStatus($status);
-			    $psychometry->setId_Recruiter($id_recruiter);
                 
                 $update = $psychometry->update();
 
@@ -455,79 +435,5 @@ class PsicometriaController{
 		} else {
 			header("location:".base_url);
 		}	
-    }
-	
-	
-	
-
-    public function update_interpretation()
-    {
-        if (Utils::isValid($_POST)) {
-            $id_psycho = isset($_POST['id_psycho']) ? Encryption::decode($_POST['id_psycho']) : FALSE;
-            $interpretation = isset($_POST['interpretation']) ? Utils::sanitizeString($_POST['interpretation']) : FALSE;
-
-
-            if ($interpretation && $id_psycho) {
-
-                $psychometry = new Psychometry();
-                $psychometry->setId($id_psycho);
-                $psychometry->setInterpretation($interpretation);
-                $update = $psychometry->update_interpretation();
-
-                if ($update) {
-                    echo  json_encode(array('status' => 1));
-                } else {
-                    echo  json_encode(array('status' => 2));
-                }
-            } else {
-                echo  json_encode(array('status' => 0));
-            }
-        } else {
-            header("location:" . base_url);
-        }
-    }
-
-
-
-    public function upload_file()
-    {
-        if (Utils::isValid($_POST)) {
-            $psycho_document = isset($_FILES['psycho_document']) && $_FILES['psycho_document']['name'] != '' ? $_FILES['psycho_document'] : FALSE;
-            $id_psycho = isset($_POST['id_psychometry'])  ? Encryption::decode($_POST['id_psychometry']) : FALSE;
-
-            if ($id_psycho || $psycho_document) {
-
-                $allowed_formats = array("application/pdf");
-
-                if ($psycho_document) {
-
-                    if (!in_array($_FILES["psycho_document"]["type"], $allowed_formats)) {
-                        echo json_encode(array('status' => 9));
-                        die();
-                    } else {
-
-                        if (file_exists('uploads/psychometrics/' . $id_psycho . '.pdf')) {
-                            unlink('uploads/psychometrics/' . $id_psycho . '.pdf');
-                        }
-
-                        $route2 = 'uploads/psychometrics/';
-                        $resume2 = $route2 . $id_psycho . '.pdf';            
-
-                        if (!file_exists($resume2)) {
-                            $result = @move_uploaded_file($_FILES["psycho_document"]["tmp_name"], $resume2);
-                            $routeDocu = base_url . $resume2;
-                        }
-
-                        echo json_encode(array(
-                            'status' => 1,
-                            'routeDocu' => $routeDocu,
-                            'flag' => 1
-                        ));
-                    }
-                }
-            } else
-                echo json_encode(array('status' => 7));
-        } else
-            echo json_encode(array('status' => 0));
     }
 }

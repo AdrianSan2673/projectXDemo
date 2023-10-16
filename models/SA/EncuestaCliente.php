@@ -125,24 +125,6 @@ class EncuestaCliente {
         return $fetch;
     }
 
-    public function getOneSAByRange(){
-        $Usuario = $this->getUsuario();
-        $ID_Cliente = $this->getID_Cliente();
-        $ID_Empresa = $this->getID_Empresa();
-        $Fecha = $this->getFecha();
-        $Fecha1 = $this->getId();
-
-        $stmt = $this->db->prepare("SELECT * FROM Encuesta_Cliente WHERE Usuario=:Usuario AND ID_Cliente=:ID_Cliente AND ID_Empresa=:ID_Empresa AND CONVERT(DATE, Fecha) BETWEEN :Fecha AND :Fecha1");
-        $stmt->bindParam(":Usuario", $Usuario, PDO::PARAM_STR);
-        $stmt->bindParam(":ID_Cliente", $ID_Cliente, PDO::PARAM_INT);
-        $stmt->bindParam(":ID_Empresa", $ID_Empresa, PDO::PARAM_INT);
-        $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
-        $stmt->bindParam(":Fecha1", $Fecha1, PDO::PARAM_STR);
-        $stmt->execute();
-        $fetch = $stmt->fetchObject();
-        return $fetch;
-    }
-
     public function getOneReclu(){
         $Usuario = $this->getUsuario();
         $ID_Cliente_Reclu = $this->getID_Cliente_Reclu();
@@ -160,25 +142,8 @@ class EncuestaCliente {
         return $fetch;
     }
 
-    public function getOneRecluByRange(){
-        $Usuario = $this->getUsuario();
-        $ID_Cliente_Reclu = $this->getID_Cliente_Reclu();
-        $Fecha = $this->getFecha();
-        $Fecha1 = $this->getFecha();
-
-        $stmt = $this->db->prepare(
-            "SELECT * FROM Encuesta_Cliente WHERE Usuario=:Usuario AND ID_Cliente_Reclu=:ID_Cliente_Reclu AND CONVERT(DATE, Fecha) BETWEEN :Fecha AND :Fecha1");
-        $stmt->bindParam(":Usuario", $Usuario, PDO::PARAM_STR);
-        $stmt->bindParam(":ID_Cliente_Reclu", $ID_Cliente_Reclu, PDO::PARAM_INT);
-        $stmt->bindParam(":Fecha", $Fecha, PDO::PARAM_STR);
-        $stmt->bindParam(":Fecha1", $Fecha1, PDO::PARAM_STR);
-        $stmt->execute();
-        $fetch = $stmt->fetchObject();
-        return $fetch;
-    }
-
     public function getAll(){
-        $stmt = $this->db2->prepare("SELECT e.id, Experiencia, Objetivos, Asesoria, Resolucion, ROUND((CAST((Experiencia + Objetivos + Asesoria + Resolucion) AS float)/4), 2) AS Promedio, Comentarios, e.Fecha, e.Usuario, first_name, last_name, email, Nombre_Empresa, Nombre_Cliente, customer, ID_Empresa, ID_Cliente, ID_Cliente_Reclu FROM rrhhinge_Candidatos.dbo.Encuesta_Cliente e LEFT JOIN reclutamiento.dbo.users u ON e.Usuario=u.username LEFT JOIN rrhhinge_Candidatos.dbo.rh_Ventas_Empresas ve ON e.ID_Empresa=ve.Empresa LEFT JOIN rrhhinge_Candidatos.dbo.rh_Ventas_Alta va ON va.Cliente=e.ID_Cliente LEFT JOIN reclutamiento.dbo.customers c ON e.ID_Cliente_Reclu=c.id where YEAR(e.Fecha)>=2023 ORDER BY Fecha DESC");
+        $stmt = $this->db2->prepare("SELECT e.id, Experiencia, Objetivos, Asesoria, Resolucion, ROUND((CAST((Experiencia + Objetivos + Asesoria + Resolucion) AS float)/4), 2) AS Promedio, Comentarios, e.Fecha, e.Usuario, first_name, last_name, email, Nombre_Empresa, Nombre_Cliente, customer, ID_Empresa, ID_Cliente, ID_Cliente_Reclu FROM rrhhinge_Candidatos.dbo.Encuesta_Cliente e LEFT JOIN reclutamiento.dbo.users u ON e.Usuario=u.username LEFT JOIN rrhhinge_Candidatos.dbo.rh_Ventas_Empresas ve ON e.ID_Empresa=ve.Empresa LEFT JOIN rrhhinge_Candidatos.dbo.rh_Ventas_Alta va ON va.Cliente=e.ID_Cliente LEFT JOIN reclutamiento.dbo.customers c ON e.ID_Cliente_Reclu=c.id ORDER BY Fecha DESC");
         $stmt->execute();
         $fetch = $stmt->fetchAll();
         return $fetch;

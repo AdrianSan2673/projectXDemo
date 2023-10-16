@@ -2,7 +2,6 @@
 
 require_once 'models/SA/Candidatos.php';
 require_once 'models/SA/CandidatosCohabitan.php';
-require_once 'models/SA/CandidatosDatos.php';
 
 class CohabitanteController{
 
@@ -12,22 +11,17 @@ class CohabitanteController{
             $Candidato = Utils::sanitizeNumber($_POST['Folio']);
 
             
-            if ($Candidato) {
-                $candidato = new CandidatosDatos();
-                $candidato->setCandidato($Candidato);
-                $candidato_datos = $candidato->getOne();
+            if ($Renglon && $Candidato) {
+                $cohabitante = new CandidatosCohabitan();
+                $cohabitante->setRenglon($Renglon);
+                $cohabitante->setCandidato($Candidato);
+                $data = $cohabitante->getOne();
 
-                if ($Renglon) {
-                    $cohabitante = new CandidatosCohabitan();
-                    $cohabitante->setRenglon($Renglon);
-                    $cohabitante->setCandidato($Candidato);
-                    $data = $cohabitante->getOne();
-                    
-                    if ($data) {
-                        header('Content-Type: text/html; charset=utf-8');
-                        echo json_encode(array('data' => $data, 'candidato_datos' => $candidato_datos, 'status' => 1), \JSON_UNESCAPED_UNICODE);
-                    } else echo json_encode(array('candidato_datos' => $candidato_datos, 'status' => 2), \JSON_UNESCAPED_UNICODE);
-                }else echo json_encode(array('candidato_datos' => $candidato_datos, 'status' => 2), \JSON_UNESCAPED_UNICODE);
+                if ($data) {
+                    header('Content-Type: text/html; charset=utf-8');
+                    echo $json_cohabitante = json_encode($data, \JSON_UNESCAPED_UNICODE);
+                } else echo 0;
+                
             }else echo 0;
         } else
             header('location:'.base_url);
@@ -44,9 +38,8 @@ class CohabitanteController{
             $Estado_Civil = Utils::sanitizeNumber($_POST['Estado_Civil']);
             $Ocupacion = Utils::sanitizeStringBlank($_POST['Ocupacion']);
             $Empresa = Utils::sanitizeStringBlank($_POST['Empresa']);
-            $Dependiente = @Utils::sanitizeNumber($_POST['Dependiente']);
+            $Dependiente = Utils::sanitizeNumber($_POST['Dependiente']);
             $Telefono = Utils::sanitizeStringBlank($_POST['Telefono']);
-            $Es_Mayor_Edad = @Utils::sanitizeNumber($_POST['Es_Mayor_Edad']);
             $flag = $_POST['flag'];
 
             if ($Candidato) {
@@ -62,7 +55,6 @@ class CohabitanteController{
                 $cohabitante->setEmpresa($Empresa);
                 $cohabitante->setDependiente($Dependiente);
                 $cohabitante->setTelefono($Telefono);
-                $cohabitante->setEs_Mayor_Edad($Es_Mayor_Edad);
                 
                 if ($flag == 1)
                     $save = $cohabitante->update();
@@ -75,11 +67,15 @@ class CohabitanteController{
                         $cohabitantes[$i]['Parentesco'] = Utils::getParentesco($cohabitantes[$i]['Parentesco']);
                         $cohabitantes[$i]['Estado_Civil'] = Utils::getEstadoCivil($cohabitantes[$i]['Estado_Civil']);
                     }
-                    $candidato = new CandidatosDatos();
+                    $candidato = new Candidatos();
                     $candidato->setCandidato($Candidato);
-                    $candidato_datos = $candidato->getOne();
+                    $comentarios = $candidato->getComentarios()->Comentario_Cohabitan;
 
-                    echo json_encode(array('data' => $cohabitantes, 'candidato_datos' => $candidato_datos, 'status' => 1, 'display' => Utils::getDisplayBotones()), \JSON_UNESCAPED_UNICODE);
+                    array_push($cohabitantes, array('Comentario_Cohabitan' => $comentarios));
+                    array_push($cohabitantes, array('display' => Utils::getDisplayBotones()));
+                    array_push($cohabitantes, array('status' => 1));
+                    
+                    echo json_encode($cohabitantes);
                 }
                 else echo json_encode(array('status' => 2));
 
@@ -101,17 +97,16 @@ class CohabitanteController{
                 
                 $delete = $cohabitante->delete();
 
-                $candidato = new CandidatosDatos();
-                $candidato->setCandidato($Candidato);
-                $candidato_datos = $candidato->getOne();
-
                 if ($delete) {
                     $cohabitantes = $cohabitante->getCohabitantesPorCandidato();
                     for ($i=0; $i < count($cohabitantes); $i++) { 
                         $cohabitantes[$i]['Parentesco'] = Utils::getParentesco($cohabitantes[$i]['Parentesco']);
                         $cohabitantes[$i]['Estado_Civil'] = Utils::getEstadoCivil($cohabitantes[$i]['Estado_Civil']);
                     }
-                    echo json_encode(array('data' => $cohabitantes, 'candidato_datos' => $candidato_datos, 'status' => 1, 'display' => Utils::getDisplayBotones()), \JSON_UNESCAPED_UNICODE);
+                    array_push($cohabitantes, array('display' => Utils::getDisplayBotones()));
+                    array_push($cohabitantes, array('status' => 1));
+                    
+                    echo json_encode($cohabitantes);
                 }
                 else echo json_encode(array('status' => 2));
 
@@ -160,15 +155,15 @@ class CohabitanteController{
                         $cohabitantes[$i]['Parentesco'] = Utils::getParentesco($cohabitantes[$i]['Parentesco']);
                         $cohabitantes[$i]['Estado_Civil'] = Utils::getEstadoCivil($cohabitantes[$i]['Estado_Civil']);
                     }
-                    $candidato = new CandidatosDatos();
+                    $candidato = new Candidatos();
                     $candidato->setCandidato($Candidato);
-                    $candidato_datos = $candidato->getOne();
+                    $comentarios = $candidato->getComentarios()->Comentario_Cohabitan;
 
-                    echo json_encode(array('data' => $cohabitantes, 
-										   'candidato_datos' => $candidato_datos, 
-										   'status' => 1, 
-										   'display' => Utils::getDisplayBotones()), \JSON_UNESCAPED_UNICODE);
+                    array_push($cohabitantes, array('Comentario_Cohabitan' => $comentarios));
+                    array_push($cohabitantes, array('display' => Utils::getDisplayBotones()));
+                    array_push($cohabitantes, array('status' => 1));
                     
+                    echo json_encode($cohabitantes);
                 }
                 else echo json_encode(array('status' => 2));
 
