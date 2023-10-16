@@ -148,8 +148,8 @@
 
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-          <?php if (Utils::isAdmin() || Utils::isSenior() || Utils::isRecruitmentManager()) : ?>
-            <button class="btn btn-orange float-right" id="candidate_submit">Enviar</button>
+        <?php if (Utils::isAdmin() || Utils::isSenior() || Utils::isRecruitmentManager()|| Utils::isCandidate()||Utils::isSenior()) : ?>
+            <button class="btn btn-orange float-right" id="candidate_submit">Guardar</button>
           <?php endif; ?>
         </div>
       </form>

@@ -10,14 +10,12 @@ require_once 'models/User.php';
 require_once 'models/Vacancy.php';
 require_once 'models/VacancyApplicant.php';
 require_once 'models/Psychometry.php';
-require_once 'models/ApplicantProfile.php';
+require_once 'models/ApplicantProfile.php';   
 require_once 'models/CandidateDirectory.php';
 require_once 'models/Area.php';
 require_once 'models/Subarea.php';
 require_once 'models/CivilStatus.php';
 
-
-//gabo 12 oct
 require_once 'models/CandidateContact.php';
 
 class CandidatoController
@@ -77,8 +75,8 @@ class CandidatoController
                         $VacancyObj->setId($candidateDirectory->id_vacancy);
                         $vacante = $VacancyObj->getOne();
                     }
-                    $candidato->id_area = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_area : 0;
-                    $candidato->id_subarea = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_subarea : 0;
+                    $candidato->id_area = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_area:0;
+                    $candidato->id_subarea = $candidateDirectory->id_vacancy != null || $candidateDirectory->id_vacancy != 0 ? $vacante->id_subarea:0;
 
                     $candidato->id_gender = 0;
                     $candidato->id_civil_status = 0;
@@ -86,18 +84,16 @@ class CandidatoController
                     $candidato->description = '';
                     $candidato->id = null;
                     $candidato->job_title = $candidato->experience;
-                    $candidato->experience = $candidato->experience;
+					$candidato->experience =$candidato->experience;
                     $candidato->cellphone = '';
                     $candidato->linkedinn = '';
                     $candidato->facebook = '';
                     $candidato->instagram = '';
                 }
             }
-            if ($_GET['action'] == 'crear' and isset($_GET['vacante'])) {
+			    if ($_GET['action'] == 'crear' and isset($_GET['vacante'])) {
                 $guardar_en_bolsa = true;
             }
-
-
             $page_title = 'Nuevo candidato | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
@@ -150,7 +146,7 @@ class CandidatoController
 
             //if ($first_name && $surname && $last_name && $date_birth && $id_gender && $id_civil_status && $job_title && $description && $telephone && $cellphone && $email && $id_state && $id_city && $linkedinn && $facebook && $instagram && $education_level && $institution && $title && $start_date && $course && $institution_additional_education && $start_date_additional && $end_date_additional) {
 
-            if (true) {
+				if (( $first_name && $surname && $last_name && $job_title  && $id_state && $id_city && $id_area && $id_subarea) ) {
                 $candidate = new Candidate();
                 $candidate->setFirst_name($first_name);
                 $candidate->setSurname($surname);
@@ -335,67 +331,59 @@ class CandidatoController
             $id_vacancy = isset($_POST['id_vacancy']) && !empty($_POST['id_vacancy']) ? Encryption::decode($_POST['id_vacancy']) : FALSE;
             $id_contacto = isset($_POST['contact']) ? Encryption::decode($_POST['contact']) : NULL; //id del contacto del directorio
 
-
-            $start_date = isset($_POST['start_date']) ?  $_POST['start_date'] : null;
+			
+			$start_date = isset($_POST['start_date']) ?  $_POST['start_date'] : null;
             $end_date = isset($_POST['end_date']) ?  $_POST['end_date'] : null;
             $enterpise_experience = isset($_POST['enterprise_experience']) ?  $_POST['enterprise_experience'] : null;
             $review_experience = isset($_POST['review_experience']) ?  $_POST['review_experience'] : null;
-
-            // if ($start_date and $end_date and $enterpise_experience and $review_experience and !Utils::isCandidate()) {
-            //     $tamanio = count($start_date);
-            //     for ($i = 0; $i < $tamanio; $i++) {
-
-
-            //         if ($start_date[$i] != '' or $end_date[$i] != '') {
-
-            //             if ($start_date[$i] < '1950-01-01'  or  $start_date[$i] > '2050-01-01' or  $end_date[$i] < '1950-01-01'  or  $end_date[$i] > '2050-01-01') {
-            //                 echo json_encode(array('status' => 6));
-            //                 die();
-            //             }
-
-            //             if (trim($enterpise_experience[$i]) == '' or  trim($review_experience[$i]) == '') {
-            //                 echo json_encode(array('status' => 7));
-            //                 die();
-            //             }
-            //         }
+			
+		// if ($start_date and $end_date and $enterpise_experience and $review_experience and !Utils::isCandidate()) {
+//     $tamanio = count($start_date);
+//     for ($i = 0; $i < $tamanio; $i++) {
 
 
-            //         if ($start_date[$i] == '' and $end_date[$i] == '' and (trim($enterpise_experience[$i]) != '' or trim($review_experience[$i]) != '')) {
-            //             echo json_encode(array('status' => 7));
-            //             die();
-            //         }
-            //     }
-            // }
+//         if ($start_date[$i] != '' or $end_date[$i] != '') {
+
+//             if ($start_date[$i] < '1950-01-01'  or  $start_date[$i] > '2050-01-01' or  $end_date[$i] < '1950-01-01'  or  $end_date[$i] > '2050-01-01') {
+//                 echo json_encode(array('status' => 6));
+//                 die();
+//             }
+
+//             if (trim($enterpise_experience[$i]) == '' or  trim($review_experience[$i]) == '') {
+//                 echo json_encode(array('status' => 7));
+//                 die();
+//             }
+//         }
 
 
+//         if ($start_date[$i] == '' and $end_date[$i] == '' and (trim($enterpise_experience[$i]) != '' or trim($review_experience[$i]) != '')) {
+//             echo json_encode(array('status' => 7));
+//             die();
+//         }
+//     }
+// }
+
+			
 
             //===[gabo 1 agosto  operativa]==      
             $isCandidate = false;
             $vacancy = new Vacancy();
             $vacancy->setId($id_vacancy);
             $vacante = $vacancy->getOne();
-
-            if (isset($vacante) && isset($vacante->type) && ($vacante->type != "1" && $vacante->type != "4")) {
-                if ($date_birth < '1950-01-01') {
+			
+			if ($date_birth < '1950-01-01'&&$date_birth!=0 && isset($date_birth)&& $date_birth!=null && isset($vacante)) {
                     echo json_encode(array('status' => 5));
                     die();
-                }
-            }
+			}
+            
 
-            if (!$id_vacancy) {
-                if ($date_birth < '1950-01-01') {
-                    echo json_encode(array('status' => 6));
-                    die();
-                }
-            }
-
-
-            if (isset($_POST['directory'])) {
+			
+			  if (isset($_POST['directory'])) {
                 $id_vacancy = false;
             }
 
 
-            if (($first_name && $surname && $last_name && $id_level && $job_title  && $id_state && $id_city && $id_area && $id_subarea)) {
+            if (( $first_name && $surname && $last_name && $id_level && $job_title  && $id_state && $id_city && $id_area && $id_subarea) ) {
                 //===[gabo 1 agosto  operativa fin]==   
                 if ($resume) {
                     $allowed_formats = array("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/pdf");
@@ -504,16 +492,16 @@ class CandidatoController
                                         for ($i = 0; $i < $tamanio; $i++) {
                                             $enterpise_experience[$i] =  trim($enterpise_experience[$i]);
                                             $review_experience[$i] =  trim($review_experience[$i]);
-
-                                            $start_date[$i] =  trim($start_date[$i]);
+											
+											$start_date[$i] =  trim($start_date[$i]);
                                             $end_date[$i] =  trim($end_date[$i]);
-
+											
                                             if ($enterpise_experience[$i] != '' and  $review_experience[$i] != '') {
                                                 $experience->setEnterprise($enterpise_experience[$i]);
                                                 $experience->setPosition($enterpise_experience[$i]);
                                                 $experience->setReview($review_experience[$i]);
-
-                                                $experience->setStart_date($start_date[$i]);
+												
+												$experience->setStart_date($start_date[$i]);
                                                 $experience->setEnd_date($end_date[$i]);
                                                 $result = $experience->save();
                                             }
@@ -608,21 +596,21 @@ class CandidatoController
                     }else{
                         echo 4;
                     } */
+                }else {if ($save) {
+                    //===[gabo 2 julio operativa]===
+                    echo json_encode(array(
+                        'status' => 1,
+                        'id_vacancy' => $id_vacancy,
+                        'id_candidate' => $id_candidate,
+                        'type' => $vacante->type,
+                        'isCandidate' => $isCandidate
+                    ));
+                    //===[gabo 2 julio operativa]===
                 } else {
-                    if ($save) {
-                        //===[gabo 2 julio operativa]===
-                        echo json_encode(array(
-                            'status' => 1,
-                            'id_vacancy' => $id_vacancy,
-                            'id_candidate' => $id_candidate,
-                            'type' => $vacante->type,
-                            'isCandidate' => $isCandidate
-                        ));
-                        //===[gabo 2 julio operativa]===
-                    } else {
-                        echo json_encode(array('status' => 2));
-                    }
+                    echo json_encode(array('status' => 2));
                 }
+					  }
+				
             } else {
                 echo json_encode(array('status' => 0));
             }
@@ -793,7 +781,83 @@ class CandidatoController
 
     public function ver()
     {
-        if (Utils::isValid($_SESSION['identity'])) {
+        if (Utils::isValid($_SESSION['identity']) || (isset($_GET['token']) && isset($_GET['id']))) {
+			if (isset($_GET['token']) && isset($_GET['id'])) {
+                $id = Encryption::decode($_GET['id']);
+                $token = $_GET['token'];
+                $user = new User();
+            
+                $case = $user->validateIdToken($id, $token);
+                
+                switch($case){
+                    case 1:
+                    case 2:
+                        $user->setId($id);
+                        $identity = $user->getOne();
+                        if ($identity && is_object($identity)) {
+                            $_SESSION['identity'] = $identity;
+                            $user->lastSession($identity->id);
+							Utils::showProfilePicture();
+                            $_SESSION['dark_mode'] = $_SESSION['identity']->dark_mode;
+                            switch ($identity->id_user_type) {
+                                case 1:
+                                    $_SESSION['admin'] = TRUE;
+                                    break;
+                                case 2:
+                                    $_SESSION['senior'] = TRUE;
+                                    break;
+                                case 3:
+                                    $_SESSION['junior'] = TRUE;
+                                    break;
+                                case 4:
+                                    $_SESSION['manager'] = TRUE;
+                                    break;
+                                case 5:
+                                    $_SESSION['salesmanager'] = TRUE;
+                                    break;
+                                case 6:
+                                    $_SESSION['customer'] = TRUE;
+                                    break;
+                                case 7:
+                                    $_SESSION['candidate'] = TRUE;
+                                    break;
+                                case 8:
+                                    $_SESSION['sales'] = TRUE;
+                                    break;
+                                case 9:
+                                    $_SESSION['recruitmentmanager'] = TRUE;
+                                    break;
+                                case 10:
+                                    $_SESSION['samanager'] = TRUE;
+                                case 11:
+                                    $_SESSION['operationssupervisor'] = TRUE;
+                                    break;
+                                case 12:
+                                    $_SESSION['logisticssupervisor'] = TRUE;
+                                    break;
+                                case 13:
+                                    $_SESSION['account'] = TRUE;
+                                    break;
+                                case 14:
+                                    $_SESSION['logistics'] = TRUE;
+                                    break;
+                                case 15:
+                                    $_SESSION['customerSA'] = TRUE;
+                                    break;
+                                case 16:
+                                    $_SESSION['humanresources'] = TRUE;
+                                    break;
+                            }
+                        }
+                        break;
+                    case 3:
+                        header('location:'.base_url);
+                        break;
+                    default:
+                        header('location:'.base_url);
+                        break;
+                }
+            }
             if (isset($_GET['id']) || Utils::isCandidate()) {
                 if (Utils::isCandidate()) {
                     if (isset($_GET['id'])) {
@@ -845,7 +909,6 @@ class CandidatoController
                     $va = new VacancyApplicant();
                     $va->setId_candidate($id);
                     $vacancies = $va->getApplicantsByCandidate();
-
                     if (isset($_GET['vacante'])) {
                         $id_vacancy = Encryption::decode($_GET['vacante']);
                         $va->setId_vacancy($id_vacancy);
@@ -1009,12 +1072,12 @@ class CandidatoController
                 $language = new CandidateLanguage();
                 $language->setId_candidate($id);
                 $languages = $language->getLanguagesByCandidate();
-
-                //gabo 27 sept
+				
+				  //gabo 27 sept
                 $vacante = new VacancyApplicant();
                 $vacante->setId_candidate($id);
                 $vacante = $vacante->getVacanciesTypeOperativaByCandidate();
-                //gabo 29 sept
+				  //gabo 29 sept
                 $resumepath = 'uploads/resume/' . $id;
                 if (file_exists($resumepath)) {
                     $resumedirectory = opendir($resumepath);
@@ -1117,43 +1180,43 @@ class CandidatoController
 
             $enterpise_experience = isset($_POST['enterprise_experience']) ?  $_POST['enterprise_experience'] : null;
             $review_experience = isset($_POST['review_experience']) ?  $_POST['review_experience'] : null;
-
-            $start_date = isset($_POST['start_date']) ?  $_POST['start_date'] : null;
+			
+			 $start_date = isset($_POST['start_date']) ?  $_POST['start_date'] : null;
             $end_date = isset($_POST['end_date']) ?  $_POST['end_date'] : null;
 
 
 
-            // if ($start_date and $end_date and $enterpise_experience and $review_experience and !Utils::isCandidate()) {
-            //     $tamanio = count($start_date);
-            //     for ($i = 0; $i < $tamanio; $i++) {
+// if ($start_date and $end_date and $enterpise_experience and $review_experience and !Utils::isCandidate()) {
+//     $tamanio = count($start_date);
+//     for ($i = 0; $i < $tamanio; $i++) {
 
 
-            //         if ($start_date[$i] != '' or $end_date[$i] != '') {
+//         if ($start_date[$i] != '' or $end_date[$i] != '') {
 
-            //             if ($start_date[$i] < '1950-01-01'  or  $start_date[$i] > '2050-01-01' or  $end_date[$i] < '1950-01-01'  or  $end_date[$i] > '2050-01-01') {
-            //                 echo json_encode(array('status' => 6));
-            //                 die();
-            //             }
+//             if ($start_date[$i] < '1950-01-01'  or  $start_date[$i] > '2050-01-01' or  $end_date[$i] < '1950-01-01'  or  $end_date[$i] > '2050-01-01') {
+//                 echo json_encode(array('status' => 6));
+//                 die();
+//             }
 
-            //             if (trim($enterpise_experience[$i]) == '' or  trim($review_experience[$i]) == '') {
-            //                 echo json_encode(array('status' => 7));
-            //                 die();
-            //             }
-            //         }
-
-
-            //         if ($start_date[$i] == '' and $end_date[$i] == '' and (trim($enterpise_experience[$i]) != '' or trim($review_experience[$i]) != '')) {
-            //             echo json_encode(array('status' => 7));
-            //             die();
-            //         }
-            //     }
-            // }
+//             if (trim($enterpise_experience[$i]) == '' or  trim($review_experience[$i]) == '') {
+//                 echo json_encode(array('status' => 7));
+//                 die();
+//             }
+//         }
 
 
-
+//         if ($start_date[$i] == '' and $end_date[$i] == '' and (trim($enterpise_experience[$i]) != '' or trim($review_experience[$i]) != '')) {
+//             echo json_encode(array('status' => 7));
+//             die();
+//         }
+//     }
+// }
 
 
 
+			
+			
+			
 
             if ($id_candidate) {
 
@@ -1174,16 +1237,16 @@ class CandidatoController
 
                         $enterpise_experience[$i] =  trim($enterpise_experience[$i]);
                         $review_experience[$i] =  trim($review_experience[$i]);
-
-                        $start_date[$i] =  trim($start_date[$i]);
+						
+						$start_date[$i] =  trim($start_date[$i]);
                         $end_date[$i] =  trim($end_date[$i]);
 
                         if ($enterpise_experience[$i] != '' and  $review_experience[$i] != '') {
                             $experience->setEnterprise($enterpise_experience[$i]);
                             $experience->setPosition($enterpise_experience[$i]);
                             $experience->setReview($review_experience[$i]);
-
-                            $experience->setStart_date($start_date[$i]);
+							
+							$experience->setStart_date($start_date[$i]);
                             $experience->setEnd_date($end_date[$i]);
 
                             $result = $experience->save();
@@ -1237,7 +1300,7 @@ class CandidatoController
             $tiempo =  isset($_POST['tiempo']) ? Utils::sanitizeString($_POST['tiempo']) : null;
             //===[gabo 27 junio perfil]==
 
-            if ($id_vacancy  && $id_candidate   && $gender  && $age     &&  $general_comments  &&   $functions  &&   $experiencia_comments  &&   $general_comments &&   $functions_comments) {
+            if ($id_vacancy  && $id_candidate  && $age    &&   $functions  &&   $experiencia_comments  &&   $general_comments &&   $functions_comments) {
                 $candidato = new VacancyApplicant();
                 $candidato->setId_candidate($id_candidate);
                 $candidato->setId_vacancy($id_vacancy);
@@ -1496,6 +1559,16 @@ class CandidatoController
                     }
                 }
 
+				
+                if (!isset($route)) {
+                    
+                    if ($candidato->id_gender != 2) {
+                        $route = "dist/img/user-icon.png";
+                    } else {
+                        $route = "dist/img/user-icon-rose.png";
+                    }
+                }
+				
                 $candidato->img = base_url . $route;
 
 
@@ -1582,8 +1655,8 @@ class CandidatoController
             header('location:' . base_url);
         }
     }
-
-    public function postulate()
+	
+	  public function postulate()
     {
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isRecruitmentManager())) {
             $id_vacancy = isset($_POST['id_vacancy']) ? trim(Encryption::decode($_POST['id_vacancy'])) : FALSE;
@@ -1654,8 +1727,7 @@ class CandidatoController
             echo json_encode(array('status' => 0));
     }
 
-    public function registrar()
-    {
+    public function registrar() {
         if (isset($_POST)) {
             $_SESSION['data'] = isset($_SESSION['data']) && !empty($_SESSION['data']) ? $_SESSION['data'] : [];
             $data = (object) array(
@@ -1676,7 +1748,7 @@ class CandidatoController
             $user->setUsername(NULL);
             $user->setPassword($data->password);
             $user->setFirst_name($data->first_name);
-            $user->setLast_name($data->surname . ' ' . $data->last_name);
+            $user->setLast_name($data->surname.' '.$data->last_name);
             $user->setEmail($data->email);
             $user->setActivation(2);
             $user->setId_user_type(7);
@@ -1698,7 +1770,7 @@ class CandidatoController
                     $candidate->setAge(NULL);
                     $candidate->setId_gender(NULL);
                     $candidate->setId_state(NULL);
-                    // $candidate->setEmail($email);
+                    $candidate->setEmail($email);
 
                     $candidate->setId_civil_status(NULL);
                     $candidate->setJob_title('');
@@ -1720,14 +1792,14 @@ class CandidatoController
                         $_SESSION['data']->id = $candidate->getId();
                         $id_user = Encryption::encode($user->getId());
                         $token = $user->getToken();
-
-                        $url = base_url . 'usuario/activar_cuenta&id=' . $id_user . '&val=' . $token;
-
+                        
+                        $url = base_url.'usuario/activar_cuenta&id='.$id_user.'&val='.$token;
+                        
                         $subject = 'Verificación de correo electrónico';
                         $body = "Gracias por registrarte en RRHH Ingenia, {$data->first_name}, ingresa a nuestra página e inicia sesión con tu correo electrónico.<br/><br/> Contraseña : {$data->password} <br /> <br /> Para continuar, es necesario que verifiques tu correo dando clic en el siguiente <a href={$url}>enlace</a>";
-
-                        Utils::sendEmail($data->email, $data->first_name . ' ' . $data->surname, $subject, $body);
-                        header('location:' . base_url . 'candidato/datos_cv');
+                        
+                        Utils::sendEmail($data->email, $data->first_name.' '.$data->surname, $subject, $body);
+                        header('location:'.base_url.'candidato/datos_cv');
                     } else {
                         $color = 'alert-danger';
                         $message = 'Error al guardar sus datos';
@@ -1740,20 +1812,20 @@ class CandidatoController
                     $icon = 'fas fa-ban';
                     $status = 2;
                 }
-            } else {
+            }else {
                 $color = 'alert-warning';
-                $message = 'La dirección de correo ' . $data->email . ' ya se encuentra registrada.';
+                $message = 'La dirección de correo '.$data->email.' ya se encuentra registrada.';
                 $icon = 'fas fa-exclamation-triangle';
                 $status = 3;
             }
+
         }
         require_once './views/user/header.php';
         require_once './views/candidate/register.php';
         require_once './views/user/footer.php';
     }
 
-    public function datos_cv()
-    {
+    public function datos_cv() {
         if (isset($_SESSION['data'])) {
             $id_candidate = $_SESSION['data']->id_candidate;
             $candidate = new Candidate();
@@ -1770,12 +1842,12 @@ class CandidatoController
                 $experiences = $experience->getExperiencesByCandidate();
                 if ($experiences)
                     $_SESSION['data']->experiences = $experiences;
-            } else
+            }  else
                 $experiences = $_SESSION['data']->experiences;
 
             foreach ($_SESSION['data']->experiences as $key => $value)
                 $_SESSION['data']->experiences[$key]['experience_id'] = $key + 1;
-
+            
             $education = [];
             if (!isset($_SESSION['data']->education)) {
                 $education = new CandidateEducation();
@@ -1819,7 +1891,7 @@ class CandidatoController
                 $aptitudes = $aptitude->getAptitudesByCandidate();
                 if ($aptitudes)
                     $_SESSION['data']->aptitudes = $aptitudes;
-            } else
+            }else
                 $aptitudes = $_SESSION['data']->aptitudes;
 
             foreach ($_SESSION['data']->aptitudes as $key => $value)
@@ -1829,12 +1901,12 @@ class CandidatoController
             require_once './views/layout/navbar.php';
             require_once './views/candidate/cv.php';
             require_once './views/layout/footer.php';
-        } else
-            header('location:' . base_url . 'candidato/registrar');
-    }
 
-    public function image()
-    {
+        }else
+            header('location:'.base_url.'candidato/registrar');
+    }
+    
+    public function image() {
         if (isset($_POST['Objeto'])) {
             $Objeto = $_POST['Objeto'];
 
@@ -1847,51 +1919,51 @@ class CandidatoController
 
             $tempFilePath = sys_get_temp_dir() . '\\' . $filename;
 
-            file_put_contents($tempFilePath, $Objeto);
+            file_put_contents($tempFilePath, $Objeto); 
 
             $type = pathinfo($tempFilePath, PATHINFO_EXTENSION);
             $img_content = file_get_contents($tempFilePath);
-
+                    
             $img_base64 = 'data:image/' . $type . ';base64,' . base64_encode($img_content);
             $_SESSION['route'] = $img_base64;
             echo json_encode(array('status' => 1, 'imagen' => $_SESSION['route']));
-        } else
-            header('location:' . base_url);
+        }else
+            header('location:'.base_url);
     }
 
-    public function delete_image()
-    {
+    public function delete_image(){
         if (isset($_SESSION['route']) && !empty($_SESSION['route'])) {
             unset($_SESSION['route']);
-            echo json_encode(array('status' => 1, 'imagen' => base_url . 'dist/img/user-icon.png'));
-        } else
-            header('location:' . base_url);
+            echo json_encode(array('status' => 1, 'imagen' => base_url.'dist/img/user-icon.png'));
+        }else
+            header('location:'.base_url);
     }
-
-
-
-
-
+	
+	
+	
+	
+	
     public function sideserver()
     {
-
-        $extrawhere = '';
-
+		//gabo 4 oct
+			$extrawhere = '';
+		//gabo 4 oct
+		
         $_GET['filtros'] .= ($_GET['id_language'] != '') ? "and id_language like " . "'%" . $_GET['id_language'] . "%'" : '';
-        $extrawhere .= substr($_GET['filtros'], 3);
+        $extrawhere = substr($_GET['filtros'], 3);
         $tabla = "rrhhinge_Candidatos.filtros_candidatos fc";
-
-        if ($_GET['clave'] != '') {
+		
+		  if ($_GET['clave'] != '') {
             $extrawhere = " ( first_name LIKE " . "'%" . $_GET['clave'] . "%' OR job_title LIKE " . "'%" . $_GET['clave'] . "%' OR description LIKE " . "'%" . $_GET['clave'] . "%' OR experiences LIKE " . "'%" . $_GET['clave'] . "%' OR aptitudes LIKE " . "'%" . $_GET['clave'] . "%')";
         }
-
-        if ($extrawhere != '') {
+		
+	//gabo 4 oct
+   if ($extrawhere != '') {
             $extrawhere .= " AND created_at > '2022-06-01' ";
         } else {
             $extrawhere = " created_at > '2022-06-01' ";
         }
-
-
+//gabo 4 oct
 
         $primaryKey = 'id';
         $columns = array(
@@ -1922,17 +1994,17 @@ class CandidatoController
 
         );
 
-        $sql_details = array(
-            'user' => '',
-            'pass' => '',
-            'db'   => 'reclutamiento',
-            'host' => 'localhost'
-        );
+         $sql_details = array(
+             'user' => 'reclutador',
+             'pass' => 'Sr65s$0z',
+             'db'   => 'reclutamiento',
+             'host' => '148.72.144.152'
+         );
 
         $botones = 1;
 
         require("helpers/SideServer/Candidatos/ssp.php");
-
+     
         //si la busqueda viene del datatable input
         $_POST['search']['value'] != "" ? $extrawhere = '' : '';
 
@@ -1942,10 +2014,8 @@ class CandidatoController
     }
 
 
-    //gabo 12 oct
-
-
-    public function save_contact()
+	
+	 public function save_contact()
     {
         if (Utils::isValid($_POST)) {
 
@@ -1980,4 +2050,6 @@ class CandidatoController
             echo json_encode(array('status' => 0));
         }
     }
+	
+
 }

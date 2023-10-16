@@ -108,7 +108,15 @@ class CandidateContact
         return $fetch;
     }
 
+   public function getAll()
+    {
 
+        $stmt = $this->db->prepare("SELECT cc.*,v.vacancy FROM candidate_contact cc INNER JOIN vacancies v on  cc.id_vacancy=v.id order by id desc");
+
+        $stmt->execute();
+        $fetch =  $stmt->fetchAll();
+        return $fetch;
+    }
     public function save()
     {
         $result = false;
@@ -163,6 +171,22 @@ class CandidateContact
 
         $result = $stmt->execute();
 
+        return $result;
+    }
+	
+	 public function updateStatus()
+    {
+        $result = false;
+
+        $id = $this->getId();
+        $status = $this->getStatus();
+
+        $stmt = $this->db->prepare("UPDATE candidate_contact SET status=:status WHERE id=:id");
+
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->bindParam(":status", $status, PDO::PARAM_INT);
+
+        $result = $stmt->execute();
         return $result;
     }
 }

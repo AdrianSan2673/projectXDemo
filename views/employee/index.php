@@ -50,6 +50,7 @@
             <tr>
               <th class="align-middle">Nombre</th>
               <th class="align-middle">Puesto</th>
+			  <th class="align-middle">Correo electronico</th>
               <th class="align-middle">Edad</th>
               <th class="align-middle">Empresa contratante</th>
               <th class="align-middle">Fecha de inicio</th>
@@ -63,6 +64,7 @@
               <tr>
                 <td class="align-middle"><?= $employee['first_name'] . ' ' . $employee['surname'] . ' ' . $employee['last_name'] ?></td>
                 <td class="text-center align-middle"><?= $employee['title'] ?></td>
+				<td class="text-center align-middle"><?= $employee['email'] ?></td>
                 <td class="text-center align-middle"><?= $employee['date_birth']  ?> Años</td>
                 <td class="text-center align-middle"><?= $employee['Nombre_Cliente']  ?></td>
                 <td class="text-center align-middle"><?= Utils::getDate($employee['start_date']) ?></td>

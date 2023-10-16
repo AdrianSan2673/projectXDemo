@@ -84,7 +84,7 @@
                     <div class="form-group" id="select_empresa">
                         <label for="customer" class="col-form-label">Empresa</label>
                         <?php $customers = Utils::showCustomers(); ?>
-                        <select name="cliente_asignado" id="cliente_asignado" class="form-control select2">
+                        <select name="cliente_asignado" id="cliente_asignado" class="form-control select2" >
                             <?php $clientes = !Utils::isCustomerSA() ? Utils::showClientes() : Utils::showClientesPorUsuario() ?>
                             <option value="" hidden selected></option>
                             <?php foreach ($clientes as $cliente) : ?>
@@ -132,7 +132,6 @@
     </div>
 </div>
 
-<!-- gabo 2 oct -->
 <div class="modal fade" id="modal_send_email">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -159,13 +158,9 @@
     </div>
 </div>
 
-
-
 <script>
-    //gabo 2 oct
-
-
-    document.querySelector('#btn_send_email').addEventListener('click', e => { //gabo duplicar
+	//gabo 2 oct
+	 document.querySelector('#btn_send_email').addEventListener('click', e => { //gabo duplicar
         e.preventDefault();
 
         document.getElementById("btn_send_email").disabled = true;
@@ -173,17 +168,8 @@
         document.getElementById("texto").hidden = true;
         document.getElementById("imagen").hidden = false;
         let user = new User();
-        var respuesta = user.Send_Email();
-
-
+        user.Send_Email();
     })
-
-
-
-
-
-
-
 
     document.querySelector('#modal_contacto_reclu').addEventListener('submit', e => {
         e.preventDefault();

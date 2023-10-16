@@ -254,6 +254,24 @@
                   </p>
                 </a>
               </li>
+			  
+			  
+			  
+			       <?php if (Utils::isAdmin() || Utils::isRecruitmentManager() || Utils::isJunior() || Utils::isSenior()) : ?>
+                        <li class="nav-item">
+                            <a href="<?= base_url ?>CandidateContact/index"
+                                class="nav-link<?= $_GET['controller'] == 'CandidateContact' ? ' active' : '' ?>">
+                                <i class="nav-icon fa fa-address-book"></i>
+                                <p>
+                                    Contacto Candidatos
+                                </p>
+                            </a>
+                        </li>
+                        <?php endif ?>
+			  
+			  
+			  
+			  
 
               <?php if (Utils::isAdmin()||Utils::isRecruitmentManager()||Utils::isJunior()||Utils::isSenior()) : ?>
               <li class="nav-item">
@@ -798,7 +816,7 @@
 
             <?php endif ?>
             <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor()) : ?>
-              <li class="nav-item has-treeview <?= $_GET['controller'] == 'reporte' ? ' menu-open' : '' ?>">
+              <li class="nav-item has-treeview <?= $_GET['controller'] == 'reporte' ? ' menu-open' : '' ?>" >
                 <a href="#" class="nav-link<?= $_GET['controller'] == 'reporte' ? ' active' : '' ?>">
                   <i class="nav-icon fas fa-chart-pie"></i>
                   <p>

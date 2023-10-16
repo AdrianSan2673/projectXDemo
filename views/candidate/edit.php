@@ -63,7 +63,7 @@
                                         </div>
                                         <div class="row">
                                             <!-- ===[gabo 1 agosto operativa]== -->
-                                            <div class="col-md-4">
+                                            <div class="col-md-4" >
                                                 <!-- gabo 18 abril vacante -->
                                                 <div class="form-group">
                                                     <label for="date_birth" class="col-form-label">Fecha de
@@ -79,7 +79,7 @@
                                                 </div>
                                             </div>
                                             <!-- gabo 18 abril vacante -->
-                                            <div class="col-md-3">
+                                            <div class="col-md-3" <?= (isset($vacante->type) && ($vacante->type == 1 || $vacante->type == 4)) ? 'hidden' : ''; ?>>
                                                 <div class="form-group">
                                                     <label for="gender" class="col-form-label">Sexo</label>
                                                     <?php $genders = Utils::showGenders(); ?>
@@ -93,7 +93,7 @@
                                                 </div>
                                             </div>
                                             <!-- ===[gabo 1 agosto operativa]== -->
-                                            <div class="col-md-3">
+                                            <div class="col-md-3" <?= (isset($vacante->type) && ($vacante->type == 1 || $vacante->type == 4)) ? 'hidden' : ''; ?>>
                                                 <!-- ===[gabo 1 agosto operativa]== -->
                                                 <div class="form-group">
                                                     <label for="id_civil_status" class="col-form-label">Estado
@@ -157,9 +157,8 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="description" class="col-form-label">
-                                                <?= (isset($vacante->type) && ($vacante->type == 1 || $vacante->type == 4)) ? 'Observaciones' : 'Reseña breve';  ?></label>
-                                            <textarea placeholder="Este campo no es obligatorio, escribe la reseña cuando se termine de entrevistar al candidato." name="description" id="description" rows="10" class="form-control"><?= isset($candidato) && is_object($candidato) ? $candidato->description : ''; ?></textarea>
+                                            <label for="description" class="col-form-label"> <?= isset($vacante->type)&& ($vacante->type == 1 || $vacante->type == 4) ? 'Observaciones' : 'Reseña breve';  ?></label>
+                                            <textarea placeholder="Este campo no es obligatorio, escribe la reseña cuando se termine de entrevistar al candidato." name="description" id="description" rows="10" class="form-control"><?= isset($candidato) && is_object($candidato) ? (isset($candidateDirectory)) ? $candidateDirectory->comment : $candidato->description : ''; ?></textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -199,15 +198,15 @@
                                                 personal?</label>
                                             <input type="file" id="resume" name="resume" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf">
                                         </div>
-                                        <!-- gabo 29 sept -->
+										 <!-- gabo 29 sept -->
                                         <div class="row" id="documento_cargado">
                                             <?php if (isset($resume)  and $_GET['action'] == 'editar') : ?>
-                                                <div class="col-8">
-                                                    <label for="psycho" class="col-form-label">Documento Cargado:</label>
-                                                    <a class="btn-success btn" href="<?= $resume ?>" target="_blank">Ver
-                                                        CV</a>
-                                                </div>
-                                                <br>
+                                            <div class="col-8">
+                                                <label for="psycho" class="col-form-label">Documento Cargado:</label>
+                                                <a class="btn-success btn" href="<?= $resume ?>" target="_blank">Ver
+                                                    CV</a>
+                                            </div>
+                                            <br>
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -228,11 +227,11 @@
                                         </div>
                                     </div>
                                     <!-- ===[gabo 1 agosto operativa]== -->
-                                    <div class="col-md-4">
+                                    <div class="col-md-4" <?= (isset($vacante->type) && ($vacante->type == 1 || $vacante->type == 4)) ? 'hidden' : ''; ?> >
                                         <!-- ===[gabo 1 agosto operativa]== -->
-                                        <div class="form-group">
+                                        <div class="form-group" >
                                             <label for="cellphone" class="col-form-label">Celular:</label>
-                                            <input type="text" name="cellphone" id="cellphone" maxlength="13" class="form-control" value="<?= isset($candidato) && is_object($candidato) ? $candidato->cellphone : ''; ?>" data-inputmask='"mask": "999 999  9999"' data-mask>
+                                            <input type="text" name="cellphone" id="cellphone" maxlength="13" class="form-control"  value="<?= isset($candidato) && is_object($candidato) ? $candidato->cellphone : ''; ?>" data-inputmask='"mask": "999 999  9999"' data-mask>
                                         </div>
                                     </div>
                                     <?php if (Utils::isCandidate()) : ?>
@@ -242,7 +241,7 @@
                                                 <input type="email" name="email" id="email" readonly value="<?= $_SESSION['identity']->email ?>" class="form-control" required>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+									  <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="id_state" class="col-form-label">Estado</label>
                                                 <?php $states = Utils::showStates(); ?>
@@ -255,7 +254,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="id_city" class="col-form-label">Ciudad</label>
                                                 <select name="id_city" id="id_city" class="form-control select2bs4" style="width: 100%;" required>
@@ -271,6 +270,7 @@
                                                 </select>
                                             </div>
                                         </div>
+									
                                     <?php else : ?>
                                         <!-- ===[gabo 1 agosto operativa]== -->
                                         <div class="col-md-4" <?= (isset($vacante->type) && ($vacante->type == 1 || $vacante->type == 4)) ? 'hidden' : ''; ?>>
@@ -340,7 +340,7 @@
 
                         <!-- gabo 15 junio experiencia candidato -->
                         <?php if (!Utils::isCandidate()  && isset($_GET['vacante']) && $_GET['vacante'] != '' && ($vacante->type == 1 || $vacante->type == 4)) :  ?>
-                            <div class="card card-success">
+                            <div class="card card-success" >
                                 <div class="card-header" style="text-align: center;">
                                     <h4 class="card-title">
                                         Experiencia
@@ -392,21 +392,25 @@
                                 </div>
                             </div>
                         <?php endif; ?>
-                        <input type="" id="bandera" name="bandera" value="0">
-                        <div class="card-footer">
+                        <input type="hidden" id="bandera" name="bandera" value="0">
+ <div class="card-footer">
                             <div class="card-body">
                                 <div class="row">
 
-                                    <div class="col-md-5"> <?php if (Utils::isCandidate()) : ?> <a href="<?= base_url ?>candidato/ver" class="btn btn-secondary btn-lg float-left">Regresar</a>
+                                    <div class="col-md-5"> <?php if (Utils::isCandidate()) : ?> <a
+                                            href="<?= base_url ?>candidato/ver"
+                                            class="btn btn-secondary btn-lg float-left">Regresar</a>
                                         <?php else : ?>
-                                            <a href="javascript: history.back()" class="btn btn-lg btn-secondary float-left">Regresar</a>
+                                        <a href="javascript: history.back()"
+                                            class="btn btn-lg btn-secondary float-left">Regresar</a>
                                         <?php endif ?>
                                     </div>
 
                                     <div class="col-md-2" style="text-align:center">
                                         <?php if ((Utils::isAdmin() or Utils::isRecruitmentManager() or Utils::isJunior()  or Utils::isSenior())  and isset($guardar_en_bolsa)) : ?>
-                                            <button class="btn btn-lg btn-orange float-left " type="submit" value="0" name="directory" id="directory">Guardar en
-                                                bolsa</button>
+                                        <button class="btn btn-lg btn-orange float-left " type="submit" value="0"
+                                            name="directory" id="directory">Guardar en
+                                            bolsa</button>
                                         <?php endif ?>
 
 
@@ -414,12 +418,13 @@
 
 
                                     <div class="col-md-5">
-                                        <button class="btn btn-lg btn-orange float-right ml-1" id="candidate_submit"><?= ($_GET['action'] == 'crear' ? 'Crear' : 'Guardar') ?></button>
+                                        <button class="btn btn-lg btn-orange float-right ml-1"
+                                            id="candidate_submit"><?= ($_GET['action'] == 'crear' ? !Utils::isCandidate()?'Postular':'Crear' : 'Guardar') ?></button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
+	
                     </form>
                 </div>
             </div>
@@ -438,6 +443,7 @@
     </script>
 <?php endif ?>
 <script>
+	
     document.querySelector('#id_area').onchange = function() {
         let subareas = new Subarea();
         subareas.id_area = document.querySelector("#id_area").value;
@@ -492,7 +498,7 @@
                     if (vacios == 0) {
                         candidate.create();
                     } else {
-                        document.querySelector("#bandera").value = 0;
+						document.querySelector("#bandera").value = 0;
                         utils.showToast('Llena los datos de experiencia correctamente', 'error');
                         //document.querySelector("#candidate-form #candidate_submit").disabled = false;
                     }
@@ -563,7 +569,7 @@
                 telephone: {
                     required: "Su número de teléfono es requerido"
                 },
-
+              
                 email: {
                     required: "Su dirección de correo electrónico es requerida",
                     email: "Formato incorrecto de correo invalido. Verifíquelo por favor."
@@ -582,11 +588,11 @@
             errorPlacement: function(error, element) {
                 error.addClass('invalid-feedback');
                 element.closest('.form-group').append(error);
-                document.querySelector("#bandera").value = 0;
+				document.querySelector("#bandera").value = 0;
             },
             highlight: function(element, errorClass, validClass) {
                 $(element).addClass('is-invalid');
-                document.querySelector("#bandera").value = 0;
+				document.querySelector("#bandera").value = 0;
             },
             unhighlight: function(element, errorClass, validClass) {
                 $(element).removeClass('is-invalid');
@@ -621,7 +627,7 @@
             const row = document.createElement('div');
             row.classList.add('row');
             row.classList.add('borrados');
-            row.style.marginBottom = "0.6rem";
+			row.style.marginBottom = "0.6rem";
             row.style.border = "1px solid #98AE98";
             row.style.borderRadius = "15px";
             row.style.padding = "1rem";

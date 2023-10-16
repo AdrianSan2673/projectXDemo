@@ -18,7 +18,11 @@
     <!-- /.col -->
     </div>
 </form>
-
+<br><br><br>
+<a href="<?=$client->createAuthUrl(); ?>" class="btn btn-block btn-default mt-3" style="display: none;">
+    <i class="fab fa-google mr-3"></i> Continuar con Google
+</a>
+<br>
 <p class="mt-3 mb-1 text-center">
     <a href="<?=base_url?>usuario/recuperar_cuenta" class="bg-danger btn btn-block">¿Has olvidado tu contraseña?</a>
 </p>

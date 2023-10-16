@@ -354,7 +354,7 @@ class CandidatosObsGenerales{
         $Proporciona_Contacto = $this->getProporciona_Contacto();
         $Informacion_Congruente = $this->getInformacion_Congruente();
         $Factor_Riesgo = $this->getFactor_Riesgo();
-        $Cual_Factor_Riesgo = $this->getFactor_Riesgo();
+        $Cual_Factor_Riesgo = $this->getCual_Factor_Riesgo();
         $Estabilidad_Laboral = $this->getEstabilidad_Laboral();
 		
         $stmt = $this->db->prepare("INSERT INTO rh_Candidatos_Obs_Generales(Candidato, Info_Proporcionada_Candidato, Referencias_Laborales, Info_Confiable,
@@ -398,7 +398,7 @@ class CandidatosObsGenerales{
         $Proporciona_Contacto = $this->getProporciona_Contacto();
         $Informacion_Congruente = $this->getInformacion_Congruente();
         $Factor_Riesgo = $this->getFactor_Riesgo();
-        $Cual_Factor_Riesgo = $this->getFactor_Riesgo();
+        $Cual_Factor_Riesgo = $this->getCual_Factor_Riesgo();
         $Estabilidad_Laboral = $this->getEstabilidad_Laboral();
 
         $stmt = $this->db->prepare("UPDATE rh_Candidatos_Obs_Generales
@@ -442,7 +442,7 @@ class CandidatosObsGenerales{
         $Proporciona_Contacto = $this->getProporciona_Contacto();
         $Informacion_Congruente = $this->getInformacion_Congruente();
         $Factor_Riesgo = $this->getFactor_Riesgo();
-        $Cual_Factor_Riesgo = $this->getFactor_Riesgo();
+        $Cual_Factor_Riesgo = $this->getCual_Factor_Riesgo();
         $Estabilidad_Laboral = $this->getEstabilidad_Laboral();
 		
         $stmt = $this->db->prepare("INSERT INTO rh_Candidatos_Obs_Generales(Candidato, Info_Proporcionada_Candidato, Referencias_Laborales, Info_Confiable,
@@ -480,7 +480,7 @@ class CandidatosObsGenerales{
         $Proporciona_Contacto = $this->getProporciona_Contacto();
         $Informacion_Congruente = $this->getInformacion_Congruente();
         $Factor_Riesgo = $this->getFactor_Riesgo();
-        $Cual_Factor_Riesgo = $this->getFactor_Riesgo();
+        $Cual_Factor_Riesgo = $this->getCual_Factor_Riesgo();
         $Estabilidad_Laboral = $this->getEstabilidad_Laboral();
 
         $stmt = $this->db->prepare("UPDATE rh_Candidatos_Obs_Generales

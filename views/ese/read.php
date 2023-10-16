@@ -158,7 +158,7 @@
                             <a class="nav-link" id="vert-tabs-profile-tab" data-toggle="pill" href="#vert-tabs-profile" role="tab" aria-controls="vert-tabs-profile" aria-selected="false">Referencias laborales</a>
                             <a class="nav-link" id="vert-tabs-messages-tab" data-toggle="pill" href="#vert-tabs-messages" role="tab" aria-controls="vert-tabs-messages" aria-selected="false">Documentos</a>
                             <a class="nav-link" id="vert-tabs-settings-tab" data-toggle="pill" href="#vert-tabs-settings" role="tab" aria-controls="vert-tabs-settings" aria-selected="false">Preguntas</a>
-                            <a class="nav-link" id="vert-tabs-google-search-tab" data-toggle="pill" href="#vert-tabs-google-search" role="tab" aria-controls="vert-tabs-google-search" aria-selected="false" style="display: none;">Búsqueda Google</a>
+                            <a class="nav-link" id="vert-tabs-google-search-tab" data-toggle="pill" href="#vert-tabs-google-search" role="tab" aria-controls="vert-tabs-google-search" aria-selected="false" style="display: block;">Búsqueda Google</a>
                             <a class="nav-link" id="vert-tabs-comentarios_generales_inv-tab" data-toggle="pill" href="#vert-tabs-comentarios_generales_inv" role="tab" aria-controls="vert-tabs-comentarios_generales_inv" aria-selected="false">Comentarios generales</a>
                           </div>
                         </div>

@@ -835,7 +835,7 @@ class ContenidoEstudio{
         this.template_datos_generales.querySelectorAll('p')[10].textContent = data.IMSS;
         this.template_datos_generales.querySelectorAll('p')[11].textContent = data.RFC;
 		
- 	  if (data.ID_Empresa==413|| data.ID_Empresa==480) {
+ 	  if (data.ID_Empresa==413|| data.ID_Empresa==480 && data.Cliente!=669) {
             this.template_datos_generales.querySelectorAll('b')[12].style.display='block'
             this.template_datos_generales.querySelectorAll('p')[12].textContent = data.Numero_Licencia;
         }

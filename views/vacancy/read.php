@@ -406,6 +406,23 @@
                         </div>
                     <?php endif; ?>
 
+					  <?php if (Utils::isAdmin()  || Utils::isRecruitmentManager() || Utils::isSenior()|| Utils::isJunior()) : ?>
+                    <div class="card card-red">
+                        <div class="card-header">
+                            <h4 class="card-title">
+                                Notas
+                            </h4>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="row " style="margin-bottom:0.6rem;padding:1rem">
+                                <div class="col-md-12">
+                                    <p><?= $vacante->notes ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endif; ?>
 
                 </div>
                 <div class="col-md-3">

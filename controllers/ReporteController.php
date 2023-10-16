@@ -900,8 +900,7 @@ class ReporteController
             $hoja3->getStyle('B1:B' . $fila)->applyFromArray($derecha);
             $hoja3->getStyle('A1:B1')->applyFromArray($estiloTituloColumnas);
 
-
-            $hoja4 = $documento->createSheet();
+     		$hoja4 = $documento->createSheet();
             $hoja4->setTitle('Clientes');
 
             $hoja4->getColumnDimension('A')->setAutoSize(true);
@@ -923,19 +922,25 @@ class ReporteController
             $hoja4->setCellValueByColumnAndRow(6, 1, '# ESE Finalizados');
 
             $hoja4->getColumnDimension('G')->setAutoSize(true);
-            $hoja4->setCellValueByColumnAndRow(7, 1, '# IL En Proceso');
+            $hoja4->setCellValueByColumnAndRow(7, 1, '# SOI Finalizados');
 
             $hoja4->getColumnDimension('H')->setAutoSize(true);
-            $hoja4->setCellValueByColumnAndRow(8, 1, '# ESE En Proceso');
+            $hoja4->setCellValueByColumnAndRow(8, 1, '# SMART Finalizados');
 
             $hoja4->getColumnDimension('I')->setAutoSize(true);
-            $hoja4->setCellValueByColumnAndRow(9, 1, '# IL TOTALES');
+            $hoja4->setCellValueByColumnAndRow(9, 1, '# IL En Proceso');
 
             $hoja4->getColumnDimension('J')->setAutoSize(true);
-            $hoja4->setCellValueByColumnAndRow(10, 1, '# ESE TOTALES');
+            $hoja4->setCellValueByColumnAndRow(10, 1, '# ESE En Proceso');
 
             $hoja4->getColumnDimension('K')->setAutoSize(true);
-            $hoja4->setCellValueByColumnAndRow(11, 1, '# Servicios TOTALES');
+            $hoja4->setCellValueByColumnAndRow(11, 1, '# IL TOTALES');
+
+            $hoja4->getColumnDimension('L')->setAutoSize(true);
+            $hoja4->setCellValueByColumnAndRow(12, 1, '# ESE TOTALES');
+
+            $hoja4->getColumnDimension('M')->setAutoSize(true);
+            $hoja4->setCellValueByColumnAndRow(13, 1, '# Servicios TOTALES');
 
             $fila = 2;
             foreach ($Clientes_Servicios as $cliente) {
@@ -945,24 +950,27 @@ class ReporteController
                 $hoja4->setCellValueByColumnAndRow(4, $fila, $cliente['No_RAL_Netos']);
                 $hoja4->setCellValueByColumnAndRow(5, $fila, $cliente['No_INV_FIN']);
                 $hoja4->setCellValueByColumnAndRow(6, $fila, $cliente['No_ESE_FIN']);
-                $hoja4->setCellValueByColumnAndRow(7, $fila, $cliente['No_INV_Proc']);
-                $hoja4->setCellValueByColumnAndRow(8, $fila, $cliente['No_ESE_Proc']);
-                $hoja4->setCellValueByColumnAndRow(9, $fila, $cliente['No_INV_Total']);
-                $hoja4->setCellValueByColumnAndRow(10, $fila, $cliente['No_ESE_Total']);
-                $hoja4->setCellValueByColumnAndRow(11, $fila, $cliente['No_Servicios']);
+                $hoja4->setCellValueByColumnAndRow(7, $fila, $cliente['No_SOI_FIN']);
+                $hoja4->setCellValueByColumnAndRow(8, $fila, $cliente['No_SMART_FIN']);
+                $hoja4->setCellValueByColumnAndRow(9, $fila, $cliente['No_INV_Proc']);
+                $hoja4->setCellValueByColumnAndRow(10, $fila, $cliente['No_ESE_Proc']);
+                $hoja4->setCellValueByColumnAndRow(11, $fila, $cliente['No_INV_Total']);
+                $hoja4->setCellValueByColumnAndRow(12, $fila, $cliente['No_ESE_Total']);
+                $hoja4->setCellValueByColumnAndRow(13, $fila, $cliente['No_Servicios']);
 
                 $fila++;
             }
 
             $fila = $fila - 1;
 
-            $hoja4->getStyle('A1:K' . $fila)->applyFromArray($estiloInformacion);
+            $hoja4->getStyle('A1:M' . $fila)->applyFromArray($estiloInformacion);
             $hoja4->getStyle('A1:A' . $fila)->applyFromArray($izquierda);
             $hoja4->getStyle('B1:B' . $fila)->applyFromArray($derecha);
             $hoja4->getStyle('C1:C' . $fila)->applyFromArray($derecha);
             $hoja4->getStyle('D1:D' . $fila)->applyFromArray($derecha);
             $hoja4->getStyle('E1:E' . $fila)->applyFromArray($derecha);
-            $hoja4->getStyle('A1:K1')->applyFromArray($estiloTituloColumnas);
+            $hoja4->getStyle('A1:M1')->applyFromArray($estiloTituloColumnas);
+            $hoja4->getStyle('A:M')->applyFromArray($centrado);
 
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="Reporte de Operaciones del ' . $start_date . ' al ' . $end_date . '.xlsx"');
@@ -979,13 +987,12 @@ class ReporteController
         }
     }
 
-      public function detallado_anual()
+    public function detallado_anual()
     {
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager())) {
             $Anio = isset($_GET['anio']) ? $_GET['anio'] : date('Y');
             $candidato = new Candidatos();
             $candidato->setFecha_solicitud($Anio);
-
             $clientes = $candidato->getDetallePorAnio();
 
             $documento = new Spreadsheet();
@@ -1252,355 +1259,366 @@ class ReporteController
                 )
             );
 
-            $hoja->getColumnDimension('A')->setAutoSize(true);
+            $hoja->getColumnDimension('A')->setAutoSize(false);
+            $hoja->getColumnDimension('A')->setWidth(40);
             $hoja->setCellValueByColumnAndRow(1, 1, 'Cliente');
 
-            $hoja->getColumnDimension('B')->setAutoSize(true);
-            $hoja->setCellValueByColumnAndRow(2, 1, 'Plaza');
+            $hoja->getColumnDimension('B')->setAutoSize(false);
+            $hoja->getColumnDimension('B')->setWidth(30);
+            $hoja->setCellValueByColumnAndRow(2, 1, 'Cuenta');
 
-            $hoja->getColumnDimension('C')->setAutoSize(true);
-            $hoja->setCellValueByColumnAndRow(3, 1, '$ RAL');
+            $hoja->getColumnDimension('C')->setAutoSize(false);
+            $hoja->getColumnDimension('C')->setWidth(25);
+            $hoja->setCellValueByColumnAndRow(3, 1, 'Logistica');
 
             $hoja->getColumnDimension('D')->setAutoSize(true);
-            $hoja->setCellValueByColumnAndRow(4, 1, '$ IL');
+            $hoja->setCellValueByColumnAndRow(4, 1, 'Plaza');
 
             $hoja->getColumnDimension('E')->setAutoSize(true);
-            $hoja->setCellValueByColumnAndRow(5, 1, '$ ESE');
+            $hoja->setCellValueByColumnAndRow(5, 1, '$ RAL');
 
             $hoja->getColumnDimension('F')->setAutoSize(true);
-            $hoja->setCellValueByColumnAndRow(6, 1, 'Enero');
+            $hoja->setCellValueByColumnAndRow(6, 1, '$ IL');
 
-            $hoja->getColumnDimension('L')->setAutoSize(true);
-            $hoja->setCellValueByColumnAndRow(12, 1, 'Febrero');
+            $hoja->getColumnDimension('G')->setAutoSize(true);
+            $hoja->setCellValueByColumnAndRow(7, 1, '$ ESE');
 
-            $hoja->getColumnDimension('R')->setAutoSize(true);
-            $hoja->setCellValueByColumnAndRow(18, 1, 'Marzo');
 
-            $hoja->getColumnDimension('V')->setAutoSize(true);
-            $hoja->setCellValueByColumnAndRow(24, 1, 'Abril');
+            $hoja->getColumnDimension('H')->setAutoSize(true);
+            $hoja->setCellValueByColumnAndRow(8, 1, 'Enero');
 
-            $hoja->getColumnDimension('AA')->setAutoSize(true);
-            $hoja->setCellValueByColumnAndRow(30, 1, 'Mayo');
+            $hoja->getColumnDimension('N')->setAutoSize(true);
+            $hoja->setCellValueByColumnAndRow(14, 1, 'Febrero');
+
+            $hoja->getColumnDimension('T')->setAutoSize(true);
+            $hoja->setCellValueByColumnAndRow(20, 1, 'Marzo');
+
+            $hoja->getColumnDimension('Z')->setAutoSize(true);
+            $hoja->setCellValueByColumnAndRow(26, 1, 'Abril');
 
             $hoja->getColumnDimension('AF')->setAutoSize(true);
-            $hoja->setCellValueByColumnAndRow(36, 1, 'Junio');
+            $hoja->setCellValueByColumnAndRow(32, 1, 'Mayo');
 
-            $hoja->getColumnDimension('AK')->setAutoSize(true);
-            $hoja->setCellValueByColumnAndRow(42, 1, 'Julio');
+            $hoja->getColumnDimension('AL')->setAutoSize(true);
+            $hoja->setCellValueByColumnAndRow(38, 1, 'Junio');
 
-            $hoja->getColumnDimension('AP')->setAutoSize(true);
-            $hoja->setCellValueByColumnAndRow(48, 1, 'Agosto');
+            $hoja->getColumnDimension('AR')->setAutoSize(true);
+            $hoja->setCellValueByColumnAndRow(44, 1, 'Julio');
 
-            $hoja->getColumnDimension('AU')->setAutoSize(true);
-            $hoja->setCellValueByColumnAndRow(54, 1, 'Septiembre');
+            $hoja->getColumnDimension('AX')->setAutoSize(true);
+            $hoja->setCellValueByColumnAndRow(50, 1, 'Agosto');
 
-            $hoja->getColumnDimension('AZ')->setAutoSize(true);
-            $hoja->setCellValueByColumnAndRow(60, 1, 'Octubre');
+            $hoja->getColumnDimension('BD')->setAutoSize(true);
+            $hoja->setCellValueByColumnAndRow(56, 1, 'Septiembre');
 
-            $hoja->getColumnDimension('BN')->setAutoSize(true);
-            $hoja->setCellValueByColumnAndRow(66, 1, 'Noviembre');
+            $hoja->getColumnDimension('BJ')->setAutoSize(true);
+            $hoja->setCellValueByColumnAndRow(62, 1, 'Octubre');
 
-            $hoja->getColumnDimension('BT')->setAutoSize(true);
-            $hoja->setCellValueByColumnAndRow(72, 1, 'Diciembre');
+            $hoja->getColumnDimension('BP')->setAutoSize(true);
+            $hoja->setCellValueByColumnAndRow(68, 1, 'Noviembre');
+
+            $hoja->getColumnDimension('BV')->setAutoSize(true);
+            $hoja->setCellValueByColumnAndRow(74, 1, 'Diciembre');
 
             /** ENERO */
-            $hoja->getColumnDimension('F')->setAutoSize(false);
-            $hoja->getColumnDimension('F')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(6, 2, '  RS');
-
-            $hoja->getColumnDimension('G')->setAutoSize(false);
-            $hoja->getColumnDimension('G')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(7, 2, '  RA');
-
             $hoja->getColumnDimension('H')->setAutoSize(false);
             $hoja->getColumnDimension('H')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(8, 2, '  RN');
+            $hoja->setCellValueByColumnAndRow(8, 2, '  RS');
 
             $hoja->getColumnDimension('I')->setAutoSize(false);
             $hoja->getColumnDimension('I')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(9, 2, '  IL');
+            $hoja->setCellValueByColumnAndRow(9, 2, '  RA');
 
             $hoja->getColumnDimension('J')->setAutoSize(false);
             $hoja->getColumnDimension('J')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(10, 2, '  ESE ');
+            $hoja->setCellValueByColumnAndRow(10, 2, '  RN');
 
             $hoja->getColumnDimension('K')->setAutoSize(false);
             $hoja->getColumnDimension('K')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(11, 2, 'Total');
+            $hoja->setCellValueByColumnAndRow(11, 2, '  IL');
 
-            /** FEBRERO */
             $hoja->getColumnDimension('L')->setAutoSize(false);
             $hoja->getColumnDimension('L')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(12, 2, '  RS');
+            $hoja->setCellValueByColumnAndRow(12, 2, '  ESE ');
 
             $hoja->getColumnDimension('M')->setAutoSize(false);
             $hoja->getColumnDimension('M')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(13, 2, '  RA');
+            $hoja->setCellValueByColumnAndRow(13, 2, 'Total');
 
+            /** FEBRERO */
             $hoja->getColumnDimension('N')->setAutoSize(false);
             $hoja->getColumnDimension('N')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(14, 2, '  RN');
+            $hoja->setCellValueByColumnAndRow(14, 2, '  RS');
 
             $hoja->getColumnDimension('O')->setAutoSize(false);
             $hoja->getColumnDimension('O')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(15, 2, '  IL');
+            $hoja->setCellValueByColumnAndRow(15, 2, '  RA');
 
             $hoja->getColumnDimension('P')->setAutoSize(false);
             $hoja->getColumnDimension('P')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(16, 2, '  ESE ');
+            $hoja->setCellValueByColumnAndRow(16, 2, '  RN');
 
             $hoja->getColumnDimension('Q')->setAutoSize(false);
             $hoja->getColumnDimension('Q')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(17, 2, 'Total');
+            $hoja->setCellValueByColumnAndRow(17, 2, '  IL');
 
-            /** MARZO */
             $hoja->getColumnDimension('R')->setAutoSize(false);
             $hoja->getColumnDimension('R')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(18, 2, '  RS');
+            $hoja->setCellValueByColumnAndRow(18, 2, '  ESE ');
 
             $hoja->getColumnDimension('S')->setAutoSize(false);
             $hoja->getColumnDimension('S')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(19, 2, '  RA');
+            $hoja->setCellValueByColumnAndRow(19, 2, 'Total');
 
+            /** MARZO */
             $hoja->getColumnDimension('T')->setAutoSize(false);
             $hoja->getColumnDimension('T')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(20, 2, '  RN');
+            $hoja->setCellValueByColumnAndRow(20, 2, '  RS');
 
             $hoja->getColumnDimension('U')->setAutoSize(false);
             $hoja->getColumnDimension('U')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(21, 2, '  IL');
+            $hoja->setCellValueByColumnAndRow(21, 2, '  RA');
 
             $hoja->getColumnDimension('V')->setAutoSize(false);
             $hoja->getColumnDimension('V')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(22, 2, '  ESE ');
+            $hoja->setCellValueByColumnAndRow(22, 2, '  RN');
 
             $hoja->getColumnDimension('W')->setAutoSize(false);
             $hoja->getColumnDimension('W')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(23, 2, 'Total');
+            $hoja->setCellValueByColumnAndRow(23, 2, '  IL');
 
-            /** ABRIL */
             $hoja->getColumnDimension('X')->setAutoSize(false);
             $hoja->getColumnDimension('X')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(24, 2, '  RS');
+            $hoja->setCellValueByColumnAndRow(24, 2, '  ESE ');
 
             $hoja->getColumnDimension('Y')->setAutoSize(false);
             $hoja->getColumnDimension('Y')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(25, 2, '  RA');
+            $hoja->setCellValueByColumnAndRow(25, 2, 'Total');
 
+            /** ABRIL */
             $hoja->getColumnDimension('Z')->setAutoSize(false);
             $hoja->getColumnDimension('Z')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(26, 2, '  RN');
+            $hoja->setCellValueByColumnAndRow(26, 2, '  RS');
 
             $hoja->getColumnDimension('AA')->setAutoSize(false);
             $hoja->getColumnDimension('AA')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(27, 2, '  IL');
+            $hoja->setCellValueByColumnAndRow(27, 2, '  RA');
 
             $hoja->getColumnDimension('AB')->setAutoSize(false);
             $hoja->getColumnDimension('AB')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(28, 2, '  ESE ');
+            $hoja->setCellValueByColumnAndRow(28, 2, '  RN');
 
             $hoja->getColumnDimension('AC')->setAutoSize(false);
             $hoja->getColumnDimension('AC')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(29, 2, 'Total');
+            $hoja->setCellValueByColumnAndRow(29, 2, '  IL');
 
-            /** MAYO */
             $hoja->getColumnDimension('AD')->setAutoSize(false);
             $hoja->getColumnDimension('AD')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(30, 2, '  RS');
+            $hoja->setCellValueByColumnAndRow(30, 2, '  ESE ');
 
             $hoja->getColumnDimension('AE')->setAutoSize(false);
             $hoja->getColumnDimension('AE')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(31, 2, '  RA');
+            $hoja->setCellValueByColumnAndRow(31, 2, 'Total');
 
+            /** MAYO */
             $hoja->getColumnDimension('AF')->setAutoSize(false);
             $hoja->getColumnDimension('AF')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(32, 2, '  RN');
+            $hoja->setCellValueByColumnAndRow(32, 2, '  RS');
 
             $hoja->getColumnDimension('AG')->setAutoSize(false);
             $hoja->getColumnDimension('AG')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(33, 2, '  IL');
+            $hoja->setCellValueByColumnAndRow(33, 2, '  RA');
 
             $hoja->getColumnDimension('AH')->setAutoSize(false);
             $hoja->getColumnDimension('AH')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(34, 2, '  ESE ');
+            $hoja->setCellValueByColumnAndRow(34, 2, '  RN');
 
             $hoja->getColumnDimension('AI')->setAutoSize(false);
             $hoja->getColumnDimension('AI')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(35, 2, 'Total');
+            $hoja->setCellValueByColumnAndRow(35, 2, '  IL');
 
-            /** JUNIO */
             $hoja->getColumnDimension('AJ')->setAutoSize(false);
             $hoja->getColumnDimension('AJ')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(36, 2, '  RS');
+            $hoja->setCellValueByColumnAndRow(36, 2, '  ESE ');
 
             $hoja->getColumnDimension('AK')->setAutoSize(false);
             $hoja->getColumnDimension('AK')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(37, 2, '  RA');
+            $hoja->setCellValueByColumnAndRow(37, 2, 'Total');
 
+            /** JUNIO */
             $hoja->getColumnDimension('AL')->setAutoSize(false);
             $hoja->getColumnDimension('AL')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(38, 2, '  RN');
+            $hoja->setCellValueByColumnAndRow(38, 2, '  RS');
 
             $hoja->getColumnDimension('AM')->setAutoSize(false);
             $hoja->getColumnDimension('AM')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(39, 2, '  IL');
+            $hoja->setCellValueByColumnAndRow(39, 2, '  RA');
 
             $hoja->getColumnDimension('AN')->setAutoSize(false);
             $hoja->getColumnDimension('AN')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(40, 2, '  ESE ');
+            $hoja->setCellValueByColumnAndRow(40, 2, '  RN');
 
             $hoja->getColumnDimension('AO')->setAutoSize(false);
             $hoja->getColumnDimension('AO')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(41, 2, 'Total');
+            $hoja->setCellValueByColumnAndRow(41, 2, '  IL');
 
-            /** JULIO */
             $hoja->getColumnDimension('AP')->setAutoSize(false);
             $hoja->getColumnDimension('AP')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(42, 2, '  RS');
+            $hoja->setCellValueByColumnAndRow(42, 2, '  ESE ');
 
             $hoja->getColumnDimension('AQ')->setAutoSize(false);
             $hoja->getColumnDimension('AQ')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(43, 2, '  RA');
+            $hoja->setCellValueByColumnAndRow(43, 2, 'Total');
 
+            /** JULIO */
             $hoja->getColumnDimension('AR')->setAutoSize(false);
             $hoja->getColumnDimension('AR')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(44, 2, '  RN');
+            $hoja->setCellValueByColumnAndRow(44, 2, '  RS');
 
             $hoja->getColumnDimension('AS')->setAutoSize(false);
             $hoja->getColumnDimension('AS')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(45, 2, '  IL');
+            $hoja->setCellValueByColumnAndRow(45, 2, '  RA');
 
             $hoja->getColumnDimension('AT')->setAutoSize(false);
             $hoja->getColumnDimension('AT')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(46, 2, '  ESE ');
+            $hoja->setCellValueByColumnAndRow(46, 2, '  RN');
 
             $hoja->getColumnDimension('AU')->setAutoSize(false);
             $hoja->getColumnDimension('AU')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(47, 2, 'Totla');
+            $hoja->setCellValueByColumnAndRow(47, 2, '  IL');
 
-            /** AGOSTO */
             $hoja->getColumnDimension('AV')->setAutoSize(false);
             $hoja->getColumnDimension('AV')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(48, 2, '  RS');
+            $hoja->setCellValueByColumnAndRow(48, 2, '  ESE ');
 
             $hoja->getColumnDimension('AW')->setAutoSize(false);
             $hoja->getColumnDimension('AW')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(49, 2, '  RA');
+            $hoja->setCellValueByColumnAndRow(49, 2, 'Totla');
 
+            /** AGOSTO */
             $hoja->getColumnDimension('AX')->setAutoSize(false);
             $hoja->getColumnDimension('AX')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(50, 2, '  RN');
+            $hoja->setCellValueByColumnAndRow(50, 2, '  RS');
 
             $hoja->getColumnDimension('AY')->setAutoSize(false);
             $hoja->getColumnDimension('AY')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(51, 2, '  IL');
+            $hoja->setCellValueByColumnAndRow(51, 2, '  RA');
 
             $hoja->getColumnDimension('AZ')->setAutoSize(false);
             $hoja->getColumnDimension('AZ')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(52, 2, '  ESE ');
+            $hoja->setCellValueByColumnAndRow(52, 2, '  RN');
 
             $hoja->getColumnDimension('BA')->setAutoSize(false);
             $hoja->getColumnDimension('BA')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(53, 2, 'Total');
+            $hoja->setCellValueByColumnAndRow(53, 2, '  IL');
 
-            /** SEPTIEMBRE */
             $hoja->getColumnDimension('BB')->setAutoSize(false);
             $hoja->getColumnDimension('BB')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(54, 2, '  RS');
+            $hoja->setCellValueByColumnAndRow(54, 2, '  ESE ');
 
             $hoja->getColumnDimension('BC')->setAutoSize(false);
             $hoja->getColumnDimension('BC')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(55, 2, '  RA');
+            $hoja->setCellValueByColumnAndRow(55, 2, 'Total');
 
+            /** SEPTIEMBRE */
             $hoja->getColumnDimension('BD')->setAutoSize(false);
             $hoja->getColumnDimension('BD')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(56, 2, '  RN');
+            $hoja->setCellValueByColumnAndRow(56, 2, '  RS');
 
             $hoja->getColumnDimension('BE')->setAutoSize(false);
             $hoja->getColumnDimension('BE')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(57, 2, '  IL');
+            $hoja->setCellValueByColumnAndRow(57, 2, '  RA');
 
             $hoja->getColumnDimension('BF')->setAutoSize(false);
             $hoja->getColumnDimension('BF')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(58, 2, '  ESE ');
+            $hoja->setCellValueByColumnAndRow(58, 2, '  RN');
 
             $hoja->getColumnDimension('BG')->setAutoSize(false);
             $hoja->getColumnDimension('BG')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(59, 2, 'Total');
+            $hoja->setCellValueByColumnAndRow(59, 2, '  IL');
 
-            /** OCTUBRE */
             $hoja->getColumnDimension('BH')->setAutoSize(false);
             $hoja->getColumnDimension('BH')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(60, 2, '  RS');
+            $hoja->setCellValueByColumnAndRow(60, 2, '  ESE ');
 
             $hoja->getColumnDimension('BI')->setAutoSize(false);
             $hoja->getColumnDimension('BI')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(61, 2, '  RA');
+            $hoja->setCellValueByColumnAndRow(61, 2, 'Total');
 
+            /** OCTUBRE */
             $hoja->getColumnDimension('BJ')->setAutoSize(false);
             $hoja->getColumnDimension('BJ')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(62, 2, '  RN');
+            $hoja->setCellValueByColumnAndRow(62, 2, '  RS');
 
             $hoja->getColumnDimension('BK')->setAutoSize(false);
             $hoja->getColumnDimension('BK')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(63, 2, '  IL');
+            $hoja->setCellValueByColumnAndRow(63, 2, '  RA');
 
             $hoja->getColumnDimension('BL')->setAutoSize(false);
             $hoja->getColumnDimension('BL')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(64, 2, '  ESE ');
+            $hoja->setCellValueByColumnAndRow(64, 2, '  RN');
 
             $hoja->getColumnDimension('BM')->setAutoSize(false);
             $hoja->getColumnDimension('BM')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(65, 2, 'Total');
+            $hoja->setCellValueByColumnAndRow(65, 2, '  IL');
 
-            /** NOVIEMBRE */
             $hoja->getColumnDimension('BN')->setAutoSize(false);
             $hoja->getColumnDimension('BN')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(66, 2, '  RS');
+            $hoja->setCellValueByColumnAndRow(66, 2, '  ESE ');
 
             $hoja->getColumnDimension('BO')->setAutoSize(false);
             $hoja->getColumnDimension('BO')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(67, 2, '  RA');
+            $hoja->setCellValueByColumnAndRow(67, 2, 'Total');
 
+            /** NOVIEMBRE */
             $hoja->getColumnDimension('BP')->setAutoSize(false);
             $hoja->getColumnDimension('BP')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(68, 2, '  RN');
+            $hoja->setCellValueByColumnAndRow(68, 2, '  RS');
 
             $hoja->getColumnDimension('BQ')->setAutoSize(false);
             $hoja->getColumnDimension('BQ')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(69, 2, '  IL');
+            $hoja->setCellValueByColumnAndRow(69, 2, '  RA');
 
             $hoja->getColumnDimension('BR')->setAutoSize(false);
             $hoja->getColumnDimension('BR')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(70, 2, '  ESE ');
+            $hoja->setCellValueByColumnAndRow(70, 2, '  RN');
 
             $hoja->getColumnDimension('BS')->setAutoSize(false);
             $hoja->getColumnDimension('BS')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(71, 2, 'Total');
+            $hoja->setCellValueByColumnAndRow(71, 2, '  IL');
 
             $hoja->getColumnDimension('BT')->setAutoSize(false);
             $hoja->getColumnDimension('BT')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(72, 2, '  RS');
+            $hoja->setCellValueByColumnAndRow(72, 2, '  ESE ');
 
             $hoja->getColumnDimension('BU')->setAutoSize(false);
             $hoja->getColumnDimension('BU')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(73, 2, '  RA');
+            $hoja->setCellValueByColumnAndRow(73, 2, 'Total');
 
+            /** DICIEMBRE */
             $hoja->getColumnDimension('BV')->setAutoSize(false);
             $hoja->getColumnDimension('BV')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(74, 2, '  RN');
+            $hoja->setCellValueByColumnAndRow(74, 2, '  RS');
 
             $hoja->getColumnDimension('BW')->setAutoSize(false);
             $hoja->getColumnDimension('BW')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(75, 2, '  IL');
+            $hoja->setCellValueByColumnAndRow(75, 2, '  RA');
 
             $hoja->getColumnDimension('BX')->setAutoSize(false);
             $hoja->getColumnDimension('BX')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(76, 2, '  ESE ');
+            $hoja->setCellValueByColumnAndRow(76, 2, '  RN');
+
+            $hoja->getColumnDimension('BY')->setAutoSize(false);
+            $hoja->getColumnDimension('BY')->setWidth(5);
+            $hoja->setCellValueByColumnAndRow(77, 2, '  IL');
 
             $hoja->getColumnDimension('BZ')->setAutoSize(false);
             $hoja->getColumnDimension('BZ')->setWidth(5);
-            $hoja->setCellValueByColumnAndRow(77, 2, 'Total');
+            $hoja->setCellValueByColumnAndRow(78, 2, '  ESE ');
+
+            $hoja->getColumnDimension('CA')->setAutoSize(false);
+            $hoja->getColumnDimension('CA')->setWidth(5);
+            $hoja->setCellValueByColumnAndRow(79, 2, 'Total');
 
             $fila = 3;
             $fila1 = $fila;
@@ -1610,94 +1628,96 @@ class ReporteController
             $No_ESE = [];
             foreach ($clientes as $cliente) {
                 $hoja->setCellValueByColumnAndRow(1, $fila, $cliente['Nombre_Cliente']);
-                $hoja->setCellValueByColumnAndRow(2, $fila, $cliente['Centro_Costos']);
-                $hoja->setCellValueByColumnAndRow(3, $fila, $cliente['RAL']);
-                $hoja->setCellValueByColumnAndRow(4, $fila, $cliente['Investigacion_L']);
-                $hoja->setCellValueByColumnAndRow(5, $fila, $cliente['ESE']);
+                $hoja->setCellValueByColumnAndRow(2, $fila, $cliente['cuenta']);
+                $hoja->setCellValueByColumnAndRow(3, $fila, $cliente['logistica']);
+                $hoja->setCellValueByColumnAndRow(4, $fila, $cliente['Centro_Costos']);
+                $hoja->setCellValueByColumnAndRow(5, $fila, $cliente['RAL']);
+                $hoja->setCellValueByColumnAndRow(6, $fila, $cliente['Investigacion_L']);
+                $hoja->setCellValueByColumnAndRow(7, $fila, $cliente['ESE']);
 
-                $hoja->setCellValueByColumnAndRow(6, $fila, $cliente['No_RAL_Brutos_Ene']);
-                $hoja->setCellValueByColumnAndRow(7, $fila, $cliente['No_RAL_Avanzados_Ene']);
-                $hoja->setCellValueByColumnAndRow(8, $fila, $cliente['No_RAL_Netos_Ene']);
-                $hoja->setCellValueByColumnAndRow(9, $fila, $cliente['No_INV_FIN_Ene']);
-                $hoja->setCellValueByColumnAndRow(10, $fila, $cliente['No_ESE_FIN_Ene']);
-                $hoja->setCellValueByColumnAndRow(11, $fila, $cliente['No_FIN_Ene']);
+                $hoja->setCellValueByColumnAndRow(8, $fila, $cliente['No_RAL_Brutos_Ene']);
+                $hoja->setCellValueByColumnAndRow(9, $fila, $cliente['No_RAL_Avanzados_Ene']);
+                $hoja->setCellValueByColumnAndRow(10, $fila, $cliente['No_RAL_Netos_Ene']);
+                $hoja->setCellValueByColumnAndRow(11, $fila, $cliente['No_INV_FIN_Ene']);
+                $hoja->setCellValueByColumnAndRow(12, $fila, $cliente['No_ESE_FIN_Ene']);
+                $hoja->setCellValueByColumnAndRow(13, $fila, $cliente['No_FIN_Ene']);
 
-                $hoja->setCellValueByColumnAndRow(12, $fila, $cliente['No_RAL_Brutos_Feb']);
-                $hoja->setCellValueByColumnAndRow(13, $fila, $cliente['No_RAL_Avanzados_Feb']);
-                $hoja->setCellValueByColumnAndRow(14, $fila, $cliente['No_RAL_Netos_Feb']);
-                $hoja->setCellValueByColumnAndRow(15, $fila, $cliente['No_INV_FIN_Feb']);
-                $hoja->setCellValueByColumnAndRow(16, $fila, $cliente['No_ESE_FIN_Feb']);
-                $hoja->setCellValueByColumnAndRow(17, $fila, $cliente['No_FIN_Feb']);
+                $hoja->setCellValueByColumnAndRow(14, $fila, $cliente['No_RAL_Brutos_Feb']);
+                $hoja->setCellValueByColumnAndRow(15, $fila, $cliente['No_RAL_Avanzados_Feb']);
+                $hoja->setCellValueByColumnAndRow(16, $fila, $cliente['No_RAL_Netos_Feb']);
+                $hoja->setCellValueByColumnAndRow(17, $fila, $cliente['No_INV_FIN_Feb']);
+                $hoja->setCellValueByColumnAndRow(18, $fila, $cliente['No_ESE_FIN_Feb']);
+                $hoja->setCellValueByColumnAndRow(19, $fila, $cliente['No_FIN_Feb']);
 
-                $hoja->setCellValueByColumnAndRow(18, $fila, $cliente['No_RAL_Brutos_Mar']);
-                $hoja->setCellValueByColumnAndRow(19, $fila, $cliente['No_RAL_Avanzados_Mar']);
-                $hoja->setCellValueByColumnAndRow(20, $fila, $cliente['No_RAL_Netos_Mar']);
-                $hoja->setCellValueByColumnAndRow(21, $fila, $cliente['No_INV_FIN_Mar']);
-                $hoja->setCellValueByColumnAndRow(22, $fila, $cliente['No_ESE_FIN_Mar']);
-                $hoja->setCellValueByColumnAndRow(23, $fila, $cliente['No_FIN_Mar']);
+                $hoja->setCellValueByColumnAndRow(20, $fila, $cliente['No_RAL_Brutos_Mar']);
+                $hoja->setCellValueByColumnAndRow(21, $fila, $cliente['No_RAL_Avanzados_Mar']);
+                $hoja->setCellValueByColumnAndRow(22, $fila, $cliente['No_RAL_Netos_Mar']);
+                $hoja->setCellValueByColumnAndRow(23, $fila, $cliente['No_INV_FIN_Mar']);
+                $hoja->setCellValueByColumnAndRow(24, $fila, $cliente['No_ESE_FIN_Mar']);
+                $hoja->setCellValueByColumnAndRow(25, $fila, $cliente['No_FIN_Mar']);
 
-                $hoja->setCellValueByColumnAndRow(24, $fila, $cliente['No_RAL_Brutos_Abr']);
-                $hoja->setCellValueByColumnAndRow(25, $fila, $cliente['No_RAL_Avanzados_Abr']);
-                $hoja->setCellValueByColumnAndRow(26, $fila, $cliente['No_RAL_Netos_Abr']);
-                $hoja->setCellValueByColumnAndRow(27, $fila, $cliente['No_INV_FIN_Abr']);
-                $hoja->setCellValueByColumnAndRow(28, $fila, $cliente['No_ESE_FIN_Abr']);
-                $hoja->setCellValueByColumnAndRow(29, $fila, $cliente['No_FIN_Abr']);
+                $hoja->setCellValueByColumnAndRow(26, $fila, $cliente['No_RAL_Brutos_Abr']);
+                $hoja->setCellValueByColumnAndRow(27, $fila, $cliente['No_RAL_Avanzados_Abr']);
+                $hoja->setCellValueByColumnAndRow(28, $fila, $cliente['No_RAL_Netos_Abr']);
+                $hoja->setCellValueByColumnAndRow(29, $fila, $cliente['No_INV_FIN_Abr']);
+                $hoja->setCellValueByColumnAndRow(30, $fila, $cliente['No_ESE_FIN_Abr']);
+                $hoja->setCellValueByColumnAndRow(31, $fila, $cliente['No_FIN_Abr']);
 
-                $hoja->setCellValueByColumnAndRow(30, $fila, $cliente['No_RAL_Brutos_May']);
-                $hoja->setCellValueByColumnAndRow(31, $fila, $cliente['No_RAL_Avanzados_May']);
-                $hoja->setCellValueByColumnAndRow(32, $fila, $cliente['No_RAL_Netos_May']);
-                $hoja->setCellValueByColumnAndRow(33, $fila, $cliente['No_INV_FIN_May']);
-                $hoja->setCellValueByColumnAndRow(34, $fila, $cliente['No_ESE_FIN_May']);
-                $hoja->setCellValueByColumnAndRow(35, $fila, $cliente['No_FIN_May']);
+                $hoja->setCellValueByColumnAndRow(32, $fila, $cliente['No_RAL_Brutos_May']);
+                $hoja->setCellValueByColumnAndRow(33, $fila, $cliente['No_RAL_Avanzados_May']);
+                $hoja->setCellValueByColumnAndRow(34, $fila, $cliente['No_RAL_Netos_May']);
+                $hoja->setCellValueByColumnAndRow(35, $fila, $cliente['No_INV_FIN_May']);
+                $hoja->setCellValueByColumnAndRow(36, $fila, $cliente['No_ESE_FIN_May']);
+                $hoja->setCellValueByColumnAndRow(37, $fila, $cliente['No_FIN_May']);
 
-                $hoja->setCellValueByColumnAndRow(36, $fila, $cliente['No_RAL_Brutos_Jun']);
-                $hoja->setCellValueByColumnAndRow(37, $fila, $cliente['No_RAL_Avanzados_Jun']);
-                $hoja->setCellValueByColumnAndRow(38, $fila, $cliente['No_RAL_Netos_Jun']);
-                $hoja->setCellValueByColumnAndRow(39, $fila, $cliente['No_INV_FIN_Jun']);
-                $hoja->setCellValueByColumnAndRow(40, $fila, $cliente['No_ESE_FIN_Jun']);
-                $hoja->setCellValueByColumnAndRow(41, $fila, $cliente['No_FIN_Jun']);
+                $hoja->setCellValueByColumnAndRow(38, $fila, $cliente['No_RAL_Brutos_Jun']);
+                $hoja->setCellValueByColumnAndRow(39, $fila, $cliente['No_RAL_Avanzados_Jun']);
+                $hoja->setCellValueByColumnAndRow(40, $fila, $cliente['No_RAL_Netos_Jun']);
+                $hoja->setCellValueByColumnAndRow(41, $fila, $cliente['No_INV_FIN_Jun']);
+                $hoja->setCellValueByColumnAndRow(42, $fila, $cliente['No_ESE_FIN_Jun']);
+                $hoja->setCellValueByColumnAndRow(43, $fila, $cliente['No_FIN_Jun']);
 
-                $hoja->setCellValueByColumnAndRow(42, $fila, $cliente['No_RAL_Brutos_Jul']);
-                $hoja->setCellValueByColumnAndRow(43, $fila, $cliente['No_RAL_Avanzados_Jul']);
-                $hoja->setCellValueByColumnAndRow(44, $fila, $cliente['No_RAL_Netos_Jul']);
-                $hoja->setCellValueByColumnAndRow(45, $fila, $cliente['No_INV_FIN_Jul']);
-                $hoja->setCellValueByColumnAndRow(46, $fila, $cliente['No_ESE_FIN_Jul']);
-                $hoja->setCellValueByColumnAndRow(47, $fila, $cliente['No_FIN_Jul']);
+                $hoja->setCellValueByColumnAndRow(44, $fila, $cliente['No_RAL_Brutos_Jul']);
+                $hoja->setCellValueByColumnAndRow(45, $fila, $cliente['No_RAL_Avanzados_Jul']);
+                $hoja->setCellValueByColumnAndRow(46, $fila, $cliente['No_RAL_Netos_Jul']);
+                $hoja->setCellValueByColumnAndRow(47, $fila, $cliente['No_INV_FIN_Jul']);
+                $hoja->setCellValueByColumnAndRow(48, $fila, $cliente['No_ESE_FIN_Jul']);
+                $hoja->setCellValueByColumnAndRow(49, $fila, $cliente['No_FIN_Jul']);
 
-                $hoja->setCellValueByColumnAndRow(48, $fila, $cliente['No_RAL_Brutos_Ago']);
-                $hoja->setCellValueByColumnAndRow(49, $fila, $cliente['No_RAL_Avanzados_Ago']);
-                $hoja->setCellValueByColumnAndRow(50, $fila, $cliente['No_RAL_Netos_Ago']);
-                $hoja->setCellValueByColumnAndRow(51, $fila, $cliente['No_INV_FIN_Ago']);
-                $hoja->setCellValueByColumnAndRow(52, $fila, $cliente['No_ESE_FIN_Ago']);
-                $hoja->setCellValueByColumnAndRow(53, $fila, $cliente['No_FIN_Ago']);
+                $hoja->setCellValueByColumnAndRow(50, $fila, $cliente['No_RAL_Brutos_Ago']);
+                $hoja->setCellValueByColumnAndRow(51, $fila, $cliente['No_RAL_Avanzados_Ago']);
+                $hoja->setCellValueByColumnAndRow(52, $fila, $cliente['No_RAL_Netos_Ago']);
+                $hoja->setCellValueByColumnAndRow(53, $fila, $cliente['No_INV_FIN_Ago']);
+                $hoja->setCellValueByColumnAndRow(54, $fila, $cliente['No_ESE_FIN_Ago']);
+                $hoja->setCellValueByColumnAndRow(55, $fila, $cliente['No_FIN_Ago']);
 
-                $hoja->setCellValueByColumnAndRow(54, $fila, $cliente['No_RAL_Brutos_Sep']);
-                $hoja->setCellValueByColumnAndRow(55, $fila, $cliente['No_RAL_Avanzados_Sep']);
-                $hoja->setCellValueByColumnAndRow(56, $fila, $cliente['No_RAL_Netos_Sep']);
-                $hoja->setCellValueByColumnAndRow(57, $fila, $cliente['No_INV_FIN_Sep']);
-                $hoja->setCellValueByColumnAndRow(58, $fila, $cliente['No_ESE_FIN_Sep']);
-                $hoja->setCellValueByColumnAndRow(59, $fila, $cliente['No_FIN_Sep']);
+                $hoja->setCellValueByColumnAndRow(56, $fila, $cliente['No_RAL_Brutos_Sep']);
+                $hoja->setCellValueByColumnAndRow(57, $fila, $cliente['No_RAL_Avanzados_Sep']);
+                $hoja->setCellValueByColumnAndRow(58, $fila, $cliente['No_RAL_Netos_Sep']);
+                $hoja->setCellValueByColumnAndRow(59, $fila, $cliente['No_INV_FIN_Sep']);
+                $hoja->setCellValueByColumnAndRow(60, $fila, $cliente['No_ESE_FIN_Sep']);
+                $hoja->setCellValueByColumnAndRow(61, $fila, $cliente['No_FIN_Sep']);
 
-                $hoja->setCellValueByColumnAndRow(60, $fila, $cliente['No_RAL_Brutos_Oct']);
-                $hoja->setCellValueByColumnAndRow(61, $fila, $cliente['No_RAL_Avanzados_Oct']);
-                $hoja->setCellValueByColumnAndRow(62, $fila, $cliente['No_RAL_Netos_Oct']);
-                $hoja->setCellValueByColumnAndRow(63, $fila, $cliente['No_INV_FIN_Oct']);
-                $hoja->setCellValueByColumnAndRow(64, $fila, $cliente['No_ESE_FIN_Oct']);
-                $hoja->setCellValueByColumnAndRow(65, $fila, $cliente['No_FIN_Oct']);
+                $hoja->setCellValueByColumnAndRow(62, $fila, $cliente['No_RAL_Brutos_Oct']);
+                $hoja->setCellValueByColumnAndRow(63, $fila, $cliente['No_RAL_Avanzados_Oct']);
+                $hoja->setCellValueByColumnAndRow(64, $fila, $cliente['No_RAL_Netos_Oct']);
+                $hoja->setCellValueByColumnAndRow(65, $fila, $cliente['No_INV_FIN_Oct']);
+                $hoja->setCellValueByColumnAndRow(66, $fila, $cliente['No_ESE_FIN_Oct']);
+                $hoja->setCellValueByColumnAndRow(67, $fila, $cliente['No_FIN_Oct']);
 
-                $hoja->setCellValueByColumnAndRow(66, $fila, $cliente['No_RAL_Brutos_Nov']);
-                $hoja->setCellValueByColumnAndRow(67, $fila, $cliente['No_RAL_Avanzados_Nov']);
-                $hoja->setCellValueByColumnAndRow(68, $fila, $cliente['No_RAL_Netos_Nov']);
-                $hoja->setCellValueByColumnAndRow(69, $fila, $cliente['No_INV_FIN_Nov']);
-                $hoja->setCellValueByColumnAndRow(70, $fila, $cliente['No_ESE_FIN_Nov']);
-                $hoja->setCellValueByColumnAndRow(71, $fila, $cliente['No_FIN_Nov']);
+                $hoja->setCellValueByColumnAndRow(68, $fila, $cliente['No_RAL_Brutos_Nov']);
+                $hoja->setCellValueByColumnAndRow(69, $fila, $cliente['No_RAL_Avanzados_Nov']);
+                $hoja->setCellValueByColumnAndRow(70, $fila, $cliente['No_RAL_Netos_Nov']);
+                $hoja->setCellValueByColumnAndRow(71, $fila, $cliente['No_INV_FIN_Nov']);
+                $hoja->setCellValueByColumnAndRow(72, $fila, $cliente['No_ESE_FIN_Nov']);
+                $hoja->setCellValueByColumnAndRow(73, $fila, $cliente['No_FIN_Nov']);
 
-                $hoja->setCellValueByColumnAndRow(72, $fila, $cliente['No_RAL_Brutos_Dic']);
-                $hoja->setCellValueByColumnAndRow(73, $fila, $cliente['No_RAL_Avanzados_Dic']);
-                $hoja->setCellValueByColumnAndRow(74, $fila, $cliente['No_RAL_Netos_Dic']);
-                $hoja->setCellValueByColumnAndRow(75, $fila, $cliente['No_INV_FIN_Dic']);
-                $hoja->setCellValueByColumnAndRow(76, $fila, $cliente['No_ESE_FIN_Dic']);
-                $hoja->setCellValueByColumnAndRow(77, $fila, $cliente['No_FIN_Dic']);
+                $hoja->setCellValueByColumnAndRow(74, $fila, $cliente['No_RAL_Brutos_Dic']);
+                $hoja->setCellValueByColumnAndRow(75, $fila, $cliente['No_RAL_Avanzados_Dic']);
+                $hoja->setCellValueByColumnAndRow(76, $fila, $cliente['No_RAL_Netos_Dic']);
+                $hoja->setCellValueByColumnAndRow(77, $fila, $cliente['No_INV_FIN_Dic']);
+                $hoja->setCellValueByColumnAndRow(78, $fila, $cliente['No_ESE_FIN_Dic']);
+                $hoja->setCellValueByColumnAndRow(79, $fila, $cliente['No_FIN_Dic']);
 
                 $fila++;
             }
@@ -1709,40 +1729,43 @@ class ReporteController
             $hoja->mergeCells('C1:C2');
             $hoja->mergeCells('D1:D2');
             $hoja->mergeCells('E1:E2');
-            $hoja->mergeCells('F1:K1');
-            $hoja->mergeCells('L1:Q1');
-            $hoja->mergeCells('R1:W1');
-            $hoja->mergeCells('X1:AC1');
-            $hoja->mergeCells('AD1:AI1');
-            $hoja->mergeCells('AJ1:AO1');
-            $hoja->mergeCells('AP1:AU1');
-            $hoja->mergeCells('AV1:BA1');
-            $hoja->mergeCells('BB1:BG1');
-            $hoja->mergeCells('BH1:BM1');
-            $hoja->mergeCells('BN1:BS1');
-            $hoja->mergeCells('BT1:BY1'); 
+            $hoja->mergeCells('F1:F2');
+            $hoja->mergeCells('G1:G2');
+            $hoja->mergeCells('H1:M1'); //ENERO
+            $hoja->mergeCells('N1:S1'); //FEBRERO
+            $hoja->mergeCells('T1:Y1'); //MAR
+            $hoja->mergeCells('Z1:AE1'); //ABR
+            $hoja->mergeCells('AF1:AK1'); //MAY
+            $hoja->mergeCells('AL1:AQ1'); //JUN
+            $hoja->mergeCells('AR1:AW1'); //JUL
+            $hoja->mergeCells('AX1:BC1'); //AGO
+            $hoja->mergeCells('BD1:BI1'); //SEP
+            $hoja->mergeCells('BJ1:BO1'); //OCT
+            $hoja->mergeCells('BP1:BU1'); //NOV
+            $hoja->mergeCells('BV1:CA1'); //DIC
 
-            $hoja->freezePane('F1');
+            $hoja->freezePane('H1');
 
-            $hoja->getStyle('A3:BM' . $fila)->applyFromArray($estiloInformacion);
-            $hoja->getStyle('B3:B' . $fila)->applyFromArray($centrado);
-            $hoja->getStyle('C3:BM' . $fila)->applyFromArray($derecha);
-            $hoja->getStyle('A1:E2')->applyFromArray($estiloTituloReporte);
-            $hoja->getStyle('F1:BY1')->applyFromArray($estiloTituloReporte);
-            $hoja->getStyle('F2:BY2')->applyFromArray($estiloTituloColumnas);
-        
-            $hoja->getStyle('F1:K' . $fila)->applyFromArray($estiloContornoRemarcado);
-            $hoja->getStyle('L1:Q' . $fila)->applyFromArray($estiloContornoRemarcado);
-            $hoja->getStyle('R1:W' . $fila)->applyFromArray($estiloContornoRemarcado);
-            $hoja->getStyle('X1:AC' . $fila)->applyFromArray($estiloContornoRemarcado);
-            $hoja->getStyle('AD1:AI' . $fila)->applyFromArray($estiloContornoRemarcado);
-            $hoja->getStyle('AJ1:AO' . $fila)->applyFromArray($estiloContornoRemarcado);
-            $hoja->getStyle('AP1:AU' . $fila)->applyFromArray($estiloContornoRemarcado);
-            $hoja->getStyle('AV1:BA' . $fila)->applyFromArray($estiloContornoRemarcado);
-            $hoja->getStyle('BB1:BG' . $fila)->applyFromArray($estiloContornoRemarcado);
-            $hoja->getStyle('BH1:BD' . $fila)->applyFromArray($estiloContornoRemarcado);
-            $hoja->getStyle('BN1:BS' . $fila)->applyFromArray($estiloContornoRemarcado);
-            $hoja->getStyle('BT1:BY' . $fila)->applyFromArray($estiloContornoRemarcado); 
+            $hoja->getStyle('A2:CA' . $fila)->applyFromArray($estiloInformacion);
+            $hoja->getStyle('D2:D' . $fila)->applyFromArray($centrado);
+            $hoja->getStyle('C2:BM' . $fila)->applyFromArray($derecha);
+
+            $hoja->getStyle('A1:G2')->applyFromArray($estiloTituloReporte);
+            $hoja->getStyle('H1:CA1')->applyFromArray($estiloTituloReporte);
+            $hoja->getStyle('H2:CA2')->applyFromArray($estiloTituloColumnas);
+
+            $hoja->getStyle('H1:M' . $fila)->applyFromArray($estiloContornoRemarcado);
+            $hoja->getStyle('N1:S' . $fila)->applyFromArray($estiloContornoRemarcado);
+            $hoja->getStyle('T1:Y' . $fila)->applyFromArray($estiloContornoRemarcado);
+            $hoja->getStyle('Z1:AE' . $fila)->applyFromArray($estiloContornoRemarcado);
+            $hoja->getStyle('AF1:AK' . $fila)->applyFromArray($estiloContornoRemarcado);
+            $hoja->getStyle('AL1:AQ' . $fila)->applyFromArray($estiloContornoRemarcado);
+            $hoja->getStyle('AR1:AW' . $fila)->applyFromArray($estiloContornoRemarcado);
+            $hoja->getStyle('AX1:BC' . $fila)->applyFromArray($estiloContornoRemarcado);
+            $hoja->getStyle('BD1:BI' . $fila)->applyFromArray($estiloContornoRemarcado);
+            $hoja->getStyle('BJ1:BO' . $fila)->applyFromArray($estiloContornoRemarcado);
+            $hoja->getStyle('BP1:BU' . $fila)->applyFromArray($estiloContornoRemarcado);
+            $hoja->getStyle('BV1:CA' . $fila)->applyFromArray($estiloContornoRemarcado);
 
             $hoja2 = $documento->createSheet();
             $hoja2->setTitle('Clientes Sin servicios');
@@ -1750,16 +1773,34 @@ class ReporteController
             $hoja2->getColumnDimension('A')->setAutoSize(true);
             $hoja2->setCellValueByColumnAndRow(1, 1, 'Cliente');
 
+            $hoja2->getColumnDimension('B')->setAutoSize(true);
+            $hoja2->setCellValueByColumnAndRow(2, 1, 'Cuenta');
+
+            $hoja2->getColumnDimension('C')->setAutoSize(true);
+            $hoja2->setCellValueByColumnAndRow(3, 1, 'Logistica');
+
 
             $candidato = new Candidatos();
             $candidato->setFecha_solicitud($Anio);
-            $clientes = $candidato->getDetallePorAnioClienteSinServicio();
+            $sinClientes = $candidato->getDetallePorAnioClienteSinServicio();
             $fila = 2;
 
-            foreach ($clientes as $cliente) {
+            foreach ($sinClientes as $cliente) {
                 $hoja2->setCellValueByColumnAndRow(1, $fila, $cliente['Nombre_Cliente']);
+                $hoja2->setCellValueByColumnAndRow(2, $fila, $cliente['cuenta']);
+                $hoja2->setCellValueByColumnAndRow(3, $fila, $cliente['logistica']);
                 $fila++;
             }
+
+            $hoja2->getStyle('A1:C' . $fila)->applyFromArray($estiloInformacion);
+            $hoja2->getStyle('A1:C' . $fila)->applyFromArray($centrado);
+
+            $hoja2->getStyle('A1:A1')->applyFromArray($estiloTituloReporte);
+            $hoja2->getStyle('B1:B1')->applyFromArray($estiloTituloReporte);
+            $hoja2->getStyle('A1:C1')->applyFromArray($estiloTituloColumnas);
+            
+            $hoja2->getStyle('A1:C' . $fila)->applyFromArray($estiloContornoRemarcado);
+
 
             $hoja3 = $documento->createSheet();
             $hoja3->setTitle('Clientes de cortesia');
@@ -1770,13 +1811,14 @@ class ReporteController
 
             $candidato = new Candidatos();
             $candidato->setFecha_solicitud($Anio);
-            $clientes = $candidato->getDetallePorAnioCortesias();
+            $clientesCortesia = $candidato->getDetallePorAnioCortesias();
             $fila = 2;
 
-            foreach ($clientes as $cliente) {
+            foreach ($clientesCortesia as $cliente) {
                 $hoja3->setCellValueByColumnAndRow(1, $fila, $cliente['Nombre_Cliente']);
                 $fila++;
             }
+
 
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="Detallado de Operaciones ' . $Anio . '.xlsx"');
@@ -2315,7 +2357,7 @@ class ReporteController
         }
     }
 
-      //RH
+    //RH
     public function employeesinformation()
     {
         $status = Encryption::decode($_GET['status']) ? Encryption::decode($_GET['status']) : 0;
@@ -2412,7 +2454,7 @@ class ReporteController
 
         $columnIndex = 1;
         foreach ($arrayColumns as $data) {
-            if (( $data['pColumn'] == 'Z' || $data['pColumn'] == 'AA' || $data['pColumn'] == 'AB' || $data['pColumn'] == 'AC') && $data['row'] == 2) {
+            if (($data['pColumn'] == 'Z' || $data['pColumn'] == 'AA' || $data['pColumn'] == 'AB' || $data['pColumn'] == 'AC') && $data['row'] == 2) {
                 $hoja->getColumnDimension($data['pColumn'])->setAutoSize(true);
                 $hoja->setCellValueByColumnAndRow($columnIndex, $data['row'], $data['value']);
             } else {
@@ -2431,7 +2473,7 @@ class ReporteController
         $employeeContactObj = new EmployeeContact();
 
         foreach ($employees as $emp) {
-            $col=1;
+            $col = 1;
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['employee_number']);
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['fullName']);
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['title']);
@@ -2923,7 +2965,7 @@ class ReporteController
             $hoja2->getStyle('A3:O3')->applyFromArray($estiloTituloColumnas);
             $hoja2->getStyle('B4:B' . $fila)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_DATE_YYYYMMDDSLASH);
 
-			  $hoja3 = $documento->createSheet();
+            $hoja3 = $documento->createSheet();
             $hoja3->setTitle('Facturas Incobrables');
 
             $hoja3->setCellValue('A1', 'REPORTE DE FACTURAS INCOBRABLES SA');
@@ -3239,7 +3281,7 @@ class ReporteController
         exit();
     }
     //===[gabo 7 junio incidencias fin]=== 
- public function ExcelGroupEvaluation()
+    public function ExcelGroupEvaluation()
     {
         $id_evaluation = ($_POST['id_evaluation'] ? Utils::sanitizeNumber($_POST['id_evaluation']) : 'false');
         $fechas = ($_POST['fechas'] ? Utils::sanitizeString($_POST['fechas']) : 'false');
@@ -3577,7 +3619,7 @@ class ReporteController
             header("location:" . base_url);
         }
     }
- public function ExcelPAsswords()
+    public function ExcelPAsswords()
     {
         require_once 'models/RH/UsuariosRH.php';
 
@@ -3749,5 +3791,4 @@ class ReporteController
         $writer->save('php://output');
         exit();
     }
-
 }

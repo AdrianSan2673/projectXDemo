@@ -187,7 +187,7 @@
                                                         <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label for="cellphone" class="col-form-label">Celular:</label>
-                                                                <input type="text" name="cellphone" id="cellphone" maxlength="13" class="form-control" required value="<?= isset($candidato) && is_object($candidato) ? $candidato->cellphone : ''; ?>" data-inputmask='"mask": "999 999  9999"' data-mask>
+                                                                <input type="text" name="cellphone" id="cellphone" maxlength="13" class="form-control"  value="<?= isset($candidato) && is_object($candidato) ? $candidato->cellphone : ''; ?>" data-inputmask='"mask": "999 999  9999"' data-mask>
                                                             </div>
                                                         </div>
                                                         <?php if (Utils::isCandidate()) : ?>

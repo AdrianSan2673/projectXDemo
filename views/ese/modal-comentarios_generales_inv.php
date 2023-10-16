@@ -102,7 +102,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="Cual_Factor_Riesgo">¿Cuál?</label>
-                        <input type="text" name="Cual_Factor_Riesgo" class="form-control">
+                        <input type="text" name="Cual_Factor_Riesgo" class="form-control"  maxlength="150">
                     </div>
                     <div class="form-group">
                         <label class="col-for-label">¿Se observa estabilidad laboral?</label>

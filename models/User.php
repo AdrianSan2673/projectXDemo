@@ -199,6 +199,19 @@ class User {
         return $result;
     }
 
+    public function updateToken()
+    {
+        $id = $this->getId();
+        $token = $this->getTokenMD5();
+        $this->setToken($token);
+        
+        $stmt = $this->db->prepare("UPDATE users SET token=:token WHERE id = :id");
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->bindParam(":token", $token, PDO::PARAM_STR);
+        $result = $stmt->execute();
+        return $result;
+    }
+
     public function activateUser($id){
 		
 		$stmt = $this->db->prepare("UPDATE users SET activation=1 WHERE id = :id");
@@ -260,6 +273,24 @@ class User {
                     $result = $fetch;
                 }
             }
+        }
+        return $result;
+    }
+	
+	public function loginWithEmail()
+    {
+        $result = FALSE;
+        $email = $this->getEmail();
+
+        $stmt = $this->db->prepare("SELECT u.*, t.user_type FROM users u INNER JOIN user_types t ON u.id_user_type=t.id WHERE email = :email", array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
+        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $fetch = $stmt->fetchObject();
+        $numRows = $stmt->rowCount();
+
+        if ($fetch && $numRows == 1) {
+            $result = $fetch;
         }
         return $result;
     }

@@ -403,4 +403,24 @@ class EmployeeHolidays{
         $fetch = $stmt->fetchObject();
         return $fetch;
     }
+	
+	 public function update_dates()
+    {
+        $id = $this->getId();
+        $end_date = $this->getEnd_date();
+        $start_date = $this->getStart_date();
+
+        $stmt = $this->db->prepare("UPDATE root.employee_holidays SET start_date=:start_date, end_date=:end_date ,modified_at=GETDATE() WHERE id=:id");
+
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->bindParam(":start_date", $start_date, PDO::PARAM_STR);
+        $stmt->bindParam(":end_date", $end_date, PDO::PARAM_STR);
+
+        $flag = $stmt->execute();
+
+        if ($flag)
+            $result = true;
+
+        return $result;
+    }
 }

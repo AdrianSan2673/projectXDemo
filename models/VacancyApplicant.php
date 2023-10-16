@@ -220,7 +220,6 @@ class VacancyApplicant
 		return $fetch;
 	}
 
-	//GABO 11 OCT
 	public function getApplicantsByCandidate()
 	{
 		$id_candidate = $this->getId_candidate();
@@ -566,7 +565,7 @@ class VacancyApplicant
 		}
 		return $result;
 	}
-	//gabo 26
+		//gabo 26
 	public function getOneByCandidate()
 	{
 
@@ -579,7 +578,7 @@ class VacancyApplicant
 		$fetch = $stmt->fetchObject();
 		return $fetch;
 	}
-	//gabo 27
+		//gabo 27
 	public function getVacanciesTypeOperativaByCandidate()
 	{
 
@@ -590,19 +589,6 @@ class VacancyApplicant
 		$stmt->bindParam(":id_candidate", $id_candidate, PDO::PARAM_INT);
 		$stmt->execute();
 
-		$fetch = $stmt->fetchObject();
-		return $fetch;
-	}
-
-	//gabo 10 oct
-
-	public function getOneByIdCandidate()
-	{
-		$id_candidate = $this->getId_candidate();
-
-		$stmt = $this->db->prepare("SELECT * FROM vacancy_applicants WHERE id_candidate=:id_candidate");
-		$stmt->bindParam(":id_candidate", $id_candidate, PDO::PARAM_INT);
-		$stmt->execute();
 		$fetch = $stmt->fetchObject();
 		return $fetch;
 	}

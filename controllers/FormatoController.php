@@ -411,6 +411,9 @@ class FormatoController
                 $pdf->setFotoAnexo($anexo_4, 4);
                 $pdf->setFotoAnexo($anexo_5, 5);
             }
+			
+			  $pdf->AddPagesFromPDF("./uploads/google_search/".$folio.".pdf");
+
             $pdf->Output('I', 'VD ' . utf8_decode($nombre) . '.pdf', true);
         } else {
             header("location:" . base_url);
@@ -1254,7 +1257,7 @@ class FormatoController
                 $pdf->setFotoAnexo($anexo_5, 5);
             }
 			
-			$pdf->AddPagesFromPDF("./uploads/google_search/".$folio."pdf");
+			$pdf->AddPagesFromPDF("./uploads/google_search/".$folio.".pdf");
 			
             $pdf->Output('I', 'VD ' . utf8_decode($nombre) . '.pdf', true);
         } else {

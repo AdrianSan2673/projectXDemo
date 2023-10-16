@@ -255,7 +255,7 @@ class VacanteController
             $advance_payment = isset($_POST['advance_payment']) ?  Utils::sanitizeStringBlank($_POST['advance_payment']) : null;
             $payment_amount = isset($_POST['payment_amount']) ?  Utils::sanitizeStringBlank($_POST['payment_amount']) : null;
             $experience_type = isset($_POST['experience_type']) ?  Utils::sanitizeStringBlank($_POST['experience_type']) : 'Años';
-            $recruitment_service_cost = isset($_POST['recruitment_service_cost']) ? Utils::sanitizeNumber($_POST['recruitment_service_cost']) : 0;
+ $recruitment_service_cost = isset($_POST['recruitment_service_cost']) ? Utils::sanitizeNumber($_POST['recruitment_service_cost']) : 0;
 
             $how_many_interviews = isset($_POST['how_many_interviews']) ? trim($_POST['how_many_interviews']) : NULL;
             $accept_reentry = isset($_POST['accept_reentry']) ? trim($_POST['accept_reentry']) : NULL;
@@ -273,7 +273,7 @@ class VacanteController
 
             $telephone = isset($_POST['telephone']) ? 0 : 1;
             //$notes = isset($_POST['notes']) ? Utils::sanitizeString($_POST['notes']) : NULL;
-
+			
 
             // gabo 17 abril quitar a ventas
             if ($customer && $vacancy && $working_day && $department && $education_level && $position_number && $age_min && $age_max && $gender && $civil_status && $salary_min && $salary_max && $workdays && $schedule && $state && $city  && $area && $subarea) {
@@ -327,7 +327,7 @@ class VacanteController
                 $vacante->setExperience_type($experience_type);
                 $vacante->setRecruitment_service_cost($recruitment_service_cost);
                 $vacante->setTelephone($telephone);
-                //$vacante->setNotes($notes);
+				//$vacante->setNotes($notes);
 
                 $save = $vacante->save();
 
@@ -405,7 +405,7 @@ class VacanteController
                         break;
                 }
 
-
+				
                 $page_title = $vacante->vacancy . ' | RRHH Ingenia';
 
                 require_once 'views/layout/header.php';
@@ -503,8 +503,8 @@ class VacanteController
             $authorization_date = isset($_POST['authorization_date']) ? Utils::sanitizeString($_POST['authorization_date']) : null;
             $commitment_date = isset($_POST['commitment_date']) ? Utils::sanitizeString($_POST['commitment_date']) : null;
 
-            $telephone = isset($_POST['telephone']) ? 0 : 1;
-            //$notes = isset($_POST['notes']) ? Utils::sanitizeString($_POST['notes']) : NULL;
+			 $telephone = isset($_POST['telephone']) ? 0 : 1;
+			 //$notes = isset($_POST['notes']) ? Utils::sanitizeString($_POST['notes']) : NULL;
 
 
             if ($customer && $vacancy && $department && $education_level && $position_number && $age_min && $age_max && $gender && $civil_status && $salary_min && $salary_max && $workdays && $schedule && $state && $city  && $area && $subarea) {
@@ -554,8 +554,8 @@ class VacanteController
                 $vacante->setPayment_amount($payment_amount);
                 $vacante->setExperience_type($experience_type);
                 $vacante->setRecruitment_service_cost($recruitment_service_cost);
-                $vacante->setTelephone($telephone);
-                //$vacante->setNotes($notes);
+				$vacante->setTelephone($telephone);
+				//$vacante->setNotes($notes);
 
 
                 $save = $vacante->update();
@@ -574,7 +574,7 @@ class VacanteController
                     $CandidateDirectoryObj->setId_state($state);
                     $CandidateDirectoryObj->setId_city($city);
                     $CandidateDirectoryObj->updateByVacancy();
-
+                    
                     $guardado = $question->update();
                     if ($guardado) {
                         echo 1;
@@ -1039,7 +1039,7 @@ class VacanteController
             echo json_encode(array('status' => 0));
     }
     //==========================================================
-    //======================[Gabo Junio 02 Entregable]=======
+  //======================[Gabo Junio 02 Entregable]=======
 
     public function entregableVacante()
     {
@@ -1072,7 +1072,7 @@ class VacanteController
         }
     }
     //==========================================================
-    public function getVacancySateCity()
+ public function getVacancySateCity()
     {
         if (Utils::isValid($_SESSION['identity'])) {
             $id_vacancy = isset($_POST['id_vacancy']) ? trim($_POST['id_vacancy']) : FALSE;
@@ -1097,6 +1097,7 @@ class VacanteController
 
 
                 echo json_encode(array('status' => 1, 'vacancy_data' => $vacancy_data, 'State' => $State, 'City' => $City));
+
             } else {
                 echo json_encode(array('status' => 0));
             }
@@ -1104,7 +1105,7 @@ class VacanteController
             echo json_encode(array('status' => 0));
         }
     }
-    public function save_notes()
+	  public function save_notes()
     {
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin())) {
 
@@ -1121,30 +1122,6 @@ class VacanteController
 
                 if ($save) {
                     echo json_encode(array('status' => 1));
-                } else {
-                    echo json_encode(array('status' => 2));
-                }
-            } else {
-                echo json_encode(array('status' => 0));
-            }
-        } else {
-            echo json_encode(array('status' => 0));
-        }
-    }
-    //GABO 4 oct
-    public function getTypeVacancy()
-    {
-        if (Utils::isValid($_POST)) {
-
-            $id_vacancy = isset($_POST['id_vacancy']) ? trim($_POST['id_vacancy']) : FALSE;
-
-            if ($id_vacancy) {
-                $vacante = new Vacancy();
-                $vacante->setId($id_vacancy);
-                $vacante = $vacante->getOne();
-
-                if ($vacante) {
-                    echo json_encode(array('status' => 1, 'type' => $vacante->type));
                 } else {
                     echo json_encode(array('status' => 2));
                 }

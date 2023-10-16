@@ -44,8 +44,6 @@ require_once 'models/RAL/EstadosMX/SanLuisPotosi.php';
 require_once 'models/SA/NotasEjecutivo.php';
 require_once 'models/SA/SOI.php';
 require_once 'helpers/FormatosSA/SOIQR.php';
-//gabo 3 oct
-require_once 'models/SA/SysCampo.php';
 
 class ServicioApoyoController
 {
@@ -1841,44 +1839,20 @@ class ServicioApoyoController
 
 
             if ($Folio && $Servicio_Solicitado && $Fase) {
-                //gbao 3 oct
+				  //gbao 3 oct
 
                 $candidato_actual = new CandidatosDatos();
                 $candidato_actual->setCandidato($Folio);
                 $candidato_actual = $candidato_actual->getOne();
-                // $estudio = new Candidatos();
-                // $estudio->setCandidato($Folio);
-                // $candidato=$estudio->getOne();
+				  //gbao 3 oct
 
-
-                // $campo = new SysCampo();
-                // $campo->setTabla(116);
-                // $campo->setCampo($candidato->Servicio_Solicitado);
-                // $servicio_solicitado_actual = $campo->getCampoById();
-
-                // $campo->setTabla(200);
-                // $campo->setCampo($candidato->Fase);
-                // $fase_actual = $campo->getCampoById();
-
-
-                //gabo 3 oct
-
+				
                 $estudio = new Candidatos();
                 $estudio->setCandidato($Folio);
                 $estudio->setServicio_Solicitado($Servicio_Solicitado);
                 $estudio->setFase($Fase);
                 $estudio->setEstado($Estado);
                 $update = $estudio->updateService();
-
-
-                // $campo->setTabla(116);
-                // $campo->setCampo($Servicio_Solicitado);
-                // $servicio_solicitado_nuevo = $campo->getCampoById();
-
-                // $campo->setTabla(200);
-                // $campo->setCampo($Fase);
-                // $fase_nuevo = $campo->getCampoById();
-
 
 
                 if ($update) {
@@ -1900,8 +1874,9 @@ class ServicioApoyoController
                         else
                             $perfil = array('../dist/img/user-icon.png', 'png');
                     }
-
-                    //gabo 3 oct
+					
+					
+//gabo 3 oct
                     $nombre_usuario = $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name;
                     $nombre = $candidato_datos->Nombres . " " . $candidato_datos->Apellido_Paterno . " " . $candidato_datos->Apellido_Materno;
 
@@ -1937,9 +1912,16 @@ class ServicioApoyoController
                     }
 
                     //gabo 3 oct
+					
+
+
+					
 
 
 
+
+					
+					
                     $display = Utils::getDisplayBotones();
                     echo json_encode(array(
                         'candidato_datos' => $candidato_datos,
@@ -2154,7 +2136,7 @@ class ServicioApoyoController
             if ($Folio && $Comentario_Cancelacion && ($Estado == 250 || $Estado == 251)) {
                 if ($Fase == 230 || $Fase == 231 || $Fase == 298)
                     $Estado = 258;
-                if ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 231 || $Servicio_Solicitado == 323 || $Servicio_Solicitado == 340) {
+                if ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 231 || $Servicio_Solicitado == 323 || $Servicio_Solicitado == 340|| $Servicio_Solicitado == 341) {
                     if ($Finalizado == 1)
                         $Estado = 252;
                     else {
@@ -2508,12 +2490,9 @@ class ServicioApoyoController
                         else
                             $perfil = array('../dist/img/user-icon.png', 'png');
                     }
-
-
-                    //gabo 3 oct
-
-
-                    //gabo 3 oct
+					
+					
+   //gabo 3 oct
                     $nombre_usuario = $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name;
                     $nombre = $candidato_datos->Nombres . " " . $candidato_datos->Apellido_Paterno . " " . $candidato_datos->Apellido_Materno;
 
@@ -2543,19 +2522,7 @@ class ServicioApoyoController
                         Utils::sendEmail('calidad@rrhhingenia.com', 'Calidad', 'Modificacion de ' . $nombre, $body);
                     }
 
-
                     //gabo 3 oct
-
-
-                    //gabo 3 oct
-
-
-
-
-
-
-
-
 
 
                     $display = Utils::getDisplayBotones();
@@ -2850,7 +2817,7 @@ class ServicioApoyoController
                                     </html>";
 
                                 Utils::newNotification($Reclutador . ' de ' . $Nombre_Cliente . ' solicita ' . $Tipo_Solicitud, $Enlace, 1, $Servicio_Solicitado == 231 || $Servicio_Solicitado == 299 ? 1 : ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 300 ? 2 : ($Servicio_Solicitado == 328 ? 3 : 16)), $id_user, $_SESSION['identity']->id, $id_cliente);
-
+                               
                                 if (!Utils::isAdmin()) {
                                     Utils::sendEmail($Correo_Ejecutivo, $Reclutador, $Asunto, $body);
                                 }
@@ -3158,8 +3125,8 @@ class ServicioApoyoController
 
                     $body = $Fase == 298 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que el <b>RAL</b> de <b>' . $Nombre_Candidato . '</b> ha quedado temporalmente pausado.<br><br><br>No es necesario responder a este correo.' : ($Fase == 299 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Investigación Laboral</b> de <b>' . $Nombre_Candidato . '</b> ha quedado temporalmente pausado.<br><br><br>No es necesario responder a este correo.' : ($Fase == 310 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Validación de Licencia</b> de <b>' . $Nombre_Candidato . '</b> ha quedado temporalmente pausado.<br><br><br>No es necesario responder a este correo.' : ($Fase == 300 || $Fase == 230 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Verificación Domiciliaria</b> de <b>' . $Nombre_Candidato . '</b> ha quedado temporalmente pausado.<br><br><br>No es necesario responder a este correo.' : ($Fase == 324 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Verificación Domiciliaria con Visita Presencial</b> de <b>' . $Nombre_Candidato . '</b> ha quedado temporalmente pausado.<br><br><br>No es necesario responder a este correo.' : ''))));
 
-                    if (!Utils::isAdmin())
-                        Utils::sendEmail($candidato_datos->Correo_Cliente, $candidato_datos->Quien_Solicita, $subject, $body);
+                    if (!Utils::isAdmin()) 
+                    Utils::sendEmail($candidato_datos->Correo_Cliente, $candidato_datos->Quien_Solicita, $subject, $body);
 
                     $perfil = new CfgImagenes();
                     $perfil->setFolio_Origen($Folio);
@@ -3224,8 +3191,8 @@ class ServicioApoyoController
 
                     $body = $Fase == 298 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que el <b>RAL</b> de <b>' . $Nombre_Candidato . '</b> se reanudará.<br><br><br>No es necesario responder a este correo.' : ($Fase == 299 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Investigación Laboral</b> de <b>' . $Nombre_Candidato . '</b> se reanudará.<br><br><br>No es necesario responder a este correo.' : ($Fase == 310 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Validación de Licencia</b> de <b>' . $Nombre_Candidato . '</b> se reanudará.<br><br><br>No es necesario responder a este correo.' : ($Fase == 300 || $Fase == 230 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Verificación Domiciliaria</b> de <b>' . $Nombre_Candidato . '</b> se reanudará.<br><br><br>No es necesario responder a este correo.' : ($Fase == 324 ? $saludo . ', ' . $candidato_datos->Quien_Solicita . '<br><br>Se le informa que la <b>Verificación Domiciliaria con Visita Presencial</b> de <b>' . $Nombre_Candidato . '</b> se reanudará.<br><br><br>No es necesario responder a este correo.' : ''))));
 
-                    if (!Utils::isAdmin())
-                        Utils::sendEmail($candidato_datos->Correo_Cliente, $candidato_datos->Quien_Solicita, $subject, $body);
+                    if (!Utils::isAdmin()) 
+                    Utils::sendEmail($candidato_datos->Correo_Cliente, $candidato_datos->Quien_Solicita, $subject, $body);
 
                     $perfil = new CfgImagenes();
                     $perfil->setFolio_Origen($Folio);

@@ -21,9 +21,9 @@ class ResumeController{
 	
 	public function psicometria(){
 		if (true) {
-			  //$id = Encryption::decode($_GET['id']);
+			 $id = Encryption::decode($_GET['id']);
             $psychometry = new Psychometry();
-            $psychometry->setId(218);
+            $psychometry->setId( $id);
             $psycho = $psychometry->getOne();
 			
             $pdf = new Psicometria("P", "pt", "Letter");
@@ -40,8 +40,7 @@ class ResumeController{
             $pdf->AddPage();
 			$pdf->setPortada($psycho);
 			$pdf->setInterpretation( $psycho);
-			$pdf->AddPagesFromPDF("./uploads/psychometrics/1.pdf");
-
+            $pdf->AddPagesFromPDF("./uploads/psychometrics/" . $id . ".pdf", $psycho);
 			$pdf->Output('I', "Psicometria - " . utf8_decode($psycho->candidate) . '.pdf', true);
 		}else{
 			header("location:".base_url);

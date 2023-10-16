@@ -690,7 +690,7 @@
                       <h3 class="card-title"><i class="fas fa-birthday-cake mr-2"></i>Cumpleaños de nuestros clientes SA</h3>
                     </div>
                     <div class="card-body table-responsive p-0 table-sm">
-                      <table id="tb_contacts" class="table table-sm">
+                       <table id="tb_contacts" class="table table-sm">
                         <thead>
                           <tr>
                             <th>Nombre</th>

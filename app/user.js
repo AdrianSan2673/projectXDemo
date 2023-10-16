@@ -312,7 +312,7 @@ class User {
     }
 
     //===[gabo 4 agosto usuarios fin]===
-    checkUsernameWithInfo() {
+	 checkUsernameWithInfo() {
         var formData = new FormData();
         let username = document.querySelector('#username').value;
         formData.append('username', username);
@@ -322,7 +322,7 @@ class User {
         })
 
             .then(response => {
-                //  console.log(response.json());
+               //  console.log(response.json());
                 if (response.ok) {
                     return response.text();
                 } else {
@@ -442,9 +442,8 @@ class User {
 
             });
     }
-    //gabo 2 oct
-
-    Send_Email() {
+	
+	  Send_Email() {
         var formData = new FormData();
         let usuario = document.querySelector('#modal_send_email #Usuario').value;
         formData.append('usuario', usuario);
@@ -455,7 +454,7 @@ class User {
         })
 
             .then(response => {
-                console.log(response.json());
+                // console.log(response.json());
                 if (response.ok) {
                     return response.text();
                 } else {
@@ -508,13 +507,10 @@ class User {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
                 }
             })
-        // .catch(error => {
-        //     utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+            .catch(error => {
+                utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
 
-        // });
+            });
     }
-
-
-
 
 }

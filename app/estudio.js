@@ -242,7 +242,7 @@ class Estudio extends ContenidoEstudio{
                         form.querySelectorAll('input')[9].value = json_app.IMSS;
                         form.querySelectorAll('input')[10].value = json_app.RFC;
    
-                        if (json_app.ID_Empresa==413||json_app.ID_Empresa==480) {
+                        if ((json_app.ID_Empresa==413||json_app.ID_Empresa==480) && json_app.Cliente!=669 ) {
                             form.querySelector('.num_licen').style.display = "block";
                             form.querySelector('[name="Numero_Licencia"]').value = json_app.Numero_Licencia
 							form.querySelector('[name="Numero_Licencia"]').required=true
@@ -1208,6 +1208,7 @@ class Estudio extends ContenidoEstudio{
                         form.querySelectorAll('select')[3].value = `${json_app.data.Viable}`;
 						
 						if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
+							form.querySelector('[name="Cual_Factor_Riesgo"]').value=json_app.data.Cual_Factor_Riesgo
                             //form.querySelector('textarea').parentElement.style.display = 'none';
 							if (json_app.data.Proporciona_Contacto == 1) {
 								document.getElementsByName('Proporciona_Contacto')[0].checked = true;
@@ -1255,7 +1256,7 @@ class Estudio extends ContenidoEstudio{
                         form.querySelectorAll('input')[0].value = folio;
                         form.querySelectorAll('input')[1].value = 0;
 						if (json_app.candidato_datos.Servicio_Solicitado == 'ESE SMART') {
-                            form.querySelector('textarea').parentElement.style.display = 'none';
+                            form.querySelector('textarea').parentElement.style.display = 'block';
                         }else {
 							form.querySelectorAll('.form-group')[5].style.display = 'none';
 							form.querySelectorAll('.form-group')[6].style.display = 'none';
@@ -3636,10 +3637,8 @@ class Estudio extends ContenidoEstudio{
 		
        }
 		
-			if (data.ID_Empresa == 525){
-				document.querySelector('#vert-tabs-google-search-tab').style.display = '';
-
-			}
+				//document.querySelector('#vert-tabs-google-search-tab').style.display = '';
+			
     }
 
     setServicioSolicitado(Servicio_Solicitado, display=false){

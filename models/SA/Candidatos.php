@@ -2759,16 +2759,18 @@ class Candidatos
         $date2 = $this->getFecha_entregado();
 
         $stmt = $this->db->prepare("SELECT RVA.Nombre_Cliente, 
-            SUM(case when RC.Servicio_Solicitado = 291 AND (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) then 1 else 0 end) AS No_RAL_Avanzados,
-            SUM(case when (RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291) AND RC.ESE IS NULL AND RC.IL IS NULL then 1 else 0 end) AS No_RAL_Netos,
-            SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 then 1 else 0 end) AS No_RAL_Brutos, 
-            SUM(case when (RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231) and (RC.Estado = 252 OR Estado = 254) then 1 else 0 end) AS No_INV_FIN,
-            SUM(case when (RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230) and (RC.Estado = 252 OR Estado = 254) then 1 else 0 end) AS No_ESE_FIN, 
+            SUM(case when (RC.Servicio_Solicitado = 291 OR RC.Servicio_Solicitado = 298 OR RC.Servicio_Solicitado = 328) AND (RC.ESE IS NOT NULL OR RC.IL IS NOT NULL) then 1 else 0 end) AS No_RAL_Avanzados,
+            SUM(case when (RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291 OR RC.Servicio_Solicitado = 328) AND RC.ESE IS NULL AND RC.IL IS NULL then 1 else 0 end) AS No_RAL_Netos,
+            SUM(case when RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291  OR RC.Servicio_Solicitado = 328 then 1 else 0 end) AS No_RAL_Brutos, 
+            SUM(case when (RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231) and (RC.Estado = 252 OR RC.Estado = 254) then 1 else 0 end) AS No_INV_FIN,
+            SUM(case when (RC.Servicio_Solicitado = 230 OR RC.Servicio_Solicitado = 300 OR RC.Servicio_Solicitado = 324) and (RC.Estado = 252 OR RC.Estado = 254) then 1 else 0 end) AS No_ESE_FIN, 
+            SUM(case when (RC.Servicio_Solicitado = 340 ) and (RC.Estado = 252 OR RC.Estado = 254) then 1 else 0 end) AS No_SOI_FIN, 
+            SUM(case when (RC.Servicio_Solicitado = 341 ) and (RC.Estado = 252 OR RC.Estado = 254) then 1 else 0 end) AS No_SMART_FIN, 
             SUM(case when (RC.Servicio_Solicitado = 299 Or RC.Servicio_Solicitado = 231) and (RC.Estado < 252) then 1 else 0 end) AS No_INV_Proc,
-            SUM(case when (RC.Servicio_Solicitado = 300 Or RC.Servicio_Solicitado = 230) and (RC.Estado < 252) then 1 else 0 end) AS No_ESE_Proc, 
+            SUM(case when (RC.Servicio_Solicitado = 230 OR RC.Servicio_Solicitado = 300 OR RC.Servicio_Solicitado = 324) and (RC.Estado < 252) then 1 else 0 end) AS No_ESE_Proc, 
             SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) and (RC.Estado = 252 OR Estado = 254 OR EStado < 252) then 1 else 0 end) AS No_INV_Total, 
-            SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254 OR Estado < 252) then 1 else 0 end) AS No_ESE_Total,
-            SUM(case when ((RC.Servicio = 299 Or RC.Servicio = 231 or RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254 OR Estado < 252) OR (RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291) AND RC.ESE IS NULL AND RC.IL IS NULL) then 1 else 0 end) AS No_Servicios
+            SUM(case when (RC.Servicio = 230 OR RC.Servicio = 300 OR RC.Servicio = 324) and (RC.Estado = 252 OR Estado = 254 OR Estado < 252) then 1 else 0 end) AS No_ESE_Total,
+            SUM(case when ((RC.Servicio = 230 OR RC.Servicio = 231 OR RC.Servicio = 291 OR RC.Servicio = 299 or RC.Servicio = 300 or RC.Servicio = 324 or RC.Servicio = 328 ) and (RC.Estado = 252 OR Estado = 254 OR Estado < 252) OR (RC.Servicio_Solicitado = 298 Or RC.Servicio_Solicitado = 291) AND RC.ESE IS NULL AND RC.IL IS NULL) then 1 else 0 end) AS No_Servicios
         FROM rh_Candidatos RC INNER JOIN rh_Ventas_Alta RVA ON RC.Cliente=RVA.Cliente WHERE  CONVERT(DATE,Fecha) BETWEEN :date1 AND :date2 AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 GROUP BY RVA.Nombre_Cliente ORDER BY No_Servicios DESC");
         $stmt->bindParam(":date1", $date1, PDO::PARAM_STR);
         $stmt->bindParam(":date2", $date2, PDO::PARAM_STR);
@@ -2950,7 +2952,9 @@ class Candidatos
 			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) AND RC.ESE IS NULL AND RC.IL IS NULL then 1 else 0 end end) AS No_RAL_Netos,
 			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 299 Or RC.Servicio = 231) then 1 else 0 end end) AS No_INV_FIN,
 			SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324) then 1 else 0 end end) AS No_ESE_FIN,
-            SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) then 1 else 0 end end) AS No_FIN
+            SUM(case when (v.Empresa=413 AND rc.replicado=2 ) then 0 else case when (RC.Servicio = 300 Or RC.Servicio = 230 Or RC.Servicio = 324 Or RC.Servicio = 299 Or RC.Servicio = 231 Or RC.Servicio = 298 Or RC.Servicio = 291 Or RC.Servicio = 328 ) then 1 else 0 end end) AS No_FIN,
+			 STUFF( (SELECT ', '  + CONCAT(s.first_name,' ',s.last_name) FROM rh_Ventas_Alta c INNER JOIN rh_Candidatos_Ejecutivos_Plazas p ON c.Cliente=p.ID_Cliente INNER JOIN reclutamiento.dbo.users s ON p.ID_Ejecutivo=s.username WHERE c.Cliente=v.Cliente AND id_user_type=13 ORDER BY s.username FOR XML PATH ('')), 1, 2, '') as logistica,
+			STUFF( (SELECT ', '  + CONCAT(s.first_name,' ',s.last_name) FROM rh_Ventas_Alta c INNER JOIN rh_Candidatos_Ejecutivos_Plazas p ON c.Cliente=p.ID_Cliente INNER JOIN reclutamiento.dbo.users s ON p.ID_Ejecutivo=s.username WHERE c.Cliente=v.Cliente AND id_user_type=14 ORDER BY s.username FOR XML PATH ('')), 1, 2, '') as cuenta
 		FROM rh_Candidatos RC
 			INNER JOIN rh_Ventas_Alta v 
 				ON RC.Cliente=v.Cliente 
@@ -2965,10 +2969,13 @@ class Candidatos
         return $fetch;
     }
 
-    public function getDetallePorAnioClienteSinServicio()
+   public function getDetallePorAnioClienteSinServicio()
     {
         $Anio = $this->getFecha_solicitud();
-        $stmt = $this->db->prepare("        SELECT Nombre_Cliente FROM rh_Ventas_Alta ve where ve.Cliente <> ALL
+        $stmt = $this->db->prepare("SELECT Nombre_Cliente,
+        STUFF( (SELECT ', '  + CONCAT(s.first_name,' ',s.last_name) FROM rh_Ventas_Alta c INNER JOIN rh_Candidatos_Ejecutivos_Plazas p ON c.Cliente=p.ID_Cliente INNER JOIN reclutamiento.dbo.users s ON p.ID_Ejecutivo=s.username WHERE c.Cliente=ve.Cliente AND id_user_type=13 ORDER BY s.username FOR XML PATH ('')), 1, 2, '') as logistica,
+		STUFF( (SELECT ', '  + CONCAT(s.first_name,' ',s.last_name) FROM rh_Ventas_Alta c INNER JOIN rh_Candidatos_Ejecutivos_Plazas p ON c.Cliente=p.ID_Cliente INNER JOIN reclutamiento.dbo.users s ON p.ID_Ejecutivo=s.username WHERE c.Cliente=ve.Cliente AND id_user_type=14 ORDER BY s.username FOR XML PATH ('')), 1, 2, '') as cuenta
+	   FROM rh_Ventas_Alta ve where ve.Cliente <> ALL
         (SELECT  	v.Cliente
                    FROM rh_Candidatos RC
                     INNER JOIN rh_Ventas_Alta v 
@@ -2981,6 +2988,7 @@ class Candidatos
         $fetch = $stmt->fetchAll();
         return $fetch;
     }
+
 
 
     public function getAnios()

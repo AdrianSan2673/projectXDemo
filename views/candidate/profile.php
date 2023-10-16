@@ -32,7 +32,7 @@
                                     </h4>
                                 </div>
                                 <div class="card-body">
-                                    <div class="row">
+                                    <div class="row" <?= $vacante->type==1?'hidden':'' ?>>
                                         <div class="col-md-3">
                                             <div class="form-group" style="text-align: center">
                                                 <label for="" class="col-form-label" style="margin-top:34px">Sexo:</label>
@@ -41,7 +41,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group" style="text-align: center">
                                                 <label class="col-form-label">Requerido</label>
-                                                <input type="" name="" id="" style="text-align:center" class=" form-control" value="<?= isset($vacante) && $vacante->gender != '' ? $vacante->gender : ''; ?>" maxlength="20" readonly>
+                                                <input type="" name="" id="" style="text-align:center" class=" form-control" value="<?= isset($vacante) && $vacante->gender != '' ? $vacante->gender : ''; ?>" maxlength="20" <?= $vacante->type==1?'':'readonly' ?>  >
                                             </div>
                                         </div>
 
@@ -55,7 +55,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group" style="text-align: center">
                                                 <label class="col-form-label">Estado</label>
-                                                <select name="status_gender" id="status_gender" class="form-control" <?= Utils::isCustomer() ? 'disabled' : '' ?> required>
+                                                <select name="status_gender" id="status_gender" class="form-control" <?= Utils::isCustomer() ? 'disabled' : '' ?> <?= $vacante->type==1?'':'required' ?>>
                                                     <option value="" selected disabled>Seleciona Estado</option>
 
                                                     <option value="si"> Cumple</option>
@@ -65,6 +65,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group" style="text-align: center">
@@ -93,7 +94,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+
+                                    <div class="row" <?= $vacante->type==1?'hidden':'' ?>>
                                         <div class="col-md-3">
                                             <div class="form-group" style="text-align: center">
                                                 <label for="" class="col-form-label" style="margin-top:5px">Estado Civil:</label>
@@ -112,7 +114,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group" style="text-align: center">
-                                                <select name="status_civil_status" id="status_civil_status"  class="form-control" <?= Utils::isCustomer() ? 'disabled' : '' ?> required>
+                                                <select name="status_civil_status" id="status_civil_status"  class="form-control" <?= Utils::isCustomer() ? 'disabled' : '' ?> <?= $vacante->type==1?'':'required' ?>>
                                                     <option value="" selected disabled>Seleciona Estado</option>
                                                     <option value="si"> Cumple</option>
                                                     <option value="no">No cumple</option>

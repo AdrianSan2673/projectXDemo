@@ -577,8 +577,8 @@
               </div>
 				<?php endif;  ?>
  <!-- gabo 29 sept -->
-                            <?php if (Utils::isAdmin()) :  ?>
-                            <div class="card card-red">
+                            
+                            <div class="card card-red" <?= !Utils::isAdmin()?'hidden':'' ?>>
                                 <div class="card-header">
                                     <h4 class="card-title">
                                         Notas
@@ -599,7 +599,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <?php endif;  ?>
 				
                 <div class="card-footer">
                 <div class="row">

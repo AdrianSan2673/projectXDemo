@@ -24,6 +24,9 @@ class Psychometry{
     private $modified_at;
 	private $id_recruiter;
 	private $interpretation;
+	private $page;
+	private $comment;
+	private $id_customer_contact;
 
     private $db;
 
@@ -219,7 +222,31 @@ class Psychometry{
 	{
 		$this->interpretation = $interpretation;
 	}
+
+	public function getPage(){
+		return $this->page;
+	}
+
+	public function setPage($page){
+		$this->page = $page;
+	}
     
+	public function getComment(){
+		return $this->comment;
+	}
+
+	public function setComment($comment){
+		$this->comment = $comment;
+	}
+
+	public function getId_customer_contact(){
+		return $this->id_customer_contact;
+	}
+
+	public function setId_customer_contact($id_customer_contact){
+		$this->id_customer_contact = $id_customer_contact;
+	}
+	
     public function getAll(){
         $stmt = $this->db->prepare("SELECT p.interpretation,p.id_recruiter,  p.request_date, p.id, p.behavior, p.intelligence, p.labor_competencies, p.honesty_ethics_values, p.personality, p.sales_skills, p.leadership, c.first_name, c.surname, c.last_name, ct.customer, ISNULL(cbn.business_name, 'Pendiente') AS business_name, p.status, CONVERT(DATE, p.end_date) AS end_date, CASE WHEN status=1 THEN 'En Proceso' WHEN status=2 THEN 'Entregado' WHEN status=3 THEN 'Facturado' WHEN status=0 THEN 'Cancelado' END AS estado FROM psychometrics p INNER JOIN candidates c ON p.id_candidate=c.id INNER JOIN customers ct ON p.id_customer=ct.id LEFT JOIN customer_business_name cbn ON p.id_business_name=cbn.id ORDER BY p.request_date DESC");
         $stmt->execute();
@@ -239,7 +266,7 @@ class Psychometry{
 
     public function getOne(){
         $id = $this->getId();
-        $stmt = $this->db->prepare("SELECT p.interpretation,p.id_recruiter, p.id, p.request_date, c.first_name, c.surname, c.last_name, c.job_title, c.telephone, c.email, ISNULL(CONCAT(c.first_name, ' ', c.surname, ' ',c.last_name), 'No seleccionado') AS candidate, p.id_candidate, p.id_customer, p.behavior, p.intelligence, p.labor_competencies, p.honesty_ethics_values, p.personality, p.sales_skills, p.leadership, ct.customer, p.id_business_name, p.id_purchase_order, ISNULL(cbn.business_name, 'Pendiente') AS business_name, CONVERT(DATE,p.end_date) AS end_date, p.status AS status, CASE WHEN p.status = 1 THEN 'Pendiente' WHEN p.status = 2 THEN 'Entregado' WHEN p.status = 3 THEN 'Facturado' WHEN p.status = 0 THEN 'Cancelado' END AS estado, CASE WHEN p.id_bill IS NULL AND p.id_purchase_order IS NULL THEN NULL WHEN p.id_bill IS NULL AND p.id_purchase_order IS NOT NULL THEN po.folio ELSE b.folio END AS folio, ROUND(p.amount,2) AS amount FROM psychometrics p INNER JOIN candidates c ON p.id_candidate=c.id INNER JOIN customers ct ON p.id_customer=ct.id LEFT JOIN customer_business_name cbn ON p.id_business_name=cbn.id LEFT JOIN purchase_orders po ON p.id_purchase_order=po.id LEFT JOIN bills b ON p.id_bill=b.id WHERE p.id=:id");
+        $stmt = $this->db->prepare("SELECT p.id_customer_contact,p.comment,p.page,p.interpretation,p.id_recruiter, p.id, p.request_date, c.first_name, c.surname, c.last_name, c.job_title, c.telephone, c.email, ISNULL(CONCAT(c.first_name, ' ', c.surname, ' ',c.last_name), 'No seleccionado') AS candidate, p.id_candidate, p.id_customer, p.behavior, p.intelligence, p.labor_competencies, p.honesty_ethics_values, p.personality, p.sales_skills, p.leadership, ct.customer, p.id_business_name, p.id_purchase_order, ISNULL(cbn.business_name, 'Pendiente') AS business_name, CONVERT(DATE,p.end_date) AS end_date, p.status AS status, CASE WHEN p.status = 1 THEN 'Pendiente' WHEN p.status = 2 THEN 'Entregado' WHEN p.status = 3 THEN 'Facturado' WHEN p.status = 0 THEN 'Cancelado' END AS estado, CASE WHEN p.id_bill IS NULL AND p.id_purchase_order IS NULL THEN NULL WHEN p.id_bill IS NULL AND p.id_purchase_order IS NOT NULL THEN po.folio ELSE b.folio END AS folio, ROUND(p.amount,2) AS amount FROM psychometrics p INNER JOIN candidates c ON p.id_candidate=c.id INNER JOIN customers ct ON p.id_customer=ct.id LEFT JOIN customer_business_name cbn ON p.id_business_name=cbn.id LEFT JOIN purchase_orders po ON p.id_purchase_order=po.id LEFT JOIN bills b ON p.id_bill=b.id WHERE p.id=:id");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
         
@@ -261,8 +288,9 @@ class Psychometry{
 		$sales_skills = $this->getSales_skills();
 		$leadership = $this->getLeadership();
 		$id_recruiter = $this->getId_Recruiter();
+		$id_customer_contact = $this->getId_customer_contact();
 
-        $stmt = $this->db->prepare("INSERT INTO psychometrics(request_date, id_candidate, behavior, intelligence, labor_competencies, honesty_ethics_values, personality, sales_skills, leadership, id_customer, id_business_name, created_at, modified_at,id_recruiter) VALUES (GETDATE(), :id_candidate, :behavior, :intelligence, :labor_competencies, :honesty_ethics_values, :personality, :sales_skills, :leadership, :id_customer, :id_business_name,  GETDATE(), GETDATE(),:id_recruiter)");
+        $stmt = $this->db->prepare("INSERT INTO psychometrics(request_date, id_candidate, behavior, intelligence, labor_competencies, honesty_ethics_values, personality, sales_skills, leadership, id_customer, id_business_name, created_at, modified_at,id_recruiter,id_customer_contact) VALUES (GETDATE(), :id_candidate, :behavior, :intelligence, :labor_competencies, :honesty_ethics_values, :personality, :sales_skills, :leadership, :id_customer, :id_business_name,  GETDATE(), GETDATE(),:id_recruiter,:id_customer_contact)");
 		$stmt->bindParam(":id_customer", $id_customer, PDO::PARAM_INT);
 		$stmt->bindParam(":id_business_name", $id_business_name, PDO::PARAM_INT);
 		$stmt->bindParam(":id_candidate", $id_candidate, PDO::PARAM_INT);
@@ -274,7 +302,8 @@ class Psychometry{
 		$stmt->bindParam(":sales_skills", $sales_skills, PDO::PARAM_INT);
 		$stmt->bindParam(":leadership", $leadership, PDO::PARAM_INT);
 		$stmt->bindParam(":id_recruiter", $id_recruiter, PDO::PARAM_INT);
-           
+		$stmt->bindParam(":id_customer_contact", $id_customer_contact, PDO::PARAM_INT);
+   
         $flag = $stmt->execute();
         if ($flag) {
             $result = true;
@@ -320,8 +349,10 @@ class Psychometry{
 		$sales_skills = $this->getSales_skills();
 		$leadership = $this->getLeadership();
 		$id_recruiter = $this->getId_Recruiter();
+		$comment = $this->getComment();
+		$id_customer_contact = $this->getId_customer_contact();
 
-		$stmt = $this->db->prepare("UPDATE psychometrics SET request_date=:request_date, behavior=:behavior, intelligence=:intelligence, labor_competencies=:labor_competencies, honesty_ethics_values=:honesty_ethics_values, personality=:personality, sales_skills=:sales_skills, leadership=:leadership, id_customer=:id_customer, id_business_name=:id_business_name, end_date=:end_date, status=:status, modified_at=GETDATE(),id_recruiter=:id_recruiter WHERE id=:id");
+		$stmt = $this->db->prepare("UPDATE psychometrics SET request_date=:request_date, behavior=:behavior, intelligence=:intelligence, labor_competencies=:labor_competencies, honesty_ethics_values=:honesty_ethics_values, personality=:personality, sales_skills=:sales_skills, leadership=:leadership, id_customer=:id_customer, id_business_name=:id_business_name, end_date=:end_date, status=:status, modified_at=GETDATE(),id_recruiter=:id_recruiter,comment=:comment,id_customer_contact=:id_customer_contact WHERE id=:id");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->bindParam(":request_date", $request_date, PDO::PARAM_STR);
 		$stmt->bindParam(":id_customer", $id_customer, PDO::PARAM_INT);
@@ -336,6 +367,8 @@ class Psychometry{
 		$stmt->bindParam(":sales_skills", $sales_skills, PDO::PARAM_INT);
 		$stmt->bindParam(":leadership", $leadership, PDO::PARAM_INT);
 		$stmt->bindParam(":id_recruiter", $id_recruiter, PDO::PARAM_INT);
+		$stmt->bindParam(":comment", $comment, PDO::PARAM_INT);
+		$stmt->bindParam(":id_customer_contact", $id_customer_contact, PDO::PARAM_INT);
         
         $flag = $stmt->execute();
         if ($flag) {
@@ -442,10 +475,12 @@ class Psychometry{
 		$result = FALSE;
 		$id_psycho = $this->getId();
 		$interpretation = $this->getInterpretation();
+		$page = $this->getPage();
 
-		$stmt = $this->db->prepare("UPDATE psychometrics SET interpretation=:interpretation WHERE id=:id_psycho");
+		$stmt = $this->db->prepare("UPDATE psychometrics SET interpretation=:interpretation,page=:page WHERE id=:id_psycho");
 		$stmt->bindParam(":id_psycho", $id_psycho, PDO::PARAM_INT);
 		$stmt->bindParam(":interpretation", $interpretation, PDO::PARAM_STR);
+		$stmt->bindParam(":page", $page, PDO::PARAM_STR);
 
 		$flag = $stmt->execute();
 		if ($flag) {

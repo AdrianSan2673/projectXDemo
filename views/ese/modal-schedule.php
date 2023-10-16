@@ -29,7 +29,10 @@
                           <?php endforeach ?>
 							<option value="PAMELAPULIDO">Pamela Ivonne Pulido Díaz</option>
 							<option value="GRISELDABAUTISTA">Griselda Bautista Del Ángel</option>
-						   <option value="EVA.GONZALEZ">Eva Daniela González Pérez</option>
+						    <option value="EVA.GONZALEZ">Eva Daniela González Pérez</option>
+			                <option value="JOSIMARROBLEDO">Martín Josimar Robledo Martínez</option>
+							<option value="MAYELASALVADOR">Mayela Guadalupe Salvador García</option>
+
 						</select>
                     </div>
                     

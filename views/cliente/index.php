@@ -49,14 +49,18 @@
         <br>
     <?php endif ?>
     <!-- Main content -->
+
     <section class="content">
-        <div class="card car-success">
-            <div class="card-header">
-                <h3 class="card-title">Listado de clientes</h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-                <table id="tb_customers" class="table table-striped">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+
+                    <div class="card">
+                        <div class="card-header">
+                        <h3 class="card-title">Listado de clientes</h3>
+                        </div>
+                        <div class="card-body">
+                        <table id="tb_customers" class="table table-striped table-responsive">
                     <thead>
                         <tr>
                             <th <?= (!Utils::isAdmin()) ? 'hidden' : ''; ?>></th>
@@ -71,8 +75,7 @@
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                <th></th>
-                                <th></th>
+                               
                                 <th></th>
                             <?php endif ?>
                             <th></th>
@@ -90,8 +93,7 @@
                                 <th class="text-center align-middle">Promedio mensual en ingreso de unidades</th>
                                 <th class="text-right align-middle">Promedio mensual facturación</th>
                                 <th class="text-right align-middle">Monto acumulado del año facturación</th>
-                                <th class="text-center align-middle">Fecha última evaluación</th>
-                                <th class="text-center align-middle">Calificación del servicio</th>
+                               
                                 <th>Creado por</th>
                             <?php endif ?>
                             <th class="text-center">Acciones</th>
@@ -112,8 +114,7 @@
                                     <td class="text-center align-middle"><?= $cliente['Prom_Mensual'] ?></td>
                                     <td class="text-right align-middle"><?= '$ ' . number_format($cliente['Prom_Fact'], 2) ?></td>
                                     <td class="text-right align-middle"><?= '$ ' . number_format($cliente['Anual_Fact']) ?></td>
-                                    <td class="text-center align-middle"><?= $cliente['Fecha_Ultima_Evaluacion'] ? Utils::getShortDate($cliente['Fecha_Ultima_Evaluacion']) : '' ?></td>
-                                    <td class="text-center align-middle"><?= $cliente['Calificacion'] ? number_format($cliente['Calificacion'], 2) : 'Sin evaluar' ?></td>
+            
                                     <th><?= $cliente['creado_por']  ?> </th>
                                 <?php endif ?>
                                 <td class="text-center py-0 align-middle">
@@ -122,7 +123,7 @@
                                             <i class="fas fa-eye"></i> Ver
                                         </a>
 
-                                        <button class="btn btn-danger ml-3" data-id="<?= Encryption::encode($cliente['Cliente']) ?>"  <?= (!Utils::isAdmin()) ? 'hidden' : ''; ?>>
+                                        <button class="btn btn-danger ml-3" data-id="<?= Encryption::encode($cliente['Cliente']) ?>" <?= (!Utils::isAdmin()) ? 'hidden' : ''; ?>>
                                             <b class="h6 text-bold">X</b>
                                         </button>
                                 </td>
@@ -144,18 +145,21 @@
                                 <th class="text-center align-middle">Promedio mensual en ingreso de unidades</th>
                                 <th>Promedio mensual facturación</th>
                                 <th>Monto acumulado del año facturación</th>
-                                <th class="text-center align-middle">Fecha última evaluación</th>
-                                <th class="text-center align-middle">Calificación del servicio</th>
                                 <th>Creado por</th>
                             <?php endif ?>
                             <th class="text-center">Acciones</th>
                         </tr>
                     </tfoot>
-                </table>
+                </table>                        </div>
+
+                
+                    </div>
+
+                </div>
             </div>
-            <!-- /.card-body -->
         </div>
     </section>
+
 </div>
 
 <script type="text/javascript" src="<?= base_url ?>app/cliente.js?v=<?= rand() ?>"></script>

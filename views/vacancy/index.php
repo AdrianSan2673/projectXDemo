@@ -285,7 +285,7 @@
                         <?php if (!Utils::isCustomer()): ?>
                           <td class="align-middle"><?=$vacancy['customer']?></td>
                         <?php endif ?>
-                        <td class="align-middle"><?=$vacancy['vacancy']?></td>
+                <td class="align-middle celda" style="cursor: pointer;"  data-name="<?= $vacancy['vacancy'] ?>" data-id="<?= base_url.'CandidateContact/register?vacante='.Encryption::encode($vacancy['id'])?>"><?= $vacancy['vacancy'] ?></td>
                         <td class="align-middle"><?= $vacancy['type'] == 1 ? 'Operativa' : ($vacancy['type'] == 2 ? 'Orden común' : ($vacancy['type'] == 3 ? 'Head Hunting' : ($vacancy['type'] == 4 ? 'Iguala' : ''))) ?></td>
                         <td class="align-middle"><?=$vacancy['city'].', '.$vacancy['abbreviation']?></td>
                         <?php if (!Utils::isCustomer()): ?>
@@ -637,7 +637,33 @@
 <script src="<?=base_url?>app/vacancy.js?v=<?=rand()?>"></script>
 <script>
   window.onload = function(){
+     var celdas = document.querySelectorAll('.celda');
 
+      function copiarEnlaceAlPortapapeles(enlace) {
+        var elementoTemporal = document.createElement('input');
+        elementoTemporal.value = enlace;
+        document.body.appendChild(elementoTemporal);
+        elementoTemporal.select();
+        document.execCommand('copy');
+        document.body.removeChild(elementoTemporal);
+      }
+
+  celdas.forEach(function(celda) {
+        celda.addEventListener('click', function() {
+          var enlace = celda.dataset.id; // O puedes obtener el enlace de otra manera si está almacenado en un atributo data o similar
+          copiarEnlaceAlPortapapeles(enlace);
+          Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'Vacante copiada copiada: '+celda.dataset.name ,
+  showConfirmButton: false,
+  timer: 1200
+})
+          
+        });
+      });
+
+	  
     /*let config = document.querySelectorAll("#tb_vacancies .btn-config");
     for(var i =0; i < config.length; i++) {
       config[i].onmouseup = function () {
