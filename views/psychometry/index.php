@@ -11,7 +11,7 @@
       </div>
     </div><!-- /.container-fluid -->
   </section>
-	
+  <?php if (Utils::isCustomer()) : ?>
     <section class="content-header">
       <div class="row">
         <div class="col-sm-2 ml-auto">
@@ -20,6 +20,7 @@
       </div>
     </section>
     <br>
+  <?php endif ?>
 
   <!-- Main content -->
   <section class="content">

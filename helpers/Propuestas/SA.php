@@ -27,8 +27,8 @@ class SA extends PDF_MC_Table
 		$this->Cell(0, 15, strftime('%d') . ' ' . strftime('%B') . ' ' . strftime('%Y'), 0, 1, 'R');
 		$this->setXY($x, $y);
 		$this->Cell(0, 15, 'Estimado(a), ' . utf8_decode($prospecto->Contacto_RH) . '.', 0, 1, 'L');
-		$this->setX($x);
-		$this->Cell(0, 15, utf8_decode($prospecto->Puesto) . ', ' . utf8_decode($prospecto->Prospecto) . '.', 0, 1, 'L');
+		//$this->setX($x);
+		//$this->Cell(0, 15, ($prospecto->Puesto) . ', ' . ($prospecto->Prospecto) . '.', 0, 1, 'L');
 		$this->setX($x);
 		$this->Cell(0, 15, 'Presente.', 0, 1, 'L');
 
@@ -38,9 +38,7 @@ class SA extends PDF_MC_Table
 Por lo que hemos integrado a nuestro servicio de línea el REPORTE de ANTECEDENTES LEGALES, lo que resulta un beneficio para usted al ser una herramienta mucho más confiable que una búsqueda en web, innovamos con el uso de la plataforma en beneficio de su proceso y que le permitan optimizar tiempos, esfuerzos y recursos."), 0, 'FJ');
 
 
-
-
-		$y = $this->GetY() + 10;
+		$y = $this->GetY() + 25;
 		$this->setXY($x, $y);
 		$this->Cell(0, 15, 'Proponemos y ponemos a su consideración lo siguiente:', 0, 1, 'L');
 
@@ -80,6 +78,7 @@ Por lo que hemos integrado a nuestro servicio de línea el REPORTE de ANTECEDENT
 		$x = 110;
 		$this->setY($y);
 		$this->SetWidths(array(420));
+		
 		for ($i = 0; $i < 6; $i++) {
 			$this->setX($x);
 			$this->SetLineWidth(0);
@@ -117,7 +116,7 @@ Por lo que hemos integrado a nuestro servicio de línea el REPORTE de ANTECEDENT
 		$this->setFont('SinkinSans', '', 8);
 		$y = $this->GetY();
 		$this->setXY(260, $y);
-		$this->Cell(0, 15, utf8_encode('Saludos cordiales.'), 0, 1, 'L');
+		$this->Cell(0, 15, utf8_encode(''), 0, 1, 'L');
 		$this->setFont('SinkinSans', '', 8);
 		$y = $this->GetY() + 10;
 		$this->setXY(242, $y);

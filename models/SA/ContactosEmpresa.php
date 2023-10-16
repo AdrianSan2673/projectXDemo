@@ -329,8 +329,8 @@ class ContactosEmpresa
 
     public function getContactosPorCumpleanos()
     {
-        //$stmt = $this->db->prepare("SELECT Nombre_Contacto, Apellido_Contacto, Puesto, Correo, Telefono, Extension, Celular, Fecha_Cumpleaños, Nombre_Empresa, CASE WHEN Fecha_Cumpleaños=FORMAT (GETDATE() - 1, 'dd/MM') THEN 'Ayer' WHEN Fecha_Cumpleaños=FORMAT (GETDATE(), 'dd/MM') THEN 'Hoy' WHEN Fecha_Cumpleaños=FORMAT (GETDATE() + 1, 'dd/MM') THEN 'Mañana' WHEN Fecha_Cumpleaños=FORMAT (GETDATE() + 2, 'dd/MM') THEN 'Pasado mañana' END AS Cumple FROM rh_Ventas_Alta_Contactos c INNER JOIN rh_Ventas_Empresas e ON c.Empresa=e.Empresa WHERE (Fecha_Cumpleaños=FORMAT (GETDATE() - 1, 'dd/MM') OR Fecha_Cumpleaños=FORMAT (GETDATE(), 'dd/MM') OR Fecha_Cumpleaños=FORMAT (GETDATE() + 1, 'dd/MM') OR Fecha_Cumpleaños=FORMAT (GETDATE()+2, 'dd/MM')) AND c.Activo=1 ORDER BY CONCAT(SUBSTRING(Fecha_Cumpleaños, 4, 2) ,SUBSTRING(Fecha_Cumpleaños, 1, 2))");
-        $stmt = $this->db->prepare("SELECT Nombre_Contacto, 
+        $stmt = $this->db->prepare("SELECT Nombre_Contacto, Apellido_Contacto, Puesto, Correo, Telefono, Extension, Celular, Fecha_Cumpleaños, Nombre_Empresa, CASE WHEN Fecha_Cumpleaños=FORMAT (GETDATE() - 1, 'dd/MM') THEN 'Ayer' WHEN Fecha_Cumpleaños=FORMAT (GETDATE(), 'dd/MM') THEN 'Hoy' WHEN Fecha_Cumpleaños=FORMAT (GETDATE() + 1, 'dd/MM') THEN 'Mañana' WHEN Fecha_Cumpleaños=FORMAT (GETDATE() + 2, 'dd/MM') THEN 'Pasado mañana' END AS Cumple FROM rh_Ventas_Alta_Contactos c INNER JOIN rh_Ventas_Empresas e ON c.Empresa=e.Empresa WHERE (Fecha_Cumpleaños=FORMAT (GETDATE() - 1, 'dd/MM') OR Fecha_Cumpleaños=FORMAT (GETDATE(), 'dd/MM') OR Fecha_Cumpleaños=FORMAT (GETDATE() + 1, 'dd/MM') OR Fecha_Cumpleaños=FORMAT (GETDATE()+2, 'dd/MM')) AND c.Activo=1 ORDER BY CONCAT(SUBSTRING(Fecha_Cumpleaños, 4, 2) ,SUBSTRING(Fecha_Cumpleaños, 1, 2))");
+      /*   $stmt = $this->db->prepare("SELECT Nombre_Contacto, 
         Apellido_Contacto, 
         Puesto, Correo, 
         Telefono, 
@@ -345,7 +345,7 @@ class ContactosEmpresa
              WHEN Fecha_Cumpleaños<>FORMAT (GETDATE() + 2, 'dd/MM') THEN 'Proximamanete'END AS Cumple 
              FROM rh_Ventas_Alta_Contactos c INNER JOIN rh_Ventas_Empresas e ON c.Empresa=e.Empresa 
              WHERE (Fecha_Cumpleaños=FORMAT (GETDATE() - 1, 'dd/MM') OR Fecha_Cumpleaños=FORMAT (GETDATE(), 'dd/MM') OR Fecha_Cumpleaños=FORMAT (GETDATE() + 2, 'dd/MM')OR Fecha_Cumpleaños=FORMAT (GETDATE() + 3, 'dd/MM')OR Fecha_Cumpleaños=FORMAT (GETDATE() + 4, 'dd/MM')OR Fecha_Cumpleaños=FORMAT (GETDATE() + 5, 'dd/MM')OR Fecha_Cumpleaños=FORMAT (GETDATE() + 6, 'dd/MM')OR Fecha_Cumpleaños=FORMAT (GETDATE() + 7, 'dd/MM') OR Fecha_Cumpleaños=FORMAT (GETDATE()+2, 'dd/MM')) AND c.Activo=1 ORDER BY CONCAT(SUBSTRING(Fecha_Cumpleaños, 4, 2) ,SUBSTRING(Fecha_Cumpleaños, 1, 2))
-        ");
+        "); */
         $stmt->execute();
         $fetch = $stmt->fetchAll();
         return $fetch;

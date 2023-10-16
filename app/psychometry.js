@@ -50,10 +50,9 @@ class Psychometry{
                     document.querySelector("#psychometry-form #submit").disabled = false;
                 } else if(r == 1){
                     utils.showToast('Psicometría actualizada exitosamente', 'success');
-                    //setTimeout(() => {
-                      ///  window.history.back();
-                    //}, 3000);
-                    document.querySelector("#psychometry-form #submit").disabled = false;
+                /*     setTimeout(() => {
+                        window.history.back();
+                    }, 3000); */
 
                 }else if (r == 2){
                     utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');

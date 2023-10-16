@@ -3857,7 +3857,7 @@ class ESEP extends FPDI
 
 
 			if($observaciones->Viabilidad!='' || $observaciones->Viabilidad!=null){
-				if ($y >= 550) {
+				if ($y >= 750) {
 					$this->AddPage();
 					$y = 72;
 				}else{

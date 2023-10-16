@@ -14,7 +14,13 @@ class DepartamentoController
     public function index()
     {
         if (Utils::isAdmin() || Utils::isCustomerSA()) {
-						
+            var_dump(Utils::decrypt('VlgvUlFreU1mS0lsanR2UnJzWS9pZz09OjqrIEfZlHM7XP0NTnxr4NSc'));die();
+            $contactoEmpresa = new ContactosEmpresa();
+            $contactoEmpresa->setUsuario($_SESSION['identity']->username);
+            $activeModule = $contactoEmpresa->getModuloRH();
+
+            var_dump($activeModule);die();
+            
             $contactoEmpresa = new ContactosEmpresa();
             $contactoEmpresa->setUsuario($_SESSION['identity']->username);
             $contactos = $contactoEmpresa->getClientesPorUsuarioContacto();

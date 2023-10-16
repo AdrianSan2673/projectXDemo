@@ -46,7 +46,6 @@ class VacacionesController
             require_once 'views/holidays/index.php';
             require_once 'views/holidays/modal-create.php';
             require_once 'views/holidays/modal-responder-solicitudes-admin.php';
-			  require_once 'views/holidays/modal-update-holidays.php';
             require_once 'views/layout/footer.php';
         } else {
             header("location:" . base_url);
@@ -489,99 +488,4 @@ class VacacionesController
         } else
             header('location:' . base_url);
     }
-	
-	
-	
-	
-	
-    public function update_holiday()
-    {
-        if (isset($_SESSION['identity']) && $_SESSION['identity'] != FALSE) {
-
-
-            $id =  isset($_POST['id']) && $_POST['id'] != '' ? Encryption::decode($_POST['id']) : '';
-            $start_date =  isset($_POST['start_date']) && $_POST['start_date'] != '' ? Utils::sanitizeString($_POST['start_date']) : '';
-            $end_date =  isset($_POST['end_date']) && $_POST['end_date'] != '' ? Utils::sanitizeString($_POST['end_date']) : '';
-
-
-
-            if ($id && $start_date && $end_date) {
-                if ($start_date > $end_date) {
-                    $aux = $start_date;
-                    $start_date = $end_date;
-                    $end_date = $aux;
-                }
-                $holiday = new EmployeeHolidays();
-                $holiday->setId($id);
-                $holiday->setStart_date($start_date);
-                $holiday->setEnd_date($end_date);
-                $save = $holiday->update_dates();
-
-                if ($save) {
-
-                    $holiday->setID_Contacto($_SESSION['id_cliente']);
-                    $employees = $holiday->getEmployeesHolidaysByCliente();
-                    $holidays = $holiday->getEmployeesHolidaysRequestedByCliente();
-
-                    foreach ($employees as &$emplo) {
-                        $emplo['start_date'] = Utils::getDate($emplo['start_date']);
-                        $emplo['due_date'] = Utils::getDate($emplo['due_date']);
-                        $emplo['rest_vacation'] = $emplo['holidays_by_year'] - $emplo['taken_holidays'];
-                    }
-
-                    $empleado = new Employees();
-                    $empleado->setCliente($_SESSION['id_cliente']);
-                    // AQUI verfiicar si es adminisrador
-
-                    $empleado = new Employees();
-                    $empleado->setCliente($_SESSION['id_cliente']);
-                    $holidays = $empleado->getEmployeesAllHolidaysRequested();
-
-                    foreach ($holidays as &$holiday) {
-                        $holiday['start_date'] = Utils::getDate($holiday['start_date']);
-                        $holiday['end_date'] = Utils::getDate($holiday['end_date']);
-                        $holiday['rest_vacation'] = $holiday['holidays_by_year'] - $holiday['taken_holidays'];
-                        $holiday['id'] = Encryption::encode($holiday['id']);
-                        $holiday['created_at'] = Utils::getDate($holiday['created_at']);
-                    }
-
-
-                    $data = array(
-                        'employees' => $employees,
-                        'holidays' => $holidays,
-                        'solicitudes' => $holidays,
-                        'status' => 1
-                    );
-                    echo json_encode($data);
-                } else
-                    echo json_encode(array('status' => 2));
-            } else
-                echo json_encode(array('status' => 3));
-        } else
-            echo json_encode(array('status' => 4));
-    }
-    public function fill_modal_update()
-    {
-        if (isset($_SESSION['identity']) && $_SESSION['identity'] != FALSE) {
-            $id =  isset($_POST['id']) && $_POST['id'] != '' ? Encryption::decode($_POST['id']) : '';
-
-            if ($id) {
-                $holiday = new EmployeeHolidays();
-                $holiday->setId($id);
-                $holiday = $holiday->getOne();
-                $holiday->id = Encryption::encode($holiday->id);
-
-                if ($holiday) {
-
-                    echo json_encode(array(
-                        'holiday' => $holiday,
-                        'status' => 1
-                    ));
-                } else
-                    echo json_encode(array('status' => 2));
-            } else
-                echo json_encode(array('status' => 0));
-        }
-    }
-	
 }

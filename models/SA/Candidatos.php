@@ -54,7 +54,7 @@ class Candidatos
     private $Gestor_modificacion;
     // ===[27 jULIO 2023 REPLICADO fin ]===
     private $db;
-	private $empresa;
+    private $empresa;
 
     public function __construct()
     {
@@ -532,7 +532,7 @@ class Candidatos
     {
         $this->Gestor_modificacion = $Gestor_modificacion;
     }
-	  public function setEmpresa($empresa)
+    public function setEmpresa($empresa)
     {
         $this->empresa = $empresa;
     }
@@ -1167,8 +1167,8 @@ class Candidatos
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-	
-	public function getServiciosPorContactoYViabilidad()
+
+    public function getServiciosPorContactoYViabilidad()
     {
         $Contacto = $this->getContacto();
         $stmt = $this->db->prepare("SELECT TOP(7200) Folio=RC.Candidato,RC.Cliente ID_Ciente,va.Empresa id_empresa
@@ -1217,7 +1217,7 @@ class Candidatos
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-	
+
 
     public function getServiciosPorContactoTranspais()
     {
@@ -1547,7 +1547,7 @@ class Candidatos
         $Contacto = $this->getContacto();
         $Razon = $this->getRazon();
         $Puesto = $this->getPuesto();
-		$cc_cliente = $this->getCC_Cliente();
+        $cc_cliente = $this->getCC_Cliente();
 
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Cliente=:Cliente, Nombre_Cliente=:Contacto, Razon=:Razon, Puesto=:Puesto, Modificado=GETDATE(),CC_Cliente=:cc_cliente WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
@@ -1555,7 +1555,7 @@ class Candidatos
         $stmt->bindParam(":Contacto", $Contacto, PDO::PARAM_INT);
         $stmt->bindParam(":Razon", $Razon, PDO::PARAM_STR);
         $stmt->bindParam(":Puesto", $Puesto, PDO::PARAM_STR);
-		$stmt->bindParam(":cc_cliente", $cc_cliente, PDO::PARAM_STR);
+        $stmt->bindParam(":cc_cliente", $cc_cliente, PDO::PARAM_STR);
 
         $flag = $stmt->execute();
         if ($flag) {
@@ -1734,6 +1734,7 @@ class Candidatos
         $Estado = $this->getEstado();
         $Fase = $this->getFase();
         $Comentario_Cancelado = $this->getComentario_Cancelado();
+
 
         if ($Estado == 252)
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=:Estado, Servicio=:Fase, Comentario_Cancelado=:Comentario_Cancelado, Fecha_Entregado=GETDATE() WHERE Candidato=:Candidato");
@@ -2969,7 +2970,7 @@ class Candidatos
         return $fetch;
     }
 
-   public function getDetallePorAnioClienteSinServicio()
+    public function getDetallePorAnioClienteSinServicio()
     {
         $Anio = $this->getFecha_solicitud();
         $stmt = $this->db->prepare("SELECT Nombre_Cliente,
@@ -3415,7 +3416,7 @@ class Candidatos
     }
 
     // ===[19 de mayo 2023 estudios fin]===
-     public function getServiciosPorUsuario()
+    public function getServiciosPorUsuario()
     {
         $Contacto = $this->getContacto();
         $Cliente = $this->getCliente();
@@ -3466,7 +3467,7 @@ class Candidatos
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-	
+
 
     public function getModificacionEjecutivoGestor()
     {
@@ -3499,7 +3500,8 @@ class Candidatos
         return $fetch;
     }
 
-    public function getServiciosSOI(){
+    public function getServiciosSOI()
+    {
 
         $stmt = $this->db->prepare("SELECT Creado, Folio=RC.Candidato
         ,[Solicitud]=RC.Fecha
@@ -3551,8 +3553,8 @@ class Candidatos
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-	
-	    public function countCandidatosPorCliente()
+
+    public function countCandidatosPorCliente()
     {
         $Cliente = $this->getCliente();
         $stmt = $this->db->prepare("SELECT count(*) as Total FROM rh_Candidatos WHERE Cliente=:Cliente");
@@ -3562,7 +3564,7 @@ class Candidatos
 
         return $fetch;
     }
-	   public function countCandidatosPorEmpresa()
+    public function countCandidatosPorEmpresa()
     {
         $empresa = $this->getEmpresa();
         $stmt = $this->db->prepare("SELECT count(*) as Total FROM rh_Candidatos rc INNER JOIN rh_Ventas_Alta rva ON rc.Cliente=rva.Cliente WHERE rva.empresa=:empresa");

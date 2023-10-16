@@ -779,7 +779,7 @@ public function getId_Usuario_Rh()
     {
         $Cliente = $this->getCliente();
         $status = $this->getStatus();
-        $stmt = $this->db->prepare("SELECT e.email,e.curp, e.id AS id_employee, CONCAT(e.first_name,' ',e.surname,' ',e.last_name,' - ', p.title) employePosition, e.first_name, e.surname, e.last_name, e.Cliente, Nombre_Cliente, p.title, d.department, dbo.GetMonthsDifference(e.date_birth, GETDATE())/12 date_birth,e.start_date, e.modified_at, ID_Candidato, e.employee_number,e.civil_status
+        $stmt = $this->db->prepare("SELECT e.curp, e.id AS id_employee, CONCAT(e.first_name,' ',e.surname,' ',e.last_name,' - ', p.title) employePosition, e.first_name, e.surname, e.last_name, e.Cliente, Nombre_Cliente, p.title, d.department, dbo.GetMonthsDifference(e.date_birth, GETDATE())/12 date_birth,e.start_date, e.modified_at, ID_Candidato, e.employee_number,e.civil_status
         FROM root.employees e INNER JOIN rh_Ventas_Alta v ON e.Cliente=v.Cliente LEFT JOIN root.positions p ON e.id_position=p.id LEFT JOIN root.department d ON p.id_department=d.id 
         WHERE e.status=:status AND e.Cliente =:Cliente ORDER BY e.first_name");
         $stmt->bindParam(":Cliente", $Cliente, PDO::PARAM_INT);

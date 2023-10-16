@@ -141,28 +141,20 @@
                                                     </button>
 
                                                     <button data-id="<?= Encryption::encode($solicitud['id']) ?>" class="btn btn-danger mt-1" id="btn-denegar">
-                                                        <i class="fas fa-ban"> Denegar</i>
+                                                        <i class="fas fa-ban"> Declinar</i>
                                                     </button>
                                                     <button value="<?= Encryption::encode($solicitud['id']) ?>" class="btn btn-warning mt-1" id="btn-borrar">
                                                         <i class="fas fa-ban"> Borrar</i>
                                                     </button>
-												
                                                 <?php else : ?>
                                                     <?php if ($solicitud['status'] == 'Aceptada') : ?>
                                                         <small class="badge badge-success">
                                                             Aceptada</small>
-                                                      <?php else : if ($solicitud['status'] == 'Declinada') : ?>
+                                                    <?php else : ?>
                                                         <small class="badge badge-danger">
                                                             Declinada</small>
                                                     <?php endif; ?>
-												  <?php endif; ?>
                                                 <?php endif; ?>
-												
-												 <button value="<?= Encryption::encode($solicitud['id']) ?>"
-                                                data-name='<?= $solicitud['first_name'] . " " . $solicitud['surname'] . " " . $solicitud['last_name'] ?>'
-                                                class="btn btn-info mt-1" id="btn-edit">
-                                                <i class="fas fa-edit"> Editar</i>
-                                            </button>
                                             </td>
                                         </tr>
 
@@ -308,37 +300,6 @@
                 }
             })
         }
-		
-		
-		
-		
-		
-		
-		 if (e.target.classList.contains('btn-info') || e.target.offsetParent.classList.contains(
-            'btn-info')) {
-
-        let id;
-        if (e.target.classList.contains('btn-info')) {
-            id = e.target.value;
-            name = e.target.dataset.name;
-        } else {
-            id = e.target.offsetParent.value;
-            name = e.target.offsetParent.dataset.name;
-        }
-
-
-        let holidays = new Holidays();
-        holidays.fill_modal_update(id)
-
-        document.querySelector('#modal_update_holidays #title-modal-update').innerHTML = name;
-
-        $('#modal_update_holidays').modal('show');
-
-    }
-
-		
-		
-		
     })
     // ===[gabo 24 julio  solicitud vacaciones fin]===
 </script>

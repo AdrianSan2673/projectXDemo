@@ -17,20 +17,20 @@
                 </div><!-- /.col -->
             </div>
             <div class="row">
-            <div class="col-sm-6 mx-auto">
+                <div class="col-sm-6 mx-auto">
                     <div class="alert <?= $class_color ?>">
                         <h6 class="text-center"><?= $vacante->vacancy_status ?></h6>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <?php if (Utils::isAdmin()||Utils::isSalesManager()||Utils::isSales()) : ?>
+                <?php if (Utils::isAdmin() || Utils::isSalesManager() || Utils::isSales()) : ?>
                     <div class="col-sm-4 mr-auto">
                         <button class="btn btn-lg btn-outline-orange btn-flat btn-app float-left" onclick="duplicate(this)"><i class="fas fa-clone"></i> Duplicar vacante</button>
                     </div>
                 <?php endif ?>
-            
-                <?php if (Utils::isAdmin() ) : ?>
+
+                <?php if (Utils::isAdmin()) : ?>
                     <div class="col-sm-4 ml-auto">
                         <?php //if ($vacante->send_date != NULL): 
                         ?>
@@ -55,12 +55,12 @@
                             <button class="btn btn-outline-danger" onclick="changeStatus1()">Envío completado</button>
                             <!-- <button class="btn btn-outline-secondary" onclick="changeStatus3()">En seguimiento</button> -->
                         <?php endif ?>
-                        <?php if ($vacante->id_status <= 8  ) : ?>
+                        <?php if ($vacante->id_status <= 8) : ?>
                             <!-- <button class="btn btn-warning" onclick="changeStatus7()">Stand by</button> -->
-						    <button class="btn btn-maroon" onclick="changeStatus4()">Cerrado</button>
-                            <button class="btn btn-outline-danger" onclick="changeStatus5()" <?= !Utils::isAdmin()?'hidden':'' ?>>Cancelado con cobro</button>
-                            <button class="btn btn-outline-secondary" onclick="changeStatus6()" <?= !Utils::isAdmin()?'hidden':'' ?>>Cancelado sin cobro</button>
-                            <button class="btn btn-outline-dark" onclick="changeStatus9()" <?= !Utils::isAdmin()?'hidden':'' ?>>No ingresado</button>
+                            <button class="btn btn-maroon" onclick="changeStatus4()">Cerrado</button>
+                            <button class="btn btn-outline-danger" onclick="changeStatus5()" <?= !Utils::isAdmin() ? 'hidden' : '' ?>>Cancelado con cobro</button>
+                            <button class="btn btn-outline-secondary" onclick="changeStatus6()" <?= !Utils::isAdmin() ? 'hidden' : '' ?>>Cancelado sin cobro</button>
+                            <button class="btn btn-outline-dark" onclick="changeStatus9()" <?= !Utils::isAdmin() ? 'hidden' : '' ?>>No ingresado</button>
                         <?php endif ?>
                     </div>
                 <?php endif ?>
@@ -128,9 +128,9 @@
                                         case 3:
                                             $type = 'Head Hunting';
                                             break;
-										case 4:
+                                        case 4:
                                             $type = 'Iguala';
-											break;
+                                            break;
                                         default:
                                             $type = '';
                                             break;
@@ -382,6 +382,7 @@
                                 <?php endif ?>
 
                             </div>
+
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-3">
@@ -406,7 +407,7 @@
                         </div>
                     <?php endif; ?>
 
-					  <?php if (Utils::isAdmin()  || Utils::isRecruitmentManager() || Utils::isSenior()|| Utils::isJunior()) : ?>
+                    <?php if (Utils::isAdmin()  || Utils::isRecruitmentManager() || Utils::isSenior()|| Utils::isJunior()) : ?>
                     <div class="card card-red">
                         <div class="card-header">
                             <h4 class="card-title">
@@ -423,6 +424,7 @@
                         </div>
                     </div>
                     <?php endif; ?>
+
 
                 </div>
                 <div class="col-md-3">

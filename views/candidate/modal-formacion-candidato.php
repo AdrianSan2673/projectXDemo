@@ -68,7 +68,7 @@
                 </div>
                 <div class="card-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                    <button class="btn btn-orange float-right" id="preparation_candidate_submit">Guardar</button>
+                    <button class="btn btn-orange float-right" id="preparation_candidate_submit">Enviar</button>
                 </div>
             </form>
         </div>

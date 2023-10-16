@@ -264,7 +264,7 @@ class SSP
         $data = self::sql_exec(
             $db,
             $bindings,
-            "SELECT  " . implode(", ", self::pluck($columns, 'db')) . " $extraFields
+            "SELECT " . implode(", ", self::pluck($columns, 'db')) . " $extraFields
 			 FROM $table
 			 $where
              $extraWhere
@@ -303,7 +303,7 @@ class SSP
         //  $limit");
         // die();
 
-        //  $c = new Candidate();
+      //  $c = new Candidate();
         for ($i = 0; $i < count($data); $i++) {
 
 
@@ -333,13 +333,13 @@ class SSP
                         $cvroute = $resumepath . '/' . $cv;
                     }
                 }
-                $resume = '../' . $cvroute;
+                $resume = '../'.$cvroute;
             }
 
 
             $data[$i]['route'] = base_url . $avatar;
 
-            $data[$i]['resume'] = $resume;
+            $data[$i]['resume'] =$resume;
             $data[$i]['id'] = Encryption::encode($data[$i]['id']);
             $data[$i]['aptitudes'] = str_replace('\n', " ", $data[$i]['aptitudes']);
             $data[$i]['experiences'] = str_replace('n*', " ", $data[$i]['experiences']);
@@ -350,8 +350,6 @@ class SSP
         }
 
 
-
-
         array_unshift($columns, array('db' => 'route',  'dt' => 0));
         array_unshift($columns, array('db' => 'resume',  'dt' => 17));
 
@@ -360,8 +358,6 @@ class SSP
             array_unshift($columns, array('db' => 'id_status',  'dt' => 22));
             array_unshift($columns, array('db' => 'status',  'dt' => 23));
         }
-
-
 
 
 

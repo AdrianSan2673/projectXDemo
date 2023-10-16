@@ -241,7 +241,7 @@
                                                 <input type="email" name="email" id="email" readonly value="<?= $_SESSION['identity']->email ?>" class="form-control" required>
                                             </div>
                                         </div>
-									  <div class="col-md-6">
+                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="id_state" class="col-form-label">Estado</label>
                                                 <?php $states = Utils::showStates(); ?>
@@ -270,7 +270,6 @@
                                                 </select>
                                             </div>
                                         </div>
-									
                                     <?php else : ?>
                                         <!-- ===[gabo 1 agosto operativa]== -->
                                         <div class="col-md-4" <?= (isset($vacante->type) && ($vacante->type == 1 || $vacante->type == 4)) ? 'hidden' : ''; ?>>

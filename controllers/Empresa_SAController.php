@@ -262,30 +262,31 @@ class Empresa_SAController
             header('location:' . base_url);
     }
 
-    public function upload_image64(){
+    public function upload_image64()
+    {
         if (isset($_SESSION['identity']) && isset($_POST['logo'])) {
             $img = $_POST['logo'];
-            $img = str_replace('data:image/png;base64,', '', $img);  
+            $img = str_replace('data:image/png;base64,', '', $img);
             $img = str_replace(' ', '+', $img);
             $data = base64_decode($img);
-			$ID_Empresa = Utils::sanitizeNumber($_POST['ID_Empresa']);
+            $ID_Empresa = Utils::sanitizeNumber($_POST['ID_Empresa']);
             $ID_Cliente = Utils::sanitizeNumber($_POST['ID_Cliente']);
-			
-			if ($ID_Cliente && $ID_Cliente > 0){
-				$route = 'uploads/cliente/'.$ID_Cliente.'/';
 
-				if (file_exists($route)) {
-					Utils::deleteDir('uploads/cliente/'. $ID_Cliente);
-				}
-			}elseif ($ID_Empresa && $ID_Empresa > 0) {
-				$route = 'uploads/empresa/'.$ID_Empresa.'/';
+            if ($ID_Cliente && $ID_Cliente > 0) {
+                $route = 'uploads/cliente/' . $ID_Cliente . '/';
 
-				if (file_exists($route)) {
-					Utils::deleteDir('uploads/empresa/'. $ID_Empresa);
-				}
-			}
-            
-            if(!file_exists($route)){
+                if (file_exists($route)) {
+                    Utils::deleteDir('uploads/cliente/' . $ID_Cliente);
+                }
+            } elseif ($ID_Empresa && $ID_Empresa > 0) {
+                $route = 'uploads/empresa/' . $ID_Empresa . '/';
+
+                if (file_exists($route)) {
+                    Utils::deleteDir('uploads/empresa/' . $ID_Empresa);
+                }
+            }
+
+            if (!file_exists($route)) {
                 mkdir($route);
             }
 
@@ -294,52 +295,51 @@ class Empresa_SAController
 
             if ($success) {
                 echo json_encode(
-					array(
-						'status' => 1,
-						'logo' => base_url.$file
-					)
-				);
+                    array(
+                        'status' => 1,
+                        'logo' => base_url . $file
+                    )
+                );
             } else {
                 echo json_encode(
-					array(
-						'status' => 0
-					)
-				);
+                    array(
+                        'status' => 0
+                    )
+                );
             }
-            
-        }else{
-            header("location:".base_url);
+        } else {
+            header("location:" . base_url);
         }
     }
 
-    public function delete_image64(){
+    public function delete_image64()
+    {
         if (isset($_SESSION['identity'])) {
-			$ID_Empresa = Utils::sanitizeNumber($_POST['ID_Empresa']);
+            $ID_Empresa = Utils::sanitizeNumber($_POST['ID_Empresa']);
             $ID_Cliente = Utils::sanitizeNumber($_POST['ID_Cliente']);
-			
-			if ($ID_Cliente && $ID_Cliente > 0){
-				$route = 'uploads/cliente/'.$ID_Cliente.'/';
 
-				if (file_exists($route)) {
-					Utils::deleteDir('uploads/cliente/'. $ID_Cliente);
-				}
-			}elseif ($ID_Empresa && $ID_Empresa > 0) {
-				$route = 'uploads/empresa/'.$ID_Empresa.'/';
+            if ($ID_Cliente && $ID_Cliente > 0) {
+                $route = 'uploads/cliente/' . $ID_Cliente . '/';
 
-				if (file_exists($route)) {
-					Utils::deleteDir('uploads/empresa/'. $ID_Empresa);
-				}
-			}
-			
+                if (file_exists($route)) {
+                    Utils::deleteDir('uploads/cliente/' . $ID_Cliente);
+                }
+            } elseif ($ID_Empresa && $ID_Empresa > 0) {
+                $route = 'uploads/empresa/' . $ID_Empresa . '/';
+
+                if (file_exists($route)) {
+                    Utils::deleteDir('uploads/empresa/' . $ID_Empresa);
+                }
+            }
+
             echo json_encode(
                 array(
                     'status' => 1,
-                    'logo' => base_url.'dist/img/image_unavailable.jpg'
+                    'logo' => base_url . 'dist/img/image_unavailable.jpg'
                 )
             );
-            
-        }else{
-            header("location:".base_url);
+        } else {
+            header("location:" . base_url);
         }
     }
 	

@@ -63,13 +63,7 @@
                 let r = this.responseText;
                 console.log(r);
                 try {
-                    let json_app = JSON.parse(r);
-                  	if (json_app.status == 1) {
-						utils.showToast('Permisos actualizados exitosamente', 'success');
-						$('#modal_permission').modal('hide');
-					} else {
-						utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-					}
+                    
                 } catch (error) {
                     utils.showToast('Algo salió mal. Inténtalo de nuevo'+error, 'error');
                     form.querySelectorAll('.btn')[1].disabled = false;

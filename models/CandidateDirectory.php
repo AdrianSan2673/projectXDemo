@@ -219,14 +219,13 @@ class CandidateDirectory
 		return $fetch;
 	}
 
-		public function getAll()
+	public function getAll()
 	{
-		$stmt = $this->db->prepare("SELECT cd.*, (SELECT state FROM states WHERE id=cd.id_state ) state, (SELECT city FROM cities WHERE id=cd.id_city) city,(select vacancy from vacancies where id=cd.id_vacancy) vacancy  FROM root.candidate_directory cd WHERE cd.status<>0 ORDER BY cd.id DESC");
+		$stmt = $this->db->prepare("SELECT cd.*, (SELECT state FROM states WHERE id=cd.id_state ) state, (SELECT city FROM cities WHERE id=cd.id_city) city,(select vacancy from vacancies where id=cd.id_vacancy) vacancy  FROM root.candidate_directory cd WHERE cd.status<>0 ORDER BY cd.created_at DESC");
 		$stmt->execute();
 		$cities = $stmt->fetchAll();
 		return $cities;
 	}
-
 
 	public function getAllById_customer()
 	{

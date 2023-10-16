@@ -80,7 +80,7 @@ class ContactosCliente
     {
         $ID_Cliente = $this->getID_Cliente();
 
-               $stmt = $this->db->prepare("SELECT *, ce.Nombre_Contacto, ct.nombre_tipo as nombre_tipo, u.password, u.id AS id_user FROM rh_Ventas_Alta_Contactos ce INNER JOIN rh_Ventas_Cliente_Contactos cc ON ce.ID=cc.ID_Contacto INNER JOIN rh_ventaS_Contacto_tipo ct ON ce.tipo_usuario=ct.id  inner join reclutamiento.dbo.users u on ce.Usuario=u.username WHERE ID_Cliente=:ID_Cliente AND ce.Activo=1 ORDER BY ce.Nombre_Contacto");
+               $stmt = $this->db->prepare("SELECT *, ce.Nombre_Contacto, ct.nombre_tipo as nombre_tipo, u.password FROM rh_Ventas_Alta_Contactos ce INNER JOIN rh_Ventas_Cliente_Contactos cc ON ce.ID=cc.ID_Contacto INNER JOIN rh_ventaS_Contacto_tipo ct ON ce.tipo_usuario=ct.id  inner join reclutamiento.dbo.users u on ce.Usuario=u.username WHERE ID_Cliente=:ID_Cliente AND ce.Activo=1 ORDER BY ce.Nombre_Contacto");
 
         $stmt->bindParam(":ID_Cliente", $ID_Cliente, PDO::PARAM_INT);
         $stmt->execute();

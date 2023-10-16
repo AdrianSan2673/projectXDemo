@@ -5,9 +5,8 @@ require_once 'models/CandidateDirectory.php';
 require_once 'models/CustomerContact.php';
 require_once 'models/State.php';
 require_once 'models/City.php';
-require_once 'models/Vacancy.php';
 
-require_once 'models/CandidateContact.php';
+
 
 class CandidatoDirectorioController
 {
@@ -232,96 +231,5 @@ class CandidatoDirectorioController
         }
 
         return  $candidatesDirector;
-    }
-	
-	
-	
-	
-	
-    public function save_contacto()
-    {
-
-        if (Utils::isValid($_POST)) {
-
-            $id_contact = isset($_POST['id_contact']) ? trim($_POST['id_contact']) : FALSE;
-
-            if ($id_contact) {
-                $contacto = new CandidateContact();
-                $contacto->setId($id_contact);
-                $contact = $contacto->getOne();
-
-
-
-                $vacancy = new Vacancy();
-                $vacancy->setId($contact->id_vacancy);
-                $vacante = $vacancy->getOne();
-                $vacancy = $vacante->vacancy;
-
-
-                $candidateDirectoryObj = new CandidateDirectory();
-                $candidateDirectoryObj->setFirst_name($contact->first_name);
-                $candidateDirectoryObj->setSurname($contact->surname);
-                $candidateDirectoryObj->setLast_name($contact->last_name);
-                $candidateDirectoryObj->setTelephone($contact->telephone);
-                // $candidateDirectoryObj->setAge(NULL);
-                $candidateDirectoryObj->setExperience('');
-                $candidateDirectoryObj->setId_vacancy($contact->id_vacancy);
-                $candidateDirectoryObj->setId_state($vacante->id_state);
-                $candidateDirectoryObj->setId_city($vacante->id_city);
-                // $candidateDirectoryObj->setUrl($url);
-                // $candidateDirectoryObj->setComment($comment);
-                $candidateDirectoryObj->setStatus(3);
-                // $candidateDirectoryObj->setCreated_at(getDate());
-                $candidateDirectoryObj->setCreated_by($_SESSION['identity']->id);
-                // $candidateDirectoryObj->setModified_at(getDate());
-                // $candidateDirectoryObj->setDate_birth($date_birth);
-                // $candidateDirectoryObj->setJob_title($job_title);
-                // $candidateDirectoryObj->setDescription($description);
-                // $candidateDirectoryObj->setCellphone($cellphone);
-                $candidateDirectoryObj->setId_area($vacante->id_area);
-                $candidateDirectoryObj->setId_subarea($vacante->id_subarea);
-
-                $save = $candidateDirectoryObj->save_candidate();
-
-                if ($save) {
-                    $contacto->setId($id_contact);
-                    $contacto->setStatus(3);
-                    $contacto->updateStatus();
-
-                    $contacts =  $contacto->getAll();
-
-                    echo json_encode(array('status' => 1, 'contacts' => $contacts));
-                } else {
-
-                    echo json_encode(array('status' => 0));
-                }
-            }
-        }
-    }
-
-    public function descart_contact()
-    {
-
-        if (Utils::isValid($_POST)) {
-
-            $id_contact = isset($_POST['id_contact']) ? trim($_POST['id_contact']) : FALSE;
-
-            if ($id_contact) {
-                $contacto = new CandidateContact();
-                $contacto->setId($id_contact);
-                $contacto->setStatus(2);
-                $save = $contacto->updateStatus();
-
-                if ($save) {
-                    $contacts =  $contacto->getAll();
-
-
-                    echo json_encode(array('status' => 1, 'contacts' => $contacts));
-                } else {
-
-                    echo json_encode(array('status' => 0));
-                }
-            }
-        }
     }
 }

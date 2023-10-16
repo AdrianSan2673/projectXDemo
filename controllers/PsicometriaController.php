@@ -60,7 +60,7 @@ class PsicometriaController
                 $contact->setId_user($_SESSION['identity']->id);
                 $contacto = $contact->getContactByUser();
                 $id_customer = $contacto->id_customer;
-                $customer_contact=$contacto->id;
+                $customer_contact = $contacto->id;
 
                 $customer = new Customer();
                 $customer->setId($id_customer);
@@ -125,7 +125,7 @@ class PsicometriaController
             $id_recruiter = (isset($_POST['id_recruiter'])) ? trim($_POST['id_recruiter']) : NULL;
             $id_customer_contact = (isset($_POST['customer_contact'])) ? Utils::sanitizeNumber($_POST['customer_contact']) : NULL;
 
-            if ($id_customer && $id_business_name &&  $first_name &&  $surname ) {
+            if ($id_customer && $id_business_name &&  $first_name &&  $surname) {
                 $candidate = new Candidate();
                 $candidate->setFirst_name($first_name);
                 $candidate->setSurname($surname);
@@ -176,9 +176,9 @@ class PsicometriaController
 
                     $email = 'cindy.luna@rrhhingenia.com';
                     $name = 'Cindy Luna';
-                    
-                    $email1 = 'iveth.gomez@rrhhingenia.com';
-                    $name1 = 'Iveth Gómez ';
+
+                    //$email1 = 'iveth.gomez@rrhhingenia.com';
+                    //$name1 = 'Iveth Gómez ';
 
                     $subject = 'Nueva solicitud de Psicometrías de ' . $cliente;
                     $created_by = $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name;
@@ -313,10 +313,20 @@ class PsicometriaController
                 $psychometry->setId($id);
                 $psycho = $psychometry->getOne();
 
+                $customerObj= new Customer();
+   
+
+
+                $customer = new Customer();
+                $customer->setId($psycho->id_customer);
+                $cliente = $customer->getOne();
+                var_dump( number_format($cliente->price_for_psychometrics, 2));die();
 
                 $ObjcustomerContact = new CustomerContact();
                 $ObjcustomerContact->setId_customer($psycho->id_customer);
                 $customerContact = $ObjcustomerContact->getContactsByCustomer();
+
+
             }
 
 
@@ -398,6 +408,9 @@ class PsicometriaController
                 $cust = new Customer();
                 $cust->setId($id_customer);
                 $cliente = $cust->getOne()->customer;
+                $precio_psicometria=number_format( $cust->getOne()->price_for_psychometrics, 2);
+                
+
 
                 $emailUser = $user->email;
                 $name = $user->first_name . ' ' . $user->last_name;
@@ -408,16 +421,16 @@ class PsicometriaController
                     "Los datos del candidato son los siguientes: <ul><li>Puesto: <b>{$job_title} </b> </li> <li>Correo:<b>{$email}</b></li> <li>Telefono: <b>{$telephone}</b></li> <li>Comentario: <b>{$comment}</b></li>" . "</ul>";
                 $user_recuriter = $psychometry->getOne();
 
-                if ($status == 1 && $user_recuriter->id_recruiter != $id_recruiter || $user_recuriter->id_recruiter == null) {
+                if ($user_recuriter->id_recruiter != $id_recruiter || $user_recuriter->id_recruiter == null) {
                     Utils::sendEmail($emailUser, $name, $subject, $body);
                 }
-
                 $update = $psychometry->update();
 
-                if ($update) {
-					    if ($status == 2 && $end_date != null ) {
-                        if ((isset($id_customer_contact) && $id_customer_contact != null) || $user_recuriter->id_customer_contact != $id_customer_contact) {
 
+                if ($update) {
+                    if ($status == 2 && $end_date != null) {
+
+                        if ((isset($id_customer_contact) && $id_customer_contact != null) || $user_recuriter->id_customer_contact != $id_customer_contact) {
                             $ObjcustomerContact = new CustomerContact();
                             $ObjcustomerContact->setId($id_customer_contact);
                             $customerContact = $ObjcustomerContact->getOne();
@@ -425,11 +438,10 @@ class PsicometriaController
                             $bodyCustomer = "Queremos informarte que el proceso de evaluación psicométrica de <b>{$nameCandidate}</b> ha concluido. Puedes acceder a los resultados en la plataforma, específicamente en la sección de 'Psicometrías'. También tienes la opción de visualizar el informe completo directamente <a href='" . base_url . "resume/psicometria&id=" . Encryption::encode($id) . "' target='_blank'>dando click aqui</a>" . ".<br><br> Si tienes alguna pregunta o necesitas más detalles, no dudes en contactarnos. Gracias por tu atención.";
                             Utils::sendEmail($customerContact->email, $customerContact->first_name . ' ' . $customerContact->last_name, 'Psicometria de ' . $first_name . ' ' . $surname . ' ' . $last_name, $bodyCustomer);
                         }
-							
-						 $body = "Se te ha finalizado la solicitud de psicometrías de <b>{$nameCandidate} </b> del cliente <b>{$cliente}</b> la cual fue solicitada el dia " . Utils::getDate($request_date);
-                        Utils::sendEmail( 'yadira.villanueva@rrhhingenia.com', 'Yadira Yazmin Villanueva Ybarra', 'Psicometria de ' . $cliente, $body);
-                        Utils::sendEmail( 'facturacion1@rrhhingenia.com', 'Berenice Rocha', 'Psicometria de ' . $cliente, $body);
 
+                        $body = "Se te ha finalizado la solicitud de psicometrías de <b>{$nameCandidate} </b> del cliente <b>{$cliente}</b> la cual fue solicitada el dia " . Utils::getDate($request_date);
+                        Utils::sendEmail('yadira.villanueva@rrhhingenia.com', 'Yadira Yazmin Villanueva Ybarra', 'Psicometria de ' . $cliente, $body);
+                        Utils::sendEmail('facturacion1@rrhhingenia.com', 'Berenice Rocha', 'Psicometria de ' . $cliente, $body);
                     }
                     echo 1;
                 } else {

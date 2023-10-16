@@ -265,6 +265,9 @@ class Employee {
                     } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
+                    }else if (json_app.status == 3) {
+                        form.querySelectorAll('.btn')[1].disabled = false;
+                        utils.showToast('El CURP ya fue registrado', 'error');
                     } else {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');

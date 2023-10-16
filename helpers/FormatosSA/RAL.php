@@ -46,7 +46,7 @@ class RAL extends FPDF
 		$this->setXY(88, $y);
 		$this->MultiCell(63, 15, utf8_encode(date('G:i', strtotime($ral->Fecha)).' hrs'), 1, 'C', false);
 		$this->setXY(151, $y);
-		$this->MultiCell(189, 15, utf8_decode( utf8_encode(utf8_encode( utf8_decode(Utils::upperAcentos($this->nombre))))), 1, 'C', false);
+		$this->MultiCell(189, 15, utf8_encode( utf8_decode( $this->nombre)), 1, 'C', false);
 
 		$this->SetXY(340, $y);
 		$this->MultiCell(126, 15, 'Exacto', 1, 'C', false);

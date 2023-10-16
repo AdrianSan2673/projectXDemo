@@ -15,17 +15,13 @@ require_once 'models/RH/AsistenciaRH.php';
 require_once 'models/RH/EmployeeHolidays.php';
 require_once 'models/RH/Employees.php';
 require_once 'models/RH/UsuariosRH.php';
-require_once 'libraries/google-api-php-client/vendor/autoload.php';
-require_once 'libraries/google-api-php-client/vendor/google/auth/src/OAuth2.php';
-require_once 'libraries/php-graph-sdk-5.x/src/Facebook/autoload.php';
 
 class UsuarioController
 {
 
     public function index()
     {
-    
-		
+      
         if (isset($_SESSION['identity']) && !empty($_SESSION['identity'])) {
             Utils::showProfilePicture();
             if (Utils::isCandidate()) {
@@ -34,16 +30,14 @@ class UsuarioController
                 $candidato = $candidate->getCandidateByUsername();
                 if (!$candidato) {
                     header('location:' . base_url . 'candidato/crear_curriculum');
-                } 
-				
-				/*else {
+                } else {
                     if ($candidato->job_title == NUll || $candidato->description == NULL || $candidato->id_state == NULL || $candidato->id_city == NULL || $candidato->id_civil_status == NULL || $candidato->id_area == NULL || ($candidato->telephone == NULL && $candidato->cellphone == NULL)) {
-                        header('location:' . base_url . 'candidato/editar');
+                       // header('location:' . base_url . 'candidato/editar');
                     }
                     if (isset($_GET['vacante'])) {
-                        header('location:' . base_url . 'postulaciones/postulate&id_candidate=' . Encryption::encode($_SESSION['identity']->id) . '&id_vacancy=' . $_GET['vacante']);
+                        //header('location:' . base_url . 'postulaciones/postulate&id_candidate=' . Encryption::encode($_SESSION['identity']->id) . '&id_vacancy=' . $_GET['vacante']);
                     }
-                }*/
+                }
             }
 
             if (Utils::isCustomer()) {
@@ -187,111 +181,6 @@ class UsuarioController
             //require_once 'views/layout/modal-encuesta.php';
             require_once 'views/layout/footer.php';
         } else {
-			$client = new Google_Client();
-            $client->setClientId(client_id);
-            $client->setClientSecret(client_secret);
-            $client->setRedirectUri(redirect_uri);
-            $client->addScope("email");
-            $client->addScope("profile");
-			
-			$fb = new Facebook\Facebook([
-                'app_id' => app_id,
-                'app_secret' => app_secret
-            ]);
-
-            $helper = $fb->getRedirectLoginHelper();
-			
-			$accessToken = $helper->getAccessToken();
-          
-            if (isset($_GET['code'])) {
-                $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
-                $client->setAccessToken($token['access_token']);
-                
-                $google_oauth = new Google_Service_Oauth2($client);
-                $google_account_info = $google_oauth->userinfo->get();
-                $email =  $google_account_info->email;
-                $first_name =  $google_account_info->givenName;
-                $familyName = $google_account_info->familyName;
-				
-				$last_name = Utils::separarApellidos($familyName);
-				$surname = $last_name[0];
-				$last_name = $last_name[1];
-				
-				$user = new User();
-                $user->setEmail($email);
-				$identity = $user->loginWithEmail();
-				
-				if ($identity && is_object($identity)) {
-                    $_SESSION['identity'] = $identity;
-                    $user->lastSession($identity->id);
-                    echo 1;
-                    $_SESSION['dark_mode'] = $_SESSION['identity']->dark_mode;
-                    switch ($identity->id_user_type) {
-                        case 1:
-                            $_SESSION['admin'] = TRUE;
-                            break;
-                        case 2:
-                            $_SESSION['senior'] = TRUE;
-                            break;
-                        case 3:
-                            $_SESSION['junior'] = TRUE;
-                            break;
-                        case 4:
-                            $_SESSION['manager'] = TRUE;
-                            break;
-                        case 5:
-                            $_SESSION['salesmanager'] = TRUE;
-                            break;
-                        case 6:
-                            $_SESSION['customer'] = TRUE;
-                            break;
-                        case 7:
-                            $_SESSION['candidate'] = TRUE;
-                            break;
-                        case 8:
-                            $_SESSION['sales'] = TRUE;
-                            break;
-                        case 9:
-                            $_SESSION['recruitmentmanager'] = TRUE;
-                            break;
-                        case 10:
-                            $_SESSION['samanager'] = TRUE;
-                        case 11:
-                            $_SESSION['operationssupervisor'] = TRUE;
-                            break;
-                        case 12:
-                            $_SESSION['logisticssupervisor'] = TRUE;
-                            break;
-                        case 13:
-                            $_SESSION['account'] = TRUE;
-                            break;
-                        case 14:
-                            $_SESSION['logistics'] = TRUE;
-                            break;
-                        case 15:
-                            $_SESSION['customerSA'] = TRUE;
-                            break;
-                        case 16:
-                            $_SESSION['humanresources'] = TRUE;
-                            break;
-                    }
-                    if (Utils::isCustomerSA()) { //Para el modulo de rh si esta activo se agrega el id del primer cliente que aprezca
-                        $contactoEmpresa = new ContactosEmpresa();
-                        $contactoEmpresa->setUsuario($_SESSION['identity']->username);
-                        $activeModule = $contactoEmpresa->getModuloRH();
-
-                        if (count($activeModule) > 1) {
-                            $_SESSION['id_cliente'] = $activeModule[0]['ID_Cliente'];
-                        } elseif (count($activeModule) == 1) {
-                            # marcaria directamente al cliente que tiene como 1
-                            $_SESSION['id_cliente'] = $activeModule[0]['ID_Cliente'];
-                        } else {
-                            $_SESSION['id_cliente'] = 0;
-                        }
-                    }
-                }
-				header("location:".base_url."usuario/index");
-            }
 
             $page_title = 'Iniciar sesión | RRHH Ingenia';
             require_once 'views/user/header.php';

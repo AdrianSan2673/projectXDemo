@@ -8,6 +8,7 @@
     top: 0;
     left: 0;
     width: 100%;
+    background-color: transparent;
     transition: background-color 0.3s ease;
   }
 
@@ -29,51 +30,7 @@
 
   .step-trigger {
     font-size: 0.8rem !important;
-  }
-
-  #template-container {
-    display: none; /* Inicialmente oculto */
-    padding: 10px;
-    overflow-x: scroll; /* Habilitar el desplazamiento horizontal */
-    white-space: nowrap; /* Evitar saltos de línea en las imágenes */
-  }
-
-  .template-scroll {
-      display: flex;
-      gap: 10px;
-  }
-
-  .template-scroll img {
-      max-width: 100px;
-      cursor: pointer;
-      transition: transform 0.3s ease-in-out;
-  }
-
-  .template-scroll img:hover {
-      transform: scale(1.1);
-  }
-
-  #colorOptions {
-      display: flex;
-  }
-
-  .colorOption {
-      width: 30px;
-      height: 30px;
-      margin: 10px;
-      cursor: pointer;
-      border-radius: 50%;
-      transition: transform 0.3s ease-in-out;
-  }
-
-  .colorOption:hover{
-    transform: scale(1.5);
-  }
-
-  #colorSelector {
-      padding: 10px 20px;
-      cursor: pointer;
-  }
+  }  
 </style>
 <div class="content-wrapper">
   <div class="container">
@@ -140,7 +97,7 @@
                           </div>
                           <div class="col-md-4 text-center">
                             <div class="photo">
-                              <img src="<?= isset($_SESSION['route']) && !empty($_SESSION['route']) ? base_url.$_SESSION['route'] : base_url.'dist/img/user-icon.png' ?>" alt="User Avatar">
+                              <img src="<?= isset($_SESSION['route']) && !empty($_SESSION['route']) ? $_SESSION['route'] : base_url.'dist/img/user-icon.png' ?>" alt="User Avatar">
                             </div>
                             <div class="btn-group btn-group-xs" style="margin-top: 110px !important;">
                             <?php if(isset($_SESSION['route']) && !empty($_SESSION['route'])): ?>
@@ -337,13 +294,13 @@
                                   <div class="row">
                                     <div class="col-md-12">
                                       <div class="form-group">
-                                        <label for="activity1" class="col-form-label">Logro o actividad</label>
+                                        <label for="activity1" class="col-form-label">Logro o actividad 1</label>
                                         <input type="text" name="activity1[]" class="form-control" value="<?=$experience['activity1']?>">
                                       </div>
                                     </div>
                                     <div class="col-md-12">
                                       <div class="form-group">
-                                        <label for="activity2" class="col-form-label">Logro o actividad</label>
+                                        <label for="activity2" class="col-form-label">Logro o actividad 2</label>
                                         <input type="text" name="activity2[]" class="form-control" value="<?=$experience['activity2']?>">
                                       </div>
                                     </div>
@@ -351,13 +308,13 @@
                                   <div class="row">
                                     <div class="col-md-12">
                                       <div class="form-group">
-                                        <label for="activity3" class="col-form-label">Logro o actividad</label>
+                                        <label for="activity3" class="col-form-label">Logro o actividad 3</label>
                                         <input type="text" name="activity3[]" class="form-control" value="<?=$experience['activity3']?>">
                                       </div>
                                     </div>
                                     <div class="col-md-12">
                                       <div class="form-group">
-                                        <label for="activity4" class="col-form-label">Logro o actividad</label>
+                                        <label for="activity4" class="col-form-label">Logro o actividad 4</label>
                                         <input type="text" name="activity4[]" class="form-control" value="<?=$experience['activity4']?>">
                                       </div>
                                     </div>
@@ -583,43 +540,9 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-5 text-center bg-light">
-                    <div id="pdf-container">
-                      <div id="pdf-page"></div>
-                      <button id="prev-page" class="btn btn-sm btn-secondary"><i class="fas fa-chevron-left"></i></button>
-                      <button id="next-page" class="btn btn-sm btn-secondary"><i class="fas fa-chevron-right"></i></button>
-                      <p id="page-info">Página <span id="page-num">1</span> de <span id="page-count"></span></p>
-                      <button id="show-templates">Cambiar Plantilla</button>
-                    </div>
-                    <div id="template-container" class="hidden">
-                        <div class="template-scroll">
-                            <img src="<?= base_url ?>dist/img/Curriculumplantilla-Ejemplo.jpg" alt="Resume">
-                            <img src="<?= base_url ?>dist/img/Resume1.jpg" alt="Resume1">
-                            <img src="<?= base_url ?>dist/img/Resume2.jpg" alt="Resume2">
-                            <img src="<?= base_url ?>dist/img/Resume3.jpg" alt="Resume3">
-                            <img src="<?= base_url ?>dist/img/Resume5.jpg" alt="Resume5">
-                            <img src="<?= base_url ?>dist/img/Resume6.jpg" alt="Resume6">
-                            <img src="<?= base_url ?>dist/img/Resume7.jpg" alt="Resume7">
-                            <img src="<?= base_url ?>dist/img/Resume8.jpg" alt="Resume8">
-                            <img src="<?= base_url ?>dist/img/Resume9.jpg" alt="Resume9">
-                            <img src="<?= base_url ?>dist/img/Resume10.jpg" alt="Resume10">
-                            <img src="<?= base_url ?>dist/img/Resume11.jpg" alt="Resume11">
-                            <img src="<?= base_url ?>dist/img/Resume12.jpg" alt="Resume12">
-                            <img src="<?= base_url ?>dist/img/Resume13.jpg" alt="Resume13">
-                            <img src="<?= base_url ?>dist/img/Resume14.jpg" alt="Resume14">
-                            <img src="<?= base_url ?>dist/img/Resume15.jpg" alt="Resume15">
-                        </div>
-                    </div>
-                    <div id="colorOptions">
-                        <div class="colorOption" style="background-color: #f28322;" data-red="242" data-green="131" data-blue="34"></div>
-                        <div class="colorOption" style="background-color: #f8c630;" data-red="248" data-green="198" data-blue="48"></div>
-                        <div class="colorOption" style="background-color: #95bf3b;" data-red="149" data-green="191" data-blue="59"></div>
-                        <div class="colorOption" style="background-color: #005e32;" data-red="0" data-green="94" data-blue="50"></div>
-                        <div class="colorOption" style="background-color: #048abf;" data-red="4" data-green="138" data-blue="191"></div>
-                        <div class="colorOption" style="background-color: #101928;" data-red="16" data-green="25" data-blue="40"></div>
-                        <div class="colorOption" style="background-color: #b80c09;" data-red="184" data-green="12" data-blue="9"></div>
-                        <div class="colorOption" style="background-color: #d948a6;" data-red="217" data-green="72" data-blue="166"></div>
-                    </div>
+
+                  <div class="col-md-5 text-center bg-lightblue">
+                    <div id="pdf-container"></div>
                   </div>
                 </div>
               </div>
@@ -773,16 +696,6 @@
 
     var inputs = form.getElementsByTagName('input');
 
-
-    var currentPage = 1; // Página actual
-    var numPages;   // Número total de páginas (ajusta esto según tu PDF)
-    var pdfContainer = document.querySelector('#pdf-container');
-    var pdfPage = document.querySelector('#pdf-page');
-    var pageNumElement = document.querySelector('#page-num');
-    var pageCountElement = document.querySelector('#page-count');
-    var prevPageButton = document.querySelector('#prev-page');
-    var nextPageButton = document.querySelector('#next-page');
-    var r;
       
     function generarCV () {
       var form = document.querySelector('#cv-maker');
@@ -792,69 +705,56 @@
       xhr.send(formData);
       xhr.onreadystatechange = function() {
         if (xhr.readyState == 4 && xhr.status == 200) {
-          r = this.responseText;
+          let r = this.responseText;
           console.log(r);
           try {
-            loadPage(currentPage);
+            document.getElementById("pdf-container").innerHTML = '';
+            var row = document.createElement('div');
+            row.classList.add('row');
+
+            pdfjsLib.getDocument({
+                data: atob(r)
+              })
+              .promise.then(function(pdf) {
+                var numPages = pdf.numPages;
+                for (var pageNumber = 1; pageNumber <= numPages; pageNumber++) {
+                  pdf.getPage(pageNumber).then(function(page) {
+                    var col = document.createElement('div');
+                    col.classList.add('col-sm-8');
+                    col.classList.add('mt-3');
+
+                    var scale = 0.7;
+                    var viewport = page.getViewport({
+                      scale: scale
+                    });
+
+                    var canvas = document.createElement("canvas");
+                    var context = canvas.getContext("2d");
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    canvas.addEventListener('contextmenu', function(event) {
+                      event.preventDefault();
+                    });
+
+                    var renderContext = {
+                      canvasContext: context,
+                      viewport: viewport
+                    };
+
+                    page.render(renderContext).promise.then(function() {
+                      col.appendChild(canvas);
+                      row.appendChild(col);
+                    });
+                  });
+                }
+                document.querySelector('#pdf-container').appendChild(row);
+              });
 
           } catch (error) {}
 
         }
       }
     }
-
-    function loadPage(pageNumber) {
-        pdfjsLib.getDocument({ data: atob(r) })
-            .promise.then(function(pdf) {
-              numPages = pdf.numPages;
-              pageCountElement.textContent = numPages;
-                return pdf.getPage(pageNumber);
-            })
-            .then(function(page) {
-                var scale = 0.7;
-                var viewport = page.getViewport({ scale: scale });
-                var canvas = document.createElement('canvas');
-                var context = canvas.getContext('2d');
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-                pdfPage.innerHTML = ''; // Limpia el contenedor de la página anterior
-                pdfPage.appendChild(canvas);
-
-                var renderContext = {
-                    canvasContext: context,
-                    viewport: viewport
-                };
-
-                return page.render(renderContext).promise;
-            })
-            .then(function() {
-                pageNumElement.textContent = pageNumber;
-            })
-            .catch(function(error) {
-                console.error('Error al cargar la página:', error);
-            });
-    }
-
-
-    function goToPrevPage() {
-        if (currentPage > 1) {
-            currentPage--;
-            loadPage(currentPage);
-        }
-    }
-
-    // Función para ir a la página siguiente
-    function goToNextPage() {
-        if (currentPage < numPages) {
-            currentPage++;
-            loadPage(currentPage);
-        }
-    }
-
-    // Manejadores de eventos para los botones de navegación
-    prevPageButton.addEventListener('click', goToPrevPage);
-    nextPageButton.addEventListener('click', goToNextPage);
-
     generarCV();
     setInterval(generarCV, 10000);
 
@@ -886,60 +786,10 @@
       cropper.destroy();
       cropper = null;
     });
-    const showTemplatesButton = document.getElementById('show-templates');
-    const templateContainer = document.getElementById('template-container');
-
-    // Escuchar clic en el botón "Seleccionar Plantilla"
-    showTemplatesButton.addEventListener('click', function() {
-        // Alternar la visibilidad de la cinta de imágenes
-        if (templateContainer.style.display === 'none') {
-            templateContainer.style.display = 'block';
-        } else {
-            templateContainer.style.display = 'none';
-        }
-    });
-
-    // Escuchar clic en las imágenes de plantilla (por ejemplo, para seleccionar una)
-    const templateImages = document.querySelectorAll('#template-container .template-scroll img');
-    templateImages.forEach(function(image) {
-        image.addEventListener('click', function() {
-            const selectedTemplate = image.alt;
-            let xhr = new XMLHttpRequest();
-            let data = `template=${selectedTemplate}`;
-            xhr.open('POST', '../Resume/selectTemplate');
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.send(data);
-            xhr.onreadystatechange = function(){
-              if (xhr.readyState == 4 && xhr.status == 200) {
-                generarCV();
-			        }
-            }
-        });
-    });
-
-    const colorOptions = document.querySelectorAll('.colorOption');
-
-    colorOptions.forEach(colorOption => {
-        colorOption.addEventListener('click', () => {
-          const selectedRed = colorOption.dataset.red;
-          const selectedGreen = colorOption.dataset.green;
-          const selectedBlue = colorOption.dataset.blue;
-            let xhr = new XMLHttpRequest();
-            let data = `red=${selectedRed}&green=${selectedGreen}&blue=${selectedBlue}`;
-            xhr.open('POST', '../Resume/selectColor');
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.send(data);
-            xhr.onreadystatechange = function(){
-              if (xhr.readyState == 4 && xhr.status == 200) {
-                generarCV();
-			        }
-            }
-        });
-    });
-
     document.querySelector('#cv-maker').addEventListener('change', e => {
       if (e.target.classList.contains('btn-upload-photo') || e.target.parentElement.classList.contains('btn-upload-photo')) {
         var new_image = document.querySelector('#modal_imagen img');
+        console.log(e.target.files);
         var files = e.target.files;
         var done = function(url) {
           new_image.src = url;
@@ -958,6 +808,8 @@
         }
       }
       if (e.target.classList.contains('id_state')) {
+        console.log(e.target)
+        console.log(e.target.parentElement.parentElement.children[1]);
         let cities = new City();
         cities.id_state = e.target.value;
         cities.selector = e.target.parentElement.parentElement.children[1].children[1];
@@ -973,6 +825,7 @@
     })
     document.querySelector('#cv-maker').addEventListener('click', e => {
       e.preventDefault();
+      console.log(e)
     });
     document.querySelector('#header-part').addEventListener('click', e => {
       if (e.target.classList.contains('btn-edit-photo') || e.target.parentElement.classList.contains('btn-edit-photo')) {
@@ -1019,6 +872,7 @@
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4 && xhr.status == 200) {
             let r = this.responseText;
+            console.log(r);
             try {
               let json_app = JSON.parse(r);
               if (json_app.status == 1) {
@@ -1027,6 +881,7 @@
                 document.querySelector('#cv-maker  div.btn-group.btn-group-xs button.btn.btn-xs.btn-danger.btn-delete-photo').remove();
               }
             } catch (error) {
+              console.log(error);
             }
           }
         }
@@ -1059,6 +914,7 @@
           xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
               let r = this.responseText;
+              console.log(r);
               try {
                 let json_app = JSON.parse(r);
                 if (json_app.status == 1) {
@@ -1077,6 +933,7 @@
                   $('#modal_imagen').modal('hide');
                 }
               } catch (error) {
+                console.log(error);
               }
             }
           }
@@ -1194,13 +1051,13 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="activity1" class="col-form-label">Logro o actividad</label>
+                  <label for="activity1" class="col-form-label">Logro o actividad 1</label>
                   <input type="text" name="activity1[]" class="form-control">
                 </div>
               </div>
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="activity2" class="col-form-label">Logro o actividad</label>
+                  <label for="activity2" class="col-form-label">Logro o actividad 2</label>
                   <input type="text" name="activity2[]" class="form-control">
                 </div>
               </div>
@@ -1208,13 +1065,13 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="activity3" class="col-form-label">Logro o actividad</label>
+                  <label for="activity3" class="col-form-label">Logro o actividad 3</label>
                   <input type="text" name="activity3[]" class="form-control">
                 </div>
               </div>
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="activity4" class="col-form-label">Logro o actividad</label>
+                  <label for="activity4" class="col-form-label">Logro o actividad 4</label>
                   <input type="text" name="activity4[]" class="form-control">
                 </div>
               </div>

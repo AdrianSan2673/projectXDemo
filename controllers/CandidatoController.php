@@ -16,8 +16,6 @@ require_once 'models/Area.php';
 require_once 'models/Subarea.php';
 require_once 'models/CivilStatus.php';
 
-require_once 'models/CandidateContact.php';
-
 class CandidatoController
 {
 
@@ -781,83 +779,7 @@ class CandidatoController
 
     public function ver()
     {
-        if (Utils::isValid($_SESSION['identity']) || (isset($_GET['token']) && isset($_GET['id']))) {
-			if (isset($_GET['token']) && isset($_GET['id'])) {
-                $id = Encryption::decode($_GET['id']);
-                $token = $_GET['token'];
-                $user = new User();
-            
-                $case = $user->validateIdToken($id, $token);
-                
-                switch($case){
-                    case 1:
-                    case 2:
-                        $user->setId($id);
-                        $identity = $user->getOne();
-                        if ($identity && is_object($identity)) {
-                            $_SESSION['identity'] = $identity;
-                            $user->lastSession($identity->id);
-							Utils::showProfilePicture();
-                            $_SESSION['dark_mode'] = $_SESSION['identity']->dark_mode;
-                            switch ($identity->id_user_type) {
-                                case 1:
-                                    $_SESSION['admin'] = TRUE;
-                                    break;
-                                case 2:
-                                    $_SESSION['senior'] = TRUE;
-                                    break;
-                                case 3:
-                                    $_SESSION['junior'] = TRUE;
-                                    break;
-                                case 4:
-                                    $_SESSION['manager'] = TRUE;
-                                    break;
-                                case 5:
-                                    $_SESSION['salesmanager'] = TRUE;
-                                    break;
-                                case 6:
-                                    $_SESSION['customer'] = TRUE;
-                                    break;
-                                case 7:
-                                    $_SESSION['candidate'] = TRUE;
-                                    break;
-                                case 8:
-                                    $_SESSION['sales'] = TRUE;
-                                    break;
-                                case 9:
-                                    $_SESSION['recruitmentmanager'] = TRUE;
-                                    break;
-                                case 10:
-                                    $_SESSION['samanager'] = TRUE;
-                                case 11:
-                                    $_SESSION['operationssupervisor'] = TRUE;
-                                    break;
-                                case 12:
-                                    $_SESSION['logisticssupervisor'] = TRUE;
-                                    break;
-                                case 13:
-                                    $_SESSION['account'] = TRUE;
-                                    break;
-                                case 14:
-                                    $_SESSION['logistics'] = TRUE;
-                                    break;
-                                case 15:
-                                    $_SESSION['customerSA'] = TRUE;
-                                    break;
-                                case 16:
-                                    $_SESSION['humanresources'] = TRUE;
-                                    break;
-                            }
-                        }
-                        break;
-                    case 3:
-                        header('location:'.base_url);
-                        break;
-                    default:
-                        header('location:'.base_url);
-                        break;
-                }
-            }
+        if (Utils::isValid($_SESSION['identity'])) {
             if (isset($_GET['id']) || Utils::isCandidate()) {
                 if (Utils::isCandidate()) {
                     if (isset($_GET['id'])) {
@@ -1020,6 +942,7 @@ class CandidatoController
     public function editar()
     {
         if (isset($_SESSION['identity']) && $_SESSION['identity'] != FALSE) {
+            
             if (isset($_GET['id']) || Utils::isCandidate()) {
 
                 if (Utils::isCandidate()) {
@@ -1300,7 +1223,7 @@ class CandidatoController
             $tiempo =  isset($_POST['tiempo']) ? Utils::sanitizeString($_POST['tiempo']) : null;
             //===[gabo 27 junio perfil]==
 
-            if ($id_vacancy  && $id_candidate  && $age    &&   $functions  &&   $experiencia_comments  &&   $general_comments &&   $functions_comments) {
+            if ($id_vacancy  && $id_candidate    && $age    &&   $functions  &&   $experiencia_comments  &&   $general_comments &&   $functions_comments) {
                 $candidato = new VacancyApplicant();
                 $candidato->setId_candidate($id_candidate);
                 $candidato->setId_vacancy($id_vacancy);
@@ -1523,8 +1446,6 @@ class CandidatoController
                     }
 
                     if (Utils::isCandidate()) {
-
-
                         $id_user = $_SESSION['identity']->id;
                         $route = 'uploads/avatar/' . $id_user . '/';
 
@@ -1559,7 +1480,6 @@ class CandidatoController
                     }
                 }
 
-				
                 if (!isset($route)) {
                     
                     if ($candidato->id_gender != 2) {
@@ -1568,9 +1488,8 @@ class CandidatoController
                         $route = "dist/img/user-icon-rose.png";
                     }
                 }
-				
-                $candidato->img = base_url . $route;
-
+                    
+               $candidato->img = base_url . $route;
 
 
                 if ($resume) {
@@ -1593,10 +1512,11 @@ class CandidatoController
                             $result = @move_uploaded_file($_FILES["resume"]["tmp_name"], $resume);
                         }
 
+                    
                         if ($update) {
-
                             echo json_encode(array(
                                 'candidato' => $candidato,
+                                'resume' => base_url.$route,
                                 'status' => 1
                             ));
                         } else {
@@ -1959,9 +1879,9 @@ class CandidatoController
 		
 	//gabo 4 oct
    if ($extrawhere != '') {
-            $extrawhere .= " AND created_at > '2022-06-01' ";
+            $extrawhere .= " AND created_at < '2022-06-01' ";
         } else {
-            $extrawhere = " created_at > '2022-06-01' ";
+            $extrawhere = " created_at < '2022-06-01' ";
         }
 //gabo 4 oct
 
@@ -2014,42 +1934,5 @@ class CandidatoController
     }
 
 
-	
-	 public function save_contact()
-    {
-        if (Utils::isValid($_POST)) {
-
-            $id_vacancy = isset($_POST['id_vacancy']) ? trim(Encryption::decode($_POST['id_vacancy'])) : FALSE;
-            $first_name = isset($_POST['first_name']) ? Utils::sanitizeString(($_POST['first_name'])) : FALSE;
-            $surname = isset($_POST['surname']) ? Utils::sanitizeString(($_POST['surname'])) : FALSE;
-            $last_name = isset($_POST['last_name']) ? Utils::sanitizeString(($_POST['last_name'])) : FALSE;
-            $telephone = isset($_POST['telephone']) ? Utils::sanitizeString(($_POST['telephone'])) : FALSE;
-
-            if ($id_vacancy && $first_name &&  $surname &&  $last_name &&  $telephone) {
-
-                //    ===[gabo 21 mayo operativa]===
-                $experience = new CandidateContact();
-                $experience->setFirst_name($first_name);
-                $experience->setSurname($surname);
-                $experience->setLast_name($last_name);
-                $experience->setTelephone($telephone);
-                $experience->setId_vacancy($id_vacancy);
-                $experience->setStatus(1);
-
-                $save = $experience->save();
-
-                if ($save) {
-                    echo json_encode(array('status' => 1));
-                } else {
-                    echo json_encode(array('status' => 2));
-                }
-            } else {
-                echo json_encode(array('status' => 0));
-            }
-        } else {
-            echo json_encode(array('status' => 0));
-        }
-    }
-	
 
 }

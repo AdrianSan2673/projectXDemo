@@ -47,7 +47,7 @@ class CVoperativo extends atributos
         $this->setFont('SinkinSans', '', 8);
         $x = $this->getX();
         $this->setXY(310, $y);
-        $this->Cell(250, 20, utf8_encode($datos['nombre']), 0, 0, 'L');
+        $this->Cell(250, 20, ($datos['nombre']), 0, 0, 'L');
         $this->SetFillColor(168, 197, 074); /* Verde */
         $this->Rect(590, $y-15, 10, 40, 'F');
         /* Fin nombre */
@@ -72,12 +72,14 @@ class CVoperativo extends atributos
         $x = 380;
         $y = $this->getY();
         $this->setXY($x, $y);
-        $this->Cell(60, 20, utf8_encode('Telefono:'), 0, 0, 'L');
+        $this->Cell(60, 20,$datos['telephoneCheck']==1? utf8_encode('Telefono:'):'', 0, 0, 'L');
+        
 
         $this->setFont('SinkinSans', '', 8);
         $x = $this->getX();
         $this->setXY($x, $y);
-        $this->Cell(100, 20,$datos['telefono']? utf8_encode($datos['telefono']):'Sin telefono', 0, 0, 'L');
+        $this->Cell(100, 20,$datos['telephoneCheck']==1?(isset($datos['telefono']))? utf8_encode($datos['telefono']):'Sin telefono':'', 0, 0, 'L');
+        
         $this->SetFillColor(71, 124, 179); /* Azul */
         $this->Rect(590, $y+5, 10, 40, 'F');
 
@@ -93,7 +95,7 @@ class CVoperativo extends atributos
         $this->setFont('SinkinSans', '', 8);
         $x = $this->getX();
         $this->setXY($x, $y);
-        $this->MultiCell(100, 10, utf8_encode($datos['escolaridad']), 0, 'L');
+        $this->MultiCell(100, 20, utf8_encode($datos['escolaridad']), 0, 'L');
         
         /* Fin escolaridad */
 
@@ -151,7 +153,7 @@ class CVoperativo extends atributos
         for ($i = 0; $i < count($laboral); $i++) {
             $this->Row(array(utf8_encode($laboral[$i]['enterprise']), utf8_encode($laboral[$i]['review'])));
             $this->setX($x1);
-            if ($this->getY() > 650) {
+            if ($this->getY() > 500) {
                 $this->AddPage();
                 $y = 45;
                 $x1 = 190;
@@ -163,12 +165,13 @@ class CVoperativo extends atributos
         }
 
         /* Comentarios  */
-		if($entrevista['comentarios']){
+		//if($entrevista['comentarios']){
         $this->SetWidths(array(180, 220));
         $y = $this->getY();
-        $this->setXY(190, $y);
-        $this->Row(array("Comentarios del entrevistador", utf8_encode($entrevista['comentarios'])));
-		}
+		$this->setY($y);
+        $this->setX(190);
+		$this->Row(array("Comentarios del entrevistador", utf8_encode($entrevista['comentarios'])));
+		//}
 
         /* Fin comentarios */
     }

@@ -50,7 +50,7 @@ class ServicioApoyoController
 
     public function index()
     {
-        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager() || Utils::isLogistics()) {
+        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager() || Utils::isLogistics()|| Utils::isSenior()) {
 
             if (!Utils::isCustomerSA()) {
                 if (Utils::isAccount()) {
@@ -83,8 +83,10 @@ class ServicioApoyoController
                         $estudio->setFecha_solicitud($_POST['start_date']);
                         $estudio->setFecha_Entregado($_POST['end_date']);
                         $estudios = $estudio->getServiciosPorRangoDeFechaConCancelados();
-                    } else
+                    } else{
+
                         $estudios = $estudio->getServiciosUltimos30();
+                    }
                 }
 
                 $page_title = 'Estudios SocioEconómicos | RRHH Ingenia';
@@ -154,7 +156,7 @@ class ServicioApoyoController
 
     public function crear()
     {
-        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isManager() || Utils::isCustomerSA()) {
+        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isManager() || Utils::isCustomerSA()|| Utils::isSenior()) {
             if (Utils::isCustomerSA()) {
             }
 
@@ -172,7 +174,7 @@ class ServicioApoyoController
 
     public function create()
     {
-        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager()) {
+        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager()||Utils::isSenior()) {
             $Nombres = Utils::sanitizeStringBlank($_POST['Nombres']);
             $Apellido_Paterno = Utils::sanitizeStringBlank($_POST['Apellido_Paterno']);
             $Apellido_Materno = Utils::sanitizeStringBlank($_POST['Apellido_Materno']);
@@ -600,6 +602,8 @@ class ServicioApoyoController
                                 </html>";
                             }
 
+
+                            if (!Utils::isSenior()) 
                             Utils::newNotification($Reclutador . ' de ' . $Nombre_Cliente . ' solicita ' . $Tipo_Solicitud, $Enlace, 1, $Servicio_Solicitado == 231 || $Servicio_Solicitado == 299 ? 1 : ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 300 ? 2 : ($Servicio_Solicitado == 328 ? 3 : 16)), $id_user, $_SESSION['identity']->id, $id_cliente);
                             Utils::sendEmail($Correo_Ejecutivo, $Reclutador, $Asunto, $body);
 
@@ -613,6 +617,7 @@ class ServicioApoyoController
                                     $estudio->setFecha_aplicacion(NULL);
                                     $estudio->updateSchedule();
                                     Utils::sendEmail($Logistica->email, $Logistica->first_name . ' ' . $Logistica->last_name, $Asunto, $body);
+                                    if (!Utils::isSenior()) 
                                     Utils::newNotification($Reclutador . ' de ' . $Nombre_Cliente . ' solicita ' . $Tipo_Solicitud, $Enlace, 1, $Servicio_Solicitado == 231 || $Servicio_Solicitado == 299 ? 1 : ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 300 ? 2 : ($Servicio_Solicitado == 328 ? 3 : 16)), $id_logistica, $_SESSION['identity']->id, $id_cliente);
                                 }
                             }
@@ -631,7 +636,7 @@ class ServicioApoyoController
                                     <label>Telefono: <b>${Telefono}</b></label><br/>${Comentarios_Cliente}<br/><br><br/>
                                     <img style='align-content: center;' src='https://rrhh-ingenia.com.mx/dist/img/rrhh-ingenia.png' height='auto' width='550' ></img>                                </body>
                             </html>";
-                            Utils::sendEmail($Correo, $Reclutador, $Asunto2, $body2);
+                           // Utils::sendEmail($Correo, $Reclutador, $Asunto2, $body2);
                         } else {
                             /***
                              * SOLICITUD DE RAL PODER JUDICIAL VIRTUAL
@@ -735,12 +740,12 @@ class ServicioApoyoController
             } else
                 echo json_encode(array('status' => 0));
         } else
-            header('location:' . base_url);
+        echo json_encode(array('status' => 0));
     }
 
     public function en_proceso()
     {
-        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager()) {
+        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager()|| Utils::isSenior()) {
             $estudio = new Candidatos();
             if (Utils::isAccount()) {
                 $estudio->setEjecutivo($_SESSION['identity']->username);
@@ -807,7 +812,7 @@ class ServicioApoyoController
 
     public function ver()
     {
-        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager()) {
+        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager()||Utils::isSenior()) {
             $folio = Encryption::decode($_GET['candidato']);
 
             $candidato = new CandidatosDatos();
@@ -1755,7 +1760,7 @@ class ServicioApoyoController
 
     public function getContactosYRazonesPorCliente()
     {
-        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics()) {
+        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics()|| Utils::isSenior()) {
             $Cliente = Utils::sanitizeNumber($_POST['Cliente']);
 
             if ($Cliente) {
@@ -2133,10 +2138,10 @@ class ServicioApoyoController
             $Comentario_Cancelacion = Utils::sanitizeString(($_POST['Comentario_Cancelacion']));
             $Finalizado = $_POST['Finalizado'];
 
-            if ($Folio && $Comentario_Cancelacion && ($Estado == 250 || $Estado == 251)) {
+            if ($Folio && $Comentario_Cancelacion && ($Estado == 250 || $Estado == 251|| $Estado == 258)) {
                 if ($Fase == 230 || $Fase == 231 || $Fase == 298)
                     $Estado = 258;
-                if ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 231 || $Servicio_Solicitado == 323 || $Servicio_Solicitado == 340|| $Servicio_Solicitado == 341) {
+                if ($Servicio_Solicitado == 230 || $Servicio_Solicitado == 231 || $Servicio_Solicitado == 323 || $Servicio_Solicitado == 340) {
                     if ($Finalizado == 1)
                         $Estado = 252;
                     else {
@@ -2179,6 +2184,8 @@ class ServicioApoyoController
                 $estudio->setEstado($Estado);
                 $estudio->setComentario_Cancelado($Comentario_Cancelacion);
                 $update = $estudio->saveCancelacion();
+            
+
                 //}
 
                 if ($update) {
@@ -2875,7 +2882,7 @@ class ServicioApoyoController
 
     public function seguimiento()
     {
-        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager()) {
+        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isManager() || Utils::isCustomerSA() || Utils::isSales() || Utils::isSalesManager()||Utils::isSenior()) {
             $folio = Encryption::decode($_GET['candidato']);
             $candidato = new CandidatosDatos();
             $candidato->setCandidato($folio);

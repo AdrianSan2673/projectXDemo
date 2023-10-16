@@ -52,7 +52,7 @@
                 <?php if (!Utils::isCustomer()) : ?>
                   <div class="card-tools">
                     <!-- ===[GABO 27 ABRIL VER CANDIDATO2]=== -->
-                    <button class="btn btn-info" style="font-size: 1.2rem;" value="editar" onclick="update_candidate('<?= Encryption::encode($candidato->id) ?>')"><i class="fas fa-pen"></i> </button>
+                    <button class="btn" style="font-size: 1.2rem;" value="editar" onclick="update_candidate('<?= Encryption::encode($candidato->id) ?>')"><i class="fas fa-pen"></i> </button>
                     <!-- <a href="<?= base_url ?>candidato/editar&id=<?= Encryption::encode($candidato->id) ?>" class="btn btn-tool" style="font-size: 1.2rem;"><i class="fas fa-pen"></i></a> -->
                     <!--  ===[FIN]=== -->
                   </div>
@@ -126,7 +126,7 @@
 
 
                 <div class="row mt-4 mx-auto">
-                  <?php if (Utils::isAdmin()||Utils::isSenior()||Utils::isJunior()||Utils::isCandidate()) : ?>
+                  <?php if (Utils::isAdmin()||Utils::isSenior()||Utils::isJunior()) : ?>
                     <div class="col-12 text-center">
                       <a href="<?= base_url ?>candidato/editar&id=<?= Encryption::encode($candidato->id) ?>" class="btn btn-lg btn-info"><i class="fas fa-pen"></i> Editar</a>
 

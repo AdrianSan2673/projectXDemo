@@ -62,6 +62,8 @@ class ESE extends FPDI
 		$y = $this->GetY() + 70;
 		$this->SetXY($x, $y);
 	
+		if($candidato->ID_Empresa !=561	){//Dicipa S.A DE C.V. (No aparecera el nombre del cliente)
+			
 		if ($this->id_cliente == 662) { //Formato RADEC
 			$this->Write(15, 'INSTITUTO:');
 			$x1 = $this->GetX() + 10;
@@ -77,7 +79,7 @@ class ESE extends FPDI
 			$this->MultiCell(180, 20, utf8_encode($candidato->Nombre_Cliente), 1, 'L');
 		} else if ($candidato->Cliente == 570 || $candidato->Cliente == 366 || $this->id_cliente == 673  || $this->id_cliente == 668|| $this->id_cliente == 660|| $this->id_cliente == 708|| $this->id_cliente == 668 ) {
 			$this->MultiCell(200, 20, utf8_encode($candidato->Nombre_Cliente), 1, 'L');
-		}else if($candidato->ID_Empresa == 480|| $candidato->ID_Empresa == 413){
+		}else if(($candidato->ID_Empresa == 480|| $candidato->ID_Empresa == 413 )&&  $candidato->Cliente != 598 ){
 			$this->MultiCell(200, 20, utf8_encode('TS Trucking'), 1, 'L');
 		}else if($candidato->ID_Empresa == 542 ){
 			$this->MultiCell(200, 20, utf8_encode($candidato->Razon), 1, 'L');
@@ -85,6 +87,7 @@ class ESE extends FPDI
 			$this->MultiCell(200, 20, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' || $candidato->Empresa == 'DUCTOS DEL ALTIPLANO SA DE CV' ? $candidato->Nombre_Cliente : ($candidato->ID_Empresa == 315 ? $candidato->Nombre_Cliente : $candidato->Empresa)))), 1, 'L');
 		}
 
+		}
 		$x1 = 306;
 		$this->SetXY($x1, $y);
 		$this->Write(15, $this->id_cliente == 662 ? 'SOLICITANTE:' : 'DE:');
@@ -223,7 +226,9 @@ class ESE extends FPDI
 		}else{
 			$this->MultiCell(410, 18, utf8_encode($candidato->Nombres . ' ' . $candidato->Apellido_Paterno . ' ' . $candidato->Apellido_Materno), 0, 'C', true);
 		}
-		$this->setFont('SinkinSans', 'B', 6.5);
+		if($candidato->ID_Empresa !=561	){//Dicipa S.A DE C.V. (No aparecera el nombre del cliente)
+		
+			$this->setFont('SinkinSans', 'B', 6.5);
 		$this->setTextColor(160, 160, 160);
 		$y = $this->GetY() + 5;
 		$this->SetXY($x, $y);
@@ -235,7 +240,7 @@ class ESE extends FPDI
 		
 		if($candidato->Cliente ==570||$candidato->Cliente ==366||$candidato->Cliente ==626  || $candidato->Cliente ==668  || $this->id_cliente == 673  ||  $this->id_cliente == 668|| $this->id_cliente == 660|| $this->id_cliente == 708){
 			$this->MultiCell(410, 18, utf8_encode( $candidato->Nombre_Cliente), 0, 'C', true);
-		}else if($candidato->ID_Empresa == 480|| $candidato->ID_Empresa == 413){
+		}else if(($candidato->ID_Empresa == 480|| $candidato->ID_Empresa == 413 )&&  $candidato->Cliente != 598 ){
 		   $this->MultiCell(410, 18, utf8_encode('TS Trucking'), 0, 'C', true);
 		}else if($candidato->ID_Empresa == 542){
 			$this->MultiCell(410, 18, utf8_encode($candidato->Razon), 0, 'C', true);
@@ -245,8 +250,8 @@ class ESE extends FPDI
 			//$this->MultiCell(410, 18, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' || $candidato->Empresa == 'DUCTOS DEL ALTIPLANO SA DE CV' ? $candidato->Nombre_Cliente : ($candidato->ID_Empresa == 315 ? $candidato->Nombre_Cliente : $candidato->Empresa)))), 0, 'C', true);
 		}
 		
+		}
 		
-		//$this->MultiCell(410, 18, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' || $candidato->Empresa == 'DUCTOS DEL ALTIPLANO SA DE CV' ? $candidato->Nombre_Cliente : ($candidato->ID_Empresa == 315 ? $candidato->Nombre_Cliente : $candidato->Empresa)))), 0, 'C', true);
 
 
 		$this->setFont('SinkinSans', 'B', 6.5);
@@ -3350,7 +3355,7 @@ class ESE extends FPDI
 			
 		}
 		$x = 24;
-		$y = $this->GetY() + 2;
+		$y = $this->GetY() + 20;
 		
 		$this->setFont('SinkinSans', 'B', 6.5);
 		$this->setTextColor(140, 140, 140);
@@ -3854,7 +3859,7 @@ class ESE extends FPDI
 
 
 			if($observaciones->Viabilidad!='' || $observaciones->Viabilidad!=null){
-				if ($y >= 550) {
+				if ($y >= 650) {
 					$this->AddPage();
 					$y = 72;
 				}else{
@@ -4272,7 +4277,7 @@ class ESE extends FPDI
 			}
 			
 			
-				if ($Empresa == 523 && $investigacion->Familiar_Empresa) {
+				if ($investigacion->Familiar_Empresa!='' ||$investigacion->Familiar_Empresa!=null ) {
 				$y = $this->GetY() + 2;
 			
 				$this->setFont('SinkinSans', 'B', 6.5);
@@ -5042,12 +5047,25 @@ class ESE extends FPDI
 		$y = $this->GetY() + 25;
 		if ($candidato->Servicio_Solicitado != 'ESE SMART') {
 			$this->SetFillColor(255, 255, 255);
-			
 			$this->setFont('SinkinSans', '', 6);
 			$this->setTextColor(0, 0, 0);
 			$this->SetXY($x, $y);
 			$this->MultiCell(562, 10, (utf8_encode($observaciones->Comentario_General_il)), 0, 'L', true);
 		}else {
+			if($observaciones->Comentario_General_il!='' || $observaciones->Comentario_General_il!=Null){
+			
+			$this->SetFillColor(255, 255, 255);
+			$this->setFont('SinkinSans', '', 6);
+			$this->setTextColor(0, 0, 0);
+			$this->SetXY($x, $y);
+			$this->MultiCell(562, 10, (utf8_encode($observaciones->Comentario_General_il)), 0, 'L', true);
+				
+				$x = 25;
+		$y = $this->GetY() + 25;
+			}
+			
+			
+
 			$this->SetFillColor(234, 234, 234);
 			$this->Rect(11, $y, 590, 72, 'F');
 
@@ -5113,6 +5131,27 @@ class ESE extends FPDI
 				$this->Circle(528, $y + 7, 4, 'F');
 			}
 			$this->SetFillColor(239, 246, 248);
+			
+			
+			if ($Factor_Riesgo == 1 && ($observaciones->Cual_Factor_Riesgo!=''||$observaciones->Cual_Factor_Riesgo!=null)) {
+				
+				
+			$y = $this->GetY() + 2;
+
+			$this->SetXY(10, $y);
+			$this->MultiCell(591, 16, utf8_encode('¿Cual?'), 0, 'L', true);
+			$this->SetFillColor(234, 234, 234);
+
+			$this->SetFillColor(255, 255, 255);
+			$this->setFont('SinkinSans', '', 6.5);
+			$this->setTextColor(0, 0, 0);
+				
+			$this->setXY(308, $y);
+			$this->MultiCell(292, 16, utf8_encode($observaciones->Cual_Factor_Riesgo), 0, 'L', true);
+				
+			$this->SetFillColor(239, 246, 248);
+			}
+
 
 			$y = $this->GetY() + 2;
 
@@ -6436,15 +6475,12 @@ class ESE extends FPDI
             $this->setSourceFile($pdfFilePath);
             $pageCount = $this->setSourceFile($pdfFilePath);
             $this->AddPage();
-
             for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber++) {
                 $template = $this->importPage($pageNumber, PdfReader\PageBoundaries::MEDIA_BOX);
                 $this->useImportedPage($template, 50, 70,550);
 				if($pageCount!=$pageNumber)
                  $this->AddPage();
             }
-			
-			
         } else {
             // El archivo PDF no existe en la ruta especificada
             // Puedes agregar aquí cualquier manejo de error o simplemente no hacer nada

@@ -142,6 +142,9 @@
         <li class="nav-item d-none d-sm-inline-block">
           <a href="<?= base_url ?>/recursos" class="nav-link">Blog</a>
         </li>
+
+      
+
       </ul>
 
       <!-- Right navbar links -->
@@ -221,7 +224,7 @@
                 </p>
               </a>
             </li>
-            <?php if ((Utils::isAdmin() || Utils::isSenior() || Utils::isJunior() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isCustomer() || Utils::isRecruitmentManager()|| Utils::isManager()) && (!Utils::isCustomerSA()|| Utils::isManager())) : ?>
+            <?php if ((Utils::isAdmin() || Utils::isSenior() || Utils::isJunior() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isCustomer() || Utils::isRecruitmentManager() || Utils::isManager()) && (!Utils::isCustomerSA() || Utils::isManager())) : ?>
               <li class="nav-header">RECLUTAMIENTO</li>
               <li class="nav-item has-treeview <?= $_GET['controller'] == 'vacante' ? ' menu-open' : '' ?>">
                 <a href="#" class="nav-link<?= $_GET['controller'] == 'vacante' ? ' active' : '' ?>">
@@ -254,34 +257,16 @@
                   </p>
                 </a>
               </li>
-			  
-			  
-			  
-			       <?php if (Utils::isAdmin() || Utils::isRecruitmentManager() || Utils::isJunior() || Utils::isSenior()) : ?>
-                        <li class="nav-item">
-                            <a href="<?= base_url ?>CandidateContact/index"
-                                class="nav-link<?= $_GET['controller'] == 'CandidateContact' ? ' active' : '' ?>">
-                                <i class="nav-icon fa fa-address-book"></i>
-                                <p>
-                                    Contacto Candidatos
-                                </p>
-                            </a>
-                        </li>
-                        <?php endif ?>
-			  
-			  
-			  
-			  
 
-              <?php if (Utils::isAdmin()||Utils::isRecruitmentManager()||Utils::isJunior()||Utils::isSenior()) : ?>
-              <li class="nav-item">
-                <a href="<?= base_url ?>CandidatoDirectorio/index" class="nav-link<?= $_GET['controller'] == 'CandidatoDirectorio' ? ' active' : '' ?>">
-                  <i class="nav-icon fas fa-users"></i>
-                  <p>
-                    Directorio de candidatos
-                  </p>
-                </a>
-              </li>
+              <?php if (Utils::isAdmin() || Utils::isRecruitmentManager() || Utils::isJunior() || Utils::isSenior()) : ?>
+                <li class="nav-item">
+                  <a href="<?= base_url ?>CandidatoDirectorio/index" class="nav-link<?= $_GET['controller'] == 'CandidatoDirectorio' ? ' active' : '' ?>">
+                    <i class="nav-icon fas fa-users"></i>
+                    <p>
+                      Directorio de candidatos
+                    </p>
+                  </a>
+                </li>
               <?php endif ?>
 
 
@@ -367,15 +352,15 @@
                 </li>
               <?php endif ?>
 
-              <?php if (Utils::isAdmin()||Utils::isRecruitmentManager()||Utils::isJunior()||Utils::isSenior()|| Utils::isManager()) : ?>
-              <li class="nav-item">
-                <a href="<?= base_url ?>candidato/index" class="nav-link<?= $_GET['controller'] == 'candidato' ? ' active' : '' ?>">
-                  <i class="nav-icon fas fa-address-card"></i>
-                  <p>
-                    Candidatos
-                  </p>
-                </a>
-              </li>
+              <?php if (Utils::isAdmin() || Utils::isRecruitmentManager() || Utils::isJunior() || Utils::isSenior() || Utils::isManager()) : ?>
+                <li class="nav-item">
+                  <a href="<?= base_url ?>candidato/index" class="nav-link<?= $_GET['controller'] == 'candidato' ? ' active' : '' ?>">
+                    <i class="nav-icon fas fa-address-card"></i>
+                    <p>
+                      Candidatos
+                    </p>
+                  </a>
+                </li>
               <?php endif ?>
 
 
@@ -407,7 +392,7 @@
               </li>
             <?php endif ?>
 
-            <?php if (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager()) : ?>
+            <?php if (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isLogistics() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior()) : ?>
               <li class="nav-header">SA</li>
               <li class="nav-item has-treeview <?= $_GET['controller'] == 'ServicioApoyo' ? ' menu-open' : '' ?>">
                 <a href="#" class="nav-link<?= $_GET['controller'] == 'ServicioApoyo' ? ' active' : '' ?>">
@@ -432,7 +417,7 @@
                       </a>
                     </li>
                   <?php endif ?>
-                  <?php if (Utils::isAccount() || Utils::isLogistics()) : ?>
+                  <?php if (Utils::isAccount() || Utils::isLogistics() || Utils::isSenior()) : ?>
                     <li class="nav-item">
                       <a href="<?= base_url ?>ServicioApoyo/index" class="nav-link<?= $_GET['controller'] == 'ServicioApoyo' && $_GET['action'] == 'index' ? ' active' : '' ?>">
                         <i class="far fa-circle nav-icon"></i>
@@ -545,8 +530,8 @@
                     </p>
                   </a>
                 </li>
-			  
-                <li class="nav-item" <?= Utils::isAdmin()?'':'hidden' ?>>
+
+                <li class="nav-item" <?= Utils::isAdmin() ? '' : 'hidden' ?>>
                   <a href="<?= base_url ?>EncuestaCliente/index" class="nav-link<?= $_GET['controller'] == 'EncuestaCliente' ? ' active' : '' ?>">
                     <i class="nav-icon fas fa-poll"></i>
                     <p>
@@ -557,7 +542,7 @@
               <?php endif ?>
             <?php endif ?>
 
-            <?php if (!Utils::isCandidate() && !Utils::isCustomer() && !Utils::isCustomerSA() && $_SESSION['identity']->id!=9396) : ?>
+            <?php if (!Utils::isCandidate() && !Utils::isCustomer() && !Utils::isCustomerSA() && $_SESSION['identity']->id != 9396) : ?>
               <li class="nav-item">
                 <a href="<?= base_url ?>cliente_SA/base_contactos" class="nav-link<?= $_GET['controller'] == 'cliente_SA' && $_GET['action'] == 'base_contactos' ? ' active' : '' ?>">
                   <i class="nav-icon far fa-building"></i>
@@ -568,10 +553,10 @@
               </li>
             <?php endif ?>
 
-            <?php $acceder = Utils::getEmpresaByContacto()[0]['Empresa']; ?>
-            <?php $acceder = Utils::isManager() ? '82' : $acceder  ?>
+            <?php //$acceder = Utils::getEmpresaByContacto()[0]['Empresa']; ?>
+            <?php //$acceder = Utils::isManager() ? '82' : $acceder  ?>
 
-            <?php if ((Utils::isCustomerSA() || Utils::isAdmin()) && ($acceder == '82' || $acceder == '13')) : ?>
+            <?php if ((Utils::isCustomerSA() || Utils::isAdmin()) && isset($_SESSION['id_cliente']) && $_SESSION['id_cliente'] != 0 ) : ?>
               <li class="nav-header">RECURSOS HUMANOS</li>
               <li class="nav-item">
                 <a href="<?= base_url ?>departamento/index" class="nav-link<?= $_GET['controller'] == 'departamento' ? ' active' : '' ?>">
@@ -677,7 +662,7 @@
                 </ul>
               </li>
 
-			  
+
               <li class="nav-item">
                 <a href="<?= base_url ?>configuracionesRH/index" class="nav-link<?= $_GET['controller'] == 'configuracionesRH' ? ' active' : '' ?>">
                   <i class="nav-icon fas fa-users-cog"></i>
@@ -816,7 +801,7 @@
 
             <?php endif ?>
             <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor()) : ?>
-              <li class="nav-item has-treeview <?= $_GET['controller'] == 'reporte' ? ' menu-open' : '' ?>" >
+              <li class="nav-item has-treeview <?= $_GET['controller'] == 'reporte' ? ' menu-open' : '' ?>">
                 <a href="#" class="nav-link<?= $_GET['controller'] == 'reporte' ? ' active' : '' ?>">
                   <i class="nav-icon fas fa-chart-pie"></i>
                   <p>
@@ -825,14 +810,14 @@
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
-                  <!-- <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() ) : ?> -->
-                    <li class="nav-item">
-                      <a href="<?= base_url ?>reporte/operaciones_SA" class="nav-link<?= $_GET['controller'] == 'reporte' && $_GET['action'] == 'operaciones_SA' ? ' active' : '' ?>">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>De operaciones</p>
-                      </a>
-                    </li>
-                  <?php endif ?>
+                  <!-- <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor()) : ?> -->
+                  <li class="nav-item">
+                    <a href="<?= base_url ?>reporte/operaciones_SA" class="nav-link<?= $_GET['controller'] == 'reporte' && $_GET['action'] == 'operaciones_SA' ? ' active' : '' ?>">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>De operaciones</p>
+                    </a>
+                  </li>
+                <?php endif ?>
                 </ul>
               </li>
             <?php endif ?>

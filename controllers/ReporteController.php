@@ -900,7 +900,8 @@ class ReporteController
             $hoja3->getStyle('B1:B' . $fila)->applyFromArray($derecha);
             $hoja3->getStyle('A1:B1')->applyFromArray($estiloTituloColumnas);
 
-     		$hoja4 = $documento->createSheet();
+
+            $hoja4 = $documento->createSheet();
             $hoja4->setTitle('Clientes');
 
             $hoja4->getColumnDimension('A')->setAutoSize(true);
@@ -2360,6 +2361,7 @@ class ReporteController
     //RH
     public function employeesinformation()
     {
+        //Consulta de tipo de usuario y identificacion sino lo regresa al
         $status = Encryption::decode($_GET['status']) ? Encryption::decode($_GET['status']) : 0;
         $title = $status == 0 ? 'Reporte De Exmpleados' : 'Reporte De Empleados';
 
@@ -2412,6 +2414,10 @@ class ReporteController
         $hoja->setTitle($title);
 
         $row = 1;
+
+        $arrayDeLetraS=['A','B'];
+        $arrayNombrecolumna=['nombre'];
+
         $arrayColumns = array(
             array('pColumn' => 'A', 'row' => $row, 'value' => 'No.Empleado'),
             array('pColumn' => 'B', 'row' => $row, 'value' => 'Nombre'),
@@ -2469,7 +2475,7 @@ class ReporteController
         $hoja->setCellValueByColumnAndRow(26, 1, 'Contratos');
 
 
-        $row = $row + 2; // PARA QUE SE SALTEN DOS FILAS PARA ESTABLECER LOS DATOS
+        $row = $row + 2; // PARA QUE SE SALTEN DOS FILAS PARA ESTABLECER LOS DATOS 8084350455
         $employeeContactObj = new EmployeeContact();
 
         foreach ($employees as $emp) {
@@ -2480,6 +2486,9 @@ class ReporteController
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['boss_title_position']);
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['department']);
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['id_gender'] == 1 ? 'Hombre' : 'Mujer');
+           
+               
+
             $hoja->setCellValueByColumnAndRow($col++, $row, Utils::getDate($emp['start_date']));
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['antiquity'] . ' Años');
             $hoja->setCellValueByColumnAndRow($col++, $row, isset($emp['history_position_date']) ? Utils::getDate($emp['history_position_date']) : '');
@@ -3638,11 +3647,7 @@ class ReporteController
         $hoja = $documento->getActiveSheet();
 
 
-        $row = 2;
-        $hoja->setCellValueByColumnAndRow(1, $row, 'Nombre del colaborador');
-        $hoja->setCellValueByColumnAndRow(2, $row, 'usuario');
-        $hoja->setCellValueByColumnAndRow(3, $row, 'contraseña');
-
+       
 
 
 
@@ -3705,6 +3710,14 @@ class ReporteController
             )
         );
 
+        
+        $hoja->setCellValueByColumnAndRow(1, 1, $title);
+
+        $row = 2;
+        $hoja->setCellValueByColumnAndRow(1, $row, 'Nombre del colaborador');
+        $hoja->setCellValueByColumnAndRow(2, $row, 'usuario');
+        $hoja->setCellValueByColumnAndRow(3, $row, 'contraseña');
+
 
         foreach (range('A', $hoja->getHighestColumn()) as $col) {
             $hoja->getStyle($col . "2")->applyFromArray($estiloTituloColumnas);
@@ -3712,18 +3725,13 @@ class ReporteController
         }
 
         //llenar tabla
-        $row++;
+        $row++;//3
         foreach ($users_rh as $user) :
-
-
             $columna = 0;
-            $row++;
             $hoja->setCellValueByColumnAndRow(++$columna, $row, $user['first_name'] . " " . $user['surname'] . $user['last_name']);
             $hoja->setCellValueByColumnAndRow(++$columna, $row, $user['username']);
             $hoja->setCellValueByColumnAndRow(++$columna, $row, Encryption::decode($user['password']));
-
-
-
+            $row++;
         endforeach;
 
         //estilos
@@ -3762,7 +3770,6 @@ class ReporteController
         $hoja->getStyle('A1:' . $col . "3")->applyFromArray($centrado);
         $hoja->getStyle('A2:' . $col . "2")->applyFromArray($estiloTituloColumnas);
         $hoja->mergeCells('A1:' . $col . "1");
-        $hoja->setCellValueByColumnAndRow(1, 1, $title);
 
         $hoja->getStyle('A3:' . $col . "3")->applyFromArray(
             array(

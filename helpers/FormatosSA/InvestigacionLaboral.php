@@ -31,6 +31,7 @@ class InvestigacionLaboral extends ESE{
 		$this->setTextColor(51, 54, 79);
 		$y = $this->GetY() + 70;
 		$this->SetXY($x, $y);
+	   if($candidato->ID_Empresa !=561	){//Dicipa S.A DE C.V. (No aparecera el nombre del cliente)
 		$this->Write(15, 'PARA:');
 		
 		$x1 = $this->GetX() + 20;
@@ -47,6 +48,8 @@ class InvestigacionLaboral extends ESE{
 		} else {
 			$this->MultiCell(200, 20, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' || $candidato->Empresa == 'DUCTOS DEL ALTIPLANO SA DE CV' ? $candidato->Nombre_Cliente : ($candidato->ID_Empresa == 315 ? $candidato->Nombre_Cliente : $candidato->Empresa)))), 1, 'L');
 		}
+		
+	}
 		
 		//$this->MultiCell(200, 20, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' ? $candidato->Nombre_Cliente : ($candidato->ID_Empresa == 315 ? $candidato->Nombre_Cliente : $candidato->Empresa)))), 1,'L');
 
@@ -171,6 +174,8 @@ class InvestigacionLaboral extends ESE{
 		$this->setTextColor(160, 160, 160);
 		$y = $this->GetY() + 5;
 		$this->SetXY($x, $y);
+		
+		if($candidato->ID_Empresa !=561	){//Dicipa S.A DE C.V. (No aparecera el nombre del cliente)
 		$this->MultiCell(46, 15, 'Empresa', 0, 'L', false);
 
 		$this->setFont('SinkinSans', '', 6.5);
@@ -185,17 +190,14 @@ class InvestigacionLaboral extends ESE{
 			$this->MultiCell(410, 18, utf8_encode($candidato->Razon), 0, 'C', true);
 		 }else{
 			$this->MultiCell(410, 18, utf8_encode($candidato->Empresa), 0, 'C', true);
-
-			//$this->MultiCell(410, 18, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' || $candidato->Empresa == 'DUCTOS DEL ALTIPLANO SA DE CV' ? $candidato->Nombre_Cliente : ($candidato->ID_Empresa == 315 ? $candidato->Nombre_Cliente : $candidato->Empresa)))), 0, 'C', true);
 		}
-		
-		//$this->MultiCell(410, 18, utf8_encode($candidato->Razon == 'GRUPO JANFREX S.A. DE C.V.' ? 'GRUPO JANFREX' : ($candidato->Razon == 'INNOVACIÓN HORUS S.A DE C.V' ? 'INNOVACIÓN HORUS' : ($candidato->Empresa == 'La Casa de Cementín' ? $candidato->Nombre_Cliente : ($candidato->ID_Empresa == 315 ? $candidato->Nombre_Cliente : $candidato->Empresa)))), 0, 'C', true);
-
+	}
 
 		$this->setFont('SinkinSans', 'B', 6.5);
 		$this->setTextColor(160, 160, 160);
 		$y = $this->GetY() + 5;
 		$this->SetXY($x, $y);
+		
 		$this->MultiCell(52, 8, utf8_encode('Puesto'), 0, 'L', false);
 
 		$this->setFont('SinkinSans', '', 6.5);
