@@ -24,4 +24,3 @@ define("maxImage14", 534225);
 define("maxImage15", 556799);
 define("maxImage16", 580671);
 define("maxImage17", 602959);
-

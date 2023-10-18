@@ -492,90 +492,90 @@ class Utils
     public static function sendEmail($email, $name, $subject, $body, $cc = false)
     {
 
-        require_once 'libraries/PHPMailer/PHPMailerAutoload.php';
+        // require_once 'libraries/PHPMailer/PHPMailerAutoload.php';
 
-        $mail = new PHPMailer();
-        $mail->isSMTP();
-        $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'tls';
-        $mail->Host = 'smtp.gmail.com';
-        $mail->Port = '587';
+        // $mail = new PHPMailer();
+        // $mail->isSMTP();
+        // $mail->SMTPAuth = true;
+        // $mail->SMTPSecure = 'tls';
+        // $mail->Host = 'smtp.gmail.com';
+        // $mail->Port = '587';
 
-        $mail->Username = 'soporteingenia@rrhhingenia.com';
-        $mail->Password = 'miguel2019';
+        // $mail->Username = 'soporteingenia@rrhhingenia.com';
+        // $mail->Password = 'miguel2019';
 
-        $mail->setFrom('soporteingenia@rrhhingenia.com', 'RRHH Ingenia');
-        $mail->addAddress($email, $name);
+        // $mail->setFrom('soporteingenia@rrhhingenia.com', 'RRHH Ingenia');
+        // $mail->addAddress($email, $name);
 
-        $mail->Subject = $subject;
-        $mail->Body    = $body;
-        $mail->IsHTML(true);
-        $mail->CharSet = 'UTF-8';
-        if ($cc)
-            $mail->addCC($cc['email'], $cc['name']);
-        if ($mail->send())
-            return true;
-        else
-            return false;
+        // $mail->Subject = $subject;
+        // $mail->Body    = $body;
+        // $mail->IsHTML(true);
+        // $mail->CharSet = 'UTF-8';
+        // if ($cc)
+        //     $mail->addCC($cc['email'], $cc['name']);
+        // if ($mail->send())
+        return true;
+        // else
+        //     return false;
     }
 
     public static function sendMultipleEmail($emails, $subject, $body, $cc = false)
     {
 
-        require_once 'libraries/PHPMailer/PHPMailerAutoload.php';
+        // require_once 'libraries/PHPMailer/PHPMailerAutoload.php';
 
-        $mail = new PHPMailer();
-        $mail->isSMTP();
-        $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'tls';
-        $mail->Host = 'smtp.gmail.com';
-        $mail->Port = '587';
+        // $mail = new PHPMailer();
+        // $mail->isSMTP();
+        // $mail->SMTPAuth = true;
+        // $mail->SMTPSecure = 'tls';
+        // $mail->Host = 'smtp.gmail.com';
+        // $mail->Port = '587';
 
-        $mail->Username = 'soporte.ingenia@rrhhingenia.com';
-        $mail->Password = 'miguel2019';
+        // $mail->Username = 'soporte.ingenia@rrhhingenia.com';
+        // $mail->Password = 'miguel2019';
 
-        $mail->setFrom('soporte.ingenia@rrhhingenia.com', 'RRHH Ingenia');
-        foreach ($emails as $email) {
-            $mail->addAddress($email);
-        }
-        if ($cc)
-            $mail->addCC($cc['email'], $cc['name']);
+        // $mail->setFrom('soporte.ingenia@rrhhingenia.com', 'RRHH Ingenia');
+        // foreach ($emails as $email) {
+        //     $mail->addAddress($email);
+        // }
+        // if ($cc)
+        //     $mail->addCC($cc['email'], $cc['name']);
 
-        $mail->Subject = $subject;
-        $mail->Body    = $body;
-        $mail->IsHTML(true);
-        $mail->CharSet = 'UTF-8';
-        if ($mail->send())
-            return true;
-        else
-            return false;
+        // $mail->Subject = $subject;
+        // $mail->Body    = $body;
+        // $mail->IsHTML(true);
+        // $mail->CharSet = 'UTF-8';
+        // if ($mail->send())
+        return true;
+        // else
+        //     return false;
     }
 
     public static function sendEmailPayment($email, $name, $subject, $body, $cc = false)
     {
-        $mail = new PHPMailer();
-        $mail->isSMTP();
-        $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'tls';
-        $mail->Host = 'smtp.gmail.com';
-        $mail->Port = '587';
+        // $mail = new PHPMailer();
+        // $mail->isSMTP();
+        // $mail->SMTPAuth = true;
+        // $mail->SMTPSecure = 'tls';
+        // $mail->Host = 'smtp.gmail.com';
+        // $mail->Port = '587';
 
-        $mail->Username = 'cuentasxcobrar@rrhhingenia.com';
-        $mail->Password = 'RRHHI2023';
+        // $mail->Username = 'cuentasxcobrar@rrhhingenia.com';
+        // $mail->Password = 'RRHHI2023';
 
-        $mail->setFrom('cuentasxcobrar@rrhhingenia.com', 'Cuentas Por Cobrar RRHH Ingenia');
-        $mail->addAddress($email, $name);
+        // $mail->setFrom('cuentasxcobrar@rrhhingenia.com', 'Cuentas Por Cobrar RRHH Ingenia');
+        // $mail->addAddress($email, $name);
 
-        $mail->Subject = $subject;
-        $mail->Body    = $body;
-        $mail->IsHTML(true);
-        $mail->CharSet = 'UTF-8';
-        if ($cc)
-            $mail->addCC($cc['email'], $cc['name']);
-        if ($mail->send())
-            return true;
-        else
-            return false;
+        // $mail->Subject = $subject;
+        // $mail->Body    = $body;
+        // $mail->IsHTML(true);
+        // $mail->CharSet = 'UTF-8';
+        // if ($cc)
+        //     $mail->addCC($cc['email'], $cc['name']);
+        // if ($mail->send())
+        return true;
+        // else
+        //     return false;
     }
 
     public static function getFullDate($date)
@@ -1406,19 +1406,18 @@ class Utils
 
     public static function newNotification($message, $url, $status, $id_type, $id_user, $created_by, $cliente = NULL, $customer = NULL)
     {
-     
 
-            $notification = new Notification();
-            $notification->setId_user($id_user);
-            $notification->setMessage($message);
-            $notification->setUrl($url);
-            $notification->setStatus($status);
-            $notification->setId_type($id_type);
-            $notification->setCreated_by($created_by);
-            $notification->setCliente($cliente);
-            $notification->setCustomer($customer);
-            $notification->create();
-       
+
+        $notification = new Notification();
+        $notification->setId_user($id_user);
+        $notification->setMessage($message);
+        $notification->setUrl($url);
+        $notification->setStatus($status);
+        $notification->setId_type($id_type);
+        $notification->setCreated_by($created_by);
+        $notification->setCliente($cliente);
+        $notification->setCustomer($customer);
+        $notification->create();
     }
 
     public static function permission($controller, $action)
@@ -1727,11 +1726,11 @@ class Utils
         $tipos = $tipo->getAll();
         return $tipos;
     }
-    
-    
+
+
     public static function getAllModuleRHClientes()
     {
-        
+
         require_once 'models/SA/ContactosEmpresa.php';
         $contactoEmpresa = new ContactosEmpresa();
         $contactoEmpresa->setUsuario($_SESSION['identity']->username);
@@ -1739,5 +1738,4 @@ class Utils
 
         return $activeModule;
     }
-
 }
