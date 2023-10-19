@@ -143,7 +143,7 @@
           <a href="<?= base_url ?>/recursos" class="nav-link">Blog</a>
         </li>
 
-      
+
 
       </ul>
 
@@ -171,7 +171,8 @@
         <li class="nav-item dropdown user-menu">
           <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
             <img src="<?= $_SESSION['avatar_route'] ?>" class="user-image img-circle" alt="User Image">
-            <span class="d-none d-md-inline"><?= $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name ?> <i class="right fas fa-angle-down"></i></span>
+            <span class="d-none d-md-inline"><?= $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name ?>
+              <i class="right fas fa-angle-down"></i></span>
           </a>
           <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <!-- User image -->
@@ -191,7 +192,8 @@
             <!-- Menu Footer-->
             <li class="user-footer">
               <a href="<?= base_url ?>usuario/editar_perfil" class="btn btn-info btn-flat">Editar</a>
-              <a href="<?= base_url ?>usuario/logout" class="btn btn-maroon btn-flat float-right">Cerrar sesión</a>
+              <a href="<?= base_url ?>usuario/logout" class="btn btn-maroon btn-flat float-right">Cerrar
+                sesión</a>
             </li>
           </ul>
         </li>
@@ -258,7 +260,7 @@
                 </a>
               </li>
 
-              <?php if (Utils::isAdmin() || Utils::isRecruitmentManager() || Utils::isJunior() || Utils::isSenior()) : ?>
+              <?php if ((Utils::isAdmin() || Utils::isRecruitmentManager() || Utils::isJunior() || Utils::isSenior()) && $_SESSION['identity']->id == 5754) : ?>
                 <li class="nav-item">
                   <a href="<?= base_url ?>CandidatoDirectorio/index" class="nav-link<?= $_GET['controller'] == 'CandidatoDirectorio' ? ' active' : '' ?>">
                     <i class="nav-icon fas fa-users"></i>
@@ -472,7 +474,8 @@
               </li>
             <?php endif ?>
             <?php if (Utils::isAdmin() || Utils::isSenior() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isJunior() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount()) : ?>
-              <li class="nav-header texto-clientes"><?= Utils::isAccount() ? '<b>CONSULTA DE CONTACTOS RH</b>' : 'VENTAS' ?></li>
+              <li class="nav-header texto-clientes">
+                <?= Utils::isAccount() ? '<b>CONSULTA DE CONTACTOS RH</b>' : 'VENTAS' ?></li>
               <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor()) : ?>
                 <li class="nav-item">
                   <a href="<?= base_url ?>empresa_SA/index" class="nav-link<?= $_GET['controller'] == 'empresa_SA' ? ' active' : '' ?>">
@@ -553,10 +556,12 @@
               </li>
             <?php endif ?>
 
-            <?php //$acceder = Utils::getEmpresaByContacto()[0]['Empresa']; ?>
-            <?php //$acceder = Utils::isManager() ? '82' : $acceder  ?>
+            <?php //$acceder = Utils::getEmpresaByContacto()[0]['Empresa']; 
+            ?>
+            <?php //$acceder = Utils::isManager() ? '82' : $acceder  
+            ?>
 
-            <?php if ((Utils::isCustomerSA() || Utils::isAdmin()) && isset($_SESSION['id_cliente']) && $_SESSION['id_cliente'] != 0 ) : ?>
+            <?php if ((Utils::isCustomerSA() || Utils::isAdmin()) && isset($_SESSION['id_cliente']) && $_SESSION['id_cliente'] != 0) : ?>
               <li class="nav-header">RECURSOS HUMANOS</li>
               <li class="nav-item">
                 <a href="<?= base_url ?>departamento/index" class="nav-link<?= $_GET['controller'] == 'departamento' ? ' active' : '' ?>">

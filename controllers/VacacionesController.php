@@ -7,6 +7,9 @@ require_once 'models/RH/HolidaysByYears.php';
 require_once 'models/RH/Employees.php';
 require_once 'models/SA/ContactosCliente.php';
 
+//gabo 18 oct
+require_once 'models/RH/VacationPolicy.php';
+require_once 'models/SA/WorkDays.php';
 class VacacionesController
 {
 
@@ -27,9 +30,92 @@ class VacacionesController
 
 
                 $employee->setID_Contacto('132');
-                $employee->setStatus('1'); 
+                $employee->setStatus('1');
 
                 $employees = $employee->getEmployeesHolidaysByCliente();
+
+
+                //gabo 18 oct
+
+
+
+                //   $solicitudes = $employee->getEmployeesHolidaysRequestedByID_User($_SESSION['identity']->id);
+
+                $work_days = new WorkDays();
+                $work_days->setCliente($_SESSION['id_cliente']);
+                $work_days = $work_days->getOne();
+
+                $work_days = array(
+                    'Sun' => $work_days->sunday,
+                    'Mon' => $work_days->monday,
+                    'Tue' => $work_days->tuesday,
+                    'Wed' => $work_days->wednesday,
+                    'Thu' => $work_days->thursday,
+                    'Fri' => $work_days->friday,
+                    'Sat' => $work_days->saturday
+                );
+
+                foreach ($employees as &$employe) {
+
+
+                    $solicitudes = $employee->getEmployeesHolidaysRequestedByID_User($employe['usuario_rh']);
+
+                    //gabo 18 oct
+
+                    $employee->setId_employee($employe['id']);
+                    $holidays = $employee->getEmployeeHoliday();
+                    $years = $holidays->years;
+
+                    $vacation_policy = new VacationPolicy();
+                    $vacation_policy->setCliente($_SESSION['id_cliente']);
+                    $vacation_policy->setYears($years);
+                    $vacation_days = $vacation_policy->getPoliciesById_Cliente();
+
+                    if ($vacation_days) {
+
+                        $total_days =   $vacation_days->holidays;
+                        $taken_holidays = 0;
+
+                        for ($i = 0; $i < count($solicitudes); $i++) {
+
+                            $start = new DateTime($solicitudes[$i]['start_date']);
+                            $end = new DateTime(date("d-m-Y", strtotime($solicitudes[$i]['end_date'] . "+ 1 days")));
+
+                            $interval = $start->diff($end);
+                            $days = $interval->days;
+
+                            $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+                            $holidays = array();
+
+                            foreach ($period as $dt) {
+
+                                $curr = $dt->format('D');
+                                foreach ($work_days as $dia => $valor) {
+                                    if ($valor == 0 && $curr == $dia) {
+                                        $days--;
+                                    }
+                                }
+                            }
+
+
+                            if ($solicitudes[$i]['status'] == 'Aceptada') {
+                                $total_days = $total_days - $days;
+                                $taken_holidays = $taken_holidays + $days;
+                            }
+                        }
+
+                        $employe['taken_holidays'] = $taken_holidays;
+                    } else {
+
+                        $employe['taken_holidays'] = 0;
+                    }
+                }
+
+
+
+
+
+
                 $holidays = $employee->getEmployeesHolidaysRequestedByCliente();
             } else {
                 //$employee = new Employees();
@@ -39,6 +125,30 @@ class VacacionesController
             $empleado->setCliente($_SESSION['id_cliente']);
             //verfiicar si es adminisrador
             $solicitudes_pendientes = $empleado->getEmployeesAllHolidaysRequested();
+
+            //gabo 18 oct
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             $page_title = 'Empleados | RRHH Ingenia';
             require_once 'views/layout/header.php';
@@ -96,9 +206,8 @@ class VacacionesController
                         $emplo['start_date'] = Utils::getDate($emplo['start_date']);
                         $emplo['due_date'] = Utils::getDate($emplo['due_date']);
                         $emplo['rest_vacation'] = $emplo['holidays_by_year'] - $emplo['taken_holidays'];
-                        
                     }
-                    
+
                     $empleado = new Employees();
                     $empleado->setCliente($_SESSION['id_cliente']);
                     // AQUI verfiicar si es adminisrador
@@ -255,7 +364,7 @@ class VacacionesController
                 $holidaysObj = new EmployeeHolidays();
                 $holidaysObj->setId($id);
                 $holidaysObj->delete();
-               
+
                 $holidaysObj->setID_Contacto($_SESSION['id_cliente']);
                 $employees = $holidaysObj->getEmployeesHolidaysByCliente();
                 foreach ($employees as &$emplo) {
@@ -312,8 +421,8 @@ class VacacionesController
                 $holiday->setComments('');
                 //===[gabo 20 julio movil-responsive fin]===
                 $save = $holiday->create();
-				
-				
+
+
                 //gabo 6 sep
                 $start_date = Utils::getShortDate($start_date);
                 $end_date = Utils::getShortDate($end_date);
@@ -334,15 +443,15 @@ class VacacionesController
                 $empleado = $employee->getOne();
 
                 if ($empleado->email != '' && $empleado->email != NULL) {
-                //   Utils::sendEmail($empleado->email, $holidays->first_name . ' ' . $holidays->surname, $subject, $body);
+                    //   Utils::sendEmail($empleado->email, $holidays->first_name . ' ' . $holidays->surname, $subject, $body);
                 }
 
 
-				
-				
-				
-				
-				
+
+
+
+
+
 
                 if ($save) {
                     $solicitudes = $holiday->getEmployeesHolidaysRequestedByID_User($_SESSION['identity']->id);
