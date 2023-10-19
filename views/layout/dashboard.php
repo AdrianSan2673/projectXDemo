@@ -17,27 +17,25 @@
       <div class="row">
         <div class="col-12">
 
-          <?php if (Utils::isCustomerSA()) : ?>
-            <section class="content-header">
-              <div class="row">
-                <div class="col-sm-3 ml-auto" hidden>
-                  <a class="btn btn-orange btn-block float-right" href="<?= base_url ?>ServicioApoyo/crear">Nuevo candidato</a>
-                </div>
-
-                <div class="col-sm-2 ml-auto">
-                  <a class="btn btn-primary float-right" href="<?= base_url ?>ServicioApoyo/carga_masiva">Cargar candidatos</a>
-
-                </div>
-
-                <div class="col-sm-2 ml-auto">
-                  <a class="btn btn-orange float-right" <?= $_SESSION['identity']->username == 'salmaperez1' ? "style='background: #cd5c5c !important'" : '' ?> href="<?= base_url ?>ServicioApoyo/crear">Nuevo candidato</a>
-                </div>
-
-
-
+          <section class="content-header">
+            <div class="row ">
+              <?php if (Utils::isCustomer()) : ?>
+                  <div class="col-sm-4 ml-auto">
+                    <a class="btn btn-orange float-right" href="<?= base_url ?>psicometria/crear">Registrar psicometria</a>
               </div>
-            </section>
-          <?php endif;  ?>
+              
+              <?php endif ?>
+              <?php if (Utils::isCustomerSA()) : ?>
+                <div class="col-sm-4 ml-auto">
+                  <a class="btn btn-primary float-right" href="<?= base_url ?>ServicioApoyo/carga_masiva">Cargar candidatos</a>
+                </div>
+
+                <div class="col-sm-4 ml-auto">
+                  <a class="btn btn-orange float-right" href="<?= base_url ?>ServicioApoyo/crear">Nuevo candidato</a>
+                </div>
+              <?php endif;  ?>
+            </div>
+          </section>
 
 
           <?php $avisos = Utils::avisoClientes(); ?>

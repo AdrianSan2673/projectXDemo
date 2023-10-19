@@ -1510,4 +1510,17 @@ class Vacancy
         }
         return $result;
     }
+	
+
+	  public function existsVacancy()
+    {
+        $id = $this->getId();
+        $stmt = $this->db->prepare("SELECT * from vacancies WHERE id=:id");
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $fetch = $stmt->fetchObject();
+        return $fetch;
+    }
+	
 }

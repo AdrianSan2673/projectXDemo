@@ -22,8 +22,8 @@ class CandidatoDirectorioController
 
     public function index()
     {
-		//  || Utils::isSenior() || Utils::isJunior() || Utils::isRecruitmentManager() || Utils::isCustomer()
-        if (Utils::isAdmin()) {
+
+        if (Utils::isAdmin() || Utils::isSenior() || Utils::isJunior() || Utils::isRecruitmentManager() || Utils::isCustomer()) {
             $id_vacancy = isset($_POST['vacancy']) && $_POST['vacancy'] != 0 ? $_POST['vacancy'] : 0;
 
             $candidatesDirector = $this->candidatesDirectory($id_vacancy);
@@ -91,7 +91,7 @@ class CandidatoDirectorioController
                     $respons = $candidateDirectoryObj->update();
                 }
 
-                $candidatesDirector = $this->candidatesDirectory($id_vacancy_filter == null || $id_vacancy_filter == ''|| $id_vacancy_filter == 0 ? $id_vacancy_filter: $id_vacancy);
+                $candidatesDirector = $this->candidatesDirectory($id_vacancy_filter == null || $id_vacancy_filter == '' || $id_vacancy_filter == 0 ? $id_vacancy_filter : $id_vacancy);
 
                 if ($respons) {
                     echo json_encode(
@@ -154,12 +154,11 @@ class CandidatoDirectorioController
                 $candidateDirectoryObj = new CandidateDirectory();
                 $candidateDirectoryObj->setId($id);
 
-                $id_vacancy = $id_vacancy_filter != 0 ? $candidateDirectoryObj->getOne()->id_vacancy : $id_vacancy_filter;
 
                 $candidateDirectoryObj->delete();
 
 
-                $candidatesDirector = $this->candidatesDirectory($id_vacancy);
+                $candidatesDirector = $this->candidatesDirectory($id_vacancy_filter);
                 echo json_encode(
                     array(
                         'status' => 1,
@@ -242,11 +241,11 @@ class CandidatoDirectorioController
 
         return  $candidatesDirector;
     }
-	
-	
-	
-	
-	
+
+
+
+
+
     public function save_contacto()
     {
 
@@ -333,36 +332,36 @@ class CandidatoDirectorioController
             }
         }
     }
-	
-	//gabo 18 oct
-	
-	
-	
-	
+
+    //gabo 18 oct
+
+
+
+
     public function save_candidato()
     {
 
         if (Utils::isValid($_POST)) {
 
-            $first_name = isset($_POST['first_name']) && !empty($_POST['first_name']) ? trim($_POST['first_name']) : FALSE;
-            $surname = isset($_POST['surname']) && $_POST['surname']!=""  ? trim($_POST['surname']) : FALSE;
-            $last_name = isset($_POST['last_name']) && $_POST['last_name']!="" ? trim($_POST['last_name']) : NULL;
+            $first_name = isset($_POST['first_name']) && !empty($_POST['first_name']) ? trim($_POST['first_name']) : NULL;
+            $surname = isset($_POST['surname']) && $_POST['surname'] != ""  ? trim($_POST['surname']) : NULL;
+            $last_name = isset($_POST['last_name']) && $_POST['last_name'] != "" ? trim($_POST['last_name']) : NULL;
             $date_birth = isset($_POST['date_birth']) && !empty($_POST['date_birth']) ? trim($_POST['date_birth']) : NULL;
             $age = isset($_POST['age']) && !empty($_POST['age']) ? trim($_POST['age']) : NULL;
             $id_gender = isset($_POST['id_gender']) && !empty($_POST['id_gender']) ? trim($_POST['id_gender']) : NULL;
             $id_civil_status = isset($_POST['id_civil_status']) && !empty($_POST['id_civil_status']) ? trim($_POST['id_civil_status']) : NULL;
-            $id_level = isset($_POST['id_level']) && !empty($_POST['id_level']) ? trim($_POST['id_level']) : FALSE;
-            $job_title = isset($_POST['job_title']) && !empty($_POST['job_title']) ? trim($_POST['job_title']) : FALSE;
+            $id_level = isset($_POST['id_level']) && !empty($_POST['id_level']) ? trim($_POST['id_level']) : NULL;
+            $job_title = isset($_POST['job_title']) && !empty($_POST['job_title']) ? trim($_POST['job_title']) : NULL;
             $description = isset($_POST['description']) && !empty($_POST['description']) ? trim($_POST['description']) : '';
             $telephone = isset($_POST['telephone']) && !empty($_POST['telephone']) ? trim($_POST['telephone']) : NULL;
             $cellphone = isset($_POST['cellphone']) && !empty($_POST['cellphone']) ? trim($_POST['cellphone']) : NULL;
-            $email = isset($_POST['email']) && !empty($_POST['email']) ? trim($_POST['email']) : FALSE;
-            $id_state = isset($_POST['id_state']) && !empty($_POST['id_state']) ? trim($_POST['id_state']) : FALSE;
-            $id_city = isset($_POST['id_city']) && !empty($_POST['id_city']) ? trim($_POST['id_city']) : FALSE;
-            $id_area = isset($_POST['id_area']) && !empty($_POST['id_area']) ? trim($_POST['id_area']) : FALSE;
-            $id_subarea = isset($_POST['id_subarea']) && !empty($_POST['id_subarea']) ? trim($_POST['id_subarea']) : FALSE;
-            $resume = isset($_FILES['resume']) && $_FILES['resume']['name'] != '' ? $_FILES['resume'] : FALSE;
-            $id_vacancy = isset($_POST['id_vacancy'])  && !empty($_POST['id_vacancy']) ? $_POST['id_vacancy'] : FALSE;
+            $email = isset($_POST['email']) && !empty($_POST['email']) ? trim($_POST['email']) : NULL;
+            $id_state = isset($_POST['id_state']) && !empty($_POST['id_state']) ? trim($_POST['id_state']) : NULL;
+            $id_city = isset($_POST['id_city']) && !empty($_POST['id_city']) ? trim($_POST['id_city']) : NULL;
+            $id_area = isset($_POST['id_area']) && !empty($_POST['id_area']) ? trim($_POST['id_area']) : NULL;
+            $id_subarea = isset($_POST['id_subarea']) && !empty($_POST['id_subarea']) ? trim($_POST['id_subarea']) : NULL;
+            $resume = isset($_FILES['resume']) && $_FILES['resume']['name'] != '' ? $_FILES['resume'] : NULL;
+            $id_vacancy = isset($_POST['id_vacancy'])  && !empty($_POST['id_vacancy']) ? $_POST['id_vacancy'] : NULL;
             $id_contacto = isset($_POST['contact']) && !empty($_POST['contact']) ? Encryption::decode($_POST['contact']) : NULL; //id del contacto del directorio
             $start_date = isset($_POST['start_date']) && !empty($_POST['start_date']) ?  $_POST['start_date'] : null;
             $end_date = isset($_POST['end_date']) && !empty($_POST['end_date']) ?  $_POST['end_date'] : null;
@@ -373,20 +372,18 @@ class CandidatoDirectorioController
             $comment = isset($_POST['comment']) && !empty($_POST['comment']) ?  $_POST['comment'] : null;
             $status = isset($_POST['status']) && !empty($_POST['status']) ?  $_POST['status'] : null;
             $cellphone = isset($_POST['cellphone']) && !empty($_POST['cellphone']) ?  $_POST['cellphone'] : null;
+            $id_vacancy_filter = Utils::sanitizeNumber($_POST['id_vacancy_filter']);
 
             $flag = isset($_POST['flag']) ?  $_POST['flag'] : null;
             //id_gender , id_state ,id_vacancy     
             $id_candidate_directory = isset($_POST['id_candidate_directory']) && !empty($_POST['id_candidate_directory']) ? Encryption::decode(($_POST['id_candidate_directory'])) : FALSE;
-			
-			$id_candidate=NULL;
+
+            $id_candidate = NULL;
 
 
 
 
-            if ($date_birth < '1950-01-01') {
-                echo json_encode(array('status' => 5));
-                die();
-            }
+
 
 
             $vacancy = new Vacancy();
@@ -395,7 +392,7 @@ class CandidatoDirectorioController
 
 
 
-            if (($first_name && $surname && $last_name && $age && $date_birth   && $id_level && $job_title  && $status && $id_vacancy  && $id_state && $id_city && $id_area && $id_subarea)) {
+            if (($first_name != NULL && $surname != NULL && $status != NULL && $id_vacancy != NULL)) {
 
 
                 if ($resume) {
@@ -413,6 +410,7 @@ class CandidatoDirectorioController
 
                     // if ($tipo == 'directory') {
                     $candidateDirectoryObj = new CandidateDirectory();
+                    $candidateDirectoryObj->setId($id_candidate_directory);
                     $candidateDirectoryObj->setFirst_name($first_name);
                     $candidateDirectoryObj->setSurname($surname);
                     $candidateDirectoryObj->setLast_name($last_name);
@@ -442,6 +440,8 @@ class CandidatoDirectorioController
                     if ($flag == 'create') {
                         $candidateDirectoryObj->save_candidate();
                         $id_candidate_directory = $candidateDirectoryObj->getId();
+                    } else {
+                        $candidateDirectoryObj->update_candidate();
                     }
 
                     $studies = new CandidateEducationDirectory();
@@ -489,6 +489,14 @@ class CandidatoDirectorioController
                     }
 
                     if ($tipo == 'postulate') {
+                        if ($date_birth < '1950-01-01') {
+                            echo json_encode(array('status' => 5));
+                            die();
+                        }
+                        if ($id_state == NULL || $id_city == NULL || $id_area == NULL || $id_subarea == NULL || $job_title == NULL  || $last_name == NULL || $age == NULL || $date_birth == NULL || $id_level == NULL || $telephone == NULL) {
+                            echo json_encode(array('status' => 0));
+                            die();
+                        }
 
                         $candidate = new Candidate();
                         $candidate->setFirst_name($first_name);
@@ -575,6 +583,16 @@ class CandidatoDirectorioController
                         }
                     } else  if ($tipo == 'candidate') {
 
+                        if ($date_birth < '1950-01-01') {
+                            echo json_encode(array('status' => 5));
+                            die();
+                        }
+
+                        if ($id_state == NULL ||  $id_city == NULL || $id_area == NULL || $id_subarea == NULL || $job_title == NULL  || $last_name == NULL || $age == NULL || $date_birth == NULL || $id_level == NULL || $telephone == NULL) {
+                            echo json_encode(array('status' => 0));
+                            die();
+                        }
+
                         $candidate = new Candidate();
                         $candidate->setFirst_name($first_name);
                         $candidate->setSurname($surname);
@@ -594,6 +612,7 @@ class CandidatoDirectorioController
                         $candidate->setId_subarea($id_subarea);;
                         $candidate->setId_user(NULL);
                         $candidate->setCreated_by($_SESSION['identity']->id);
+
                         $save = $candidate->save();
                         $id_candidate = $candidate->getId();
 
@@ -648,255 +667,269 @@ class CandidatoDirectorioController
                     }
 
                     ///fin metodo
-                    $candidatesDirector = $this->candidatesDirectory();
-					if($id_candidate!=NULL){
-						$id_candidate= Encryption::encode($id_candidate);
-						$id_vacancy= Encryption::encode($id_vacancy);
-					}
+                    $candidatesDirector = $this->candidatesDirectory($id_vacancy_filter);
+                    if ($id_candidate != NULL) {
+                        $id_candidate = Encryption::encode($id_candidate);
+                        $id_vacancy = Encryption::encode($id_vacancy);
+                    }
 
                     if ($save) {
                         echo json_encode(
                             array(
                                 'status' => 1,
                                 'candidatesDirector' => $candidatesDirector,
-								'tipo' => $tipo,
-								'id_candidate' => $id_candidate,
-								'id_vacancy' => $id_vacancy
+                                'tipo' => $tipo,
+                                'id_candidate' => $id_candidate,
+                                'id_vacancy' => $id_vacancy
+                            )
+                        );
+                        die();
+                    } else {
+                        echo json_encode(array('status' => 2));
+                        die();
+                    }
+                } else {
+
+
+                    //  if ($tipo == 'directory') {
+
+                    $candidateDirectoryObj = new CandidateDirectory();
+                    $candidateDirectoryObj->setId($id_candidate_directory);
+                    $candidateDirectoryObj->setFirst_name($first_name);
+                    $candidateDirectoryObj->setSurname($surname);
+                    $candidateDirectoryObj->setLast_name($last_name);
+                    $candidateDirectoryObj->setTelephone($telephone);
+                    $candidateDirectoryObj->setAge($age);
+                    $candidateDirectoryObj->setExperience($job_title);
+                    $candidateDirectoryObj->setId_vacancy($id_vacancy);
+                    $candidateDirectoryObj->setId_state($id_state);
+                    $candidateDirectoryObj->setId_city($id_city);
+                    $candidateDirectoryObj->setEmail($email);
+                    $candidateDirectoryObj->setUrl($url);
+                    $candidateDirectoryObj->setComment($comment);
+                    $candidateDirectoryObj->setStatus($status);
+                    $candidateDirectoryObj->setCreated_at(getDate());
+                    $candidateDirectoryObj->setCreated_by($_SESSION['identity']->id);
+                    $candidateDirectoryObj->setModified_at(getDate());
+                    $candidateDirectoryObj->setDate_birth($date_birth);
+                    $candidateDirectoryObj->setId_gender($id_gender);
+                    $candidateDirectoryObj->setId_civil_status($id_civil_status);
+                    $candidateDirectoryObj->setJob_title($job_title);
+                    $candidateDirectoryObj->setDescription($description);
+                    $candidateDirectoryObj->setCellphone($cellphone);
+                    $candidateDirectoryObj->setId_area($id_area);
+                    $candidateDirectoryObj->setId_subarea($id_subarea);
+
+
+
+                    if ($flag == 'create') {
+                        $save = $candidateDirectoryObj->save_candidate();
+                        $id_candidate_directory = $candidateDirectoryObj->getId();
+                    } else {
+                        $save = $candidateDirectoryObj->update_candidate();
+                    }
+
+
+
+                    $studies = new CandidateEducationDirectory();
+                    $studies->setId_directory($id_candidate_directory);
+                    $studies->setId_level($id_level);
+                    $flag == 'create' ? $save = $studies->save() : $save = $studies->update();
+
+
+
+                    if ($resume) {
+
+                        if (file_exists('uploads/resume_directory/' . $id_candidate_directory . '.pdf')) {
+                            unlink('uploads/resume_directory/' . $id_candidate_directory . '.pdf');
+                        }
+
+                        $route2 = 'uploads/resume_directory/';
+                        $resume2 = $route2 . $id_candidate_directory . '.pdf';
+
+                        if (!file_exists($resume2)) {
+                            $result = @move_uploaded_file($_FILES["resume"]["tmp_name"], $resume2);
+                            $routeDocu = base_url . $resume2;
+                        }
+                    }
+
+
+                    if ($tipo == 'postulate') {
+
+                        if ($date_birth < '1950-01-01') {
+                            echo json_encode(array('status' => 5));
+                            die();
+                        }
+                        //valida los datos restantes 
+                        if ($id_gender == NULL || $id_civil_status == NULL || $email == NULL || $cellphone == NULL || $date_birth == NULL || $id_level == NULL) {
+                            echo json_encode(array('status' => 0));
+                            die();
+                        }
+
+
+                        $candidate = new Candidate();
+                        $candidate->setFirst_name($first_name);
+                        $candidate->setSurname($surname);
+                        $candidate->setLast_name($last_name);
+                        $candidate->setDate_birth($date_birth);
+                        $candidate->setAge($age);
+                        $candidate->setId_gender($id_gender);
+                        $candidate->setId_civil_status($id_civil_status);
+                        $candidate->setJob_title($job_title);
+                        $candidate->setDescription($description);
+                        $candidate->setTelephone($telephone);
+                        $candidate->setCellphone($cellphone);
+                        $candidate->setEmail($email);
+                        $candidate->setId_state($id_state);
+                        $candidate->setId_city($id_city);
+                        $candidate->setId_area($id_area);
+                        $candidate->setId_subarea($id_subarea);;
+                        $candidate->setId_user(NULL);
+                        $candidate->setCreated_by($_SESSION['identity']->id);
+                        $save = $candidate->save();
+                        $id_candidate = $candidate->getId();
+
+                        if ($save) {
+                            //vincular candidato con el directorio
+                            $candidateDirectoryObj = new CandidateDirectory();
+                            $candidateDirectoryObj->setId($id_candidate_directory);
+                            $candidateDirectoryObj->setStatus(6);
+                            $candidateDirectoryObj->setId_candidate($id_candidate);
+                            $candidateDirectoryObj->updateSatusCandidate();
+
+
+
+                            $studies = new CandidateEducation();
+                            $studies->setId_candidate($id_candidate);
+                            $studies->setTitle(NULL);
+                            $studies->setInstitution(NULL);
+                            $studies->setStart_date(NULL);
+                            $studies->setEnd_date(NULL);
+                            $studies->setStill_studies(NULL);
+                            $studies->setId_level($id_level);
+                            $save = $studies->save();
+
+
+                            if ($id_vacancy && is_numeric($id_vacancy)) {
+                                $vacancy = new Vacancy();
+                                $vacancy->setId($id_vacancy);
+                                $vacante = $vacancy->getOne();
+                                if ($vacante) {
+                                    $applicant = new VacancyApplicant();
+                                    $applicant->setId_vacancy($id_vacancy);
+                                    $applicant->setId_candidate($id_candidate);
+                                    $save = $applicant->create();
+                                    $applicant->setId_status(3);
+                                    $applicant->setCustomer_date(true);
+                                    $applicant->updateStatus();
+                                }
+                            }
+
+                            if (file_exists('uploads/resume_directory/' . $id_candidate_directory . '.pdf')) {
+                                $route = 'uploads/resume/' . $id_candidate . '/';
+                                if (!file_exists($route)) {
+                                    mkdir($route);
+                                }
+
+                                rename('uploads/resume_directory/' . $id_candidate_directory . '.pdf', "uploads/resume/" . $id_candidate . "/" . $id_candidate . ".pdf");
+                            }
+                        }
+                    } else  if ($tipo == 'candidate') {
+
+                        if ($date_birth < '1950-01-01') {
+                            echo json_encode(array('status' => 5));
+                            die();
+                        }
+                        //valida los datos restantes 
+                        if ($id_gender == NULL || $id_civil_status == NULL || $email == NULL || $cellphone == NULL || $date_birth == NULL || $id_level == NULL) {
+                            echo json_encode(array('status' => 0));
+                            die();
+                        }
+
+                        $candidate = new Candidate();
+                        $candidate->setFirst_name($first_name);
+                        $candidate->setSurname($surname);
+                        $candidate->setLast_name($last_name);
+                        $candidate->setDate_birth($date_birth);
+                        $candidate->setAge($age);
+                        $candidate->setId_gender($id_gender);
+                        $candidate->setId_civil_status($id_civil_status);
+                        $candidate->setJob_title($job_title);
+                        $candidate->setDescription($description);
+                        $candidate->setTelephone($telephone);
+                        $candidate->setCellphone($cellphone);
+                        $candidate->setEmail($email);
+                        $candidate->setId_state($id_state);
+                        $candidate->setId_city($id_city);
+                        $candidate->setId_area($id_area);
+                        $candidate->setId_subarea($id_subarea);
+                        $candidate->setId_user(NULL);
+                        $candidate->setCreated_by($_SESSION['identity']->id);
+                        $save = $candidate->save();
+                        $id_candidate = $candidate->getId();
+
+                        if ($save) {
+
+                            //vincular candidato con el directorio
+                            $candidateDirectoryObj = new CandidateDirectory();
+                            $candidateDirectoryObj->setId($id_candidate_directory);
+                            $candidateDirectoryObj->setStatus(6);
+                            $candidateDirectoryObj->setId_candidate($id_candidate);
+                            $status = $candidateDirectoryObj->updateSatusCandidate();
+
+                            $studies = new CandidateEducation();
+                            $studies->setId_candidate($id_candidate);
+                            $studies->setTitle(NULL);
+                            $studies->setInstitution(NULL);
+                            $studies->setStart_date(NULL);
+                            $studies->setEnd_date(NULL);
+                            $studies->setStill_studies(NULL);
+                            $studies->setId_level($id_level);
+
+                            $save = $studies->save();
+
+                            if (file_exists('uploads/resume_directory/' . $id_candidate_directory . '.pdf')) {
+
+
+                                $route = 'uploads/resume/' . $id_candidate . '/';
+                                if (!file_exists($route)) {
+                                    mkdir($route);
+                                }
+
+                                rename('uploads/resume_directory/' . $id_candidate_directory . '.pdf', "uploads/resume/" . $id_candidate . "/" . $id_candidate . ".pdf");
+                            }
+                        }
+                    }
+
+                    ///fin metodo
+                    $candidatesDirector = $this->candidatesDirectory($id_vacancy_filter);
+                    if ($id_candidate != NULL) {
+                        $id_candidate = Encryption::encode($id_candidate);
+                        $id_vacancy = Encryption::encode($id_vacancy);
+                    }
+
+                    if ($save) {
+                        echo json_encode(
+                            array(
+                                'status' => 1,
+                                'candidatesDirector' => $candidatesDirector,
+                                'tipo' => $tipo,
+                                'id_candidate' => $id_candidate,
+                                'id_vacancy' => $id_vacancy
                             )
                         );
                     } else {
                         echo json_encode(array('status' => 2));
                     }
-                } else {
-                    //valida los datos restantes 
 
-                    if ($id_gender && $id_civil_status && $email && $cellphone) {
-
-                        //  if ($tipo == 'directory') {
-
-                        $candidateDirectoryObj = new CandidateDirectory();
-                        $candidateDirectoryObj->setId($id_candidate_directory);
-                        $candidateDirectoryObj->setFirst_name($first_name);
-                        $candidateDirectoryObj->setSurname($surname);
-                        $candidateDirectoryObj->setLast_name($last_name);
-                        $candidateDirectoryObj->setTelephone($telephone);
-                        $candidateDirectoryObj->setAge($age);
-                        $candidateDirectoryObj->setExperience($job_title);
-                        $candidateDirectoryObj->setId_vacancy($id_vacancy);
-                        $candidateDirectoryObj->setId_state($id_state);
-                        $candidateDirectoryObj->setId_city($id_city);
-                        $candidateDirectoryObj->setEmail($email);
-                        $candidateDirectoryObj->setUrl($url);
-                        $candidateDirectoryObj->setComment($comment);
-                        $candidateDirectoryObj->setStatus($status);
-                        $candidateDirectoryObj->setCreated_at(getDate());
-                        $candidateDirectoryObj->setCreated_by($_SESSION['identity']->id);
-                        $candidateDirectoryObj->setModified_at(getDate());
-                        $candidateDirectoryObj->setDate_birth($date_birth);
-                        $candidateDirectoryObj->setId_gender($id_gender);
-                        $candidateDirectoryObj->setId_civil_status($id_civil_status);
-                        $candidateDirectoryObj->setJob_title($job_title);
-                        $candidateDirectoryObj->setDescription($description);
-                        $candidateDirectoryObj->setCellphone($cellphone);
-                        $candidateDirectoryObj->setId_area($id_area);
-                        $candidateDirectoryObj->setId_subarea($id_subarea);
-
-
-                      
-                        if ($flag == 'create') {
-                            $save = $candidateDirectoryObj->save_candidate();
-                            $id_candidate_directory = $candidateDirectoryObj->getId();
-                        } else {
-                            $save = $candidateDirectoryObj->update_candidate();
-                        }
-
-
-                   
-                        $studies = new CandidateEducationDirectory();
-                        $studies->setId_directory($id_candidate_directory);
-                        $studies->setId_level($id_level);
-                        $flag == 'create' ? $save = $studies->save() : $save = $studies->update();
-
-             
-
-                        if ($resume) {
-
-                            if (file_exists('uploads/resume_directory/' . $id_candidate_directory . '.pdf')) {
-                                unlink('uploads/resume_directory/' . $id_candidate_directory . '.pdf');
-                            }
-
-                            $route2 = 'uploads/resume_directory/';
-                            $resume2 = $route2 . $id_candidate_directory . '.pdf';
-
-                            if (!file_exists($resume2)) {
-                                $result = @move_uploaded_file($_FILES["resume"]["tmp_name"], $resume2);
-                                $routeDocu = base_url . $resume2;
-                            }
-                        }
-
-               
-                        if ($tipo == 'postulate') {
-
-                            $candidate = new Candidate();
-                            $candidate->setFirst_name($first_name);
-                            $candidate->setSurname($surname);
-                            $candidate->setLast_name($last_name);
-                            $candidate->setDate_birth($date_birth);
-                            $candidate->setAge($age);
-                            $candidate->setId_gender($id_gender);
-                            $candidate->setId_civil_status($id_civil_status);
-                            $candidate->setJob_title($job_title);
-                            $candidate->setDescription($description);
-                            $candidate->setTelephone($telephone);
-                            $candidate->setCellphone($cellphone);
-                            $candidate->setEmail($email);
-                            $candidate->setId_state($id_state);
-                            $candidate->setId_city($id_city);
-                            $candidate->setId_area($id_area);
-                            $candidate->setId_subarea($id_subarea);;
-                            $candidate->setId_user(NULL);
-                            $candidate->setCreated_by($_SESSION['identity']->id);
-                            $save = $candidate->save();
-                            $id_candidate = $candidate->getId();
-
-                            if ($save) {
-                                //vincular candidato con el directorio
-                                $candidateDirectoryObj = new CandidateDirectory();
-                                $candidateDirectoryObj->setId($id_candidate_directory);
-                                $candidateDirectoryObj->setStatus(6);
-                                $candidateDirectoryObj->setId_candidate($id_candidate);
-                                $candidateDirectoryObj->updateSatusCandidate();
-
-
-
-                                $studies = new CandidateEducation();
-                                $studies->setId_candidate($id_candidate);
-                                $studies->setTitle(NULL);
-                                $studies->setInstitution(NULL);
-                                $studies->setStart_date(NULL);
-                                $studies->setEnd_date(NULL);
-                                $studies->setStill_studies(NULL);
-                                $studies->setId_level($id_level);
-                                $save = $studies->save();
-
-
-                                if ($id_vacancy && is_numeric($id_vacancy)) {
-                                    $vacancy = new Vacancy();
-                                    $vacancy->setId($id_vacancy);
-                                    $vacante = $vacancy->getOne();
-                                    if ($vacante) {
-                                        $applicant = new VacancyApplicant();
-                                        $applicant->setId_vacancy($id_vacancy);
-                                        $applicant->setId_candidate($id_candidate);
-                                        $save = $applicant->create();
-                                        $applicant->setId_status(3);
-                                        $applicant->setCustomer_date(true);
-                                        $applicant->updateStatus();
-                                    }
-                                }
-
-                                if (file_exists('uploads/resume_directory/' . $id_candidate_directory . '.pdf')) {
-                                    $route = 'uploads/resume/' . $id_candidate . '/';
-                                    if (!file_exists($route)) {
-                                        mkdir($route);
-                                    }
-                                  
-                                    rename('uploads/resume_directory/' . $id_candidate_directory . '.pdf', "uploads/resume/" . $id_candidate . "/" . $id_candidate . ".pdf");
-                                 
-                                }
-                            }
-                        } else  if ($tipo == 'candidate') {
-
-                            $candidate = new Candidate();
-                            $candidate->setFirst_name($first_name);
-                            $candidate->setSurname($surname);
-                            $candidate->setLast_name($last_name);
-                            $candidate->setDate_birth($date_birth);
-                            $candidate->setAge($age);
-                            $candidate->setId_gender($id_gender);
-                            $candidate->setId_civil_status($id_civil_status);
-                            $candidate->setJob_title($job_title);
-                            $candidate->setDescription($description);
-                            $candidate->setTelephone($telephone);
-                            $candidate->setCellphone($cellphone);
-                            $candidate->setEmail($email);
-                            $candidate->setId_state($id_state);
-                            $candidate->setId_city($id_city);
-                            $candidate->setId_area($id_area);
-                            $candidate->setId_subarea($id_subarea);
-                            $candidate->setId_user(NULL);
-                            $candidate->setCreated_by($_SESSION['identity']->id);
-                            $save = $candidate->save();
-                            $id_candidate = $candidate->getId();
-
-                            if ($save) {
-
-                                //vincular candidato con el directorio
-                                $candidateDirectoryObj = new CandidateDirectory();
-                                $candidateDirectoryObj->setId($id_candidate_directory);
-                                $candidateDirectoryObj->setStatus(6);
-                                $candidateDirectoryObj->setId_candidate($id_candidate);
-                                $status = $candidateDirectoryObj->updateSatusCandidate();
-
-                                $studies = new CandidateEducation();
-                                $studies->setId_candidate($id_candidate);
-                                $studies->setTitle(NULL);
-                                $studies->setInstitution(NULL);
-                                $studies->setStart_date(NULL);
-                                $studies->setEnd_date(NULL);
-                                $studies->setStill_studies(NULL);
-                                $studies->setId_level($id_level);
-
-                                $save = $studies->save();
-
-                                if (file_exists('uploads/resume_directory/' . $id_candidate_directory . '.pdf')) {
-
-
-                                    $route = 'uploads/resume/' . $id_candidate . '/';
-                                    if (!file_exists($route)) {
-                                        mkdir($route);
-                                    }
-                             
-                                    rename('uploads/resume_directory/' . $id_candidate_directory . '.pdf', "uploads/resume/" . $id_candidate . "/" . $id_candidate . ".pdf");
-                                  
-                                }
-
-                            }
-                        }
-
-                        ///fin metodo
-                        $candidatesDirector = $this->candidatesDirectory();
-						if($id_candidate!=NULL){
-						$id_candidate= Encryption::encode($id_candidate);
-					    $id_vacancy= Encryption::encode($id_vacancy);
-					    }
-
-                        if ($save) {
-                            echo json_encode(
-                                array(
-                                    'status' => 1,
-                                    'candidatesDirector' => $candidatesDirector,
-									'tipo' => $tipo,
-									'id_candidate' => $id_candidate,
-									'id_vacancy' => $id_vacancy
-                                )
-                            );
-                        } else {
-                            echo json_encode(array('status' => 2));
-                        }
-                    } else {
-                        //valida los datyos restantes
-                        echo json_encode(array('status' => 0));
-                    }
 
                     //fin else
 
 
                 }
-            }else{
-				 echo json_encode(array('status' => 0));
-				
-			}
+            } else {
+                echo json_encode(array('status' => 0));
+            }
 
 
             //fin de todo
@@ -942,9 +975,16 @@ class CandidatoDirectorioController
                 $cities = $City->getCitiesByState();
 
 
-                $subareas = new Subarea();
-                $subareas->setId_area($candidatedirectory->id_area);
-                $subareas = $subareas->getSubareasByArea();
+                if ($candidatedirectory->id_area != null) {
+                    $subareas = new Subarea();
+                    $subareas->setId_area($candidatedirectory->id_area);
+                    $subareas = $subareas->getSubareasByArea();
+                } else {
+                    $subareas = new Subarea();
+                    $subareas->setId_area($vacancy->id_area);
+                    $subareas = $subareas->getSubareasByArea();
+                }
+
 
 
                 $curriculum = '';
@@ -985,8 +1025,4 @@ class CandidatoDirectorioController
             echo json_encode(array('status' => 0));
         }
     }
-	
-		
-	
-	
 }

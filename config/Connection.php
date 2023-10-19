@@ -9,7 +9,7 @@ class Connection
             //hola
             //148.72.144.152
             //$link = new PDO("mysql:host=localhost;dbname=reclutamiento", "root", "");
-            $link = new PDO("sqlsrv:Server=localhost;Database=reclutamiento", "", "");
+            $link = new PDO("sqlsrv:Server=localhost;Database=reclutamiento2", "", "");
             //   $link = new PDO("sqlsrv:Server=148.72.144.152;Database=reclutamiento", "reclutador", "Sr65s$0z");
             $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $link->setAttribute(constant('PDO::SQLSRV_ATTR_DIRECT_QUERY'), true);

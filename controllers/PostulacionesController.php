@@ -1110,9 +1110,9 @@ class PostulacionesController
 		  
   //gabo 4 oct
         if ($extrawhere != '') {
-            $extrawhere .= " AND created_at < '2022-06-01' ";
+            $extrawhere .= " AND created_at > '2022-06-01' ";
         } else {
-            $extrawhere = " created_at < '2022-06-01' ";
+            $extrawhere = " created_at > '2022-06-01' ";
         }
         //gabo 4 oct
 

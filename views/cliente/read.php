@@ -498,6 +498,13 @@
                 keyboard: false
             });
         })
+		
+		
+		   document.querySelector('#modal_comentario').addEventListener('submit', e => {
+                e.preventDefault();
+                let cliente = new Cliente();
+                cliente.save_comentario_cliente();
+            })
     })
 </script>
 <?php endif; ?>

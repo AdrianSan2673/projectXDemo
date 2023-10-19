@@ -824,7 +824,7 @@ class ReporteController
             $hoja1->getStyle('A1:AB1')->applyFromArray($estiloTituloColumnas);
             ///////////////////////////////////////////////////////////
 
-            $hoja2 = $documento->createSheet();
+          $hoja2 = $documento->createSheet();
             $hoja2->setTitle('Ej. Cuenta');
 
             $hoja2->getColumnDimension('A')->setAutoSize(true);
@@ -837,44 +837,67 @@ class ReporteController
             $hoja2->setCellValueByColumnAndRow(3, 1, '# ESE Finalizados');
 
             $hoja2->getColumnDimension('D')->setAutoSize(true);
-            $hoja2->setCellValueByColumnAndRow(4, 1, '# IL En Proceso');
+            $hoja2->setCellValueByColumnAndRow(4, 1, '# SOI Finalizados');
 
             $hoja2->getColumnDimension('E')->setAutoSize(true);
-            $hoja2->setCellValueByColumnAndRow(5, 1, '# ESE En Proceso');
+            $hoja2->setCellValueByColumnAndRow(5, 1, '# SMART Finalizados');
 
             $hoja2->getColumnDimension('F')->setAutoSize(true);
-            $hoja2->setCellValueByColumnAndRow(6, 1, '# IL TOTALES');
+            $hoja2->setCellValueByColumnAndRow(6, 1, '# IL En Proceso');
 
             $hoja2->getColumnDimension('G')->setAutoSize(true);
-            $hoja2->setCellValueByColumnAndRow(7, 1, '# ESE TOTALES');
+            $hoja2->setCellValueByColumnAndRow(7, 1, '# ESE En Proceso');
 
             $hoja2->getColumnDimension('H')->setAutoSize(true);
-            $hoja2->setCellValueByColumnAndRow(8, 1, '# Servicios TOTALES');
+            $hoja2->setCellValueByColumnAndRow(8, 1, '# SOI En Proceso');
+
+            $hoja2->getColumnDimension('I')->setAutoSize(true);
+            $hoja2->setCellValueByColumnAndRow(9, 1, '# SMART En Proceso');
+
+            $hoja2->getColumnDimension('J')->setAutoSize(true);
+            $hoja2->setCellValueByColumnAndRow(10, 1, '# IL TOTALES');
+
+            $hoja2->getColumnDimension('K')->setAutoSize(true);
+            $hoja2->setCellValueByColumnAndRow(11, 1, '# ESE TOTALES');
+
+            $hoja2->getColumnDimension('L')->setAutoSize(true);
+            $hoja2->setCellValueByColumnAndRow(12, 1, '# SOI TOTALES');
+
+            $hoja2->getColumnDimension('M')->setAutoSize(true);
+            $hoja2->setCellValueByColumnAndRow(13, 1, '# SMART TOTALES');
+
+            $hoja2->getColumnDimension('N')->setAutoSize(true);
+            $hoja2->setCellValueByColumnAndRow(14, 1, '# Servicios TOTALES');
 
             $fila = 2;
             foreach ($Ejecutivos_Cuenta as $ejecutivo) {
                 $hoja2->setCellValueByColumnAndRow(1, $fila, $ejecutivo['Nombre']);
                 $hoja2->setCellValueByColumnAndRow(2, $fila, $ejecutivo['No_INV_FIN']);
                 $hoja2->setCellValueByColumnAndRow(3, $fila, $ejecutivo['No_ESE_FIN']);
-                $hoja2->setCellValueByColumnAndRow(4, $fila, $ejecutivo['No_INV_Proc']);
-                $hoja2->setCellValueByColumnAndRow(5, $fila, $ejecutivo['No_ESE_Proc']);
-                $hoja2->setCellValueByColumnAndRow(6, $fila, $ejecutivo['No_INV_Total']);
-                $hoja2->setCellValueByColumnAndRow(7, $fila, $ejecutivo['No_ESE_Total']);
-                $hoja2->setCellValueByColumnAndRow(8, $fila, $ejecutivo['No_Total']);
+                $hoja2->setCellValueByColumnAndRow(4, $fila, $ejecutivo['No_ESE_FIN_SOI']);
+                $hoja2->setCellValueByColumnAndRow(5, $fila, $ejecutivo['No_ESE_FIN_SMART']);
+                $hoja2->setCellValueByColumnAndRow(6, $fila, $ejecutivo['No_INV_Proc']);
+                $hoja2->setCellValueByColumnAndRow(7, $fila, $ejecutivo['No_ESE_Proc']);
+                $hoja2->setCellValueByColumnAndRow(8, $fila, $ejecutivo['No_ESE_SOI_Proc']);
+                $hoja2->setCellValueByColumnAndRow(9, $fila, $ejecutivo['No_ESE_SMART_Proc']);
+                $hoja2->setCellValueByColumnAndRow(10,$fila, $ejecutivo['No_INV_Total']);
+                $hoja2->setCellValueByColumnAndRow(11,$fila, $ejecutivo['No_ESE_Total']);
+                $hoja2->setCellValueByColumnAndRow(12,$fila, $ejecutivo['No_ESE_SOI_Total']);
+                $hoja2->setCellValueByColumnAndRow(13,$fila, $ejecutivo['No_ESE_SMART_Total']);
+                $hoja2->setCellValueByColumnAndRow(14,$fila, $ejecutivo['No_Total']);
 
                 $fila++;
             }
 
             $fila = $fila - 1;
 
-            $hoja2->getStyle('A1:H' . $fila)->applyFromArray($estiloInformacion);
+            $hoja2->getStyle('A1:N' . $fila)->applyFromArray($estiloInformacion);
             $hoja2->getStyle('A1:A' . $fila)->applyFromArray($izquierda);
             $hoja2->getStyle('B1:B' . $fila)->applyFromArray($derecha);
             $hoja2->getStyle('C1:C' . $fila)->applyFromArray($derecha);
             $hoja2->getStyle('D1:D' . $fila)->applyFromArray($derecha);
             $hoja2->getStyle('E1:E' . $fila)->applyFromArray($derecha);;
-            $hoja2->getStyle('A1:H1')->applyFromArray($estiloTituloColumnas);
-
+            $hoja2->getStyle('A1:N1')->applyFromArray($estiloTituloColumnas);
 
             $hoja3 = $documento->createSheet();
             $hoja3->setTitle('Ej. Logística');
@@ -900,8 +923,7 @@ class ReporteController
             $hoja3->getStyle('B1:B' . $fila)->applyFromArray($derecha);
             $hoja3->getStyle('A1:B1')->applyFromArray($estiloTituloColumnas);
 
-
-            $hoja4 = $documento->createSheet();
+     		$hoja4 = $documento->createSheet();
             $hoja4->setTitle('Clientes');
 
             $hoja4->getColumnDimension('A')->setAutoSize(true);
@@ -2361,7 +2383,6 @@ class ReporteController
     //RH
     public function employeesinformation()
     {
-        //Consulta de tipo de usuario y identificacion sino lo regresa al
         $status = Encryption::decode($_GET['status']) ? Encryption::decode($_GET['status']) : 0;
         $title = $status == 0 ? 'Reporte De Exmpleados' : 'Reporte De Empleados';
 
@@ -2414,10 +2435,6 @@ class ReporteController
         $hoja->setTitle($title);
 
         $row = 1;
-
-        $arrayDeLetraS=['A','B'];
-        $arrayNombrecolumna=['nombre'];
-
         $arrayColumns = array(
             array('pColumn' => 'A', 'row' => $row, 'value' => 'No.Empleado'),
             array('pColumn' => 'B', 'row' => $row, 'value' => 'Nombre'),
@@ -2475,7 +2492,7 @@ class ReporteController
         $hoja->setCellValueByColumnAndRow(26, 1, 'Contratos');
 
 
-        $row = $row + 2; // PARA QUE SE SALTEN DOS FILAS PARA ESTABLECER LOS DATOS 8084350455
+        $row = $row + 2; // PARA QUE SE SALTEN DOS FILAS PARA ESTABLECER LOS DATOS
         $employeeContactObj = new EmployeeContact();
 
         foreach ($employees as $emp) {
@@ -2486,9 +2503,6 @@ class ReporteController
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['boss_title_position']);
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['department']);
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['id_gender'] == 1 ? 'Hombre' : 'Mujer');
-           
-               
-
             $hoja->setCellValueByColumnAndRow($col++, $row, Utils::getDate($emp['start_date']));
             $hoja->setCellValueByColumnAndRow($col++, $row, $emp['antiquity'] . ' Años');
             $hoja->setCellValueByColumnAndRow($col++, $row, isset($emp['history_position_date']) ? Utils::getDate($emp['history_position_date']) : '');
@@ -3647,7 +3661,11 @@ class ReporteController
         $hoja = $documento->getActiveSheet();
 
 
-       
+        $row = 2;
+        $hoja->setCellValueByColumnAndRow(1, $row, 'Nombre del colaborador');
+        $hoja->setCellValueByColumnAndRow(2, $row, 'usuario');
+        $hoja->setCellValueByColumnAndRow(3, $row, 'contraseña');
+
 
 
 
@@ -3710,14 +3728,6 @@ class ReporteController
             )
         );
 
-        
-        $hoja->setCellValueByColumnAndRow(1, 1, $title);
-
-        $row = 2;
-        $hoja->setCellValueByColumnAndRow(1, $row, 'Nombre del colaborador');
-        $hoja->setCellValueByColumnAndRow(2, $row, 'usuario');
-        $hoja->setCellValueByColumnAndRow(3, $row, 'contraseña');
-
 
         foreach (range('A', $hoja->getHighestColumn()) as $col) {
             $hoja->getStyle($col . "2")->applyFromArray($estiloTituloColumnas);
@@ -3725,13 +3735,18 @@ class ReporteController
         }
 
         //llenar tabla
-        $row++;//3
+        $row++;
         foreach ($users_rh as $user) :
+
+
             $columna = 0;
+            $row++;
             $hoja->setCellValueByColumnAndRow(++$columna, $row, $user['first_name'] . " " . $user['surname'] . $user['last_name']);
             $hoja->setCellValueByColumnAndRow(++$columna, $row, $user['username']);
             $hoja->setCellValueByColumnAndRow(++$columna, $row, Encryption::decode($user['password']));
-            $row++;
+
+
+
         endforeach;
 
         //estilos
@@ -3770,6 +3785,7 @@ class ReporteController
         $hoja->getStyle('A1:' . $col . "3")->applyFromArray($centrado);
         $hoja->getStyle('A2:' . $col . "2")->applyFromArray($estiloTituloColumnas);
         $hoja->mergeCells('A1:' . $col . "1");
+        $hoja->setCellValueByColumnAndRow(1, 1, $title);
 
         $hoja->getStyle('A3:' . $col . "3")->applyFromArray(
             array(

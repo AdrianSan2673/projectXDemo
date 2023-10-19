@@ -24,12 +24,7 @@ class NotificationsController {
             $user->setId($id_user);
             $user = $user->getOne();
             $activation = $user ? $user->activation : 0;
-         /*    if (!$identity){
-                unset($_SESSION['identity']);
-				 if (!isset($_SESSION['user_rh'])) 
-                    unset($_SESSION['identity']);
-                
-			} */
+         
             $data = array(
                 'notifications' => $notificaciones,
                 'id_user' => $id_user,

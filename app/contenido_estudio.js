@@ -1530,6 +1530,15 @@ class ContenidoEstudio{
             this.template_ubicacion.querySelectorAll('b')[21].style.display = 'none';
             this.template_ubicacion.querySelectorAll('p')[21].style.display = 'none';
         }
+		
+		  if (candidato.ID_Empresa == 497) { //Empresa BKT Bicipublica No quiere estos datos
+            this.template_ubicacion.querySelectorAll('b')[16].style.display = 'none';
+            this.template_ubicacion.querySelectorAll('p')[16].style.display = 'none';
+            this.template_ubicacion.querySelectorAll('b')[19].style.display = 'none';
+            this.template_ubicacion.querySelectorAll('p')[19].style.display = 'none';
+            this.template_ubicacion.querySelectorAll('b')[20].style.display = 'none';
+            this.template_ubicacion.querySelectorAll('p')[20].style.display = 'none';
+        }
 
         const clone_ubicacion = this.template_ubicacion.cloneNode(true);
         this.fragment_ubicacion.appendChild(clone_ubicacion);

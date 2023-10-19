@@ -23,6 +23,8 @@ class BusinessName{
                     for (let i in json_bn){
                         business_name += `<option value="${json_bn[i].id}">${json_bn[i].business_name}</option>`;
                     }
+					                    business_name += `<option value="">Pendiente</option>`;
+
                     document.querySelector("#business_name").innerHTML = business_name;
                 }
             }

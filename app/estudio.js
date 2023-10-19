@@ -1969,7 +1969,13 @@ class Estudio extends ContenidoEstudio{
                     form.querySelectorAll('input')[0].value = folio;
                     form.querySelectorAll('input')[1].value = json_app.ubicacion.status;
                     form.querySelectorAll('input')[2].value = json_app.vivienda.status;
-                    if (json_app.vivienda.status == 1) {
+                    
+					 if (json_app.candidato_datos.ID_Empresa == 497) {
+                        document.querySelectorAll('#modal_ubicacion form .form-group')[16].hidden = true
+                        document.querySelectorAll('#modal_ubicacion form .form-row')[6].hidden = true
+                    }
+					
+					if (json_app.vivienda.status == 1) {
                         form.querySelectorAll('input')[3].value = json_app.vivienda.Tiempo_Viviendo;
                     }
                     if (json_app.ubicacion.status == 1) {

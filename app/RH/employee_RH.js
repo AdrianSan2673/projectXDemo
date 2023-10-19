@@ -520,7 +520,8 @@ class Employee_RH {
                                                          <button value="${solicitud.id}"
                                                         class="btn btn-warning mt-1" id="btn-borrar">
                                                         <i class="fas fa-ban"> Borrar</i>
-                                                    </button>`;
+                                                    </button>
+													`;
                             }
                             if (solicitud.status == 'Aceptada') {
                                 solicitudes += ` <small class="badge badge-success"> Aceptada</small>`;
@@ -529,7 +530,11 @@ class Employee_RH {
                                 solicitudes += ` <small class="badge badge-danger"> Declinada</small>`;
                             }
                             //===[gabo 4 agosto fail]===
-                            solicitudes += ` </td >
+                            solicitudes += ` <button value="${solicitud.id}"
+                                                    data-name='${solicitud.first_name}  ${solicitud.surname}  ${solicitud.last_name}'
+                                                    class="btn btn-info mt-1" id="btn-edit">
+                                                    <i class="fas fa-edit"> Editar</i>
+                                                </button> </td >
                                             </tr > `;
                             cont--;
                         });

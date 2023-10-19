@@ -11,7 +11,8 @@
       </div>
     </div><!-- /.container-fluid -->
   </section>
-  <?php if (Utils::isCustomer()) : ?>
+	  <?php if (Utils::isCustomer()||Utils::isRecruitmentManager()||Utils::isSenior()||Utils::isSales()||Utils::isSalesManager()||Utils::isAdmin()) : ?>
+
     <section class="content-header">
       <div class="row">
         <div class="col-sm-2 ml-auto">

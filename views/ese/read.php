@@ -76,9 +76,9 @@
                         <div class="col-5 col-sm-3 col-md-2 mt-3">
                           <div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" role="tablist" aria-orientation="vertical">
                             <a class="nav-link <?=Utils::getDisplayBotones()['Account'] == 'block' ? 'active' : ''?>" id="vert-tabs-busqueda_ral-tab" data-toggle="pill" href="#vert-tabs-busqueda_ral" role="tab" aria-controls="vert-tabs-busqueda_ral" aria-selected="true" style="display: block">Búsqueda de RAL</a>
-                            <a class="nav-link" id="vert-tabs-propio_ral-tab" data-toggle="pill" href="#vert-tabs-propio_ral" role="tab" aria-controls="vert-tabs-busqueda_ral" aria-selected="true" style="display: <?=Utils::getDisplayBotones()['Account']?>;">RAL Propio</a>
-                            <a class="nav-link <?=Utils::getDisplayBotones()['Account'] != 'block' ? 'active' : ''?>" id="vert-tabs-acerca_ral-tab" data-toggle="pill" href="#vert-tabs-acerca_ral" role="tab" aria-controls="vert-tabs-acerca_ral" aria-selected="true">Acerca del RAL</a>
-                            <a class="nav-link" id="vert-tabs-capturas_ral-tab" data-toggle="pill" href="#vert-tabs-capturas_ral" role="tab" aria-controls="vert-tabs-capturas_ral" aria-selected="false">Capturas del RAL</a>
+                            <a class="nav-link" id="vert-tabs-propio_ral-tab" data-toggle="pill" href="#vert-tabs-propio_ral" role="tab" aria-controls="vert-tabs-busqueda_ral" aria-selected="true" style="display: <?=Utils::getDisplayBotones()['Account']?>;" hidden>RAL Propio</a>
+                            <a class="nav-link <?=Utils::getDisplayBotones()['Account'] != 'block' ? 'active' : ''?>" id="vert-tabs-acerca_ral-tab" data-toggle="pill" href="#vert-tabs-acerca_ral" role="tab" aria-controls="vert-tabs-acerca_ral" aria-selected="true" hidden>Acerca del RAL</a>
+                            <a class="nav-link" id="vert-tabs-capturas_ral-tab" data-toggle="pill" href="#vert-tabs-capturas_ral" role="tab" aria-controls="vert-tabs-capturas_ral" aria-selected="false" hidden>Capturas del RAL</a>
                             <a class="nav-link" id="vert-tabs-comentarios_ral-tab" data-toggle="pill" href="#vert-tabs-comentarios_ral" role="tab" aria-controls="vert-tabs-comentarios_ral" aria-selected="true" style="display: <?=Utils::getDisplayBotones()['Account']?>;">Comentarios de RAL</a>
                           </div>
                         </div>

@@ -480,7 +480,8 @@ class Cliente_SAController
 
     public function updateComentario()
     {
-        if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior() || Utils::isSalesManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor())) {
+              if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager()  || Utils::isSalesManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor()|| Utils::isSAManager())) {
+
             $Cliente = Utils::sanitizeNumber($_POST['Cliente']);
             $Comentario = Utils::sanitizeStringBlank($_POST['Comentario']);
 

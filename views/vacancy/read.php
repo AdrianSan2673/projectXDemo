@@ -1,633 +1,727 @@
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-left mb-2">
+            <li class="breadcrumb-item"><a href="<?= base_url ?>">Inicio</a></li>
+            <li class="breadcrumb-item active">Vacantes</li>
+          </ol>
+        </div>
+        <div class="col-sm-12">
+          <div class="alert alert-success">
+            <h1>Vacantes<?= Utils::isCustomer() ? ' <b>' . $customerName . '</b>' : '' ?></h1>
+          </div>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+  <?php if ($_GET['action'] == 'index') : ?>
     <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-5">
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-left mb-2">
-                        <li class="breadcrumb-item"><a href="<?= base_url ?>">Inicio</a></li>
-                        <li class="breadcrumb-item"><a href="<?= base_url . "vacante/index" ?>">Vacantes</a></li>
-                        <li class="breadcrumb-item active"><?= $vacante->vacancy ?></li>
-                    </ol>
-                </div>
-                <div class="col-sm-12">
-                    <div class="alert alert-success">
-                        <h1><?= $vacante->vacancy ?> T</h1>
-                    </div>
-                </div><!-- /.col -->
+      <div class="container-fluid">
+        <form method="POST" action="<?= base_url . "vacante/index" ?>" class="row">
+          <div class="col-12 col-md-5">
+            <div class="form-group">
+              <label for="start_date" class="col-form-label">Fecha inicial:</label>
+              <input type="date" name="start_date" id="start_date" value="<?= isset($_POST['start_date']) ? $_POST['start_date'] : date('Y-m-d') ?>" class="form-control">
             </div>
-            <div class="row">
-                <div class="col-sm-6 mx-auto">
-                    <div class="alert <?= $class_color ?>">
-                        <h6 class="text-center"><?= $vacante->vacancy_status ?></h6>
-                    </div>
-                </div>
+          </div>
+          <div class="col-12 col-md-5">
+            <div class="form-group">
+              <label for="end_date" class="col-form-label">Fecha final:</label>
+              <input type="date" name="end_date" id="end_date" value="<?= isset($_POST['end_date']) ? $_POST['end_date'] : date('Y-m-d') ?>" class="form-control">
             </div>
-            <div class="row">
-                <?php if (Utils::isAdmin() || Utils::isSalesManager() || Utils::isSales()) : ?>
-                    <div class="col-sm-4 mr-auto">
-                        <button class="btn btn-lg btn-outline-orange btn-flat btn-app float-left" onclick="duplicate(this)"><i class="fas fa-clone"></i> Duplicar vacante</button>
-                    </div>
-                <?php endif ?>
-
-                <?php if (Utils::isAdmin()) : ?>
-                    <div class="col-sm-4 ml-auto">
-                        <?php //if ($vacante->send_date != NULL): 
-                        ?>
-                        <button class="btn btn-lg btn-outline-info btn-flat float-right" onclick="restartDate()">Reactivar búsqueda</button>
-                        <?php //endif 
-                        ?>
-                    </div>
-                <?php endif ?>
-            </div>
-            <br>
-            <input type="hidden" id="id" value="<?= $vacante->id_vacancy ?>">
-            <div class="row">
-                <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSenior()) : ?>
-                    <div class="col-md-5 mx-auto">
-                        <?php if ($vacante->id_status == 1) : ?>
-                            <button class="btn btn-success" onclick="changeStatus1()">Envío completado</button>
-                        <?php endif ?>
-                        <?php if ($vacante->id_status == 2) : ?>
-                            <!-- <button class="btn btn-orange" onclick="changeStatus2()">En entrevistas</button> -->
-                        <?php endif ?>
-                        <?php if ($vacante->id_status == 3) : ?>
-                            <button class="btn btn-outline-danger" onclick="changeStatus1()">Envío completado</button>
-                            <!-- <button class="btn btn-outline-secondary" onclick="changeStatus3()">En seguimiento</button> -->
-                        <?php endif ?>
-                        <?php if ($vacante->id_status <= 8) : ?>
-                            <!-- <button class="btn btn-warning" onclick="changeStatus7()">Stand by</button> -->
-                            <button class="btn btn-maroon" onclick="changeStatus4()">Cerrado</button>
-                            <button class="btn btn-outline-danger" onclick="changeStatus5()" <?= !Utils::isAdmin() ? 'hidden' : '' ?>>Cancelado con cobro</button>
-                            <button class="btn btn-outline-secondary" onclick="changeStatus6()" <?= !Utils::isAdmin() ? 'hidden' : '' ?>>Cancelado sin cobro</button>
-                            <button class="btn btn-outline-dark" onclick="changeStatus9()" <?= !Utils::isAdmin() ? 'hidden' : '' ?>>No ingresado</button>
-                        <?php endif ?>
-                    </div>
-                <?php endif ?>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col-sm-2 mx-auto h6">
-                    <?php if ($vacante->salary_min != $vacante->salary_max) : ?>
-                        <b><?= '$' . number_format($vacante->salary_min) . ' - $' . number_format($vacante->salary_max) . ' (mensual)' ?></b>
-                    <?php else : ?>
-                        <b><?= '$' . number_format($vacante->salary_min) . ' (mensual)' ?></b>
-                    <?php endif ?>
-                </div>
-                <div class="col-sm-2 mx-auto h6">
-                    <p><?= $vacante->city . ', ' . $vacante->state ?></p>
-                </div>
-                <div class="col-sm-2 mx-auto h6">
-                    <p class="text-muted"><?= Utils::getDate($vacante->request_date) ?></p>
-                </div>
-            </div>
-        </div><!-- /.container-fluid -->
+          </div>
+          <div class="col-12 col-md-2" style="padding-right: 14px;">
+            <button type="submit" name="search" id="search" class="btn btn-app btn-block btn-info" style="background-color: #17a2b8; color: #fff;"><i class="fas fa-search"></i>Buscar</button>
+          </div>
+        </form>
+      </div>
     </section>
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-9">
-                    <div class="card card-success">
-                        <div class="card-header">
-                            <h4 class="card-title">Perfil del Puesto</h4>
+  <?php endif ?>
+  <section class="content-header">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="info-box mb-3 bg-navy">
+          <span class="info-box-icon"><i class="fas fa-briefcase"></i></span>
 
-                            <!-- <div class="ribbon-wrapper ribbon-xl">
-                        <div class="ribbon <?= $class_color ?>">
-                          <?= $vacante->vacancy_status ?>
-                        </div>
-                    </div> -->
-                            <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSalesManager()  || Utils::isSales()) : ?>
-                                <!-- GABOOOOOO -->
-                                <button class="btn btn-info btn-modal  float-right" id="editar-perfil"> <i class="fas fa-pencil-alt"></i> </button>
-                            <?php endif ?>
+          <div class="info-box-content">
+            <span class="info-box-text">Total de operaciones ingresadas en <?= strftime('%B') ?></span>
+            <span class="info-box-number"><?= !Utils::isCustomer() ? Statistics::getVacancyCountInCurrentMonth() : $inCurrentMont ?></span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="info-box mb-3 bg-info">
+          <span class="info-box-icon"><i class="fas fa-briefcase"></i></span>
+          <div class="info-box-content">
+            <span class="info-box-text">Total de operaciones en proceso en <?= strftime('%B') ?></span>
+            <span class="info-box-number"><?= !Utils::isCustomer() ? Statistics::getVacancyInProcessCount() : $inProcess ?></span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="info-box mb-3 bg-maroon">
+          <span class="info-box-icon"><i class="fas fa-briefcase"></i></span>
+          <div class="info-box-content">
+            <span class="info-box-text">Total de operaciones cerradas en <?= strftime('%B') ?></span>
+            <span class="info-box-number"><?= !Utils::isCustomer() ? Statistics::getVacancyClosedCountInCurrentMonth() :  $closeInCurrent ?></span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 ml-auto">
+        <a class="btn btn-orange float-right" href="<?= base_url ?>vacante/crear">Crear vacante</a>
+      </div>
+    </div>
+  </section>
+  <br>
+  <!-- Main content -->
+  <section class="content">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Listado de vacantes</h3>
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i>
+          </button>
+        </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body ">
+        <table id="tb_vacancies" class="table <?= Utils::isManager() ? 'table-head-fixed text-nowrap' : '' ?> table-striped table-sm table-responsive" style="display: none; <?= Utils::isManager() ? 'height: 400px;' : '' ?>">
+          <thead>
+            <tr>
+              <th></th>
+              <th class="filterhead"></th>
+              <th></th>
+              <?php if (!Utils::isCustomer()) : ?>
+                <th class="filterhead"></th>
+              <?php endif ?>
+              <th></th>
+              <th class="filterhead"></th>
+              <th class="filterhead"></th>
+              <?php if (!Utils::isCustomer()) : ?>
+                <th class="filterhead"></th>
+              <?php endif ?>
+              <?php if (Utils::isCustomer()) : ?>
+                <th class="text-center filterhead"></th>
+              <?php endif ?>
+              <th></th>
+              <?php if (!Utils::isCustomer()) : ?>
+                <th></th>
+              <?php endif ?>
+              <?php if (Utils::isAdmin() || Utils::isManager()) : ?>
+                <!-- <th></th> -->
+                <th></th>
+              <?php endif ?>
+              <?php if (Utils::isSenior()) : ?>
+                <!-- <th></th> -->
+                <th></th>
+              <?php endif ?>
+              <?php if (Utils::isJunior()) : ?>
+                <!-- <th></th> -->
+              <?php endif ?>
+              <?php if (Utils::isCustomer()) : ?>
+                <th></th>
+              <?php endif ?>
+              <?php if (!Utils::isCustomer()) : ?>
+                <!-- <th></th> -->
+                <th></th>
+                <th></th>
+                <th></th>
+              <?php endif ?>
+              <th></th>
+              <?php if (!Utils::isCustomer()) : ?>
+                <th></th>
+              <?php endif ?>
+              <!-- <th class="filterhead"></th> -->
+              <th></th>
+              <th class="filterhead"></th>
+              <th></th>
+            </tr>
+            <tr>
+              <th class="align-middle">Folio</th>
+              <th class="align-middle">Reclutador</th>
+              <th class="align-middle">Fecha de recepción</th>
+              <?php if (!Utils::isCustomer()) : ?>
+                <th class="align-middle">Cliente</th>
+              <?php endif ?>
+              <th class="align-middle">Vacante</th>
+              <th class="align-middle">Tipo</th>
+              <th class="align-middle">Ciudad</th>
+              <?php if (!Utils::isCustomer()) : ?>
+                <th class="align-middle text-center">CC</th>
+              <?php endif ?>
+              <?php if (Utils::isCustomer()) : ?>
+                <th class="align-middle text-center">Facturable a</th>
+              <?php endif ?>
+              <th class="align-middle text-center">Sueldo</th>
+              <?php if (!Utils::isCustomer()) : ?>
+                <th class="align-middle text-center">Nuevas Postulaciones</th>
+              <?php endif ?>
+              <?php if (Utils::isAdmin() || Utils::isManager()) : ?>
+                <!-- <th class="align-middle">Candidatos captados por Ej. Busq.</th> -->
+                <th class="align-middle">Candidatos compartidos al cliente</th>
+              <?php endif ?>
+              <?php if (Utils::isSenior()) : ?>
+                <!-- <th class="align-middle">Candidatos recibidos</th> -->
+                <th class="align-middle">Candidatos compartidos al cliente</th>
+              <?php endif ?>
+              <?php if (Utils::isJunior()) : ?>
+                <!-- <th class="align-middle">Candidatos enviados a Ej. Recl.</th> -->
+              <?php endif ?>
+              <?php if (Utils::isCustomer()) : ?>
+                <th class="align-middle">Candidatos adecuados al perfil</th>
+              <?php endif ?>
+              <?php if (!Utils::isCustomer() && !Utils::isCandidate()) : ?>
+                <!-- <th class="align-middle">Posiciones</th> -->
+                <th class="align-middle">Posiciones por cubrir</th>
+                <th>Fecha de Autorización</th>
+                <th class="align-middle">Fecha de compromiso de envío</th>
+              <?php endif ?>
+              <th>Fecha real de envío</th>
+              <?php if (!Utils::isCustomer()) : ?>
+                <th class="align-middle">Fecha de finalización</th>
+              <?php endif ?>
+              <!-- <th class="align-middle">T</th> -->
+              <th class="align-middle">Días</th>
+              <th class="align-middle">Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($vacancies as $vacancy) : ?>
+              <tr>
+                <?php switch ($vacancy['id_status']) {
+                  case 1:
+                    $class_color = 'bg-info';
+                    break;
+                  case 2:
+                    $class_color = 'bg-success';
+                    break;
+                  case 3:
+                    $class_color = 'bg-orange';
+                    break;
+                  case 4:
+                    $class_color = 'bg-navy';
+                    break;
+                  case 5:
+                    $class_color = 'bg-maroon';
+                    break;
+                  case 8:
+                    $class_color = 'bg-warning';
+                    break;
+                  default:
+                    $class_color = '';
+                    break;
+                }
 
-                        </div>
-                        <!-- /.card-header -->
+                //if ($vacancy['time'] == 72) {
+                if ($vacancy['n_days'] < 3)
+                  $day_color = 'bg-success';
+                elseif ($vacancy['n_days'] == 3)
+                  $day_color = 'bg-orange';
+                else
+                  $day_color = 'bg-danger';
+                /*}else{
+                          if ($vacancy['n_days'] < 5)
+                            $day_color = 'bg-success';
+                          elseif ($vacancy['n_days'] == 5)
+                            $day_color = 'bg-orange';
+                          else
+                            $day_color = 'bg-danger';
+                        }*/
 
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <b>Nombre del puesto</b>
-                                    <p id="vacancy"><?= $vacante->vacancy ?></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <b>Departamento</b>
-                                    <p id="department"><?= $vacante->department ?></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <b>Tipo de vacante</b>
-                                    <?php
-                                    // 25 abril 2023
-                                    switch ($vacante->type) {
-                                        case 1:
-                                            $type = 'Operativa';
-                                            break;
-                                        case 2:
-                                            $type = 'Orden Común';
-                                            break;
-                                        case 3:
-                                            $type = 'Head Hunting';
-                                            break;
-                                        case 4:
-                                            $type = 'Iguala';
-                                            break;
-                                        default:
-                                            $type = '';
-                                            break;
-                                    }
-                                    // fin 
-                                    ?>
-                                    <p id="type"><?= $type ?></p>
-                                </div>
-                            </div>
+                if ($vacancy['new_n_applicants'] > 0)
+                  $new_applicant_color = 'btn-info';
+                else
+                  $new_applicant_color = 'btn-secondary';
 
-                            <?php if ($vacante->report_to != '') : ?>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <b>Puesto al que le reportará</b>
-                                        <p id="report_to"><?= $vacante->report_to ?></p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <b>¿Tendrá personal a cargo?</b>
-                                        <p id="personal_in_charge"><?= $in_charge = ($vacante->personal_in_charge == 1) ? 'Sí' : 'No' ?></p>
-                                    </div>
-                                </div>
-                            <?php endif ?>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <b>Área</b>
-                                    <p id="area"><?= $vacante->area ?></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <b>Subárea</b>
-                                    <p id="subarea"><?= $vacante->subarea ?></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <b>Tiempo de Garantía</b>
-                                    <p id="warranty_time"><?= $vacante->warranty_time . ' días' ?></p>
-                                </div>
-                            </div>
-                            <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSalesManager() || Utils::isSenior()) : ?>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <b>Monto a facturar</b>
-                                        <p id="amount_to_invoice"><?= '$ ' . number_format($vacante->amount_to_invoice, 2) ?></p>
-                                    </div>
+                //if ($vacancy['n_applicants'] <= 3) {
+                if ($vacancy['real_n_applicants'] <= 3) {
+                  $applicant_color = 'btn-danger';
+                } elseif ($vacancy['n_applicants'] > 4) {
+                  $applicant_color = 'btn-success';
+                } else {
+                  $applicant_color = 'btn-warning';
+                }
 
-                                    <?php if ($vacante->authorization_date) : ?>
-                                        <div class="col-md-4">
-                                            <b>Fecha de autorización</b>
-                                            <p id="authorization_date"><?= Utils::getFullDate($vacante->authorization_date) ?></p>
-                                        </div>
-                                    <?php endif ?>
-                                    <?php if ($vacante->commitment_date) : ?>
-                                        <div class="col-md-4">
-                                            <b>Fecha de compromiso de envío</b>
-                                            <p id="commitment_date"><?= Utils::getDate($vacante->commitment_date) ?></p>
-                                        </div>
-                                    <?php endif ?>
-                                </div>
-                            <?php endif ?>
+                if ($vacancy['n_sent'] <= 3) {
+                  $sent_color = 'btn-danger';
+                } elseif ($vacancy['n_sent'] > 4) {
+                  $sent_color = 'btn-success';
+                } else {
+                  $sent_color = 'btn-warning';
+                }
 
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <b>Ciudad y estado</b>
-                                    <p id="city_and_state"><?= $vacante->city . ', ' . $vacante->state ?></p>
-                                </div>
-                                <?php if ($vacante->working_day) : ?>
-                                    <div class="col-md-4">
-                                        <b>Jornada Semanal</b>
-                                        <p id="working_day"><?= $vacante->working_day ?> hrs</p>
-                                    </div>
-                                <?php endif; ?>
+                if ($vacancy['n_selected'] <= 3) {
+                  $selected_color = 'btn-danger';
+                } elseif ($vacancy['n_selected'] > 4) {
+                  $selected_color = 'btn-success';
+                } else {
+                  $selected_color = 'btn-warning';
+                }
 
-                                <div class="col-md-4">
-                                    <b>Sueldo base mensual</b>
-                                    <?php if ($vacante->salary_min != $vacante->salary_max) : ?>
-                                        <p id="salary_min_and_salary_max"><?= '$' . number_format($vacante->salary_min) . ' - $' . number_format($vacante->salary_max) . ' (mensual)' ?></p>
-                                    <?php else : ?>
-                                        <p id="salary_min"><?= '$' . number_format($vacante->salary_min) . ' (mensual)' ?></p>
-                                    <?php endif ?>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <div class="card card-info">
-                        <div class="card-header">
-                            <h4 class="card-title">Descripción del Puesto</h4>
-                            <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSalesManager() ||  Utils::isSales()) : ?>
-                                <!-- gaboooo -->
-                                <button class="btn btn-success btn-modal  float-right" id="editar-descripcion"> <i class="fas fa-pencil-alt"></i> </button>
-                            <?php endif ?>
+                if ($vacancy['id_recruiter'] == 6113) { //michell
+                  $recruiter_color = 'bg-navy';
+                } elseif ($vacancy['id_recruiter'] == 1550) { //miros
+                  $recruiter_color = 'bg-maroon';
+                } elseif ($vacancy['id_recruiter'] == 24) { //cindy
+                  $recruiter_color = 'bg-info';
+                } elseif ($vacancy['id_recruiter'] == 333) { //vero
+                  $recruiter_color = 'bg-warning';
+                } elseif ($vacancy['id_recruiter'] == 2276) { //gisel
+                  $recruiter_color = 'bg-success';
+                } elseif ($vacancy['id_recruiter'] == 42) { //ivan
+                  $recruiter_color = 'bg-gray';
+                } elseif ($vacancy['id_recruiter'] == 4441) { //cinthiapaez
+                  $recruiter_color = 'bg-fuchsia';
+                } elseif ($vacancy['id_recruiter'] == 4094) { //melissabarron
+                  $recruiter_color = 'bg-orange';
+                } elseif ($vacancy['id_recruiter'] == 3908) //aglay
+                  $recruiter_color = 'bg-purple';
+                elseif ($vacancy['id_recruiter'] == 2096) //Sin ejecutivo
+                  $recruiter_color = 'table-maroon';
+                else {
+                  $recruiter_color = 'bg-danger';
+                }
+                ?>
+                <td class="align-middle h6"><?= $vacancy['id'] ?></td>
+                <td class="align-middle <?= $recruiter_color ?>">
+                  <?= $vacancy['recruiter'] != ' ' ? $vacancy['recruiter'] : 'Sin asignar' ?>
+                </td>
+                <td class="align-middle"><?= Utils::getFullDate($vacancy['request_date']); ?></td>
+                <?php if (!Utils::isCustomer()) : ?>
+                  <td class="align-middle"><?= $vacancy['customer'] ?></td>
+                <?php endif ?>
+                <td class="align-middle celda" data-id="<?= base_url . 'usuario/index?vacante=' . Encryption::encode($vacancy['id']) ?>"><?= $vacancy['vacancy'] ?></td>
+                <td class="align-middle"><?= $vacancy['type'] == 1 ? 'Operativa' : ($vacancy['type'] == 2 ? 'Orden común' : ($vacancy['type'] == 3 ? 'Head Hunting' : ($vacancy['type'] == 4 ? 'Iguala' : ''))) ?></td>
+                <td class="align-middle"><?= $vacancy['city'] . ', ' . $vacancy['abbreviation'] ?></td>
+                <?php if (!Utils::isCustomer()) : ?>
+                  <td class="align-middle text-center"><?= $vacancy['cost_center'] ?></td>
+                <?php endif ?>
+                <?php if (Utils::isCustomer()) : ?>
+                  <td class="align-middle"><?= $vacancy['business_name'] ?></td>
+                <?php endif ?>
+                <td class="align-middle text-center">$<?= $vacancy['salary_min'] != $vacancy['salary_max'] ? number_format($vacancy['salary_min'])  . ' - $' . number_format($vacancy['salary_max']) : number_format($vacancy['salary_min']) ?></td>
+                <?php if (!Utils::isCustomer()) : ?>
+                  <?php if ($vacancy['real_n_applicants'] > 0) : ?>
+                    <td class="align-middle text-center"><a class="font-weight-bold btn <?= $new_applicant_color ?>" href="<?= base_url ?>postulaciones/ver&id=<?= Encryption::encode($vacancy['id']) ?>"><?= $vacancy['new_n_applicants'] ?></a></td>
+                  <?php else : ?>
+                    <td class="align-middle text-center"><?= $vacancy['real_n_applicants'] ?></td>
+                  <?php endif ?>
+                <?php endif ?>
 
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <b>Escolaridad requerida</b>
-                                    <p id="education_level"><?= $vacante->level ?></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <b>Número de posiciones requeridas</b>
-                                    <p id="position_number"><?= $vacante->position_number ?></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <b>Años o meses de experiencia</b>
-                                    <p id="experience_years"><?= $years = ($vacante->experience_years == 0) ? 'Sin experiencia' : $vacante->experience_years . ' ' . $vacante->experience_type ?></p>
-                                </div>
-                            </div>
-                            <?php if ($vacante->experience != NULL) : ?>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <b>Experiencias</b>
-                                        <p><?= Utils::lineBreak($vacante->experience) ?></p>
-                                    </div>
-                                </div>
-                            <?php endif ?>
-
-
-                            <?php if ($vacante->skills != NULL) : ?>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <b>Habilidades</b>
-                                        <p><?= Utils::lineBreak($vacante->skills) ?></p>
-                                    </div>
-                                </div>
-                            <?php endif ?>
-                            <?php if ($vacante->technical_knowledge != '') : ?>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <b>Conocimientos técnicos</b>
-                                        <p><?= Utils::lineBreak($vacante->technical_knowledge) ?></p>
-                                    </div>
-                                </div>
-                            <?php endif ?>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <b>Edad</b>
-                                    <p id="age"><?= 'entre ' . $vacante->age_min . ' y ' . $vacante->age_max . ' años' ?></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <b>Sexo</b>
-                                    <p id="gender"><?= $vacante->gender ?></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <b>Estado civil</b>
-                                    <p id="civil_status"><?= $vacante->status ?></p>
-                                </div>
-                            </div>
-
-
-
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <b>Idioma y nivel</b>
-                                    <p id="language"><?= $vacante->language . ' ' . $vacante->language_level ?></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <b>Días de trabajo</b>
-                                    <p id="workdays"><?= $vacante->workdays ?></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <b>Horarios</b>
-                                    <p id="schedule"><?= $vacante->schedule ?></p>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <b>Que experiencia debe haber desarrollado:</b>
-                                    <p id="requeriments"><?= Utils::lineBreak($vacante->requirements) ?></p>
-                                </div>
-                                <div class="col-md-6">
-                                    <b>Puestos que pudo haber ocupado</b>
-                                    <p id="functions"><?= Utils::linebreak($vacante->functions) ?></p>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <b>Prestaciones o beneficios</b>
-                                    <p id="benefits"><?= Utils::lineBreak($vacante->benefits) ?></p>
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </div>
-
-                    <?php if (!Utils::isCustomer() && false) : ?>
-
-                        <div class="card card-danger">
-                            <div class="card-header">
-                                <h4 class="card-title">Proceso del cliente</h4>
-                            </div>
-                            <div class="card-body">
-                                <?php if ($vacante->how_many_interviews != 0) : ?>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <b>¿Cuántas entrevistas se preveen que se realicen?</b>
-                                            <p><?= $vacante->how_many_interviews ?></p>
-                                        </div>
-                                        <?php if ($vacante->accept_reentry != NULL) : ?>
-                                            <div class="col-md-6">
-                                                <b>¿Se aceptan reingresos?</b>
-                                                <p><?= $reentry = ($vacante->accept_reentry == 1) ? 'Sí' : 'No' ?></p>
-                                            </div>
-                                        <?php endif ?>
-                                    </div>
-                                    <div class="row">
-                                        <?php if ($vacante->offer_transportation != NULL) : ?>
-                                            <div class="col-md-6">
-                                                <b>¿Ofrecen transporte?</b>
-                                                <p><?= $transportation = ($vacante->offer_transportation) ? 'Sí' : 'No' ?></p>
-                                            </div>
-                                        <?php endif ?>
-                                        <?php if ($vacante->do_medical_exam != NULL) : ?>
-                                            <div class="col-md-6">
-                                                <b>¿Realizan exámen médico?</b>
-                                                <p><?= $medical = ($vacante->do_medical_exam) ? 'Sí' : 'No' ?></p>
-                                            </div>
-                                        <?php endif ?>
-                                    </div>
-                                <?php endif ?>
-
-                                <div class="row">
-                                    <div class="col">
-                                        <b>¿Cuánto timepo tiene sin cubrir esta vacante?</b>
-                                        <p><?= $vacante->time_without_filling ?></p>
-                                    </div>
-                                    <div class="col">
-                                        <b>¿Están trabajando con alguna otra agencia de reclutamiento?</b>
-                                        <p><?= $vacante->another_agency == 1 ? 'Sí' : ($vacante->another_agency == 0 ? 'No' : '') ?></p>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
+                <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSenior() || Utils::isJunior()) : ?>
+                  <?php if ($vacancy['n_sent'] > 0) : ?>
+                    <!-- <td class="align-middle text-center"><a class="font-weight-bold btn <?= $sent_color ?>" href="<?= base_url ?>postulaciones/enviados_a_reclutador&id=<?= Encryption::encode($vacancy['id']) ?>"><?= $vacancy['n_sent'] ?></a></td> -->
+                  <?php else : ?>
+                    <!-- <td class="align-middle text-center"><?= $vacancy['n_sent'] ?></td> -->
+                  <?php endif ?>
+                <?php endif ?>
+                <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSenior() || (Utils::isCustomer() && $vacancy['id_status'] != 7)) : ?>
+                  <?php if ($vacancy['n_selected'] > 0) : ?>
+                    <td class="align-middle text-center"><a class="font-weight-bold btn <?= $selected_color ?>" href="<?= base_url ?>postulaciones/enviados_a_cliente&id=<?= Encryption::encode($vacancy['id']) ?>"><?= $vacancy['n_selected'] ?></a></td>
+                  <?php else : ?>
+                    <td class="align-middle text-center"><?= $vacancy['n_selected'] ?></td>
+                  <?php endif ?>
+                <?php else : ?>
+                  <?php if ((Utils::isCustomer() && $vacancy['id_status'] == 7)) : ?>
+                    <td class="align-middle text-center"><?= $vacancy['n_selected'] ?></td>
+                  <?php endif ?>
+                <?php endif ?>
+                <?php if (!Utils::isCustomer()) : ?>
+                  <!-- <td class="align-middle text-center"><?= $vacancy['position_number'] ?></td> -->
+                  <td class="align-middle text-center"><?= $vacancy['id_status'] < 5 || $vacancy['id_status'] == 8 ? $vacancy['position_number'] - $vacancy['n_chosen'] : 0 ?></td>
+                  <td class="align-middle text-center"><?= $vacancy['authorization_date'] ? Utils::getFullDate($vacancy['authorization_date']) : '' ?></td>
+                  <td class="align-middle text-center"><?= $vacancy['commitment_date'] == '' ? '' : Utils::getDate($vacancy['commitment_date']) ?></td>
+                <?php endif ?>
+                <td class="align-middle"><?= $send_date = $vacancy['send_date'] != NULL ? Utils::getFullDate($vacancy['send_date']) : '' ?></td>
+                <?php if (!Utils::isCustomer()) : ?>
+                  <td class="align-middle"><?= $end_date = $vacancy['end_date'] != NULL ? Utils::getFullDate($vacancy['end_date']) : '' ?></td>
+                <?php endif ?>
+                <!-- <td class="align-middle text-center <?= $vacancy['time'] == 72 ? 'bg-lightblue' : 'bg-purple' ?>"><?= $vacancy['time'] ?></td> -->
+                <td class="<?= $day_color ?> align-middle text-center"><?= $vacancy['number_days'] ?></td>
+                <td class="align-middle text-center <?= $class_color ?>"><?= $vacancy['status'] ?></td>
+                <td class="text-center py-0 align-middle">
+                  <div class="btn-group btn-group-sm">
+                    <a href="<?= base_url ?>vacante/ver&id=<?= Encryption::encode($vacancy['id']) ?>" class="btn btn-success">
+                      <i class="fas fa-eye"></i> Ver
+                    </a>
+                    <?php if (Utils::isAdmin() || Utils::isSales() || Utils::isSalesManager()) : ?>
+                      <a href="<?= base_url ?>vacante/editar&id=<?= Encryption::encode($vacancy['id']) ?>" class="btn btn-info">
+                        <i class="fas fa-pencil-alt"></i> Editar
+                      </a>
                     <?php endif ?>
-
-
-                    <?php if (Utils::isAdmin()  || Utils::isSalesManager() || Utils::isSales()) : ?>
-                        <div class="card card-purple">
-                            <div class="card-header">
-                                <h4 class="card-title">
-                                    Condiciones Comerciales
-                                </h4>
-                                <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSalesManager() ||  Utils::isSales()) : ?>
-                                    <!-- gaboooooo -->
-                                    <button class="btn btn-info btn-modal  float-right" id="editar-condiciones"> <i class="fas fa-pencil-alt"></i> </button>
-                                <?php endif ?>
-
-                            </div>
-
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <b>Fecha de envio de candidatos</b>
-                                        <p id="send_date_candidate"><?= Utils::getDate($vacante->send_date_candidate) ?></p>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <b>Cantidad anticipo</b>
-                                        <p id="advance_payment"><?= number_format($vacante->advance_payment, 2) ?> pesos</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <b>Gastos administrativos</b>
-                                        <p id="payment_amount"><?= number_format($vacante->payment_amount, 2) ?> pesos</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <b>Porcentaje a facturar</b>
-                                        <p id="recruitment_service_cost"><?= number_format($vacante->recruitment_service_cost, 0) ?>%</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if (Utils::isAdmin()  || Utils::isRecruitmentManager() || Utils::isSenior()|| Utils::isJunior()) : ?>
-                    <div class="card card-red">
-                        <div class="card-header">
-                            <h4 class="card-title">
-                                Notas
-                            </h4>
-                        </div>
-
-                        <div class="card-body">
-                            <div class="row " style="margin-bottom:0.6rem;padding:1rem">
-                                <div class="col-md-12">
-                                    <p><?= $vacante->notes ?></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-
-
-                </div>
-                <div class="col-md-3">
-                    <!-- general form elements -->
-                    <div class="card card-success">
-                        <div class="card-header">
-                            <h4 class="card-title">Contacto</h4>
-                            <?php if (Utils::isAdmin() || Utils::isManager() || Utils::isSalesManager() || Utils::isSales()) : ?>
-                                <!-- gabo -->
-                                <button class="btn btn-info btn-modal  float-right" id="editar-contacto"> <i class="fas fa-pencil-alt"></i> </button>
-                            <?php endif ?>
-
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <strong>
-                                <i class="fas fa-building"></i>
-                                Empresa
-                            </strong>
-                            <p class="text-muted" id="customer"><?= $vacante->customer ?></p>
-                            <hr>
-
-                            <?php if ($vacante->customer_contact != NULL) : ?>
-                                <strong>
-                                    <i class="fas fa-user-circle"></i>
-                                    Contacto
-                                </strong>
-                                <p class="text-muted" id="customer_contact"><?= $vacante->customer_contact ?></p>
-                            <?php endif ?>
-
-                            <?php if ($vacante->position != NULL) : ?>
-                                <strong>
-                                    <i class="fas fa-star"></i>
-                                    Posición
-                                </strong>
-                                <p class="text-muted"><?= $vacante->position ?></p>
-                            <?php endif ?>
-
-                            <strong>
-                                <i class="fas fa-envelope"></i>
-                                Dirección de correo
-                            </strong>
-                            <p class="text-muted"><?= $vacante->customer_contact_email ?></p>
-
-                            <?php if ($vacante->telephone != NULL) : ?>
-                                <strong>
-                                    <i class="fas fa-phone"></i>
-                                    Teléfono
-                                </strong>
-                                <p class="text-muted"><?= $vacante->telephone ?></p>
-                            <?php endif ?>
-
-                            <?php if ($vacante->cellphone != NULL) : ?>
-                                <strong>
-                                    <i class="fas fa-mobile-alt"></i>
-                                    Celular
-                                </strong>
-                                <p class="text-muted"><?= $vacante->cellphone ?></p>
-                            <?php endif ?>
-
-                            <hr>
-                            <strong>
-                                <i class="fas fa-user-tie"></i>
-                                Reclutador
-                            </strong>
-                            <p class="text-muted" id="recruiter"><?= $vacante->recruiter ?></p>
-                            <hr>
-                            <strong>
-                                <i class="fas fa-registered"></i>
-                                Razón social
-                            </strong>
-                            <p class="text-muted" id="business_name"><?= $vacante->business_name ?></p>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <?php if ($vacante->comments != NULL) : ?>
-                        <div class="card card-info">
-                            <div class="card-header">
-                                <h4 class="card-title">Comentarios</h4>
-                            </div>
-                            <div class="card-body">
-                                <strong>
-                                    Comentarios
-                                </strong>
-                                <p class="text-muted" id="comments"><?= $vacante->comments ?></p>
-                            </div>
-                        </div>
+                    <?php if (Utils::isAdmin() || Utils::isSenior() || Utils::isJunior()) : ?>
+                      <a href="<?= base_url ?>postulaciones/buscar&id=<?= Encryption::encode($vacancy['id']) ?>&area=<?= Encryption::encode($vacancy['id_area']) ?>" class="btn btn-navy">
+                        <i class="fas fa-search"></i> Buscar
+                      </a>
                     <?php endif ?>
+                    <?php if (Utils::isAdmin() || Utils::isSenior() || Utils::isJunior()) : ?>
+                      <a href="<?= base_url ?>candidato/crear&vacante=<?= Encryption::encode($vacancy['id']) ?>" class="btn btn-orange">
+                        <i class="fas fa-user-plus"></i> Agregar
+                      </a>
+                    <?php endif ?>
+                    <?php if (Utils::isAdmin()) : ?>
+                      <button type="button" id="<?= $vacancy['id'] ?>" class="btn btn-secondary btn-config">
+                        <i class="fas fa-cog"></i> Configurar
+                      </button>
+                    <?php endif ?>
+                  </div>
+                </td>
+              </tr>
+            <?php endforeach; ?>
 
-                    <?php if (Utils::isAdmin()  || Utils::isSalesManager() || Utils::isSales()) : ?>
-                        <div class="row">
-
-                            <div class="col-6">
-
-
-                                <a href="<?= base_url ?>vacante/vacantePDF&id=<?= $_GET['id'] ?>" class="btn btn-orange w-100 p-3 text-bold">Descargar propuesta</a>
-                            </div>
-                            <div class="col-6">
-                                <a href="<?= base_url ?>vacante/entregableVacante&id=<?= $_GET['id'] ?>" class="btn btn-success w-100 p-3 text-bold">Descargar Entregable</a>
-                            </div>
-                        </div>
-
-                    <?php endif; ?>
-                </div>
-            </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </section>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>Folio</th>
+              <th>Reclutador</th>
+              <th>Fecha de recepción</th>
+              <?php if (!Utils::isCustomer()) : ?>
+                <th>Cliente</th>
+              <?php endif ?>
+              <th>Vacante</th>
+              <th>Tipo</th>
+              <th>Ciudad</th>
+              <?php if (!Utils::isCustomer()) : ?>
+                <th>CC</th>
+              <?php endif ?>
+              <?php if (Utils::isCustomer()) : ?>
+                <th class="text-center">Facturable a</th>
+              <?php endif ?>
+              <th class="text-center">Sueldo</th>
+              <?php if (!Utils::isCustomer()) : ?>
+                <th class="text-center">Nuevos postulados</th>
+              <?php endif ?>
+              <?php if (Utils::isAdmin() || Utils::isManager()) : ?>
+                <!-- <th>Candidatos captados por Ej. Busq.</th> -->
+                <th>Candidatos compartidos al cliente</th>
+              <?php endif ?>
+              <?php if (Utils::isSenior()) : ?>
+                <!-- <th>Candidatos recibidos</th> -->
+                <th>Candidatos compartidos al cliente</th>
+              <?php endif ?>
+              <?php if (Utils::isJunior()) : ?>
+                <!-- <th>Candidatos enviados a Ej. Recl.</th> -->
+              <?php endif ?>
+              <?php if (Utils::isCustomer()) : ?>
+                <th>Candidatos adecuados al perfil</th>
+              <?php endif ?>
+              <?php if (!Utils::isCustomer()) : ?>
+                <!-- <th>Posiciones</th> -->
+                <th>Posiciones por cubrir</th>
+                <th>Fecha de autorización</th>
+                <th>Fecha de compromiso de envío</th>
+              <?php endif ?>
+              <th>Fecha real de envío</th>
+              <?php if (!Utils::isCustomer()) : ?>
+                <th>Fecha de finalización</th>
+              <?php endif ?>
+              <!-- <th>T</th> -->
+              <th>Días</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <!-- /.card-body -->
+    </div>
+  </section>
 </div>
-<script src="<?= base_url ?>app/vacancy.js?v=<?= rand() ?>"></script>
+<script>
+  // Obtén todas las celdas de la clase "celda"
+  var celdas = document.querySelectorAll('.celda');
 
-<script type="text/javascript">
-    function changeStatus1() {
-        let vacancy = new Vacancy();
-        vacancy.changeStatus1();
-    }
+  // Función para copiar el enlace al portapapeles
+  function copiarEnlaceAlPortapapeles(enlace) {
+    var elementoTemporal = document.createElement('input');
+    elementoTemporal.value = enlace;
+    document.body.appendChild(elementoTemporal);
+    elementoTemporal.select();
+    document.execCommand('copy');
+    document.body.removeChild(elementoTemporal);
+  }
 
-    function changeStatus2() {
-        let vacancy = new Vacancy();
-        vacancy.changeStatus2();
-    }
-
-    function changeStatus3() {
-        let vacancy = new Vacancy();
-        vacancy.changeStatus3();
-    }
-
-    function changeStatus4() {
-        let vacancy = new Vacancy();
-        vacancy.changeStatus4();
-    }
-
-    function changeStatus5() {
-        let vacancy = new Vacancy();
-        vacancy.changeStatus5();
-    }
-
-    function changeStatus6() {
-        let vacancy = new Vacancy();
-        vacancy.changeStatus6();
-    }
-
-    function changeStatus7() {
-        let vacancy = new Vacancy();
-        vacancy.changeStatus7();
-    }
-
-    function changeStatus9() {
-        let vacancy = new Vacancy();
-        vacancy.changeStatus9();
-    }
-
-    function restartDate() {
-        let vacancy = new Vacancy();
-        vacancy.restartDate();
-    }
-
-    function duplicate(e) {
-        e.disabled = true;
-        let vacancy = new Vacancy();
-        vacancy.duplicate();
-    }
-
-
-
-
-    document.querySelector('#editar-perfil').addEventListener('click', e => { ///gabo
-        e.preventDefault();
-
-        $('#modal_perfil').modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-
+  // Agrega un evento clic a cada celda
+  celdas.forEach(function(celda) {
+    celda.addEventListener('click', function() {
+      var enlace = celda.dataset.id; // O puedes obtener el enlace de otra manera si está almacenado en un atributo data o similar
+      copiarEnlaceAlPortapapeles(enlace);
+      alert('Enlace copiado al portapapeles: ' + enlace);
 
     });
-    document.querySelector('#editar-descripcion').addEventListener('click', e => { ///gabo
-        e.preventDefault();
-        $('#modal_descripcion').modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-
-
-    });
-
-    document.querySelector('#editar-contacto').addEventListener('click', e => { ///gabo
-        e.preventDefault();
-        $('#modal_contacto').modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-
-
-    });
-
-    document.querySelector('#editar-condiciones').addEventListener('click', e => { ///gabo
-        e.preventDefault();
-        $('#modal_condiciones').modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-
-
-    });
+  });
 </script>
+<script>
+  $(document).ready(function() {
+    let table = document.querySelector('#tb_vacancies');
+    table.style.display = "block";
+    utils.dtTable(table, <?= Utils::isManager() ? 'false' : 'true' ?>);
+
+    // Obtén todas las celdas de la clase "celda"
+    var celdas = document.querySelectorAll('.celda');
+
+    // Función para copiar el enlace al portapapeles
+    function copiarEnlaceAlPortapapeles(enlace) {
+      var elementoTemporal = document.createElement('input');
+      elementoTemporal.value = enlace;
+      document.body.appendChild(elementoTemporal);
+      elementoTemporal.select();
+      document.execCommand('copy');
+      document.body.removeChild(elementoTemporal);
+    }
+
+    // Agrega un evento clic a cada celda
+    celdas.forEach(function(celda) {
+      celda.addEventListener('click', function() {
+        var enlace = celda.dataset.id; // O puedes obtener el enlace de otra manera si está almacenado en un atributo data o similar
+        copiarEnlaceAlPortapapeles(enlace);
+        alert('Enlace copiado al portapapeles: ' + enlace);
+
+      });
+    });
+  });
+</script>
+<?php if (Utils::isAdmin()) : ?>
+  <div class="modal fade" id="modal_edit">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form method="post" id="update-form">
+          <div class="modal-header">
+            <h4 class="modal-title">Configuración</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="id_vacancy" id="id_vacancy">
+            <div class="form-group mb-3">
+              <label class="col-form-label" for="vacancy">Vacante</label>
+              <input type="text" class="form-control" name="vacancy" id="vacancy" readonly>
+            </div>
+            <div class="form-group mb-3">
+              <label class="col-form-label" for="customer">Cliente</label>
+              <input type="text" class="form-control" name="customer" id="customer" readonly>
+            </div>
+            <div class="form-group">
+              <label class="col-form-label" for="time">Vacante</label>
+              <select class="form-control" name="time">
+                <option value="72">72 horas (3 días)</option>
+                <option value="120">120 horas (5 días)</option>
+              </select>
+            </div>
+            <div class="form-group mb-3">
+              <label class="col-form-label" for="interview_date">Fecha de solicitud</label>
+              <div class="row">
+                <div class="col-2">
+                  <div class="input-group mb-3">
+                    <select id="request_day" name="request_day" class="form-control custom-select" required>
+                      <option value="" hidden selected>Día</option>
+                      <?php foreach (range(1, 31) as $i) : ?>
+                        <option value="<?= $i ?>"><?= $i ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="input-group mb-3">
+                    <select id="request_month" name="request_month" class="form-control custom-select" required>
+                      <option value="" hidden selected>Mes</option>
+                      <?php $months = Utils::getMonths(); ?>
+                      <?php foreach ($months as $i => $m) : ?>
+                        <option value="<?= $i + 1 ?>"><?= $m ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="input-group mb-3">
+                    <select id="request_year" name="request_year" class="form-control custom-select" required>
+                      <option value="" hidden selected>Año</option>
+                      <?php foreach (range(date('Y'), date('Y') - 1) as $i) : ?>
+                        <option value="<?= $i ?>"><?= $i ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div class="input-group mb-3">
+                    <select id="request_hour" name="request_hour" class="form-control custom-select" required>
+                      <option value="" hidden selected>Hora</option>
+                      <?php foreach (range(0, 23) as $i) : ?>
+                        <option value="<?= $i ?>"><?= str_pad($i, 2, "0", STR_PAD_LEFT) ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div class="input-group mb-3">
+                    <select id="request_minute" name="request_minute" class="form-control custom-select" required>
+                      <option value="" hidden selected>Minutos</option>
+                      <?php foreach (range(0, 60) as $i) : ?>
+                        <option value="<?= $i ?>"><?= str_pad($i, 2, "0", STR_PAD_LEFT) ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <label class="col-form-label" for="interview_date">Fecha de envío</label>
+              <div class="row">
+                <div class="col-2">
+                  <div class="input-group mb-3">
+                    <select id="send_day" name="send_day" class="form-control custom-select">
+                      <option value="" selected>Día</option>
+                      <?php foreach (range(1, 31) as $i) : ?>
+                        <option value="<?= $i ?>"><?= $i ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="input-group mb-3">
+                    <select id="send_month" name="send_month" class="form-control custom-select">
+                      <option value="" selected>Mes</option>
+                      <?php $months = Utils::getMonths(); ?>
+                      <?php foreach ($months as $i => $m) : ?>
+                        <option value="<?= $i + 1 ?>"><?= $m ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="input-group mb-3">
+                    <select id="send_year" name="send_year" class="form-control custom-select">
+                      <option value="" selected>Año</option>
+                      <?php foreach (range(date('Y'), date('Y') - 1) as $i) : ?>
+                        <option value="<?= $i ?>"><?= $i ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div class="input-group mb-3">
+                    <select id="send_hour" name="send_hour" class="form-control custom-select">
+                      <option value="" selected>Hora</option>
+                      <?php foreach (range(0, 23) as $i) : ?>
+                        <option value="<?= $i ?>"><?= str_pad($i, 2, "0", STR_PAD_LEFT) ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div class="input-group mb-3">
+                    <select id="send_minute" name="send_minute" class="form-control custom-select">
+                      <option value="" selected>Minutos</option>
+                      <?php foreach (range(0, 60) as $i) : ?>
+                        <option value="<?= $i ?>"><?= str_pad($i, 2, "0", STR_PAD_LEFT) ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <label class="col-form-label" for="interview_date">Fecha de finalización</label>
+              <div class="row">
+                <div class="col-2">
+                  <div class="input-group mb-3">
+                    <select id="end_day" name="end_day" class="form-control custom-select">
+                      <option value="" selected>Día</option>
+                      <?php foreach (range(1, 31) as $i) : ?>
+                        <option value="<?= $i ?>"><?= $i ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="input-group mb-3">
+                    <select id="end_month" name="end_month" class="form-control custom-select">
+                      <option value="" selected>Mes</option>
+                      <?php $months = Utils::getMonths(); ?>
+                      <?php foreach ($months as $i => $m) : ?>
+                        <option value="<?= $i + 1 ?>"><?= $m ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="input-group mb-3">
+                    <select id="end_year" name="end_year" class="form-control custom-select">
+                      <option value="" selected>Año</option>
+                      <?php foreach (range(date('Y'), date('Y') - 1) as $i) : ?>
+                        <option value="<?= $i ?>"><?= $i ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div class="input-group mb-3">
+                    <select id="end_hour" name="end_hour" class="form-control custom-select">
+                      <option value="" selected>Hora</option>
+                      <?php foreach (range(0, 23) as $i) : ?>
+                        <option value="<?= $i ?>"><?= str_pad($i, 2, "0", STR_PAD_LEFT) ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div class="input-group mb-3">
+                    <select id="end_minute" style="cursor: pointer;" name="end_minute" class="form-control custom-select">
+                      <option value="" selected>Minutos</option>
+                      <?php foreach (range(0, 60) as $i) : ?>
+                        <option value="<?= $i ?>"><?= str_pad($i, 2, "0", STR_PAD_LEFT) ?></option>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            <input type="submit" name="submit" id="submit" class="btn btn-orange" value="Guardar">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="<?= base_url ?>app/vacancy.js?v=<?= rand() ?>"></script>
+  <script>
+    window.onload = function() {
+
+
+
+
+      /*let config = document.querySelectorAll("#tb_vacancies .btn-config");
+      for(var i =0; i < config.length; i++) {
+        config[i].onmouseup = function () {
+           $('#modal_edit').modal('show'); 
+          let vacancy = new Vacancy();
+          vacancy.getVacancy(this.id);
+        };
+      }*/
+      $("#tb_vacancies").on('click', '.btn-config', function() {
+        $('#modal_edit').modal('show');
+        let vacancy = new Vacancy();
+        vacancy.getVacancy($(this).attr('id'));
+      });
+
+      document.querySelector("#update-form").onsubmit = function(e) {
+        e.preventDefault();
+        let vacancy = new Vacancy();
+        vacancy.update_config();
+      };
+    };
+  </script>
+
+<?php endif ?>

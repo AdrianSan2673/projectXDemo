@@ -24,7 +24,7 @@ class Employee {
                         Swal.fire({
                             position: 'top-end',
                             icon: 'success',
-                            title: 'El empleado fue registrada exitosamente',
+                            title: 'El empleado fue registrado exitosamente',
                             showConfirmButton: false,
                             timer: 1750
                         })
@@ -265,9 +265,9 @@ class Employee {
                     } else if (json_app.status == 2) {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
-                    }else if (json_app.status == 3) {
+                    } else if (json_app.status == 3) {
                         form.querySelectorAll('.btn')[1].disabled = false;
-                        utils.showToast('El CURP ya fue registrado', 'error');
+                        utils.showToast('El CURP ya fue registrado.', 'error');
                     } else {
                         form.querySelectorAll('.btn')[1].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');

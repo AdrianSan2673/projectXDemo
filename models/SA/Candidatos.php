@@ -54,7 +54,7 @@ class Candidatos
     private $Gestor_modificacion;
     // ===[27 jULIO 2023 REPLICADO fin ]===
     private $db;
-    private $empresa;
+	private $empresa;
 
     public function __construct()
     {
@@ -532,7 +532,7 @@ class Candidatos
     {
         $this->Gestor_modificacion = $Gestor_modificacion;
     }
-    public function setEmpresa($empresa)
+	  public function setEmpresa($empresa)
     {
         $this->empresa = $empresa;
     }
@@ -1167,8 +1167,8 @@ class Candidatos
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-
-    public function getServiciosPorContactoYViabilidad()
+	
+	public function getServiciosPorContactoYViabilidad()
     {
         $Contacto = $this->getContacto();
         $stmt = $this->db->prepare("SELECT TOP(7200) Folio=RC.Candidato,RC.Cliente ID_Ciente,va.Empresa id_empresa
@@ -1217,7 +1217,7 @@ class Candidatos
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-
+	
 
     public function getServiciosPorContactoTranspais()
     {
@@ -1547,7 +1547,7 @@ class Candidatos
         $Contacto = $this->getContacto();
         $Razon = $this->getRazon();
         $Puesto = $this->getPuesto();
-        $cc_cliente = $this->getCC_Cliente();
+		$cc_cliente = $this->getCC_Cliente();
 
         $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Cliente=:Cliente, Nombre_Cliente=:Contacto, Razon=:Razon, Puesto=:Puesto, Modificado=GETDATE(),CC_Cliente=:cc_cliente WHERE Candidato=:Candidato");
         $stmt->bindParam(":Candidato", $Candidato, PDO::PARAM_INT);
@@ -1555,7 +1555,7 @@ class Candidatos
         $stmt->bindParam(":Contacto", $Contacto, PDO::PARAM_INT);
         $stmt->bindParam(":Razon", $Razon, PDO::PARAM_STR);
         $stmt->bindParam(":Puesto", $Puesto, PDO::PARAM_STR);
-        $stmt->bindParam(":cc_cliente", $cc_cliente, PDO::PARAM_STR);
+		$stmt->bindParam(":cc_cliente", $cc_cliente, PDO::PARAM_STR);
 
         $flag = $stmt->execute();
         if ($flag) {
@@ -1734,7 +1734,6 @@ class Candidatos
         $Estado = $this->getEstado();
         $Fase = $this->getFase();
         $Comentario_Cancelado = $this->getComentario_Cancelado();
-
 
         if ($Estado == 252)
             $stmt = $this->db->prepare("UPDATE rh_Candidatos SET Estado=:Estado, Servicio=:Fase, Comentario_Cancelado=:Comentario_Cancelado, Fecha_Entregado=GETDATE() WHERE Candidato=:Candidato");
@@ -2741,12 +2740,27 @@ class Candidatos
         return $servicios;
     }
 
-    public function getServiciosFasePorEjecutivoRangoFechas()
+      public function getServiciosFasePorEjecutivoRangoFechas()
     {
         $date1 = $this->getFecha_solicitud();
         $date2 = $this->getFecha_entregado();
 
-        $stmt = $this->db->prepare("SELECT CONCAT(U.first_name, ' ', U.last_name) AS Nombre, SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) and (RC.Estado = 252 OR Estado = 254) then 1 else 0 end) AS No_INV_FIN, SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254) then 1 else 0 end) AS No_ESE_FIN, SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) and (RC.Estado < 252) then 1 else 0 end) AS No_INV_Proc, SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado < 252) then 1 else 0 end) AS No_ESE_Proc, SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) and (RC.Estado = 252 OR Estado = 254 OR EStado < 252) then 1 else 0 end) AS No_INV_Total, SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254 OR Estado < 252) then 1 else 0 end) AS No_ESE_Total, SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231 or RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254 OR Estado < 252) then 1 else 0 end) AS No_Total FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Ejecutivo=U.username WHERE CONVERT(DATE,Fecha) BETWEEN :date1 AND :date2 AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 GROUP BY U.first_name, U.last_name ORDER BY No_Total DESC");
+        $stmt = $this->db->prepare("SELECT 
+        CONCAT(U.first_name, ' ', U.last_name) AS Nombre, 
+        SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) and (RC.Estado = 252 OR Estado = 254) then 1 else 0 end) AS No_INV_FIN, 
+        SUM(case when (RC.Servicio = 324 Or RC.Servicio = 300 Or RC.Servicio = 230)  and (RC.Estado = 252 OR Estado = 254) AND RC.Servicio_Solicitado=230 then 1 else 0 end) AS No_ESE_FIN, 
+        SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230)  and (RC.Estado = 252 OR Estado = 254) AND RC.Servicio_Solicitado=340 then 1 else 0 end) AS No_ESE_FIN_SOI, 
+        SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230)  and (RC.Estado = 252 OR Estado = 254) AND RC.Servicio_Solicitado=341 then 1 else 0 end) AS No_ESE_FIN_SMART, 
+        SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) and (RC.Estado < 252) then 1 else 0 end) AS No_INV_Proc, 
+        SUM(case when (RC.Servicio = 324 Or RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado < 252) then 1 else 0 end) AS No_ESE_Proc, 
+        SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado < 252) AND RC.Servicio_Solicitado=340 then 1 else 0 end) AS No_ESE_SOI_Proc, 
+        SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado < 252) AND RC.Servicio_Solicitado=341 then 1 else 0 end) AS No_ESE_SMART_Proc, 
+        SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231) and (RC.Estado = 252 OR Estado = 254 OR EStado < 252) then 1 else 0 end) AS No_INV_Total, 
+        SUM(case when (RC.Servicio = 324 Or RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254 OR Estado < 252) then 1 else 0 end) AS No_ESE_Total, 
+        SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254 OR Estado < 252) AND RC.Servicio_Solicitado=340  then 1 else 0 end) AS No_ESE_SOI_Total, 
+        SUM(case when (RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254 OR Estado < 252) AND RC.Servicio_Solicitado=341  then 1 else 0 end) AS No_ESE_SMART_Total, 
+        SUM(case when (RC.Servicio = 299 Or RC.Servicio = 231 or RC.Servicio = 324 or RC.Servicio = 300 Or RC.Servicio = 230) and (RC.Estado = 252 OR Estado = 254 OR Estado < 252) then 1 else 0 end) AS No_Total 
+        FROM rh_Candidatos RC INNER JOIN reclutamiento.dbo.Users U ON RC.Ejecutivo=U.username WHERE CONVERT(DATE,Fecha) BETWEEN :date1 AND :date2 AND Ejecutivo<>'miguelcasanova' AND Estado<>257 AND Estado<>258 GROUP BY U.first_name, U.last_name ORDER BY No_Total DESC");
         $stmt->bindParam(":date1", $date1, PDO::PARAM_STR);
         $stmt->bindParam(":date2", $date2, PDO::PARAM_STR);
         $stmt->execute();
@@ -2970,7 +2984,7 @@ class Candidatos
         return $fetch;
     }
 
-    public function getDetallePorAnioClienteSinServicio()
+   public function getDetallePorAnioClienteSinServicio()
     {
         $Anio = $this->getFecha_solicitud();
         $stmt = $this->db->prepare("SELECT Nombre_Cliente,
@@ -3416,7 +3430,7 @@ class Candidatos
     }
 
     // ===[19 de mayo 2023 estudios fin]===
-    public function getServiciosPorUsuario()
+     public function getServiciosPorUsuario()
     {
         $Contacto = $this->getContacto();
         $Cliente = $this->getCliente();
@@ -3467,7 +3481,7 @@ class Candidatos
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-
+	
 
     public function getModificacionEjecutivoGestor()
     {
@@ -3500,8 +3514,7 @@ class Candidatos
         return $fetch;
     }
 
-    public function getServiciosSOI()
-    {
+    public function getServiciosSOI(){
 
         $stmt = $this->db->prepare("SELECT Creado, Folio=RC.Candidato
         ,[Solicitud]=RC.Fecha
@@ -3553,8 +3566,8 @@ class Candidatos
         $servicios = $stmt->fetchAll();
         return $servicios;
     }
-
-    public function countCandidatosPorCliente()
+	
+	    public function countCandidatosPorCliente()
     {
         $Cliente = $this->getCliente();
         $stmt = $this->db->prepare("SELECT count(*) as Total FROM rh_Candidatos WHERE Cliente=:Cliente");
@@ -3564,7 +3577,7 @@ class Candidatos
 
         return $fetch;
     }
-    public function countCandidatosPorEmpresa()
+	   public function countCandidatosPorEmpresa()
     {
         $empresa = $this->getEmpresa();
         $stmt = $this->db->prepare("SELECT count(*) as Total FROM rh_Candidatos rc INNER JOIN rh_Ventas_Alta rva ON rc.Cliente=rva.Cliente WHERE rva.empresa=:empresa");

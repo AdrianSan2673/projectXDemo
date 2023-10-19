@@ -66,7 +66,7 @@
         </div>
         <div class="card-footer   justify-content-between">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-          <button class="btn btn-orange float-right" id="candidate_education_submit">Enviar</button>
+          <button class="btn btn-orange float-right" id="candidate_education_submit">Guardar</button>
         </div>
       </form>
     </div>

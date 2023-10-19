@@ -26,7 +26,7 @@
 
     <section class="content">
       <div class="container-fluid">
-        <div class="row">
+        <div class="">
           <form id="employee-form" name="employee-form" method="POST">
             <div class="col-md-12">
               <!-- form start -->

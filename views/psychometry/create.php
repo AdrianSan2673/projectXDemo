@@ -85,8 +85,8 @@
                     <label for="customer" class="col-form-label">Cliente:</label>
 
                     <?php if (Utils::isCustomer()) : ?>
-                      <select name="customer" id="customer" class="form-control" required readonly>
-                        <option readonly selected="selected" value="<?= $cliente->id ?>"><?= $cliente->customer ?></option>
+                      <select name="customer" id="customer" class="form-control" required >
+                        <option  selected="selected" value="<?= $cliente->id ?>"><?= $cliente->customer ?></option>
                       </select>
                     <?php else : ?>
                       <?php $customers = Utils::showCustomers(); ?>
