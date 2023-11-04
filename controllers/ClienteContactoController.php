@@ -7,34 +7,34 @@ require_once 'models/Customer.php';
 require_once 'models/SA/ContactosEmpresa.php';   //gabo 02/02/2023
 require_once 'models/SA/ContactosCliente.php';    //gabo
 
-class ClienteContactoController{
+class ClienteContactoController
+{
 
-    public function index(){
+    public function index()
+    {
         if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin() || Utils::isManager()) {
             $customerContact = new CustomerContact();
             $users = $customerContact->getAll();
-            for($i=0; $i < count($users); $i++){
-                $path = $users[$i]['id_user'] ? 'uploads/avatar/'.$users[$i]['id_user'] : '';
+            for ($i = 0; $i < count($users); $i++) {
+                $path = $users[$i]['id_user'] ? 'uploads/avatar/' . $users[$i]['id_user'] : '';
                 if (file_exists($path)) {
                     $directory = opendir($path);
-        
-                    while ($file = readdir($directory))
-                    {
-                        if (!is_dir($file)){
+
+                    while ($file = readdir($directory)) {
+                        if (!is_dir($file)) {
                             $type = pathinfo($path, PATHINFO_EXTENSION);
-                            $img_content = file_get_contents($path."/".$file);
-                            $route = $path.'/'.$file;
+                            $img_content = file_get_contents($path . "/" . $file);
+                            $route = $path . '/' . $file;
                         }
                     }
-                }else{
+                } else {
                     $route = "dist/img/user-icon.png";
                     $type = pathinfo($route, PATHINFO_EXTENSION);
                     $img_content = file_get_contents($route);
                 }
                 //$img_base64 = chunk_split(base64_encode($img_content));
                 $img_base64 = 'data:image/' . $type . ';base64,' . base64_encode($img_content);
-                $users[$i]['avatar'] = base_url.$route;
-                
+                $users[$i]['avatar'] = base_url . $route;
             }
 
 
@@ -44,12 +44,13 @@ class ClienteContactoController{
             require_once 'views/customer/contacts.php';
             //require_once 'views/user/edit.php';
             require_once 'views/layout/footer.php';
-        }else {
-            header("location:".base_url);
+        } else {
+            header("location:" . base_url);
         }
     }
 
-    public function getContactsByCustomer(){
+    public function getContactsByCustomer()
+    {
         if (Utils::isValid($_SESSION['identity'])) {
             $customer = isset($_POST['customer']) ? trim($_POST['customer']) : FALSE;
             if ($customer) {
@@ -58,15 +59,16 @@ class ClienteContactoController{
                 $contacts = $customerContact->getContactsByCustomer();
                 header('Content-Type: text/html; charset=utf-8');
                 echo $json_customer_contacts = json_encode($contacts, \JSON_UNESCAPED_UNICODE);
-            }else{
+            } else {
                 echo 0;
             }
         } else {
-            header('location:'.base_url);
+            header('location:' . base_url);
         }
     }
 
-    public function create(){
+    public function create()
+    {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior())) {
             $first_name = (isset($_POST['first_name'])) ? trim($_POST['first_name']) : FALSE;
             $last_name = (isset($_POST['last_name'])) ? trim($_POST['last_name']) : FALSE;
@@ -77,7 +79,7 @@ class ClienteContactoController{
             $cellphone = (isset($_POST['cellphone'])) ? trim($_POST['cellphone']) : NULL;
             $day = isset($_POST['day']) ? str_pad($_POST['day'], 2, "0", STR_PAD_LEFT) : FALSE;
             $month = isset($_POST['month']) ? str_pad($_POST['month'], 2, "0", STR_PAD_LEFT) : FALSE;
-            $birthday = $day && $month ? $day.'/'.$month : '01/01';
+            $birthday = $day && $month ? $day . '/' . $month : '01/01';
             $id_customer = (isset($_POST['id_customer'])) ? Encryption::decode($_POST['id_customer']) : FALSE;
             if ($first_name && $last_name && $email) {
                 $contacto = new CustomerContact();
@@ -103,9 +105,9 @@ class ClienteContactoController{
                     $user->setEmail($email);
                     $user->setActivation(1);
                     $user->setId_user_type(6);
-					
-					
-					 if (!isset($_POST['Password'])) {
+
+
+                    if (!isset($_POST['Password'])) {
                         //gabo 13 sept
                         $pattern = "1234567890abcdefghijklmnopqrstuvwxyz#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                         $max = strlen($pattern) - 1;
@@ -116,7 +118,7 @@ class ClienteContactoController{
                     $user->setPassword($password);
 
 
-                    
+
                     $userExists = $user->userExists();
                     $emailExists = $user->emailExists();
                     if (!$userExists && !$emailExists) {
@@ -137,32 +139,37 @@ class ClienteContactoController{
                             $contacto->setId_user($id);
 
                             $save = $contacto->create();
-                            if ($save) {echo 1;}
-                            else{echo 2;}
-                        }else{
+                            if ($save) {
+                                echo 1;
+                            } else {
+                                echo 2;
+                            }
+                        } else {
                             echo 4;
                         }
-                    }else{
+                    } else {
                         echo 3; //if the user or email already exists, returns 3
                     }
-                
-                }else{
+                } else {
                     $contacto->setId_user(NULL);
 
                     $save = $contacto->create();
-                    if ($save) {echo 1;}
-                    else{echo 2;}
+                    if ($save) {
+                        echo 1;
+                    } else {
+                        echo 2;
+                    }
                 }
-                
-            }else{
+            } else {
                 echo 0;
             }
-        }else{
-            header('location:'.base_url);
+        } else {
+            header('location:' . base_url);
         }
     }
 
-    public function crear(){
+    public function crear()
+    {
         if (isset($_SESSION['identity']) && $_SESSION['identity'] != FALSE && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior())) {
             if (isset($_GET['id']) || Utils::isCandidate()) {
                 $id = Encryption::decode($_GET['id']);
@@ -170,20 +177,21 @@ class ClienteContactoController{
                 $customer->setId($id);
                 $cliente = $customer->getOne();
 
-                $page_title = $cliente->alias.' | RRHH Ingenia';
+                $page_title = $cliente->alias . ' | RRHH Ingenia';
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
                 require_once 'views/customer/contact.php';
-                require_once 'views/layout/footer.php'; 
+                require_once 'views/layout/footer.php';
             } else {
-                header("location:".base_url."cliente/index");
+                header("location:" . base_url . "cliente/index");
             }
         } else {
-            header('location:'.base_url);
+            header('location:' . base_url);
         }
     }
 
-    public function editar(){
+    public function editar()
+    {
         if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior())) {
             if (isset($_GET['id'])) {
                 $edit = true;
@@ -191,8 +199,8 @@ class ClienteContactoController{
                 $contact = new CustomerContact();
                 $contact->setId($id);
                 $contacto = $contact->getOne();
-				
-				if ($contacto) {
+
+                if ($contacto) {
                     $birthday = $contacto->birthday ? explode('/', $contacto->birthday) : array('01', '01');
                 }
 
@@ -200,20 +208,21 @@ class ClienteContactoController{
                 $customer->setId($contacto->id_customer);
                 $cliente = $customer->getOne();
 
-                $page_title = $cliente->alias.' | RRHH Ingenia';
+                $page_title = $cliente->alias . ' | RRHH Ingenia';
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
                 require_once 'views/customer/contact.php';
                 require_once 'views/layout/footer.php';
-            }else {
-                header('location:'.base_url.'cliente/index');
+            } else {
+                header('location:' . base_url . 'cliente/index');
             }
-        }else {
-            header('location:'.base_url);
+        } else {
+            header('location:' . base_url);
         }
     }
 
-    public function update(){
+    public function update()
+    {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior() || Utils::isSenior())) {
             $id = (isset($_POST['id'])) ? Encryption::decode($_POST['id']) : FALSE;
             $first_name = (isset($_POST['first_name'])) ? trim($_POST['first_name']) : FALSE;
@@ -225,7 +234,7 @@ class ClienteContactoController{
             $cellphone = (isset($_POST['cellphone'])) ? trim($_POST['cellphone']) : NULL;
             $day = isset($_POST['day']) ? str_pad($_POST['day'], 2, "0", STR_PAD_LEFT) : FALSE;
             $month = isset($_POST['month']) ? str_pad($_POST['month'], 2, "0", STR_PAD_LEFT) : FALSE;
-            $birthday = $day && $month ? $day.'/'.$month : '01/01';
+            $birthday = $day && $month ? $day . '/' . $month : '01/01';
             $id_user = (isset($_POST['id_user']) && !empty($_POST['id_user'])) ? Encryption::decode($_POST['id_user']) : NULL;
 
             if ($first_name && $last_name && $email) {
@@ -254,26 +263,29 @@ class ClienteContactoController{
                         $user->setLast_name($last_name);
                         $user->setEmail($email);
                         $user->setId_user_type(6);
-                        
+
                         $userExists = $user->userExists();
                         $emailExists = $user->emailExists();
                         if ((!$userExists || ($username == $userExists)) && (!$emailExists || ($email == $emailExists))) {
                             $update = $user->edit();
                             if ($update) {
                                 $id_user = $user->getId();
-                                
+
                                 $contacto->setId_user($id_user);
 
                                 $update = $contacto->update();
-                                if ($update) {echo 1;}
-                                else{echo 2;}
-                            }else{
+                                if ($update) {
+                                    echo 1;
+                                } else {
+                                    echo 2;
+                                }
+                            } else {
                                 echo 4;
                             }
-                        }else{
+                        } else {
                             echo 3; //if the user or email already exists, returns 3
                         }
-                    }else{
+                    } else {
                         $user = new User();
                         $user->setUsername($username);
                         $user->setPassword($password);
@@ -283,7 +295,7 @@ class ClienteContactoController{
                         $user->setActivation(1);
                         $user->setId_user_type(6);
 
-                        
+
                         $userExists = $user->userExists();
                         $emailExists = $user->emailExists();
                         if (!$userExists && !$emailExists) {
@@ -292,32 +304,35 @@ class ClienteContactoController{
                                 $id_user = $user->getId();
                                 $contacto->setId_user($id_user);
                                 $update = $contacto->update();
-                                if ($update) {echo 1;}
-                                else{echo 2;}
-                            }else{
+                                if ($update) {
+                                    echo 1;
+                                } else {
+                                    echo 2;
+                                }
+                            } else {
                                 echo 4;
                             }
-                        }else{
+                        } else {
                             echo 3; //if the user or email already exists, returns 3
                         }
                     }
-                    
-                
-                }else{
+                } else {
                     $update = $contacto->update();
-                    if ($update) {echo 1;}
-                    else{echo 2;}
+                    if ($update) {
+                        echo 1;
+                    } else {
+                        echo 2;
+                    }
                 }
-                
-            }else{
+            } else {
                 echo 0;
             }
-        }else{
-            header('location:'.base_url);
+        } else {
+            header('location:' . base_url);
         }
     }
-	
-	
+
+
     ///////////////////////////////////////////// INIICO GABO  ////////////////////////////////////////////////////////////
     public function getContacto()
     {
@@ -344,7 +359,7 @@ class ClienteContactoController{
             echo json_encode(array('status' => 0));
     }
 
-   public function create_gabotest()  //gabo prueba  24
+    public function create_gabotest()  //gabo prueba  24
     {
         if (Utils::isValid($_POST) && (Utils::isAdmin() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager() || Utils::isSenior())) {
             $first_name = (isset($_POST['first_name'])) ? trim($_POST['first_name']) : FALSE;
@@ -589,6 +604,7 @@ class ClienteContactoController{
                     $contacto->setExtension($Extension);
                     $contacto->setCelular($Celular);
                     $contacto->setFecha_Cumpleaños($Fecha_Cumpleanos);
+                    $contacto->setTipo_usuario(0);
                     $contacto->setEmpresa($cliente_asignado);
                     $contacto->setUsuario($Usuario);
                     $contacto->setCorreo($Correo);

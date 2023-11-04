@@ -50,6 +50,7 @@
                                             <option value="4">Pendiente</option>
                                             <option value="5">No recomendado</option>
                                             <option value="6" hidden>Candidato postulado</option>
+                                            <option value="7" hidden>Candidato en bolsa</option>
                                         </select>
                                     </div>
                                 </div>

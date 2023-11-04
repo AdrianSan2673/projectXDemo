@@ -72,7 +72,7 @@ class AsistenceTypes
     public function getAllByClient()
     {
         $client = $this->getClient();
-        $stmt = $this->db->prepare("SELECT * from asistence_type where client=:client and status=1 order by id ASC");
+        $stmt = $this->db->prepare("SELECT * from asistence_type where client=:client and status=1 order by id DESC");
         $stmt->bindParam(":client", $client, PDO::PARAM_INT);
         $stmt->execute();
         $fetch =  $stmt->fetchAll();

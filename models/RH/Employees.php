@@ -30,10 +30,10 @@ class Employees
     private $civil_status;
     private $id_razon;
     private $id_boss;
-	private $id_usuario_rh;
+    private $id_usuario_rh;
     private $db;
     private $email;
-	
+
     public function __construct()
     {
         $this->db = Connection::connectSA();
@@ -309,8 +309,8 @@ class Employees
     {
         $this->id_boss = $id_boss;
     }
-	
-public function getId_Usuario_Rh()
+
+    public function getId_Usuario_Rh()
     {
         return $this->id_usuario_rh;
     }
@@ -319,7 +319,7 @@ public function getId_Usuario_Rh()
     {
         $this->id_usuario_rh = $id_usuario_rh;
     }
-	  public function getEmail()
+    public function getEmail()
     {
         return $this->email;
     }
@@ -328,7 +328,7 @@ public function getId_Usuario_Rh()
     {
         $this->email = $email;
     }
-	
+
     public function getOne()
     {
         $id = $this->getId();
@@ -564,7 +564,7 @@ public function getId_Usuario_Rh()
         $civil_status = $this->getCivil_status();
         $id_razon = $this->getId_razon();
         $id_boss = $this->getId_boss();
-		  $email = $this->getEmail();
+        $email = $this->getEmail();
 
         $stmt = $this->db->prepare("INSERT INTO root.employees (first_name, surname, last_name, Cliente, ID_Contacto, date_birth, id_gender, start_date,id_position,created_at,modified_at,scholarship,curp,rfc,nss,employee_number,civil_status,id_razon,id_boss,email) VALUES (:first_name, :surname, :last_name, :Cliente, :ID_Contacto, :date_birth, :id_gender, :start_date,:id_position,GETDATE(),GETDATE(),:scholarship,:curp,:rfc,:nss,:employee_number,:civil_status,:id_razon,:id_boss,:email)");
         //$stmt = $this->db->prepare("INSERT INTO root.employees (first_name, surname, last_name, Cliente, ID_Contacto, date_birth, id_gender, start_date, ID_Candidato) VALUES (:first_name, :surname, :last_name, :Cliente, :ID_Contacto, :date_birth, :id_gender, :start_date, :id_position, :ID_Candidato)");
@@ -626,7 +626,7 @@ public function getId_Usuario_Rh()
         $civil_status = $this->getCivil_status();
         $id_razon = $this->getId_razon();
         $id_boss = $this->getId_boss();
-		  $email = $this->getEmail();
+        $email = $this->getEmail();
 
 
         $stmt = $this->db->prepare("UPDATE root.employees 
@@ -656,7 +656,7 @@ public function getId_Usuario_Rh()
         $stmt->bindParam(":civil_status", $civil_status, PDO::PARAM_INT);
         $stmt->bindParam(":id_razon", $id_razon, PDO::PARAM_INT);
         $stmt->bindParam(":id_boss", $id_boss, PDO::PARAM_INT);
-		$stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
 
         $flag = $stmt->execute();
 
@@ -809,7 +809,7 @@ public function getId_Usuario_Rh()
 
     public function getEmployeesAllInformationByCliente()
     {
-        
+
         $Cliente = $this->getCliente();
         $status = $this->getStatus();
         $stmt = $this->db->prepare("SELECT e.id AS id_employee, CONCAT(e.first_name,' ',e.surname,' ',e.last_name) fullName,  p.title, d.department,e.date_birth, dbo.GetMonthsDifference(e.date_birth, GETDATE())/12 age,e.start_date,dbo.GetMonthsDifference(e.start_date, GETDATE())/12 antiquity ,e.modified_at, e.employee_number,e.civil_status, e.id_gender,
@@ -883,7 +883,7 @@ public function getId_Usuario_Rh()
         return $fetch;
     }
 
-      public function getOneByIdUserRh()
+    public function getOneByIdUserRh()
     {
         $id_usuario_rh = $this->getId_Usuario_Rh();
 
@@ -910,8 +910,8 @@ public function getId_Usuario_Rh()
         }
         return $result;
     }
-	
-	public function Update_Id_userRH()
+
+    public function Update_Id_userRH()
     {
 
         $id = $this->getId();
@@ -922,8 +922,8 @@ public function getId_Usuario_Rh()
         $flag = $stmt->execute();
         return $flag;
     }
-	
-	  public function Validate_Curp()
+
+    public function Validate_Curp()
     {
         $cliente = $this->getCliente();
         $curp = $this->getCurp();
@@ -937,8 +937,8 @@ public function getId_Usuario_Rh()
         $result =  $stmt->fetchObject();
         return $result;
     }
-	
-	public function getAllEmployeesByIDCliente()
+
+    public function getAllEmployeesByIDCliente()
     {
         $Cliente = $this->getCliente();
         $status = $this->getStatus();
@@ -951,8 +951,9 @@ public function getId_Usuario_Rh()
         $fetch =  $stmt->fetchAll();
         return $fetch;
     }
-	
-	 public function getEmployeesAllHolidaysRequested()
+
+    //18 oct
+    public function getEmployeesAllHolidaysRequested()
     {
         $Cliente = $this->getCliente();
         $stmt = $this->db->prepare(
@@ -966,8 +967,9 @@ public function getId_Usuario_Rh()
 			eh.id,
 			eh.status,
 			eh.comments,
+            e.usuario_rh,
             dbo.count_days(eh.start_date, eh.end_date) + 1 AS days,
-            ISNULL((SELECT top(1) holidays FROM root.holidays_by_years WHERE years = (dbo.GetMonthsDifference(e.start_date, GETDATE())/12)), 0) AS holidays_by_year,
+            ISNULL((SELECT top(1) holidays FROM root.holidays_by_years hby INNER JOIN  root.vacation_policy vp  ON hby.id_policy=vp.id    WHERE hby.years = (dbo.GetMonthsDifference(e.start_date, GETDATE())/12)  AND vp.Cliente=e.Cliente ), 0) AS holidays_by_year,
             ISNULL((SELECT top(1) SUM(dbo.count_days(eh.start_date, eh.end_date) + 1) FROM root.employee_holidays eh WHERE eh.status='Aceptada' and  e.id=eh.id_employee AND eh.start_date BETWEEN DATEADD(YEAR, (dbo.GetMonthsDifference(eh.start_date, GETDATE())/12), eh.start_date) AND DATEADD(YEAR, (dbo.GetMonthsDifference(eh.start_date, GETDATE())/12) + 1, eh.start_date) ), 0) AS taken_holidays
         FROM  
             root.employees e INNER JOIN root.employee_holidays eh ON e.id=eh.id_employee 
@@ -980,7 +982,7 @@ public function getId_Usuario_Rh()
         $fetch = $stmt->fetchAll();
         return $fetch;
     }
-	  public function updateEmail()
+    public function updateEmail()
     {
         $id = $this->getId();
         $email = $this->getEmail();

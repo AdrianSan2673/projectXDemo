@@ -248,9 +248,9 @@ class Candidatedirectory {
             body: formData
         })
             .then(response => {
-                //console.log(response.json());
+                console.log(response.json());
                 if (response.ok) {
-                    return response.text();
+                    //    return response.text();
                 } else {
                     throw new Error('Network response was not ok.');
                 }
@@ -280,10 +280,10 @@ class Candidatedirectory {
 
                 }
             })
-            .catch(error => {
-                utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+        // .catch(error => {
+        //     utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
 
-            });
+        // });
     }
 
 
@@ -345,6 +345,7 @@ class Candidatedirectory {
         json_app.contacts.forEach(element => {
             contacts += `
                 <tr>
+                        <td class="text-center align-middle">${element.created_at}</td>
                     <td class="text-center align-middle">${element.first_name} ${element.surname} ${element.last_name} </td>
                     <td class="text-center align-middle">${element.telephone}</td>
                     <td class="text-center align-middle">${element.vacancy}</td>

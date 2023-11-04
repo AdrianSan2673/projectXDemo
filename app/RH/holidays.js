@@ -1,6 +1,6 @@
 class Holidays {
 
-    //===[gabo 26 solicitud vacaciones]===
+    //===[gabo 20 oct]===
     save() {
         console.log('save');
         var form = document.querySelector('#modal_create_holidays form');
@@ -61,7 +61,6 @@ class Holidays {
                                         <td class="text-center">${solicitud.created_at}</td>
                                         <td class="text-center">${solicitud.start_date + " al " + solicitud.end_date}</td>
                                         <td class="text-center">${solicitud.days}</td>
-                                        <td class="text-center">${solicitud.holidays_by_year - solicitud.taken_holidays} </td>
                                         <td class="text-center">${solicitud.comments} </td>
                                         <td class="text-center"> `;
                                         if (solicitud.status == 'En revisión') {
@@ -114,7 +113,7 @@ class Holidays {
 
     }
 
-
+    //20 oct
     delete(id) {
         fetch('../Vacaciones/delete', {
             method: 'POST',
@@ -166,7 +165,6 @@ class Holidays {
                                         <td class="text-center">${solicitud.created_at}</td>
                                         <td class="text-center">${solicitud.start_date + " al " + solicitud.end_date}</td>
                                         <td class="text-center">${solicitud.days}</td>
-                                        <td class="text-center">${solicitud.holidays_by_year - solicitud.taken_holidays} </td>
                                         <td class="text-center">${solicitud.comments} </td>
                                         <td class="text-center"> `;
                             if (solicitud.status == 'En revisión') {
@@ -211,8 +209,8 @@ class Holidays {
             });
     }
 
-    //===[gabo 26 solicitud vacaciones fin]=== 
-	   update_holiday() {
+    //===[20 oct]=== 
+    update_holiday() {
 
         var form = document.querySelector("#modal_update_holidays form");
         var formData = new FormData(form);
@@ -266,7 +264,6 @@ class Holidays {
                                         <td class="text-center">${solicitud.created_at}</td>
                                         <td class="text-center">${solicitud.start_date + " al " + solicitud.end_date}</td>
                                         <td class="text-center">${solicitud.days}</td>
-                                        <td class="text-center">${solicitud.holidays_by_year - solicitud.taken_holidays} </td>
                                         <td class="text-center">${solicitud.comments} </td>
                                         <td class="text-center"> `;
                             if (solicitud.status == 'En revisión') {

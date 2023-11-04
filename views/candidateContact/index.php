@@ -34,8 +34,10 @@
                             <th></th>
                             <th></th>
                             <th></th>
+                            <th></th>
                         </tr>
                         <tr>
+                            <th class="text-center align-middle">fecha</th>
                             <th class="text-center align-middle">Nombre</th>
                             <th class="text-center align-middle">Telefono</th>
                             <th class="text-center align-middle">Vacante</th>
@@ -45,6 +47,7 @@
                     <tbody>
                         <?php foreach ($candidatecontact as $candidate) :  ?>
                         <tr class="">
+                            <td class="text-center align-middle"><?= Utils::getDate($candidate['created_at']) ?></td>
                             <td class="text-center align-middle">
                                 <?= $candidate['first_name'] . " " . $candidate['surname'] . " " . $candidate['last_name'] ?>
                             </td>
@@ -80,6 +83,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
+                            <th class="text-center align-middle">fecha</th>
                             <th class="text-center align-middle">Fecha de registro</th>
                             <th class="text-center align-middle">Nombre</th>
                             <th class="text-center align-middle">Telefono</th>

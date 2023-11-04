@@ -233,6 +233,9 @@ class CandidatoDirectorioController
                 case 6: //Postulado
                     $candidate['color'] = 'bg-info';
                     break;
+                case 7: //EN bolsa
+                    $candidate['color'] = 'bg-orange';
+                    break;
                 default:
                     $candidate['color'] = '';
                     break;
@@ -278,7 +281,7 @@ class CandidatoDirectorioController
                 $candidateDirectoryObj->setId_city($vacante->id_city);
                 // $candidateDirectoryObj->setUrl($url);
                 // $candidateDirectoryObj->setComment($comment);
-                $candidateDirectoryObj->setStatus(3);
+                $candidateDirectoryObj->setStatus(1);
                 // $candidateDirectoryObj->setCreated_at(getDate());
                 $candidateDirectoryObj->setCreated_by($_SESSION['identity']->id);
                 // $candidateDirectoryObj->setModified_at(getDate());
@@ -293,10 +296,14 @@ class CandidatoDirectorioController
 
                 if ($save) {
                     $contacto->setId($id_contact);
-                    $contacto->setStatus(3);
+                    $contacto->setStatus(1);
                     $contacto->updateStatus();
 
                     $contacts =  $contacto->getAll();
+                    foreach ($contacts as &$contact) {
+                        $contact['created_at'] = Utils::getDate($contact['created_at']);
+                    }
+
 
                     echo json_encode(array('status' => 1, 'contacts' => $contacts));
                 } else {
@@ -322,6 +329,10 @@ class CandidatoDirectorioController
 
                 if ($save) {
                     $contacts =  $contacto->getAll();
+
+                    foreach ($contacts as &$contact) {
+                        $contact['created_at'] = Utils::getDate($contact['created_at']);
+                    }
 
 
                     echo json_encode(array('status' => 1, 'contacts' => $contacts));
@@ -524,7 +535,7 @@ class CandidatoDirectorioController
                             //vincular candidato con el directorio
                             $candidateDirectoryObj = new CandidateDirectory();
                             $candidateDirectoryObj->setId($id_candidate_directory);
-                            $candidateDirectoryObj->setStatus(6);
+                            $candidateDirectoryObj->setStatus(7);
                             $candidateDirectoryObj->setId_candidate($id_candidate);
                             $candidateDirectoryObj->updateSatusCandidate();
 
@@ -620,7 +631,7 @@ class CandidatoDirectorioController
                             //vincular candidato con el directorio
                             $candidateDirectoryObj = new CandidateDirectory();
                             $candidateDirectoryObj->setId($id_candidate_directory);
-                            $candidateDirectoryObj->setStatus(6);
+                            $candidateDirectoryObj->setStatus(7);
                             $candidateDirectoryObj->setId_candidate($id_candidate);
                             $candidateDirectoryObj->updateSatusCandidate();
 
@@ -873,7 +884,7 @@ class CandidatoDirectorioController
                             //vincular candidato con el directorio
                             $candidateDirectoryObj = new CandidateDirectory();
                             $candidateDirectoryObj->setId($id_candidate_directory);
-                            $candidateDirectoryObj->setStatus(6);
+                            $candidateDirectoryObj->setStatus(7);
                             $candidateDirectoryObj->setId_candidate($id_candidate);
                             $status = $candidateDirectoryObj->updateSatusCandidate();
 
