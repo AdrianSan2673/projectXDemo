@@ -11,6 +11,8 @@ class EmployeeHolidays
     private $status;
     private $id_admin;
 
+    private $id_template;
+
     private $db;
 
     public function __construct()
@@ -98,6 +100,17 @@ class EmployeeHolidays
     {
         $this->id_admin = $id_admin;
     }
+
+
+    public function getId_Template()
+    {
+        return $this->id_template;
+    }
+
+    public function setId_Template($id_template)
+    {
+        $this->id_template = $id_template;
+    }
     public function getOne()
     {
         $id = $this->getId();
@@ -164,7 +177,7 @@ class EmployeeHolidays
         return $fetch;
     }
 
-
+    //gABO 31 oct
     public function create()
     {
         $result = false;
@@ -174,10 +187,12 @@ class EmployeeHolidays
         $end_date = $this->getEnd_date();
         $comments = $this->getComments();
         $ID_Contacto = $this->getID_Contacto();
+        $id_template = $this->getId_Template();
+
 
         $status = $this->getStatus();
 
-        $stmt = $this->db->prepare("INSERT INTO root.employee_holidays (start_date, end_date, comments, id_employee, ID_Contacto, created_at,status) VALUES (:start_date, :end_date, :comments, :id_employee, :ID_Contacto, GETDATE(),:status)");
+        $stmt = $this->db->prepare("INSERT INTO root.employee_holidays (start_date, end_date, comments, id_employee, ID_Contacto, created_at,status,id_template) VALUES (:start_date, :end_date, :comments, :id_employee, :ID_Contacto, GETDATE(),:status,:id_template)");
 
         $stmt->bindParam(":start_date", $start_date, PDO::PARAM_STR);
         $stmt->bindParam(":end_date", $end_date, PDO::PARAM_STR);
@@ -185,6 +200,7 @@ class EmployeeHolidays
         $stmt->bindParam(":id_employee", $id_employee, PDO::PARAM_INT);
         $stmt->bindParam(":ID_Contacto", $ID_Contacto, PDO::PARAM_INT);
         $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+        $stmt->bindParam(":id_template", $id_template, PDO::PARAM_STR);
         $flag = $stmt->execute();
 
         if ($flag) {
@@ -291,6 +307,7 @@ class EmployeeHolidays
         return $fetch;
     }
 
+    //gabo 31 oct
     public function getEmployeesHolidaysRequestedByID_User($id_usuario_rh)
     {
 
@@ -305,6 +322,7 @@ class EmployeeHolidays
             eh.end_date,
 			eh.id,
 			eh.comments,
+            eh.id_template,
             dbo.count_days(eh.start_date, eh.end_date) + 1 AS days,
             ISNULL((SELECT TOP(1) holidays FROM root.holidays_by_years WHERE years = (dbo.GetMonthsDifference(e.start_date, GETDATE())/12)), 0) AS holidays_by_year,
             ISNULL((SELECT SUM(dbo.count_days(eh.start_date, eh.end_date) + 1) FROM root.employee_holidays eh WHERE eh.status='Aceptada' and e.id=eh.id_employee AND eh.start_date BETWEEN DATEADD(YEAR, (dbo.GetMonthsDifference(e.start_date, GETDATE())/12), e.start_date) AND DATEADD(YEAR, (dbo.GetMonthsDifference(e.start_date, GETDATE())/12) + 1, e.start_date) ), 0) AS taken_holidays
@@ -319,6 +337,7 @@ class EmployeeHolidays
         return $fetch;
     }
 
+    //gabo 31 oct
     public function getEmployeesHolidaysRequested()
     {
         $id_employee = $this->getId_employee();
@@ -334,6 +353,7 @@ class EmployeeHolidays
 			eh.id,
 			eh.status,
 			eh.comments,
+            eh.id_template,
             dbo.count_days(eh.start_date, eh.end_date) + 1 AS days,
             ISNULL((SELECT top (1) holidays FROM root.holidays_by_years WHERE years = (dbo.GetMonthsDifference(e.start_date, GETDATE())/12)), 0) AS holidays_by_year,
             ISNULL((SELECT SUM(dbo.count_days(eh.start_date, eh.end_date) + 1) FROM root.employee_holidays eh WHERE eh.status='Aceptada' and  e.id=eh.id_employee AND eh.start_date BETWEEN DATEADD(YEAR, (dbo.GetMonthsDifference(e.start_date, GETDATE())/12), e.start_date) AND DATEADD(YEAR, (dbo.GetMonthsDifference(e.start_date, GETDATE())/12) + 1, e.start_date) ), 0) AS taken_holidays
@@ -442,5 +462,18 @@ class EmployeeHolidays
             $result = true;
 
         return $result;
+    }
+
+
+    public function getOneByIdTemplate()
+    {
+        $id_template = $this->getId_Template();
+
+        $stmt = $this->db->prepare("SELECT top(1) * from root.employee_holidays where id_template=:id_template");
+        $stmt->bindParam(":id_template", $id_template, PDO::PARAM_INT);
+        $stmt->execute();
+        $fetch = $stmt->fetchObject();
+
+        return $fetch;
     }
 }

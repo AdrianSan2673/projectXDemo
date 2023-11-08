@@ -1,6 +1,6 @@
 class Holidays {
 
-    //===[gabo 20 oct]===
+    //PENDIENTE
     save() {
         console.log('save');
         var form = document.querySelector('#modal_create_holidays form');
@@ -20,22 +20,20 @@ class Holidays {
                     if (r == 0)
                         utils.showToast('Omitiste algún dato', 'warning');
                     else {
-
-                        if (json_app.status == 2) {
+                        if (json_app.status === 0) {
+                            form.querySelectorAll('.btn')[1].disabled = false;
+                            utils.showToast('Omitió algún dato', 'error');
+                        } else if (json_app.status == 2) {
                             utils.showToast('Hubo un error al registrar la solicitud de vacaciones, intenta de nuevo.', 'error');
                             form.querySelectorAll('.btn')[1].disabled = false;
                         } else if (json_app.status == 1) {
 
                             try {
-                                const json_app = JSON.parse(r);
-                                if (json_app.status === 0) {
-                                    utils.showToast('Omitió algún dato', 'error');
-                                } else if (json_app.status === 1) {
-                                    console.log(json_app);
 
-                                    let employees = '';
-                                    json_app.employees.forEach(employee => {
-                                        employees += `
+
+                                let employees = '';
+                                json_app.employees.forEach(employee => {
+                                    employees += `
                                     <tr>
                                         <td class="align-middle text-bold"> ${employee.first_name} ${employee.surname} ${employee.last_name}</td>
                                         <td class="text-center align-middle">${employee.start_date}</td>
@@ -45,26 +43,26 @@ class Holidays {
                                         <td class="text-center align-middle">${employee.due_date}</td>
                                     </tr>
                                 `;
-                                    });
+                                });
 
-                                    utils.destruir_datatable('#tb_employees', '#tb_employees tbody', employees);
+                                utils.destruir_datatable('#tb_employees', '#tb_employees tbody', employees);
 
 
-                                    var solicitudes = '';
-                                    var cont = json_app.solicitudes.length;
-                                    json_app.solicitudes.forEach(solicitud => {
+                                var solicitudes = '';
+                                var cont = json_app.solicitudes.length;
+                                json_app.solicitudes.forEach(solicitud => {
 
-                                        (solicitud.comments == '') ? solicitud.comments = '-' : false;
-                                        solicitudes += ` <tr>
+                                    (solicitud.comments == '') ? solicitud.comments = '-' : false;
+                                    solicitudes += ` <tr>
                                         <td class="text-center text-bold">${cont}</td>
                                         <td class="text-center">${solicitud.first_name}  ${solicitud.surname}  ${solicitud.last_name}</td>
                                         <td class="text-center">${solicitud.created_at}</td>
                                         <td class="text-center">${solicitud.start_date + " al " + solicitud.end_date}</td>
-                                        <td class="text-center">${solicitud.days}</td>
+                                        <td class="text-center">${solicitud.requested_days}</td>
                                         <td class="text-center">${solicitud.comments} </td>
                                         <td class="text-center"> `;
-                                        if (solicitud.status == 'En revisión') {
-                                            solicitudes += `  <button data-id="" value="${solicitud.id}" class="btn btn-success mt-1" id="btn-aceptar">
+                                    if (solicitud.status == 'En revisión') {
+                                        solicitudes += `  <button data-id="" value="${solicitud.id}" class="btn btn-success mt-1" id="btn-aceptar">
                                                     <i class="fas fa-check"> Aceptar</i>
                                                 </button>
                                                 <a data-id="${solicitud.id}" class="btn btn-danger mt-1" id="btn-denegar">
@@ -78,30 +76,34 @@ class Holidays {
                                         class="btn btn-info mt-1" id="btn-edit">
                                         <i class="fas fa-edit"> Editar</i>
                                     </button>`;
-                                        }
-                                        if (solicitud['status'] == 'Aceptada') {
-                                            solicitudes += ` <small class="badge badge-success"> Aceptada</small>`;
-                                        }
-                                        if (solicitud['status'] == 'Declinada') {
-                                            solicitudes += ` <small class="badge badge-danger"> Declinada</small>`;
-                                        }
+                                    }
+                                    if (solicitud['status'] == 'Aceptada') {
+                                        solicitudes += ` <small class="badge badge-success"> Aceptada</small>`;
+                                    }
+                                    if (solicitud['status'] == 'Declinada') {
+                                        solicitudes += ` <small class="badge badge-danger"> Declinada</small>`;
+                                    }
 
-                                        solicitudes += `</td>
+                                    solicitudes += `</td>
                                     </tr > `;
 
-                                        cont--;
-                                    });
+                                    cont--;
+                                });
 
-                                    utils.destruir_datatable('#table3', '#table3 tbody', solicitudes);
+                                utils.destruir_datatable('#table3', '#table3 tbody', solicitudes);
 
-                                    utils.showToast('Se agregó el periodo vacacional exitosamente', 'success');
-                                    $('#modal_create_holidays').modal('hide');
-                                    form.querySelectorAll('.btn')[1].disabled = false;
-                                }
-                            } catch (error) {
+                                utils.showToast('Se agregó el periodo vacacional exitosamente', 'success');
+                                $('#modal_create_holidays').modal('hide');
+                                form.querySelectorAll('.btn')[1].disabled = false;
+                            }
+                            catch (error) {
+                                form.querySelectorAll('.btn')[1].disabled = false;
                                 utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
                             }
 
+                        } else if (json_app.status === 3) {
+                            form.querySelectorAll('.btn')[1].disabled = false;
+                            utils.showToast('Verifique las fechas por favor, no puede solicitar vacaciones  sólo en dias inhábiles o festivos', 'error');
                         }
                     }
                 } catch (error) {
@@ -112,6 +114,7 @@ class Holidays {
         }
 
     }
+
 
     //20 oct
     delete(id) {
@@ -164,7 +167,7 @@ class Holidays {
                                         <td class="text-center">${solicitud.first_name}  ${solicitud.surname}  ${solicitud.last_name}</td>
                                         <td class="text-center">${solicitud.created_at}</td>
                                         <td class="text-center">${solicitud.start_date + " al " + solicitud.end_date}</td>
-                                        <td class="text-center">${solicitud.days}</td>
+                                        <td class="text-center">${solicitud.requested_days}</td>
                                         <td class="text-center">${solicitud.comments} </td>
                                         <td class="text-center"> `;
                             if (solicitud.status == 'En revisión') {
@@ -209,7 +212,7 @@ class Holidays {
             });
     }
 
-    //===[20 oct]=== 
+    //gabo 31 oxt
     update_holiday() {
 
         var form = document.querySelector("#modal_update_holidays form");
@@ -263,7 +266,7 @@ class Holidays {
                                         <td class="text-center">${solicitud.first_name}  ${solicitud.surname}  ${solicitud.last_name}</td>
                                         <td class="text-center">${solicitud.created_at}</td>
                                         <td class="text-center">${solicitud.start_date + " al " + solicitud.end_date}</td>
-                                        <td class="text-center">${solicitud.days}</td>
+                                        <td class="text-center">${solicitud.requested_days}</td>
                                         <td class="text-center">${solicitud.comments} </td>
                                         <td class="text-center"> `;
                             if (solicitud.status == 'En revisión') {

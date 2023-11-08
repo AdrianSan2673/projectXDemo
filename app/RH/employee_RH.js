@@ -33,7 +33,7 @@ class Employee_RH {
                                         <td class="text-center">${solicitud.first_name}  ${solicitud.surname}  ${solicitud.last_name}</td>
                                         <td class="text-center">${solicitud.created_at}</td>
                                         <td class="text-center">${solicitud.start_date + " al " + solicitud.end_date}</td>
-                                        <td class="text-center">${solicitud.days}</td>
+                                        <td class="text-center">${solicitud.requested_days}</td>
                                         <td class="text-center">${solicitud.holidays_by_year - solicitud.taken_holidays} </td>
                                         <td class="text-center">${solicitud.comments} </td>
                                         <td class="text-center"> `;
@@ -168,7 +168,7 @@ class Employee_RH {
             });
     }
 
-    //===[gabo 20 julio  responsive-movil]===
+    //===[gabo 31 oct
     save_solicitud() {
 
         document.querySelector("#modal_create_holidays [name='submit']").disabled = true
@@ -200,7 +200,7 @@ class Employee_RH {
                             <tr>
                                         <td class="text-center text-bold" >${cont}</td>
                                         <td class="text-center" >${solicitud.created_at}</td>
-                                        <td class="text-center" >${solicitud.days}</td>
+                                        <td class="text-center" >${solicitud.requested_days}</td>
                                         <td class="text-center" >${solicitud.start_date + " Al " + solicitud.end_date}</td>
                                         <td class="text-center" >${solicitud.comments}</td>
                                         <td class="text-center" >`;
@@ -240,7 +240,7 @@ class Employee_RH {
                                         ${solicitud.created_at}
                                         <hr style="margin:0.1rem;opacity:0% ">
 
-                                            <b> Dias solicitados :</b> ${solicitud.days}
+                                            <b> Dias solicitados :</b> ${solicitud.requested_days}
                                             <hr style="margin:0.1rem;opacity:0% ">
                                                 <b> Periodo de vacaciones :</b>
                                                 ${solicitud.start_date}  Al  ${solicitud.end_date}
@@ -308,6 +308,8 @@ class Employee_RH {
                 } else {
                     utils.showToast('No se pudo consultar la informacion', 'error');
                     document.querySelector("#modal_create_holidays [name='submit']").disabled = false
+                } if (json_app.status === 3) {
+                    utils.showToast('Verifica las fechas por favorr', 'error');
                 }
 
 
@@ -461,7 +463,7 @@ class Employee_RH {
             });
     }
 
-    //20 oct
+    //gabo 31 oct
     responder_solicitud_admin() {
         document.querySelector("#modal_responder [name='submit']").disabled = true
         var form = document.querySelector("#modal_responder form");
@@ -505,7 +507,7 @@ class Employee_RH {
                                                 <td class="text-center">${solicitud.first_name}  ${solicitud.surname}  ${solicitud.last_name}</td>
                                                 <td class="text-center">${solicitud.created_at}</td>
                                                 <td class="text-center">${solicitud.start_date + " al " + solicitud.end_date}</td>
-                                                <td class="text-center">${solicitud.days}</td>
+                                                <td class="text-center">${solicitud.requested_days}</td>
                                                 <td class="text-center">${solicitud.comments} </td>
                                                 <td class="text-center"> `;
                         //===[gabo 4 agosto fail]===

@@ -196,4 +196,15 @@ class VacationPolicy
 		$fetch = $stmt->fetchObject();
 		return $fetch;
 	}
+
+
+	public function getHolidaysWithPoliticsByIdCliente()
+	{
+		$cliente = $this->getCliente();
+		$stmt = $this->db->prepare("SELECT day,month from reclutamiento2.dbo.holidays where  id_template in (select  top(1) id from  reclutamiento2.dbo.template_holidays where cliente=:cliente and status=1) and status=1");
+		$stmt->bindParam(":cliente", $cliente, PDO::PARAM_INT);
+		$stmt->execute();
+		$fetch = $stmt->fetchAll();
+		return $fetch;
+	}
 }

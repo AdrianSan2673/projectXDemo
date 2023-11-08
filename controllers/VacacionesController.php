@@ -9,6 +9,11 @@ require_once 'models/SA/ContactosCliente.php';
 //gabo 18 oct
 require_once 'models/RH/VacationPolicy.php';
 require_once 'models/SA/WorkDays.php';
+
+//gabo 31 oct
+require_once 'models/RH/TemplateHolidays.php';
+require_once 'models/RH/Holidays.php';
+
 class VacacionesController
 {
 
@@ -79,6 +84,79 @@ class VacacionesController
                     $start_date = $end_date;
                     $end_date = $aux;
                 }
+
+                $plantilla = new TemplateHolidays();
+                $plantilla->setCliente($_SESSION['id_cliente']);
+                $template = $plantilla->getActivatedTemplate();
+                $id_template = $template->id;
+
+
+
+
+                $work_days = new WorkDays();
+                $work_days->setCliente($_SESSION['id_cliente']);
+                $work_days = $work_days->getOne();
+
+                $work_days = array(
+                    'Sun' => $work_days->sunday,
+                    'Mon' => $work_days->monday,
+                    'Tue' => $work_days->tuesday,
+                    'Wed' => $work_days->wednesday,
+                    'Thu' => $work_days->thursday,
+                    'Fri' => $work_days->friday,
+                    'Sat' => $work_days->saturday
+                );
+
+                $start = new DateTime($start_date);
+                $end = new DateTime($end_date);
+
+                $interval = $start->diff($end);
+                $days = $interval->days;
+
+                $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+                //  $holidays = array();
+                $vp = new Holidays();
+                $vp->setId_template($id_template);
+                $dates = $vp->getAllByIdTemplate();
+
+                $holidays = array();
+                foreach ($dates as &$date) {
+                    if ($date['month'] < 10) {
+                        $date['month'] = '0' . $date['month'];
+                    }
+
+                    if ($date['day'] < 10) {
+                        $date['day'] = '0' . $date['day'];
+                    }
+
+                    array_push($holidays, Date('Y') . '-' . $date['month'] . '-' . $date['day']);
+                }
+
+
+                foreach ($period as $dt) {
+                    $descont = false;
+                    $curr = $dt->format('D');
+                    foreach ($work_days as $dia => $valor) {
+                        if ($valor == 0 && $curr == $dia) {
+                            $days--;
+                            $descont = true;
+                        }
+                    }
+
+                    if (in_array($dt->format('Y-m-d'), $holidays)) {
+                        if ($descont == false) {
+                            $days--;
+                        }
+                    }
+                }
+
+
+                if ($days < 1) {
+                    echo json_encode(array('status' => 3));
+                    die();
+                }
+
+
                 $holiday = new EmployeeHolidays();
                 $holiday->setId($id);
                 $holiday->setId_employee($id_employee);
@@ -87,11 +165,15 @@ class VacacionesController
                 $holiday->setComments($comments);
                 $holiday->setID_Contacto($id_contacto);
                 $holiday->setStatus('En revisión');
+                //gabo 31 oct
+                $holiday->setId_Template($id_template);
 
                 if ($flag == 1)
                     $save = $holiday->update();
                 else
                     $save = $holiday->create();
+
+
 
                 if ($save) {
                     //Ernestesto es del vijeo, ahora el id de cliente lo tiene al inciar sesion si tiene activo el servicio
@@ -100,35 +182,37 @@ class VacacionesController
 
                     $holiday->setID_Contacto($_SESSION['id_cliente']);
                     $employees = $holiday->getEmployeesHolidaysByCliente();
-                    $holidays = $holiday->getEmployeesHolidaysRequestedByCliente();
+                    $employees =  VacacionesController::Format_employees($employees);
 
-                    foreach ($employees as &$emplo) {
-                        $emplo['start_date'] = Utils::getDate($emplo['start_date']);
-                        $emplo['due_date'] = Utils::getDate($emplo['due_date']);
-                        $emplo['rest_vacation'] = $emplo['holidays_by_year'] - $emplo['taken_holidays'];
-                    }
+                    // foreach ($employees as &$emplo) {
+                    //     $emplo['start_date'] = Utils::getDate($emplo['start_date']);
+                    //     $emplo['due_date'] = Utils::getDate($emplo['due_date']);
+                    //     $emplo['rest_vacation'] = $emplo['holidays_by_year'] - $emplo['taken_holidays'];
+                    // }
 
                     $empleado = new Employees();
                     $empleado->setCliente($_SESSION['id_cliente']);
                     // AQUI verfiicar si es adminisrador
 
-                    $empleado = new Employees();
-                    $empleado->setCliente($_SESSION['id_cliente']);
-                    $holidays = $empleado->getEmployeesAllHolidaysRequested();
+                    $employee_holidays = $empleado->getEmployeesAllHolidaysRequested();
+                    $employee_holidays =  VacacionesController::Format_requests($employee_holidays);
 
-                    foreach ($holidays as &$holiday) {
-                        $holiday['start_date'] = Utils::getDate($holiday['start_date']);
-                        $holiday['end_date'] = Utils::getDate($holiday['end_date']);
-                        $holiday['rest_vacation'] = $holiday['holidays_by_year'] - $holiday['taken_holidays'];
-                        $holiday['id'] = Encryption::encode($holiday['id']);
-                        $holiday['created_at'] = Utils::getDate($holiday['created_at']);
-                    }
+
+
+                    // foreach ($holidays as &$holiday) {
+                    //     $holiday['start_date'] = Utils::getDate($holiday['start_date']);
+                    //     $holiday['end_date'] = Utils::getDate($holiday['end_date']);
+                    //     $holiday['rest_vacation'] = $holiday['holidays_by_year'] - $holiday['taken_holidays'];
+                    //     $holiday['id'] = Encryption::encode($holiday['id']);
+                    //     $holiday['created_at'] = Utils::getDate($holiday['created_at']);
+                    // }
+
+
 
 
                     $data = array(
                         'employees' => $employees,
-                        'holidays' => $holidays,
-                        'solicitudes' => $holidays,
+                        'solicitudes' => $employee_holidays,
                         'status' => 1
                     );
                     echo json_encode($data);
@@ -348,14 +432,15 @@ class VacacionesController
 
                 if ($save) {
                     $solicitudes = $holiday->getEmployeesHolidaysRequestedByID_User($_SESSION['identity']->id);
+                    $solicitudes =  VacacionesController::Format_requests($solicitudes);
 
 
-                    for ($i = 0; $i < count($solicitudes); $i++) {
-                        $solicitudes[$i]['start_date'] = Utils::getFullDate12($solicitudes[$i]['start_date']);
-                        $solicitudes[$i]['created_at'] = Utils::getDate($solicitudes[$i]['created_at']);
-                        $solicitudes[$i]['end_date'] = Utils::getDate($solicitudes[$i]['end_date']);
-                        $solicitudes[$i]['days'] = $solicitudes[$i]['days'] == 1 ? $solicitudes[$i]['days'] . ' Dia' : $solicitudes[$i]['days'] . ' Dias';
-                    }
+                    // for ($i = 0; $i < count($solicitudes); $i++) {
+                    //     $solicitudes[$i]['start_date'] = Utils::getFullDate12($solicitudes[$i]['start_date']);
+                    //     $solicitudes[$i]['created_at'] = Utils::getDate($solicitudes[$i]['created_at']);
+                    //     $solicitudes[$i]['end_date'] = Utils::getDate($solicitudes[$i]['end_date']);
+                    //     $solicitudes[$i]['days'] = $solicitudes[$i]['days'] == 1 ? $solicitudes[$i]['days'] . ' Dia' : $solicitudes[$i]['days'] . ' Dias';
+                    // }
 
                     $data = array(
                         'solicitudes' => $solicitudes,
@@ -425,6 +510,7 @@ class VacacionesController
 
     public function responder_solicitud_admin()
     {
+
 
         if (isset($_SESSION['identity']) && $_SESSION['identity'] != FALSE) {
             $id_solicitud = (isset($_POST['id_solicitud'])) ? Encryption::decode($_POST['id_solicitud'])  : FALSE;
@@ -550,8 +636,6 @@ class VacacionesController
                     $employee_holidays =  VacacionesController::Format_requests($employee_holidays);
 
 
-
-
                     $data = array(
                         'employees' => $employees,
                         'solicitudes' => $employee_holidays,
@@ -617,19 +701,43 @@ class VacacionesController
 
             $period = new DatePeriod($start, new DateInterval('P1D'), $end);
             //  $holidays = array();
+            $vp = new Holidays();
+            $vp->setId_template($solicitudes[$i]['id_template']);
+            $dates = $vp->getAllByIdTemplate();
+
+            $holidays = array();
+            foreach ($dates as &$date) {
+                if ($date['month'] < 10) {
+                    $date['month'] = '0' . $date['month'];
+                }
+
+                if ($date['day'] < 10) {
+                    $date['day'] = '0' . $date['day'];
+                }
+
+                array_push($holidays, Date('Y') . '-' . $date['month'] . '-' . $date['day']);
+            }
+
 
             foreach ($period as $dt) {
-
+                $descont = false;
                 $curr = $dt->format('D');
                 foreach ($work_days as $dia => $valor) {
                     if ($valor == 0 && $curr == $dia) {
                         $days--;
+                        $descont = true;
+                    }
+                }
+
+                if (in_array($dt->format('Y-m-d'), $holidays)) {
+                    if ($descont == false) {
+                        $days--;
                     }
                 }
             }
+
+
             $solicitudes[$i]['requested_days'] = $days;
-
-
             $solicitudes[$i]['id'] = Encryption::encode($solicitudes[$i]['id']);
             $solicitudes[$i]['created_at'] = Utils::getDate($solicitudes[$i]['created_at']);
             $solicitudes[$i]['start_date'] = Utils::getDate($solicitudes[$i]['start_date']);
@@ -675,9 +783,9 @@ class VacacionesController
             $vacation_policy->setYears($years);
             $vacation_days = $vacation_policy->getPoliciesById_Cliente();
 
-            if ($vacation_days) {
+            if (($vacation_days || $solicitudes)) {
 
-                $total_days =   $vacation_days->holidays;
+                $total_days =  $vacation_days ? $vacation_days->holidays : 0;
                 $taken_holidays = 0;
 
                 for ($i = 0; $i < count($solicitudes); $i++) {
@@ -689,20 +797,57 @@ class VacacionesController
                     $days = $interval->days;
 
                     $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+
+
+                    //gabo 31 oct
+                    $vp = new Holidays();
+                    $vp->setId_template($solicitudes[$i]['id_template']);
+                    $dates = $vp->getAllByIdTemplate();
+
                     $holidays = array();
+                    foreach ($dates as &$date) {
+                        if ($date['month'] < 10) {
+                            $date['month'] = '0' . $date['month'];
+                        }
+
+                        if ($date['day'] < 10) {
+                            $date['day'] = '0' . $date['day'];
+                        }
+
+                        array_push($holidays, Date('Y') . '-' . $date['month'] . '-' . $date['day']);
+                    }
+
 
                     foreach ($period as $dt) {
+                        $descont = false;
 
                         $curr = $dt->format('D');
                         foreach ($work_days as $dia => $valor) {
                             if ($valor == 0 && $curr == $dia) {
                                 $days--;
+                                $descont = true;
+                                //gabo 31 oct
+                            }
+                        }
+
+
+                        if (in_array($dt->format('Y-m-d'), $holidays)) {
+                            if ($descont == false) {
+                                $days--;
                             }
                         }
                     }
 
+                    //gabo 26 oct
+                    //si no tiene 2 años
+                    if (!$employe['years'] < 2) {
+                        $start_vacation =   date("d-m-Y", strtotime($employe['due_date'] . " - 1 year"));
+                    }
 
-                    if ($solicitudes[$i]['status'] == 'Aceptada') {
+
+
+                    if (($solicitudes[$i]['status'] == 'Aceptada' &&  (isset($start_vacation) && $solicitudes[$i]['created_at'] > $start_vacation &&  $solicitudes[$i]['created_at'] < $employe['due_date'])) || ($employe['years'] < 2 && $solicitudes[$i]['status'] == 'Aceptada')) {
+
                         $total_days = $total_days - $days;
                         $taken_holidays = $taken_holidays + $days;
                     }
@@ -715,7 +860,7 @@ class VacacionesController
             }
 
             $employe['start_date'] = Utils::getDate($employe['start_date']);
-            $employe['due_date'] = Utils::getDate($employe['due_date']);
+            $employe['due_date'] =  $employe['due_date'] != 'Sin días' ? Utils::getDate($employe['due_date']) :  $employe['due_date'];
         }
         return $employees;
     }

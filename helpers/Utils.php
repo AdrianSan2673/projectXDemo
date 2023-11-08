@@ -1738,4 +1738,18 @@ class Utils
 
         return $activeModule;
     }
+
+
+    //gabo 24 oct
+    public static function getHolidaysByIdTemplate($id_template)
+    {
+
+        $id_template = Encryption::decode($id_template);
+        require_once 'models/RH/Holidays.php';
+        $holidays = new Holidays();
+        $holidays->setId_template($id_template);
+        $holidays = $holidays->getAllByIdTemplate();
+
+        return $holidays;
+    }
 }

@@ -952,7 +952,7 @@ class Employees
         return $fetch;
     }
 
-    //18 oct
+    //31 oct
     public function getEmployeesAllHolidaysRequested()
     {
         $Cliente = $this->getCliente();
@@ -968,6 +968,7 @@ class Employees
 			eh.status,
 			eh.comments,
             e.usuario_rh,
+            eh.id_template,
             dbo.count_days(eh.start_date, eh.end_date) + 1 AS days,
             ISNULL((SELECT top(1) holidays FROM root.holidays_by_years hby INNER JOIN  root.vacation_policy vp  ON hby.id_policy=vp.id    WHERE hby.years = (dbo.GetMonthsDifference(e.start_date, GETDATE())/12)  AND vp.Cliente=e.Cliente ), 0) AS holidays_by_year,
             ISNULL((SELECT top(1) SUM(dbo.count_days(eh.start_date, eh.end_date) + 1) FROM root.employee_holidays eh WHERE eh.status='Aceptada' and  e.id=eh.id_employee AND eh.start_date BETWEEN DATEADD(YEAR, (dbo.GetMonthsDifference(eh.start_date, GETDATE())/12), eh.start_date) AND DATEADD(YEAR, (dbo.GetMonthsDifference(eh.start_date, GETDATE())/12) + 1, eh.start_date) ), 0) AS taken_holidays

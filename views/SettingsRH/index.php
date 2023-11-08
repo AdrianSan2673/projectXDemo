@@ -25,15 +25,27 @@
                     <div class="card-header">
                         <ul class="nav nav-pills">
                             <li class="nav-item">
-                                <a class="nav-link active" href="#tabla-area" data-toggle="tab">Tipos de Asistencia</a>
+                                <a class="nav-link active  ml-2" href="#tabla-holidays" data-toggle="tab">Dias
+                                    Festivos</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link " href="#tabla-asystence" data-toggle="tab">Tipos de
+                                    Asistencia</a>
+                            </li>
+
                         </ul>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="tab-content">
-                            <?php require_once 'views/SettingsRH/AsistenceTypes/tablaAsistenceTypes.php';  ?>
+                            <div class="tab-pane  " id="tabla-asystence">
+                                <?php require_once 'views/SettingsRH/AsistenceTypes/tablaAsistenceTypes.php';  ?>
+                            </div>
 
+                            <div class="tab-pane active" id="tabla-holidays">
+                                <?php require_once 'views/SettingsRH/Holidays/tablaHolidays.php';
+                                ?>
+                            </div>
                         </div>
                     </div>
                     <!-- /.card-body -->
