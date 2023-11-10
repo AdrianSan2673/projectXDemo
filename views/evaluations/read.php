@@ -332,6 +332,10 @@
             e.preventDefault();
             document.querySelector("#modal_category form").reset()
             document.querySelectorAll('#modal_category input')[0].value = 1
+
+            //gabo 8 nov
+            document.querySelector("#div-porcentaje").hidden = true;
+
             $('#modal_category').modal({
                 backdrop: 'static',
                 keyboard: false
@@ -378,6 +382,9 @@
                     evaluationCategory.getEvaluationCategory(e.target.offsetParent.value)
                 else
                     evaluationCategory.getEvaluationCategory(e.target.value)
+
+                //gabo 8 nov
+                document.querySelector("#div-porcentaje").hidden = false;
 
                 $('#modal_category').modal({
                     backdrop: 'static',

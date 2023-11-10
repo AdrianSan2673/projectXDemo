@@ -10,6 +10,7 @@ class EvaluationCategory
     private $created_at;
     private $modified_at;
     private $db;
+    private $value;
 
     public function __construct()
     {
@@ -76,14 +77,14 @@ class EvaluationCategory
         $this->created_at = $created_at;
     }
 
-    public function getModified_at()
+    public function getValue()
     {
-        return $this->modified_at;
+        return $this->value;
     }
 
-    public function setModified_at($modified_at)
+    public function setValue($value)
     {
-        $this->modified_at = $modified_at;
+        $this->value = $value;
     }
 
     public function getOne()
@@ -95,7 +96,7 @@ class EvaluationCategory
         $fetch =  $stmt->fetchObject();
         return $fetch;
     }
-//   === [gabo 24 de mayo table]===
+    //   === [gabo 24 de mayo table]===
     public function getAllByIdEvaluation()
     {
         $id_evaluation = $this->getId_evaluation();
@@ -124,8 +125,8 @@ class EvaluationCategory
         WHERE e.id=:id_evaluation AND  ec.id_evaluation=e.id AND cc.id_category=ec.id AND q.id_criterion=cc.id AND ec.status=:status AND q.status=1 order by id_category
         ");
 
-         $stmt->bindParam(":id_evaluation", $id_evaluation, PDO::PARAM_INT);
-        $stmt->bindParam(":status", $status, PDO::PARAM_INT); 
+        $stmt->bindParam(":id_evaluation", $id_evaluation, PDO::PARAM_INT);
+        $stmt->bindParam(":status", $status, PDO::PARAM_INT);
         $stmt->execute();
         $fetch =  $stmt->fetchAll();
         return $fetch;
@@ -169,13 +170,16 @@ class EvaluationCategory
         $id_evaluation = $this->getId_evaluation();
         $status = $this->getStatus();
         $description = $this->getDescription();
+
+        $value = $this->getValue();
+
         $stmt = $this->db->prepare("UPDATE root.evaluation_category
 									SET 
 									category=:category,
 									id_evaluation=:id_evaluation,
 									status=:status,
 									description=:description,
-									modified_at=GETDATE()
+									modified_at=GETDATE(),value=:value
 									WHERE id=:id");
 
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
@@ -183,7 +187,7 @@ class EvaluationCategory
         $stmt->bindParam(":id_evaluation", $id_evaluation, PDO::PARAM_STR);
         $stmt->bindParam(":status", $status, PDO::PARAM_STR);
         $stmt->bindParam(":description", $description, PDO::PARAM_STR);
-
+        $stmt->bindParam(":value", $value, PDO::PARAM_STR);
         $flag = $stmt->execute();
 
         if ($flag) {
@@ -224,6 +228,20 @@ class EvaluationCategory
         $stmt = $this->db->prepare("DELETE root.evaluation_category WHERE id=:id");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $fetch = $stmt->execute();
+        return $fetch;
+    }
+
+
+    public function getSumValueByIdEvaluation()
+    {
+        $id_evaluation = $this->getId_evaluation();
+
+        $stmt = $this->db->prepare("SELECT SUM(value) as suma FROM root.evaluation_category ec
+        WHERE  ec.id_evaluation=:id_evaluation AND status=1 ");
+
+        $stmt->bindParam(":id_evaluation", $id_evaluation, PDO::PARAM_INT);
+        $stmt->execute();
+        $fetch =  $stmt->fetchObject();
         return $fetch;
     }
 }

@@ -99,7 +99,7 @@ class PostulacionesController
             header('location:' . base_url);
         }
     }
-	
+
 
     public function postulate_multiple()
     {
@@ -127,8 +127,8 @@ class PostulacionesController
                         $cdto->setId(Encryption::decode($p));
                         $candidate = $cdto->getOne();
                         $postulado .= "  * " . $candidate->first_name . " " . $candidate->surname . " " . $candidate->last_name . "<br>";
-						//gabo 26 sept
-						$candidato = new VacancyApplicant();
+                        //gabo 26 sept
+                        $candidato = new VacancyApplicant();
                         $candidato->setId_candidate(Encryption::decode($p));
                         $result = $candidato->getOneByCandidate();
 
@@ -145,8 +145,8 @@ class PostulacionesController
                                 $candidato->setId_profile($profile->getId());
                                 $candidato->update_id_profile();
                             }
-                        }//gabo 26 sept
-						
+                        } //gabo 26 sept
+
                     }
                 }
 
@@ -363,11 +363,11 @@ class PostulacionesController
                 $candidates = $candidate->getCandidatesByApplicationStatus($vacancy, 2);
                 $total = $candidate->getTotal();
 
-           
+
                 $c = new Candidate();
                 for ($i = 0; $i < count($candidates); $i++) {
-					
-					
+
+
                     $candidates[$i]['area'] = "";
                     $candidates[$i]['subarea'] = "";
                     $candidates[$i]['language'] = "";
@@ -438,7 +438,7 @@ class PostulacionesController
 
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
-               require_once 'views/candidate/enviados_a_reclutador.php';
+                require_once 'views/candidate/enviados_a_reclutador.php';
                 require_once 'views/layout/footer.php';
             } else {
                 header('location:' . base_url . 'vacante/index');
@@ -624,16 +624,16 @@ class PostulacionesController
                 require_once 'views/layout/header.php';
                 require_once 'views/layout/sidebar.php';
                 require_once 'views/applicant/selected.php';
-                  // ===[gabo 2 junio modal-experiencia]=== 
-                  require_once 'views/applicant/modal-experiencia.php';
-                  // ===[gabo 2 junio modal-experiencia fin]===
+                // ===[gabo 2 junio modal-experiencia]=== 
+                require_once 'views/applicant/modal-experiencia.php';
+                // ===[gabo 2 junio modal-experiencia fin]===
                 require_once 'views/applicant/modal-eliminar-postulante.php';
                 require_once 'views/applicant/modal-reactivar-postulante.php';
                 require_once 'views/applicant/modal-descartar-postulante.php';
                 require_once 'views/applicant/modal-mover-postulante.php';
                 require_once 'views/applicant/modal-perfil-postulante.php';
-              
-               
+
+
                 require_once 'views/layout/footer.php';
             } else {
                 header('location:' . base_url . 'vacante/index');
@@ -797,9 +797,9 @@ class PostulacionesController
 
                 if (!$existe) {
                     $save = $vacante->move_postulant();
-					
-					//gabo 26 sept
-					  if ($save) {
+
+                    //gabo 26 sept
+                    if ($save) {
                         $candidato = new VacancyApplicant();
                         $candidato->setId_candidate($id_candidate);
                         $result = $candidato->getOneByCandidate();
@@ -819,7 +819,7 @@ class PostulacionesController
                             }
                         }
                     }
-                   //gabo 26 sept
+                    //gabo 26 sept
                     if ($save) {
                         echo json_encode(array('status' => 1));
                     } else {
@@ -949,7 +949,7 @@ class PostulacionesController
     //===[Gabo 2 mayo modal vacantes]===
     public function agregar_a_vacante()
     {
-        if (Utils::isValid($_SESSION['identity']) && Utils::isAdmin()) {
+        if (Utils::isValid($_SESSION['identity']) && (Utils::isAdmin() || Utils::isSenior() || Utils::isRecruitmentManager())) {
             $id_vacancies = isset($_POST['id_vacancies']) ? $_POST['id_vacancies'] : FALSE;
             $id_candidate = isset($_POST['id_candidate']) ? trim(Encryption::decode($_POST['id_candidate'])) : FALSE;
             $save = false;
@@ -962,28 +962,28 @@ class PostulacionesController
                     $existe = $vacante->getOne();
                     if (!$existe) {
                         $save = $vacante->move_postulant();
-						//gabo 26 sept
-					  if ($save) {
-                        $candidato = new VacancyApplicant();
-                        $candidato->setId_candidate($id_candidate);
-                        $result = $candidato->getOneByCandidate();
+                        //gabo 26 sept
+                        if ($save) {
+                            $candidato = new VacancyApplicant();
+                            $candidato->setId_candidate($id_candidate);
+                            $result = $candidato->getOneByCandidate();
 
 
-                        if ($result) {
-                            $id_perfil_anterior = $result->id_profile;
-                            $profile = new ApplicantProfile();
-                            $profile->setId($id_perfil_anterior);
-                            $insertado = $profile->duplicateProfile();
+                            if ($result) {
+                                $id_perfil_anterior = $result->id_profile;
+                                $profile = new ApplicantProfile();
+                                $profile->setId($id_perfil_anterior);
+                                $insertado = $profile->duplicateProfile();
 
-                            if ($insertado) {
-                                $candidato->setId_vacancy($id_vacancy);
-                                $candidato->setId_candidate($id_candidate);
-                                $candidato->setId_profile($profile->getId());
-                                $candidato->update_id_profile();
+                                if ($insertado) {
+                                    $candidato->setId_vacancy($id_vacancies[$i]);
+                                    $candidato->setId_candidate($id_candidate);
+                                    $candidato->setId_profile($profile->getId());
+                                    $candidato->update_id_profile();
+                                }
                             }
                         }
-                    }
-                   //gabo 26 sept
+                        //gabo 26 sept
                     }
                 }
 
@@ -1001,10 +1001,10 @@ class PostulacionesController
     public function getVacanciesByCandidato()
     {
         if (Utils::isValid($_SESSION['identity'])) {
-           
+
             $id_candidato = isset($_POST['id_candidato']) ? trim(Encryption::decode($_POST['id_candidato'])) : FALSE;
 
-            if ($id_candidato ) {
+            if ($id_candidato) {
 
                 $vacantes = new Vacancy();
                 //===[gabo 9 agosto postular]=== correcion
@@ -1023,24 +1023,23 @@ class PostulacionesController
                     if (!$existe) {
                         $vacantesFiltradas[$i]['id'] = $vacantes[$i]['id'];
                         $vacantesFiltradas[$i]['vacancy'] = $vacantes[$i]['vacancy'];
-						$vacantesFiltradas[$i]['status'] = $vacantes[$i]['status'];
+                        $vacantesFiltradas[$i]['status'] = $vacantes[$i]['status'];
                         $vacantesFiltradas[$i]['customer'] = $vacantes[$i]['customer'];
                     }
                 }
 
-                    echo json_encode(array(
-                        'vacantes' => $vacantesFiltradas,
-                        'status' => 1
-                    ));
-              
+                echo json_encode(array(
+                    'vacantes' => $vacantesFiltradas,
+                    'status' => 1
+                ));
             } else
                 echo json_encode(array('status' => 0));
         } else
             echo json_encode(array('status' => 0));
     }
 
-//sideserver
-	
+    //sideserver
+
     function postulate_one()
     {
 
@@ -1064,7 +1063,7 @@ class PostulacionesController
             $postulado = $cdto->getOne();
 
             $save =  $applicant->move_postulant();
-		
+
 
             $subject = 'Nueva postulación para ' . $vacante->vacancy;
 
@@ -1074,14 +1073,14 @@ class PostulacionesController
                 $user->setId($recruiter);
                 $executive = $user->getOne();
 
-                  Utils::sendEmail($executive->email, $executive->first_name . ' ' . $executive->last_name, $subject, $body);
+                Utils::sendEmail($executive->email, $executive->first_name . ' ' . $executive->last_name, $subject, $body);
 
                 $exe = new ExecutiveJRRecruiter();
                 $exe->setId_recruiter($executive->id);
                 $executiveJR = $exe->getExecutiveJRByRecruiter();
 
                 if ($executiveJR) {
-                       Utils::sendEmail($executiveJR->email, $executiveJR->first_name . ' ' . $executiveJR->last_name, $subject, $body);
+                    Utils::sendEmail($executiveJR->email, $executiveJR->first_name . ' ' . $executiveJR->last_name, $subject, $body);
                 }
             }
 
@@ -1092,10 +1091,10 @@ class PostulacionesController
             echo json_encode(array('status' => 0));
         }
     }
-	
-	  public function sideserver()
+
+    public function sideserver()
     {
-		//gabo 4 oct
+        //gabo 4 oct
         $extrawhere = '';
         //gabo 4 oct
 
@@ -1107,8 +1106,8 @@ class PostulacionesController
         if ($_GET['clave'] != '') {
             $extrawhere = " ( first_name LIKE " . "'%" . $_GET['clave'] . "%' OR job_title LIKE " . "'%" . $_GET['clave'] . "%' OR description LIKE " . "'%" . $_GET['clave'] . "%' OR experiences LIKE " . "'%" . $_GET['clave'] . "%' OR aptitudes LIKE " . "'%" . $_GET['clave'] . "%')";
         }
-		  
-  //gabo 4 oct
+
+        //gabo 4 oct
         if ($extrawhere != '') {
             $extrawhere .= " AND created_at > '2022-06-01' ";
         } else {
@@ -1139,15 +1138,15 @@ class PostulacionesController
             array('db' => 'surname',  'dt' => 18),
             array('db' => 'last_name',  'dt' => 19),
             array('db' => 'id_language',  'dt' => 20),
-			array('db' => 'postulaciones',  'dt' => 24)
+            array('db' => 'postulaciones',  'dt' => 24)
         );
 
-         $sql_details = array(
-             'user' => 'reclutador',
-             'pass' => 'Sr65s$0z',
-             'db'   => 'reclutamiento',
-             'host' => '148.72.144.152'
-         );
+        $sql_details = array(
+            'user' => 'reclutador',
+            'pass' => 'Sr65s$0z',
+            'db'   => 'reclutamiento',
+            'host' => '148.72.144.152'
+        );
 
         $botones = 1;
 
@@ -1167,5 +1166,4 @@ class PostulacionesController
             SSP::simple($_POST, $sql_details,  $tabla, $primaryKey, $columns, $botones, $extrawhere, $extraFields)
         );
     }
-
 }

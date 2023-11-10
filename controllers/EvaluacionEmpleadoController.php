@@ -279,6 +279,9 @@ class EvaluacionEmpleadoController
 
             foreach ($evaluationCategory as $evaluacionCat) {
 
+
+
+
                 $resultados_x_criterio = [];
                 $getCriterionsCategory = Utils::getAllCriterionsByIdCategory($evaluacionCat['id']);
 
@@ -468,6 +471,10 @@ class EvaluacionEmpleadoController
                     $desglose = explode(":", $score);
 
                     $calificacion[$desglose[0]] = round($desglose[1], 0);
+
+                    if (isset($desglose[2])) {
+                        $calificacion['category_value' . $desglose[0]] = $desglose[2];
+                    }
                 }
             }
 
@@ -587,17 +594,18 @@ class EvaluacionEmpleadoController
             $resultados_x_categoria = [];
             $total_answer = 0;
 
-            $total_categorias = count($evaluationCategory);
-            $valor_categoria = round(100 / $total_categorias, 2);
+            // $total_categorias = count($evaluationCategory);
+            // $valor_categoria = round(100 / $total_categorias, 2);
 
 
             foreach ($evaluationCategory as $evaluacionCat) {
+
 
                 $resultados_x_criterio = [];
                 $getCriterionsCategory = Utils::getAllCriterionsByIdCategory($evaluacionCat['id']);
 
                 $total_criterios = count($getCriterionsCategory);
-                $valor_criterio = round($valor_categoria / $total_criterios, 3);
+                $valor_criterio = round($evaluacionCat['value'] / $total_criterios, 3);
                 $total_puntuaje_x_categoria = 0;
                 $puntuaje_criterio_para_mas_de_uno = 0;
                 foreach ($getCriterionsCategory as $criterionCategory) {
@@ -636,6 +644,7 @@ class EvaluacionEmpleadoController
                         $resultados_x_criterio[] = $evaluacionCat['id'];
                         $resultados_x_criterio[] = $valor_criterio;
                         $resultados_x_criterio[] = (($total_answer * 1) / $maximo_puntuaje) * ($valor_criterio);
+                        $resultados_x_criterio[] =  $evaluacionCat['value'];
                     }
                 }
                 if ($total_criterios > 1) {
@@ -644,18 +653,21 @@ class EvaluacionEmpleadoController
                     $resultados_x_criterio[] = $evaluacionCat['id'];
                     $resultados_x_criterio[] = 0;
                     $resultados_x_criterio[] = $puntuaje_criterio_para_mas_de_uno;
+                    $resultados_x_criterio[] =  $evaluacionCat['value'];
                 }
 
                 $resultados_x_categoria[] = $resultados_x_criterio;
             }
+
+
             $scores = '';
             $bandera = true;
             foreach ($resultados_x_categoria as $categoria) {
                 if ($bandera) {
-                    $scores .= $categoria[2] . ":" . $categoria[4];
+                    $scores .= $categoria[2] . ":" . $categoria[4] . ":" . $categoria[5];
                     $bandera = false;
                 } else {
-                    $scores .= "/" . $categoria[2] . ":" . $categoria[4];
+                    $scores .= "/" . $categoria[2] . ":" . $categoria[4] . ":" . $categoria[5];
                 }
             }
 
@@ -942,7 +954,7 @@ class EvaluacionEmpleadoController
                 //===[gabo 15 junio excel evaluaciones pt3]===
 
                 for ($i = 0; $i < count($groups); $i++) {
-					$groups[$i]['start_date_noformat'] = date('Y-m-d', strtotime($groups[$i]['start_date']));
+                    $groups[$i]['start_date_noformat'] = date('Y-m-d', strtotime($groups[$i]['start_date']));
                     $groups[$i]['end_date_noformat']  = date('Y-m-d', strtotime($groups[$i]['end_date']));
                     $groups[$i]['start_date'] = Utils::getDate($groups[$i]['start_date']);
                     $groups[$i]['end_date']  = Utils::getDate($groups[$i]['end_date']);

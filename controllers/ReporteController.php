@@ -824,7 +824,7 @@ class ReporteController
             $hoja1->getStyle('A1:AB1')->applyFromArray($estiloTituloColumnas);
             ///////////////////////////////////////////////////////////
 
-          $hoja2 = $documento->createSheet();
+            $hoja2 = $documento->createSheet();
             $hoja2->setTitle('Ej. Cuenta');
 
             $hoja2->getColumnDimension('A')->setAutoSize(true);
@@ -880,11 +880,11 @@ class ReporteController
                 $hoja2->setCellValueByColumnAndRow(7, $fila, $ejecutivo['No_ESE_Proc']);
                 $hoja2->setCellValueByColumnAndRow(8, $fila, $ejecutivo['No_ESE_SOI_Proc']);
                 $hoja2->setCellValueByColumnAndRow(9, $fila, $ejecutivo['No_ESE_SMART_Proc']);
-                $hoja2->setCellValueByColumnAndRow(10,$fila, $ejecutivo['No_INV_Total']);
-                $hoja2->setCellValueByColumnAndRow(11,$fila, $ejecutivo['No_ESE_Total']);
-                $hoja2->setCellValueByColumnAndRow(12,$fila, $ejecutivo['No_ESE_SOI_Total']);
-                $hoja2->setCellValueByColumnAndRow(13,$fila, $ejecutivo['No_ESE_SMART_Total']);
-                $hoja2->setCellValueByColumnAndRow(14,$fila, $ejecutivo['No_Total']);
+                $hoja2->setCellValueByColumnAndRow(10, $fila, $ejecutivo['No_INV_Total']);
+                $hoja2->setCellValueByColumnAndRow(11, $fila, $ejecutivo['No_ESE_Total']);
+                $hoja2->setCellValueByColumnAndRow(12, $fila, $ejecutivo['No_ESE_SOI_Total']);
+                $hoja2->setCellValueByColumnAndRow(13, $fila, $ejecutivo['No_ESE_SMART_Total']);
+                $hoja2->setCellValueByColumnAndRow(14, $fila, $ejecutivo['No_Total']);
 
                 $fila++;
             }
@@ -923,7 +923,7 @@ class ReporteController
             $hoja3->getStyle('B1:B' . $fila)->applyFromArray($derecha);
             $hoja3->getStyle('A1:B1')->applyFromArray($estiloTituloColumnas);
 
-     		$hoja4 = $documento->createSheet();
+            $hoja4 = $documento->createSheet();
             $hoja4->setTitle('Clientes');
 
             $hoja4->getColumnDimension('A')->setAutoSize(true);
@@ -1821,7 +1821,7 @@ class ReporteController
             $hoja2->getStyle('A1:A1')->applyFromArray($estiloTituloReporte);
             $hoja2->getStyle('B1:B1')->applyFromArray($estiloTituloReporte);
             $hoja2->getStyle('A1:C1')->applyFromArray($estiloTituloColumnas);
-            
+
             $hoja2->getStyle('A1:C' . $fila)->applyFromArray($estiloContornoRemarcado);
 
 
@@ -3522,7 +3522,8 @@ class ReporteController
 
 
                 for ($i = 0; $i < $total_answers_employee; $i++) :
-                    $hoja->setCellValueByColumnAndRow(++$columna, $row, $valore[$i]['value_question_employee']);
+                    $hoja->setCellValueByColumnAndRow(++$columna, $row, $valore[$i]['
+                    ']);
                     $id = $valore[$i]['id_evaluation_employe'];
                 endfor;
 

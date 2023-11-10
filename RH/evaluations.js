@@ -245,27 +245,27 @@ class Evaluations {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = this.responseText;
                 console.log(r);
-                try {
-                    let json_app = JSON.parse(r);
-                    if (json_app.status == 0) {
-                        form.querySelectorAll('.btn')[0].disabled = false;
-                        utils.showToast('Omitiste algún dato', 'error');
-                    } else if (json_app.status == 1) {
-                        utils.showToast('Evaluación realizada con éxito', 'success');
-                        form.querySelectorAll('.btn')[0].disabled = true;
-                        setTimeout(() => {
-                            window.location.href = json_app.url;
-                        }, 3000);
+                // try {
+                let json_app = JSON.parse(r);
+                if (json_app.status == 0) {
+                    form.querySelectorAll('.btn')[0].disabled = false;
+                    utils.showToast('Omitiste algún dato', 'error');
+                } else if (json_app.status == 1) {
+                    utils.showToast('Evaluación realizada con éxito', 'success');
+                    form.querySelectorAll('.btn')[0].disabled = true;
+                    setTimeout(() => {
+                        window.location.href = json_app.url;
+                    }, 3000);
 
 
-                    } else {
-                        form.querySelectorAll('.btn')[0].disabled = false;
-                        utils.showToast('Omitiste algún dato', 'error');
-                    }
-                } catch (error) {
+                } else {
                     form.querySelectorAll('.btn')[0].disabled = false;
                     utils.showToast('Omitiste algún dato', 'error');
                 }
+                // } catch (error) {
+                //     form.querySelectorAll('.btn')[0].disabled = false;
+                //     utils.showToast('Omitiste algún dato', 'error');
+                // }
 
             }
         }

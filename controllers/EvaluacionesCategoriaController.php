@@ -19,6 +19,7 @@ class EvaluacionesCategoriaController
             $category = isset($_POST['category']) ? Utils::sanitizeStringBlank($_POST['category']) : null;
             $description = isset($_POST['description']) ? Utils::sanitizeStringBlank($_POST['description']) : '';
             $flag = $_POST['flag'];
+            $value = isset($_POST['value']) ? Utils::sanitizeStringBlank($_POST['value']) : null;
 
 
             if ($id_evaluation && $category) {
@@ -28,6 +29,7 @@ class EvaluacionesCategoriaController
                 $evaluationCategoryObj->setStatus(1);
                 $evaluationCategoryObj->setCategory($category);
                 $evaluationCategoryObj->setDescription($description);
+                $evaluationCategoryObj->setValue($value);
 
                 if ($flag == 1) {
 
@@ -41,7 +43,7 @@ class EvaluacionesCategoriaController
                     $categoryCriterionObj->save();
 
                     //$criterionScoreArray = array('Nunca', 'Algunas veces', 'Cumple expectativas', 'Sobresaliente');
-                      $criterionScoreArray = array('NUNCA', 'ALGUNAS VECES', 'CUMPLE EXPECTATIVAS', 'SOBRESALIENTE');
+                    $criterionScoreArray = array('NUNCA', 'ALGUNAS VECES', 'CUMPLE EXPECTATIVAS', 'SOBRESALIENTE');
 
                     for ($i = 0; $i < count($criterionScoreArray); $i++) {
                         $criterionScoreObj = new CriterionScore();
@@ -52,8 +54,22 @@ class EvaluacionesCategoriaController
                         $criterionScoreObj->setStatus(1);
                         $criterionScoreObj->save();
                     }
- 
                 } else {
+
+
+                    $evaluation = $evaluationCategoryObj->getOne();
+
+
+
+                    $suma_evaluaciones =  $evaluationCategoryObj->getSumValueByIdEvaluation();
+                    $restante = 100 - $suma_evaluaciones->suma + $evaluation->value;
+
+                    if ($value > $restante) {
+                        echo json_encode(array('status' => 3));
+                        die();
+                    }
+
+
                     $id_category = $id;
                     $fetch = $evaluationCategoryObj->update();
                 }
@@ -215,7 +231,7 @@ class EvaluacionesCategoriaController
         for ($u = 0; $u < count($evaluationAll); $u++) {
 
             $evaluationAll[$u]['getCriterionsCategory']  = Utils::getAllCriterionsByIdCategory($evaluationAll[$u]['id']);
-            $evaluationAll[$u]['id_category_encryption']=Encryption::encode($evaluationAll[$u]['id']);
+            $evaluationAll[$u]['id_category_encryption'] = Encryption::encode($evaluationAll[$u]['id']);
 
 
             for ($i = 0; $i < count($evaluationAll[$u]['getCriterionsCategory']); $i++) {

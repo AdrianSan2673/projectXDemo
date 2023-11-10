@@ -58,9 +58,9 @@ class EvaluationCategory {
 
                               <div id="div_category_cirterion_${element.id}">`
 
-                              element.getCriterionsCategory.forEach(elementCriterion => {
+                element.getCriterionsCategory.forEach(elementCriterion => {
 
-                                category+= `
+                  category += `
                                 <div class="row">
                                   <div class="col-md-12">
                                       <div class="card">
@@ -87,19 +87,19 @@ class EvaluationCategory {
                                                               <tr>
             
                                                                   <th>
-                                                                      ${elementCriterion.criterion==null?'Criterio':elementCriterion.criterion}
+                                                                      ${elementCriterion.criterion == null ? 'Criterio' : elementCriterion.criterion}
             
                                                                       <button class="btn btn-warning rounded-circle float-right btn_new_category_criterion" value="${elementCriterion.id_criterion_encryption}" name="${elementCriterion.id_category_encryption}"><i class="fas fa-edit"></i></button>
             
                                                                   </th>
             
-                                                                  ${elementCriterion.th==undefined?'':elementCriterion.th}
+                                                                  ${elementCriterion.th == undefined ? '' : elementCriterion.th}
                                                               </tr>
                                                           </thead>
             
             
                                                           <tbody id="tbody_category_${elementCriterion.id}">
-                                                              ${elementCriterion.tr==undefined?'':elementCriterion.tr}
+                                                              ${elementCriterion.tr == undefined ? '' : elementCriterion.tr}
                                                           </tbody>
             
                                                       </table>
@@ -120,11 +120,11 @@ class EvaluationCategory {
             
                                   </div>
             
-                              </div> ` 
-                              });
+                              </div> `
+                });
 
 
-                              category += `  </div>
+                category += `  </div>
 
                               <div class="row">
                                   <div class="col-12">
@@ -150,6 +150,9 @@ class EvaluationCategory {
               utils.showToast('Se realizo con exito', 'success');
               $('#modal_category').modal('hide');
 
+            } else if (json_app.status == 3) {
+              utils.showToast('La suma de todas las categorias debe ser igual a 100, intente darle un valor inferior a esta categoria o quitarle valor a las otras categorias.', 'error');
+              form.querySelectorAll('.btn')[1].disabled = false;
             } else {
               utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
               form.querySelectorAll('.btn')[1].disabled = false;
@@ -218,9 +221,9 @@ class EvaluationCategory {
 
                             <div id="div_category_cirterion_${element.id}">`
 
-                            element.getCriterionsCategory.forEach(elementCriterion => {
+              element.getCriterionsCategory.forEach(elementCriterion => {
 
-                              category+= `
+                category += `
                               <div class="row">
                                 <div class="col-md-12">
                                     <div class="card">
@@ -247,19 +250,19 @@ class EvaluationCategory {
                                                             <tr>
           
                                                                 <th>
-                                                                    ${elementCriterion.criterion==null?'Criterio':elementCriterion.criterion}
+                                                                    ${elementCriterion.criterion == null ? 'Criterio' : elementCriterion.criterion}
           
                                                                     <button class="btn btn-warning rounded-circle float-right btn_new_category_criterion" value="${elementCriterion.id_criterion_encryption}" name="${elementCriterion.id_category_encryption}"><i class="fas fa-edit"></i></button>
           
                                                                 </th>
           
-                                                                ${elementCriterion.th==undefined?'':elementCriterion.th}
+                                                                ${elementCriterion.th == undefined ? '' : elementCriterion.th}
                                                             </tr>
                                                         </thead>
           
           
                                                         <tbody id="tbody_category_${elementCriterion.id}">
-                                                            ${elementCriterion.tr==undefined?'':elementCriterion.tr}
+                                                            ${elementCriterion.tr == undefined ? '' : elementCriterion.tr}
                                                         </tbody>
           
                                                     </table>
@@ -280,11 +283,11 @@ class EvaluationCategory {
           
                                 </div>
           
-                            </div> ` 
-                            });
+                            </div> `
+              });
 
 
-                            category += `  </div>
+              category += `  </div>
 
                             <div class="row">
                                 <div class="col-12">
@@ -341,6 +344,9 @@ class EvaluationCategory {
             document.querySelector('#modal_category [name="id"]').value = json_app.evaluationCategory.id
             document.querySelector('#modal_category [name="category"]').value = json_app.evaluationCategory.category
             document.querySelector('#modal_category [name="description"]').value = json_app.evaluationCategory.description
+
+            document.querySelector('#modal_category [name="value"]').value = json_app.evaluationCategory.value
+
           } else if (json_app.status == 2) {
             form.querySelectorAll('.btn')[0].disabled = false;
             utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
