@@ -88,9 +88,11 @@ class VacacionesController
                 $plantilla = new TemplateHolidays();
                 $plantilla->setCliente($_SESSION['id_cliente']);
                 $template = $plantilla->getActivatedTemplate();
-                $id_template = $template->id;
-
-
+                //gabo 7 nov
+                $id_template = null;
+                if ($template) {
+                    $id_template = $template->id;
+                }
 
 
                 $work_days = new WorkDays();
@@ -783,6 +785,8 @@ class VacacionesController
             $vacation_policy->setYears($years);
             $vacation_days = $vacation_policy->getPoliciesById_Cliente();
 
+
+
             if (($vacation_days || $solicitudes)) {
 
                 $total_days =  $vacation_days ? $vacation_days->holidays : 0;
@@ -818,15 +822,18 @@ class VacacionesController
                     }
 
 
+
+                    $start_vacation =   date("Y-m-d", strtotime($solicitudes[$i]['due_date'] . " - 1 year"));
+
+                    $dias_del_periodo = 0;
                     foreach ($period as $dt) {
                         $descont = false;
-
+                        $periodo = false;
                         $curr = $dt->format('D');
                         foreach ($work_days as $dia => $valor) {
                             if ($valor == 0 && $curr == $dia) {
                                 $days--;
                                 $descont = true;
-                                //gabo 31 oct
                             }
                         }
 
@@ -834,29 +841,33 @@ class VacacionesController
                         if (in_array($dt->format('Y-m-d'), $holidays)) {
                             if ($descont == false) {
                                 $days--;
+                                $descont = true;
+                            }
+                        }
+
+                        if ($dt->format('Y-m-d') >= $start_vacation  && $dt->format('Y-m-d') <= $solicitudes[$i]['due_date']) {
+                            if ($descont == false) {
+                                $dias_del_periodo++;
+                                // $days--;
+                                // $descont = true;
                             }
                         }
                     }
 
                     //gabo 26 oct
-                    //si no tiene 2 años
-                    if (!$employe['years'] < 2) {
-                        $start_vacation =   date("d-m-Y", strtotime($employe['due_date'] . " - 1 year"));
-                    }
 
 
 
-                    if (($solicitudes[$i]['status'] == 'Aceptada' &&  (isset($start_vacation) && $solicitudes[$i]['created_at'] > $start_vacation &&  $solicitudes[$i]['created_at'] < $employe['due_date'])) || ($employe['years'] < 2 && $solicitudes[$i]['status'] == 'Aceptada')) {
-
-                        $total_days = $total_days - $days;
+                    if (($solicitudes[$i]['status'] == 'Aceptada')  || ($years < 2 && $solicitudes[$i]['status'] == 'Aceptada')) {
+                        $total_days = $total_days - $dias_del_periodo;
                         $taken_holidays = $taken_holidays + $days;
                     }
                 }
 
-                $employe['taken_holidays'] = $taken_holidays;
+                $employe['total_days'] = $total_days;
             } else {
 
-                $employe['taken_holidays'] = 0;
+                $employe['total_days'] = 0;
             }
 
             $employe['start_date'] = Utils::getDate($employe['start_date']);

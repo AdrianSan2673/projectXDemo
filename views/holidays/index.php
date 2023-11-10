@@ -62,7 +62,7 @@
                                     <td class="text-center align-middle"><?= $employee['years']  ?></td>
                                     <td class="text-center align-middle"><?= $employee['holidays_by_year']  ?></td>
                                     <td class="text-center align-middle">
-                                        <?= $employee['holidays_by_year'] - $employee['taken_holidays'] ?></td>
+                                        <?= $employee['total_days'] ?></td>
                                     <td class="text-center align-middle"><?= $employee['due_date'] ?>
                                     </td>
                                 </tr>

@@ -17,6 +17,9 @@ class RH_Module
     private $billed_days;
     //===[gabo 17 julio corte fin]===
     private $db;
+    //4 nov
+    private $settings;
+
 
 
 
@@ -155,6 +158,23 @@ class RH_Module
         $this->billed_days = $billed_days;
     }
     //===[gabo 17 julio corte fin]===
+
+    //4 nov
+    public function getSettings()
+    {
+        return $this->settings;
+    }
+
+    public function setSettings($settings)
+    {
+        $this->settings = $settings;
+    }
+
+
+
+
+
+
     public function getOne()
     {
         $id = $this->getId();
@@ -237,8 +257,10 @@ class RH_Module
         $status = $this->getStatus();
         $cost_package = $this->getCost_package();
         $start_date = $this->getStart_date();
+        $settings = $this->getSettings();
 
-        $stmt = $this->db->prepare("INSERT INTO rh_module (cost,id_cliente,status,	days,	id_package,	created_at,start_date,cost_package) VALUES (:cost,:id_cliente,:status,:days,:id_package, GETDATE(),:start_date,:cost_package)");
+
+        $stmt = $this->db->prepare("INSERT INTO rh_module (cost,id_cliente,status,	days,	id_package,	created_at,start_date,cost_package,settings) VALUES (:cost,:id_cliente,:status,:days,:id_package, GETDATE(),:start_date,:cost_package,:settings)");
 
         $stmt->bindParam(":cost", $cost, PDO::PARAM_INT);
         $stmt->bindParam(":cost_package", $cost_package, PDO::PARAM_INT);
@@ -247,6 +269,7 @@ class RH_Module
         $stmt->bindParam(":days", $days, PDO::PARAM_STR);
         $stmt->bindParam(":status", $status, PDO::PARAM_STR);
         $stmt->bindParam(":start_date", $start_date, PDO::PARAM_STR);
+        $stmt->bindParam(":settings", $settings, PDO::PARAM_STR);
 
 
         $fetch = $stmt->execute();

@@ -93,7 +93,7 @@ class TemplateHolidays
     public function getAllByClient()
     {
         $cliente = $this->getCliente();
-        $stmt = $this->db->prepare(" SELECT th.*,(select  COUNT( id )from rrhhinge_Candidatos.root.employee_holidays where id_template=th.id) as usado FROM template_holidays  th WHERE cliente=:cliente  and th.status<>2 order by id desc");
+        $stmt = $this->db->prepare(" SELECT th.*,(select  COUNT( id )from rrhhinge_Candidatos.root.employee_holidays where id_template=th.id) as usado FROM root.template_holidays  th WHERE cliente=:cliente  and th.status<>2 order by id desc");
         $stmt->bindParam(":cliente", $cliente, PDO::PARAM_INT);
         $stmt->execute();
         $fetch = $stmt->fetchAll();
@@ -108,7 +108,7 @@ class TemplateHolidays
         $status = $this->getStatus();
 
 
-        $stmt = $this->db->prepare("INSERT INTO template_holidays (name, cliente, empresa,status,created_at) VALUES (:name, :cliente, :empresa,:status,GETDATE() )");
+        $stmt = $this->db->prepare("INSERT INTO root.template_holidays (name, cliente, empresa,status,created_at) VALUES (:name, :cliente, :empresa,:status,GETDATE() )");
         $stmt->bindParam(":name", $name, PDO::PARAM_STR);
         $stmt->bindParam(":cliente", $cliente, PDO::PARAM_INT);
         $stmt->bindParam(":empresa", $empresa, PDO::PARAM_INT);
@@ -127,7 +127,7 @@ class TemplateHolidays
     {
         $id = $this->getId();
 
-        $stmt = $this->db->prepare("SELECT * FROM template_holidays WHERE id=:id");
+        $stmt = $this->db->prepare("SELECT * FROM root.template_holidays WHERE id=:id");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
         $fetch = $stmt->fetchObject();
@@ -164,7 +164,7 @@ class TemplateHolidays
     {
         $cliente = $this->getCliente();
 
-        $stmt = $this->db->prepare("SELECT h.* FROM holidays h LEFT JOIN  template_holidays th  on h.id_template=th.id where th.cliente=:cliente  and h.status=1 order by h.id desc");
+        $stmt = $this->db->prepare("SELECT h.* FROM root.holidays h LEFT JOIN  root.template_holidays th  on h.id_template=th.id where th.cliente=:cliente  and h.status=1 order by h.id desc");
         $stmt->bindParam(":cliente", $cliente, PDO::PARAM_INT);
         $stmt->execute();
         $fetch = $stmt->fetchAll();
@@ -174,7 +174,7 @@ class TemplateHolidays
     {
         $cliente = $this->getCliente();
 
-        $stmt = $this->db->prepare("SELECT * from template_holidays where cliente=:cliente  and  status=1 ");
+        $stmt = $this->db->prepare("SELECT * from root.template_holidays where cliente=:cliente  and  status=1 ");
         $stmt->bindParam(":cliente", $cliente, PDO::PARAM_INT);
         $stmt->execute();
         $fetch = $stmt->fetchObject();
@@ -188,7 +188,7 @@ class TemplateHolidays
         $status = $this->getStatus();
         $id = $this->getId();
 
-        $stmt = $this->db->prepare("UPDATE template_holidays set status=:status where id=:id ");
+        $stmt = $this->db->prepare("UPDATE root.template_holidays set status=:status where id=:id ");
         $stmt->bindParam(":status", $status, PDO::PARAM_INT);
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $flag = $stmt->execute();
@@ -203,7 +203,7 @@ class TemplateHolidays
     {
         $cliente = $this->getCliente();
 
-        $stmt = $this->db->prepare("SELECT * from holidays where id_template in (SELECT TOP (1) id from template_holidays  where cliente=:cliente and  status <> 2 order by  id desc) order by id asc");
+        $stmt = $this->db->prepare("SELECT * from root.holidays where id_template in (SELECT TOP (1) id from root.template_holidays  where cliente=:cliente and  status <> 2 order by  id desc) order by id asc");
         $stmt->bindParam(":cliente", $cliente, PDO::PARAM_INT);
         $stmt->execute();
         $fetch = $stmt->fetchAll();
@@ -216,7 +216,7 @@ class TemplateHolidays
     {
         $result = false;
         $id = $this->getId();
-        $stmt = $this->db->prepare("SELECT * from template_holidays where id=:id  and  status=1 ");
+        $stmt = $this->db->prepare("SELECT * from root.template_holidays where id=:id  and  status=1 ");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
         $flag = $stmt->fetchObject();

@@ -1752,4 +1752,18 @@ class Utils
 
         return $holidays;
     }
+
+    public static function getDefaultHolidays()
+    {
+        $holidays = array(
+            array(1, 1),
+            array(6, 2),
+            array(20, 3),
+            array(1, 5),
+            array(16, 9),
+            array(20, 11),
+            array(25, 12),
+        );
+        return $holidays;
+    }
 }

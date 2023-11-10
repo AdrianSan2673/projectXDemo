@@ -127,12 +127,39 @@ class RecursosHumanosController
                     //===[gabo 17 julio corte fin]===
 
                     $moduleObj->setStart_date(date("Y-m-d"));
-
                     // ===[gabo 27 junio perfil fin]==
+
+                    //gabo 4 nov
                     $moduleObj->save();
 
                     $customer->setActivo(1);
                     $customer->updateClienteActivoRH();
+
+
+
+                   $module_rh= $moduleObj->getOne();
+
+                     
+                    $template = new TemplateHolidays;
+                    $cliente = new Clientes();
+                    $cliente->setCliente($Cliente);
+                    $cliente = $cliente->getOne();
+                    $empresa = $cliente->Empresa;
+
+                    $template->setName('Dias Festivos' . GETDATE('Y'));
+                    $template->setCliente($Cliente);
+                    $template->setEmpresa($empresa);
+                    $template->setStatus(0);
+                    $save = $template->save();
+
+                    $holidays = Utils::getDefaultHolidays();
+
+                    foreach ($holidays as &$holiday) {
+                        var_dump($holiday);
+                        die();
+                    }
+
+
                 }
 
                 $clientes = $customer->getAllClientesRH();

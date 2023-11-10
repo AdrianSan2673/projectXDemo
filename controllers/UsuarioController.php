@@ -1739,7 +1739,7 @@ class UsuarioController
             $objectuser = $user->getOneByUsername();
             $contrasena = Utils::decrypt($objectuser->password);
             $email = $objectuser->email;
-            $name = $objectuser->first_name . " " . $objectuser->last_name;
+            $nombre = $objectuser->first_name . " " . $objectuser->last_name;
 
 
             $subject = 'Envio de Usuario de RRHH Ingenia';

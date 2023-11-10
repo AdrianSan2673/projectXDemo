@@ -17,7 +17,7 @@ class Holidays
 
     public function __construct()
     {
-        $this->db = Connection::connect();
+        $this->db = Connection::connectSA();
     }
     public function getId()
     {
@@ -114,7 +114,7 @@ class Holidays
     {
         $id = $this->getId();
 
-        $stmt = $this->db->prepare("SELECT * FROM holidays WHERE id=:id");
+        $stmt = $this->db->prepare("SELECT * FROM root.holidays WHERE id=:id");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
         $fetch = $stmt->fetchObject();
@@ -133,7 +133,7 @@ class Holidays
         $status = $this->getStatus();
 
 
-        $stmt = $this->db->prepare("INSERT INTO holidays (name, day,month, id_template,status,created_at) VALUES (:name, :day,:month, :id_template,:status,GETDATE())");
+        $stmt = $this->db->prepare("INSERT INTO root.holidays (name, day,month, id_template,status,created_at) VALUES (:name, :day,:month, :id_template,:status,GETDATE())");
         $stmt->bindParam(":name", $name, PDO::PARAM_STR);
         //$stmt->bindParam(":holiday", $holiday, PDO::PARAM_STR);
         $stmt->bindParam(":day", $day, PDO::PARAM_STR);
@@ -157,7 +157,7 @@ class Holidays
         $day = $this->getDay();
         $month = $this->getMonth();
 
-        $stmt = $this->db->prepare("UPDATE holidays  SET  name=:name, day=:day,month=:month,modified_at=GETDATE() WHERE id=:id");
+        $stmt = $this->db->prepare("UPDATE root.holidays  SET  name=:name, day=:day,month=:month,modified_at=GETDATE() WHERE id=:id");
         $stmt->bindParam(":name", $name, PDO::PARAM_INT);
         $stmt->bindParam(":id", $id, PDO::PARAM_STR);
         $stmt->bindParam(":day", $day, PDO::PARAM_INT);
@@ -176,7 +176,7 @@ class Holidays
     {
         $id_template = $this->getId_template();
 
-        $stmt = $this->db->prepare("SELECT * FROM holidays WHERE id_template=:id_template and status=1 order by id desc");
+        $stmt = $this->db->prepare("SELECT * FROM root.holidays WHERE id_template=:id_template and status=1 order by id desc");
         $stmt->bindParam(":id_template", $id_template, PDO::PARAM_INT);
         $stmt->execute();
         $fetch = $stmt->fetchAll();
@@ -189,7 +189,7 @@ class Holidays
     {
         $id = $this->getId();
         $status = $this->getStatus();
-        $stmt = $this->db->prepare("UPDATE holidays SET status=:status, modified_at=GETDATE() WHERE id=:id");
+        $stmt = $this->db->prepare("UPDATE root.holidays SET status=:status, modified_at=GETDATE() WHERE id=:id");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->bindParam(":status", $status, PDO::PARAM_INT);
         $flag = $stmt->execute();

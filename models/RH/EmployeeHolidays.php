@@ -325,7 +325,8 @@ class EmployeeHolidays
             eh.id_template,
             dbo.count_days(eh.start_date, eh.end_date) + 1 AS days,
             ISNULL((SELECT TOP(1) holidays FROM root.holidays_by_years WHERE years = (dbo.GetMonthsDifference(e.start_date, GETDATE())/12)), 0) AS holidays_by_year,
-            ISNULL((SELECT SUM(dbo.count_days(eh.start_date, eh.end_date) + 1) FROM root.employee_holidays eh WHERE eh.status='Aceptada' and e.id=eh.id_employee AND eh.start_date BETWEEN DATEADD(YEAR, (dbo.GetMonthsDifference(e.start_date, GETDATE())/12), e.start_date) AND DATEADD(YEAR, (dbo.GetMonthsDifference(e.start_date, GETDATE())/12) + 1, e.start_date) ), 0) AS taken_holidays
+            ISNULL((SELECT SUM(dbo.count_days(eh.start_date, eh.end_date) + 1) FROM root.employee_holidays eh WHERE eh.status='Aceptada' and e.id=eh.id_employee AND eh.start_date BETWEEN DATEADD(YEAR, (dbo.GetMonthsDifference(e.start_date, GETDATE())/12), e.start_date) AND DATEADD(YEAR, (dbo.GetMonthsDifference(e.start_date, GETDATE())/12) + 1, e.start_date) ), 0) AS taken_holidays,
+            CASE WHEN (dbo.GetMonthsDifference(e.start_date, GETDATE())/12) = 0 THEN 'Sin días' ELSE CONVERT(varchar, DATEADD(YEAR, (dbo.GetMonthsDifference(e.start_date, GETDATE())/12) + 1, e.start_date))END AS due_date
         FROM  
             root.employees e INNER JOIN root.employee_holidays eh ON e.id=eh.id_employee
         WHERE e.usuario_rh=:id_usuario_rh AND e.status=1
