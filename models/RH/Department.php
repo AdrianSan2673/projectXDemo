@@ -1,5 +1,6 @@
 <?php
 
+
 class Department
 {
 	private $id;
@@ -9,9 +10,9 @@ class Department
 	private $created_at;
 	private $modified_at;
 	private $status;
-	//===[gabo 5 de junio departamento]===
+	
 	private $ID_Cliente;
-	//===[gabo 5 de junio departamento fin]===
+
 	private $db;
 
 	public function __construct()

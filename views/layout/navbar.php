@@ -2,10 +2,10 @@
 <!-- Site wrapper -->
   <div class="wrapper" id="inicio">
     <!-- Navbar -->
-    <nav class="main-header navbar navbar-expand-lg navbar-white navbar-light ml-0">
+    <nav class="main-header navbar navbar-expand-lg navbar-dark navbar-lightblue ml-0">
         <div class="container">
             <a href="<?=base_url?>/" class="navbar-brand col-lg-3 col-md-6 col-sm-6 col-6 col">
-              <img src="<?=base_url?>dist/img/RRHHIngenia-Website2020_LogoHeader.svg" alt="RRHH Ingenia" class="img-fluid logo">
+              <img src="<?=base_url?>dist/img/RRHHIngenia-Website2020_LogoFooter.svg" alt="RRHH Ingenia" class="img-fluid logo">
             </a>
           
             <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,7 @@
                         </li>
                     <?php else: ?>
                         <li class="nav-item">
-                            <a href="<?=base_url?>usuario/registrar" class="nav-link">Registrarse</a>
+                            <a href="<?=base_url?>candidato/registrar" class="nav-link">Registrarse</a>
                         </li>
                     <?php endif ?>
                     <?php if (isset($_SESSION['identity'])): ?>

@@ -10,7 +10,7 @@
           </div>
           <div class="col-lg-4 col-md-4 col-sm-4 col-12 text-center mb-3">
             <p>&copy; <?=date('Y')?> - RRHH Ingenia</p>
-            <p><a href="http://rrhh-ingenia.com/Aviso_de_Privacidad">Aviso de privacidad</a></p>
+            <p><a href="<?= base_url ?>aviso-de-privacidad/">Aviso de privacidad</a></p>
             <p>Todos los derechos reservados.</p>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-4 col-12 text-center mb-3">
@@ -35,6 +35,8 @@
 <script src="<?=base_url?>plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
 <script src="<?=base_url?>plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 <script src="<?=base_url?>plugins/bs-stepper/js/steppermin.js"></script>
+<script src="<?=base_url?>plugins/summernote/summernote-bs4.min.js"></script>
+<script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
 <script src="<?=base_url?>app/city.js?v=<?=rand()?>"></script>
 <script src="<?=base_url?>app/subarea.js?v=<?=rand()?>"></script>
 <script src="<?=base_url?>app/utils.js?v=<?=rand()?>"></script>
@@ -42,8 +44,21 @@
 <script src="<?=base_url?>app/image.js?v=<?=rand()?>"></script>
 <script src="<?=base_url?>app/account.js?v=<?=rand()?>"></script>
 <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.stepper = new Stepper(document.querySelector('.bs-stepper'))
+  })
   $(function(){
     $('.select2').select2();
+	$('.summernote').summernote({
+      fontNames: ['SinkinSans'],
+      height: 250,
+      toolbar: [
+        ['style', ['bold', 'italic', 'underline', 'clear']],
+        ['fontsize', ['fontsize']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['height', ['height']]      ]
+    })
     $('.select2bs4').select2({
       theme: 'bootstrap4'
     })
@@ -100,7 +115,7 @@ $(function () {
 <?php endif ?>
 <?php if ($_GET['controller'] == 'usuario' && $_GET['action'] == 'index'): ?>
 <script src="<?=base_url?>plugins/chart.js/Chart.min.js"></script>
-<?php if (!Utils::isSAManager() && !Utils::isOperationsSupervisor() && !Utils::isLogisticsSupervisor() && !Utils::isAccount() && !Utils::isCustomerSA()): ?>
+<?php if (!Utils::isSAManager() && !Utils::isOperationsSupervisor() && !Utils::isLogisticsSupervisor() && !Utils::isAccount() && !Utils::isCustomerSA() && !Utils::isCustomer()): ?>
   <script type="text/javascript">
     // Sales graph chart
     var salesGraphChartCanvas = $('#line-chart').get(0).getContext('2d');
@@ -108,10 +123,16 @@ $(function () {
 
     let labels = new Array();
     let data = new Array();
-    <?php foreach ($candidates_count as $count): ?>
-      labels.push('<?=$count['dia_semana'].' '.$count['dia']?>');
-      data.push(<?=$count['total']?>);
-    <?php endforeach ?>
+	  
+   		<?php
+          if (isset($candidates_count)) :
+            foreach ($candidates_count as $count) : ?>
+              labels.push('<?= $count['dia_semana'] . ' ' . $count['dia'] ?>');
+              data.push(<?= $count['total'] ?>);
+          <?php endforeach;
+          endif;
+          ?>
+	  
     var salesGraphChartData = {
       labels  : labels,
       datasets: [
@@ -358,6 +379,80 @@ $(function () {
         data: data,
         options: stackedBarChartOptions
       })*/
+    </script>
+  <?php endif ?>
+  
+  <?php if (Utils::isMarketing()) : ?>
+    <?php $talent_attraction_status = Statistics::getTalentAttractionsCountByStatus(); ?>
+    <?php $estatus = array_column($talent_attraction_status, 'estatus'); ?>
+    <?php $data = array_column($talent_attraction_status, 'count'); ?>
+    <?php $color = array_column($talent_attraction_status, 'color'); ?>
+
+    <?php $talent_attraction_applicants_status = Statistics::getTalentAttractionsApplicantsCountByStatus(); ?>
+    <?php $estatus_applicants = array_column($talent_attraction_applicants_status, 'status'); ?>
+    <?php $data_applicants = array_column($talent_attraction_applicants_status, 'count'); ?>
+    <?php $color_applicants = array_column($talent_attraction_applicants_status, 'color'); ?>
+    <script>
+      var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+      var pieData = {
+        labels: [
+          <?php foreach ($estatus as $e): ?>
+            "<?= $e ?>",
+          <?php endforeach ?>
+        ],
+        datasets: [
+          {
+            data: [
+              <?php foreach ($data as $d): ?>
+                <?= $d ?>,
+              <?php endforeach ?>
+            ],
+            backgroundColor: [
+              <?php foreach ($color as $c): ?>
+                "<?= $c ?>",
+              <?php endforeach ?>
+            ]
+          }
+        ]
+      }
+      var pieOptions = {
+        legend: {
+          display: true
+        }
+      }
+      var pieChart = new Chart(pieChartCanvas, {
+        type: 'doughnut',
+        data: pieData,
+        options: pieOptions
+      })
+
+      var pieChartApplicantsCanvas = $('#pieApplicantsChart').get(0).getContext('2d')
+      var pieApplicantsData = {
+        labels: [
+          <?php foreach ($estatus_applicants as $e): ?>
+            "<?= $e ?>",
+          <?php endforeach ?>
+        ],
+        datasets: [
+          {
+            data: [
+              <?php foreach ($data_applicants as $d): ?>
+                <?= $d ?>,
+              <?php endforeach ?>
+            ],
+            backgroundColor: [
+              <?php foreach ($color_applicants as $c): ?>
+                "<?= $c ?>",
+              <?php endforeach ?>
+            ]
+          }
+        ]
+      }
+      var pieChart = new Chart(pieChartApplicantsCanvas, {
+        type: 'doughnut',
+        data: pieApplicantsData,
+        options: pieOptions
+      })
     </script>
   <?php endif ?>
 <?php endif ?>

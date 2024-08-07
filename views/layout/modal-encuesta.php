@@ -111,6 +111,10 @@
                         <!-- <label class="col-form-label" style="font-size: 0.8rem;">¿Qué nos sugieres mejorar de nuestro servicio en general?</label> -->
                         <textarea class="form-control" name="Comentarios" rows="5"></textarea>
                     </div>
+					<div class="form-group text-center">
+                        <label class="col-form-label" style="font-size: 0.8rem;">¿Tiene alguna duda o sugerencia sobre nuestra plataforma?</label>
+                        <textarea class="form-control" name="Plataforma_Comentarios" rows="5"></textarea>
+                    </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>

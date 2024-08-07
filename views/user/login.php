@@ -1,5 +1,5 @@
 
-<p class="login-box-msg text-white"><b>Iniciar Sesión | Reclutamiento</b></p>
+<p class="login-box-msg text-white"><b>Iniciar Sesión </b></p>
 
 <form id="login-form" method="post">
     <div class="input-group mb-3">
@@ -19,18 +19,9 @@
     </div>
 </form>
 
-<p class="mt-3 mb-1 text-center">
+<!-- <p class="mt-3 mb-1 text-center">
     <a href="<?=base_url?>usuario/recuperar_cuenta" class="bg-danger btn btn-block">¿Has olvidado tu contraseña?</a>
-</p>
-<?php if (isset($_GET['vacante'])): ?>
-<p class="mt-4 text-center ">
-    <a href="<?=base_url?>usuario/registrar&vacante=<?=$_GET['vacante']?>" class="text-center bg-success  btn btn-block">Registrarse</a>
-</p>
-<?php else: ?>
-<p class="mt-3 text-center">
-    <a href="<?=base_url?>usuario/registrar" class="text-center bg-success  btn btn-block">Registrarse</a>
-</p>
-<?php endif ?>
+</p> -->
 
 <div class="modal fade" id="modal-login">
     <div class="modal-dialog">

@@ -1,6 +1,6 @@
-   <div class="tab-pane active table-responsive" id="tabla-area">
+   <div class="tab-pane active table-responsive" >
        <div class="card-body" style="display:flex;justify-content:center">
-           <div class="table-respsonsive" style="width: 70%;">
+           <div class="table-respsonsive" style="width: 100%;">
 
 
                <div>

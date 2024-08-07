@@ -1,5 +1,7 @@
 <?php
 
+
+
 class User {
 
     private $id;
@@ -254,26 +256,16 @@ class User {
 
     public function login() {
         $result = FALSE;
-        $email = $this->getEmail();
+        //$email = $this->getEmail();
         $password = $this->getPassword();
         $username = $this->getUsername();
 
-        $stmt = $this->db->prepare("SELECT u.*, t.user_type FROM users u INNER JOIN user_types t ON u.id_user_type=t.id WHERE email = :email OR username = :username", array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
-        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-        $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+        $stmt = $this->db->prepare("SELECT * FROM usuarios WHERE usuario = :usuario AND password = :password");
+        $stmt->bindParam(":usuario", $username, PDO::PARAM_STR);
+        $stmt->bindParam(":password", $password, PDO::PARAM_STR);
         $stmt->execute();
 
-        $fetch = $stmt->fetchObject();
-        $numRows = $stmt->rowCount();
-
-        if ($fetch && $numRows == 1 ) {
-            if($fetch->activation == 1){
-                //$verify = ();
-                if ($password === Utils::decrypt($fetch->password) ? true : false) {
-                    $result = $fetch;
-                }
-            }
-        }
+        $result = $stmt->fetchObject();
         return $result;
     }
 	

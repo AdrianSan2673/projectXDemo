@@ -22,18 +22,18 @@ class ModuleRH {
             })
             .then(r => {
                 console.log(r);
-                try {
-                    const json_app = JSON.parse(r);
-                    if (json_app.status === 0) {
-                        utils.showToast('Omitió algún dato', 'error');
-                        submitBtn.disabled = false;
-                    } else if (json_app.status === 1) {
-                        utils.showToast('Se activo con exito', 'success');
+                // try {
+                const json_app = JSON.parse(r);
+                if (json_app.status === 0) {
+                    utils.showToast('Omitió algún dato', 'error');
+                    submitBtn.disabled = false;
+                } else if (json_app.status === 1) {
+                    utils.showToast('Se activo con exito', 'success');
 
-                        let clientes = '';
-                        json_app.clientes.forEach(element => {
+                    let clientes = '';
+                    json_app.clientes.forEach(element => {
 
-                            clientes += `
+                        clientes += `
                           <tr>
                                   <td class="text-left align-middle" ${element.hidden}> ${element.Id_cliente} </td> 
                                   <td class="text-left align-middle" ${element.hidden}>${element.ID_Empresa}</td>
@@ -61,27 +61,27 @@ class ModuleRH {
                                   </td>
                           </tr>
                                     `
-                        });
+                    });
 
-                        document.querySelector('#tb_customers tbody').innerHTML = clientes;
-                        submitBtn.disabled = false;
-                        $('#modal_RH').modal('hide');
-                    } else if (json_app.status === 2) {
-                        utils.showToast('No se pudo guardar el dato', 'error');
-                        submitBtn.disabled = false;
-                    } else if (json_app.status === 3) {
-                        utils.showToast('No tienes permiso para registrar', 'error');
-                        submitBtn.disabled = false;
-                    }
-                } catch (error) {
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                    document.querySelector('#tb_customers tbody').innerHTML = clientes;
+                    submitBtn.disabled = false;
+                    $('#modal_RH').modal('hide');
+                } else if (json_app.status === 2) {
+                    utils.showToast('No se pudo guardar el dato', 'error');
+                    submitBtn.disabled = false;
+                } else if (json_app.status === 3) {
+                    utils.showToast('No tienes permiso para registrar', 'error');
                     submitBtn.disabled = false;
                 }
+                // } catch (error) {
+                //     utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                //     submitBtn.disabled = false;
+                // }
             })
-            .catch(error => {
-                utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
-                submitBtn.disabled = false;
-            });
+        // .catch(error => {
+        //     utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+        //     submitBtn.disabled = false;
+        // });
     }
 
 

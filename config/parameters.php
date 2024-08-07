@@ -2,7 +2,7 @@
 
 //define("base_url", "https://rrhh-ingenia.com.mx/");
 
-define("base_url", "http://{$_SERVER['SERVER_NAME']}/reclutamiento/");
+define("base_url", "http://{$_SERVER['SERVER_NAME']}/reclutamiento2/");
 define("controller_default", "SeccionController");
 define("action_default", "inicio");
 define("ral_api_key", '$2y$10$KT4fwR3QKXPo.4Ft5sZHBO8o9FpF0DqTioNmVTvUCUFxSLGbhlrj6');

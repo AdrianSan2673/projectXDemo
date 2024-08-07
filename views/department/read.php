@@ -15,7 +15,7 @@
                         <div class="alert alert-success">
                             <h4><b>Departamento</b>
                                 <span class="title-departament">
-                                    <?= $departamento->department ?>
+                                    <?= $proyecto->Nombre ?>
                                 </span>
                             </h4>
                         </div>

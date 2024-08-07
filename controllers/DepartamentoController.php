@@ -1,27 +1,21 @@
 <?php
 
-require_once 'models/SA/ContactosEmpresa.php';
 require_once 'models/User.php';
 require_once 'models/RH/Department.php';
-require_once 'models/RH/Employees.php';
-require_once 'models/RH/Positions.php';
-// gabo 1 de junio
-require_once 'models/SA/ContactosCliente.php';
+require_once 'models/ModelosSigma/proyecto.php';
 
 class DepartamentoController
 {
 
     public function index()
     {
-        if (Utils::isAdmin() || Utils::isCustomerSA()) {
-						
-            $contactoEmpresa = new ContactosEmpresa();
-            $contactoEmpresa->setUsuario($_SESSION['identity']->username);
-            $contactos = $contactoEmpresa->getClientesPorUsuarioContacto();
-
-            $dptos = new Department();
-            $dptos->setID_Cliente($_SESSION['id_cliente']);
-            $departamentos = $dptos->getDepartmentsByCliente();
+        //var_dump($_SESSION);
+        //if (Utils::isAdmin() || Utils::isCustomerSA()) {
+				
+  
+            $projec = new Proyecto();
+     
+            $proyectos = $projec->getAllProject();
 
             $page_title =  'Departamentos | RRHH Ingenia';
 
@@ -30,37 +24,31 @@ class DepartamentoController
             require_once 'views/department/index.php';
             require_once 'views/department/modal-create.php';
             require_once 'views/layout/footer.php';
-        } else
-            header('location:' . base_url);
+        //} 
+            //header('location:' . base_url);
     }
 
     public function ver()
     {
-        if (Utils::isAdmin() || Utils::isCustomerSA()) {
-            $id_department = Encryption::decode($_GET['id']);
+        //var_dump($_SESSION);
+        //if (Utils::isAdmin() || Utils::isCustomerSA()) {
+			$idProyecto = Encryption::decode($_GET['id']) ;
 
-            $contactoEmpresa = new ContactosEmpresa();
-            $contactoEmpresa->setUsuario($_SESSION['identity']->username);
-            $ID_Contacto = $contactoEmpresa->getContactoPorUsuario()->ID;
-            $Empresa = $contactoEmpresa->getContactoPorUsuario()->Empresa;
+  
+            $projec = new Proyecto();
+     
+            $projec->setId($idProyecto);
+            $proyecto = $projec->getOne();
+            
+            $page_title =  'Departamentos | RRHH Ingenia';
 
-            $department = new Department();
-            $department->setId($id_department);
-            $departamento = $department->getOne();
-
-            $positionObj = new Positions();
-            $positionObj->setId_department($id_department);
-            $employees = $positionObj->getPositionEmployeeByIdDepartment();
-            $positions = $positionObj->getPositionByIdeDeparment();
-
-            $page_title = $departamento->department . ' | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
             require_once 'views/department/read.php';
-            require_once 'views/department/modal-edit.php';
+            require_once 'views/department/modal-create.php';
             require_once 'views/layout/footer.php';
-        } else
-            header('location:' . base_url);
+        //} 
+            //header('location:' . base_url);
     }
 
     public function save()
@@ -123,6 +111,8 @@ class DepartamentoController
             echo json_encode(array('status' => 2));
     }
 
+
+  
     public function getDepartmentsByEmpresa()
     {
         if (Utils::isAdmin() || Utils::isCustomerSA()) {
@@ -170,45 +160,5 @@ class DepartamentoController
 
 
 
-    function delete()
-    {
-        if (Utils::isAdmin() || Utils::isCustomerSA()) {
-
-            $id = Encryption::decode($_POST['id']);
-
-            if ($id) {
-                $deparmentObj = new Department();
-                $deparmentObj->setId($id);
-                $countDepartment = $deparmentObj->countEmployeesAndPositionByIdDepartment();
-                // if ($countDepartment->no_employees == 0 && $countDepartment->no_positions == 0) {
-                $depFlag = $deparmentObj->delete();
-                if ($depFlag) {
-                    $contactoEmpresa = new ContactosEmpresa();
-                    $contactoEmpresa->setUsuario($_SESSION['identity']->username);
-                    $Empresa = $contactoEmpresa->getContactoPorUsuario()->Empresa;
-
-                    $deparmentObj = new Department();
-                    $deparmentObj->setEmpresa($Empresa);
-
-                    $deparments = $deparmentObj->getDepartmentsByEmpresa();
-                    for ($i = 0; $i < count($deparments); $i++) {
-                        $deparments[$i]['id'] = Encryption::encode($deparments[$i]['id']);
-                    }
-
-                    echo json_encode(
-                        array(
-                            'status' => 1,
-                            'departamentos' => $deparments,
-                            'base_url' => base_url
-                        )
-                    );
-                } else
-                    echo json_encode(array('status' => 0));
-                //} else
-                //  echo json_encode(array('status' => 2));
-            } else
-                echo json_encode(array('status' => 0));
-        } else
-            echo json_encode(array('status' => 0));
-    }
+    
 }

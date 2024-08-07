@@ -27,17 +27,67 @@
               <?php endif ?>
               <?php if (Utils::isCustomerSA()) : ?>
                 <div class="col-sm-4 ml-auto">
-                  <a class="btn btn-primary float-right" href="<?= base_url ?>ServicioApoyo/carga_masiva">Cargar candidatos</a>
+                  <a <?= $visualizador == true ? 'style=" cursor: not-allowed; pointer-events: none; filter: brightness(50%);"' :  ''; ?> class="btn btn-primary float-right" href="<?= base_url ?>ServicioApoyo/carga_masiva" hidden>Carga masiva</a>
                 </div>
 
                 <div class="col-sm-4 ml-auto">
-                  <a class="btn btn-orange float-right" href="<?= base_url ?>ServicioApoyo/crear">Nuevo candidato</a>
+                  <a <?= $visualizador == true ? 'style=" cursor: not-allowed; pointer-events: none; filter: brightness(50%);"' :  ''; ?> class="btn btn-orange float-right" href="<?= base_url ?>ServicioApoyo/crear">Nuevo candidato</a>
                 </div>
               <?php endif;  ?>
             </div>
           </section>
 
 
+          <?php if (Utils::isCustomer()) : ?>
+              <div class="row">
+                <div class="col-lg-4 col-12">
+                  <div class="small-box bg-navy">
+                    <div class="inner">
+                      <h4><?= isset($contacto->id_customer) ? Statistics::getVacancyCountByCustomer($contacto->id_customer) : '0' ?></h4>
+                      <p>Vacantes solicitadas</p>
+                    </div>
+                    <div class="icon">
+                      <i class="fas fa-briefcase"></i>
+                    </div>
+                    <a href="<?= base_url ?>vacante/index" class="small-box-footer">
+                      Ver
+                      <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-6">
+                  <div class="small-box bg-info">
+                    <div class="inner">
+                      <h4><?= isset($contacto->id_customer) ? Statistics::getVacancyInProcessCountByCustomer($contacto->id_customer) : '0' ?></h4>
+                      <p>Vacantes en proceso</p>
+                    </div>
+                    <div class="icon">
+                      <i class="ion ion-load-a"></i>
+                    </div>
+                    <a href="<?= base_url ?>vacante/en_proceso" class="small-box-footer">
+                      Ver
+                      <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-6">
+                  <div class="small-box bg-danger">
+                    <div class="inner">
+                      <h4><?= isset($contacto->id_customer) ? Statistics::getVacancyClosedCountByCustomer($contacto->id_customer) : '0' ?></h4>
+                      <p>Vacantes cerradas</p>
+                    </div>
+                    <div class="icon">
+                      <i class="ion ion-android-lock"></i>
+                    </div>
+                    <a href="<?= base_url ?>vacante/index" class="small-box-footer">
+                      Ver
+                      <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            <?php endif ?>
+            
           <?php $avisos = Utils::avisoClientes(); ?>
           <?php if (isset($avisos) && (Utils::isCustomerSA() || Utils::isCustomer())) : ?>
             <div class="card">
@@ -117,55 +167,6 @@
           <?php if (Utils::isCustomerSA()) : ?>
 
 
-            <?php if (Utils::isCustomer()) : ?>
-              <div class="row">
-                <div class="col-lg-4 col-12">
-                  <div class="small-box bg-navy">
-                    <div class="inner">
-                      <h4><?= isset($contacto->id_customer) ? Statistics::getVacancyCountByCustomer($contacto->id_customer) : '0' ?></h4>
-                      <p>Vacantes solicitadas</p>
-                    </div>
-                    <div class="icon">
-                      <i class="fas fa-briefcase"></i>
-                    </div>
-                    <a href="<?= base_url ?>vacante/index" class="small-box-footer">
-                      Ver
-                      <i class="fas fa-arrow-circle-right"></i>
-                    </a>
-                  </div>
-                </div>
-                <div class="col-lg-4 col-6">
-                  <div class="small-box bg-info">
-                    <div class="inner">
-                      <h4><?= isset($contacto->id_customer) ? Statistics::getVacancyInProcessCountByCustomer($contacto->id_customer) : '0' ?></h4>
-                      <p>Vacantes en proceso</p>
-                    </div>
-                    <div class="icon">
-                      <i class="ion ion-load-a"></i>
-                    </div>
-                    <a href="<?= base_url ?>vacante/en_proceso" class="small-box-footer">
-                      Ver
-                      <i class="fas fa-arrow-circle-right"></i>
-                    </a>
-                  </div>
-                </div>
-                <div class="col-lg-4 col-6">
-                  <div class="small-box bg-danger">
-                    <div class="inner">
-                      <h4><?= isset($contacto->id_customer) ? Statistics::getVacancyClosedCountByCustomer($contacto->id_customer) : '0' ?></h4>
-                      <p>Vacantes cerradas</p>
-                    </div>
-                    <div class="icon">
-                      <i class="ion ion-android-lock"></i>
-                    </div>
-                    <a href="<?= base_url ?>vacante/index" class="small-box-footer">
-                      Ver
-                      <i class="fas fa-arrow-circle-right"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            <?php endif ?>
 
             <?php if (isset($employeeContract) && $employeeContract != null) : ?>
               <section class="content">
@@ -218,14 +219,24 @@
                 </div>
               </section>
             <?php endif; ?>
-            <?php if (isset($employeeBirthday) || isset($employeeBirthdayNextMonth) && ($employeeBirthday != null || $employeeBirthdayNextMonth != null)) : ?>
+			
+			
+			
+			
+            <?php if ((isset($employeeBirthday) || isset($employeeBirthdayNextMonth)) && ($employeeBirthday != null || $employeeBirthdayNextMonth != null)) : ?>
               <section class="content">
                 <div class="card">
                   <div class="card-header">
                     <h3 class="card-title"><i class="fas fa-birthday-cake mr-2"></i>Cumpleaños de nuestros colaboradores</h3>
+                    <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <i class="fas fa-plus"></i>
+                    </button>
+
+                  </div>
                   </div>
 
-                  <div class="card-body">
+                  <div class="card-body" style="display: none;">
                     <div class="row">
                       <div class="card bg-primary col-md-6">
                         <div class="card-header">
@@ -336,10 +347,15 @@
               <div class="card">
                 <div class="card-header">
                   <h4 class="card-title">Evaluaciones pendientes</h4>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="display: none;">
                   <table class="table table-sm table-striped" id="table_evaluations">
-                    <thead>
+                    <thead> 
                       <tr>
                         <th>Evaluación</th>
                         <th>Empleado</th>
@@ -679,92 +695,296 @@
                 </div>
               <?php endif ?>
             </div>
+			
+			
+			
+			
+			<?php if ( (Utils::isAdmin() || Utils::isCustomerSA())  && isset($_SESSION['id_cliente']) ) : ?>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Vacaciones por vencer de Empleados</h4>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body" style="display: none;">
+                            <table id="table-vencimiento" class="table table-striped " style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th class=" align-middle text-center">Nombre</th>
+                                        <th class="align-middle text-center">Días restantes</th>
+                                        <th class="align-middle text-center">Vencen el </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($expired_employees as $employee) :
+
+                                            $fecha_actual = date("Y-m-d");
+                                            $vencimiento =  date("Y-m-d", strtotime($fecha_actual . "+ 3 month"));
+                                            // var_dump($employee['due_date']);
+                                            // die();
+                                            $due_date = $employee['due_date'] == 'Sin días' ? '' : Utils::ConvertirFecha($employee['due_date']);
+                                            if ($due_date != 'Sin días' && $due_date <=  $vencimiento   &&  $due_date >=  $fecha_actual) :
+                                        ?>
+                                    <tr>
+                                        <td class="align-middle text-center ">
+                                            <?= $employee['first_name'] . ' ' . $employee['surname'] . ' ' . $employee['last_name'] ?>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <?= $employee['total_days'] ?></td>
+                                        <td class="text-center align-middle"><?= $employee['due_date'] ?>
+                                        </td>
+                                    </tr>
+                                    <?php
+
+                                            endif;
+
+                                        endforeach; ?>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th class="align-middle text-center">Nombre</th>
+                                        <th class="align-middle text-center">Días restantes</th>
+                                        <th class="align-middle text-center">Vencen el</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <?php endif; ?>
+			
+			
+			
+			
+			
+			
+			
+			
             <?php if (Utils::isAdmin() || Utils::isSales() || Utils::isSalesManager()) : ?>
-              <div class="row">
-                <div class="col-12">
-                  <div class="card">
-                    <?php $contactos = Utils::showCumpleanosClientes(); ?>
-                    <div class="card-header border-0">
-                      <h3 class="card-title"><i class="fas fa-birthday-cake mr-2"></i>Cumpleaños de nuestros clientes SA</h3>
-                    </div>
-                    <div class="card-body table-responsive p-0 table-sm">
-                       <table id="tb_contacts" class="table table-sm">
-                        <thead>
-                          <tr>
-                            <th>Nombre</th>
-                            <th>Empresa</th>
-                            <th>Fecha de Nacimiento</th>
-                            <th>Cumple</th>
-                            <th>Puesto</th>
-                            <th>Correo</th>
-                            <th>Teléfono</th>
-                            <th>Extensión</th>
-                            <th>Celular</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <?php foreach ($contactos as $contacto) : ?>
-                            <tr class="<?= $contacto['Cumple'] == 'Hoy' ? 'table-warning text-bold' : '' ?>">
-                              <td><?= $contacto['Nombre_Contacto'] . ' ' . $contacto['Apellido_Contacto'] ?></td>
-                              <td><?= $contacto['Nombre_Empresa'] ?></td>
-                              <td><?= $contacto['Fecha_Cumpleaños'] ?></td>
-                              <td><?= $contacto['Cumple'] ?></td>
-                              <td><?= $contacto['Puesto'] ?></td>
-                              <td><?= $contacto['Correo'] ?></td>
-                              <td><?= $contacto['Telefono'] ?></td>
-                              <td><?= $contacto['Extension'] ?></td>
-                              <td><?= $contacto['Celular'] ?></td>
+               <div class="row">
+                                <div class="col-12">
+                                    <div class="card collapsed-card">
+                                        <?php $contactos = Utils::showCumpleanosClientes(); ?>
+                                        <div class="card-header border-0">
+                                            <h3 class="card-title"><i class="fas fa-birthday-cake mr-2"></i>Cumpleaños de
+                                                nuestros clientes SA</h3>
+                                            <div class="card-tools">
+                                                <button type="button" class="btn  btn-sm" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table id="tb_contacts_SA" class="table table-sm table-striped">
 
-                            </tr>
-                          <?php endforeach; ?>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
 
-              <div class="row">
-                <div class="col-12">
-                  <div class="card">
-                    <?php $contactosReclu = Utils::showCumpleanosClientesReclu(); ?>
-                    <div class="card-header border-0">
-                      <h3 class="card-title"><i class="fas fa-birthday-cake mr-2"></i>Cumpleaños de nuestros de Reclutamiento</h3>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th class="filterhead"></th>
+                                                            <th></th>
+
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Nombre</th>
+                                                            <th>Empresa</th>
+                                                            <th>Fecha de Nacimiento</th>
+                                                            <th>Mes</th>
+                                                            <th>Cumple</th>
+                                                            <th>Puesto</th>
+                                                            <th>Correo</th>
+                                                            <th>Teléfono</th>
+                                                            <th>Extensión</th>
+                                                            <th>Celular</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php
+
+                                                        $fechaActual = new DateTime();
+                                                        // Fecha de un mes antes
+                                                        $fechaInicio = clone $fechaActual;
+                                                        $fechaInicio->modify('-15 days');
+
+                                                        // Fecha de un mes después
+                                                        $fechaFin = clone $fechaActual;
+                                                        $fechaFin->modify('+45 days');
+
+                                                        $formato = 'd/m';
+                                                        $fechaInicioFormateada = $fechaInicio->format($formato);
+                                                        $fechaFinFormateada = $fechaFin->format($formato);
+
+                                                        $fechaInicioFormateada = explode('/', $fechaInicioFormateada);
+                                                        $fechaFinFormateada = explode('/', $fechaFinFormateada);
+
+                                                        $meses = array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+
+
+                                                        foreach ($contactos as &$contacto) :
+
+
+                                                            $fechas_cumpleaños = explode('/', $contacto['Fecha_Cumpleaños']);
+
+                                                            if ($fechas_cumpleaños[1] == $fechaInicioFormateada[1] ||  $fechas_cumpleaños[1] == $fechaFinFormateada[1]-1 ) :
+
+                                                        ?>
+
+
+                                                                <tr class="<?= $contacto['Cumple'] == 'Hoy' ? 'table-warning text-bold' : '' ?>">
+                                                                    <td><?= $contacto['Nombre_Contacto'] . ' ' . $contacto['Apellido_Contacto'] ?>
+                                                                    </td>
+                                                                    <td> <a href="<?= base_url . 'empresa_SA/ver&id=' . Encryption::encode($contacto['Empresa']) ?>" target="_blank"> <?= $contacto['Nombre_Empresa'] ?></a></td>
+                                                                    <td><?= $contacto['Fecha_Cumpleaños'] ?></td>
+                                                                    <td><?= $meses[$fechas_cumpleaños[1] - 1] ?></td>
+                                                                    <td><?= $contacto['Cumple'] ?></td>
+                                                                    <td><?= $contacto['Puesto'] ?></td>
+                                                                    <td><?= $contacto['Correo'] ?></td>
+                                                                    <td><?= $contacto['Telefono'] ?></td>
+                                                                    <td><?= $contacto['Extension'] ?></td>
+                                                                    <td><?= $contacto['Celular'] ?></td>
+
+                                                                </tr>
+
+
+
+                                                        <?php
+                                                            endif;
+                                                        endforeach; ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+             <div class="row">
+                        <div class="col-12">
+                            <div class="card collapsed-card">
+                                <?php $contactosReclu = Utils::showCumpleanosClientesReclu(); ?>
+                                <div class="card-header border-0">
+                                    <h3 class="card-title"><i class="fas fa-birthday-cake mr-2"></i>Cumpleaños de
+                                        nuestros de Reclutamiento</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn  btn-sm" data-card-widget="collapse"
+                                            data-toggle="tooltip" title="Collapse">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="tb_contacts_reclu" class="table table-sm table-striped">
+                                            <thead>
+
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th class="filterhead"></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th>Empresa</th>
+                                                    <th>Fecha de Nacimiento</th>
+                                                    <th>Mes</th>
+                                                    <th>Cumple</th>
+                                                    <th>Puesto</th>
+                                                    <th>Correo</th>
+                                                    <th>Teléfono</th>
+                                                    <th>Extensión</th>
+                                                    <th>Celular</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+
+                                                <?php
+
+                                                        $fechaActual = new DateTime();
+                                                        // Fecha de un mes antes
+                                                        $fechaInicio = clone $fechaActual;
+                                                        $fechaInicio->modify('-15 days');
+
+                                                        // Fecha de un mes después
+                                                        $fechaFin = clone $fechaActual;
+                                                        $fechaFin->modify('+45 days');
+
+                                                        $formato = 'd/m';
+                                                        $fechaInicioFormateada = $fechaInicio->format($formato);
+                                                        $fechaFinFormateada = $fechaFin->format($formato);
+
+                                                        $fechaInicioFormateada = explode('/', $fechaInicioFormateada);
+                                                        $fechaFinFormateada = explode('/', $fechaFinFormateada);
+
+                                                        $meses = array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+
+
+                                                        ?>
+
+                                                <?php foreach ($contactosReclu as $contactoReclu) :
+
+                                                            if ($contactoReclu['birthday'] != '') {
+                                                                $fechas_cumpleaños = explode('/', $contactoReclu['birthday']);
+                                                            }
+												
+												
+                                                            if ($contactoReclu['birthday'] != '' && ($fechas_cumpleaños[1] == $fechaInicioFormateada[1]  ||  $fechas_cumpleaños[1] == $fechaFinFormateada[1]-1)) :
+
+                                                        ?>
+                                                <tr
+                                                    class="<?= $contactoReclu['Cumple'] == 'Hoy' ? 'table-warning text-bold' : '' ?>">
+                                                    <td><?= $contactoReclu['first_name'] . ' ' . $contactoReclu['last_name'] ?>
+                                                    </td>
+                                                    <td><?= $contactoReclu['customer'] ?></td>
+                                                    <td><?= $contactoReclu['birthday'] ?></td>
+                                                    <td><?= $meses[$fechas_cumpleaños[1] - 1] ?></td>
+
+                                                    <td><?= $contactoReclu['Cumple'] ?></td>
+                                                    <td><?= $contactoReclu['position'] ?></td>
+                                                    <td><?= $contactoReclu['email'] ?></td>
+                                                    <td><?= $contactoReclu['telephone'] ?></td>
+                                                    <td><?= $contactoReclu['extension'] ?></td>
+                                                    <td><?= $contactoReclu['cellphone'] ?></td>
+                                                </tr>
+
+
+                                                <?php
+                                                            endif;
+                                                        endforeach; ?>
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body table-responsive p-0 table-sm">
-                      <table id="tb_contacts" class="table table-sm">
-                        <thead>
-                          <tr>
-                            <th>Nombre</th>
-                            <th>Empresa</th>
-                            <th>Fecha de Nacimiento</th>
-                            <th>Cumple</th>
-                            <th>Puesto</th>
-                            <th>Correo</th>
-                            <th>Teléfono</th>
-                            <th>Extensión</th>
-                            <th>Celular</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <?php foreach ($contactosReclu as $contactoReclu) : ?>
-                            <tr class="<?= $contactoReclu['Cumple'] == 'Hoy' ? 'table-warning text-bold' : '' ?>">
-                              <td><?= $contactoReclu['first_name'] . ' ' . $contactoReclu['last_name'] ?></td>
-                              <td><?= $contactoReclu['customer'] ?></td>
-                              <td><?= $contactoReclu['birthday'] ?></td>
-                              <td><?= $contactoReclu['Cumple'] ?></td>
-                              <td><?= $contactoReclu['position'] ?></td>
-                              <td><?= $contactoReclu['email'] ?></td>
-                              <td><?= $contactoReclu['telephone'] ?></td>
-                              <td><?= $contactoReclu['extension'] ?></td>
-                              <td><?= $contactoReclu['cellphone'] ?></td>
-                            </tr>
-                          <?php endforeach; ?>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
 
                 <div class="col-12">
                   <div class="card card-warning">
@@ -835,179 +1055,177 @@
                 </div>
               </div>
             <?php endif ?>
-            <?php if (Utils::isAdmin() || Utils::isManager()) : ?>
-              <div class="row">
-                <div class="col-12">
-                  <div class="card card-danger">
-                    <?php $facturas = Utils::showCuentasPorCobrarHoy() ?>
-                    <div class="card-header border-0">
-                      <h3 class="card-title">
-                        <?= count($facturas) ?> facturas de SA con promesa de pago para hoy
-                      </h3>
-                      <!-- card tools -->
-                      <div class="card-tools">
-                        <button type="button" class="btn btn-danger btn-sm" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                          <i class="fas fa-minus"></i>
-                        </button>
-                      </div>
-                      <!-- /.card-tools -->
-                    </div>
-                    <div class="card-body table-responsive p-0 table-sm">
-                      <table class="table table-hover text-nowrap">
-                        <thead>
-                          <tr>
-                            <th class="align-middle">Factura</th>
-                            <th class="align-middle">Fecha</th>
-                            <th class="align-middle">Días de crédito</th>
-                            <th class="align-middle">Días transcurridos</th>
-                            <th class="align-middle text-center">Cliente</th>
-                            <th class="align-middle">Razón social</th>
-                            <th class="align-middle text-right">Monto</th>
-                            <th class="align-middle text-right">Monto + IVA</th>
-                            <th class="align-middle text-center">Fecha de pago</th>
-                            <th class="align-middle text-center">Estado</th>
-                            <th class="align-middle text-center">Promesa de pago</th>
-                            <th class="align-middle">Fecha última gestión</th>
-                            <th>Última gestión</th>
-                            <th class="align-middle text-center">Acciones</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <?php foreach ($facturas as $bill) : ?>
-                            <tr>
-                              <?php switch ($bill['Estado']) {
-                                case 'Pendiente de pago':
-                                  $class_color = 'bg-orange';
-                                  break;
-                                case 'Pagada':
-                                  $class_color = 'bg-success';
-                                  break;
-                                default:
-                                  $class_color = '';
-                                  break;
-                              }
-                              ?>
-                              <td class="text-center align-middle"><b><?= $bill['Folio_Factura'] ?></b></td>
-                              <td class="text-center align-middle"><?= Utils::getShortDate($bill['Fecha_Emision']); ?></td>
-                              <td class="text-center align-middle"><?= $bill['Plazo_Credito'] ?></td>
-                              <td class="text-center align-middle"><?= $bill['Dias_Transcurridos'] ?></td>
-                              <td class="text-center align-middle"><?= $bill['Cliente'] ?></td>
-                              <td class="align-middle"><?= $bill['Razon_Social'] ?></td>
-                              <td class="text-right align-middle">$ <?= number_format($bill['Monto']) ?></td>
-                              <td class="text-right align-middle">$ <?= number_format($bill['Monto_IVA']) ?></td>
-                              <td class="text-center align-middle"><?= !is_null($bill['Fecha_de_Pago']) ? Utils::getShortDate($bill['Fecha_de_Pago']) : '' ?></td>
-                              <td class="text-center align-middle <?= $class_color ?>"><?= $bill['Estado'] ?></td>
-                              <td class="text-center align-middle"><?= !is_null($bill['Promesa_Pago']) ? Utils::getShortDate($bill['Promesa_Pago']) : '' ?></td>
-                              <td class="text-center align-middle"><?= !is_null($bill['Fecha_Ultima_Gestion']) ? Utils::getShortDate($bill['Fecha_Ultima_Gestion']) : '' ?></td>
-                              <td><?= $bill['Ultima_Gestion'] ?></td>
-                              <td class="text-center py-0 align-middle">
-                                <div class="btn-group btn-group-sm">
-                                  <a href="<?= base_url ?>administracion_SA/editar_factura&folio=<?= Encryption::encode($bill['Folio_Factura']) ?>" class="btn btn-info" style="font-size: 0.6rem">
-                                    <i class="fas fa-pencil-alt"></i>
-                                    Editar
-                                  </a>
-                                  <a href="<?= base_url ?>administracion_SA/gestion_factura&folio=<?= Encryption::encode($bill['Folio_Factura']) ?>" class="btn btn-secondary" style="font-size: 0.6rem">
-                                    <i class="fas fa-cog"></i>
-                                    Gestionar
-                                  </a>
-                                </div>
-                              </td>
-                            </tr>
-                          <?php endforeach; ?>
-
-                        </tbody>
-                      </table>
-                    </div>
-
-                  </div>
+     
+		       <?php if (Utils::isAdmin() || Utils::isManager()) : ?>
+            <div class="card card-danger">
+              <?php $facturas = Utils::showCuentasPorCobrarHoy() ?>
+              <div class="card-header border-0">
+                <h3 class="card-title">
+                  <?= count($facturas) ?> facturas de SA con promesa de pago para hoy
+                </h3>
+                <!-- card tools -->
+                <div class="card-tools">
+                  <button type="button" class="btn btn-danger btn-sm" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
                 </div>
-                <div class="col-12">
-                  <div class="card card-orange">
-                    <?php $ordenes = Utils::showOrdenesCompraHoy() ?>
-                    <div class="card-header border-0">
-                      <h3 class="card-title">
-                        <?= count($ordenes) ?> ordenes de compra de SA para gestionar hoy
-                      </h3>
-                      <!-- card tools -->
-                      <div class="card-tools">
-                        <button type="button" class="btn btn-orange btn-sm" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                          <i class="fas fa-minus"></i>
-                        </button>
-                      </div>
-                      <!-- /.card-tools -->
-                    </div>
-                    <div class="card-body table-responsive p-0 table-sm">
-                      <table class="table table-hover text-nowrap">
-                        <thead>
-                          <tr>
-                            <th class="align-middle">Folio</th>
-                            <th class="align-middle">Fecha</th>
-                            <th class="align-middle text-center">Cliente</th>
-                            <th class="align-middle">Razón social</th>
-                            <th class="align-middle text-center"># servicios</th>
-                            <th class="align-middle text-right">Total</th>
-                            <th class="align-middle text-center">Estado</th>
-                            <th class="align-middle text-center">Fecha última gestión</th>
-                            <th class="align-middle text-center">Última gestión</th>
-                            <th class="align-middle text-center">Fecha próxima gestión</th>
-                            <th class="align-middle text-center">Acciones</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <?php foreach ($ordenes as $order) : ?>
-                            <tr>
-                              <?php switch ($order['Estado_OC']) {
-                                case 'Pendiente':
-                                  $class_color = 'bg-orange';
-                                  break;
-                                case 'En Proceso':
-                                  $class_color = 'bg-navy';
-                                  break;
-                                case 'Liberada':
-                                  $class_color = 'bg-success';
-                                  break;
-                                default:
-                                  $class_color = '';
-                                  break;
-                              }
-                              ?>
-                              <td><b><?= $order['Factura'] ?></b></td>
-                              <td><?= Utils::getShortDate($order['Fecha_Emision']); ?></td>
-                              <td class="text-center"><?= $order['Cliente'] ?></td>
-                              <td><?= $order['Razon'] ?></td>
-                              <td class="text-center"><?= $order['No_Servicios'] ?></td>
-                              <td class="text-right">$ <?= number_format($order['Monto']) ?></td>
-                              <td class="text-center <?= $class_color ?>"><?= $order['Estado_OC'] ?></td>
-                              <td><?= !is_null($order['Fecha_Gestion']) ? Utils::getShortDate($order['Fecha_Gestion']) : '' ?></td>
-                              <td><?= $order['Comentarios'] ?></td>
-                              <td><?= !is_null($order['Fecha_Prox_Gestion']) ? Utils::getShortDate($order['Fecha_Prox_Gestion']) : '' ?></td>
-                              <td class="text-center py-0">
-                                <div class="btn-group btn-group-sm">
-                                  <a href="<?= base_url ?>administracion_SA/gestion_orden_de_compra&folio=<?= Encryption::encode($order['Factura']) ?>" class="btn btn-info" style="font-size: 0.6rem">
-                                    <i class="fas fa-cog"></i>
-                                    Gestionar
-                                  </a>
-                                  <a href="<?= base_url ?>administracion_SA/detalle_orden_de_compra&folio=<?= Encryption::encode($order['Factura']) ?>" class="btn btn-success" style="font-size: 0.6rem">
-                                    <i class="far fa-clipboard"></i>
-                                    Detalle
-                                  </a>
-                                  <a href="<?= base_url ?>administracion_SA/listado_orden_de_compra&folio=<?= Encryption::encode($order['Factura']) ?>" class="btn btn-orange" style="font-size: 0.6rem">
-                                    <i class="fas fa-list-alt"></i>
-                                    Listado
-                                  </a>
-                                </div>
-                              </td>
-                            </tr>
-                          <?php endforeach; ?>
-
-                        </tbody>
-                      </table>
-                    </div>
-
-                  </div>
-                </div>
+                <!-- /.card-tools -->
               </div>
-            <?php endif ?>
+              <div class="card-body table-responsive p-0 table-sm">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                    <tr>
+                      <th class="align-middle">Factura</th>
+                      <th class="align-middle">Fecha</th>
+                      <th class="align-middle">Días de crédito</th>
+                      <th class="align-middle">Días transcurridos</th>
+                      <th class="align-middle text-center">Cliente</th>
+                      <th class="align-middle">Razón social</th>
+                      <th class="align-middle text-right">Monto</th>
+                      <th class="align-middle text-right">Monto + IVA</th>
+                      <th class="align-middle text-center">Fecha de pago</th>
+                      <th class="align-middle text-center">Estado</th>
+                      <th class="align-middle text-center">Promesa de pago</th>
+                      <th class="align-middle">Fecha última gestión</th>
+                      <th>Última gestión</th>
+                      <th class="align-middle text-center">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php foreach ($facturas as $bill) : ?>
+                      <tr>
+                        <?php switch ($bill['Estado']) {
+                          case 'Pendiente de pago':
+                            $class_color = 'bg-orange';
+                            break;
+                          case 'Pagada':
+                            $class_color = 'bg-success';
+                            break;
+                          default:
+                            $class_color = '';
+                            break;
+                        }
+                        ?>
+                        <td class="text-center align-middle"><b><?= $bill['Folio_Factura'] ?></b></td>
+                        <td class="text-center align-middle"><?= Utils::getShortDate($bill['Fecha_Emision']); ?></td>
+                        <td class="text-center align-middle"><?= $bill['Plazo_Credito'] ?></td>
+                        <td class="text-center align-middle"><?= $bill['Dias_Transcurridos'] ?></td>
+                        <td class="text-center align-middle"><?= $bill['Cliente'] ?></td>
+                        <td class="align-middle"><?= $bill['Razon_Social'] ?></td>
+                        <td class="text-right align-middle">$ <?= number_format($bill['Monto']) ?></td>
+                        <td class="text-right align-middle">$ <?= number_format($bill['Monto_IVA']) ?></td>
+                        <td class="text-center align-middle"><?= !is_null($bill['Fecha_de_Pago']) ? Utils::getShortDate($bill['Fecha_de_Pago']) : '' ?></td>
+                        <td class="text-center align-middle <?= $class_color ?>"><?= $bill['Estado'] ?></td>
+                        <td class="text-center align-middle"><?= !is_null($bill['Promesa_Pago']) ? Utils::getShortDate($bill['Promesa_Pago']) : '' ?></td>
+                        <td class="text-center align-middle"><?= !is_null($bill['Fecha_Ultima_Gestion']) ? Utils::getShortDate($bill['Fecha_Ultima_Gestion']) : '' ?></td>
+                        <td><?= $bill['Ultima_Gestion'] ?></td>
+                        <td class="text-center py-0 align-middle">
+                          <div class="btn-group btn-group-sm">
+                            <a href="<?= base_url ?>administracion_SA/editar_factura&folio=<?= Encryption::encode($bill['Folio_Factura']) ?>" class="btn btn-info" style="font-size: 0.6rem">
+                              <i class="fas fa-pencil-alt"></i>
+                              Editar
+                            </a>
+                            <a href="<?= base_url ?>administracion_SA/gestion_factura&folio=<?= Encryption::encode($bill['Folio_Factura']) ?>" class="btn btn-secondary" style="font-size: 0.6rem">
+                              <i class="fas fa-cog"></i>
+                              Gestionar
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                    <?php endforeach; ?>
+
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+       
+            <div class="card card-orange">
+              <?php $ordenes = Utils::showOrdenesCompraHoy() ?>
+              <div class="card-header border-0">
+                <h3 class="card-title">
+                  <?= count($ordenes) ?> ordenes de compra de SA para gestionar hoy
+                </h3>
+                <!-- card tools -->
+                <div class="card-tools">
+                  <button type="button" class="btn btn-orange btn-sm" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+                <!-- /.card-tools -->
+              </div>
+              <div class="card-body table-responsive p-0 table-sm">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                    <tr>
+                      <th class="align-middle">Folio</th>
+                      <th class="align-middle">Fecha</th>
+                      <th class="align-middle text-center">Cliente</th>
+                      <th class="align-middle">Razón social</th>
+                      <th class="align-middle text-center"># servicios</th>
+                      <th class="align-middle text-right">Total</th>
+                      <th class="align-middle text-center">Estado</th>
+                      <th class="align-middle text-center">Fecha última gestión</th>
+                      <th class="align-middle text-center">Última gestión</th>
+                      <th class="align-middle text-center">Fecha próxima gestión</th>
+                      <th class="align-middle text-center">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php foreach ($ordenes as $order) : ?>
+                      <tr>
+                        <?php switch ($order['Estado_OC']) {
+                          case 'Pendiente':
+                            $class_color = 'bg-orange';
+                            break;
+                          case 'En Proceso':
+                            $class_color = 'bg-navy';
+                            break;
+                          case 'Liberada':
+                            $class_color = 'bg-success';
+                            break;
+                          default:
+                            $class_color = '';
+                            break;
+                        }
+                        ?>
+                        <td><b><?= $order['Factura'] ?></b></td>
+                        <td><?= Utils::getShortDate($order['Fecha_Emision']); ?></td>
+                        <td class="text-center"><?= $order['Cliente'] ?></td>
+                        <td><?= $order['Razon'] ?></td>
+                        <td class="text-center"><?= $order['No_Servicios'] ?></td>
+                        <td class="text-right">$ <?= number_format($order['Monto']) ?></td>
+                        <td class="text-center <?= $class_color ?>"><?= $order['Estado_OC'] ?></td>
+                        <td><?= !is_null($order['Fecha_Gestion']) ? Utils::getShortDate($order['Fecha_Gestion']) : '' ?></td>
+                        <td><?= $order['Comentarios'] ?></td>
+                        <td><?= !is_null($order['Fecha_Prox_Gestion']) ? Utils::getShortDate($order['Fecha_Prox_Gestion']) : '' ?></td>
+                        <td class="text-center py-0">
+                          <div class="btn-group btn-group-sm">
+                            <a href="<?= base_url ?>administracion_SA/gestion_orden_de_compra&folio=<?= Encryption::encode($order['Factura']) ?>" class="btn btn-info" style="font-size: 0.6rem">
+                              <i class="fas fa-cog"></i>
+                              Gestionar
+                            </a>
+                            <a href="<?= base_url ?>administracion_SA/detalle_orden_de_compra&folio=<?= Encryption::encode($order['Factura']) ?>" class="btn btn-success" style="font-size: 0.6rem">
+                              <i class="far fa-clipboard"></i>
+                              Detalle
+                            </a>
+                            <a href="<?= base_url ?>administracion_SA/listado_orden_de_compra&folio=<?= Encryption::encode($order['Factura']) ?>" class="btn btn-orange" style="font-size: 0.6rem">
+                              <i class="fas fa-list-alt"></i>
+                              Listado
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                    <?php endforeach; ?>
+
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+         
+      <?php endif ?>
+		  
             <?php if (Utils::isAdmin() && $_SESSION['identity']->id == 1) : ?>
               <div class="row">
                 <div class="col-12">
@@ -1088,6 +1306,8 @@
 
 
           <?php if (Utils::isAdmin() || Utils::isSAManager() || Utils::isOperationsSupervisor() || Utils::isLogisticsSupervisor() || Utils::isAccount() || Utils::isManager() || Utils::isSales() || Utils::isSalesManager()) : ?>
+		      <div class="col-12">  
+
             <div class="card card-info card-tabs">
               <div class="card-header p-0 pt-1">
                 <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
@@ -1112,7 +1332,7 @@
                       <div class="col-lg-3 col-6">
                         <div class="small-box bg-success">
                           <div class="inner">
-                            <h4><?= !Utils::isAccount() ? Statistics::getTotalInvHoy() + Statistics::getTotalESESHoy() + Statistics::getTotalRALESHoy() + Statistics::getTotalESESOIHoy() + Statistics::getTotalESESMARTHoy() : Statistics::getTotalServiciosApoyoHoyPorEjecutivo() ?>
+                            <h4><?= !Utils::isAccount() ? Statistics::getTotalRALESHoy() +  Statistics::getTotalISELAHoy() +Statistics::getTotalInvHoy() +Statistics::getTotalVDHoy() + Statistics::getTotalESESHoy() +Statistics::getTotalESESOIHoy() + Statistics::getTotalESESMARTHoy() : Statistics::getTotalServiciosApoyoHoyPorEjecutivo() ?>
                               <p>Servicios solicitados hoy</p>
                           </div>
                           <div class="icon">
@@ -1193,11 +1413,30 @@
                         </div>
                       </div>
 
-                      <div class="col-lg-3 col-6">
+                      <div class="col-lg-1 col-2">
+                        <div class="small-box bg-info">
+                          <div class="inner">
+                            <h4><?= !Utils::isAccount() ? Statistics::getTotalVDHoy() : Statistics::getTotalESESMARTHoyPorEjecutivo() ?>
+                            </h4>
+                            <p>
+                              <font size="2">VD</font>
+                            </p>
+                          </div>
+                          <div class="icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                          </div>
+                          <a href="#" class="small-box-footer">
+                            Ver
+                            <i class="fas fa-arrow-circle-right"></i>
+                          </a>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-2 col-2">
                         <div class="small-box bg-maroon">
                           <div class="inner">
-                            <h4><?= !Utils::isAccount() ? Statistics::getTotalRALESHoy() : Statistics::getTotalRALESHoyPorEjecutivo() ?></h4>
-                            <p>RAL solicitados hoy</p>
+                            <h4><?= !Utils::isAccount() ? Statistics::getTotalISELAHoy() : Statistics::getTotalRALESHoyPorEjecutivo() ?></h4>
+                            <p>ISELA solicitados hoy</p>
                           </div>
                           <div class="icon">
                             <i class="fas fa-gavel"></i>
@@ -1310,7 +1549,7 @@
                       </div>
                     </div>
                     <div class="card">
-                      <?php $serviciosentxejhoy = !Utils::isAccount() ? Statistics::getServiciosPorEjecutivoHoy() : Statistics::getServiciosPorEjecutivoUnicoHoy() ?>
+                      <?php $serviciosentxejhoy = !Utils::isAccount() ? Statistics::getServiciosPorEjecutivoHoy() : Statistics::getServiciosPorEjecutivoHoy()//getServiciosPorEjecutivoUnicoHoy ?>
                       <div class="card-header">
                         <h4 class="card-title">Servicios solicitados hoy de cada ejecutivo</h4>
                       </div>
@@ -1368,8 +1607,8 @@
                       <div class="col-lg-3 col-6">
                         <div class="small-box bg-maroon">
                           <div class="inner">
-                            <h4><?= !Utils::isAccount() ? Statistics::getTotalRALESEnProceso() : Statistics::getTotalRALESEnProcesoPorEjecutivo() ?></h4>
-                            <p>RAL solicitados en proceso</p>
+                            <h4><?= !Utils::isAccount() ? Statistics::getTotalRALESEnProceso()+ Statistics::getTotalIselaESEnProceso() : Statistics::getTotalRALESEnProcesoPorEjecutivo() ?></h4>
+                            <p>RAL-ISELA solicitados en proceso</p>
                           </div>
                           <div class="icon">
                             <i class="fas fa-gavel"></i>
@@ -1380,7 +1619,10 @@
                           </a>
                         </div>
                       </div>
-                      <div class="col-lg-3 col-6">
+						
+						
+						
+                      <div class="col-lg-2 col-6">
                         <div class="small-box bg-orange">
                           <div class="inner">
                             <h4><?= !Utils::isAccount() ? Statistics::getTotalInvEnProceso() : Statistics::getTotalInvEnProcesoPorEjecutivo() ?></h4>
@@ -1395,7 +1637,8 @@
                           </a>
                         </div>
                       </div>
-                      <div class="col-lg-3 col-6">
+						
+                      <div class="col-lg-2 col-6">
                         <div class="small-box bg-info">
                           <div class="inner">
                             <h4><?= !Utils::isAccount() ? Statistics::getTotalESESEnProceso() : Statistics::getTotalESESEnProcesoPorEjecutivo() ?></h4>
@@ -1410,6 +1653,22 @@
                           </a>
                         </div>
                       </div>
+						     <div class="col-lg-2 col-6">
+                        <div class="small-box bg-info">
+                          <div class="inner">
+                            <h4><?= !Utils::isAccount() ? Statistics::getTotalVDEnProceso() : '0'?></h4>
+                            <p>VD solicitados en proceso</p>
+                          </div>
+                          <div class="icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                          </div>
+                          <a href="#" class="small-box-footer">
+                            Ver
+                            <i class="fas fa-arrow-circle-right"></i>
+                          </a>
+                        </div>
+                      </div>
+						
                     </div>
                     <div class="row">
                       <div class="col col-md-8">
@@ -1928,6 +2187,131 @@
               </div>
               <!-- /.card -->
             </div>
+				  </div>
+          <?php endif ?>
+          <?php if (Utils::isMarketing()) : ?>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Candidatos</h3>
+
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-8">
+                        <div class="chart-responsive">
+                          <canvas id="pieApplicantsChart" height="150"></canvas>
+                        </div>
+                        <!-- ./chart-responsive -->
+                      </div>
+                      <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Atracciones de Talento</h3>
+
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-8">
+                        <div class="chart-responsive">
+                          <canvas id="pieChart" height="150"></canvas>
+                        </div>
+                        <!-- ./chart-responsive -->
+                      </div>
+                      <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+            </div>
+                
+          <?php endif ?>
+		  <?php if (Utils::isCandidate()) : ?>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card card-widget widget-user-2">
+                  <div class="widget-user-header bg-warning">
+                    <div class="widget-user-image">
+                      <img class="img-circle elevation-2" src="<?=$_SESSION["avatar_route"]?>" alt="User Avatar">
+                    </div>
+                    <!-- /.widget-user-image -->
+                    <h3 class="widget-user-username"><a href="<?=base_url?>candidato/datos_cv"><?=$candidato->first_name.' '.$candidato->surname.' '.$candidato->last_name?></a></h3>
+                    <h5 class="widget-user-desc"><?=$candidato->job_title?></h5>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header">
+                    <h4 class="card-title">Mis postulaciones</h4>
+                  </div>
+                  <div class="card-body">
+                    <?php $talent_attractions = Statistics::getTAApplicantsByCandidates($candidato->id); ?>
+                    <?php $vacancies = Statistics::getApplicantsByCandidates($candidato->id); ?>
+                    <?php foreach ($talent_attractions as $ta): ?>                  
+                      <div class="callout callout-navy">
+                        <h5><a href="<?=base_url?>bolsa/ver&atracciontalento=<?=Encryption::encode($ta['id'])?>" class="text-primary" style="text-decoration: none;"><?=$ta['job_title']?></a></h5>
+                        <i class="fas fa-map-marker-alt"></i> <b class="text-navy"><?=$ta['city'].', '.$ta['abbreviation']?></b>
+                        <?=($ta['description'])?>
+                      </div>
+                    <?php endforeach ?>    
+                    <?php foreach ($vacancies as $vacancy): ?>                  
+                      <div class="callout callout-navy">
+                        <h5><a href="<?=base_url?>bolsa/ver&vacante=<?=Encryption::encode($vacancy['id'])?>" class="text-primary" style="text-decoration: none;"><?=$vacancy['vacancy']?></a></h5>
+                        <i class="fas fa-map-marker-alt"></i> <b class="text-navy"><?=$vacancy['city'].', '.$vacancy['abbreviation']?></b>
+                        <p><?=Utils::linebreak($vacancy['functions'])?></p>
+                      </div>
+                    <?php endforeach ?>
+                  </div>
+                </div>
+                
+              </div>
+              <div class="col-md-6">
+                  <?php $jobsTA = Statistics::getTalentAttractionsAvailable($candidato->id); ?>
+                  <?php $jobs = Statistics::getVacanciesAvailable($candidato->id); ?>
+                  <div class="card">
+                    <div class="card-header">
+                      <h4 class="card-title">Vacantes que te podrían interesar</h4>
+                    </div>
+                    <div class="card-body">
+                      <?php foreach ($jobsTA as $ta): ?>
+                        <div class="callout callout-success">
+                          <h5><a href="<?=base_url?>bolsa/ver&atracciontalento=<?=Encryption::encode($ta['id'])?>" class="text-primary" style="text-decoration: none;"><?=$ta['job_title']?></a></h5>
+                          <i class="fas fa-map-marker-alt"></i> <b class="text-navy"><?=$ta['city'].', '.$ta['abbreviation']?></b>
+                          <?=($ta['description'])?>
+                        </div>
+                      <?php endforeach ?>  
+                      <?php foreach ($jobs as $v): ?>
+                        <div class="callout callout-success">
+                          <h5><a href="<?=base_url?>bolsa/ver&vacante=<?=Encryption::encode($v['id'])?>" class="text-primary" style="text-decoration: none;"><?=$v['vacancy']?></a></h5>
+                          <i class="fas fa-map-marker-alt"></i> <b class="text-navy"><?=$v['city'].', '.$v['abbreviation']?></b>
+                          <?=($v['functions'])?>
+                        </div>
+                      <?php endforeach ?>  
+                    </div>
+                  </div>
+              </div>
+            </div>
           <?php endif ?>
         </div>
       </div>
@@ -1935,3 +2319,38 @@
   </section>
   <!-- /.content -->
 </div>
+	
+	<script type="text/javascript" src="<?= base_url ?>app/utils.js?v=<?= rand() ?>"></script>
+
+<script>
+    let table = document.querySelector('#tb_contacts_SA');
+    table.style.display = "table";
+    utils.dtTable(table, false);
+	let table2 = document.querySelector('#tb_contacts_reclu');
+table2.style.display = "table";
+utils.dtTable(table2, false);
+	
+	
+	
+	let table3 = document.querySelector('#table-vencimiento');
+utils.dtTable(table3, false);
+</script>
+
+
+<?php if(!Utils::isCustomer() && !Utils::isCustomerSA() && !Utils::isCandidate()):  ?>
+<script>
+  document.addEventListener('DOMContentLoaded', e => {
+
+    Swal.fire({
+      //title: "Hola",
+     // text: "Modal with a custom image.",
+      confirmButtonText: `Enterado`,
+      imageUrl: "https://rrhh-ingenia.com.mx/dist/img/frases/frase5.gif",
+      imageWidth: 700,
+      imageHeight: 400,
+      imageAlt: "Custom image"
+    });
+
+  })
+</script>
+<?php endif; ?>

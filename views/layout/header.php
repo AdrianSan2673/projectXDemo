@@ -61,6 +61,18 @@
     <script src="<?=base_url?>plugins/jquery-validation/additional-methods.min.js"></script>
     <link href="<?=base_url?>plugins/unpkg/cropper.css" rel="stylesheet"/>
     <script src="<?=base_url?>plugins/unpkg/cropper.js"></script>
+	<link rel="stylesheet" href="<?=base_url?>plugins/summernote/summernote-bs4.min.css">
+	<link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+	<link href="https://unpkg.com/@videojs/themes@1/dist/sea/index.css" rel="stylesheet" />
+	
+	<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MLF9ZBQL');</script>
+<!-- End Google Tag Manager -->
+	
 </head>
 <?php if (isset($_SESSION['identity']) && $_SESSION['identity']->username == 'salmaperez1'): ?>
   <style type="text/css">
@@ -111,4 +123,38 @@
       color: #fff;
     }
   </style>
+<?php endif ?>
+<?php if ($_GET['controller'] == 'atracciontalento') : ?>
+<style>
+	.content-wrapper {
+		background-image: url("https://rrhh-ingenia.com.mx/dist/img/fondo pagina web.png");
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+	
+	thead {
+		background: #BC4593;
+		color: white;
+	}
+	
+	tfoot {
+		background: #BC4593;
+		color: white;
+	}
+	.active .bs-stepper-circle {
+		background-color: #BC4593;
+	}
+	
+	div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+		justify-content: center;
+	}
+	
+	.page-item.active .page-link {
+		border-color: #DC872E;
+		color: #000;
+		background-color: white;
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+</style>
 <?php endif ?>

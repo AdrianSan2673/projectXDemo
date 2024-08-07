@@ -30,6 +30,6 @@
 </div>
 <script>
     setTimeout(() => {
-        window.location.href = "http://rrhh-ingenia.com/reclutamiento"
+        window.location.href = "https://rrhh-ingenia.com.mx/usuario/index"
     }, 5000);
 </script>
