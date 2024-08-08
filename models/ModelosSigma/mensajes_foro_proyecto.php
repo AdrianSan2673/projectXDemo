@@ -1,5 +1,5 @@
 <?php 
-    class mensajes_foro_proyecto {
+    class Mensajes_foro_proyecto {
         private $id;
         private $id_proyecto;
         private $id_area;
@@ -55,5 +55,21 @@
             $this->creado = $creado;
         }
 
+        public function getAllProject(){
+            $stmt = $this->db->prepare("SELECT * FROM mensajes_foro_proyecto ORDER BY id ASC;");
+            $stmt->execute();
+            $roles = $stmt->fetchAll();
+            return $roles;
+        }
+    
+        public function getOne(){
+            $id = $this->getId();
+            $stmt = $this->db->prepare("SELECT * from mensajes_foro_proyecto WHERE id=:id");
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            $fetch = $stmt->fetchObject();
+            return $fetch;
+        }
     }
 ?>

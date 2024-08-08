@@ -106,7 +106,10 @@ class Usuario {
 	}
 
 	public function getAllUsuario(){
-
+            $stmt = $this->db->prepare("SELECT * FROM usuarios ORDER BY id ASC;");
+            $stmt->execute();
+            $roles = $stmt->fetchAll();
+            return $roles;
 	}
 
 	public function getOne(){

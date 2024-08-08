@@ -175,17 +175,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </li>
         <li class="nav-item dropdown user-menu">
           <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-            <img src="<?= $_SESSION['avatar_route'] ?>" class="user-image img-circle" alt="User Image">
-            <span class="d-none d-md-inline"><?= $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name ?> <i class="right fas fa-angle-down"></i></span>
+            <!--<img src="C:\xampp\htdocs\projectXDemo\icons8-usuario-40.png" class="user-image img-circle" alt="User Image">-->
+            <i class="fa fa-user" style="font-size: 25px;"></i>       
+            <span class="d-none d-md-inline"><?= $_SESSION['identity']->Nombres . ' ' . $_SESSION['identity']->Apellidos ?> <i class="right fas fa-angle-down"></i></span>
           </a>
           <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <!-- User image -->
-            <li class="user-header <?= $_SESSION['identity']->username == 'salmaperez1' ? 'bg-maroon' : 'bg-success' ?>">
-              <img src="<?= $_SESSION['avatar_route'] ?>" class="img-circle" alt="User Image">
+            <li class="user-header <?= $_SESSION['identity']->usuario == 'salmaperez1' ? 'bg-maroon' : 'bg-success' ?>">
+              <!--<img src="<?= $_SESSION['avatar_route'] ?>" class="img-circle" alt="User Image">-->
+              <i class="fa fa-user" style="font-size: 50px;"></i>
 
               <p style="font-size: 14px;">
-                <?= $_SESSION['identity']->first_name . ' ' . $_SESSION['identity']->last_name ?><br>
-                <?= $_SESSION['identity']->user_type ?>
+                <?= $_SESSION['identity']->Nombres . ' ' . $_SESSION['identity']->Apellidos ?><br>
+                <?= $_SESSION['identity']->id_tipo_usuario ?>
               </p>
             </li>
             <!-- Menu Body -->

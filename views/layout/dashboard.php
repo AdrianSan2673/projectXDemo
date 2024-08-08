@@ -5,7 +5,7 @@
       <div class="row mb-2">
         <div class="col-sm-12">
           <div class="alert <?= $_SESSION['identity']->username == 'salmaperez1' ? 'alert-maroon' : 'alert-success' ?>">
-            <h1>¡Hola, <?= $_SESSION['identity']->first_name ?>!</h1>
+            <h1>¡Hola, <?= $_SESSION['identity']->Nombres ?>!</h1>
           </div>
         </div>
       </div>
@@ -88,8 +88,9 @@
               </div>
             <?php endif ?>
             
-          <?php $avisos = Utils::avisoClientes(); ?>
-          <?php if (isset($avisos) && (Utils::isCustomerSA() || Utils::isCustomer())) : ?>
+          <!--<?php $avisos = Utils::avisoClientes(); ?>
+
+          <?php if (isset($avisos) && (Utils::isCustomerSA() || Utils::isCustomer())) : ?>-->
             <div class="card">
               <div class="card bg-transparent">
                 <div class="card-header bg-yellow">

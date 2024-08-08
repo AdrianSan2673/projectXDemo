@@ -1,5 +1,5 @@
 <?php
-class proyecto_asignado {
+class Proyecto_asignado {
     private $id;
     private $id_proyecto;
     private $id_usuario;
@@ -44,5 +44,21 @@ class proyecto_asignado {
 
 	public function setModificado($modificado){
 		$this->modificado = $modificado;
+	}
+	public function getAllProject(){
+		$stmt = $this->db->prepare("SELECT * FROM proyecto_asignado ORDER BY id ASC;");
+		$stmt->execute();
+		$roles = $stmt->fetchAll();
+		return $roles;
+	}
+
+	public function getOne(){
+		$id = $this->getId();
+		$stmt = $this->db->prepare("SELECT * from proyecto_asignado WHERE id=:id");
+		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		$stmt->execute();
+		
+		$fetch = $stmt->fetchObject();
+		return $fetch;
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-class tipoUsuario {
+class TipoUsuario {
     private $id;
     private $tipo_usuario;
     private $id_area;
@@ -26,6 +26,23 @@ class tipoUsuario {
 
 	public function setId_area($id_area){
 		$this->id_area = $id_area;
+	}
+
+	public function getAllProject(){
+		$stmt = $this->db->prepare("SELECT * FROM tipo_usuario ORDER BY id ASC;");
+		$stmt->execute();
+		$roles = $stmt->fetchAll();
+		return $roles;
+	}
+
+	public function getOne(){
+		$id = $this->getId();
+		$stmt = $this->db->prepare("SELECT * from tipo_usuario WHERE id=:id");
+		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		$stmt->execute();
+		
+		$fetch = $stmt->fetchObject();
+		return $fetch;
 	}
 }
 ?>
