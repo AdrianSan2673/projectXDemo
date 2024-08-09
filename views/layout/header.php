@@ -74,7 +74,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 	
 </head>
-<?php if (isset($_SESSION['identity']) && $_SESSION['identity']->username == 'salmaperez1'): ?>
+<?php if (isset($_SESSION['identity']) && $_SESSION['identity']->usuario == 'salmaperez1'): ?>
   <style type="text/css">
     .sidebar-dark-maroon {
       background-color: #c25d72 !important;

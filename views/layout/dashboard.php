@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-12">
-          <div class="alert <?= $_SESSION['identity']->username == 'salmaperez1' ? 'alert-maroon' : 'alert-success' ?>">
+          <div class="alert <?= $_SESSION['identity']->usuario == 'salmaperez1' ? 'alert-maroon' : 'alert-success' ?>">
             <h1>¡Hola, <?= $_SESSION['identity']->Nombres ?>!</h1>
           </div>
         </div>
@@ -14,29 +14,25 @@
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
-      <div class="row">
+      <div class="card">
         <div class="col-12">
 
-          <section class="content-header">
-            <div class="row ">
-              <?php if (Utils::isCustomer()) : ?>
-                  <div class="col-sm-4 ml-auto">
-                    <a class="btn btn-orange float-right" href="<?= base_url ?>psicometria/crear">Registrar psicometria</a>
-              </div>
-              
-              <?php endif ?>
-              <?php if (Utils::isCustomerSA()) : ?>
-                <div class="col-sm-4 ml-auto">
-                  <a <?= $visualizador == true ? 'style=" cursor: not-allowed; pointer-events: none; filter: brightness(50%);"' :  ''; ?> class="btn btn-primary float-right" href="<?= base_url ?>ServicioApoyo/carga_masiva" hidden>Carga masiva</a>
-                </div>
-
-                <div class="col-sm-4 ml-auto">
-                  <a <?= $visualizador == true ? 'style=" cursor: not-allowed; pointer-events: none; filter: brightness(50%);"' :  ''; ?> class="btn btn-orange float-right" href="<?= base_url ?>ServicioApoyo/crear">Nuevo candidato</a>
-                </div>
-              <?php endif;  ?>
-            </div>
-          </section>
-
+          <section class="content">
+                  <div class="card-body">
+                    <div class="row gx-5 justify-content-center">
+                      <div class="col-md-6">
+                        <a class="btn btn-app btn-lg bg-secondary" href="<?= base_url ?>departamento/index">
+                          <i class="fa fa-folder"></i> Proyectos
+                        </a>
+                        <a class="btn btn-app bg-info" href="<?= base_url ?>usuario/all">
+                          <i class="fa fa-check-square"></i> Revisar
+                        </a>
+                      </div>
+                      <div class="col-md-6">
+                      </div>
+                    </div>
+                  </div>
+                </section>
 
           <?php if (Utils::isCustomer()) : ?>
               <div class="row">
