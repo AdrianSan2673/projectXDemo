@@ -113,5 +113,15 @@
             $fetch = $stmt->fetchObject();
             return $fetch;
         }
+
+        public function getTipoUsuario(){
+            $id = $this->getId_tipo_usuario();
+            $stmt = $this->db->prepare("SELECT tipo_usuario from tipo_usuario WHERE id=:id");
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            $fetch = $stmt->fetchObject();
+            return $fetch;
+        }
     }
 ?>

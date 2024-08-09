@@ -3,6 +3,7 @@
 require_once 'models/User.php';
 require_once 'models/RH/Department.php';
 require_once 'models/ModelosSigma/proyecto.php';
+require_once 'models/ModelosSigma/usuario.php';
 
 class DepartamentoController
 {
