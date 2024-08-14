@@ -12,6 +12,7 @@ class Usuario {
     private $id_tipo_usuario;
     private $creado;
     private $modificado;
+	private $nueva;
 
 	public function __construct() {
         $this->db = Connection::connect();
