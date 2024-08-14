@@ -30,52 +30,88 @@
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
-        </section>
+        </section>    
         <section class="content">
-            <div class="container-fluid">
+            <div class = "container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card card-danger">
+                        <div class="card card-primary">
                             <div class="card-header">
                                 <h3 class="text-center">Datos del proyecto</h3>
                             </div>
-                            <div class="card-body">
-                                <div class="row info-empresa">
-                                    <div class="col-md-12 text-left">
-                                        <b>Dirección</b>
-                                        <p class="title-departament"><?= $proyecto->direccion?> <?= $proyecto->Estado?></p>
-                                    </div>
-                                    <div class="col-md-12 text-left">
-                                        <b>Fase</b>
-                                        <p class="title-departament"><?= $proyecto->status?></p>
-                                    </div>
-                                    <div class="col-md-12 text-left">
-                                        <b>Telefono del encargado</b>
-                                        <p class="title-departament"><?= $proyecto->Telefono?></p>
-                                    </div>
-                                    <div class="col-md-12 text-left">
-                                        <b>Inicio del proyecto</b>
-                                        <p class="title-departament"><?= $proyecto->creado?></p>
-                                    </div>
-                                    <div class="col-md-12 text-left">
-                                        <b>Area Encargada</b>
-                                        
-                                        <p class="title-departament"><?= $proyecto->id_tipo_usuario?></p>
-                                       
-                                        
-                                    </div>
-                                </div>
-                                <div class="text-center">
-                                    <button class="btn btn-info" id="btn-editar-departamento">Editar</button>
-                                </div>
+                            <div class="col-12 table-responsive">
+                                <table class="table tablestriped">            
+                                <thead>
+                                        <tr>
+                                            <th>Dirección</th>
+                                            <th>Fase</th>
+                                            <th>Telefono del encargado</th>
+                                            <th>inicio del proyecto</th>
+                                            <th>Area Encargada</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><p class="title-department" style='font-size: 17px;'><?= $proyecto->direccion?> <?= $proyecto->Estado?> </p></td>
+                                            <td><p class="title-departament" style='font-size: 17px;'><?= $proyecto->status?></p></td>
+                                            <td><p class="title-departament" style='font-size: 17px;'><?= $proyecto->Telefono?></p></td>
+                                            <td><p class="title-departament" style='font-size: 17px;'><?= $proyecto->creado?></p></td>
+                                            <td><p class="title-departament" style='font-size: 17px;'><?= $proyecto->id_tipo_usuario?></p></td>
+                                        </tr>
+                                    </tbody>    
+                                </table>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-info" id="btn-editar-departamento" onclick="document.getElementById('id01').style.display='block'">Editar</button>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </section>
+
+        <!--Open Edit Form  -->
+        <!--<section class="content"> -->
+        <div id="id01" class="modal">
+            <div class="card-header">
+                <h3 class="text-center">Editar Proyecto</h3>
+
+            </div>
+            <div>
+                <div class="card-body">
+                    <label for="inputName">Nombre</label>
+                    <input type="text" id="inputName" class="form-control" value="AdminLTE">
+                </div>
+                <div class="card-body">
+                    <label for="inputName">Estado</label>
+                    <input type="text" id="inputEstado" class="form-control" value="AdminLTE">
+                </div>
+                <div class="card-body">
+                    <label for="inputName">Direccion</label>
+                    <input type="text" id="inputAddress" class="form-control" value="AdminLTE">
+                </div>
+                <div class="card-body">
+                    <label for="inputName">Estatus</label>
+                    <input type="text" id="inputStatus" class="form-control" value="AdminLTE">
+                </div>
+                <div class="card-body">
+                    <label for="inputName">Telefono</label>
+                    <input type="text" id="inputPhone" class="form-control" value="AdminLTE">
+                </div>
+                <div class="card-body">
+                    <label for="inputName">Activacion</label>
+                    <input type="text" id="inputActive" class="form-control" value="AdminLTE">
+                </div>
+                <div class="card-body">
+                    <label for="inputName">Area</label>
+                    <input type="text" id="inputIdUserType" class="form-control" value="AdminLTE">
+                </div>
+            </div>
+        </div>
+
+        </section>
         
+
         <!-- This section is used to show the docuement-->
         <section class="content">
             <div class="container-fluid">
@@ -88,6 +124,10 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-12">
+                                        <div class="text-right">
+                                            <button class="btn btn-info" id="btn-editar-departamento">Añadir</button>
+                                        </div>
+                                        <div> </div>
                                         <table id="docuemento" class="table table-border table-hover" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
