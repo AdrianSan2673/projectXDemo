@@ -21,8 +21,7 @@
     <div class="card-body bg-light">
         <div class="row gx-5 justify-content-center text-center">
             <div class="col-12">
-              <!--<img src="<?=base_url?>dist\img\SIGMALOGO.png" alt="LOGOSIGMA">-->
-<img src="<?=base_url?>dist\img\SIGMALOGO.png" alt="LOGOSIGMA" style="width: 100px; height: auto;">
+              <img src="<?=base_url?>dist\img\SIGMALOGOORIGINAL.jpeg" alt="LOGOSIGMA" style="width: 100px; height: auto;">
 
                 <h1 class="display-6" >¿Qué deseas hacer hoy?</h1>
             </div>
