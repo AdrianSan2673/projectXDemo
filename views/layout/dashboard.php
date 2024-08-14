@@ -17,22 +17,26 @@
       <div class="card">
         <div class="col-12">
 
-          <section class="content">
-                  <div class="card-body">
-                    <div class="row gx-5 justify-content-center">
-                      <div class="col-md-6">
-                        <a class="btn btn-app btn-lg bg-secondary" href="<?= base_url ?>departamento/index">
-                          <i class="fa fa-folder"></i> Proyectos
-                        </a>
-                        <a class="btn btn-app bg-info" href="<?= base_url ?>usuario/all">
-                          <i class="fa fa-check-square"></i> Revisar
-                        </a>
-                      </div>
-                      <div class="col-md-6">
-                      </div>
-                    </div>
-                  </div>
-                </section>
+        <section class="content">
+    <div class="card-body bg-light">
+        <div class="row gx-5 justify-content-center text-center">
+            <div class="col-12">
+              <!--<img src="<?=base_url?>dist\img\SIGMALOGO.png" alt="LOGOSIGMA">-->
+<img src="<?=base_url?>dist\img\SIGMALOGO.png" alt="LOGOSIGMA" style="width: 100px; height: auto;">
+
+                <h1 class="display-6" >¿Qué deseas hacer hoy?</h1>
+            </div>
+            <div class="col-12 mt-3">
+                <a class="btn btn-app btn-lg bg-secondary mx-2" href="<?= base_url ?>departamento/index">
+                    <i class="fa fa-folder"></i> Proyectos
+                </a>
+                <a class="btn btn-app btn-lg bg-orange mx-2" href="<?= base_url ?>usuario/all">
+                    <i class="fa fa-check-square"></i> Revisar
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 
           <?php if (Utils::isCustomer()) : ?>
               <div class="row">
