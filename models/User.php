@@ -137,6 +137,37 @@ class User {
         $this->dark_mode = $dark_mode;
     }
 
+
+
+
+    public function getUserTypes(){
+        $stmt = $this->db->prepare("SELECT * FROM tipo_usuario ORDER BY id ASC;");
+        $stmt->execute();
+        $roles = $stmt->fetchAll();
+        return $roles;
+    }
+
+
+
+    public function getOne(){
+        $id = $this->getId();
+        $stmt = $this->db->prepare("SELECT u.*, t.tipo_usuario FROM usuarios u INNER JOIN tipo_usuario t ON u.id_tipo_usuario=t.id  WHERE u.id=:id;");
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        $fetch = $stmt->fetchObject();
+        return $fetch;
+    }
+
+    public function getAll(){
+        $stmt = $this->db->prepare("SELECT * FROM usuarios u INNER JOIN tipo_usuario t ON u.id_tipo_usuario=t.id ORDER BY u.id ASC");
+        $stmt->execute();
+        $usuarios = $stmt->fetchAll();
+        return $usuarios;
+    }
+
+
+
     public function userExists(){
         $result = FALSE;
         $username = $this->getUsername();
@@ -384,13 +415,7 @@ class User {
         return $result;
     }
 
-    public function getUserTypes(){
-        $stmt = $this->db->prepare("SELECT * FROM user_types ORDER BY id ASC;");
-        $stmt->execute();
-        $roles = $stmt->fetchAll();
-        return $roles;
-    }
-
+  
     //obtengo el id de acuerdo al email proporcionado
     public function getIdWithEmail(){
         $email = $this->getEmail();
@@ -478,16 +503,7 @@ class User {
         return $result;
     }
 
-    public function getOne(){
-        $id = $this->getId();
-        $stmt = $this->db->prepare("SELECT u.*, t.user_type FROM users u INNER JOIN user_types t ON u.id_user_type=t.id WHERE u.id=:id;");
-        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-        $stmt->execute();
-        
-        $fetch = $stmt->fetchObject();
-        return $fetch;
-    }
-
+  
   
     public function getEmployees(){
         //$stmt = $this->db->prepare("SELECT u.id, username, first_name, last_name, password, email, last_session , user_type FROM users u INNER JOIN user_types t ON u.id_user_type=t.id WHERE id_user_type <> 6 AND id_user_type <> 7 AND id_user_type <> 15 AND activation = 1 ORDER BY username ASC");
@@ -497,13 +513,7 @@ class User {
         return $users;
     }
 
-    public function getAll(){
-        $stmt = $this->db->prepare("SELECT u.id, username, first_name, last_name, password, email, last_session , user_type FROM users u INNER JOIN user_types t ON u.id_user_type=t.id ORDER BY username ASC");
-        $stmt->execute();
-        $users = $stmt->fetchAll();
-        return $users;
-    }
-
+   
     public function getUsersByType(){
         $id_user_type = $this->getId_user_type();
 

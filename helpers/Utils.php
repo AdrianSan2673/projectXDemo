@@ -186,8 +186,8 @@ class Utils
 
     public static function showRoles()
     {
-        require_once 'models/User.php';
-        $user = new User();
+        require_once 'models/ModelosSigma/usuario.php';
+        $user = new Usuario();
         $roles = $user->getUserTypes();
         return $roles;
     }

@@ -156,49 +156,25 @@ class UsuarioController
     {
         // && Utils::isAdmin()
         if (Utils::isValid($_SESSION['identity']) ) {
-            $user = new User();
-            $users = $user->getEmployees();
-            $users =  UsuarioController::formatear($users);
-
-
-            $users2 = $user->getEmployeesInactive();
-            $users_inactive =  UsuarioController::formatear($users2);
-
-            for ($i = 0; $i < count($users); $i++) {
-                $path = 'uploads/avatar/' . $users[$i]['id'];
-                if (file_exists($path)) {
-                    $directory = opendir($path);
-
-                    while ($file = readdir($directory)) {
-                        if (!is_dir($file)) {
-                            $type = pathinfo($path, PATHINFO_EXTENSION);
-                            $img_content = file_get_contents($path . "/" . $file);
-                            $route = $path . '/' . $file;
-                        }
-                    }
-                } else {
-                    $route = "dist/img/user-icon.png";
-                    $type = pathinfo($route, PATHINFO_EXTENSION);
-                    $img_content = file_get_contents($route);
-                }
-                //$img_base64 = chunk_split(base64_encode($img_content));
-                $img_base64 = 'data:image/' . $type . ';base64,' . base64_encode($img_content);
-                $users[$i]['avatar'] = base_url . $route;
-            }
-
+            $user = new Usuario();
+            $users = $user->getAll();
+     
+          
             $page_title = 'Usuarios | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
-            require_once 'views/user/modal-user.php';
             require_once 'views/user/index.php';
-            require_once 'views/user/create.php';
-            require_once 'views/user/modal-date.php';
+             require_once 'views/user/modal-user.php';
+    
+            // require_once 'views/user/create.php';
+            // require_once 'views/user/modal-date.php';
             //require_once 'views/user/edit.php';
             require_once 'views/layout/footer.php';
         } else {
             header("location:" . base_url);
         }
     }
+
 
     public function save()
     {
@@ -589,7 +565,7 @@ class UsuarioController
                 $UserObj = new User();
                 $UserObj->setId($id);
                 $user = $UserObj->getOne();
-                $user->password = Utils::decrypt($user->password);
+               // $user->password = Utils::decrypt($user->password);
                 echo json_encode(array(
                     'status' => 1,
                     'user' => $user

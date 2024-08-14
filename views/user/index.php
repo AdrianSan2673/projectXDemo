@@ -60,17 +60,17 @@
               <tbody>
                 <?php foreach ($users as $user) : ?>
                   <tr>
-                    <td class="image"><img class="img-circle img-fluid img-responsive elevation-2" src="<?= $user['avatar'] ?>" style="width:60px; height:auto;"></td>
-                    <td><?= $user['username'] ?></td>
-                    <td><?= $user['first_name'] . ' ' . $user['last_name'] ?></td>
-                    <td><?= $user['password'] ?></td>
-                    <td><?= $user['email'] ?></td>
-                    <td><?= $user['last_session'] ?>
+                  <td class="image"><img class="img-circle img-fluid img-responsive elevation-2" src="<?= $user['avatar'] ?>" style="width:60px; height:auto;"></td>
+                    <td><?= $user['Nombres'] ?></td>
+                    <td><?= $user['Apellidos']?></td>
+                    <td><?= $user['Correo'] ?></td>
+                    <td><?= $user['usuario'] ?></td>
+                    <td><?= $user['password'] ?>
                     </td>
-                    <td><?= $user['user_type'] ?></td>
+                    <td><?= $user['tipo_usuario'] ?></td>
                     <td style="display:flex;text-align:center">
-                      <button class="btn btn-info" value="<?= $user['id'] ?>"><i class="fas fa-pencil-alt"></i></button>
-                      <button class="btn btn-danger" value="<?= $user['id'] ?>"><i class="fas fa-trash-alt"></i></button>
+                      <button class="btn btn-info" value="<?= Encryption::encode($user['id']) ?>"><i class="fas fa-pencil-alt"></i></button>
+                      <button class="btn btn-danger" value="<?= Encryption::encode($user['id']) ?>"><i class="fas fa-trash-alt"></i></button>
 
                     </td>
                   </tr>
@@ -149,6 +149,7 @@
 
 
 <script>
+ 
   $(document).ready(function() {
     let table = document.querySelector('#tb_users');
     utils.dtTable(table);

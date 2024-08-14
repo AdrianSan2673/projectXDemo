@@ -131,7 +131,6 @@ class User {
 
 
     getUser(id) {
-        var form = document.querySelector("#modal-update-user form");
         let xhr = new XMLHttpRequest();
         xhr.open('POST', '../usuario/getOne');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -141,37 +140,37 @@ class User {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let r = xhr.responseText;
                 console.log(r);
-                try {
+                //try {
                     let json_app = JSON.parse(r);
                     if (json_app.status == 0) {
-                        form.querySelectorAll('.btn')[0].disabled = false;
                         utils.showToast('Omitiste algún dato', 'error');
                     } else if (json_app.status == 1) {
 
-                        document.querySelector('#modal-update-user [name="username"]').value = json_app.user.username
-                        document.querySelector('#modal-update-user [name="first_name"]').value = json_app.user.first_name
-                        document.querySelector('#modal-update-user [name="last_name"]').value = json_app.user.last_name
-                        document.querySelector('#modal-update-user [name="email"]').value = json_app.user.email
+                        document.querySelector('#modal-update-user [name="usuario"]').value = json_app.user.usuario
+                        document.querySelector('#modal-update-user [name="Nombres"]').value = json_app.user.Nombres
+                        document.querySelector('#modal-update-user [name="Apellidos"]').value = json_app.user.Apellidos
+                        document.querySelector('#modal-update-user [name="Correo"]').value = json_app.user.Correo
                         document.querySelector('#modal-update-user [name="password"]').value = json_app.user.password
-                        document.querySelector('#modal-update-user [name="id_user_type"]').value = json_app.user.id_user_type
+                        document.querySelector('#modal-update-user [name="id_tipo_usuario"]').value = json_app.user.id_tipo_usuario
                         document.querySelector('#modal-update-user [name="id"]').value = json_app.user.id
+                        
+                        
                     } else if (json_app.status == 2) {
-                        form.querySelectorAll('.btn')[0].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     } else if (json_app.status == 3) {
                         utils.showToast('La fecha inicial es mayor que la final.', 'error');
                     } else {
-                        form.querySelectorAll('.btn')[0].disabled = false;
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                     }
-                } catch (error) {
-                    form.querySelectorAll('.btn')[0].disabled = false;
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
-                }
+                // } catch (error) {
+                //     form.querySelectorAll('.btn')[0].disabled = false;
+                //     utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                // }
 
             }
         }
     }
+
 
 
     //===[gabo 4 agosto usuarios ]===
@@ -230,12 +229,12 @@ class User {
                                    <tr>
                             <td class="image"><img class="img-circle img-fluid img-responsive elevation-2"
                                 src="${usuario.avatar}" style="width:60px; height:auto;"></td>
-                            <td>${usuario.username}</td>
-                            <td>${usuario.first_name} ${usuario.last_name}</td>
+                            <td>${usuario.usuario}</td>
+                            <td>${usuario.Nombres}</td>
+                            <td>${usuario.Apellidos}</td>
+                            <td>${usuario.Correo}</td>
                             <td>${usuario.password}</td>
-                            <td>${usuario.email}</td>
-                            <td>${usuario.last_session}</td>
-                            <td>${usuario.user_type}</td>
+                            <td>${usuario.id_tipo_usuario}</td>
                             <td style="display:flex;text-align:center">
                                     <button class="btn btn-info" value="${usuario.id}"><i class="fas fa-pencil-alt"></i></button>
                                     <button class="btn btn-danger" value="${usuario.id}"><i class="fas fa-trash-alt"></i></button>
@@ -248,12 +247,12 @@ class User {
                         <tr>
                             <td class="image"><img class="img-circle img-fluid img-responsive elevation-2"
                                 src="${usuario.avatar}" style="width:60px; height:auto;"></td>
-                            <td>${usuario.username}</td>
-                            <td>${usuario.first_name} ${usuario.last_name}</td>
+                            <td>${usuario.usuario}</td>
+                            <td>${usuario.Nombres}</td>
+                            <td>${usuario.Apellidos}</td>
+                            <td>${usuario.Correo}</td>
                             <td>${usuario.password}</td>
-                            <td>${usuario.email}</td>
-                            <td>${usuario.last_session}</td>
-                            <td>${usuario.user_type}</td>
+                            <td>${usuario.id_tipo_usuario}</td>
                             <td style="display:flex;text-align:center">
                                     <button class="btn btn-success" value="${usuario.id}"><i class="fas fa-check"></i></button>
                             </td>
@@ -267,7 +266,6 @@ class User {
 
         return usuarios;
     }
-
 
     activate_user(id_user) {
 

@@ -2,7 +2,7 @@
 class Usuario {
 
     private $id;
-    private $usuariomanuel;
+    private $usuario;
     private $password;
     private $Nombres;
     private $Apellidos;
@@ -13,6 +13,7 @@ class Usuario {
     private $creado;
     private $modificado;
 	private $nueva;
+	private $db;
 
 	public function __construct() {
         $this->db = Connection::connect();
@@ -106,6 +107,14 @@ class Usuario {
 		$this->modificado = $modificado;
 	}
 
+	public function getAll(){
+        $stmt = $this->db->prepare("SELECT * FROM usuarios u INNER JOIN tipo_usuario t ON u.id_tipo_usuario=t.id ORDER BY u.id ASC");
+        $stmt->execute();
+        $usuarios = $stmt->fetchAll();
+        return $usuarios;
+    }
+
+
 	public function getAllUsuario(){
             $stmt = $this->db->prepare("SELECT * FROM usuarios ORDER BY id ASC;");
             $stmt->execute();
@@ -113,9 +122,16 @@ class Usuario {
             return $roles;
 	}
 
-	public function getOne(){
+	public function getUserTypes(){
+        $stmt = $this->db->prepare("SELECT * FROM tipo_usuario ORDER BY id ASC;");
+        $stmt->execute();
+        $roles = $stmt->fetchAll();
+        return $roles;
+    }
+    
+    public function getOne(){
         $id = $this->getId();
-        $stmt = $this->db->prepare("SELECT * from usuarios WHERE id=:id");
+        $stmt = $this->db->prepare("SELECT u.*, t.tipo_usuario FROM usuarios u INNER JOIN tipo_usuario t ON u.id_tipo_usuario=t.id  WHERE u.id=:id;");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
         

@@ -2,11 +2,9 @@
       <div class="container">
         <div class="row mx-auto">
           <div class="col-lg-4 col-md-4 col-sm-4 col-12 text-center mb-3">
-            <?php if (isset($_SESSION['identity']) && $_SESSION['identity']->username == 'salmaperez'): ?>
-               <img src="<?=base_url?>dist/img/RRHHIngenia-Website2020_LogoHeader.svg" alt="RRHH Ingenia" class="img-fluid logo">
-            <?php else: ?>
+           
               <img src="<?=base_url?>dist/img/RRHHIngenia-Website2020_LogoFooter.svg" alt="RRHH Ingenia" class="img-fluid logo">
-            <?php endif ?>
+          
           </div>
           <div class="col-lg-4 col-md-4 col-sm-4 col-12 text-center mb-3">
             <p>&copy; <?=date('Y')?> - RRHH Ingenia</p>
@@ -37,11 +35,11 @@
 <script src="<?=base_url?>plugins/bs-stepper/js/steppermin.js"></script>
 <script src="<?=base_url?>plugins/summernote/summernote-bs4.min.js"></script>
 <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
-<script src="<?=base_url?>app/city.js?v=<?=rand()?>"></script>
-<script src="<?=base_url?>app/subarea.js?v=<?=rand()?>"></script>
+<!-- <script src="<?=base_url?>app/city.js?v=<?=rand()?>"></script> -->
+<!-- <script src="<?=base_url?>app/subarea.js?v=<?=rand()?>"></script> -->
 <script src="<?=base_url?>app/utils.js?v=<?=rand()?>"></script>
 <script src="<?=base_url?>app/user.js?v=<?=rand()?>"></script>
-<script src="<?=base_url?>app/image.js?v=<?=rand()?>"></script>
+<!-- <script src="<?=base_url?>app/image.js?v=<?=rand()?>"></script> -->
 <script src="<?=base_url?>app/account.js?v=<?=rand()?>"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
