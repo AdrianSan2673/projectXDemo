@@ -1,6 +1,7 @@
 <!--Bootstrap CSS-->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <!--Bootstrap JS-->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
@@ -154,9 +155,38 @@
                 </div>
             </div>
         </section>
-    </div>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-navy">
+                            <div class="card-header">
+                                <h3 class="text-center">Subir documentos</h3>
+                            </div>
+                            <div class="card-body">
+                            <div class="container mt-5">
+                                <div class="row">
+                                    <div class="col-md-6 offset-md-3">
+                                        <h1 class="text-center">Subir Archivos</h1>
+                                        <div class="d-grid gap-2">
+                                            <input type="file" id="fileInput" class="form-control">
+                                            
+                                        </div>
+                                        <div id="timeline" class="list-group">
+                                            <!-- Aquí se agregarán los archivos subidos -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+            </div>
+        </section>
+ </div>
 </div>
-    
+
 <script type="text/javascript" src="<?= base_url ?>app/cliente.js?v=<?= rand() ?>"></script>
 <script type="text/javascript" src="<?= base_url ?>app/RH/department.js?v=<?= rand() ?>"></script>
 
@@ -186,4 +216,54 @@
         })
 
     }
+</script>
+
+<script>
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const timeline = document.getElementById('timeline');
+
+            // Crear un nuevo elemento de timeline
+            const listItem = document.createElement('div');
+            listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+            // Crear un contenedor para el enlace y la información
+            const fileInfoContainer = document.createElement('div');
+
+            // Crear un enlace para ver/descargar el archivo
+            const fileLink = document.createElement('a');
+            fileLink.href = URL.createObjectURL(file);
+            fileLink.target = '_blank';
+            fileLink.innerText = file.name;
+            fileLink.className = 'fw-bold';
+
+            // Crear un elemento para mostrar la fecha y hora de subida
+            const fileInfo = document.createElement('p');
+            fileInfo.className = 'mb-1 text-muted';
+            fileInfo.innerText = 'Subido el ' + new Date().toLocaleString();
+
+            // Añadir el enlace y la información al contenedor
+            fileInfoContainer.appendChild(fileLink);
+            fileInfoContainer.appendChild(fileInfo);
+
+            // Crear un botón de eliminar
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'btn btn-danger btn-sm';
+            deleteButton.innerText = 'Eliminar';
+            deleteButton.addEventListener('click', function() {
+                timeline.removeChild(listItem);
+            });
+
+            // Añadir el contenedor de información y el botón de eliminar al elemento del timeline
+            listItem.appendChild(fileInfoContainer);
+            listItem.appendChild(deleteButton);
+
+            // Agregar el nuevo elemento al timeline
+            timeline.prepend(listItem);
+
+            // Limpiar el input para permitir subir el mismo archivo nuevamente
+            event.target.value = '';
+        }
+    });
 </script>

@@ -165,7 +165,7 @@ class UsuarioController
             require_once 'views/layout/sidebar.php';
             require_once 'views/user/index.php';
              require_once 'views/user/modal-user.php';
-    
+             //require_once 'views/department/indexAdmin.php';
             // require_once 'views/user/create.php';
             // require_once 'views/user/modal-date.php';
             //require_once 'views/user/edit.php';
