@@ -223,3 +223,17 @@
 
     }
 </script>
+<script>
+    document.querySelector('#form-document').addEventListener('submit', e => {
+        e.preventDefault();
+
+        let file_input = document.querySelector("#evidence_document");
+
+        if (file_input.value != '') {
+            let archivo = new Archivo();
+            archivo.upload_file();
+        } else {
+            utils.showToast('Selecciona un archivo.', 'warning');
+        }
+    });
+</script>

@@ -1,22 +1,9 @@
-document.querySelector('#form-document').addEventListener('submit', e => {
-    e.preventDefault();
-
-    let file_input = document.querySelector("#evidence_document");
-
-    if (file_input.value != '') {
-        let archivo = new Archivo();
-        archivo.upload_file();
-    } else {
-        utils.showToast('Selecciona un archivo.', 'warning');
-    }
-});
-
 class Archivo {
     upload_file() {
         var form = document.querySelector("#form-document");
         var formData = new FormData(form);
 
-        fetch('../ArchivoController/upload_file', { // Asegúrate de que esta ruta esté correcta
+        fetch('../Archivo/upload_file', { // Asegúrate de que esta ruta esté correcta
             method: 'POST',
             body: formData,
             headers: {
