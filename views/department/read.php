@@ -7,6 +7,9 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js" integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2" crossorigin="anonymous"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 <div class="content-wrapper">
     <div class="container">
         <!-- Content Header (Page header) -->
@@ -31,9 +34,9 @@
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
-        </section>    
+        </section>
         <section class="content">
-            <div class = "container-fluid">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card card-primary">
@@ -41,8 +44,8 @@
                                 <h3 class="text-center">Datos del proyecto</h3>
                             </div>
                             <div class="col-12 table-responsive">
-                                <table class="table tablestriped">            
-                                <thead>
+                                <table class="table tablestriped">
+                                    <thead>
                                         <tr>
                                             <th>Dirección</th>
                                             <th>Fase</th>
@@ -53,13 +56,23 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td><p class="title-department" style='font-size: 17px;'><?= $proyecto->direccion?> <?= $proyecto->Estado?> </p></td>
-                                            <td><p class="title-departament" style='font-size: 17px;'><?= $proyecto->status?></p></td>
-                                            <td><p class="title-departament" style='font-size: 17px;'><?= $proyecto->Telefono?></p></td>
-                                            <td><p class="title-departament" style='font-size: 17px;'><?= $proyecto->creado?></p></td>
-                                            <td><p class="title-departament" style='font-size: 17px;'><?= $proyecto->id_tipo_usuario?></p></td>
+                                            <td>
+                                                <p class="title-department" style='font-size: 17px;'><?= $proyecto->direccion ?> <?= $proyecto->Estado ?> </p>
+                                            </td>
+                                            <td>
+                                                <p class="title-departament" style='font-size: 17px;'><?= $proyecto->status ?></p>
+                                            </td>
+                                            <td>
+                                                <p class="title-departament" style='font-size: 17px;'><?= $proyecto->Telefono ?></p>
+                                            </td>
+                                            <td>
+                                                <p class="title-departament" style='font-size: 17px;'><?= $proyecto->creado ?></p>
+                                            </td>
+                                            <td>
+                                                <p class="title-departament" style='font-size: 17px;'><?= $proyecto->id_tipo_usuario ?></p>
+                                            </td>
                                         </tr>
-                                    </tbody>    
+                                    </tbody>
                                 </table>
                             </div>
                             <div class="text-center">
@@ -111,7 +124,7 @@
         </div>
 
         </section>
-        
+
 
         <!-- This section is used to show the docuement-->
         <section class="content">
@@ -120,75 +133,68 @@
                     <div class="col-md-12">
                         <div class="card card-navy">
                             <div class="card-header">
-                                <h3 class="text-center">Lista de documentos</h3>
+                                <h3 class="text-center">Documentos</h3>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <div class="text-right">
-                                            <button class="btn btn-info" id="btn-editar-departamento">Añadir</button>
+                                        <div class="container">
+                                            <h2 class="mt-4">Subir Archivos de Evidencia</h2>
+                                            <form action="" id="form-document" enctype="multipart/form-data">
+                                                <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>"> <!-- CSRF Protection -->
+
+                                                <div class="row">
+                                                    <div class="col-8">
+                                                        <label for="evidence_document" class="col-form-label">Cargar Nuevo Documento:</label>
+                                                        <input type="file" id="evidence_document" class="form-control" name="evidence_document" placeholder="Adjuntar archivo" accept="application/pdf" required>
+                                                    </div>
+                                                    <div class="col-4" style="margin-top: 2rem;">
+                                                        <input class="btn btn-orange" type="submit" value="Subir">
+                                                    </div>
+                                                </div>
+                                            </form>
+
                                         </div>
-                                        <div> </div>
-                                        <table id="docuemento" class="table table-border table-hover" cellspacing="0" width="100%">
+                                        <h3 class="mt-5">Archivos Subidos</h3>
+                                        <table class="table table-border table-hover" id="filesTable">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center align-middle" style='font-size: 17px;'>Verificado</th>
-                                                    <th class="text-center align-middle" style='font-size: 17px;'>Nombre del docuemento</th>
-                                                    <th class="text-center align-middle" style='font-size: 17px;'>Cargar</th>
-                                                    <th class="text-center align-middle" style='font-size: 17px;'>Descargar</th>
+                                                    <th lass="text-center align-middle" style='font-size: 17px;'>Fecha de Subida</th>
+                                                    <th lass="text-center align-middle" style='font-size: 17px;'>Nombre de Archivo</th>
+                                                    <th lass="text-center align-middle" style='font-size: 17px;'>Hora de Subida</th>
+                                                    <th lass="text-center align-middle" style='font-size: 17px;'>Ver</th>
+                                                    <th lass="text-center align-middle" style='font-size: 17px;'>Descargar</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td class="text-center align-middle"><input type="checkbox"></td>
-                                                    <td class="text-center align-middle" style='font-size: 17px;'> factura </td>
-                                                    <td class="text-center align-middle"><a href = "" class="btn btn-small btn-primary"><i class="fa fa-upload"></i></a></td>
-                                                    <td class="text-center align-middle"><a href = "" class="btn btn-small btn-success"><i class="fa fa-download"></i></a></td>
-                                                </tr>
+                                                <?php $files = $files ?? []; ?>
+                                                <?php foreach ($files as $file): ?>
+                                                    <tr>
+                                                        <td><?= htmlspecialchars($file['upload_date']) ?></td>
+                                                        <td><?= htmlspecialchars($file['file_name']) ?></td>
+                                                        <td><?= htmlspecialchars($file['upload_time']) ?></td>
+                                                        <td><a href="uploads/evidencias/<?= htmlspecialchars($file['file_name']) ?>" class="btn btn-info btn-sm" target="_blank">Ver</a></td>
+                                                        <td><a href="uploads/evidencias/<?= htmlspecialchars($file['file_name']) ?>" class="btn btn-success btn-sm">Descargar</a></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>    
+                    </div>
                 </div>
             </div>
-        </section>
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card card-navy">
-                            <div class="card-header">
-                                <h3 class="text-center">Subir documentos</h3>
-                            </div>
-                            <div class="card-body">
-                            <div class="container mt-5">
-                                <div class="row">
-                                    <div class="col-md-6 offset-md-3">
-                                        <h1 class="text-center">Subir Archivos</h1>
-                                        <div class="d-grid gap-2">
-                                            <input type="file" id="fileInput" class="form-control">
-                                            
-                                        </div>
-                                        <div id="timeline" class="list-group">
-                                            <!-- Aquí se agregarán los archivos subidos -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>    
-                </div>
-            </div>
-        </section>
- </div>
+    </div>
+</div>
 </div>
 
 <script type="text/javascript" src="<?= base_url ?>app/cliente.js?v=<?= rand() ?>"></script>
 <script type="text/javascript" src="<?= base_url ?>app/RH/department.js?v=<?= rand() ?>"></script>
+<script type="text/javascript" src="<?= base_url ?>app/archivo.js?v=<?= rand() ?>"></script>
+
+
 
 <script type="text/javascript">
     window.onload = function() {
@@ -216,54 +222,4 @@
         })
 
     }
-</script>
-
-<script>
-    document.getElementById('fileInput').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const timeline = document.getElementById('timeline');
-
-            // Crear un nuevo elemento de timeline
-            const listItem = document.createElement('div');
-            listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-
-            // Crear un contenedor para el enlace y la información
-            const fileInfoContainer = document.createElement('div');
-
-            // Crear un enlace para ver/descargar el archivo
-            const fileLink = document.createElement('a');
-            fileLink.href = URL.createObjectURL(file);
-            fileLink.target = '_blank';
-            fileLink.innerText = file.name;
-            fileLink.className = 'fw-bold';
-
-            // Crear un elemento para mostrar la fecha y hora de subida
-            const fileInfo = document.createElement('p');
-            fileInfo.className = 'mb-1 text-muted';
-            fileInfo.innerText = 'Subido el ' + new Date().toLocaleString();
-
-            // Añadir el enlace y la información al contenedor
-            fileInfoContainer.appendChild(fileLink);
-            fileInfoContainer.appendChild(fileInfo);
-
-            // Crear un botón de eliminar
-            const deleteButton = document.createElement('button');
-            deleteButton.className = 'btn btn-danger btn-sm';
-            deleteButton.innerText = 'Eliminar';
-            deleteButton.addEventListener('click', function() {
-                timeline.removeChild(listItem);
-            });
-
-            // Añadir el contenedor de información y el botón de eliminar al elemento del timeline
-            listItem.appendChild(fileInfoContainer);
-            listItem.appendChild(deleteButton);
-
-            // Agregar el nuevo elemento al timeline
-            timeline.prepend(listItem);
-
-            // Limpiar el input para permitir subir el mismo archivo nuevamente
-            event.target.value = '';
-        }
-    });
 </script>

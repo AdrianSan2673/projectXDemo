@@ -175,14 +175,7 @@ class Utils
         return !isset($_SESSION['humanresources']) ? false : true;
     }
 
-    public static function isDarkMode()
-    {
-        if ($_SESSION['dark_mode'] == 0) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+    public static function isDarkMode() {}
 
     public static function showRoles()
     {
@@ -225,7 +218,7 @@ class Utils
         //     return false;
     }
 
-   
+
     public static function getFullDate($date)
     {
         $day = Utils::getDayOfTheWeek($date);
@@ -314,7 +307,7 @@ class Utils
         rmdir($folder);
     }
 
- 
+
 
     public static function encrypt($data)
     {
@@ -331,5 +324,4 @@ class Utils
         list($encrypted_data, $iv) = explode('::', base64_decode($data), 2);
         return openssl_decrypt($encrypted_data, 'aes-256-cbc', $key, 0, $iv);
     }
-
 }
