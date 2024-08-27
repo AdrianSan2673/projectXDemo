@@ -125,8 +125,6 @@
 
         </section>
 
-
-        <!-- This section is used to show the docuement-->
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -140,45 +138,16 @@
                                     <div class="col-lg-12">
                                         <div class="container">
                                             <h2 class="mt-4">Subir Archivos de Evidencia</h2>
-                                            <form action="" id="form-document" enctype="multipart/form-data">
-                                                <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>"> <!-- CSRF Protection -->
-
+                                            <form action="<?= base_url ?>Archivos/Archivo.php" id="form-document" method="post" enctype="multipart/form-data">
                                                 <div class="row">
                                                     <div class="col-8">
-                                                        <label for="evidence_document" class="col-form-label">Cargar Nuevo Documento:</label>
-                                                        <input type="file" id="evidence_document" class="form-control" name="evidence_document" placeholder="Adjuntar archivo" accept="application/pdf" required>
-                                                    </div>
-                                                    <div class="col-4" style="margin-top: 2rem;">
+                                                        <input type="file" id="file" name="file">
                                                         <input class="btn btn-orange" type="submit" value="Subir">
                                                     </div>
                                                 </div>
                                             </form>
 
                                         </div>
-                                        <h3 class="mt-5">Archivos Subidos</h3>
-                                        <table class="table table-border table-hover" id="filesTable">
-                                            <thead>
-                                                <tr>
-                                                    <th lass="text-center align-middle" style='font-size: 17px;'>Fecha de Subida</th>
-                                                    <th lass="text-center align-middle" style='font-size: 17px;'>Nombre de Archivo</th>
-                                                    <th lass="text-center align-middle" style='font-size: 17px;'>Hora de Subida</th>
-                                                    <th lass="text-center align-middle" style='font-size: 17px;'>Ver</th>
-                                                    <th lass="text-center align-middle" style='font-size: 17px;'>Descargar</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php $files = $files ?? []; ?>
-                                                <?php foreach ($files as $file): ?>
-                                                    <tr>
-                                                        <td><?= htmlspecialchars($file['upload_date']) ?></td>
-                                                        <td><?= htmlspecialchars($file['file_name']) ?></td>
-                                                        <td><?= htmlspecialchars($file['upload_time']) ?></td>
-                                                        <td><a href="uploads/evidencias/<?= htmlspecialchars($file['file_name']) ?>" class="btn btn-info btn-sm" target="_blank">Ver</a></td>
-                                                        <td><a href="uploads/evidencias/<?= htmlspecialchars($file['file_name']) ?>" class="btn btn-success btn-sm">Descargar</a></td>
-                                                    </tr>
-                                                <?php endforeach; ?>
-                                            </tbody>
-                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -222,18 +191,4 @@
         })
 
     }
-</script>
-<script>
-    document.querySelector('#form-document').addEventListener('submit', e => {
-        e.preventDefault();
-
-        let file_input = document.querySelector("#evidence_document");
-
-        if (file_input.value != '') {
-            let archivo = new Archivo();
-            archivo.upload_file();
-        } else {
-            utils.showToast('Selecciona un archivo.', 'warning');
-        }
-    });
 </script>
