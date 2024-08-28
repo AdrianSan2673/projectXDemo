@@ -9,6 +9,29 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<?php
+require_once __DIR__ . '/../../config/Connection.php';
+
+
+try {
+    $db = Connection::connect();
+} catch (PDOException $e) {
+    echo "Error en la conexión: " . $e->getMessage();
+    exit();
+}
+?>
+
+<?php
+$id_proyecto = $proyecto->id;
+
+$sql = "SELECT * FROM archivos_subidos WHERE id_proyecto = :id_proyecto";
+$stmt = $db->prepare($sql);
+$stmt->bindParam(':id_proyecto', $id_proyecto, PDO::PARAM_INT);
+$stmt->execute();
+$files = $stmt->fetchAll(PDO::FETCH_OBJ);
+?>
+
+
 
 <div class="content-wrapper">
     <div class="container">
@@ -23,7 +46,7 @@
                             <li class="breadcrumb-item active title-departament"><?= $proyecto->Nombre ?></li>
                         </ol>
                     </div>
-                    <div class="col-sm-12">
+                    <div class="col-md-12">
                         <div class="alert alert-success">
                             <h4><b>Proyecto: </b>
                                 <span class="title-departament">
@@ -139,14 +162,61 @@
                                         <div class="container">
                                             <h2 class="mt-4">Subir Archivos de Evidencia</h2>
                                             <form action="<?= base_url ?>Archivos/Archivo.php" id="form-document" method="post" enctype="multipart/form-data">
+                                                <input type="hidden" name="id_proyecto" value="<?= $proyecto->id ?>">
                                                 <div class="row">
                                                     <div class="col-8">
-                                                        <input type="file" id="file" name="file">
+                                                        <?php
+                                                        if (isset($_SESSION['msj'])) {
+                                                            $respuesta = $_SESSION['msj']; ?>
+                                                            <script>
+                                                                Swal.fire({
+                                                                    title: "Buen trabajo!",
+                                                                    text: '<?php echo $respuesta; ?>',
+                                                                    icon: "success"
+                                                                });
+                                                            </script>
+                                                        <?php
+                                                            unset($_SESSION['msj']);
+                                                        }
+                                                        ?>
+                                                        <input type="file" id="file" name="file" required>
                                                         <input class="btn btn-orange" type="submit" value="Subir">
                                                     </div>
                                                 </div>
                                             </form>
+                                            <!-- Tabla de Archivos Subidos -->
+                                            <h2 class="mt-4">Archivos Subidos</h2>
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nombre del Proyecto</th>
+                                                        <th>Nombre del Archivo</th>
+                                                        <th>Fecha de Subida</th>
+                                                        <th>Hora de Subida</th>
+                                                        <th>Ver</th>
+                                                        <th>Descargar</th>
+                                                        <th>Eliminar</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($files as $file): ?>
+                                                        <tr>
+                                                            <td><?= $proyecto->Nombre ?></td>
+                                                            <td><?= htmlspecialchars($file->file_name) ?></td>
+                                                            <td><?= $file->upload_date ?></td>
+                                                            <td><?= $file->upload_time ?></td>
+                                                            <td><a href="<?= base_url ?>Archivos/Files/<?= htmlspecialchars($file->file_name) ?>" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a></td>
+                                                            <td><a href="<?= base_url ?>Archivos/Files/<?= htmlspecialchars($file->file_name) ?>" download class="btn btn-success"><i class="fa fa-download"></i></a></td>
+                                                            <td><a href="<?= base_url ?>Archivos/Archivo.php?delete=<?= $file->id ?>" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este archivo?');"><i class="fa fa-trash"></i></a></td>
 
+                                                            <td><a href="#" class="btn btn-danger" onclick="confirmDelete('<?= $file->id ?>')"><i class="fa fa-trash"></i></a></td>
+
+
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                            <!-- Fin de la Tabla -->
                                         </div>
                                     </div>
                                 </div>
@@ -157,7 +227,7 @@
             </div>
     </div>
 </div>
-</div>
+
 
 <script type="text/javascript" src="<?= base_url ?>app/cliente.js?v=<?= rand() ?>"></script>
 <script type="text/javascript" src="<?= base_url ?>app/RH/department.js?v=<?= rand() ?>"></script>
@@ -190,5 +260,25 @@
             });
         })
 
+    }
+</script>
+
+<script>
+    function confirmDelete(fileId) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Si se confirma, redirigir a Archivo.php con el ID del archivo a eliminar
+                window.location.href = '<?= base_url ?>Archivos/Archivo.php?delete=' + fileId;
+            }
+        })
     }
 </script>

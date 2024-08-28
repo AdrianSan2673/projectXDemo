@@ -120,11 +120,11 @@
 </style>
 
 <body class="hold-transition sidebar-mini layout-fixed sidebar-collapse layout-navbar-fixed <?= Utils::isDarkMode() ? 'dark-mode' : '' ?>">
-	<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MLF9ZBQL"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-	
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MLF9ZBQL"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
   <!-- Site wrapper -->
   <div class="wrapper">
     <!-- Navbar -->
@@ -147,9 +147,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <li class="nav-item d-none d-sm-inline-block">
           <a href="<?= base_url ?>/recursos" class="nav-link">Blog</a>
         </li> -->
-        <?php //if (count(Utils::getEmpresaByContactoRH()) >= 2 && Utils::isCustomerSA() && ($_GET['controller'] != 'vacante'  && $_GET['controller'] != 'psicometria' && $_GET['controller'] != 'ServicioApoyo' && $_GET['controller'] != 'usuario')) :  ?>
-        
-        <?php //endif; ?>
+        <?php //if (count(Utils::getEmpresaByContactoRH()) >= 2 && Utils::isCustomerSA() && ($_GET['controller'] != 'vacante'  && $_GET['controller'] != 'psicometria' && $_GET['controller'] != 'ServicioApoyo' && $_GET['controller'] != 'usuario')) :  
+        ?>
+
+        <?php //endif; 
+        ?>
       </ul>
 
       <!-- Right navbar links -->
@@ -176,7 +178,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <li class="nav-item dropdown user-menu">
           <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
             <!--<img src="C:\xampp\htdocs\projectXDemo\icons8-usuario-40.png" class="user-image img-circle" alt="User Image">-->
-            <i class="fa fa-user" style="font-size: 25px;"></i>       
+            <i class="fa fa-user" style="font-size: 25px;"></i>
             <span class="d-none d-md-inline"><?= $_SESSION['identity']->Nombres . ' ' . $_SESSION['identity']->Apellidos ?> <i class="right fas fa-angle-down"></i></span>
           </a>
           <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
@@ -225,38 +227,52 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                with font-awesome or any other icon font library -->
             <li class="nav-item">
               <a href="<?= base_url ?>usuario/index" class="nav-link<?= $_GET['controller'] == 'usuario' && $_GET['action'] == 'index' ? ' active' : '' ?>">
-                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <i class="nav-icon fa fa-home"></i>
                 <p>
                   Inicio
                 </p>
               </a>
             </li>
-     
-            <?php if ((Utils::isCustomerSA() )) ?>
-              <li class="nav-header">INICIO</li>
-              <li class="nav-item">
-                <a href="<?= base_url ?>departamento/index" class="nav-link<?= $_GET['controller'] == 'departamento' ? ' active' : '' ?>">
-                  <i class="nav-icon fas fa-users-cog"></i>
-                  <p>
-                    Departamentos
-                  </p>
-                </a>
-              </li>
 
-    
-        
-            <?php //if (Utils::isAdmin()) : ?>
-              <li class="nav-header"></li>
-              <li class="nav-item">
-                <a href="<?= base_url ?>usuario/all" class="nav-link<?= $_GET['controller'] == 'usuario' && $_GET['action'] != 'index' && $_GET['action'] != 'editar_perfil' ? ' active' : '' ?>">
-                  <i class="nav-icon fas fa-users"></i>
-                  <p>
-                    Usuarios
-                  </p>
-                </a>
-              </li>
+            <?php if ((Utils::isCustomerSA())) ?>
+            <li class="nav-header">INICIO</li>
+            <li class="nav-item">
+              <a href="<?= base_url ?>departamento/index" class="nav-link<?= $_GET['controller'] == 'departamento' ? ' active' : '' ?>">
+                <i class="nav-icon fa fa-folder"></i>
+                <p>
+                  Proyectos
+                </p>
+              </a>
+            </li>
 
-            <?php // endif ?>
+            <?php //if (Utils::isAdmin()) : 
+            ?>
+            <li class="nav-header"></li>
+            <li class="nav-item">
+              <a href="<?= base_url ?>departamento/index" class="nav-link<?= $_GET['controller'] == 'departamento' ? ' active' : '' ?>">
+                <i class="nav-icon fa fa-folder-open"></i>
+                <p>
+                  Revisar Proyectos
+                </p>
+              </a>
+            </li>
+
+
+
+            <?php //if (Utils::isAdmin()) : 
+            ?>
+            <li class="nav-header"></li>
+            <li class="nav-item">
+              <a href="<?= base_url ?>usuario/all" class="nav-link<?= $_GET['controller'] == 'usuario' && $_GET['action'] != 'index' && $_GET['action'] != 'editar_perfil' ? ' active' : '' ?>">
+                <i class="nav-icon fas fa-users"></i>
+                <p>
+                  Usuarios
+                </p>
+              </a>
+            </li>
+
+            <?php // endif 
+            ?>
 
           </ul>
         </nav>
@@ -264,4 +280,3 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <!-- /.sidebar -->
     </aside>
-
