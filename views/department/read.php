@@ -207,8 +207,6 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
                                                             <td><?= $file->upload_time ?></td>
                                                             <td><a href="<?= base_url ?>Archivos/Files/<?= htmlspecialchars($file->file_name) ?>" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a></td>
                                                             <td><a href="<?= base_url ?>Archivos/Files/<?= htmlspecialchars($file->file_name) ?>" download class="btn btn-success"><i class="fa fa-download"></i></a></td>
-                                                            <td><a href="<?= base_url ?>Archivos/Archivo.php?delete=<?= $file->id ?>" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este archivo?');"><i class="fa fa-trash"></i></a></td>
-
                                                             <td><a href="#" class="btn btn-danger" onclick="confirmDelete('<?= $file->id ?>')"><i class="fa fa-trash"></i></a></td>
 
 
@@ -275,7 +273,7 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
             confirmButtonText: 'Sí, eliminarlo',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
-            if (result.isConfirmed) {
+            if (result.value == true) {
                 // Si se confirma, redirigir a Archivo.php con el ID del archivo a eliminar
                 window.location.href = '<?= base_url ?>Archivos/Archivo.php?delete=' + fileId;
             }

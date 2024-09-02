@@ -189,7 +189,7 @@
 
               <p style="font-size: 14px;">
                 <?= $_SESSION['identity']->Nombres . ' ' . $_SESSION['identity']->Apellidos ?><br>
-                <?= $_SESSION['identity']->id_tipo_usuario ?>
+                <?= $_SESSION['identity']->tipo_usuario ?>
               </p>
             </li>
             <!-- Menu Body -->

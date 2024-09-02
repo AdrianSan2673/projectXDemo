@@ -10,7 +10,7 @@ class UsuarioController
     {
 
         if (isset($_SESSION['identity']) && !empty($_SESSION['identity'])) {
-  
+
             $page_title = 'Bienvenido(a) | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
@@ -32,7 +32,7 @@ class UsuarioController
     public function login()
     {
         if (Utils::isValid($_POST)) {
-            
+
             $username = isset($_POST['username']) ? trim($_POST['username']) : FALSE;
             $password = isset($_POST['password']) ? trim($_POST['password']) : FALSE;
             if ($username && $password) {
@@ -41,8 +41,8 @@ class UsuarioController
                 //$user->setEmail($username);
                 $user->setPassword($password);
                 $identity = $user->login();
-                
-                
+
+
                 if ($identity && is_object($identity)) {
                     $_SESSION['identity'] = $identity;
                     $user->lastSession($identity->id);
@@ -53,7 +53,8 @@ class UsuarioController
                             $_SESSION['admin'] = TRUE;
                             break;
                         case 2:
-                            $_SESSION['senior'] = TRUE;
+                            $_SESSION['Procura'] = TRUE;
+                            $_SESSION['tipo'] = 'Procura';
                             break;
                         case 3:
                             $_SESSION['junior'] = TRUE;
@@ -97,7 +98,6 @@ class UsuarioController
                             $_SESSION['humanresources'] = TRUE;
                             break;
                     }
-                    
                 } else {
                     echo 10;
                 }
@@ -121,12 +121,12 @@ class UsuarioController
         header("location:" . base_url . "usuario/index");
     }
 
-    
+
     public static function formatear($usuarios)
     {
 
         foreach ($usuarios as &$usuario) {
-           // $usuario['password'] = Utils::decrypt($usuario['password']);
+            // $usuario['password'] = Utils::decrypt($usuario['password']);
             $usuario['last_session'] = ($usuario['last_session'] != NULL) ? Utils::getFullDate($usuario['last_session']) : '';
             $usuario['id'] = Encryption::encode($usuario['id']);
 
@@ -155,17 +155,17 @@ class UsuarioController
     public function all()
     {
         // && Utils::isAdmin()
-        if (Utils::isValid($_SESSION['identity']) ) {
+        if (Utils::isValid($_SESSION['identity'])) {
             $user = new Usuario();
             $users = $user->getAll();
-     
-          
+
+
             $page_title = 'Usuarios | RRHH Ingenia';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
             require_once 'views/user/index.php';
-             require_once 'views/user/modal-user.php';
-           
+            require_once 'views/user/modal-user.php';
+
             // require_once 'views/user/create.php';
             // require_once 'views/user/modal-date.php';
             //require_once 'views/user/edit.php';
@@ -178,7 +178,7 @@ class UsuarioController
 
     public function save()
     {
-        if (Utils::isValid($_POST) ) {
+        if (Utils::isValid($_POST)) {
             $username = isset($_POST['username']) ? trim($_POST['username']) : FALSE;
             $password = isset($_POST['password']) ? trim($_POST['password']) : FALSE;
             $password_confirm = isset($_POST['password_confirm']) ? trim($_POST['password_confirm']) : FALSE;
@@ -233,7 +233,7 @@ class UsuarioController
         }
     }
 
-  
+
     public function cambiar_contrasenia()
     {
         if (isset($_GET['id']) && isset($_GET['token'])) {
@@ -565,16 +565,15 @@ class UsuarioController
                 $UserObj = new User();
                 $UserObj->setId($id);
                 $user = $UserObj->getOne();
-               // $user->password = Utils::decrypt($user->password);
+                // $user->password = Utils::decrypt($user->password);
                 echo json_encode(array(
                     'status' => 1,
                     'user' => $user
                 ));
             } else
                 echo json_encode(array('status' => 0));
-        } else{
+        } else {
             echo json_encode(array('status' => 0));
-
         }
     }
     public function getOneByUsername()
