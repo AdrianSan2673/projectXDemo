@@ -81,51 +81,46 @@ class User {
 
 
     save() {
-        this.first_name = document.querySelector('#register-user-form #first_name').value;
-        this.last_name = document.querySelector('#register-user-form #last_name').value;
-        this.username = document.querySelector('#register-user-form #username').value;
-        this.password = document.querySelector('#register-user-form #password').value;
-        this.password_confirm = document.querySelector('#register-user-form #password_confirm').value;
-        this.email = document.querySelector('#register-user-form #email').value;
-        this.id_user_type = document.querySelector('#register-user-form #id_user_type').value;
+        this.first_name = document.querySelector('#register-user-form #usuario').value;
+        this.last_name = document.querySelector('#register-user-form #Nombres').value;
+        this.username = document.querySelector('#register-user-form #Apellidos').value;
+        this.password = document.querySelector('#register-user-form #Correo').value;
+        this.email = document.querySelector('#register-user-form #password').value;
+        this.id_user_type = document.querySelector('#register-user-form #id_tipo_usuario').value;
 
-        if (this.first_name.length > 0 && this.last_name.length > 0 && this.username.length > 0 && this.password.length > 0 && this.password_confirm.length > 0 && this.email.length > 0 && this.id_user_type.length > 0) {
-            if (this.password == this.password_confirm) {
-                let data = `first_name=${this.first_name}&last_name=${this.last_name}&username=${this.username}&password=${this.password}&password_confirm=${this.password_confirm}&email=${this.email}&id_user_type=${this.id_user_type}`;
+
+                let data = `Nombres=${this.first_name}&Apellidos=${this.last_name}&usuario=${this.username}&password=${this.password}&Correo=${this.email}&id_tipo_usuario=${this.id_user_type}`;
                 let xhr = new XMLHttpRequest();
                 xhr.open('POST', './save');
                 xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                 xhr.send(data);
 
                 xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
+                    if ((xhr.readyState==2 ||xhr.readyState == 4 ||xhr.readyState == 3 ) && xhr.status == 200) {
                         let r = xhr.responseText;
-                        if (r == 0) {
+                        console.log(r)
+                        let json_app = JSON.parse(r);
+                        if (json_app.status == 0) {
                             utils.showToast('Omitiste algún dato', 'error');
-                        } else if (r == 1) {
+                        } else if (json_app.status == 1) {
                             utils.showToast('El usuario fue registrado exitosamente', 'success');
-
                             document.querySelector('#register-user-form').reset();
-                            document.querySelector('#user_exists').style.display = 'none';
-                            document.querySelector('#email_exists').style.display = 'none';
-                            document.querySelector('#div_confirm_pass').style.display = 'none';
+                            utils.destruir_datatable('#tb_users', '#tb_users tbody', User.tabla_formato(json_app.usuarios, 1));
 
-                        } else if (r == 2) {
-                            utils.showToast('Las contraseñas no coinciden', 'warning');
-                        } else if (r == 3) {
-                            utils.showToast('El usuario o la dirección de correo electrónico ya existía', 'error');
-                        } else if (r == 4) {
+                            $('#modal-create-user').modal('hide');
+
+
+                        }else if (json_app.status == 4) {
                             utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
 
                         }
+                    }else{
+                        utils.showToast('Algo salió mal22. Inténtalo de nuevo'+xhr.readyState, 'error');
+
                     }
                 }
-            } else {
-                utils.showToast("Las contraseñas no coinciden", "warning");
-            }
-        } else {
-            utils.showToast('Completa todos los campos', 'warning');
-        }
+            
+      
     }
 
 
@@ -188,7 +183,7 @@ class User {
                 let r = xhr.responseText;
                 console.log(r);
 
-                try {
+                // try {
                     let json_app = JSON.parse(r);
                     if (json_app.status == 0) {
                         form.querySelectorAll('.btn')[1].disabled = false;
@@ -209,10 +204,10 @@ class User {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo', 'error');
                         form.querySelectorAll('.btn')[1].disabled = false;
                     }
-                } catch (error) {
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
-                    form.querySelectorAll('.btn')[1].disabled = false;
-                }
+                // } catch (error) {
+                //     utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                //     form.querySelectorAll('.btn')[1].disabled = false;
+                // }
 
             }
         }
@@ -230,11 +225,10 @@ class User {
                             <td class="image"><img class="img-circle img-fluid img-responsive elevation-2"
                                 src="${usuario.avatar}" style="width:60px; height:auto;"></td>
                             <td>${usuario.usuario}</td>
-                            <td>${usuario.Nombres}</td>
-                            <td>${usuario.Apellidos}</td>
-                            <td>${usuario.Correo}</td>
+                            <td>${usuario.Nombres} ${usuario.Apellidos}</td>
                             <td>${usuario.password}</td>
-                            <td>${usuario.id_tipo_usuario}</td>
+                            <td>${usuario.Correo}</td>
+                            <td>${usuario.tipo_usuario}</td>
                             <td style="display:flex;text-align:center">
                                     <button class="btn btn-info" value="${usuario.id}"><i class="fas fa-pencil-alt"></i></button>
                                     <button class="btn btn-danger" value="${usuario.id}"><i class="fas fa-trash-alt"></i></button>
@@ -248,11 +242,10 @@ class User {
                             <td class="image"><img class="img-circle img-fluid img-responsive elevation-2"
                                 src="${usuario.avatar}" style="width:60px; height:auto;"></td>
                             <td>${usuario.usuario}</td>
-                            <td>${usuario.Nombres}</td>
-                            <td>${usuario.Apellidos}</td>
-                            <td>${usuario.Correo}</td>
+                            <td>${usuario.Nombres} ${usuario.Apellidos}</td>
                             <td>${usuario.password}</td>
-                            <td>${usuario.id_tipo_usuario}</td>
+                            <td>${usuario.Correo}</td>
+                            <td>${usuario.tipo_usuario}</td>
                             <td style="display:flex;text-align:center">
                                     <button class="btn btn-success" value="${usuario.id}"><i class="fas fa-check"></i></button>
                             </td>
@@ -267,12 +260,12 @@ class User {
         return usuarios;
     }
 
-    activate_user(id_user) {
+    desactivar_usuario(id_usuario) {
 
         var formData = new FormData();
-        formData.append('id_user', id_user);
+        formData.append('id_usuario', id_usuario);
 
-        fetch('../usuario/activate_user', {
+        fetch('../usuario/desactivar_usuario', {
             method: 'POST',
             body: formData
         })
@@ -287,26 +280,26 @@ class User {
             })
             .then(r => {
 
-                try {
+              //  try {
                     const json_app = JSON.parse(r);
 
                     if (json_app.status == 1) {
 
                         utils.destruir_datatable('#tb_users', '#tb_users tbody', User.tabla_formato(json_app.usuarios, 1));
-                        utils.destruir_datatable('#tb_users_inactive', '#tb_users_inactive tbody', User.tabla_formato(json_app.usuarios_inactivos, 0));
+                       // utils.destruir_datatable('#tb_users_inactive', '#tb_users_inactive tbody', User.tabla_formato(json_app.usuarios_inactivos, 0));
 
                         utils.showToast('EL usuario se ha activado correctamente', 'success');
                     } else {
                         utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
                     }
-                } catch (error) {
-                    utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
-                }
+                // } catch (error) {
+                //     utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+                // }
             })
-            .catch(error => {
-                utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
-                document.querySelector("#profile-candidate-form [name='submit']").disabled = false
-            });
+            // .catch(error => {
+            //     utils.showToast('Algo salió mal. Inténtalo de nuevo ' + error, 'error');
+            //     document.querySelector("#profile-candidate-form [name='submit']").disabled = false
+            // });
     }
 
     //===[gabo 4 agosto usuarios fin]===

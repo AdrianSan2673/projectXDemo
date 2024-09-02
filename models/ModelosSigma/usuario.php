@@ -2,7 +2,7 @@
 class Usuario {
 
     private $id;
-    private $usuariomanuel;
+    private $usuario;
     private $password;
     private $Nombres;
     private $Apellidos;
@@ -108,7 +108,7 @@ class Usuario {
 	}
 
 	public function getAll(){
-        $stmt = $this->db->prepare("SELECT * FROM usuarios u INNER JOIN tipo_usuario t ON u.id_tipo_usuario=t.id ORDER BY u.id ASC");
+        $stmt = $this->db->prepare("SELECT u.*,t.tipo_usuario FROM usuarios u INNER JOIN tipo_usuario t ON u.id_tipo_usuario=t.id where activacion=1 ORDER BY u.id ASC");
         $stmt->execute();
         $usuarios = $stmt->fetchAll();
         return $usuarios;
@@ -139,6 +139,67 @@ class Usuario {
         return $fetch;
     }
 
+	
+
+	public function desactivar_usuario()
+    {
+  
+		$id = $this->getId();
+		$activacion = $this->getActivation();
+
+    
+        $stmt = $this->db->prepare("UPDATE usuarios 
+        SET activacion=:activacion 
+        WHERE id=:id");
+
+
+		   $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		   $stmt->bindParam(":activacion", $activacion, PDO::PARAM_INT);
+
+		
+
+        $flag = $stmt->execute();
+
+        if ($flag) {
+            $result = true;
+        }
+
+        return $result;
+    }
+
+	public function updateUser()
+    {
+  
+        $usuario = $this->getUsuario();
+        $password = $this->getPassword();
+        $Nombres = $this->getNombres();
+        $Apellidos = $this->getApellidos();
+        $Correo = $this->getCorreo();
+		$id = $this->getId();
+        $id_tipo_usuario = $this->getId_tipo_usuario();
+
+        $stmt = $this->db->prepare("UPDATE usuarios 
+        SET usuario=:usuario, password=:password, Nombres=:Nombres, Apellidos=:Apellidos, Correo=:Correo,id_tipo_usuario=:id_tipo_usuario,modificado=GETDATE() 
+        WHERE id=:id");
+
+           $stmt->bindParam(":usuario", $usuario, PDO::PARAM_STR);
+		   $stmt->bindParam(":password", $password, PDO::PARAM_STR);
+		   $stmt->bindParam(":Nombres", $Nombres, PDO::PARAM_STR);
+		   $stmt->bindParam(":Apellidos", $Apellidos, PDO::PARAM_STR);
+		   $stmt->bindParam(":Correo", $Correo, PDO::PARAM_STR);
+		   $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		   $stmt->bindParam(":id_tipo_usuario", $id_tipo_usuario, PDO::PARAM_INT);
+
+        $flag = $stmt->execute();
+
+        if ($flag) {
+            $result = true;
+        }
+
+        return $result;
+    }
+
+
 	public function save() {
  
         $usuario = $this->getUsuario();
@@ -146,18 +207,18 @@ class Usuario {
         $Nombres = $this->getNombres();
         $Apellidos = $this->getApellidos();
         $Correo = $this->getCorreo();
-		$Telefono = $this->getTelefono();
+		// $Telefono = $this->getTelefono();
         $activation = $this->getActivation();
         $id_tipo_usuario = $this->getId_tipo_usuario();
     
-        $stmt = $this->db->prepare("INSERT INTO users (usuario, password, Nombres, Apellidos, Correo,Telefono, Activation, id_tipo_usuario, creado) VALUES(:usuario, :password, :Nombres, :Apellidos, :Correo, :Telefono, :activation, :id_tipo_usuario, GETDATE())");
+        $stmt = $this->db->prepare("INSERT INTO usuarios (usuario, password, Nombres, Apellidos, Correo, Activacion, id_tipo_usuario, creado,modificado) VALUES(:usuario, :password, :Nombres, :Apellidos, :Correo, :activacion, :id_tipo_usuario, GETDATE(),GETDATE())");
         $stmt->bindParam(":usuario", $usuario, PDO::PARAM_STR);
         $stmt->bindParam(":password", $password, PDO::PARAM_STR);
         $stmt->bindParam(":Nombres", $Nombres, PDO::PARAM_STR);
         $stmt->bindParam(":Apellidos", $Apellidos, PDO::PARAM_STR);
         $stmt->bindParam(":Correo", $Correo, PDO::PARAM_STR);
-        $stmt->bindParam(":Telefono", $Telefono, PDO::PARAM_INT);
-        $stmt->bindParam(":Activation", $activation, PDO::PARAM_STR);
+       // $stmt->bindParam(":Telefono", $Telefono, PDO::PARAM_INT);
+        $stmt->bindParam(":activacion", $activation, PDO::PARAM_STR);
         $stmt->bindParam(":id_tipo_usuario", $id_tipo_usuario, PDO::PARAM_INT);
 		
 
@@ -166,10 +227,31 @@ class Usuario {
         if ($flag) {
             $result = true;
             $this->setId($this->db->lastInsertId());
-            $this->setToken($token);
+          //  $this->setToken($token);
         }
         
         return $result;
     }
+
+
+
+	
+    public function userExists(){
+        $result = FALSE;
+        $username = $this->getUsuario();
+		$stmt = $this->db->prepare("SELECT TOP 1 id, usuario FROM usuarios WHERE usuario = :username");
+		$stmt->bindParam(":username", $username, PDO::PARAM_STR);
+		$stmt->execute();       
+        $fetch = $stmt->fetchObject();
+		$num = $stmt->rowCount();
+		if ($num > 0){
+			$result = $fetch->username;
+            $this->setId($fetch->id);
+		}
+        return $result;
+    }
+
+
+
 }
 ?>

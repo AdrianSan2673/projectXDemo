@@ -22,7 +22,7 @@ class Account {
                     if (login == 0) {
                         $('#modal-login').modal('show');
                     } else {
-                        window.location.reload();
+                      //  window.location.reload();
                     }
                 }
             }

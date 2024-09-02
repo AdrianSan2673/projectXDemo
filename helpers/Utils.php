@@ -57,16 +57,16 @@ class Utils
 
     public static function isAdmin()
     {
-        if (!isset($_SESSION['admin'])) {
+        if (!isset($_SESSION['Administrador'])) {
             return false;
         } else {
             return true;
         }
     }
 
-    public static function isSenior()
+    public static function isCalidad()
     {
-        if (!isset($_SESSION['senior'])) {
+        if (!isset($_SESSION['Calidad'])) {
             return false;
         } else {
             return true;

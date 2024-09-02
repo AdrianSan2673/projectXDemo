@@ -211,13 +211,13 @@ class User {
         $token = $this->getTokenMD5();
         $id_user_type = $this->getId_user_type();
 
-        $stmt = $this->db->prepare("INSERT INTO users (username, password, first_name, last_name, email, activation, token, id_user_type, created_at, modified_at) VALUES(:username, :password, :first_name, :last_name, :email, :activation, :token, :id_user_type, GETDATE(), GETDATE())");
+        $stmt = $this->db->prepare("INSERT INTO users (username, password, first_name, last_name, email, activation, token, id_user_type, created_at, modified_at) VALUES(:username, :password, :first_name, :last_name, :email, :activationn , :token, :id_user_type, GETDATE(), GETDATE())");
         $stmt->bindParam(":username", $username, PDO::PARAM_STR);
         $stmt->bindParam(":password", $password, PDO::PARAM_STR);
         $stmt->bindParam(":first_name", $first_name, PDO::PARAM_STR);
         $stmt->bindParam(":last_name", $last_name, PDO::PARAM_STR);
         $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-        $stmt->bindParam(":activation", $activation, PDO::PARAM_INT);
+        $stmt->bindParam(":activationn", $activation, PDO::PARAM_INT);
         $stmt->bindParam(":token", $token, PDO::PARAM_STR);
         $stmt->bindParam(":id_user_type", $id_user_type, PDO::PARAM_INT);
 

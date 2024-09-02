@@ -29,9 +29,15 @@
                 <a class="btn btn-app btn-lg bg-secondary mx-2" href="<?= base_url ?>departamento/index">
                     <i class="fa fa-folder"></i> Proyectos
                 </a>
+
+
+                <?php if (Utils::isCalidad()) : ?>
                 <a class="btn btn-app btn-lg bg-orange mx-2" href="<?= base_url ?>usuario/all">
                     <i class="fa fa-check-square"></i> Revisar
                 </a>
+                <?php endif ?>
+
+
             </div>
         </div>
     </div>

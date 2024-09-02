@@ -18,9 +18,7 @@
         <button class="btn btn-orange float-right" data-toggle="modal" data-target="#modal-create-user">Crear
           usuario</button>
       </div>
-      <div class="col-sm-2 ml-1">
-        <button class="btn btn-info " data-toggle="modal" data-target="#modal-date">Agregar dia festivo</button>
-      </div>
+    
     </div>
   </section>
   <br>
@@ -34,10 +32,10 @@
           <li class="nav-item">
             <a class="nav-link active" href="#tab_users_active" style="margin:0.2rem" data-toggle="tab">Usuarios Activos</a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" href="#tab_users_inactive" style="margin:0.2rem" data-toggle="tab">Usuarios
               Inactivos</a>
-          </li>
+          </li> -->
         </ul>
       </div>
 
@@ -52,7 +50,6 @@
                   <th>Nombre</th>
                   <th>Contraseña</th>
                   <th>Correo electrónico</th>
-                  <th>Última sesión</th>
                   <th>Tipo</th>
                   <th class="text-right py-0 align-middle">Acciones</th>
                 </tr>
@@ -61,13 +58,12 @@
                 <?php foreach ($users as $user) : ?>
                   <tr>
                   <td class="image"><img class="img-circle img-fluid img-responsive elevation-2" src="<?= $user['avatar'] ?>" style="width:60px; height:auto;"></td>
-                    <td><?= $user['Nombres'] ?></td>
-                    <td><?= $user['Apellidos']?></td>
-                    <td><?= $user['Correo'] ?></td>
                     <td><?= $user['usuario'] ?></td>
-                    <td><?= $user['password'] ?>
-                    </td>
-                    <td><?= $user['tipo_usuario'] ?></td>
+                    <td><?= $user['Nombres']." ".$user['Apellidos']  ?></td>
+                    <td><?=  $user['password']  ?></td>
+                    <td><?= $user['Correo']  ?></td>
+                   
+                    <td><?= $user['tipo_usuario'].$user['id'] ?></td>
                     <td style="display:flex;text-align:center">
                       <button class="btn btn-info" value="<?= Encryption::encode($user['id']) ?>"><i class="fas fa-pencil-alt"></i></button>
                       <button class="btn btn-danger" value="<?= Encryption::encode($user['id']) ?>"><i class="fas fa-trash-alt"></i></button>
@@ -84,7 +80,6 @@
                   <th>Nombre</th>
                   <th>Contraseña</th>
                   <th>Correo electrónico</th>
-                  <th>Última sesión</th>
                   <th>Tipo</th>
                   <th class="text-right py-0 align-middle">Acciones</th>
                 </tr>
@@ -174,7 +169,14 @@
 
       if (e.target.classList.contains('btn-danger') || e.target.offsetParent.classList.contains('btn-danger')) {
 
-        let id = e.target.value
+      
+
+        if (e.target.offsetParent.classList.contains('btn-danger')) {
+          var id = e.target.offsetParent.value
+        } else {
+          var id = e.target.value
+        }
+       
 
         Swal.fire({
           title: '¿Quieres desactivar esta usuario?',
@@ -187,8 +189,9 @@
           confirmButtonText: 'Desactivar'
         }).then((result) => {
           if (result.value == true) {
+
             var user = new User();
-            user.activate_user(id);
+            user.desactivar_usuario(id);
           }
         })
       }
@@ -215,7 +218,7 @@
         }).then((result) => {
           if (result.value == true) {
             var user = new User();
-            user.activate_user(id);
+            user.activar_usuario(id);
           }
         })
 

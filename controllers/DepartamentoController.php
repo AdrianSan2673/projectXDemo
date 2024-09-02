@@ -16,7 +16,9 @@ class DepartamentoController
   
             $projec = new Proyecto();
      
+
             $proyectos = $projec->getAllProject();
+       
 
             $page_title =  'Departamentos | RRHH Ingenia';
 
