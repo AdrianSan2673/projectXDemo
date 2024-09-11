@@ -3,9 +3,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <!--Bootstrap JS-->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js" integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpTRWZm8frl7C5c0bR6erbrsLJmlCRW8GTGHvNhuv8Yk5g7DhGZ1jL6F" crossorigin="anonymous"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -184,37 +184,7 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
                                                     </div>
                                                 </div>
                                             </form>
-                                            <!-- Tabla de Archivos Subidos -->
-                                            <h2 class="mt-4">Archivos Subidos</h2>
-                                            <table class="table table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Nombre del Proyecto</th>
-                                                        <th>Nombre del Archivo</th>
-                                                        <th>Fecha de Subida</th>
-                                                        <th>Hora de Subida</th>
-                                                        <th>Ver</th>
-                                                        <th>Descargar</th>
-                                                        <th>Eliminar</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php foreach ($files as $file): ?>
-                                                        <tr>
-                                                            <td><?= $proyecto->Nombre ?></td>
-                                                            <td><?= htmlspecialchars($file->file_name) ?></td>
-                                                            <td><?= $file->upload_date ?></td>
-                                                            <td><?= $file->upload_time ?></td>
-                                                            <td><a href="<?= base_url ?>Archivos/Files/<?= htmlspecialchars($file->file_name) ?>" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a></td>
-                                                            <td><a href="<?= base_url ?>Archivos/Files/<?= htmlspecialchars($file->file_name) ?>" download class="btn btn-success"><i class="fa fa-download"></i></a></td>
-                                                            <td><a href="#" class="btn btn-danger" onclick="confirmDelete('<?= $file->id ?>')"><i class="fa fa-trash"></i></a></td>
 
-
-                                                        </tr>
-                                                    <?php endforeach; ?>
-                                                </tbody>
-                                            </table>
-                                            <!-- Fin de la Tabla -->
                                         </div>
                                     </div>
                                 </div>
@@ -223,6 +193,99 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
                     </div>
                 </div>
             </div>
+        </section>
+
+
+        <section>
+            <!-- Tabla de Archivos Subidos -->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card-navy">
+                            <div class="card-header">
+                                <h2 class="text-center">Archivos Subidos</h2>
+                            </div>
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-md-12">
+                                    <div class="card shadow-0 border comment-input">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre del Proyecto</th>
+                                                    <th>Nombre del Archivo</th>
+                                                    <th>Fecha de Subida</th>
+                                                    <th>Hora de Subida</th>
+                                                    <th>Ver</th>
+                                                    <th>Descargar</th>
+                                                    <th>Eliminar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($files as $file): ?>
+                                                    <tr>
+                                                        <td><?= $proyecto->Nombre ?></td>
+                                                        <td><?= htmlspecialchars($file->file_name) ?></td>
+                                                        <td><?= $file->upload_date ?></td>
+                                                        <td><?= $file->upload_time ?></td>
+                                                        <td><a href="<?= base_url ?>Archivos/Files/<?= htmlspecialchars($file->file_name) ?>" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a></td>
+                                                        <td><a href="<?= base_url ?>Archivos/Files/<?= htmlspecialchars($file->file_name) ?>" download class="btn btn-success"><i class="fa fa-download"></i></a></td>
+                                                        <td><a href="#" class="btn btn-danger" onclick="confirmDelete('<?= $file->id ?>')"><i class="fa fa-trash"></i></a></td>
+
+
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                        <!-- Fin de la Tabla -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </section>
+
+
+
+        <section>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card-navy">
+                            <div class="card-header">
+                                <h3 class="text-center">Foro de Comentarios</h3>
+                            </div>
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-md-12">
+                                    <div class="card shadow-0 border comment-input">
+                                        <div class="card-body p-4">
+                                            <form id="formulario-comentario">
+                                                <div data-mdb-input-init class="form-outline mb-4">
+                                                    <input type="text" id="comentario" name="comentario" class="form-control" placeholder="Escribe un comentario..." required />
+                                                    <label class="form-label" for="comentario">+ Agregar un comentario</label>
+                                                </div>
+                                            </form>
+
+                                            <button id="vaciar-comentarios" class="btn btn-danger mb-4">Vaciar Comentarios</button>
+
+                                            <div id="comentarios-container">
+                                                <!-- Los comentarios se cargarán aquí -->
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </div>
 </div>
 
@@ -279,4 +342,115 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
             }
         })
     }
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        cargarComentarios();
+
+        // Recargar comentarios cada 5 segundos
+        setInterval(cargarComentarios, 5000);
+
+        // Función para cargar los comentarios
+        function cargarComentarios() {
+            $.ajax({
+                url: '<?= base_url ?>Foro/Foro.php',
+                method: 'GET',
+                success: function(data) {
+                    $('#comentarios-container').html(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error al cargar comentarios:", error);
+                }
+            });
+        }
+
+        // Enviar comentario al presionar Enter
+        $('#comentario').keypress(function(e) {
+            if (e.which == 13 && !e.shiftKey) {
+                e.preventDefault(); // Prevenir el salto de línea
+                $('#formulario-comentario').submit(); // Enviar el formulario
+            }
+        });
+
+        // Enviar comentario
+        $('#formulario-comentario').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '<?= base_url ?>Foro/Foro.php',
+                method: 'POST',
+                data: $(this).serialize(),
+                success: function(data) {
+                    cargarComentarios(); // Recargar comentarios después de enviar
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Comentario enviado',
+                        text: 'Tu comentario ha sido enviado correctamente.'
+                    });
+                    $('#formulario-comentario')[0].reset(); // Limpiar el formulario
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un problema al enviar tu comentario.'
+                    });
+                }
+            });
+        });
+
+        // Vaciar comentarios
+        $('#vaciar-comentarios').on('click', function() {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Esto eliminará todos los comentarios. ¡No podrás deshacer esta acción!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, vaciar comentarios'
+            }).then((result) => {
+                if (result.value == true) {
+                    $.ajax({
+                        url: '<?= base_url ?>Foro/vaciar_comentarios.php',
+                        method: 'POST',
+                        success: function(data) {
+                            try {
+                                const response = JSON.parse(data);
+                                if (response.status === 'success') {
+                                    Swal.fire(
+                                        'Comentarios Vaciados',
+                                        'Todos los comentarios han sido eliminados.',
+                                        'success'
+                                    );
+                                    cargarComentarios(); // Recargar la lista de comentarios
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: response.message || 'Hubo un problema al vaciar los comentarios.'
+                                    });
+                                }
+                            } catch (e) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Hubo un problema al procesar la respuesta del servidor.'
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Hubo un problema al vaciar los comentarios.'
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+    });
 </script>
