@@ -4,8 +4,9 @@ require_once 'models/User.php';
 require_once 'models/RH/Department.php';
 require_once 'models/ModelosSigma/proyecto.php';
 require_once 'models/ModelosSigma/usuario.php';
+//require_once 'controllers/ModalEditProjectController.php';
 
-class DepartamentoController
+class ProyectoController
 {
 
     public function index()
@@ -18,13 +19,15 @@ class DepartamentoController
      
             $proyectos = $projec->getAllProject();
 
-            $page_title =  'Departamentos | RRHH Ingenia';
+            $page_title =  'pryectos | RRHH Ingenia';
 
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
-            require_once 'views/department/index.php';
-            require_once 'views/department/modal-create.php';
+            require_once 'views/proyecto/index.php';
+            require_once 'views/proyecto/modal-create.php';
             require_once 'views/layout/footer.php';
+            require_once 'views/proyecto/modal-create.php';
+            require_once 'views/proyecto/modal_editar_proyecto.php';
         //} 
             //header('location:' . base_url);
     }
@@ -41,13 +44,14 @@ class DepartamentoController
             $projec->setId($idProyecto);
             $proyecto = $projec->getOne();
             
-            $page_title =  'Departamentos | RRHH Ingenia';
+            $page_title =  'Proyectos | RRHH Ingenia';
 
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
-            require_once 'views/department/read.php';
-            require_once 'views/department/modal-create.php';
+            require_once 'views/proyecto/read.php';
+            require_once 'views/proyecto/modal-create.php';
             require_once 'views/layout/footer.php';
+            require_once 'views/proyecto/modal_editar_proyecto.php';
         //} 
             //header('location:' . base_url);
     }
@@ -93,7 +97,7 @@ class DepartamentoController
 
                 for ($i = 0; $i < count($departments); $i++) {
                     $departments[$i]['id'] = Encryption::encode($departments[$i]['id']);
-                    $departments[$i]['url'] = base_url . 'departamento/ver&id=' . $departments[$i]['id'];
+                    $departments[$i]['url'] = base_url . 'proyecto/ver&id=' . $departments[$i]['id'];
                 }
 
                 if ($save) {
@@ -159,7 +163,34 @@ class DepartamentoController
             header('location:' . base_url);
     }
 
-
-
+    public function updateUser() {
+        $id = $_POST['id'];
+        $Nombre = isset($_POST['Nombre']) ? trim($_POST['Nombre']) : FALSE;
+        $Estado = isset($_POST['Estado']) ? trim($_POST['Estado']) : FALSE;
+        $direccion = isset($_POST['direccion']) ? trim($_POST['direccion']) : FALSE;
+        $status = isset($_POST['status']) ? trim($_POST['status']) : FALSE;
+        $Activacion = isset($_POST['Activacion']) ? trim($_POST['Activacion']) : FALSE;
+        $creado = isset($_POST['creado']) ? trim($_POST['creado']) : FALSE;
+        $modificado = isset($_POST['modificado']) ? trim($_POST['modificado']) : FALSE;
     
+        if($id && $Nombre && $Estado && $direccion && $status && $Telefono && $Activacion && $id_tipo_usuario && $creado && $modificado) {
+            $projectObj = new Proyecto();
+            $projectObj->setId($id);
+            $projectObj->setNombre($Nombre);
+            $projectObj->setEstado($Estado);
+            $projectObj->setDireccion($direccion); 
+            $projectObj->setStatus($status);
+            $projectObj->setActivacion($Activacion);
+            $projectObj->setCreado($creado);
+            $projectObj->setModificado($modificado);
+
+            $update = $projectObj->updateProject();
+
+            if ($update) {
+                
+            } else {}
+        } else {
+
+        }
+    }
 }

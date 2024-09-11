@@ -5,7 +5,7 @@
       <div class="row mb-2">
         <div class="col-sm-12">
           <div class="alert alert-success">
-            <h3>Proyectos</h3>
+            <h3>Proyectos por Area</h3>
           </div>
         </div>
       </div>
@@ -26,20 +26,12 @@
       <?php foreach ($proyectos as $proyecto) : ?>
         <div class="col-md-4 ">
           <div class="small-box bg-info">
-            <button class="btn text-white btn-delete" value="<?= Encryption::encode($proyecto['id']) ?>">X</button>
+            <button class="btn text-white btn-delete" value="<?= Encryption::encode($areas['id']) ?>">X</button>
             <div class="inner">
-              <h4><?= $proyecto['Nombre'] ?></h4>
-              <div class="row">
-                <div class="col-6">
-                  <p style="font-size: small;"><?= $proyecto['Estado'] ?> Estado</p>
-                </div>
-                <div class="col-6">
-                  <p style="font-size: small;"><?= $proyecto['status'] ?> Status</p>
-                </div>
-              </div>
+              <h4><?= $areas['nombre_area'] ?></h4>
             </div>
             <?php //if (Utils::permission($_GET['controller'], 'read')) : ?>
-            <a class="small-box-footer" href="<?= base_url ?>departamento/ver&id=<?= Encryption::encode($proyecto['id']) ?>">
+            <a class="small-box-footer" href="<?= base_url ?>proyecto/ver&id=<?= Encryption::encode($areas['id']) ?>">
               Ver
               <i class="fas fa-arrow-circle-right"></i>
             </a>

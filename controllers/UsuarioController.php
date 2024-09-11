@@ -496,7 +496,7 @@ class UsuarioController
 
 
 
-    public function updateUser()
+    public function updateUser() // el formulario se recive por post
     {
         $id = $_POST['id'];
         $username = isset($_POST['username']) ? trim($_POST['username']) : FALSE;
@@ -507,7 +507,7 @@ class UsuarioController
         $id_user_type = isset($_POST['id_user_type']) ? $_POST['id_user_type'] : FALSE;
 
         if ($id && $username && $email  && $first_name && $last_name && $password && $id_user_type) {
-            $userObj = new User();
+            $userObj = new User();// es el modelo de user
             $userObj->setId($id);
             $userObj->setUsername($username);
             $userObj->setFirst_name($first_name);
@@ -531,13 +531,17 @@ class UsuarioController
                 $userObj->setActivation(0);
                 $userObj->updateActivation();
             }
+            
+            $save = $userObj->updateUser();//
 
-            $userObj->updateUser();
             $user = new User();
             $usuarios = $user->getEmployees();
             $usuarios =  UsuarioController::formatear($usuarios);
-
-            echo json_encode(array('status' => 1, 'usuarios' => $usuarios));
+            if ($save) {
+                echo json_encode(array('status' => 1, 'usuarios' => $usuarios));
+            } else {
+                echo json_encode(array('status' => 2));
+            }
         } else
             echo json_encode(array('status' => 0));
     }

@@ -5,7 +5,7 @@ class Department {
     form.querySelectorAll('.btn')[1].disabled = true;
 
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', '../departamento/save');
+    xhr.open('POST', '../proyecto/save');
     xhr.send(formData);
     xhr.onreadystatechange = function () {
       if (xhr.readyState == 4 && xhr.status == 200) {
@@ -65,18 +65,19 @@ class Department {
     }
   }
 
-  updateDepartamento() {
-    var form = document.querySelector("#modal_edit form");
+  updateProyecto() {
+    var form = document.querySelector("#modal_editar_proyecto form");
     var formData = new FormData(form);
 
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', '../departamento/updateDepartamento');
+    xhr.open('POST', '../proyecto/updateDepartamento');
     xhr.send(formData);
 
     xhr.onreadystatechange = function () {
       if (xhr.readyState == 4 && xhr.status == 200) {
         let r = xhr.responseText;
         console.log(r);
+        echo(r);
         try {
           let json_app = JSON.parse(r);
           if (json_app.status == 0) {
@@ -87,7 +88,7 @@ class Department {
               title[i].textContent = json_app.departments
             }
             utils.showToast('Fue actualizado', 'success');
-            $('#modal_edit').modal('hide');
+            $('#modal_editar_proyecto').modal('hide');
 
           } else if (json_app.status == 2) {
             form.querySelectorAll('.btn')[1].disabled = false;
@@ -110,7 +111,7 @@ class Department {
     let xhr = new XMLHttpRequest();
     let data = `id=${id}`;
 
-    xhr.open('POST', '../departamento/delete');
+    xhr.open('POST', '../proyecto/delete');
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.send(data);
 
@@ -142,7 +143,7 @@ class Department {
                                             </div>
                                           </div>
                                         </div>
-                                        <a class="small-box-footer" href="${json_app.base_url}departamento/ver&id=${element.id}">
+                                        <a class="small-box-footer" href="${json_app.base_url}proyecto/ver&id=${element.id}">
                                           Ver
                                           <i class="fas fa-arrow-circle-right"></i>
                                         </a>
