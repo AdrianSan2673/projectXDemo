@@ -163,34 +163,30 @@ class ProyectoController
             header('location:' . base_url);
     }
 
-    public function updateUser() {
+    public function updateProject() {
         $id = $_POST['id'];
-        $Nombre = isset($_POST['Nombre']) ? trim($_POST['Nombre']) : FALSE;
-        $Estado = isset($_POST['Estado']) ? trim($_POST['Estado']) : FALSE;
         $direccion = isset($_POST['direccion']) ? trim($_POST['direccion']) : FALSE;
-        $status = isset($_POST['status']) ? trim($_POST['status']) : FALSE;
-        $Activacion = isset($_POST['Activacion']) ? trim($_POST['Activacion']) : FALSE;
-        $creado = isset($_POST['creado']) ? trim($_POST['creado']) : FALSE;
-        $modificado = isset($_POST['modificado']) ? trim($_POST['modificado']) : FALSE;
-    
-        if($id && $Nombre && $Estado && $direccion && $status && $Telefono && $Activacion && $id_tipo_usuario && $creado && $modificado) {
+        $fase = isset($_POST['fase']) ? trim($_POST['fase']) : FALSE;
+        $Telefono = isset($_POST['Telefono']) ? trim($_POST['Telefono']) : FALSE;
+        $id_tipo_usuario = isset($_POST['id_tipo_usuario']) ? trim($_POST['id_tipo_usuario']) : FALSE;
+        
+        if($id && $direccion && $fase && $Telefono && $id_tipo_usuario) {
             $projectObj = new Proyecto();
             $projectObj->setId($id);
-            $projectObj->setNombre($Nombre);
-            $projectObj->setEstado($Estado);
             $projectObj->setDireccion($direccion); 
-            $projectObj->setStatus($status);
-            $projectObj->setActivacion($Activacion);
-            $projectObj->setCreado($creado);
-            $projectObj->setModificado($modificado);
-
+            $projectObj->setStatus($fase);
+            $projectObj->setTelefono($Telefono);
+            $projectObj->setId_tipo_usuario($id_tipo_usuario);
+       
             $update = $projectObj->updateProject();
-
+            $proyecto = $projectObj->getOne();
             if ($update) {
-                
-            } else {}
+                echo json_encode(array('status' => 1, 'proyecto' => $proyecto));
+            } else {
+                echo json_encode(array('status' => 2));
+            }
         } else {
-
+            echo json_encode(array('status' => 0));
         }
     }
 }

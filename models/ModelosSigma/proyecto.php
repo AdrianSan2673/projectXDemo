@@ -10,7 +10,6 @@
         private $id_tipo_usuario;
         private $creado;
         private $modificado;
-
         private $db;
 
     public function __construct() {
@@ -144,12 +143,14 @@
             $stmt->bindParam(':Telefono', $this->Telefono, PDO::PARAM_STR);
             $stmt->bindParam(':id_tipo_usuario', $this->id_tipo_usuario, PDO::PARAM_INT);
             $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
-        
-            if ($stmt->execute()) {
-                return true;
+            $flag = $stmt->execute();
+            
+            if ($flag) {
+                $result = true;
             } else {
-                return false;
+                $result = false;
             }
+            return $result;
         }
         
     } 

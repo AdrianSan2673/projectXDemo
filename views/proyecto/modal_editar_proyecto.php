@@ -11,7 +11,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="flag" id="flag" value="1">
-                    <input type="hidden" name="id" value="0">
+                    <input  name="id" value = <?= $proyecto->id ?>>
                     <input type="hidden" name="id_cliente_create" value="<?= $_SESSION['id_cliente'] ?>">
                     <div class="form-group">
                         <label class="col-form-label" for="department">Direccion</label>

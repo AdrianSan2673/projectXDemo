@@ -1,10 +1,5 @@
 <?php
-
-
-
-class User
-{
-
+class User {
     private $id;
     private $username;
     private $password;
@@ -166,9 +161,6 @@ class User
     {
         $this->dark_mode = $dark_mode;
     }
-
-
-
 
     public function getUserTypes()
     {
