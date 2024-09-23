@@ -1,6 +1,6 @@
 <!--Bootstrap CSS-->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <!--Bootstrap JS-->
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
@@ -77,7 +77,7 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
                                             <th style='font-size: 17px;'>Area Encargada</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id = "tb_proyecto">
                                         <tr>
                                             <td>
                                                 <p class="title-department" style='font-size: 17px;'><?= $proyecto->direccion ?> <?= $proyecto->Estado ?> </p>
@@ -99,7 +99,7 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
                                 </table>
                             </div>
                             <div class="text-center">
-                                <button class="btn btn-info" id="btn-editar-departamento" onclick="document.getElementById('id01').style.display='block'">Editar</button>
+                            <button class="btn btn-info" id="btn_editar_proyecto">Editar</button>
                             </div>
                         </div>
                     </div>
@@ -208,7 +208,7 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
                             <div class="row d-flex justify-content-center">
                                 <div class="col-md-12">
                                     <div class="card shadow-0 border comment-input">
-                                        <table class="table table-striped">
+                                        <table class="table table-striped" id="archivos">
                                             <thead>
                                                 <tr>
                                                     <th style='font-size: 17px;'>Nombre del Proyecto</th>
@@ -291,7 +291,7 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
 
 
 <script type="text/javascript" src="<?= base_url ?>app/cliente.js?v=<?= rand() ?>"></script>
-<script type="text/javascript" src="<?= base_url ?>app/RH/department.js?v=<?= rand() ?>"></script>
+<script type="text/javascript" src="<?= base_url ?>app/proyecto.js?v=<?= rand() ?>"></script>
 <script type="text/javascript" src="<?= base_url ?>app/archivo.js?v=<?= rand() ?>"></script>
 
 
@@ -299,28 +299,20 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
 <script type="text/javascript">
     window.onload = function() {
 
-        let table = document.querySelector('#tb_employees');
+        let table = document.querySelector('#archivos');
         table.style.display = "table";
         utils.dtTable(table, true);
 
-        let table_position = document.querySelector('#tb_position');
-        table_position.style.display = "table";
-        utils.dtTable(table_position, true);
+        // let table_position = document.querySelector('#tb_position');
+        // table_position.style.display = "table";
+        // utils.dtTable(table_position, true);
 
-        document.querySelector('#modal_edit form').addEventListener('submit', e => {
+        document.querySelector('#modal_editar_proyecto form').addEventListener('submit', e => {
             e.preventDefault();
-            let departamento = new Department();
-            departamento.updateDepartamento();
+            console.log("Hola")
+            let departamento = new Proyecto();
+            departamento.updateProject();
         });
-
-        document.querySelector('#btn-editar-departamento').addEventListener('click', e => {
-            e.preventDefault();
-            $('#modal_edit').modal({
-                backdrop: 'static',
-                keyboard: false
-            });
-        })
-
     }
 </script>
 
@@ -342,6 +334,15 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
             }
         })
     }
+
+    document.querySelector('#btn_editar_proyecto').addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelector('#modal_editar_proyecto form').reset();
+        $('#modal_editar_proyecto').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    });
 </script>
 
 

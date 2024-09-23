@@ -27,11 +27,11 @@
                   <h1 class="display-6">¿Qué deseas hacer hoy?</h1>
                 </div>
                 <div class="col-12 mt-3">
-                  <a class="btn btn-app btn-lg bg-secondary mx-2" href="<?= base_url ?>departamento/index">
+                  <a class="btn btn-app btn-lg bg-secondary mx-2" href="<?= base_url ?>proyecto/index">
                     <i class="fa fa-folder"></i> Proyectos
                   </a>
 
-                  <a class="btn btn-app btn-lg bg-secondary mx-2" href="<?= base_url ?>departamento/index">
+                  <a class="btn btn-app btn-lg bg-secondary mx-2" href="<?= base_url ?>proyecto/index">
                     <i class="fa fa-check-square"></i> Revisar Proyectos
                   </a>
 

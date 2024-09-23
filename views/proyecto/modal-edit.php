@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal_edit">
+<div class="modal fade" id="modal_edit_department">
     <div class="modal-dialog">
         <div class="modal-content">
             <form method="post">
@@ -9,7 +9,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="flag" id="flag" value="0">
+                    <input type="hidden" name="flag" id="flag" value="1">
                     <input type="hidden" name="id" value="<?=Encryption::encode($departamento->id) ?>">
                     <div class="form-group">
                         <label class="col-form-label" for="department">Nombre del Departamento</label>
@@ -25,7 +25,8 @@
     </div>              
 </div>
 
-<script>
+<script type="text/javascript">
+    
     
 
     

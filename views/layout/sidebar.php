@@ -237,7 +237,7 @@
             <?php if ((Utils::isCustomerSA())) ?>
             <li class="nav-header">INICIO</li>
             <li class="nav-item">
-              <a href="<?= base_url ?>departamento/index" class="nav-link<?= $_GET['controller'] == 'departamento' ? ' active' : '' ?>">
+              <a href="<?= base_url ?>proyecto/index" class="nav-link<?= $_GET['controller'] == 'proyecto' ? ' active' : '' ?>">
                 <i class="nav-icon fa fa-folder"></i>
                 <p>
                   Proyectos
@@ -249,7 +249,7 @@
             ?>
             <li class="nav-header"></li>
             <li class="nav-item">
-              <a href="<?= base_url ?>departamento/index" class="nav-link<?= $_GET['controller'] == 'departamento' ? ' active' : '' ?>">
+              <a href="<?= base_url ?>proyecto/index" class="nav-link<?= $_GET['controller'] == 'proyecto' ? ' active' : '' ?>">
                 <i class="nav-icon fa fa-folder-open"></i>
                 <p>
                   Revisar Proyectos

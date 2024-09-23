@@ -141,7 +141,7 @@ class Usuario {
 
 	public function save() {
  
-        $usuario = $this->getUsuario();
+        $usuario = $this->getUsuario(); // saca el objeto de usuario, de la vista  va al JS, js va al controllador, controlador al modelo
         $password = $this->getPassword();
         $Nombres = $this->getNombres();
         $Apellidos = $this->getApellidos();

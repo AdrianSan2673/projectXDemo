@@ -33,23 +33,24 @@
 
 
 <script type="text/javascript">
-window.onload = function() {
-    document.querySelector('#btn_new_department').addEventListener('click', e => {
-        e.preventDefault();
-        document.querySelector('#modal_create form').reset();
-        $('#modal_create').modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-    })
+//window.onload = function() {
+    
+    // document.querySelector('#btn_new_department').addEventListener('click', e => {
+    //     e.preventDefault();
+    //     document.querySelector('#modal_create form').reset();
+    //     $('#modal_create').modal({
+    //         backdrop: 'static',
+    //         keyboard: false
+    //     });
+    // })
 
-    document.querySelector('#modal_create form').onsubmit = function(e) {
-        e.preventDefault();
-        let departamento = new Department();
-            departamento.save();
+    // document.querySelector('#modal_create form').onsubmit = function(e) {
+    //     e.preventDefault();
+    //     let departamento = new Department();
+    //         departamento.save();
 
-        }
-    }
+    //     }
+    // }
 
 
 </script>

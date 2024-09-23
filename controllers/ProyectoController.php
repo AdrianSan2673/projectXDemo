@@ -4,8 +4,9 @@ require_once 'models/User.php';
 require_once 'models/RH/Department.php';
 require_once 'models/ModelosSigma/proyecto.php';
 require_once 'models/ModelosSigma/usuario.php';
+//require_once 'controllers/ModalEditProjectController.php';
 
-class DepartamentoController
+class ProyectoController
 {
 
     public function index()
@@ -18,13 +19,15 @@ class DepartamentoController
      
             $proyectos = $projec->getAllProject();
 
-            $page_title =  'Departamentos | RRHH Ingenia';
+            $page_title =  'pryectos | RRHH Ingenia';
 
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
-            require_once 'views/department/index.php';
-            require_once 'views/department/modal-create.php';
+            require_once 'views/proyecto/index.php';
+            require_once 'views/proyecto/modal-create.php';
             require_once 'views/layout/footer.php';
+            require_once 'views/proyecto/modal-create.php';
+            require_once 'views/proyecto/modal_editar_proyecto.php';
         //} 
             //header('location:' . base_url);
     }
@@ -41,13 +44,14 @@ class DepartamentoController
             $projec->setId($idProyecto);
             $proyecto = $projec->getOne();
             
-            $page_title =  'Departamentos | RRHH Ingenia';
+            $page_title =  'Proyectos | RRHH Ingenia';
 
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
-            require_once 'views/department/read.php';
-            require_once 'views/department/modal-create.php';
+            require_once 'views/proyecto/read.php';
+            require_once 'views/proyecto/modal-create.php';
             require_once 'views/layout/footer.php';
+            require_once 'views/proyecto/modal_editar_proyecto.php';
         //} 
             //header('location:' . base_url);
     }
@@ -93,7 +97,7 @@ class DepartamentoController
 
                 for ($i = 0; $i < count($departments); $i++) {
                     $departments[$i]['id'] = Encryption::encode($departments[$i]['id']);
-                    $departments[$i]['url'] = base_url . 'departamento/ver&id=' . $departments[$i]['id'];
+                    $departments[$i]['url'] = base_url . 'proyecto/ver&id=' . $departments[$i]['id'];
                 }
 
                 if ($save) {
@@ -159,7 +163,30 @@ class DepartamentoController
             header('location:' . base_url);
     }
 
-
-
-    
+    public function updateProject() {
+        $id = $_POST['id'];
+        $direccion = isset($_POST['direccion']) ? trim($_POST['direccion']) : FALSE;
+        $fase = isset($_POST['fase']) ? trim($_POST['fase']) : FALSE;
+        $Telefono = isset($_POST['Telefono']) ? trim($_POST['Telefono']) : FALSE;
+        $id_tipo_usuario = isset($_POST['id_tipo_usuario']) ? trim($_POST['id_tipo_usuario']) : FALSE;
+        
+        if($id && $direccion && $fase && $Telefono && $id_tipo_usuario) {
+            $projectObj = new Proyecto();
+            $projectObj->setId($id);
+            $projectObj->setDireccion($direccion); 
+            $projectObj->setStatus($fase);
+            $projectObj->setTelefono($Telefono);
+            $projectObj->setId_tipo_usuario($id_tipo_usuario);
+       
+            $update = $projectObj->updateProject();
+            $proyecto = $projectObj->getOne();
+            if ($update) {
+                echo json_encode(array('status' => 1, 'proyecto' => $proyecto));
+            } else {
+                echo json_encode(array('status' => 2));
+            }
+        } else {
+            echo json_encode(array('status' => 0));
+        }
+    }
 }

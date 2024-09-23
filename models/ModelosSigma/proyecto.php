@@ -10,7 +10,6 @@
         private $id_tipo_usuario;
         private $creado;
         private $modificado;
-
         private $db;
 
     public function __construct() {
@@ -123,5 +122,36 @@
             $fetch = $stmt->fetchObject();
             return $fetch;
         }
-    }
+
+        public function updateProject() {
+            //Recopilo la informacion del project
+            $id = $this->getId();
+            $Nombre = $this->getNombre();
+            $Estado = $this->getEstado();
+            $direccion = $this->getDireccion();// El valor de la direccion sera pasado por el input
+            $status = $this->getStatus();// El vaalor de status sera pasado por el input
+            $Telefono = $this->getTelefono();// El valor de telefono sera pasado por el input
+            $Activacion = $this->getActivacion(); 
+            $id_tipo_usuario = $this->getId_tipo_usuario(); // el valor de id sera pasado por el input
+            $creado = $this->getCreado();
+            $modificado = $this->getModificado();
+
+            $stmt = $this->db->prepare("UPDATE proyecto 
+            SET direccion=:direccion, status=:status, Telefono=:Telefono, id_tipo_usuario=:id_tipo_usuario WHERE id=:id");
+            $stmt->bindParam(':direccion', $this->direccion, PDO::PARAM_STR);
+            $stmt->bindParam(':status', $this->status, PDO::PARAM_STR);
+            $stmt->bindParam(':Telefono', $this->Telefono, PDO::PARAM_STR);
+            $stmt->bindParam(':id_tipo_usuario', $this->id_tipo_usuario, PDO::PARAM_INT);
+            $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
+            $flag = $stmt->execute();
+            
+            if ($flag) {
+                $result = true;
+            } else {
+                $result = false;
+            }
+            return $result;
+        }
+        
+    } 
 ?>

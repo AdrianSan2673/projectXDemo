@@ -7,8 +7,8 @@ class Connection
     {
         try {
   // //$link = new PDO("mysql:host=localhost;dbname=reclutamiento", "root", "");
-   $link = new PDO("sqlsrv:Server=(local);Database=ProjectX","","");
-    //$link = new PDO("sqlsrv:Server=localhost\\sqlexpress;Database=ProjectX", "", "");
+   //$link = new PDO("sqlsrv:Server=(local);Database=ProjectX","","");
+    $link = new PDO("sqlsrv:Server=localhost\\sqlexpress;Database=ProjectX", "sa", "sasa");
 
 
             $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -24,7 +24,7 @@ class Connection
     {
         try {
         //    $link = new PDO("sqlsrv:Server=localhost;Database=ProyectoX","","");
-       $link = new PDO("sqlsrv:Server=localhost\\sqlexpress;Database=ProjectX", "", "");
+       $link = new PDO("sqlsrv:Server=localhost\\sqlexpress;Database=ProjectX", "sa", "sasa");
 
        
             $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

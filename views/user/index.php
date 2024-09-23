@@ -227,7 +227,7 @@
       e.preventDefault();
       user.updateUser()
     });
-
+//manda a llamar al formulario 
 
 
 
