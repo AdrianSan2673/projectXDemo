@@ -47,7 +47,7 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
                         </ol>
                     </div>
                     <div class="col-md-12">
-                        <div class="alert alert-success">
+                        <div class="alert alert-navy">
                             <h4><b>Proyecto: </b>
                                 <span class="title-departament">
                                     <?= $proyecto->Nombre ?>
@@ -70,11 +70,11 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
                                 <table class="table tablestriped">
                                     <thead>
                                         <tr>
-                                            <th>Dirección</th>
-                                            <th>Fase</th>
-                                            <th>Telefono del encargado</th>
-                                            <th>inicio del proyecto</th>
-                                            <th>Area Encargada</th>
+                                            <th style='font-size: 17px;'>Dirección</th>
+                                            <th style='font-size: 17px;'>Fase</th>
+                                            <th style='font-size: 17px;'>Telefono del encargado</th>
+                                            <th style='font-size: 17px;'>inicio del proyecto</th>
+                                            <th style='font-size: 17px;'>Area Encargada</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -211,25 +211,25 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
                                         <table class="table table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th>Nombre del Proyecto</th>
-                                                    <th>Nombre del Archivo</th>
-                                                    <th>Fecha de Subida</th>
-                                                    <th>Hora de Subida</th>
-                                                    <th>Ver</th>
-                                                    <th>Descargar</th>
-                                                    <th>Eliminar</th>
+                                                    <th style='font-size: 17px;'>Nombre del Proyecto</th>
+                                                    <th style='font-size: 17px;'>Nombre del Archivo</th>
+                                                    <th style='font-size: 17px;'>Fecha de Subida</th>
+                                                    <th style='font-size: 17px;'>Hora de Subida</th>
+                                                    <th style='font-size: 17px;'>Ver</th>
+                                                    <th style='font-size: 17px;'>Descargar</th>
+                                                    <th style='font-size: 17px;'>Eliminar</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php foreach ($files as $file): ?>
                                                     <tr>
-                                                        <td><?= $proyecto->Nombre ?></td>
-                                                        <td><?= htmlspecialchars($file->file_name) ?></td>
-                                                        <td><?= $file->upload_date ?></td>
-                                                        <td><?= $file->upload_time ?></td>
-                                                        <td><a href="<?= base_url ?>Archivos/Files/<?= htmlspecialchars($file->file_name) ?>" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a></td>
-                                                        <td><a href="<?= base_url ?>Archivos/Files/<?= htmlspecialchars($file->file_name) ?>" download class="btn btn-success"><i class="fa fa-download"></i></a></td>
-                                                        <td><a href="#" class="btn btn-danger" onclick="confirmDelete('<?= $file->id ?>')"><i class="fa fa-trash"></i></a></td>
+                                                        <td style='font-size: 16px;'><?= $proyecto->Nombre ?></td>
+                                                        <td style='font-size: 16px;'><?= htmlspecialchars($file->file_name) ?></td>
+                                                        <td style='font-size: 16px;'><?= $file->upload_date ?></td>
+                                                        <td style='font-size: 16px;'><?= $file->upload_time ?></td>
+                                                        <td style='font-size: 16px;'><a href="<?= base_url ?>Archivos/Files/<?= htmlspecialchars($file->file_name) ?>" target="_blank" class="btn btn-primary"><i class="fa fa-eye"></i></a></td>
+                                                        <td style='font-size: 16px;'><a href="<?= base_url ?>Archivos/Files/<?= htmlspecialchars($file->file_name) ?>" download class="btn btn-success"><i class="fa fa-download"></i></a></td>
+                                                        <td style='font-size: 16px;'><a href="#" class="btn btn-danger" onclick="confirmDelete('<?= $file->id ?>')"><i class="fa fa-trash"></i></a></td>
 
 
                                                     </tr>

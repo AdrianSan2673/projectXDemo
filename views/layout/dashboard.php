@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-12">
-          <div class="alert <?= $_SESSION['identity']->usuario == 'salmaperez1' ? 'alert-maroon' : 'alert-success' ?>">
+          <div class="alert <?= $_SESSION['identity']->usuario == 'salmaperez1' ? 'alert-maroon' : 'alert-navy' ?>">
             <h1>¡Hola, <?= $_SESSION['identity']->Nombres ?>!</h1>
           </div>
         </div>
@@ -22,7 +22,7 @@
             <div class="card-body bg-light">
               <div class="row gx-5 justify-content-center text-center">
                 <div class="col-12">
-                  <img src="<?= base_url ?>dist\img\SIGMALOGOORIGINAL.jpeg" alt="LOGOSIGMA" style="width: 100px; height: auto;">
+                  <img src="<?= base_url ?>dist\img\SIGMA.png" alt="LOGOSIGMA" style="width: 100px; height: auto;">
 
                   <h1 class="display-6">¿Qué deseas hacer hoy?</h1>
                 </div>
@@ -40,6 +40,39 @@
                   </a>
                 </div>
               </div>
+            </div>
+          </section>
+
+          <section>
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+              <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+              </ol>
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img class="d-block w-100" src="<?= base_url ?>dist\img\slide.png" alt="First slide">
+                </div>
+                <div class="carousel-item">
+                  <img class="d-block w-100" src="<?= base_url ?>dist\img\slide1.png" alt="Second slide">
+                </div>
+                <div class="carousel-item">
+                  <img class="d-block w-100" src="<?= base_url ?>dist\img\slide2.png" alt="Third slide">
+                </div>
+                <div class="carousel-item">
+                  <img class="d-block w-100" src="<?= base_url ?>dist\img\slide3.png" alt="Fourth slide">
+                </div>
+              </div>
+              <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
             </div>
           </section>
 

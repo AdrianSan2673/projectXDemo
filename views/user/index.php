@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-12">
-          <div class="alert alert-success">
+          <div class="alert alert-navy">
             <h3>Usuarios</h3>
           </div>
 
@@ -60,9 +60,9 @@
               <tbody>
                 <?php foreach ($users as $user) : ?>
                   <tr>
-                  <td class="image"><img class="img-circle img-fluid img-responsive elevation-2" src="<?= $user['avatar'] ?>" style="width:60px; height:auto;"></td>
+                    <td class="image"><img class="img-circle img-fluid img-responsive elevation-2" src="<?= $user['avatar'] ?>" style="width:60px; height:auto;"></td>
                     <td><?= $user['Nombres'] ?></td>
-                    <td><?= $user['Apellidos']?></td>
+                    <td><?= $user['Apellidos'] ?></td>
                     <td><?= $user['Correo'] ?></td>
                     <td><?= $user['usuario'] ?></td>
                     <td><?= $user['password'] ?>
@@ -149,7 +149,6 @@
 
 
 <script>
- 
   $(document).ready(function() {
     let table = document.querySelector('#tb_users');
     utils.dtTable(table);
