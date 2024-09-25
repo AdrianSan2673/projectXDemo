@@ -23,10 +23,3 @@
 
 <body class="hold-transition login-page login-bg">
     <div class="login-box">
-        <div class="login-logo">
-            <a href="<?= base_url ?>">
-                <img src="<?= base_url ?>dist\img\SIGMALOGOORIGINAL.jpeg" class="img-rounded" alt="LOGOSIGMA" style="width: 200px; height: auto;">
-
-            </a>
-
-        </div>
