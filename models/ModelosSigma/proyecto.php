@@ -123,16 +123,34 @@
             return $fetch;
         }
 
+        public function createNewProject(){
+            
+            $Nombre = $this->getNombre();
+            $Estado = $this->getEstado();
+            $direccion = $this->getDireccion();
+            $Telefono = $this->getTelefono();
+
+            $stmt = $this->db->prepare("INSERT INTO proyecto (Nombre, Estado, direccion, Telefono, creado, modificado,status,Activacion,id_tipo_usuario) 
+            VALUES(:Nombre, :Estado, :direccion, :Telefono, GETDATE(),GETDATE(),1,1,1)");
+            $stmt->bindParam(':Nombre',$this->Nombre, PDO::PARAM_STR);
+            $stmt->bindParam(':Estado',$this->Estado, PDO::PARAM_STR);
+            $stmt->bindParam(':direccion',$this->direccion, PDO::PARAM_STR);
+            $stmt->bindParam(':Telefono',$this->Telefono, PDO::PARAM_STR);   
+            $result = $stmt->execute();
+            return $result;
+           
+        }
+
         public function updateProject() {
             //Recopilo la informacion del project
             $id = $this->getId();
             $Nombre = $this->getNombre();
             $Estado = $this->getEstado();
-            $direccion = $this->getDireccion();// El valor de la direccion sera pasado por el input
-            $status = $this->getStatus();// El vaalor de status sera pasado por el input
-            $Telefono = $this->getTelefono();// El valor de telefono sera pasado por el input
+            $direccion = $this->getDireccion();
+            $status = $this->getStatus();
+            $Telefono = $this->getTelefono();
             $Activacion = $this->getActivacion(); 
-            $id_tipo_usuario = $this->getId_tipo_usuario(); // el valor de id sera pasado por el input
+            $id_tipo_usuario = $this->getId_tipo_usuario(); 
             $creado = $this->getCreado();
             $modificado = $this->getModificado();
 

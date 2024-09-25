@@ -1,3 +1,4 @@
+<script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
@@ -15,14 +16,14 @@
   <section class="content-header">
     <div class="row">
       <div class="col-sm-2 ml-auto">
-        <button class="btn btn-orange float-right" id="btn_new_department">Crear Departamento</button>
+        <button class="btn btn-orange float-right" id="btn_new_project">Crear proyecto</button>
       </div>
     </div>
   </section>
   <?php //endif ?>
   <section class="content">
 
-    <div class="row mt-3 " id="all_departments">
+    <div class="row mt-3 " id="all_projects">
       <?php foreach ($proyectos as $proyecto) : ?>
         <div class="col-md-4 ">
           <div class="small-box bg-info">
@@ -55,9 +56,9 @@
 
 
 <script type="text/javascript" src="<?= base_url ?>app/RH/department.js?v=<?= rand() ?>"></script>
-
+<script type="text/javascript" src="<?= base_url ?>app/proyecto.js?v=<?= rand() ?>"></script>
 <script>
-  document.querySelector('#all_departments').addEventListener('click', function(e) {
+  document.querySelector('#all_projects').addEventListener('click', function(e) {
 
     if (e.target.classList.contains('btn-delete')) {
       Swal.fire({
@@ -77,5 +78,20 @@
       })
     }
   })
-</script>
 
+  document.querySelector('#btn_new_project').addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector('#modal_create form').reset();
+    $('#modal_create').modal({
+      backdrop: 'static',
+      keyboard: false
+    });
+  });
+
+  document.querySelector('#btn_create_project').addEventListener('click' , e => {
+    e.preventDefault();
+    console.log("hola desde el index");
+    let project = new Proyecto();
+    project.createNewProject();
+  })
+</script>

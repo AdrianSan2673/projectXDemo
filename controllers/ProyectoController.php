@@ -19,17 +19,18 @@ class ProyectoController
      
             $proyectos = $projec->getAllProject();
 
+            $user = new User();
+
+            $users = $user->getAll();
+
             $page_title =  'pryectos | RRHH Ingenia';
 
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
-            require_once 'views/proyecto/index.php';
-            require_once 'views/proyecto/modal-create.php';
-            require_once 'views/layout/footer.php';
             require_once 'views/proyecto/modal-create.php';
             require_once 'views/proyecto/modal_editar_proyecto.php';
-        //} 
-            //header('location:' . base_url);
+            require_once 'views/proyecto/index.php';
+            require_once 'views/layout/footer.php';
     }
 
     public function ver()
@@ -115,8 +116,6 @@ class ProyectoController
         } else
             echo json_encode(array('status' => 2));
     }
-
-
   
     public function getDepartmentsByEmpresa()
     {
@@ -161,6 +160,36 @@ class ProyectoController
             }
         } else
             header('location:' . base_url);
+    }
+
+    public function createNewProject(){
+       
+        $Nombre = isset($_POST['Nombre']) ? trim($_POST['Nombre']) : FALSE;
+        $Estado = isset($_POST['Estado']) ? trim($_POST['Estado']) : FALSE;
+        $direccion = isset($_POST['direccion']) ? trim($_POST['direccion']) : FALSE;
+       
+        $Telefono = isset($_POST['Telefono']) ? trim($_POST['Telefono']) : FALSE;
+        
+        $userSelect = isset($_POST['userSelect']) ? $_POST['userSelect'] : FALSE;
+
+        if($Nombre && $Estado && $direccion && $Telefono){
+            $projectObj = new Proyecto();
+            $projectObj->setNombre($Nombre);
+            $projectObj->setEstado($Estado);
+            $projectObj->setDireccion($direccion);
+            $projectObj->setTelefono($Telefono);
+         
+           
+            $create = $projectObj->createNewProject();
+            $proyecto = $projectObj->getAllProject();
+            if ($create){
+                echo json_encode(array('status' => 1, 'proyectos' => $proyecto));
+            } else {
+                echo json_encode(array('status' => 2));
+            }
+        } else {
+            echo json_encode(array('status' => 0));
+        }
     }
 
     public function updateProject() {

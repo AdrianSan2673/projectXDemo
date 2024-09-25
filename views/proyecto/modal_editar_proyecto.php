@@ -1,10 +1,9 @@
-
 <div class="modal fade" id="modal_editar_proyecto">
     <div class="modal-dialog">
         <div class="modal-content">
             <form method="post">
                 <div class="modal-header">
-                    <h4 class="modal-title">Departamento</h4>
+                    <h4 class="modal-title">Proyecto</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -38,25 +37,3 @@
         </div>
     </div>
 </div>
-
-
-
-<!-- 
-    document.querySelector('#modal_editar_proyecto form').onsubmit = function(e) {
-        e.preventDefault();
-        
-        let proyecto = new Proyecto();
-        proyecto.id = document.querySelector('#project_id').value;
-        proyecto.direccion = document.querySelector('#direccion').value;
-        proyecto.status = document.querySelector('#fase').value;
-        proyecto.Telefono = document.querySelector('#Telefono').value;
-        proyecto.id_tipo_usuario = document.querySelector('#id_tipo_usuario').value;
-        
-        if (proyecto.update()) {
-            alert('Proyecto actualizado con éxito');
-            location.reload(); // Recargar la página o actualizar la tabla de proyectos
-        } else {
-            alert('Error al actualizar el proyecto');
-        }
-    }
--->

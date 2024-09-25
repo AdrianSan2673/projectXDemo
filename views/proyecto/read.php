@@ -63,7 +63,7 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card card-primary">
-                            <div class="card-header">
+                            <div class="card-header"> 
                                 <h3 class="text-center">Datos del proyecto</h3>
                             </div>
                             <div class="col-12 table-responsive">
@@ -98,8 +98,11 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
                                     </tbody>
                                 </table>
                             </div>
+                            
+                            <div class="card-footer"> 
                             <div class="text-center">
                             <button class="btn btn-info" id="btn_editar_proyecto">Editar</button>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -205,9 +208,14 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
                             <div class="card-header">
                                 <h2 class="text-center">Archivos Subidos</h2>
                             </div>
-                            <div class="row d-flex justify-content-center">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="container">
+                            <div>
                                 <div class="col-md-12">
                                     <div class="card shadow-0 border comment-input">
+
                                         <table class="table table-striped" id="archivos">
                                             <thead>
                                                 <tr>
@@ -237,6 +245,10 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
                                             </tbody>
                                         </table>
                                         <!-- Fin de la Tabla -->
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
                                     </div>
                                 </div>
                             </div>
