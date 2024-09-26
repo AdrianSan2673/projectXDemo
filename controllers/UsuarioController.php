@@ -204,7 +204,7 @@ class UsuarioController
             header("location:" . base_url);
         }
     }
-
+}
 
     public function desactivar_usuario()
     {
@@ -616,7 +616,7 @@ class UsuarioController
             } else
                 echo json_encode(array('status' => 0));
         } else {
-        } else {
+        
             echo json_encode(array('status' => 0));
         }
     }

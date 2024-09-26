@@ -57,16 +57,13 @@
               <tbody>
                 <?php foreach ($users as $user) : ?>
                   <tr>
-                    <td class="image"><img class="img-circle img-fluid img-responsive elevation-2" src="<?= $user['avatar'] ?>" style="width:60px; height:auto;"></td>
-                    <td><?= $user['Nombres'] ?></td>
-                    <td><?= $user['Apellidos'] ?></td>
-                    <td><?= $user['Correo'] ?></td>
+                  <td class="image"><img class="img-circle img-fluid img-responsive elevation-2" src="<?= $user['avatar'] ?>" style="width:60px; height:auto;"></td>
                     <td><?= $user['usuario'] ?></td>
-                    <td><?= $user['Nombres']." ".$user['Apellidos']  ?></td>
-                    <td><?=  $user['password']  ?></td>
-                    <td><?= $user['Correo']  ?></td>
-                   
-                    <td><?= $user['tipo_usuario'].$user['id'] ?></td>
+                    <td><?= $user['Nombres']. $user['Apellidos']?></td>
+                    <td><?= $user['password'] ?></td>
+                    <td><?= $user['Correo'] ?></td>
+                    <td><?= $user['tipo_usuario'] ?></td>
+    
                     <td style="display:flex;text-align:center">
                       <button class="btn btn-info" value="<?= Encryption::encode($user['id']) ?>"><i class="fas fa-pencil-alt"></i></button>
                       <button class="btn btn-danger" value="<?= Encryption::encode($user['id']) ?>"><i class="fas fa-trash-alt"></i></button>
