@@ -169,6 +169,7 @@ class User {
 
 
     //===[gabo 4 agosto usuarios ]===
+    //manda a llamar el modal de user 
     updateUser() {
         var form = document.querySelector("#modal-update-user form");
         var formData = new FormData(form);

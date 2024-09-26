@@ -3,20 +3,20 @@
         <div class="row mx-auto">
           <div class="col-lg-4 col-md-4 col-sm-4 col-12 text-center mb-3">
            
-              <img src="<?=base_url?>dist/img/RRHHIngenia-Website2020_LogoFooter.svg" alt="RRHH Ingenia" class="img-fluid logo">
+              <img src="" alt="" class="img-fluid logo">
           
           </div>
           <div class="col-lg-4 col-md-4 col-sm-4 col-12 text-center mb-3">
-            <p>&copy; <?=date('Y')?> - RRHH Ingenia</p>
+            <p></p>
             <p><a href="<?= base_url ?>aviso-de-privacidad/">Aviso de privacidad</a></p>
             <p>Todos los derechos reservados.</p>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-4 col-12 text-center mb-3">
-            <a href="https://www.facebook.com/RRHHIngenia/" target="_blank">
-              <img class="icon" src="<?=base_url?>dist/img/RRHHIngenia-Website2020_FacebookIcon.svg" alt="Facebook">
+            <a href="" target="_blank">
+              <img class="icon" src="" alt="Facebook">
             </a>
-            <a href="https://mx.linkedin.com/company/rrhh-ingenia" target="_blank">
-              <img class="icon" src="<?=base_url?>dist/img/RRHHIngenia-Website2020_LinkedinIcon.svg" alt="Linkedin">
+            <a href="" target="_blank">
+              <img class="icon" src="" alt="Linkedin">
             </a>
               
           </div>
@@ -46,7 +46,7 @@
     window.stepper = new Stepper(document.querySelector('.bs-stepper'))
   })
   $(function(){
-    $('.select2').select2();
+  //  $('.select2').select2();
 	$('.summernote').summernote({
       fontNames: ['SinkinSans'],
       height: 250,
@@ -57,9 +57,9 @@
         ['para', ['ul', 'ol', 'paragraph']],
         ['height', ['height']]      ]
     })
-    $('.select2bs4').select2({
-      theme: 'bootstrap4'
-    })
+    //$('.select2bs4').select2({
+      //theme: 'bootstrap4'
+    //})
     $('[data-mask]').inputmask()
     $("input[data-bootstrap-switch]").each(function(){
       $(this).bootstrapSwitch('state', $(this).prop('checked'));

@@ -44,9 +44,6 @@ class UsuarioController
                 $identity = $user->login();
 
 
-                var_dump($identity);
-                die();
-
                 if ($identity && is_object($identity)) {
                     $_SESSION['identity'] = $identity;
 
@@ -60,7 +57,8 @@ class UsuarioController
                             $_SESSION['Administrador'] = TRUE;
                             break;
                         case 2:
-                            $_SESSION['senior'] = TRUE;
+                            $_SESSION['Procura'] = TRUE;
+                            $_SESSION['tipo'] = 'Procura';
                             break;
                         case 3:
                             $_SESSION['Calidad'] = TRUE;
@@ -128,6 +126,7 @@ class UsuarioController
     }
 
 
+
     public static function formatear($usuarios)
     {
 
@@ -161,6 +160,7 @@ class UsuarioController
     public function all()
     {
         // && Utils::isAdmin()
+        if (Utils::isValid($_SESSION['identity'])) {
         if (Utils::isValid($_SESSION['identity'])) {
             $user = new Usuario();
             $users = $user->getAll();
@@ -283,6 +283,7 @@ class UsuarioController
             header("location:" . base_url);
         }
     }
+
 
 
     public function cambiar_contrasenia()
@@ -547,7 +548,7 @@ class UsuarioController
 
 
 
-    public function updateUser()
+    public function updateUser() // el formulario se recive por post
     {
         $id = $_POST['id'];
         $usuario = isset($_POST['usuario']) ? trim($_POST['usuario']) : FALSE;
@@ -607,12 +608,14 @@ class UsuarioController
                 $UserObj->setId($id);
                 $user = $UserObj->getOne();
                 // $user->password = Utils::decrypt($user->password);
+                // $user->password = Utils::decrypt($user->password);
                 echo json_encode(array(
                     'status' => 1,
                     'user' => $user
                 ));
             } else
                 echo json_encode(array('status' => 0));
+        } else {
         } else {
             echo json_encode(array('status' => 0));
         }
