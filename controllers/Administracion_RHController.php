@@ -25,7 +25,7 @@ class Administracion_RhController
             $servicios_rh->getALL();
             $servicios = $servicios_rh->getAll();
 
-            $page_title = 'Facturación RH | RRHH Ingenia';
+            $page_title = 'Facturación RH | SIGMA';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
             require_once 'views/administracion_RH/modal-editRH.php';
@@ -49,7 +49,7 @@ class Administracion_RhController
             }
 
 
-            $page_title = 'Cobranza RH | RRHH Ingenia';
+            $page_title = 'Cobranza RH | SIGMA';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
             // require_once 'views/administracion/modal_afectar_facturas_cobranza.php';
@@ -344,7 +344,7 @@ class Administracion_RhController
             }
 
 
-            $page_title = "{$factura->factura} Factura | RRHH Ingenia";
+            $page_title = "{$factura->factura} Factura | SIGMA";
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
             require_once 'views/administracion_RH/editar_factura.php';

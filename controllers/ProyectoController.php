@@ -25,7 +25,7 @@ class ProyectoController
 
             $users = $user->getAll();
 
-            $page_title =  'pryectos | RRHH Ingenia';
+            $page_title =  'proyectos | SIGMA';
 
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
@@ -47,7 +47,7 @@ class ProyectoController
             $projec->setId($idProyecto);
             $proyecto = $projec->getOne();
             
-            $page_title =  'Proyectos | RRHH Ingenia';
+            $page_title =  'Proyectos | SIGMA';
 
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';

@@ -22,7 +22,7 @@
 				<img src="http://<?=$_SERVER['SERVER_NAME']?>/blog/wp-content/uploads/2020/08/RRHHIngenia-Website2020_LogoFooter.png" alt="RRHH Ingenia" class="img-fluid logo">
 			  </div>
 			  <div class="col-lg-4 col-md-4 col-sm-4 col-12 text-center mb-3">
-				<p>&copy; 2020 - RRHH Ingenia</p>
+				<p>&copy; 2020 - SIGMA</p>
 				<p>Todos los derechos reservados.</p>
 			  </div>
 			  <div class="col-lg-4 col-md-4 col-sm-4 col-12 text-center mb-3">

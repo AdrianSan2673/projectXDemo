@@ -11,7 +11,7 @@ class UsuarioController
 
         if (isset($_SESSION['identity']) && !empty($_SESSION['identity'])) {
 
-            $page_title = 'Bienvenido(a) | RRHH Ingenia';
+            $page_title = 'Bienvenido(a) | SIGMA';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
             require_once 'views/layout/dashboard.php';
@@ -20,7 +20,7 @@ class UsuarioController
             require_once 'views/layout/footer.php';
         } else {
 
-            $page_title = 'Iniciar sesión | RRHH Ingenia';
+            $page_title = 'Iniciar sesión | SIGMA';
             require_once 'views/user/header.php';
             require_once 'views/user/login.php';
             require_once 'views/user/footer.php';
@@ -189,7 +189,7 @@ class UsuarioController
 
 
 
-            $page_title = 'Usuarios | RRHH Ingenia';
+            $page_title = 'Usuarios | SIGMA';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
             require_once 'views/user/index.php';
@@ -294,7 +294,7 @@ class UsuarioController
             $user->setToken_password($_GET['token']);
             $flag = $user->verifyToken_password();
 
-            $page_title = 'Cambiar contraseña | RRHH Ingenia';
+            $page_title = 'Cambiar contraseña | SIGMA';
             require_once 'views/user/header.php';
             require_once 'views/user/new_password.php';
             require_once 'views/user/footer.php';
@@ -357,7 +357,7 @@ class UsuarioController
     {
         if (!isset($_SESSION['identity'])) {
 
-            $page_title = 'Regístrate | RRHH Ingenia';
+            $page_title = 'Regístrate | SIGMA';
             require_once 'views/user/header.php';
             require_once 'views/user/create_candidate copy.php';
             require_once 'views/user/footer.php';
