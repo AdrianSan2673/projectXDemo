@@ -26,14 +26,18 @@
                     <div class="form-group">
                         <label class="col-form-label" for="createNewProject">Telefono del encargado</label>
                         <input type="text" class="form-control" name="Telefono" id="createNewProject" maxlength="100" required>
-                    </div>
-    
-                    <select class="custom-select" id="createNewProject" name="userSelect" multiple data-coreui-search="true">
-                        <option selected>Open this select menu</option>
-                        <?php foreach ($users as $user) : ?>
+                    </div class="form-group">
+                    <!-- Pendiente de implementar
+                    <div>
+                        <label class="col-form-label" for="createNewProject">Encargado del proyecto</label>
+                        <select class="custom-select" id="userSelect" name="userSelect" multiple data-coreui-search="true" required>
+                            <option disabled="">Selecciona al encargado</option>
+                            <?php foreach ($users as $user) : ?>
                             <option><?= $user['usuario'] ?></option>
                         <?php endforeach; ?>
                     </select>
+                    </div>
+                            -->
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>

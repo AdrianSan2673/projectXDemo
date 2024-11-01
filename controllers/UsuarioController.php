@@ -48,54 +48,25 @@ class UsuarioController
                     $user->lastSession($identity->id);
                     echo 1;
                     $_SESSION['dark_mode'] = $_SESSION['identity']->dark_mode;
-                    switch ($identity->id_tipo_usuario) {
-                        case 1:
-                            $_SESSION['admin'] = TRUE;
+                    switch ($identity->tipo_usuario) {
+                        case "logistica":
+                            $_SESSION['logistica'] = TRUE;
                             break;
-                        case 2:
-                            $_SESSION['Procura'] = TRUE;
-                            $_SESSION['tipo'] = 'Procura';
+                        case "procura":
+                            $_SESSION['procura'] = TRUE;
+                            $_SESSION['tipo'] = 'procura';
                             break;
-                        case 3:
-                            $_SESSION['junior'] = TRUE;
+                        case "calidad":
+                            $_SESSION['calidad'] = TRUE;
+                            $_SESSION['tipo'] = 'calidad';
                             break;
-                        case 4:
-                            $_SESSION['manager'] = TRUE;
+                        case "gerente de logistica":
+                            $_SESSION['gerente de logistica'] = TRUE;
+                            $_SESSION['tipo'] = 'gerente de logistica';
                             break;
-                        case 5:
-                            $_SESSION['salesmanager'] = TRUE;
-                            break;
-                        case 6:
-                            $_SESSION['customer'] = TRUE;
-                            break;
-                        case 7:
-                            $_SESSION['candidate'] = TRUE;
-                            break;
-                        case 8:
-                            $_SESSION['sales'] = TRUE;
-                            break;
-                        case 9:
-                            $_SESSION['recruitmentmanager'] = TRUE;
-                            break;
-                        case 10:
-                            $_SESSION['samanager'] = TRUE;
-                        case 11:
-                            $_SESSION['operationssupervisor'] = TRUE;
-                            break;
-                        case 12:
-                            $_SESSION['logisticssupervisor'] = TRUE;
-                            break;
-                        case 13:
-                            $_SESSION['account'] = TRUE;
-                            break;
-                        case 14:
-                            $_SESSION['logistics'] = TRUE;
-                            break;
-                        case 15:
-                            $_SESSION['customerSA'] = TRUE;
-                            break;
-                        case 16:
-                            $_SESSION['humanresources'] = TRUE;
+                        case "superviso":
+                            $_SESSION['superviso'] = TRUE;
+                            $_SESSION['tipo'] = 'superviso';
                             break;
                     }
                 } else {
@@ -107,6 +78,8 @@ class UsuarioController
         } else {
             header("location:" . base_url . SID);
         }
+        var_dump($_SESSION);
+        die();
     }
 
     public function logout()

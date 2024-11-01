@@ -29,6 +29,7 @@ $stmt = $db->prepare($sql);
 $stmt->bindParam(':id_proyecto', $id_proyecto, PDO::PARAM_INT);
 $stmt->execute();
 $files = $stmt->fetchAll(PDO::FETCH_OBJ);
+$userType = $_SESSION['identity']->tipo_usuario;
 ?>
 
 
@@ -58,6 +59,29 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
                 </div>
             </div><!-- /.container-fluid -->
         </section>
+        <!-- Pendiente de agregar
+        <section class="content">
+            <div class = "container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class = "card-header">
+                                <h3 class="text-center">Encargado</h3>
+                            </div>
+                            <div class = "col-md-12 table-responsive">
+                                <table class="table tablestriped">
+                                    <thead>
+                                        <tr>
+                                            <th style='font-size: 17px;'></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section> -->
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -109,48 +133,7 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
                 </div>
             </div>
         </section>
-
-        <!--Open Edit Form  -->
-        <!--<section class="content"> -->
-        <div id="id01" class="modal">
-            <div class="card-header">
-                <h3 class="text-center">Editar Proyecto</h3>
-
-            </div>
-            <div>
-                <div class="card-body">
-                    <label for="inputName">Nombre</label>
-                    <input type="text" id="inputName" class="form-control" value="AdminLTE">
-                </div>
-                <div class="card-body">
-                    <label for="inputName">Estado</label>
-                    <input type="text" id="inputEstado" class="form-control" value="AdminLTE">
-                </div>
-                <div class="card-body">
-                    <label for="inputName">Direccion</label>
-                    <input type="text" id="inputAddress" class="form-control" value="AdminLTE">
-                </div>
-                <div class="card-body">
-                    <label for="inputName">Estatus</label>
-                    <input type="text" id="inputStatus" class="form-control" value="AdminLTE">
-                </div>
-                <div class="card-body">
-                    <label for="inputName">Telefono</label>
-                    <input type="text" id="inputPhone" class="form-control" value="AdminLTE">
-                </div>
-                <div class="card-body">
-                    <label for="inputName">Activacion</label>
-                    <input type="text" id="inputActive" class="form-control" value="AdminLTE">
-                </div>
-                <div class="card-body">
-                    <label for="inputName">Area</label>
-                    <input type="text" id="inputIdUserType" class="form-control" value="AdminLTE">
-                </div>
-            </div>
-        </div>
-
-        </section>
-
+        <?php if(!Utils::isAdmin($userType)) : ?>
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -197,7 +180,7 @@ $files = $stmt->fetchAll(PDO::FETCH_OBJ);
                 </div>
             </div>
         </section>
-
+        <?php endif ?>                                        
 
         <section>
             <!-- Tabla de Archivos Subidos -->
