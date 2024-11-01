@@ -18,7 +18,9 @@ class ProyectoController
   
             $projec = new Proyecto();
      
+
             $proyectos = $projec->getAllProject();
+       
 
             $user = new User();
 

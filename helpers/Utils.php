@@ -83,7 +83,7 @@ class Utils
     
     public static function isSenior()
     {
-        if (!isset($_SESSION['senior'])) {
+        if (!isset($_SESSION['Calidad'])) {
             return false;
         } else {
             return true;

@@ -157,12 +157,7 @@
       <!-- Right navbar links -->
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <div class="theme-switch-wrapper nav-link">
-            <label class="theme-switch" for="dark-mode">
-              <input type="checkbox" name="dark-mode" <?= Utils::isDarkMode() ? 'checked' : '' ?> id="dark-mode">
-              <span class="slider round"></span>
-            </label>
-          </div>
+         
         </li>
         <li class="nav-item dropdown" id="notifications-content">
           <a class="nav-link" data-toggle="dropdown" href="../notifications/checked" onclick="checkedNotifications(event)" aria-expanded="true">
