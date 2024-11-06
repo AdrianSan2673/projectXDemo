@@ -170,6 +170,21 @@
             }
             return $result;
         }
-        
+
+        public function deleteProject() {
+            $result = false;
+    
+            $id = $this -> getId();
+    
+            $stmt = $this -> bd -> prepare("DELETE FROM proyecto WHERE id = :id");
+            $stmt -> bindParam(":id", $id, PDO::PARAM_STR);
+            
+            $flag = $stmt -> execute();
+    
+            if ($flag) {
+                $result = true;
+            }
+            return $result;
+        }
     } 
 ?>

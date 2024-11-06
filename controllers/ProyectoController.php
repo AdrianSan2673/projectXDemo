@@ -220,4 +220,8 @@ class ProyectoController
             echo json_encode(array('status' => 0));
         }
     }
+
+    public function deleteProject() {
+        
+    }
 }
