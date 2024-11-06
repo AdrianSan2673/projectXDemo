@@ -11,7 +11,8 @@ class ProyectoController
 
     public function index()
     {
-        //var_dump($_SESSION);
+        //var_dump($_SESSION['identity']->tipo_usuario);
+        //die();
         //if (Utils::isAdmin() || Utils::isCustomerSA()) {
 				
   
@@ -24,6 +25,8 @@ class ProyectoController
             $user = new User();
 
             $users = $user->getAll();
+
+            $userType = $_SESSION['identity']->tipo_usuario;
 
             $page_title =  'pryectos | RRHH Ingenia';
 
@@ -46,7 +49,7 @@ class ProyectoController
      
             $projec->setId($idProyecto);
             $proyecto = $projec->getOne();
-            
+            //$userType = $_SESSION['identity']
             $page_title =  'Proyectos | RRHH Ingenia';
 
             require_once 'views/layout/header.php';
