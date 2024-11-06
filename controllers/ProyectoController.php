@@ -26,9 +26,8 @@ class ProyectoController
 
             $users = $user->getAll();
 
+            $page_title =  'proyectos | SIGMA';
             $userType = $_SESSION['identity']->tipo_usuario;
-
-            $page_title =  'pryectos | RRHH Ingenia';
 
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
@@ -49,8 +48,8 @@ class ProyectoController
      
             $projec->setId($idProyecto);
             $proyecto = $projec->getOne();
-            //$userType = $_SESSION['identity']
-            $page_title =  'Proyectos | RRHH Ingenia';
+            
+            $page_title =  'Proyectos | SIGMA';
 
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
@@ -222,5 +221,9 @@ class ProyectoController
         } else {
             echo json_encode(array('status' => 0));
         }
+    }
+
+    public function deleteProject() {
+        
     }
 }

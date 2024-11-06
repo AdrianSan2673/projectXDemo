@@ -77,7 +77,7 @@
       }).then((result) => {
         if (result.value == true) {
           let departamento = new Department();
-          departamento.delet(e.target.value);
+          departamento.deleteProject(e.target.value);
         }
       })
     }
