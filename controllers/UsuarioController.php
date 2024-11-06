@@ -47,7 +47,7 @@ class UsuarioController
                 if ($identity && is_object($identity)) {
                     $_SESSION['identity'] = $identity;
 
-                    //  echo 1;
+                      echo 1;
                     //    $_SESSION['dark_mode'] = $_SESSION['identity']->dark_mode;
 
 
