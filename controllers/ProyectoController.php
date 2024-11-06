@@ -11,7 +11,8 @@ class ProyectoController
 
     public function index()
     {
-        //var_dump($_SESSION);
+        //var_dump($_SESSION['identity']->tipo_usuario);
+        //die();
         //if (Utils::isAdmin() || Utils::isCustomerSA()) {
 				
   
@@ -26,6 +27,7 @@ class ProyectoController
             $users = $user->getAll();
 
             $page_title =  'proyectos | SIGMA';
+            $userType = $_SESSION['identity']->tipo_usuario;
 
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';

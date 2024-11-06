@@ -55,16 +55,33 @@ class Utils
         return isset($var) && !empty(trim($var)) ? trim(filter_var($var, FILTER_SANITIZE_EMAIL)) : null;
     }
 
-    public static function isAdmin()
+    public static function isAdmin($tipo_usuario)
     {
-        if (!isset($_SESSION['Administrador'])) {
-            return false;
-        } else {
-            return true;
-        }
+        return $tipo_usuario == 'gerente de logistica' ? true : false;
     }
 
-    public static function isCalidad()
+    public static function isLogistica($tipo_usuario) {
+        return $tipo_usuario == 'logistica' ? true : false;
+    }
+
+    public static function isProcura($tipo_usuario) {
+        return $tipo_usuario == 'procura' ? true : false;
+    }
+
+    public static function isCalidad($tipo_usuario) {
+        return $tipo_usuario == 'calidad' ? true : false;
+    }
+
+    public static function isManagmentLogistic($tipo_usuario) {
+        return $tipo_usuario == 'gerente de logistica' ? true : false;
+    }
+
+    public static function isSupervisor($tipo_usuario) {
+        return $tipo_usuario == 'superviso' ? true : false;
+    }
+
+    
+    public static function isSenior()
     {
         if (!isset($_SESSION['Calidad'])) {
             return false;
