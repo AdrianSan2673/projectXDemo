@@ -6,7 +6,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
     <title><?=isset($page_title) ? $page_title : 'Reclutamiento'?></title>
-    <link rel="icon" type="image/png" href="<?=base_url?>dist/img/favicon.png">
+    <link rel="icon" type="image/png" href="<?=base_url?>dist/img/SIGMALOGO2.png">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="<?=base_url?>plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">

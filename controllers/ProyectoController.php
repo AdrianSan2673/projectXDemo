@@ -11,25 +11,30 @@ class ProyectoController
 
     public function index()
     {
-        //var_dump($_SESSION);
+        //var_dump($_SESSION['identity']->tipo_usuario);
+        //die();
         //if (Utils::isAdmin() || Utils::isCustomerSA()) {
 				
   
             $projec = new Proyecto();
      
-            $proyectos = $projec->getAllProject();
 
-            $page_title =  'pryectos | RRHH Ingenia';
+            $proyectos = $projec->getAllProject();
+       
+
+            $user = new User();
+
+            $users = $user->getAll();
+
+            $page_title =  'proyectos | SIGMA';
+            $userType = $_SESSION['identity']->tipo_usuario;
 
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
-            require_once 'views/proyecto/index.php';
-            require_once 'views/proyecto/modal-create.php';
-            require_once 'views/layout/footer.php';
             require_once 'views/proyecto/modal-create.php';
             require_once 'views/proyecto/modal_editar_proyecto.php';
-        //} 
-            //header('location:' . base_url);
+            require_once 'views/proyecto/index.php';
+            require_once 'views/layout/footer.php';
     }
 
     public function ver()
@@ -44,7 +49,7 @@ class ProyectoController
             $projec->setId($idProyecto);
             $proyecto = $projec->getOne();
             
-            $page_title =  'Proyectos | RRHH Ingenia';
+            $page_title =  'Proyectos | SIGMA';
 
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
@@ -115,8 +120,6 @@ class ProyectoController
         } else
             echo json_encode(array('status' => 2));
     }
-
-
   
     public function getDepartmentsByEmpresa()
     {
@@ -163,6 +166,36 @@ class ProyectoController
             header('location:' . base_url);
     }
 
+    public function createNewProject(){
+       
+        $Nombre = isset($_POST['Nombre']) ? trim($_POST['Nombre']) : FALSE;
+        $Estado = isset($_POST['Estado']) ? trim($_POST['Estado']) : FALSE;
+        $direccion = isset($_POST['direccion']) ? trim($_POST['direccion']) : FALSE;
+       
+        $Telefono = isset($_POST['Telefono']) ? trim($_POST['Telefono']) : FALSE;
+        
+        $userSelect = isset($_POST['userSelect']) ? $_POST['userSelect'] : FALSE;
+
+        if($Nombre && $Estado && $direccion && $Telefono){
+            $projectObj = new Proyecto();
+            $projectObj->setNombre($Nombre);
+            $projectObj->setEstado($Estado);
+            $projectObj->setDireccion($direccion);
+            $projectObj->setTelefono($Telefono);
+         
+           
+            $create = $projectObj->createNewProject();
+            $proyecto = $projectObj->getAllProject();
+            if ($create){
+                echo json_encode(array('status' => 1, 'proyectos' => $proyecto));
+            } else {
+                echo json_encode(array('status' => 2));
+            }
+        } else {
+            echo json_encode(array('status' => 0));
+        }
+    }
+
     public function updateProject() {
         $id = $_POST['id'];
         $direccion = isset($_POST['direccion']) ? trim($_POST['direccion']) : FALSE;
@@ -188,5 +221,9 @@ class ProyectoController
         } else {
             echo json_encode(array('status' => 0));
         }
+    }
+
+    public function deleteProject() {
+        
     }
 }

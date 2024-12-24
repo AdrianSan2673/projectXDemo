@@ -11,7 +11,7 @@ class UsuarioController
 
         if (isset($_SESSION['identity']) && !empty($_SESSION['identity'])) {
 
-            $page_title = 'Bienvenido(a) | RRHH Ingenia';
+            $page_title = 'Bienvenido(a) | SIGMA';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
             require_once 'views/layout/dashboard.php';
@@ -20,7 +20,7 @@ class UsuarioController
             require_once 'views/layout/footer.php';
         } else {
 
-            $page_title = 'Iniciar sesión | RRHH Ingenia';
+            $page_title = 'Iniciar sesión | SIGMA';
             require_once 'views/user/header.php';
             require_once 'views/user/login.php';
             require_once 'views/user/footer.php';
@@ -40,6 +40,7 @@ class UsuarioController
                 $user->setUsername($username);
                 //$user->setEmail($username);
                 $user->setPassword($password);
+
                 $identity = $user->login();
 
 
@@ -48,58 +49,29 @@ class UsuarioController
                     $user->lastSession($identity->id);
                     echo 1;
                     $_SESSION['dark_mode'] = $_SESSION['identity']->dark_mode;
-                    switch ($identity->id_tipo_usuario) {
-                        case 1:
-                            $_SESSION['admin'] = TRUE;
+                    switch ($identity->tipo_usuario) {
+                        case "logistica":
+                            $_SESSION['logistica'] = TRUE;
                             break;
-                        case 2:
-                            $_SESSION['Procura'] = TRUE;
-                            $_SESSION['tipo'] = 'Procura';
+                        case "procura":
+                            $_SESSION['procura'] = TRUE;
+                            $_SESSION['tipo'] = 'procura';
                             break;
-                        case 3:
-                            $_SESSION['junior'] = TRUE;
+                        case "calidad":
+                            $_SESSION['calidad'] = TRUE;
+                            $_SESSION['tipo'] = 'calidad';
                             break;
-                        case 4:
-                            $_SESSION['manager'] = TRUE;
+                        case "gerente de logistica":
+                            $_SESSION['gerente de logistica'] = TRUE;
+                            $_SESSION['tipo'] = 'gerente de logistica';
                             break;
-                        case 5:
-                            $_SESSION['salesmanager'] = TRUE;
-                            break;
-                        case 6:
-                            $_SESSION['customer'] = TRUE;
-                            break;
-                        case 7:
-                            $_SESSION['candidate'] = TRUE;
-                            break;
-                        case 8:
-                            $_SESSION['sales'] = TRUE;
-                            break;
-                        case 9:
-                            $_SESSION['recruitmentmanager'] = TRUE;
-                            break;
-                        case 10:
-                            $_SESSION['samanager'] = TRUE;
-                        case 11:
-                            $_SESSION['operationssupervisor'] = TRUE;
-                            break;
-                        case 12:
-                            $_SESSION['logisticssupervisor'] = TRUE;
-                            break;
-                        case 13:
-                            $_SESSION['account'] = TRUE;
-                            break;
-                        case 14:
-                            $_SESSION['logistics'] = TRUE;
-                            break;
-                        case 15:
-                            $_SESSION['customerSA'] = TRUE;
-                            break;
-                        case 16:
-                            $_SESSION['humanresources'] = TRUE;
+                        case "superviso":
+                            $_SESSION['superviso'] = TRUE;
+                            $_SESSION['tipo'] = 'superviso';
                             break;
                     }
                 } else {
-                    echo 10;
+                    echo 0;
                 }
             } else {
                 echo 11;
@@ -107,6 +79,8 @@ class UsuarioController
         } else {
             header("location:" . base_url . SID);
         }
+        var_dump($_SESSION);
+        die();
     }
 
     public function logout()
@@ -122,12 +96,13 @@ class UsuarioController
     }
 
 
+
     public static function formatear($usuarios)
     {
 
         foreach ($usuarios as &$usuario) {
             // $usuario['password'] = Utils::decrypt($usuario['password']);
-            $usuario['last_session'] = ($usuario['last_session'] != NULL) ? Utils::getFullDate($usuario['last_session']) : '';
+            //$usuario['last_session'] = ($usuario['last_session'] != NULL) ? Utils::getFullDate($usuario['last_session']) : '';
             $usuario['id'] = Encryption::encode($usuario['id']);
 
             $path = 'uploads/avatar/' . $usuario['id'];
@@ -156,17 +131,42 @@ class UsuarioController
     {
         // && Utils::isAdmin()
         if (Utils::isValid($_SESSION['identity'])) {
+        if (Utils::isValid($_SESSION['identity'])) {
             $user = new Usuario();
             $users = $user->getAll();
+            foreach ($users as &$usuario) {
+
+                $path = 'uploads/avatar/' . $usuario['id'];
+                if (file_exists($path)) {
+                    $directory = opendir($path);
+
+                    while ($file = readdir($directory)) {
+                        if (!is_dir($file)) {
+                            $type = pathinfo($path, PATHINFO_EXTENSION);
+                            $img_content = file_get_contents($path . "/" . $file);
+                            $route = $path . '/' . $file;
+                        }
+                    }
+                } else {
+                    $route = "dist/img/user-icon.png";
+                    $type = pathinfo($route, PATHINFO_EXTENSION);
+                    $img_content = file_get_contents($route);
+                }
+                //$img_base64 = chunk_split(base64_encode($img_content));
+                $img_base64 = 'data:image/' . $type . ';base64,' . base64_encode($img_content);
+                $usuario['avatar'] = base_url . $route;
+            }
 
 
-            $page_title = 'Usuarios | RRHH Ingenia';
+
+            $page_title = 'Usuarios | SIGMA';
             require_once 'views/layout/header.php';
             require_once 'views/layout/sidebar.php';
             require_once 'views/user/index.php';
+            require_once 'views/user/create.php';
             require_once 'views/user/modal-user.php';
 
-            // require_once 'views/user/create.php';
+
             // require_once 'views/user/modal-date.php';
             //require_once 'views/user/edit.php';
             require_once 'views/layout/footer.php';
@@ -174,64 +174,86 @@ class UsuarioController
             header("location:" . base_url);
         }
     }
+}
+
+    public function desactivar_usuario()
+    {
+
+        if (isset($_SESSION['identity']) && !empty($_SESSION['identity'])) {
+            $id_usuario = isset($_POST['id_usuario']) ? Encryption::decode(trim($_POST['id_usuario'])) : '';
+
+
+         
+            $user = new Usuario();
+            $user->setId($id_usuario);
+            $user->setActivation(0);
+            $save = $user->desactivar_usuario();
+
+          
+            $user = new Usuario();
+            $usuarios = UsuarioController::formatear($user->getAll());
+
+            if ($save) {
+                echo json_encode(array('status' => 1, 'usuarios' => $usuarios));
+            } else {
+                echo json_encode(array('status' => 2));
+            }
+        } else {
+            header("location:" . base_url . SID);
+        }
+    }
+
 
 
     public function save()
     {
         if (Utils::isValid($_POST)) {
-            $username = isset($_POST['username']) ? trim($_POST['username']) : FALSE;
+
+            $usuario = isset($_POST['usuario']) ? trim($_POST['usuario']) : FALSE;
             $password = isset($_POST['password']) ? trim($_POST['password']) : FALSE;
-            $password_confirm = isset($_POST['password_confirm']) ? trim($_POST['password_confirm']) : FALSE;
-            $first_name = isset($_POST['first_name']) ? trim($_POST['first_name']) : FALSE;
-            $last_name = isset($_POST['last_name']) ? trim($_POST['last_name']) : FALSE;
-            $email = isset($_POST['email']) ? trim($_POST['email']) : FALSE;
-            $id_user_type = isset($_POST['id_user_type']) ? trim($_POST['id_user_type']) : FALSE;
+            $Nombres = isset($_POST['Nombres']) ? trim($_POST['Nombres']) : FALSE;
+            $Apellidos = isset($_POST['Apellidos']) ? trim($_POST['Apellidos']) : FALSE;
+            $Correo = isset($_POST['Correo']) ? trim($_POST['Correo']) : FALSE;
+            $id_tipo_usuario = isset($_POST['id_tipo_usuario']) ? trim($_POST['id_tipo_usuario']) : FALSE;
 
-            if ($username && $password && $password_confirm && $first_name && $last_name && $email && $id_user_type) {
-                if ($password == $password_confirm) {
-                    $user = new User();
-                    $user->setUsername($username);
-                    $user->setPassword($password);
-                    $user->setFirst_name($first_name);
-                    $user->setLast_name($last_name);
-                    $user->setEmail($email);
-                    $user->setActivation(0);
-                    $user->setId_user_type($id_user_type);
 
-                    $userExists = $user->userExists();
-                    $emailExists = $user->emailExists();
+            if ($usuario && $password  && $Nombres && $Apellidos && $Correo && $id_tipo_usuario) {
 
-                    if (!$userExists && !$emailExists) {
-                        $save = $user->save();
+                $user = new Usuario();
+                $user->setUsuario($usuario);
+                $user->setPassword($password);
+                $user->setNombres($Nombres);
+                $user->setApellidos($Apellidos);
+                $user->setCorreo($Correo);
+                $user->setActivation(1);
+                $user->setId_tipo_usuario($id_tipo_usuario);
 
-                        if ($save) {
-                            $id = Encryption::encode($user->getId());
-                            $token = $user->getToken();
+                $userExists = $user->userExists();
+                // $emailExists = $user->emailExists();
 
-                            $url = base_url . 'usuario/activar_cuenta&id=' . $id . '&val=' . $token;
+                if (!$userExists) {
+                    $save = $user->save();
 
-                            $subject = 'Activar cuenta de usuario';
-                            $name = $first_name . ' ' . $last_name;
-                            $body = "Estimado(a) {$name}, tu cuenta ha sido creada para que ingreses a nuestra página " . base_url . " con tu nombre de usuario o correo electrónico: <br/><br/> Usuario: {$username} <br/><br/> Contraseña : {$password} <br /> <br /> Para continuar con el proceso de registro, es necesario que actives tu cuenta haciendo click en el siguiente <a href={$url}>enlace</a>";
+                    if ($save) {
 
-                            echo 1; //if everything is ok, returns 1
-                            Utils::sendEmail($email, $name, $subject, $body);
-                        } else {
-                            echo 4;
-                        }
+                        $user = new Usuario();
+                        $usuarios = UsuarioController::formatear($user->getAll());
+
+                        echo json_encode(array('status' => 1, 'usuarios' => $usuarios));
                     } else {
-                        echo 3; //if the user or email already exists, returns 3
+                        echo json_encode(array('status' => 4));
                     }
                 } else {
-                    echo 2; //if the passwords do not match, returns 2
+                    echo json_encode(array('status' => 3)); //si existe l usuario marca 3
                 }
             } else {
-                echo 0; //if any data is missing, returns 0
+                echo json_encode(array('status' => 0));
             }
         } else {
             header("location:" . base_url);
         }
     }
+
 
 
     public function cambiar_contrasenia()
@@ -242,7 +264,7 @@ class UsuarioController
             $user->setToken_password($_GET['token']);
             $flag = $user->verifyToken_password();
 
-            $page_title = 'Cambiar contraseña | RRHH Ingenia';
+            $page_title = 'Cambiar contraseña | SIGMA';
             require_once 'views/user/header.php';
             require_once 'views/user/new_password.php';
             require_once 'views/user/footer.php';
@@ -305,7 +327,7 @@ class UsuarioController
     {
         if (!isset($_SESSION['identity'])) {
 
-            $page_title = 'Regístrate | RRHH Ingenia';
+            $page_title = 'Regístrate | SIGMA';
             require_once 'views/user/header.php';
             require_once 'views/user/create_candidate copy.php';
             require_once 'views/user/footer.php';
@@ -499,49 +521,35 @@ class UsuarioController
     public function updateUser() // el formulario se recive por post
     {
         $id = $_POST['id'];
-        $username = isset($_POST['username']) ? trim($_POST['username']) : FALSE;
-        $first_name = isset($_POST['first_name']) ? trim($_POST['first_name']) : FALSE;
-        $last_name = isset($_POST['last_name']) ? trim($_POST['last_name']) : FALSE;
-        $email = isset($_POST['email']) ? $_POST['email'] : FALSE;
-        $password = isset($_POST['password']) ? Utils::encrypt($_POST['password']) : FALSE;
-        $id_user_type = isset($_POST['id_user_type']) ? $_POST['id_user_type'] : FALSE;
+        $usuario = isset($_POST['usuario']) ? trim($_POST['usuario']) : FALSE;
+        $Nombres = isset($_POST['Nombres']) ? trim($_POST['Nombres']) : FALSE;
+        $Apellidos = isset($_POST['Apellidos']) ? trim($_POST['Apellidos']) : FALSE;
+        $Correo = isset($_POST['Correo']) ? $_POST['Correo'] : FALSE;
+        // $password = isset($_POST['password']) ? Utils::encrypt($_POST['password']) : FALSE;
+        $password = isset($_POST['password']) ? $_POST['password'] : FALSE;
+        $id_tipo_usuario = isset($_POST['id_tipo_usuario']) ? $_POST['id_tipo_usuario'] : FALSE;
 
-        if ($id && $username && $email  && $first_name && $last_name && $password && $id_user_type) {
-            $userObj = new User();// es el modelo de user
+
+
+        if ($id && $usuario && $Nombres  && $Apellidos && $Correo && $password && $id_tipo_usuario) {
+            $userObj = new Usuario();
             $userObj->setId($id);
-            $userObj->setUsername($username);
-            $userObj->setFirst_name($first_name);
-            $userObj->setLast_name($last_name);
-            $userObj->setEmail($email);
+            $userObj->setUsuario($usuario);
+            $userObj->setNombres($Nombres);
+            $userObj->setApellidos($Apellidos);
+            $userObj->setCorreo($Correo);
             $userObj->setPassword($password);
-            $userObj->setId_user_type($id_user_type);
+            $userObj->setId_tipo_usuario($id_tipo_usuario);
 
             $userExists = $userObj->userExists();
-            $emailExists = $userObj->emailExists();
 
-            if (isset($_POST['flag_username']) && !$userExists) {
-                $userObj->updateUserName();
-            }
 
-            if (isset($_POST['flag_email']) && !$emailExists) {
-                $userObj->updateUserEmail();
-            }
+            $userObj->updateUser();
 
-            if (isset($_POST['flag_desactivate'])) {
-                $userObj->setActivation(0);
-                $userObj->updateActivation();
-            }
-            
-            $save = $userObj->updateUser();//
+            $user = new Usuario();
+            $usuarios = UsuarioController::formatear($user->getAll());
 
-            $user = new User();
-            $usuarios = $user->getEmployees();
-            $usuarios =  UsuarioController::formatear($usuarios);
-            if ($save) {
-                echo json_encode(array('status' => 1, 'usuarios' => $usuarios));
-            } else {
-                echo json_encode(array('status' => 2));
-            }
+            echo json_encode(array('status' => 1, 'usuarios' => $usuarios));
         } else
             echo json_encode(array('status' => 0));
     }
@@ -570,6 +578,7 @@ class UsuarioController
                 $UserObj->setId($id);
                 $user = $UserObj->getOne();
                 // $user->password = Utils::decrypt($user->password);
+                // $user->password = Utils::decrypt($user->password);
                 echo json_encode(array(
                     'status' => 1,
                     'user' => $user
@@ -577,6 +586,7 @@ class UsuarioController
             } else
                 echo json_encode(array('status' => 0));
         } else {
+        
             echo json_encode(array('status' => 0));
         }
     }

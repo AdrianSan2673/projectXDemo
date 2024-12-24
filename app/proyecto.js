@@ -2,16 +2,77 @@ class Proyecto {
 
     constructor(){
         this.id = null;
-        this.usuario = '';
-        this.password = '';
-        this.Nombres = '';
-        this.Apellidos = '';
-        this.Correo = '';
+        this.Nombre = '';
+        this.Estado = '';
+        this.direccion = '';
+        this.status = '';
         this.Telefono = '';
         this.Activacion = '';
         this.id_tipo_usuario = '';
         this.creado = '';
         this.modificado = '';
+    }
+
+    createNewProject() {
+
+        var form = document.querySelector("#modal_create form");
+        var formData = new FormData(form);
+
+
+        fetch('../proyecto/createNewProject', {
+            method: 'POST',
+            body: formData
+        })
+
+            .then(response => {
+                //  console.log(response.json());
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('Network response was not ok.');
+                }
+            })
+            .then(r => {
+                let json_app = JSON.parse(r);
+                console.log(json_app)
+                if (json_app.status == 1) {
+                    utils.showToast('Se guardo con exito', 'success');
+                    form.querySelectorAll('.btn')[1].disabled = false;
+                    $('#modal_create').modal('hide');
+                    let proyectos = '';
+                    json_app.proyectos.forEach (element => { //AQUI SE RECOPILA INFORMACION DE LA TABLA                   
+                            proyectos += `
+                        <div class="col-md-4 ">
+                        <div class="small-box bg-info">
+                            <button class="btn text-white btn-delete" value="<?= Encryption::encode($proyecto['id']) ?>">X</button>
+                            <div class="inner">
+                            <h4>${element.Nombre}</h4>
+                            <div class="row">
+                                <div class="col-6">
+                                <p style="font-size: small;">${element.Estado} </p>
+                                </div>
+                                <div class="col-6">
+                                <p style="font-size: small;">${element.status} Status</p>
+                                </div>
+                            </div>
+                            </div>
+                            <?php //if (Utils::permission($_GET['controller'], 'read')) : ?>
+                            <a class="small-box-footer" href="<?= base_url ?>proyecto/ver&id=AQUI SE INCRUTA CON LA LLAVE">
+                            Ver
+                            <i class="fas fa-arrow-circle-right"></i>
+                            </a>
+                            <?php //endif ?>
+                        </div>
+                        </div>
+                    `;}
+                    )
+                    document.getElementById('all_projects').innerHTML = proyectos;
+                } else {
+                    utils.showToast('Algo salio mal', 'warning');
+                    form.querySelectorAll('.btn')[1].disabled = false;
+                }
+               
+            })
     }
 
     updateProject(){
